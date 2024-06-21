@@ -17,6 +17,13 @@ Contents
 -------------------------------------------------------------------------------
 
 .. toctree::
+
+   :caption: Overview
+   :maxdepth: 1
+
+   Prototyping Platform <overview/toplevel.md>
+
+.. toctree::
    :caption: Product Categories
    :maxdepth: 2
    :glob:

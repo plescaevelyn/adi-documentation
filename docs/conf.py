@@ -15,14 +15,14 @@ extensions = [
     "sphinx.ext.todo",
     "adi_doctools",
     "sphinxcontrib.mermaid",
+    "sphinxcontrib_d2",
     "myst_parser",
 ]
 
 needs_extensions = {
     'adi_doctools': '0.4.33'
 }
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store',
-                    'solutions/reference-designs/common/zcu102-zynqmp-setup.rst']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 source_suffix = {
     ".rst": "restructuredtext",
@@ -38,6 +38,13 @@ html_css_files = [
 # -- Custom extensions configuration ------------------------------------------
 
 mermaid_d3_zoom = True
+myst_enable_extensions = [
+    "colon_fence",
+]
+
+d2_config = {
+    "d2_args": ["--pad 0", "-l elk"],
+}
 
 # -- External docs configuration ----------------------------------------------
 
