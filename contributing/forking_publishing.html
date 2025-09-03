@@ -496,10 +496,13 @@ branch at mainland, then just:</p>
 <section id="fork">
 <span id="forking-publishing-fork"></span><h3>Fork<a class="headerlink" href="#fork" title="Link to this heading"></a></h3>
 <p>Fork the <em>analogdevicesinc/documentation</em> repo on your account.</p>
-<div class="line-block">
-<div class="line"><strong>Enable the workflows</strong> on the forked repo at <em>github.com/&lt;your_user&gt;/documentation/actions</em>
-by clicking the green button</div>
-<div class="line">“I understand my workflows, go ahead and enable them”.</div>
+<p><strong>Enable the workflows</strong> on the forked repo at <em>github.com/&lt;your_user&gt;/documentation/actions</em>
+by clicking the <span class="green">green button</span> “I understand my workflows, go ahead and enable them”.</p>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>If you forked all branches, the <span class="green">green button</span> <strong>will</strong> be hidden by
+the <code class="docutils literal notranslate"><span class="pre">pages</span> <span class="pre">build</span> <span class="pre">and</span> <span class="pre">deployment</span></code> run. You <strong>need</strong> to delete all runs from
+the Actions tab to get the <span class="green">green button</span> again.</p>
 </div>
 <p>Ensure git-lfs is installed with:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>git-lfs<span class="w"> </span>-y
@@ -912,10 +915,9 @@ If you don’t care about this file at the moment, just <code class="docutils li
 <div class="clear-left"></div></div></div></section>
 <section id="pull-request-permission">
 <h3>Pull request permission<a class="headerlink" href="#pull-request-permission" title="Link to this heading"></a></h3>
-<p>When a user creates a pull request, they temporarily grant write permission
-for the removal of branches containing commits.
-However, this does not extend to LFS.
-As such, pushing LFS artifacts to their remote will result in:</p>
+<p>When a user creates a pull request, they temporarily grant write permission for
+the removal of branches containing commits. However, this does not extend to
+LFS:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
 </pre></div>
 </div>
@@ -926,7 +928,21 @@ As such, pushing LFS artifacts to their remote will result in:</p>
 error: failed to push some refs to &#39;https://github.com/&lt;contributor&gt;/documentation.git&#39;
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+<div class="clear-left"></div></div></div><p>If you <strong>didn’t</strong> touch any LFS files, you can just skip the verification:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>push<span class="w"> </span>contributor<span class="w"> </span>--no-verify
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>Writing objects: 100% (8/8), 1.08 KiB | 1.08 MiB/s, done.
+Total 8 (delta 6), reused 0 (delta 0), pack-reused 0 (from 0)
+To https://github.com/contributor/documentation.git
+   21s72b2..1b31311  branch-name -&gt; branch-name
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>But if you did add <strong>new</strong> or <strong>modified</strong> LFS artifacts, the push will fail:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>push<span class="w"> </span>contributor<span class="w"> </span>--no-verify
@@ -944,12 +960,13 @@ To https://github.com/&lt;contributor&gt;/documentation.git
 <div class="clear-left"></div></div></div><p>As a reviewer, this gets on the way and there is no straightforward
 solution beyond not pushing commits with new LFS artifacts, or awkwardly requesting
 contributor permissions to their repository.</p>
-<p>If you wish to add new LFS artifacts, as a reviewer, simply merge the PR and commit to main.
+<p>If you wish to add new LFS artifacts, as a reviewer, simply merge the PR and commit to the
+further changes.
 If the pull request is complex, you can push to a new branch, work on it, and
 once both parties are satisfied, close the original PR without merging, merging
 the branch onto the main remote instead.</p>
-<p>But if you <strong>don’t</strong> want to touch any LFS file and are only rebasing, you can temporarily
-disable lfs, work, push, and enable again, for example:</p>
+<p>For rebasing, if you <strong>won’t</strong> touch any LFS file, you can temporarily
+disable lfs, work, push, and enable again:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
@@ -993,18 +1010,6 @@ Global Git LFS configuration has been removed.
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>push<span class="w"> </span>contributor<span class="w"> </span>branch-name:branch-name
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>Enumerating objects: 6, done.
-Writing objects: 100% (4/4), 768 bytes | 768.00 KiB/s, done.
-To https://github.com/contributor/documentation.git
-   21s72b2..1b31311  branch-name -&gt; branch-name
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Re-install lfs</span>
 </pre></div>
 </div>
@@ -1012,6 +1017,18 @@ To https://github.com/contributor/documentation.git
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>lfs<span class="w"> </span>install<span class="w"> </span>--skip-smudge
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>push<span class="w"> </span>contributor<span class="w"> </span>--no-verify<span class="w"> </span>--force
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>Writing objects: 100% (4/4), 768 bytes | 768.00 KiB/s, done.
+Total 16 (delta 10), reused 0 (delta 0), pack-reused 0 (from 0)
+To https://github.com/contributor/documentation.git
+   21s72b2..1b31311  branch-name -&gt; branch-name
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div></section>
