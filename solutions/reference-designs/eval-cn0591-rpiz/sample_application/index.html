@@ -441,16 +441,18 @@ based on configurable thresholds and hysteresis.</p>
 <li><p>Raspberry Pi with <a class="icon adi reference external" href="https://www.analog.com/Kuiper 2" target="_blank">Kuiper 2</a> image installed.
 Follow the instructions in the <a class="icon link reference external" href="https://github.com/analogdevicesinc/adi-kuiper-gen/releases" target="_blank">Kuiper 2 User Guide</a>
 to prepare the Raspberry Pi.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">pyadi-iio</span></code> package cloned from GitHub (steps below).</p></li>
+<li><p>Ensure that the <strong>Software Setup</strong> steps from <a class="reference internal" href="../index.html"><span class="doc">EVAL-CN0591-RPIZ</span></a>
+(Downloading and Flashing the Micro-SD Card, and Configuring the Micro-SD Card)
+are completed <strong>using Kuiper 2</strong> before continuing.</p></li>
 </ul>
 </section>
 <section id="hardware-setup">
 <h2>Hardware Setup<a class="headerlink" href="#hardware-setup" title="Link to this heading"></a></h2>
-<figure class="align-center" id="id2">
+<figure class="align-center" id="id1">
 <a class="reference internal image-reference" href="../../../../_images/temp_controller_system.jpg"><img alt="../../../../_images/temp_controller_system.jpg" src="../../../../_images/temp_controller_system.jpg" style="width: 500px;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 1 </span><span class="caption-text">Temperature Controller System</span><a class="headerlink" href="#id2" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 1 </span><span class="caption-text">Temperature Controller System</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p><strong>Equipment Needed</strong></p>
@@ -475,46 +477,136 @@ to prepare the Raspberry Pi.</p></li>
 <h2>Software Setup<a class="headerlink" href="#software-setup" title="Link to this heading"></a></h2>
 <section id="firmware-flashing">
 <h3>Firmware Flashing<a class="headerlink" href="#firmware-flashing" title="Link to this heading"></a></h3>
-<p>Firmware images and flashing steps for the AD-SWIOT1L-SL boards are provided in the
-<a class="icon link reference external" href="https://github.com/analogdevicesinc/pyadi-iio" target="_blank">pyadi-iio</a>
-repository, under <code class="docutils literal notranslate"><span class="pre">examples/cn0591/host_setup/config/firmware</span></code>.</p>
-<p>Follow the instructions in the <a class="icon link reference external" href="https://github.com/analogdevicesinc/pyadi-iio/blob/swio/examples/cn0591/host_setup/README.md" target="_blank">README from the pyadi-iio repository</a>
-to flash the firmware onto the SWIOT1L boards.</p>
+<p>Each <a class="icon adi reference external" href="https://www.analog.com/AD-SWIOT1L-SL" target="_blank">AD-SWIOT1L-SL</a> must be updated with the provided firmware image.</p>
+<ol class="arabic">
+<li><p>Follow the official update instructions here:
+<a class="icon link reference external" href="https://analogdevicesinc.github.io/documentation/solutions/reference-designs/ad-swiot1l-sl/software-guide/index.html#updating-the-ad-swiot1l-sl-firmware" target="_blank">Updating the AD-SWIOT1L-SL firmware</a>.</p></li>
+<li><p>Repeat the process for <strong>both boards</strong>.</p></li>
+<li><p>Use the firmware images provided in the <a class="icon link reference external" href="https://github.com/analogdevicesinc/pyadi-iio/tree/swio/examples/cn0591/host_setup" target="_blank">pyadi-iio</a> repository,
+under <code class="docutils literal notranslate"><span class="pre">examples/cn0591/host_setup/config/firmware</span></code>. These images configure the boards with static IP addresses:
+- The first board will have the <code class="docutils literal notranslate"><span class="pre">192.168.97.40</span></code> IP address
+- The second board will have the <code class="docutils literal notranslate"><span class="pre">192.168.97.41</span></code> IP address</p></li>
+<li><p>After flashing, verify that each board responds to ping:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w"> </span>ping<span class="w"> </span><span class="m">192</span>.168.97.40
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w"> </span>ping<span class="w"> </span><span class="m">192</span>.168.97.41
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
+</ol>
 </section>
 <section id="network-setup">
 <h3>Network Setup<a class="headerlink" href="#network-setup" title="Link to this heading"></a></h3>
-<p>The <a class="icon adi reference external" href="https://www.analog.com/AD-SWIOT1L-SL" target="_blank">AD-SWIOT1L-SL</a> boards require static IP addresses to be accessible by the
-application. There are <strong>two modes</strong> in which the static IPs can be configured:</p>
-<ul class="simple">
-<li><p><strong>Manual configuration</strong> – follow the steps described in the
-<a class="reference internal" href="../index.html"><span class="doc">EVAL-CN0591-RPIZ</span></a> page, under the Setting up a static IP subsection to assign the IP addresses manually.</p></li>
-<li><p><strong>NetworkManager configuration</strong> – use the provided configuration files
-and steps described in the <a class="icon link reference external" href="https://github.com/analogdevicesinc/pyadi-iio/blob/swio/examples/cn0591/host_setup/README.md" target="_blank">README from the pyadi-iio repository</a>
-to apply static IPs via NetworkManager.</p></li>
-</ul>
+<p>The Raspberry Pi must be configured to communicate with both <a class="icon adi reference external" href="https://www.analog.com/AD-SWIOT1L-SL" target="_blank">AD-SWIOT1L-SL</a> boards via static IP connections.
+You can apply the NetworkManager profiles provided alongside the host setup files.</p>
+<ol class="arabic">
+<li><p>From the project folder, navigate to the <code class="docutils literal notranslate"><span class="pre">host_setup</span></code> directory.</p></li>
+<li><p>Copy the connection profiles into NetworkManager’s system folder:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w"> </span>sudo<span class="w"> </span>cp<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;Wired connection 2&quot;</span><span class="w"> </span>/etc/NetworkManager/system-connections/
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w"> </span>sudo<span class="w"> </span>cp<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;Wired connection 3&quot;</span><span class="w"> </span>/etc/NetworkManager/system-connections/
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
+<li><p>Ensure correct permissions:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w"> </span>sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>/etc/NetworkManager/system-connections/Wired<span class="se">\ </span>connection<span class="se">\ </span><span class="m">2</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w"> </span>sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>/etc/NetworkManager/system-connections/Wired<span class="se">\ </span>connection<span class="se">\ </span><span class="m">3</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
+<li><p>Reload NetworkManager:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w"> </span>sudo<span class="w"> </span>nmcli<span class="w"> </span>connection<span class="w"> </span>reload
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
+<li><p>Verify the connections are active:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w"> </span>nmcli<span class="w"> </span>connection<span class="w"> </span>show
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
+</ol>
+<p>For full host setup details (including the NetworkManager profiles and context), see the README here:
+<a class="icon link reference external" href="https://github.com/analogdevicesinc/pyadi-iio/blob/swio/examples/cn0591/host_setup/README.md" target="_blank">pyadi-iio host_setup README</a>.</p>
 </section>
 <section id="repository-cloning-application-usage">
 <h3>Repository Cloning &amp; Application Usage<a class="headerlink" href="#repository-cloning-application-usage" title="Link to this heading"></a></h3>
 <ol class="arabic">
 <li><p>Clone the repository:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/analogdevicesinc/pyadi-iio.git
-<span class="nb">cd</span><span class="w"> </span>pyadi-iio
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
 </pre></div>
 </div>
-</li>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/analogdevicesinc/pyadi-iio.git
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>pyadi-iio
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
 <li><p>Install Python dependencies:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>examples/cn0591
-python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>venv
-<span class="nb">source</span><span class="w"> </span>venv/bin/activate
-pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
 </pre></div>
 </div>
-</li>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>examples/cn0591
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~/examples/cn0591$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>venv
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~/examples/cn0591$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="nb">source</span><span class="w"> </span>venv/bin/activate
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~/examples/cn0591$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
 <li><p>Run the Temperature Controller example</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>temperature_controller.py
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
 </pre></div>
 </div>
-</li>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w"> </span>python3<span class="w"> </span>temperature_controller.py
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
 </ol>
 </section>
 </section>
