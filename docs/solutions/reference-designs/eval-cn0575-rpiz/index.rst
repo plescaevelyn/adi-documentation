@@ -479,6 +479,15 @@ Hardware Registration
    Receive software update notifications, documentation updates, view the latest
    videos, and more when you :adi:`register <EVAL-CN0575-RPIZ?&v=RevC>` your hardware.
 
+Sample Application
+------------------
+
+.. toctree::
+   :maxdepth: 2
+   :glob:
+
+   */index
+
 Help and Support
 -------------------
 
