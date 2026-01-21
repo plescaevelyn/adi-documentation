@@ -103,6 +103,9 @@
 <li><a class="reference internal" href="#applying-overlays">Applying Overlays</a></li>
 <li><a class="reference internal" href="#network-setup">Network Setup</a></li>
 <li><a class="reference internal" href="#application-execution">Application Execution</a><ul>
+<li><a class="reference internal" href="#command-line-arguments">Command-line arguments</a></li>
+<li><a class="reference internal" href="#running-the-application">Running the Application</a></li>
+<li><a class="reference internal" href="#system-characterization">System characterization</a></li>
 <li><a class="reference internal" href="#use-cases">Use Cases</a></li>
 </ul>
 </li>
@@ -518,6 +521,8 @@ Kuiper 2 to ensure proper compatibility before continuing.</p></li>
 <li><p>1x <a class="icon adi reference external" href="https://www.analog.com/TMP01" target="_blank">TMP01</a> Temperature Sensor</p></li>
 <li><p>1x MC002103 DC Axial Fan</p></li>
 <li><p>1x Raspberry Pi USB Type-C Power Supply (5V, 3A)</p></li>
+<li><p>1x Power Resistor (6.2Ω, 10W was used by us)</p></li>
+<li><p>1x Power Supply for the Power Resistor (5V, 1A was used by us)</p></li>
 </ul>
 <p><strong>Setup Procedure</strong></p>
 <ol class="arabic">
@@ -525,8 +530,7 @@ Kuiper 2 to ensure proper compatibility before continuing.</p></li>
 40-pin header</p></li>
 <li><p>Connect the two <a class="icon adi reference external" href="https://www.analog.com/AD-SWIOT1L-SL" target="_blank">AD-SWIOT1L-SL</a> boards to the
 <a class="icon adi reference external" href="https://www.analog.com/AD-RPI-T1LPSE-SL" target="_blank">AD-RPI-T1LPSE-SL</a> board via the T1L connectors</p></li>
-<li><p>Connect the first <a class="icon adi reference external" href="https://www.analog.com/AD-SWIOT1L-SL" target="_blank">AD-SWIOT1L-SL</a> board to the <a class="icon adi reference external" href="https://www.analog.com/TMP01" target="_blank">TMP01</a> temperature
-sensor</p>
+<li><p>Connect the <a class="icon adi reference external" href="https://www.analog.com/TMP01" target="_blank">TMP01</a> temperature sensor to the first <a class="icon adi reference external" href="https://www.analog.com/AD-SWIOT1L-SL" target="_blank">AD-SWIOT1L-SL</a> board</p>
 <p>The first SWIOT1L-SL board is used to both power the TMP01 sensor and
 measure its analog output voltage (VPTAT), which encodes the temperature.</p>
 <ul class="simple">
@@ -553,7 +557,9 @@ the TMP01 VOUT signal. Both channels must share the same ground reference
 with the sensor.</p>
 </div>
 </li>
-<li><p>Connect the second <a class="icon adi reference external" href="https://www.analog.com/AD-SWIOT1L-SL" target="_blank">AD-SWIOT1L-SL</a> board to the fan actuator</p>
+<li><p>Power on the power resistor. Attach the power resistor to the TMP01 sensor
+to simulate temperature changes via rubber bands or similar means to dissipate heat.</p></li>
+<li><p>Connect the fan actuator to the second <a class="icon adi reference external" href="https://www.analog.com/AD-SWIOT1L-SL" target="_blank">AD-SWIOT1L-SL</a> board</p>
 <p>The second SWIOT1L-SL board drives the fan according to the control loop.</p>
 <ul class="simple">
 <li><p>The fan is powered directly from channel 0, configured as a
@@ -617,6 +623,12 @@ with the sensor.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
 </pre></div>
 </div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>matplotlib
+</pre></div>
+</div>
 <div class="clear-left"></div></div></div></li>
 </ol>
 </section>
@@ -651,7 +663,7 @@ IP addresses of the boards or to extend the application.</p>
 <div><div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>/boot/firmware/config.txt<span class="w"> </span>&lt;&lt;<span class="s1">&#39;EOF&#39;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>/boot/config.txt<span class="w"> </span>&lt;&lt;<span class="s1">&#39;EOF&#39;</span>
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>  dtoverlay=rpi-t1lpse-apl
@@ -767,26 +779,46 @@ with the boards:</p>
 </section>
 <section id="application-execution">
 <h3>Application Execution<a class="headerlink" href="#application-execution" title="Link to this heading"></a></h3>
-<p>When executed, the demo continuously reads the temperature from the <a class="icon adi reference external" href="https://www.analog.com/TMP01" target="_blank">TMP01</a>
-sensor and compares it against the configured thresholds. The fan is
-automatically turned <strong>ON</strong> once the temperature rises above <code class="docutils literal notranslate"><span class="pre">TEMP_ON</span></code>
-(default 27 °C) and turned <strong>OFF</strong> once the temperature falls below
-<code class="docutils literal notranslate"><span class="pre">TEMP_OFF</span></code> (default 26 °C). This hysteresis prevents rapid switching when the
-temperature hovers around the threshold.</p>
+<p>When executed, the demo continuously reads temperature from the external
+<a class="icon adi reference external" href="https://www.analog.com/TMP01" target="_blank">TMP01</a> and applies a simple thermostat hysteresis:</p>
+<ul class="simple">
+<li><p>Fan turns <strong>ON</strong> when temperature is <strong>≥ TEMP_ON</strong></p></li>
+<li><p>Fan turns <strong>OFF</strong> when temperature is <strong>≤ TEMP_OFF</strong></p></li>
+<li><p>Between thresholds, the fan keeps its previous state</p></li>
+</ul>
+<p>The thresholds are configured via command-line arguments (see below). The
+application validates that <code class="docutils literal notranslate"><span class="pre">TEMP_OFF</span> <span class="pre">&lt;</span> <span class="pre">TEMP_ON</span></code>; otherwise it exits with an error.</p>
+<p>The on-board ADT75 is included as a secondary reference measurement to provide
+a quick sanity check that the SWIOT1L-SL is operational and to indicate local
+ambient/board temperature.</p>
 <p>During runtime, the application prints sensor readings and fan state in the
 console, and displays two plots:</p>
 <ul class="simple">
-<li><p><strong>Temperature vs Time</strong> — TMP01 and ADT75 temperature measurements with ON/OFF
-thresholds.</p></li>
+<li><p><strong>Temperature vs Time</strong> — external <a class="icon adi reference external" href="https://www.analog.com/TMP01" target="_blank">TMP01</a> temperature and the <strong>on-board ADT75</strong>
+temperature from the SWIOT1L-SL “temperature sensor board”, with ON/OFF thresholds.</p></li>
 <li><p><strong>Fan State vs Time</strong> — graphical representation of when the fan is active.</p></li>
 </ul>
-<p>The application accepts optional command-line arguments to override the default
-IP addresses of the temperature sensor board and the fan control board. If no
-arguments are provided, the application falls back to the default IP addresses
-defined in the script.</p>
-<p>Run the Temperature Controller example using the default configuration:</p>
-<blockquote>
-<div><div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+<section id="command-line-arguments">
+<h4>Command-line arguments<a class="headerlink" href="#command-line-arguments" title="Link to this heading"></a></h4>
+<p>The demo accepts optional command-line arguments to select the IP addresses for
+each SWIOT1L-SL board and to configure the thermostat thresholds:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--temp-ip</span></code>: IP address of the SWIOT1L-SL board that powers/reads the TMP01 and
+provides the on-board ADT75 reference trace (default: <code class="docutils literal notranslate"><span class="pre">192.168.97.41</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--fan-ip</span></code>: IP address of the SWIOT1L-SL board that drives the fan (default:
+<code class="docutils literal notranslate"><span class="pre">192.168.97.40</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--temp-on</span></code>: temperature in °C at/above which the fan turns ON</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--temp-off</span></code>: temperature in °C at/below which the fan turns OFF</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">--temp-off</span></code> must be strictly less than <code class="docutils literal notranslate"><span class="pre">--temp-on</span></code> (hysteresis condition).</p>
+</div>
+</section>
+<section id="running-the-application">
+<h4>Running the Application<a class="headerlink" href="#running-the-application" title="Link to this heading"></a></h4>
+<p>Run the Temperature Controller example with example thresholds:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>examples/rpi_t1lpse
@@ -795,35 +827,59 @@ defined in the script.</p>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~/examples/rpi_t1lpse$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>temperature_controller.py
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>temperature_controller.py<span class="w"> </span>--temp-on<span class="w"> </span><span class="m">50</span><span class="w"> </span>--temp-off<span class="w"> </span><span class="m">40</span>
 </pre></div>
 </div>
-<div class="clear-left"></div></div></div></div></blockquote>
-<p>To explicitly specify the board IP addresses:</p>
-<blockquote>
-<div><div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+<div class="clear-left"></div></div></div><p>Specify board IP addresses and thresholds:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>temperature_controller.py<span class="w"> </span><span class="se">\</span>
 <span class="w">   </span>--temp-ip<span class="w"> </span><span class="m">192</span>.168.97.41<span class="w"> </span><span class="se">\</span>
-<span class="w">   </span>--fan-ip<span class="w"> </span><span class="m">192</span>.168.97.40
+<span class="w">   </span>--fan-ip<span class="w"> </span><span class="m">192</span>.168.97.40<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--temp-on<span class="w"> </span><span class="m">50</span><span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--temp-off<span class="w"> </span><span class="m">40</span>
 </pre></div>
 </div>
-<div class="clear-left"></div></div></div><figure class="align-center" id="id3">
-<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/t1lpse-temp-controller/docs/solutions/reference-designs/ad-rpi-t1lpse-sl/sample_application/ad-rpi-t1lpse-sl-sample-application-console-output.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/t1lpse-temp-controller/docs/solutions/reference-designs/ad-rpi-t1lpse-sl/sample_application/ad-rpi-t1lpse-sl-sample-application-console-output.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/t1lpse-temp-controller/docs/solutions/reference-designs/ad-rpi-t1lpse-sl/sample_application/ad-rpi-t1lpse-sl-sample-application-console-output.png" width="500" />
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>.. figure:: ad-rpi-t1lpse-sl-sample-application-console-output.png
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>  :align: center
+  :width: 500
+
+  Example Console Output of the Temperature Controller Application
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>.. figure:: ad-rpi-t1lpse-sl-sample-application-plot-output.png
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>  :align: center
+  :width: 500
+
+  Example Plot Result of the Temperature Controller Application
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+<section id="system-characterization">
+<h4>System characterization<a class="headerlink" href="#system-characterization" title="Link to this heading"></a></h4>
+<p>After running the application, the resulting temperature and fan state plots can
+be used to characterize the thermal behavior of the system.</p>
+<p>Based on this characterization, appropriate thermostat thresholds may be chosen
+and applied either as defaults or via command-line arguments.</p>
+<p>Wide thresholds (for example, fan ON at 100 °C and OFF at 0 °C) may be used during
+initial bring-up or validation, while tighter thresholds can be selected for
+normal operation.</p>
+<figure class="align-center" id="id3">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/t1lpse-temp-controller/docs/solutions/reference-designs/ad-rpi-t1lpse-sl/sample_application/ad-rpi-t1lpse-sl-sample-application-step-response.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/t1lpse-temp-controller/docs/solutions/reference-designs/ad-rpi-t1lpse-sl/sample_application/ad-rpi-t1lpse-sl-sample-application-step-response.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/t1lpse-temp-controller/docs/solutions/reference-designs/ad-rpi-t1lpse-sl/sample_application/ad-rpi-t1lpse-sl-sample-application-step-response.png" width="500" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 3 </span><span class="caption-text">Example Console Output of the Temperature Controller Application</span><a class="headerlink" href="#id3" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 3 </span><span class="caption-text">Temperature response and fan state during system characterization</span><a class="headerlink" href="#id3" title="Link to this image"></a></p>
 </figcaption>
 </figure>
-<figure class="align-center" id="id4">
-<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/t1lpse-temp-controller/docs/solutions/reference-designs/ad-rpi-t1lpse-sl/sample_application/ad-rpi-t1lpse-sl-sample-application-plot-output.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/t1lpse-temp-controller/docs/solutions/reference-designs/ad-rpi-t1lpse-sl/sample_application/ad-rpi-t1lpse-sl-sample-application-plot-output.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/t1lpse-temp-controller/docs/solutions/reference-designs/ad-rpi-t1lpse-sl/sample_application/ad-rpi-t1lpse-sl-sample-application-plot-output.png" width="500" />
-</a>
-<figcaption>
-<p><span class="caption-number">Figure 4 </span><span class="caption-text">Example Plot Result of the Temperature Controller Application</span><a class="headerlink" href="#id4" title="Link to this image"></a></p>
-</figcaption>
-</figure>
-</div></blockquote>
+</section>
 <section id="use-cases">
 <h4>Use Cases<a class="headerlink" href="#use-cases" title="Link to this heading"></a></h4>
 <p>This demo illustrates how the <a class="icon adi reference external" href="https://www.analog.com/AD-RPI-T1LPSE-SL" target="_blank">AD-RPI-T1LPSE-SL</a> platform together

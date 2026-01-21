@@ -44,6 +44,8 @@ Hardware Setup
 - 1x :adi:`TMP01` Temperature Sensor
 - 1x MC002103 DC Axial Fan
 - 1x Raspberry Pi USB Type-C Power Supply (5V, 3A)
+- 1x Power Resistor (6.2Ω, 10W was used by us)
+- 1x Power Supply for the Power Resistor (5V, 1A was used by us)
 
 **Setup Procedure**
 
@@ -53,8 +55,7 @@ Hardware Setup
 2. Connect the two :adi:`AD-SWIOT1L-SL` boards to the
    :adi:`AD-RPI-T1LPSE-SL` board via the T1L connectors
 
-3. Connect the first :adi:`AD-SWIOT1L-SL` board to the :adi:`TMP01` temperature
-   sensor
+3. Connect the :adi:`TMP01` temperature sensor to the first :adi:`AD-SWIOT1L-SL` board
 
    The first SWIOT1L-SL board is used to both power the TMP01 sensor and
    measure its analog output voltage (VPTAT), which encodes the temperature.
@@ -78,7 +79,10 @@ Hardware Setup
       the TMP01 VOUT signal. Both channels must share the same ground reference
       with the sensor.
 
-4. Connect the second :adi:`AD-SWIOT1L-SL` board to the fan actuator
+4. Power on the power resistor. Attach the power resistor to the TMP01 sensor
+   to simulate temperature changes via rubber bands or similar means to dissipate heat.
+
+5. Connect the fan actuator to the second :adi:`AD-SWIOT1L-SL` board
 
    The second SWIOT1L-SL board drives the fan according to the control loop.
 
@@ -92,7 +96,7 @@ Hardware Setup
 
      - ``CH1 SWIO`` → ``Fan Tach Out``
 
-5. Power the Raspberry Pi with a 5V, 3A USB Type-C power supply.
+6. Power the Raspberry Pi with a 5V, 3A USB Type-C power supply.
 
 
 Software Setup
@@ -122,6 +126,7 @@ Repository Cloning
       $ python3 -m venv ./venv
       $ source venv/bin/activate
       $ pip install -e .
+      $ pip install matplotlib
 
 
 Firmware Flashing
@@ -161,7 +166,7 @@ Open a terminal and write this command:
       :group: analog
       :show-user:
 
-      $ sudo tee -a /boot/firmware/config.txt <<'EOF'
+      $ sudo tee -a /boot/config.txt <<'EOF'
          dtoverlay=rpi-t1lpse-apl
          dtoverlay=rpi-t1lpse-class12
          EOF
@@ -256,45 +261,70 @@ Open the terminal and run the following commands.
 Application Execution
 ~~~~~~~~~~~~~~~~~~~~~
 
-When executed, the demo continuously reads the temperature from the :adi:`TMP01`
-sensor and compares it against the configured thresholds. The fan is
-automatically turned **ON** once the temperature rises above ``TEMP_ON``
-(default 27 °C) and turned **OFF** once the temperature falls below
-``TEMP_OFF`` (default 26 °C). This hysteresis prevents rapid switching when the
-temperature hovers around the threshold.
+When executed, the demo continuously reads temperature from the external
+:adi:`TMP01` and applies a simple thermostat hysteresis:
+
+- Fan turns **ON** when temperature is **≥ TEMP_ON**
+- Fan turns **OFF** when temperature is **≤ TEMP_OFF**
+- Between thresholds, the fan keeps its previous state
+
+The thresholds are configured via command-line arguments (see below). The
+application validates that ``TEMP_OFF < TEMP_ON``; otherwise it exits with an error.
+
+The on-board ADT75 is included as a secondary reference measurement to provide
+a quick sanity check that the SWIOT1L-SL is operational and to indicate local
+ambient/board temperature.
 
 During runtime, the application prints sensor readings and fan state in the
 console, and displays two plots:
 
-- **Temperature vs Time** — TMP01 and ADT75 temperature measurements with ON/OFF
-  thresholds.
+- **Temperature vs Time** — external :adi:`TMP01` temperature and the **on-board ADT75**
+  temperature from the SWIOT1L-SL "temperature sensor board", with ON/OFF thresholds.
 - **Fan State vs Time** — graphical representation of when the fan is active.
 
-The application accepts optional command-line arguments to override the default
-IP addresses of the temperature sensor board and the fan control board. If no
-arguments are provided, the application falls back to the default IP addresses
-defined in the script.
+Command-line arguments
+^^^^^^^^^^^^^^^^^^^^^^
 
-Run the Temperature Controller example using the default configuration:
+The demo accepts optional command-line arguments to select the IP addresses for
+each SWIOT1L-SL board and to configure the thermostat thresholds:
 
-   .. shell::
-      :user: analog
-      :group: analog
-      :show-user:
+- ``--temp-ip``: IP address of the SWIOT1L-SL board that powers/reads the TMP01 and
+  provides the on-board ADT75 reference trace (default: ``192.168.97.41``)
+- ``--fan-ip``: IP address of the SWIOT1L-SL board that drives the fan (default:
+  ``192.168.97.40``)
+- ``--temp-on``: temperature in °C at/above which the fan turns ON
+- ``--temp-off``: temperature in °C at/below which the fan turns OFF
 
-      $ cd examples/rpi_t1lpse
-      $ python3 temperature_controller.py
+.. note::
 
-To explicitly specify the board IP addresses:
+   ``--temp-off`` must be strictly less than ``--temp-on`` (hysteresis condition).
 
-   .. shell::
-      :user: analog
-      :group: analog
-      :show-user:
 
-      $ python3 temperature_controller.py \
-          --temp-ip 192.168.97.41 \
-          --fan-ip 192.168.97.40
+Running the Application
+^^^^^^^^^^^^^^^^^^^^^^^
+
+Run the Temperature Controller example with example thresholds:
+
+.. shell::
+   :user: analog
+   :group: analog
+   :show-user:
+
+   $ cd examples/rpi_t1lpse
+   $ python3 temperature_controller.py --temp-on 50 --temp-off 40
+
+Specify board IP addresses and thresholds:
+
+.. shell::
+   :user: analog
+   :group: analog
+   :show-user:
+
+   $ python3 temperature_controller.py \
+       --temp-ip 192.168.97.41 \
+       --fan-ip 192.168.97.40 \
+       --temp-on 50 \
+       --temp-off 40
 
    .. figure:: ad-rpi-t1lpse-sl-sample-application-console-output.png
       :align: center
@@ -307,6 +337,27 @@ To explicitly specify the board IP addresses:
       :width: 500
 
       Example Plot Result of the Temperature Controller Application
+
+
+System characterization
+^^^^^^^^^^^^^^^^^^^^^^^
+
+After running the application, the resulting temperature and fan state plots can
+be used to characterize the thermal behavior of the system.
+
+Based on this characterization, appropriate thermostat thresholds may be chosen
+and applied either as defaults or via command-line arguments. 
+
+Wide thresholds (for example, fan ON at 100 °C and OFF at 0 °C) may be used during
+initial bring-up or validation, while tighter thresholds can be selected for
+normal operation.
+
+
+.. figure:: ad-rpi-t1lpse-sl-sample-application-step-response.png
+   :align: center
+   :width: 500
+
+   Temperature response and fan state during system characterization
 
 
 Use Cases
