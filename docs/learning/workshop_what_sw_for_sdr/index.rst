@@ -3,8 +3,7 @@ What software do I need for my SDR?
 
 FTC2023 Pluto Workshop
 ------------------------------------------------------------------------------
-- USB drive image is available `here <https://swdownloads.analog.com/cse/kuiper/FTC2023_SDR.zip>`__
-- Documentation is available `here <https://swdownloads.analog.com/cse/workshops/ftc2024/pluto_sdr/FTC2023_SDR_pluto.zip>`__ (PPT, lab instructions and exercises)
+:doc:`Just Enough Software and HDL for High-Speed Designs <../workshop_just_enough_sw_and_hdl_for_high_speed_designs/index>`
 
 FTC2024 Jupiter Workshop
 -----------------------------------------------------------------------------
