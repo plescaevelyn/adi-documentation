@@ -24,17 +24,17 @@ following the tutorial yourself:
 
    :download:`SDR Lab Booklet <instructions_sdr_lab.pdf>`
 
-The source code for the hands-on exercises is provided here:
-
-.. admonition:: Download
-
-   :download:`SDR Lab Source Code <sdr_lab_source_code.zip>`
-
-The SD Card image for the hands-on exercises is provided here:
-
-.. admonition:: Download
-
-   :download:`SDR Lab Image <SDR_Lab_Image.zip>`
+.. The source code for the hands-on exercises is provided here:
+..
+.. .. admonition:: Download
+..
+..    :download:`SDR Lab Source Code <sdr_lab_source_code.zip>`
+..
+.. The SD Card image for the hands-on exercises is provided here:
+..
+.. .. admonition:: Download
+..
+..    :download:`SDR Lab Image <SDR_Lab_Image.zip>`
 
 .. contents:: Workshop Contents
    :local:
