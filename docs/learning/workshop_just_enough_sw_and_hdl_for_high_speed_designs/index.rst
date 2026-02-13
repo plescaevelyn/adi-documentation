@@ -294,7 +294,7 @@ Common Architecture for Easy Platform Transition
 
 The common architecture across ADI's platforms makes it easy to transition between hardware as your project evolves from prototype to production.
 
-.. figure:: images/common_architecture.png
+.. figure:: images/commonarchmakesiteasytotransformbetweenplatforms.png
    :alt: Common Architecture Makes It Easy to Transition Between Platforms
    :align: center
 
