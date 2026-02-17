@@ -107,7 +107,14 @@ Analysis, control and evaluation tools
 Hands-on exercises
 ~~~~~~~~~~~~~~~~~~
 
-TODO: Complete
+#. Transmit and receive a complex sinusoid with Python using Pluto SDR
+#. Transmit and receive a complex sinusoid with Python using Jupiter or Talise
+#. Doppler Radar with GNU Radio (Pluto)
+#. Binary Phase Shift Keying (BPSK) in Python using Pluto
+#. Binary Shift Keying (BPSK) in Python using Jupiter or Talise
+#. Quadrature Phase Shift Keying (QPSK) in GNU Radio using Pluto
+#. Receiving QPSK modulated Video with SDRs using Pluto
+#. Spectrum Paint using Pluto
 
 Theoretical Concepts and Practical Foundations
 ----------------------------------------------
@@ -119,7 +126,7 @@ Software-defined radio development follows a progressive, stage-based approach t
 The key advantage of ADI's approach is that the **same HDL, software, and infrastructure components are used throughout the entire flow**, 
 reducing the learning curve and development risk at each stage.
 
-.. figure:: images/customer_design_flow.png
+.. figure:: images/theoretical_content/customer_design_flow.png
    :alt: Customer Design Flow
    :align: center
 
@@ -189,11 +196,11 @@ Evaluation, Test and Analysis
 
 Analog Devices provides a single cohesive software solution, meeting customers in their ecosystem or at their tools of choice.
 
-.. figure:: images/sw_solution.png
-   :alt: Software Solution Architecture
-   :align: center
+   .. figure:: images/theoretical_content/sw_solution.png
+      :alt: Software Solution Architecture
+      :align: center
 
-   Single cohesive software solution supporting multiple user personas and tools
+      Single cohesive software solution supporting multiple user personas and tools
 
 ** Product Evaluation** uses hardware and software tools to verify that the Converter meets Application requirements.
 
@@ -220,7 +227,7 @@ Building Blocks for Development and New Revenue Streams
 
 ADI's modular architecture provides reusable building blocks that accelerate development and create opportunities for new applications and revenue streams.
 
-.. figure:: images/building_blocks.png
+.. figure:: images/theoretical_content/building_blocks.png
    :alt: Building Blocks for Development
    :align: center
 
@@ -244,11 +251,11 @@ Common Architecture for Easy Platform Transition
 
 The common architecture across ADI's platforms makes it easy to transition between hardware as your project evolves from prototype to production.
 
-.. figure:: images/common_architecture.png
-   :alt: Common Architecture Makes It Easy to Transition Between Platforms
-   :align: center
+   .. figure:: images/theoretical_content/common_architecture.png
+      :alt: Common Architecture Makes It Easy to Transition Between Platforms
+      :align: center
 
-   Common architecture enables seamless transitions between platforms
+      Common architecture enables seamless transitions between platforms
 
 **Shared Software and HDL Stack:**
 
@@ -273,7 +280,188 @@ This architecture ensures that code developed on entry-level hardware like ADALM
 Analysis | Control | Evaluation
 -------------------------------
 
-TODO: Complete
+Once you have the IIO framework set up, you need tools to analyze, control, and evaluate your hardware. ADI provides several software tools that work seamlessly with IIO devices, from simple command-line utilities to full-featured graphical applications.
+
+ACE Software and Plugins
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+**ACE (Analysis, Control, Evaluation)** is ADI's original software framework for interacting with evaluation boards and development platforms. It provides a plugin-based architecture where different modules can control specific hardware features.
+
+**ADGenericIIOBoard Plugin** is a key plugin within ACE that enables interaction with any IIO-compatible device. This generic approach means you can use the same plugin to control different ADI evaluation boards without requiring board-specific software.
+
+.. figure:: images/analysis_control_eval/adgeneric_iio_board_plugin.png
+   :alt: ADGenericIIOBoard Plugin Interface
+   :align: center
+
+   ADGenericIIOBoard Plugin showing IIO device control
+
+IIO Oscilloscope
+~~~~~~~~~~~~~~~~
+
+**IIO Oscilloscope (IIO-Scope)** is a powerful cross-platform application for visualizing and controlling IIO devices. It provides both time-domain and frequency-domain visualization along with device configuration capabilities.
+
+**Key Features:**
+
+* **Multi-platform support**: Runs on Linux, Windows, and macOS
+* **Time and frequency domain plots**: View signals in both domains simultaneously
+* **Device configuration**: Modify hardware parameters in real-time
+* **Plugin architecture**: Extensible with generic and device-specific plugins
+* **Remote operation**: Can connect to IIO devices over network using iiod
+
+.. figure:: images/analysis_control_eval/iio_scope.png
+   :alt: IIO Oscilloscope Main Interface
+   :align: center
+
+   IIO Oscilloscope showing time and frequency domain plots
+
+**Generic Plugins:**
+
+IIO-Scope includes several generic plugins that work with any IIO device:
+
+* **DMM (Digital Multimeter) Plugin**: Displays real-time numerical values from device channels, useful for monitoring DC values, temperatures, voltages, and other scalar measurements
+
+   .. figure:: images/analysis_control_eval/dmm_plugin.png
+      :alt: DMM Plugin Interface
+      :align: center
+
+      DMM Plugin showing real-time channel values
+
+* **Debug Tab/Plugin**: Provides low-level access to all IIO device attributes, allowing direct read/write operations on any device parameter for advanced debugging and development
+
+   .. figure:: images/analysis_control_eval/debug_tab.png
+      :alt: Debug Tab Interface
+      :align: center
+
+      Debug Tab showing device attributes tree
+
+**Specific Control Plugins:**
+
+For more complex devices, IIO-Scope offers specialized plugins:
+
+* **FPGA Settings Plugin**: Controls FPGA-specific parameters such as clock configurations, data path settings, and interface modes
+* **High Level Device Control Plugins**: Provide intuitive interfaces for complex RF transceivers, DACs, and ADCs with features like frequency tuning, gain control, and filter configuration
+
+   .. figure:: images/analysis_control_eval/fpga_settings.png
+      :alt: FPGA Settings Plugin
+      :align: center
+
+      FPGA Settings Plugin for controlling FPGA-specific parameters
+
+   .. figure:: images/analysis_control_eval/high_level_device_ctrl.png
+      :alt: High Level Device Control Plugin
+      :align: center
+
+      High Level Device Control Plugin providing intuitive interfaces for RF transceivers
+
+IIO Command Line Tools
+~~~~~~~~~~~~~~~~~~~~~~~
+
+For automation, scripting, and headless operation, the IIO framework includes command-line utilities:
+
+* **iio_info**: Lists all available IIO devices and their attributes
+* **iio_attr**: Reads or writes device/channel attributes
+* **iio_readdev**: Captures samples from device channels
+* **iio_writedev**: Transmits samples to device channels
+* **iio_reg**: Direct register access for low-level debugging
+
+These tools are particularly useful for:
+
+* Automated testing and continuous integration
+* Remote device control via SSH
+* Scripting complex measurement sequences
+* Quick parameter verification without GUI overhead
+
+**iio_info**
+
+Displays information about all available IIO devices and their attributes, channels, and triggering capabilities.
+
+.. code-block:: bash
+
+   iio_info
+   iio_info -n 192.168.1.100
+
+**iio_attr**
+
+Reads or writes device and channel attributes for configuration and control.
+
+.. code-block:: bash
+
+   iio_attr -d cf-ad9361-lpc
+   iio_attr -c voltage0 frequency
+   iio_attr -c voltage0 frequency 2400000000
+
+**iio_readdev**
+
+Captures samples from device channels and saves to file for analysis.
+
+.. code-block:: bash
+
+   iio_readdev -d cf-ad9361-lpc -c voltage0 -s 1024 > samples.raw
+
+**iio_writedev**
+
+Transmits samples from file to device channels.
+
+.. code-block:: bash
+
+   iio_writedev -d cf-ad9361-lpc -c voltage0 < samples.raw
+
+**Remote Access via iiod**
+
+Connect to IIO devices over network using the iiod server:
+
+.. code-block:: bash
+
+   iio_info -n 10.48.65.212
+
+Scopy: Next-Generation Analysis Tool
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**Scopy** is ADI's modern, next-generation instrument software that supersedes IIO-Scope with enhanced capabilities and a more intuitive interface. It transforms your PC into a complete laboratory instrument suite.
+
+**Scopy provides:**
+
+* **Multiple instrument views**: Oscilloscope, spectrum analyzer, network analyzer, signal generator, logic analyzer, pattern generator, and more
+* **Modern UI/UX**: Contemporary interface with improved usability
+* **Enhanced visualization**: Advanced plotting with zoom, cursors, measurements, and annotations
+* **Cross-platform**: Available for Windows, Linux, and macOS
+* **Generic IIO support**: Works with any IIO-compatible device, not just ADI hardware
+* **Export capabilities**: Save data, screenshots, and configurations for documentation
+
+.. figure:: images/analysis_control_eval/scopy_interface.png
+   :alt: Scopy Main Interface
+   :align: center
+
+   Scopy interface showing multiple instrument views
+   *(Replace with screenshot from PDF page 14 showing Scopy)*
+
+Scopy is the recommended tool for new projects, offering a more complete and modern experience than the older IIO-Scope application.
+
+qIQ Receiver
+~~~~~~~~~~~~
+
+**qIQ Receiver** is a specialized application for analyzing and demodulating various wireless communication standards. It's particularly useful for RF engineers working with:
+
+* **Digital modulation analysis**: BPSK, QPSK, QAM, and other modulation schemes
+* **Constellation diagrams**: Real-time visualization of modulation quality
+* **Spectrum analysis**: Detailed frequency domain analysis
+* **Recording and playback**: Capture RF signals for offline analysis
+
+.. figure:: images/analysis_control_eval/qiq_receiver.png
+   :alt: qIQ Receiver Interface
+   :align: center
+
+   qIQ Receiver showing constellation diagram and spectrum
+   *(Replace with screenshot from PDF page 15 showing qIQ Receiver)*
+
+qIQ Receiver bridges the gap between generic oscilloscope tools and specialized protocol analyzers, making it easier to develop and debug wireless communication systems with ADI SDR platforms.
+
+**Tool Selection Guide:**
+
+* **For quick debugging and parameter verification**: Use IIO command-line tools
+* **For comprehensive signal analysis and multiple instruments**: Use Scopy
+* **For wireless communication development**: Use qIQ Receiver
+* **For legacy systems or specific ACE plugins**: Use ACE/IIO-Scope
 
 
 Hands on exercises
@@ -592,11 +780,11 @@ As demonstrated in the previous Doppler radar exercise, frequency varies with di
 
 This exercise demonstrates how modern SDR systems correct all these impairments in software using sophisticated algorithms:
 
-.. figure:: images/exercises/bpsk_loopback/tx_rx_flow_diagram.png
-   :alt: BPSK Transmitter and Receiver Architecture
-   :align: center
+   .. figure:: images/exercises/bpsk_loopback/tx_rx_flow_diagram.png
+      :alt: BPSK Transmitter and Receiver Architecture
+      :align: center
 
-   BPSK system architecture showing transmitter and receiver signal processing chain (slide 5 - flowchart diagram)
+      BPSK system architecture showing transmitter and receiver signal processing chain (slide 5 - flowchart diagram)
 
 **How the BPSK System Works:**
 
@@ -632,11 +820,11 @@ Starting from a noisy, offset constellation with scattered points, you will see 
 #. **After symbol timing recovery**: Correct samples selected, reducing mid-constellation points
 #. **After Costas loop**: Clean constellation with two tight clusters at -1 and +1
 
-.. figure:: images/exercises/bpsk_loopback/bpsk_constellation_progression.png
-   :alt: BPSK Signal Recovery Progression
-   :align: center
+   .. figure:: images/exercises/bpsk_loopback/bpsk_constellation_progression.png
+      :alt: BPSK Signal Recovery Progression
+      :align: center
 
-   Progression from noisy received signal to clean demodulated constellation
+      Progression from noisy received signal to clean demodulated constellation
 
 This exercise demonstrates the power of software-defined radio: complex signal processing algorithms running in software can correct real-world impairments that would be difficult or impossible to handle in analog hardware alone.
 
@@ -700,16 +888,57 @@ to remotely connect to Jupiter or Talise.
 
 #. To stop running the Python script or if you want to run it again, use the instructions shown in *Figure 10*.
 
-Quadrature Shit Keying (QPSK) in GNU Radio using Pluto
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Quadrature Phase Shift Keying (QPSK) in GNU Radio using Pluto
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This exercise demonstrates Quadrature Phase Shift Keying (QPSK), a digital modulation scheme that transmits 2 bits per symbol instead of BPSK's 1 bit per symbol. QPSK uses four phase positions in the I/Q plane to encode data, effectively doubling the data rate in the same bandwidth.
+
+**What is QPSK?**
+
+QPSK encodes two bits into each symbol using four constellation points at 45°, 135°, 225°, and 315°:
+
+* **00**, **01**, **10**, **11** → Four distinct phase positions
+
+This creates twice the spectral efficiency of BPSK while maintaining good noise immunity.
+
+   .. figure:: images/exercises/qpsk_gnuradio/qpsk_constellation.png
+      :alt: QPSK Constellation 
+      :align: center
+
+      QPSK constellation (4 points, 2 bits/symbol)
+
+   .. figure:: images/exercises/qpsk_gnuradio/qpsk_ho_modulation.png
+      :alt: QPSK Higher Order Modulation Constellation
+      :align: center
+
+      QPSK higher-order modulation schemes (16-QAM, 32-QAM, 64-QAM, 256-QAM) 
+
+**Where is QPSK Used?**
+
+* Satellite communications (DVB-S, GPS)
+* Wireless standards (CDMA, LTE, 5G)
+* Cable modems (DOCSIS)
+* Point-to-point microwave links
+
+**How This Exercise Works:**
+
+You will receive QPSK-modulated data packets containing hexadecimal values using GNU Radio. The flowgraph performs symbol synchronization, frequency locking, and constellation decoding to recover the transmitted data.
+
+   .. figure:: images/exercises/qpsk_gnuradio/qpsk_gnuradio_flowgraph.png
+      :alt: QPSK GNU Radio Flowgraph
+      :align: center
+
+      GNU Radio flowgraph for receiving QPSK-modulated data using Pluto SDR
+
+Follow these steps to receive QPSK-modulated data:
 
 #. Make the following setup using Pluto and connect it to your PC:
 
-   .. figure:: images/exercises/qpsk_pluto/qpsk_pluto_setup.png
-      :alt: QPSK Pluto Setup
-      :align: center
+      .. figure:: images/exercises/qpsk_pluto/qpsk_pluto_setup.png
+         :alt: QPSK Pluto Setup
+         :align: center
 
-      QPSK Pluto Setup
+         QPSK Pluto Setup
 
 #. In *gnuradio-companion*, open **qpsk_point_to_point_rx_console.grc** from **workshop_exercises->gnuradio->qpsk_point_to_point_console**. 
 
@@ -724,7 +953,24 @@ Run the flowgraph and observe the received message stored in "msg_var" variable 
 Receiving QPSK modulated Video with SDRs using Pluto
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#. Make the following setup using Pluto and connect it to your PC (la fel ca poza cealalta)
+This exercise demonstrates a real-world application of QPSK modulation: receiving Digital Amateur Television (DATV). Using the open-source SDRangel software, you will receive and display live video transmitted over the air using QPSK modulation, the same technique used in satellite TV broadcasting.
+
+**What is DATV?**
+
+Digital Amateur Television (DATV) is a form of amateur radio that transmits video and audio using digital modulation schemes like QPSK. Unlike analog TV, DATV provides:
+
+* Better quality with less interference
+* More efficient use of bandwidth
+* Error correction capabilities
+* Multiple audio/video streams in a single channel
+
+**How This Exercise Works:**
+
+SDRangel is a powerful open-source SDR application that implements a complete DATV receiver chain including QPSK demodulation, Forward Error Correction (FEC), and MPEG-2/H.264 video decoding. The Pluto SDR receives the RF signal, and SDRangel processes it to display the video in real-time.
+
+Follow these steps to receive QPSK-modulated video:
+
+#. Make the following setup using Pluto and connect it to your PC:
 
 #. Open the terminal by pressing at the same time **Ctrl + Alt + T** on your keyboard.
 
@@ -756,10 +1002,39 @@ Receiving QPSK modulated Video with SDRs using Pluto
 Spectrum Paint using Pluto
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#. Make the following setup using Pluto and connect it to your PC (la fel ca prima poza)
+This exercise demonstrates a creative application of SDR: "painting" images in the frequency spectrum. By transmitting signals at different frequencies over time, you can create visible patterns on a waterfall display, which shows frequency on the horizontal axis and time on the vertical axis.
 
-#. Open in *gnuradio-companion* the **paint_tx.grc** file from **workshop_exercises->gnuradio->spectrum_paint** and run the flowgraph. Observe the waterfall received.
+**How Spectrum Paint Works:**
+
+A waterfall display is a spectrogram that shows:
+
+* **Frequency** (horizontal axis): Different colors represent signal strength at each frequency
+* **Time** (vertical axis): Each new row represents a new time snapshot
+* **Amplitude** (color intensity): Brighter colors indicate stronger signals
+
+By carefully controlling which frequencies are transmitted at each moment, you can "draw" images, text, or patterns that become visible as the waterfall scrolls down.
+
+**Applications:**
+
+While spectrum paint is primarily a demonstration, the underlying technique is used in:
+
+* Frequency-hopping spread spectrum (FHSS)
+* Chirp radar systems
+* Multi-carrier communications
+* Signal identification and watermarking
+
+This exercise showcases the flexibility of software-defined radio: the same hardware can transmit any arbitrary frequency pattern by simply changing the software.
+
+Follow these steps to create a spectrum painting:
+
+#. Make the following setup using Pluto and connect it to your PC.
+
+#. Open in *gnuradio-companion* the **paint_tx.grc** file from **workshop_exercises->gnuradio->spectrum_paint** and run the flowgraph.
+
+#. Observe the waterfall display as the spectrum painting appears, created by the Pluto SDR transmitting the frequency pattern.
 
    .. figure:: images/exercises/spectrum_paint/paint_tx.png
-      :alt: Spectrum Paint Transmitter
+      :alt: Spectrum Paint Waterfall Display
       :align: center
+
+      Waterfall display showing the spectrum painting created by transmitting controlled frequency patterns
