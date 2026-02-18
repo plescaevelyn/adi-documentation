@@ -52,8 +52,9 @@ Prerequisites
 * USB cable
 * SMA cables for loopback connections
 * Two antennas for wireless experiments
-* PC/Laptop with USB port
-* An SD Card with the provided SDR Lab Image or an image that you set up yourself with the required software
+* Raspberry Pi (Raspberry Pi 4 or newer recommended)
+* SD Card (minimum 16GB) with the provided SDR Lab Image (see Downloads section above) or an image that you set up yourself with the required software
+* Monitor, keyboard, mouse, and power source for the Raspberry Pi
 
 **Software Requirements**:
 
@@ -471,6 +472,13 @@ qIQ Receiver bridges the gap between generic oscilloscope tools and specialized 
 Hands on exercises
 ------------------
 
+.. note::
+
+   The following exercises should be run on a Raspberry Pi with the provided SD card image (available in the Downloads section above).
+   The SD card image contains all necessary software pre-installed, including Python, GNU Radio, Thonny IDE, and all required libraries.
+   Connect the mouse, keyboard and monitor to the Raspberry Pi, and power it on.
+   Connect your SDR hardware (Pluto, Jupiter, or Talise) to the Raspberry Pi via USB before starting the exercises.
+
 Transmit and receive a complex sinusoid  with Python using Pluto SDR
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -500,7 +508,7 @@ signal and its frequency spectrum representation.
 
 Follow the next steps:
 
-#. Make the following setup using Pluto and connect it to your PC:
+#. Make the following setup using Pluto and connect it to your Raspberry Pi:
 
    .. figure:: images/exercises/sinewave_loopback/pluto_setup.png
       :alt: Pluto SDR Setup
@@ -579,13 +587,13 @@ between platforms, while the signal generation, transmission, reception, and vis
 
 Follow these steps:
 
-#. Assuming the lab exercise folder is already downloaded and unzipped on your desktop, go to **workshop_exercises->python->sinewave_loopback** 
-subfolder, open **python_loopback_sine_pluto.py (for Jupiter)** or **python_loopback_sine_talise_zu11eg.py (for Talise)** using **Thonny Python IDE**
-as described in the previous exercise.
+#. Assuming the lab exercise folder is already downloaded and unzipped on your desktop, go to **workshop_exercises->python->sinewave_loopback**
+   subfolder, open **python_loopback_sine_pluto.py (for Jupiter)** or **python_loopback_sine_talise_zu11eg.py (for Talise)** using **Thonny Python IDE**
+   as described in the previous exercise.
 
-#. Observe in the script where only the "Configure SDR" code section was changed in **python_loopback_sine_jupiter.py** and **python_loopback_sine_talise_zu11eg.py** 
-compared to **python_loopback_sine_pluto.py** from *Figure 6*. This is because the same software and HDL building blocks are used across all platforms, 
-making it easy to transition between them.
+#. Observe in the script where only the "Configure SDR" code section was changed in **python_loopback_sine_jupiter.py** and **python_loopback_sine_talise_zu11eg.py**
+   compared to **python_loopback_sine_pluto.py**. This is because the same software and HDL building blocks are used across all platforms,
+   making it easy to transition between them.
 
    .. figure:: images/exercises/tx_rx_jupiter_talise/jupiter_config_code.png
       :alt: Configure SDR Code Section
@@ -601,8 +609,8 @@ making it easy to transition between them.
 
       Configure SDR code for Talise platform
 
-#. Insert the IP address on line 12 for Jupiter (in **python_loopback_sine_jupiter.py**) or for Talise (in **python_loopback_sine_talise_zu11eg.py**) 
-to remotely connect to Jupiter or Talise.
+#. Insert the IP address on line 12 for Jupiter (in **python_loopback_sine_jupiter.py**) or for Talise (in **python_loopback_sine_talise_zu11eg.py**)
+   to remotely connect to Jupiter or Talise.
 
    .. shell::
       :user: analog
@@ -615,9 +623,9 @@ to remotely connect to Jupiter or Talise.
       $ # For Talise (in python_loopback_sine_talise_zu11eg.py):
       $ sdr = adi.adrv9009_zu11eg("ip:10.48.65.182") # Create Radio object for Talise
 
-#. Run the script as indicated in *Figure 7*. In this example, a sinusoid at 15.360 KHz is transmitted and received. 
-This frequency is chosen to have an integer number of periods of the sine at the sample rate of 15.36 Msps. 
-More specifically, line 16 (depicted below) should return an integer number.
+#. Run the script as indicated in *Figure 17*. In this example, a sinusoid at 15.360 KHz is transmitted and received.
+   This frequency is chosen to have an integer number of periods of the sine at the sample rate of 15.36 Msps.
+   More specifically, line 16 (depicted below) should return an integer number.
 
    .. shell::
       :user: analog
@@ -626,9 +634,9 @@ More specifically, line 16 (depicted below) should return an integer number.
 
       $ num_samps = int((20*sample_rate)/frequency) # number of samples per call to rx()
 
-#. To zoom on the generated figures, use the instructions shown in *Figure 8*.
+#. To zoom on the generated figures, use the instructions shown in *Figure 18*.
 
-#. To stop running the Python script or if you want to run it again, use the instructions shown in *Figure 10*.
+#. To stop running the Python script or if you want to run it again, use the instructions shown in *Figure 19*.
 
 
 Doppler Radar with GNU Radio (Pluto)
@@ -698,7 +706,7 @@ This is the same principle used in police speed radar guns, weather radar, and a
 
 Follow these steps to run the Doppler radar experiment:
 
-#. Make the following setup using Pluto and connect it to your PC:
+#. Make the following setup using Pluto and connect it to your Raspberry Pi:
 
    .. figure:: images/exercises/doppler_radar/pluto_doppler_setup.png
       :alt: Pluto SDR Doppler Radar Setup
@@ -748,16 +756,20 @@ right (hand moving toward) from the center frequency.
 Binary Phase Shift Keying (BPSK) in Python using Pluto
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This exercise demonstrates Binary Phase Shift Keying (BPSK), a fundamental digital modulation technique used in modern communication systems. You will transmit digital data (binary bits) through the Pluto SDR, receive it back via a loopback connection, and observe how software-based signal processing recovers the original data despite real-world impairments.
+This exercise demonstrates Binary Phase Shift Keying (BPSK), a fundamental digital modulation technique used in modern communication
+systems. You will transmit digital data (binary bits) through the Pluto SDR, receive it back via a loopback connection, and observe
+how software-based signal processing recovers the original data despite real-world impairments.
 
 **What is BPSK?**
 
-Binary Phase Shift Keying is a type of phase modulation where digital information is encoded by shifting the phase of a carrier signal. In BPSK:
+Binary Phase Shift Keying is a type of phase modulation where digital information is encoded by shifting the phase of a carrier signal.
+In BPSK:
 
 * **Bit 0** is represented by a phase of 180° (or -1 in the I/Q plane)
 * **Bit 1** is represented by a phase of 0° (or +1 in the I/Q plane)
 
-This creates two distinct constellation points on the real axis of the I/Q diagram, making BPSK one of the most robust digital modulation schemes against noise.
+This creates two distinct constellation points on the real axis of the I/Q diagram, making BPSK one of the most robust digital
+modulation schemes against noise.
 
    .. figure:: images/exercises/bpsk_loopback/bpsk_modulation_concept.png
       :alt: BPSK Modulation Concept
@@ -804,7 +816,7 @@ This exercise demonstrates how modern SDR systems correct all these impairments 
       :align: center
       :width: 40em
 
-      BPSK system architecture showing transmitter and receiver signal processing chain (slide 5 - flowchart diagram)
+      BPSK system architecture showing transmitter and receiver signal processing chain
 
 **How the BPSK System Works:**
 
@@ -851,31 +863,31 @@ This exercise demonstrates the power of software-defined radio: complex signal p
 
 Follow these steps to run the BPSK transmission and reception experiment:
 
-#. Make the setup from *Figure 6* using Pluto and connect it to your PC.
+#. Make the setup from *Figure 15* using Pluto and connect it to your Raspberry Pi.
 
 #. Open the **workshop_exercises** folder from your desktop.
 
 #. Go to **python->bpsk_loopback** subfolder.
 
 #. Right click on **bpsk_pluto_loopback_pluto.py -> Open With Other Application** and select **Thonny Python IDE** 
-(or any other Python IDE you have installed) from the Recommended Applications list as in *Figure 7*.
+(or any other Python IDE you have installed) from the Recommended Applications list as in *Figure 16*.
 
-#. To run the script, press the green round button from the top left corner in Thonny IDE as in *Figure 8*.
+#. To run the script, press the green round button from the top left corner in Thonny IDE as in *Figure 17*.
 
-#. To zoom on a plot, use the instructions shown in *Figure 9*.
+#. To zoom on a plot, use the instructions shown in *Figure 18*.
 
-#. To stop running the Python script (if you want to run it again or run another script), close all the tabs by **right clicking on the 
-taskbar icon -> Quit x windows** as shown depicted below in *Figure 10* or close them manually one by one.
+#. To stop running the Python script (if you want to run it again or run another script), close all the tabs by **right clicking on the
+   taskbar icon -> Quit x windows** as shown depicted below in *Figure 19* or close them manually one by one.
 
 
 Binary Shift Keying (BPSK) in Python using Jupiter or Talise
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#. From **workshop_exercises->python->bpsk_loopback** subfolder, open **bpsk_jupiter_loopback_jupiter.py (for Jupiter)** 
-or **bpsk_talise_loopback_talise_zu11eg.py (for Talise)** using **Thonny Python IDE** as in *Figure 7*.
+#. From **workshop_exercises->python->bpsk_loopback** subfolder, open **bpsk_jupiter_loopback_jupiter.py (for Jupiter)**
+   or **bpsk_talise_loopback_talise_zu11eg.py (for Talise)** using **Thonny Python IDE** as in *Figure 15*.
 
-#. Observe in the script that only the "Configure SDR" code section was changed in **bpsk_jupiter_loopback_jupiter.py** and **bpsk_talise_loopback_talise_zu11eg.py** 
-compared to **bpsk_pluto_loopback_pluto.py** from the previous exercise.
+#. Observe in the script that only the "Configure SDR" code section was changed in **bpsk_jupiter_loopback_jupiter.py** and **bpsk_talise_loopback_talise_zu11eg.py**
+   compared to **bpsk_pluto_loopback_pluto.py** from the previous exercise.
 
    .. figure:: images/exercises/bpsk_loopback/jupiter_config_code.png
       :alt: Configure SDR Code Section
@@ -891,8 +903,8 @@ compared to **bpsk_pluto_loopback_pluto.py** from the previous exercise.
 
       Configure SDR code for Talise platform
 
-#. Insert the IP address given for Jupiter (in **bpsk_jupiter_loopback_jupiter.py**) or for Talise (in **bpsk_talise_loopback_talise_zu11eg.py**) 
-to remotely connect to Jupiter or Talise.
+#. Insert the IP address given for Jupiter (in **bpsk_jupiter_loopback_jupiter.py**) or for Talise (in **bpsk_talise_loopback_talise_zu11eg.py**)
+   to remotely connect to Jupiter or Talise.
 
    .. shell::
       :user: analog
@@ -905,11 +917,11 @@ to remotely connect to Jupiter or Talise.
       $ # For Talise (in bpsk_talise_loopback_talise_zu11eg.py):
       $ sdr = adi.adrv9009_zu11eg("ip:10.48.65.182") # Create Radio object for Talise
 
-#. Run the script as indicated in *Figure 8*. 
+#. Run the script as indicated in *Figure 17*.
 
-#. To zoom on the generated figures, use the instructions shown in *Figure 9*.
+#. To zoom on the generated figures, use the instructions shown in *Figure 18*.
 
-#. To stop running the Python script or if you want to run it again, use the instructions shown in *Figure 10*.
+#. To stop running the Python script or if you want to run it again, use the instructions shown in *Figure 19*.
 
 Quadrature Phase Shift Keying (QPSK) in GNU Radio using Pluto
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -947,7 +959,8 @@ This creates twice the spectral efficiency of BPSK while maintaining good noise 
 
 **How This Exercise Works:**
 
-You will receive QPSK-modulated data packets containing hexadecimal values using GNU Radio. The flowgraph performs symbol synchronization, frequency locking, and constellation decoding to recover the transmitted data.
+You will receive QPSK-modulated data packets containing hexadecimal values using GNU Radio. The flowgraph performs symbol synchronization,
+frequency locking, and constellation decoding to recover the transmitted data.
 
    .. figure:: images/exercises/qpsk_gnuradio/qpsk_gnuradio_flowgraph.png
       :alt: QPSK GNU Radio Flowgraph
@@ -958,18 +971,18 @@ You will receive QPSK-modulated data packets containing hexadecimal values using
 
 Follow these steps to receive QPSK-modulated data:
 
-#. Make the following setup using Pluto and connect it to your PC:
+#. Make the following setup using Pluto and connect it to your Raspberry Pi:
 
-      .. figure:: images/exercises/qpsk_pluto/qpsk_pluto_setup.png
-         :alt: QPSK Pluto Setup
-         :align: center
-         :width: 40em
+   .. figure:: images/exercises/qpsk_pluto/qpsk_pluto_setup.png
+      :alt: QPSK Pluto Setup
+      :align: center
+      :width: 40em
 
-         QPSK Pluto Setup
+      QPSK Pluto Setup
 
-#. In *gnuradio-companion*, open **qpsk_point_to_point_rx_console.grc** from **workshop_exercises->gnuradio->qpsk_point_to_point_console**. 
+#. In *gnuradio-companion*, open **qpsk_point_to_point_rx_console.grc** from **workshop_exercises->gnuradio->qpsk_point_to_point_console**.
 
-Run the flowgraph and observe the received message stored in "msg_var" variable as depicted below.
+   Run the flowgraph and observe the received message stored in "msg_var" variable as depicted below.
 
    .. figure:: images/exercises/qpsk_pluto/qpsk_point_to_point_rx_console.png
       :alt: QPSK Point to Point RX Console
@@ -998,7 +1011,7 @@ Digital Amateur Television (DATV) is a form of amateur radio that transmits vide
 
 Follow these steps to receive QPSK-modulated video:
 
-#. Make the following setup using Pluto and connect it to your PC:
+#. Make the following setup using Pluto and connect it to your Raspberry Pi:
 
 #. Open the terminal by pressing at the same time **Ctrl + Alt + T** on your keyboard.
 
@@ -1057,7 +1070,7 @@ This exercise showcases the flexibility of software-defined radio: the same hard
 
 Follow these steps to create a spectrum painting:
 
-#. Make the following setup using Pluto and connect it to your PC.
+#. Make the following setup using Pluto and connect it to your Raspberry Pi.
 
 #. Open in *gnuradio-companion* the **paint_tx.grc** file from **workshop_exercises->gnuradio->spectrum_paint** and run the flowgraph.
 
