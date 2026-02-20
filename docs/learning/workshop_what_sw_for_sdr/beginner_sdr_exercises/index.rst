@@ -45,8 +45,8 @@ developed on the entry-level Pluto can be seamlessly transferred to production-g
    Boot your PC from the USB drive with the mouse, keyboard, and monitor connected.
    Connect your SDR hardware (Pluto, Jupiter, or Talise) to the PC via USB before starting the exercises.
 
-Transmit and receive a complex sinusoid with Python using Pluto SDR
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Transmit and receive a complex sinusoid (Sinewave Loopback)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A complex sinusoid is a fundamental building block in software-defined radio. Unlike a real sinusoid
 (which oscillates in a single dimension), a complex sinusoid consists of two components:
@@ -55,7 +55,7 @@ A complex sinusoid is a fundamental building block in software-defined radio. Un
 * **Quadrature (Q) component**: Imaginary part of the signal
 
 Together, they form a single tone in the frequency domain. This exercise transmits a complex sinusoid
-at 20 kHz and receives it back via a loopback connection, allowing you to observe both the transmitted
+and receives it back via a loopback connection, allowing you to observe both the transmitted
 signal and its frequency spectrum representation.
 
    .. figure:: images/exercises/sinewave_loopback/complex_sinusoid.png
@@ -71,6 +71,11 @@ signal and its frequency spectrum representation.
       :width: 40em
 
       Constellation plot of a complex sinusoid
+
+The following subsections demonstrate different implementations of this exercise using various tools and platforms.
+
+Using PyADI-IIO with Pluto
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Follow the next steps:
 
@@ -130,36 +135,16 @@ Follow the next steps:
       Close all tabs to stop the Python script
 
 
-Transmit and receive a complex sinusoid with Python using Jupiter or Talise
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Using PyADI-IIO with Jupiter
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This exercise demonstrates one of the most powerful features of ADI's software ecosystem: **platform portability**.
-You will run the same complex sinusoid transmission and reception algorithm from the previous exercise, but now
-on higher-performance hardware platforms—Jupiter (ADRV9002) or Talise (ADRV9009-ZU11EG).
-
-**Key Learning Points:**
-
-* **Minimal code changes**: Only the device configuration section needs to be modified
-* **Same PyADI-IIO library**: The identical Python library works across all ADI platforms
-* **Common software architecture**: tx(), rx(), and other functions remain the same
-* **Seamless scaling**: Move from prototyping on Pluto to production-grade hardware without rewriting algorithms
-
-This demonstrates the design principle discussed earlier: algorithms developed on entry-level hardware like
-ADALM-PLUTO can be directly transferred to production platforms with minimal effort, dramatically reducing
-development time and risk.
-
-In this exercise, you will observe that only the SDR configuration code (approximately 10-15 lines) changes
-between platforms, while the signal generation, transmission, reception, and visualization code remains identical.
+This demonstrates **platform portability**—running the same algorithm on higher-performance hardware with minimal code changes.
 
 Follow these steps:
 
-#. Assuming the lab exercise folder is already downloaded and unzipped on your desktop, go to **workshop_exercises->python->sinewave_loopback**
-   subfolder, open **python_loopback_sine_pluto.py (for Jupiter)** or **python_loopback_sine_talise_zu11eg.py (for Talise)** using **Thonny Python IDE**
-   as described in the previous exercise.
+#. Go to **workshop_exercises→python→sinewave_loopback** and open **python_loopback_sine_jupiter.py** using **Thonny Python IDE**.
 
-#. Observe in the script where only the "Configure SDR" code section was changed in **python_loopback_sine_jupiter.py** and **python_loopback_sine_talise_zu11eg.py**
-   compared to **python_loopback_sine_pluto.py**. This is because the same software and HDL building blocks are used across all platforms,
-   making it easy to transition between them.
+#. Observe that only the "Configure SDR" section changed compared to **python_loopback_sine_pluto.py**:
 
    .. figure:: images/exercises/tx_rx_jupiter_talise/jupiter_config_code.png
       :alt: Configure SDR Code Section
@@ -168,41 +153,129 @@ Follow these steps:
 
       Configure SDR code for Jupiter platform
 
-   .. figure:: images/exercises/tx_rx_jupiter_talise/talise_config_code.png
-      :alt: Configure SDR Code Section
-      :align: center
-      :width: 40em
-
-      Configure SDR code for Talise platform
-
-#. Insert the IP address on line 12 for Jupiter (in **python_loopback_sine_jupiter.py**) or for Talise (in **python_loopback_sine_talise_zu11eg.py**)
-   to remotely connect to Jupiter or Talise.
+#. Insert the IP address on line 12 to remotely connect to Jupiter:
 
    .. shell::
       :user: analog
       :group: analog
       :show-user:
 
-      $ # For Jupiter (in python_loopback_sine_jupiter.py):
       $ sdr = adi.adrv9002(uri="ip:10.48.65.212") # Create Radio object for Jupiter
 
-      $ # For Talise (in python_loopback_sine_talise_zu11eg.py):
-      $ sdr = adi.adrv9009_zu11eg("ip:10.48.65.182") # Create Radio object for Talise
+#. Run the script. In this example, a sinusoid at 15.360 KHz is transmitted and received (chosen to have an integer
+   number of periods at the sample rate of 15.36 Msps).
 
-#. Run the script as indicated in *Figure 17*. In this example, a sinusoid at 15.360 KHz is transmitted and received.
-   This frequency is chosen to have an integer number of periods of the sine at the sample rate of 15.36 Msps.
-   More specifically, line 16 (depicted below) should return an integer number.
+
+Using PyADI-IIO with Talise
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Follow these steps:
+
+#. Go to **workshop_exercises→python→sinewave_loopback** and open **python_loopback_sine_talise_zu11eg.py** using **Thonny Python IDE**.
+
+#. Make the following hardware setup with TX1A_P/N connected to RX1A_P/N via loopback cables.
+
+   .. TODO: Add Talise hardware setup image when available
+   .. .. figure:: images/exercises/sinewave_loopback_talise/talise_setup.png
+   ..    :alt: Talise Hardware Setup
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Talise hardware setup with loopback connections
+
+#. Observe the "Configure SDR" section for Talise:
 
    .. shell::
       :user: analog
       :group: analog
       :show-user:
 
-      $ num_samps = int((20*sample_rate)/frequency) # number of samples per call to rx()
+      $ # Configure properties
+      $ sample_rate = 30720000  # Sample rate
+      $ center_freq = 2000000000  # Center frequency
+      $ num_samps = 100000  # Number of samples per call to rx()
+      $ frequency = 3000000  # Frequency of complex sinusoid
+      $ fc0 = int(center_freq / (sample_rate / 2) * 2**15)  # Digital frequency for TX1
+      $
+      $ # Create radio object
+      $ sdr = adi.adrv9009_zu11eg("ip:10.48.65.182")  # IP address of Talise
+      $
+      $ # Configure Tx properties
+      $ sdr.tx_hardwaregain_chan0 = -10  # TX attenuation in dB
+      $ sdr.tx_enabled_channels = [0]
+      $ sdr.dds_single_tone(fc0, 0.8, 0)  # Generate tone: freq, scale, channel
+      $
+      $ # Configure Rx properties
+      $ sdr.gain_control_mode_chan0 = "slow_attack"
+      $ sdr.rx_enabled_channels = [0]
+      $ sdr.rx_buffer_size = num_samps
 
-#. To zoom on the generated figures, use the instructions shown in *Figure 18*.
+#. Run the script and observe the output plots showing transmitted and received signals.
 
-#. To stop running the Python script or if you want to run it again, use the instructions shown in *Figure 19*.
+   .. TODO: Add Talise output plots image when available
+   .. .. figure:: images/exercises/sinewave_loopback_talise/talise_output.png
+   ..    :alt: Talise Output Plots
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Output showing transmitted and received signals
+
+
+Using GNU Radio with Jupiter
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This exercise implements the same complex sinusoid loopback using GNU Radio Companion's visual flowgraph environment instead of Python code.
+
+Follow these steps:
+
+#. Make the following hardware setup using Jupiter SDR with TX1A connected to RX1A via loopback cable.
+
+   .. TODO: Add Jupiter hardware setup image when available
+   .. .. figure:: images/exercises/gnuradio_sinewave_loopback/jupiter_setup.png
+   ..    :alt: Jupiter SDR Hardware Setup
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Jupiter SDR setup with TX1A connected to RX1A via loopback cable
+
+#. Open the terminal and launch GNU Radio Companion:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ gnuradio-companion
+
+#. In GNU Radio Companion, open **Desktop → workshop_exercises → gnuradio → sinewave_loopback_jupiter.grc**.
+
+#. Click the **Execute** button (green arrow) to run the flowgraph.
+
+   .. TODO: Add flowgraph execution screenshot when available
+   .. .. figure:: images/exercises/gnuradio_sinewave_loopback/run_flowgraph.png
+   ..    :alt: Run GNU Radio Flowgraph
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Click the green arrow to execute the flowgraph
+
+#. Observe the output plots showing transmitted/received samples, spectrum, and constellation diagram.
+
+   .. TODO: Add output plots screenshot when available
+   .. .. figure:: images/exercises/gnuradio_sinewave_loopback/output_plots.png
+   ..    :alt: GNU Radio Output Plots
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Output plots showing transmitted/received samples, spectrum, and constellation diagram
+
+#. Use the sliders to adjust parameters in real-time:
+
+   * **Frequency slider**: Changes the offset frequency of the complex sinusoid
+   * **TX Attenuation slider**: Controls transmit power
+   * **RX Gain slider**: Controls receiver gain
+
+#. Click the **Stop** button (red square) when finished.
 
 
 Doppler Radar with GNU Radio (Pluto)
