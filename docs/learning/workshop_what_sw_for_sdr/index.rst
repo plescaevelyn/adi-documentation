@@ -408,3 +408,20 @@ FTC2025 Pluto Workshop
 - Title: Software hands-on training kit: Getting started with SDR using ADALM-PLUTO
 - RPi5 SD Card image with Kuiper v2.0 available `here <https://swdownloads.analog.com/cse/kuiper/FTC25_SDR_Kuiper.zip>`__
 - Documentation is available `here <https://swdownloads.analog.com/cse/workshops/ftc2025/ftc2025_sdr_exercises.zip>`__ (PPT, lab instructions and exercises)
+
+Beginner SDR Exercises
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. toctree::
+   :maxdepth: 1
+
+   beginner_sdr_exercises/index
+
+Step-by-step hands-on exercises for learning SDR fundamentals:
+
+* Transmitting and receiving complex sinusoids with Python (Pluto, Jupiter, and Talise)
+* Doppler radar with GNU Radio
+* BPSK modulation and demodulation in Python
+* QPSK modulation with GNU Radio
+* Receiving QPSK video with SDRangel
+* Spectrum painting
