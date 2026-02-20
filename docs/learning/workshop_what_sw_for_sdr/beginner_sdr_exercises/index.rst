@@ -196,15 +196,12 @@ Follow these steps:
       $ num_samps = 100000  # Number of samples per call to rx()
       $ frequency = 3000000  # Frequency of complex sinusoid
       $ fc0 = int(center_freq / (sample_rate / 2) * 2**15)  # Digital frequency for TX1
-      $
       $ # Create radio object
       $ sdr = adi.adrv9009_zu11eg("ip:10.48.65.182")  # IP address of Talise
-      $
       $ # Configure Tx properties
       $ sdr.tx_hardwaregain_chan0 = -10  # TX attenuation in dB
       $ sdr.tx_enabled_channels = [0]
       $ sdr.dds_single_tone(fc0, 0.8, 0)  # Generate tone: freq, scale, channel
-      $
       $ # Configure Rx properties
       $ sdr.gain_control_mode_chan0 = "slow_attack"
       $ sdr.rx_enabled_channels = [0]
