@@ -299,7 +299,11 @@ The following workshops provide hands-on exercises demonstrating real-world soft
 
 FTC2023 Pluto Workshop
 ~~~~~~~~~~~~~~~~~~~~~~
-:doc:`Just Enough Software and HDL for High-Speed Designs <workshop_just_enough_sw_and_hdl_for_high_speed_designs/index>`
+
+.. toctree::
+   :maxdepth: 1
+
+   workshop_just_enough_sw_and_hdl_for_high_speed_designs/index
 
 This workshop demonstrates hands-on exercises including:
 
