@@ -111,7 +111,7 @@ Software-defined radio development follows a progressive, stage-based approach t
 The key advantage of ADI's approach is that the **same HDL, software, and infrastructure components are used throughout the entire flow**, 
 reducing the learning curve and development risk at each stage.
 
-.. figure:: images/theoretical_content/customer_design_flow.png
+.. figure:: ../images/theoretical_content/customer_design_flow.png
    :alt: Customer Design Flow
    :align: center
    :width: 40em
@@ -185,7 +185,7 @@ Evaluation, Test and Analysis
 
 Analog Devices provides a single cohesive software solution, meeting customers in their ecosystem or at their tools of choice.
 
-   .. figure:: images/theoretical_content/sw_solution.png
+   .. figure:: ../images/theoretical_content/sw_solution.png
       :alt: Software Solution Architecture
       :align: center
       :width: 40em
@@ -217,7 +217,7 @@ Building Blocks for Development and New Revenue Streams
 
 ADI's modular architecture provides reusable building blocks that accelerate development and create opportunities for new applications and revenue streams.
 
-   .. figure:: images/theoretical_content/building_blocks.png
+   .. figure:: ../images/theoretical_content/building_blocks.png
       :alt: Building Blocks for Development
       :align: center
       :width: 40em
@@ -245,7 +245,7 @@ Common Architecture for Easy Platform Transition
 
 The common architecture across ADI's platforms makes it easy to transition between hardware as your project evolves from prototype to production.
 
-   .. figure:: images/theoretical_content/common_architecture.png
+   .. figure:: ../images/theoretical_content/common_architecture.png
       :alt: Common Architecture Makes It Easy to Transition Between Platforms
       :align: center
       :width: 40em
@@ -291,7 +291,7 @@ It provides a plugin-based architecture where different modules can control spec
 **ADGenericIIOBoard Plugin** is a key plugin within ACE that enables interaction with any IIO-compatible device.
 This generic approach means you can use the same plugin to control different ADI evaluation boards without requiring board-specific software.
 
-   .. figure:: images/analysis_control_eval/adgeneric_iio_board_plugin.png
+   .. figure:: ../images/analysis_control_eval/adgeneric_iio_board_plugin.png
       :alt: ADGenericIIOBoard Plugin Interface
       :align: center
       :width: 40em
@@ -312,7 +312,7 @@ It provides both time-domain and frequency-domain visualization along with devic
 * **Plugin architecture**: Extensible with generic and device-specific plugins
 * **Remote operation**: Can connect to IIO devices over network using iiod
 
-   .. figure:: images/analysis_control_eval/iio_scope.png
+   .. figure:: ../images/analysis_control_eval/iio_scope.png
       :alt: IIO Oscilloscope Main Interface
       :align: center
       :width: 40em
@@ -326,7 +326,7 @@ IIO-Scope includes several generic plugins that work with any IIO device:
 * **DMM (Digital Multimeter) Plugin**:
    Displays real-time numerical values from device channels, useful for monitoring DC values, temperatures, voltages, and other scalar measurements
 
-   .. figure:: images/analysis_control_eval/dmm_plugin.png
+   .. figure:: ../images/analysis_control_eval/dmm_plugin.png
       :alt: DMM Plugin Interface
       :align: center
       :width: 40em
@@ -336,7 +336,7 @@ IIO-Scope includes several generic plugins that work with any IIO device:
 * **Debug Tab/Plugin**:
    Provides low-level access to all IIO device attributes, allowing direct read/write operations on any device parameter for advanced debugging and development
 
-   .. figure:: images/analysis_control_eval/debug_tab.png
+   .. figure:: ../images/analysis_control_eval/debug_tab.png
       :alt: Debug Tab Interface
       :align: center
       :width: 40em
@@ -352,14 +352,14 @@ For more complex devices, IIO-Scope offers specialized plugins:
 * **High Level Device Control Plugins**:
    Provide intuitive interfaces for complex RF transceivers, DACs, and ADCs with features like frequency tuning, gain control, and filter configuration
 
-   .. figure:: images/analysis_control_eval/fpga_settings.png
+   .. figure:: ../images/analysis_control_eval/fpga_settings.png
       :alt: FPGA Settings Plugin
       :align: center
       :width: 40em
 
       FPGA Settings Plugin for controlling FPGA-specific parameters
 
-   .. figure:: images/analysis_control_eval/high_level_device_ctrl.png
+   .. figure:: ../images/analysis_control_eval/high_level_device_ctrl.png
       :alt: High Level Device Control Plugin
       :align: center
       :width: 40em
@@ -442,7 +442,7 @@ capabilities and a more intuitive interface. It transforms your PC into a comple
 * **Generic IIO support**: Works with any IIO-compatible device, not just ADI hardware
 * **Export capabilities**: Save data, screenshots, and configurations for documentation
 
-   .. figure:: images/analysis_control_eval/scopy_interface.png
+   .. figure:: ../images/analysis_control_eval/scopy_interface.png
       :alt: Scopy Main Interface
       :align: center
       :width: 40em
@@ -462,7 +462,7 @@ It's particularly useful for RF engineers working with:
 * **Spectrum analysis**: Detailed frequency domain analysis
 * **Recording and playback**: Capture RF signals for offline analysis
 
-   .. figure:: images/analysis_control_eval/qiq_receiver.png
+   .. figure:: ../images/analysis_control_eval/qiq_receiver.png
       :alt: qIQ Receiver Interface
       :align: center
       :width: 40em
@@ -532,14 +532,14 @@ Together, they form a single tone in the frequency domain. This exercise transmi
 at 20 kHz and receives it back via a loopback connection, allowing you to observe both the transmitted
 signal and its frequency spectrum representation.
 
-   .. figure:: images/exercises/sinewave_loopback/complex_sinusoid.png
+   .. figure:: ../beginner_sdr_exercises/images/exercises/sinewave_loopback/complex_sinusoid.png
       :alt: Complex Sinusoid
       :align: center
       :width: 40em
 
       Complex sinusoid with in-phase (I) and quadrature (Q) components
 
-   .. figure:: images/exercises/sinewave_loopback/complex_sinusoid_constellation_plot.png
+   .. figure:: ../beginner_sdr_exercises/images/exercises/sinewave_loopback/complex_sinusoid_constellation_plot.png
       :alt: Complex Sinusoid Constellation Plot
       :align: center
       :width: 40em
@@ -550,7 +550,7 @@ Follow the next steps:
 
 #. Make the following setup using Pluto and connect it to your PC:
 
-   .. figure:: images/exercises/sinewave_loopback/pluto_setup.png
+   .. figure:: ../beginner_sdr_exercises/images/exercises/sinewave_loopback/pluto_setup.png
       :alt: Pluto SDR Setup
       :align: center
       :width: 40em
@@ -567,7 +567,7 @@ Follow the next steps:
    select **Thonny Python IDE** (or any other Python IDE you have installed) from the 
    Recommended Applications list.
 
-   .. figure:: images/exercises/sinewave_loopback/python_ide.png
+   .. figure:: ../beginner_sdr_exercises/images/exercises/sinewave_loopback/python_ide.png
       :alt: Open Python Script with IDE
       :align: center
       :width: 40em
@@ -576,7 +576,7 @@ Follow the next steps:
 
 #. To run the script, press the green round button from the top left corner in Thonny IDE as shown below.
 
-   .. figure:: images/exercises/sinewave_loopback/run_script.png
+   .. figure:: ../beginner_sdr_exercises/images/exercises/sinewave_loopback/run_script.png
       :alt: Run Python Script
       :align: center
       :width: 40em
@@ -586,7 +586,7 @@ Follow the next steps:
 #. To zoom on a plot, you can use the zoom option as depicted below. Encircle holding left click the area you want to zoom. 
    On this example, if you zoom at the figure below on the received signal, you should see a harmonic at 20KHz.
 
-   .. figure:: images/exercises/sinewave_loopback/zoom_plot.png
+   .. figure:: ../beginner_sdr_exercises/images/exercises/sinewave_loopback/zoom_plot.png
       :alt: Zoom on Plot
       :align: center
       :width: 40em
@@ -596,7 +596,7 @@ Follow the next steps:
 #. To stop running the Python script (if you want to run it again or run another script), close all the tabs by **right clicking on the
    taskbar icon -> Quit x windows** as shown depicted below or close them manually one by one.
 
-   .. figure:: images/exercises/sinewave_loopback/close_tabs.png
+   .. figure:: ../beginner_sdr_exercises/images/exercises/sinewave_loopback/close_tabs.png
       :alt: Close Tabs
       :align: center
       :width: 40em
@@ -635,14 +635,14 @@ Follow these steps:
    compared to **python_loopback_sine_pluto.py**. This is because the same software and HDL building blocks are used across all platforms,
    making it easy to transition between them.
 
-   .. figure:: images/exercises/tx_rx_jupiter_talise/jupiter_config_code.png
+   .. figure:: ../beginner_sdr_exercises/images/exercises/tx_rx_jupiter_talise/jupiter_config_code.png
       :alt: Configure SDR Code Section
       :align: center
       :width: 40em
 
       Configure SDR code for Jupiter platform
 
-   .. figure:: images/exercises/tx_rx_jupiter_talise/talise_config_code.png
+   .. figure:: ../beginner_sdr_exercises/images/exercises/tx_rx_jupiter_talise/talise_config_code.png
       :alt: Configure SDR Code Section
       :align: center
       :width: 40em
@@ -728,7 +728,7 @@ where:
 #. **Processing**: GNU Radio processes the signal to extract the Doppler shift
 #. **Visualization**: Real-time plots show the frequency shift, and audio output lets you hear the Doppler tone
 
-   .. figure:: images/exercises/doppler_radar/filter_frequency_diagram.png
+   .. figure:: ../beginner_sdr_exercises/images/exercises/doppler_radar/filter_frequency_diagram.png
       :alt: Band Pass and Reject Filters
       :align: center
       :width: 40em
@@ -748,7 +748,7 @@ Follow these steps to run the Doppler radar experiment:
 
 #. Make the following setup using Pluto and connect it to your PC:
 
-   .. figure:: images/exercises/doppler_radar/pluto_doppler_setup.png
+   .. figure:: ../beginner_sdr_exercises/images/exercises/doppler_radar/pluto_doppler_setup.png
       :alt: Pluto SDR Doppler Radar Setup
       :align: center
       :width: 40em
@@ -771,7 +771,7 @@ Follow these steps to run the Doppler radar experiment:
 
 #. To run the flowgraph, press on the grey arrow from the top function bar as indicated below.
 
-   .. figure:: images/exercises/doppler_radar/run_grc.png
+   .. figure:: ../beginner_sdr_exercises/images/exercises/doppler_radar/run_grc.png
       :alt: Run GNU Radio Flowgraph
       :align: center
       :width: 40em
@@ -785,7 +785,7 @@ The six plots show the received signal at different processing stages: top row d
 while the bottom row shows frequency-domain FFT plots where you can see the Doppler shift peak move left (hand moving away) or
 right (hand moving toward) from the center frequency.
 
-   .. figure:: images/exercises/doppler_radar/doppler_plots.png
+   .. figure:: ../beginner_sdr_exercises/images/exercises/doppler_radar/doppler_plots.png
       :alt: Doppler Radar Plots
       :align: center
       :width: 40em
@@ -811,14 +811,14 @@ In BPSK:
 This creates two distinct constellation points on the real axis of the I/Q diagram, making BPSK one of the most robust digital
 modulation schemes against noise.
 
-   .. figure:: images/exercises/bpsk_loopback/bpsk_modulation_concept.png
+   .. figure:: ../beginner_sdr_exercises/images/exercises/bpsk_loopback/bpsk_modulation_concept.png
       :alt: BPSK Modulation Concept
       :align: center
       :width: 40em
 
       BPSK modulation: binary bits modulate the phase of the carrier signal
 
-   .. figure:: images/exercises/bpsk_loopback/bpsk_constellation.png
+   .. figure:: ../beginner_sdr_exercises/images/exercises/bpsk_loopback/bpsk_constellation.png
       :alt: BPSK Constellation Diagram
       :align: center
       :width: 40em
@@ -851,7 +851,7 @@ As demonstrated in the previous Doppler radar exercise, frequency varies with di
 
 This exercise demonstrates how modern SDR systems correct all these impairments in software using sophisticated algorithms:
 
-   .. figure:: images/exercises/bpsk_loopback/tx_rx_flow_diagram.png
+   .. figure:: ../beginner_sdr_exercises/images/exercises/bpsk_loopback/tx_rx_flow_diagram.png
       :alt: BPSK Transmitter and Receiver Architecture
       :align: center
       :width: 40em
@@ -892,7 +892,7 @@ Starting from a noisy, offset constellation with scattered points, you will see 
 #. **After symbol timing recovery**: Correct samples selected, reducing mid-constellation points
 #. **After Costas loop**: Clean constellation with two tight clusters at -1 and +1
 
-   .. figure:: images/exercises/bpsk_loopback/bpsk_constellation_progression.png
+   .. figure:: ../beginner_sdr_exercises/images/exercises/bpsk_loopback/bpsk_constellation_progression.png
       :alt: BPSK Signal Recovery Progression
       :align: center
       :width: 40em
@@ -929,14 +929,14 @@ Binary Shift Keying (BPSK) in Python using Jupiter or Talise
 #. Observe in the script that only the "Configure SDR" code section was changed in **bpsk_jupiter_loopback_jupiter.py** and **bpsk_talise_loopback_talise_zu11eg.py**
    compared to **bpsk_pluto_loopback_pluto.py** from the previous exercise.
 
-   .. figure:: images/exercises/bpsk_loopback/jupiter_config_code.png
+   .. figure:: ../beginner_sdr_exercises/images/exercises/bpsk_loopback/jupiter_config_code.png
       :alt: Configure SDR Code Section
       :align: center
       :width: 40em
 
       Configure SDR code for Jupiter platform
 
-   .. figure:: images/exercises/bpsk_loopback/talise_config_code.png
+   .. figure:: ../beginner_sdr_exercises/images/exercises/bpsk_loopback/talise_config_code.png
       :alt: Configure SDR Code Section
       :align: center
       :width: 40em
@@ -976,14 +976,14 @@ QPSK encodes two bits into each symbol using four constellation points at 45°, 
 
 This creates twice the spectral efficiency of BPSK while maintaining good noise immunity.
 
-   .. figure:: images/exercises/qpsk_gnuradio/qpsk_constellation.png
+   .. figure:: ../beginner_sdr_exercises/images/exercises/qpsk_gnuradio/qpsk_constellation.png
       :alt: QPSK Constellation 
       :align: center
       :width: 40em
 
       QPSK constellation (4 points, 2 bits/symbol)
 
-   .. figure:: images/exercises/qpsk_gnuradio/qpsk_ho_modulation.png
+   .. figure:: ../beginner_sdr_exercises/images/exercises/qpsk_gnuradio/qpsk_ho_modulation.png
       :alt: QPSK Higher Order Modulation Constellation
       :align: center
       :width: 40em
@@ -1002,7 +1002,7 @@ This creates twice the spectral efficiency of BPSK while maintaining good noise 
 You will receive QPSK-modulated data packets containing hexadecimal values using GNU Radio. The flowgraph performs symbol synchronization,
 frequency locking, and constellation decoding to recover the transmitted data.
 
-   .. figure:: images/exercises/qpsk_gnuradio/qpsk_gnuradio_flowgraph.png
+   .. figure:: ../beginner_sdr_exercises/images/exercises/qpsk_gnuradio/qpsk_gnuradio_flowgraph.png
       :alt: QPSK GNU Radio Flowgraph
       :align: center
       :width: 40em
@@ -1013,7 +1013,7 @@ Follow these steps to receive QPSK-modulated data:
 
 #. Make the following setup using Pluto and connect it to your PC:
 
-   .. figure:: images/exercises/qpsk_pluto/qpsk_pluto_setup.png
+   .. figure:: ../beginner_sdr_exercises/images/exercises/qpsk_pluto/qpsk_pluto_setup.png
       :alt: QPSK Pluto Setup
       :align: center
       :width: 40em
@@ -1024,7 +1024,7 @@ Follow these steps to receive QPSK-modulated data:
 
    Run the flowgraph and observe the received message stored in "msg_var" variable as depicted below.
 
-   .. figure:: images/exercises/qpsk_pluto/qpsk_point_to_point_rx_console.png
+   .. figure:: ../beginner_sdr_exercises/images/exercises/qpsk_pluto/qpsk_point_to_point_rx_console.png
       :alt: QPSK Point to Point RX Console
       :align: center
       :width: 40em
@@ -1053,7 +1053,7 @@ Follow these steps to receive QPSK-modulated video:
 
 #. Make the setup using Pluto and connect it to your PC as depicted in *Figure 35*:
 
-   .. figure:: images/exercises/qpsk_pluto/qpsk_pluto_setup.png
+   .. figure:: ../beginner_sdr_exercises/images/exercises/qpsk_pluto/qpsk_pluto_setup.png
       :alt: QPSK Pluto Setup
       :align: center
       :width: 40em
@@ -1073,7 +1073,7 @@ Follow these steps to receive QPSK-modulated video:
 
 #. The application should be preconfigured. Run the program by pressing the purple arrow as depicted below.
 
-   .. figure:: images/exercises/qpsk_video/sdrangel_run.png
+   .. figure:: ../beginner_sdr_exercises/images/exercises/qpsk_video/sdrangel_run.png
       :alt: Run SDRangel
       :align: center
       :width: 40em
@@ -1082,7 +1082,7 @@ Follow these steps to receive QPSK-modulated video:
 
 #. On DATV window, **check and then uncheck Viterbi** to synchronize the qpsk data **while the program is running** (as shown below).
 
-   .. figure:: images/exercises/qpsk_video/viterbi_sync.png
+   .. figure:: ../beginner_sdr_exercises/images/exercises/qpsk_video/viterbi_sync.png
       :alt: Viterbi Sync
       :align: center
       :width: 40em
@@ -1123,7 +1123,7 @@ Follow these steps to create a spectrum painting:
 
 #. Observe the waterfall display as the spectrum painting appears, created by the Pluto SDR transmitting the frequency pattern.
 
-   .. figure:: images/exercises/spectrum_paint/paint_tx.png
+   .. figure:: ../beginner_sdr_exercises/images/exercises/spectrum_paint/paint_tx.png
       :alt: Spectrum Paint Waterfall Display
       :align: center
       :width: 40em
