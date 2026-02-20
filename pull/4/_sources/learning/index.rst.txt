@@ -65,12 +65,6 @@ Workshops
    workshop_kuiper/index
 
 
-.. toctree::
-   :maxdepth: 1
-
-   workshop_just_enough_sw_and_hdl_for_high_speed_designs/index
-
-
 Academic Workshops
 -------------------------------------------------------------------------------
 

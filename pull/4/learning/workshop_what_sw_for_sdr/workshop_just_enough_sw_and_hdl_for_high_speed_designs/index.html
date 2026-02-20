@@ -1,0 +1,1742 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="This workshop goes through the software tools typically used when working with the ADALM Pluto board, demonstrating its versatility and showing hands-on exercises to get you up and running quickly." name="description" />
+
+    <title>Just Enough Software and HDL for High-Speed Designs &#8212; System Level Documentation  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/app.min.css?v=a525f648" />
+    <script async="async" src="../../../_static/app.umd.js?v=fcf3088a"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <link rel="icon" href="../../../_static/icon.svg"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="A Precision Converter FPGA Integration Journey" href="../../workshop_a_precision_converter_fpga_integration_journey/index.html" />
+    <link rel="prev" title="What software do I need for my SDR?" href="../index.html" />
+   
+  
+  
+  <meta name="repository" content="documentation">
+  <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head>
+  
+    <body>
+  
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
+        <div class="vertical-divider"></div>
+        
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        
+        <a id="logo" href="../../../index.html">
+          <div>System Level</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../../index.html" class="current">System Level</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div class="header localtoc-header">
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">Just Enough Software and HDL for High-Speed Designs</a><ul>
+<li><a class="reference internal" href="#slide-deck-and-booklet">Slide Deck and Booklet</a><ul>
+<li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li><a class="reference internal" href="#learning-objectives">Learning Objectives</a></li>
+<li><a class="reference internal" href="#analysis-control-and-evaluation-tools">Analysis, control and evaluation tools</a></li>
+<li><a class="reference internal" href="#hands-on-exercises">Hands-on exercises</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#theoretical-concepts-and-practical-foundations">Theoretical Concepts and Practical Foundations</a><ul>
+<li><a class="reference internal" href="#typical-customer-design-flow">Typical Customer Design Flow</a></li>
+<li><a class="reference internal" href="#software-in-the-design-in-journey">Software in the Design-in Journey</a></li>
+<li><a class="reference internal" href="#evaluation-test-and-analysis">Evaluation, Test and Analysis</a></li>
+<li><a class="reference internal" href="#algorithmic-development-modeling-and-prototyping">Algorithmic Development, Modeling and Prototyping</a></li>
+<li><a class="reference internal" href="#building-blocks-for-development-and-new-revenue-streams">Building Blocks for Development and New Revenue Streams</a></li>
+<li><a class="reference internal" href="#common-architecture-for-easy-platform-transition">Common Architecture for Easy Platform Transition</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#analysis-control-evaluation">Analysis | Control | Evaluation</a><ul>
+<li><a class="reference internal" href="#ace-software-and-plugins">ACE Software and Plugins</a></li>
+<li><a class="reference internal" href="#id10">IIO Oscilloscope</a></li>
+<li><a class="reference internal" href="#iio-command-line-tools">IIO Command Line Tools</a></li>
+<li><a class="reference internal" href="#scopy-next-generation-analysis-tool">Scopy: Next-Generation Analysis Tool</a></li>
+<li><a class="reference internal" href="#qiq-receiver">qIQ Receiver</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id12">Hands on exercises</a><ul>
+<li><a class="reference internal" href="#transmit-and-receive-a-complex-sinusoid-with-python-using-pluto-sdr">Transmit and receive a complex sinusoid  with Python using Pluto SDR</a></li>
+<li><a class="reference internal" href="#transmit-and-receive-a-complex-sinusoid-with-python-using-jupiter-or-talise">Transmit and receive a complex sinusoid with Python using Jupiter or Talise</a></li>
+<li><a class="reference internal" href="#doppler-radar-with-gnu-radio-pluto">Doppler Radar with GNU Radio (Pluto)</a></li>
+<li><a class="reference internal" href="#binary-phase-shift-keying-bpsk-in-python-using-pluto">Binary Phase Shift Keying (BPSK) in Python using Pluto</a></li>
+<li><a class="reference internal" href="#binary-shift-keying-bpsk-in-python-using-jupiter-or-talise">Binary Shift Keying (BPSK) in Python using Jupiter or Talise</a></li>
+<li><a class="reference internal" href="#quadrature-phase-shift-keying-qpsk-in-gnu-radio-using-pluto">Quadrature Phase Shift Keying (QPSK) in GNU Radio using Pluto</a></li>
+<li><a class="reference internal" href="#receiving-qpsk-modulated-video-with-sdrs-using-pluto">Receiving QPSK modulated Video with SDRs using Pluto</a></li>
+<li><a class="reference internal" href="#spectrum-paint-using-pluto">Spectrum Paint using Pluto</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../../../index.html">
+      System Level Documentation
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../../index.html" class="current">System Level</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><p class="caption" role="heading"><span class="caption-text">Product Categories</span></p>
+<ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../../../products/adsp/index.html">Digital Signal Processors (ADSP)</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../products/adsp/setup.html">Getting started</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Kuiper &amp; Linux Kernel</span></p>
+<ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../../../linux/drivers/index.html">Linux drivers</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../../../linux/drivers/iio/index.html">Linux Industrial I/O Subsystem</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../linux/drivers/iio/iio-trig-sysfs.html">iio-trig-sysfs driver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../linux/drivers/iio/iio-trig-bfin-timer.html">iio-trig-bfin-timer driver</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../../../linux/kernel/index.html">Kernel and devicetrees</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../linux/kernel/zynq.html">Build Zynq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../linux/kernel/zynqmp.html">Build ZynqMP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../linux/kernel/microblaze.html">Build MicroBlaze</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3-1" id="toctree-collapse-3-1"/><div class="collapse"><a class="reference internal" href="../../../linux/kernel/petalinux.html">Build with Petalinux</a><label for="toctree-collapse-3-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3-1-1" id="toctree-collapse-3-1-1"/><div class="collapse"><a class="reference internal" href="../../../linux/kernel/petalinux-dts/index.html">Petalinux Device Trees</a><label for="toctree-collapse-3-1-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../linux/kernel/petalinux-dts/petalinux-custom-dts.html">Custom Device Trees with meta-adi</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../linux/kernel/petalinux-dts/petalinux-meta-adi-bypass.html">Custom Device Trees with DTG (meta-adi Bypass)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../linux/kernel/petalinux-dts/petalinux-system-user.html">Device Tree Modifications with system-user.dtsi</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../linux/kuiper/index.html">Kuiper</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Software</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../software/ad9084-profile-generator/index.html">AD9084 (Apollo) Profile Generator</a></li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-4" id="toctree-collapse-4"/><div class="collapse"><a class="reference internal" href="../../../software/iio-oscilloscope/index.html">IIO Oscilloscope</a><label for="toctree-collapse-4"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-4-1" id="toctree-collapse-4-1"/><div class="collapse"><a class="reference internal" href="../../../software/iio-oscilloscope/adrv9009/index.html">ADRV9009</a><label for="toctree-collapse-4-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../software/iio-oscilloscope/adrv9009/plugin.html">Standard Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../software/iio-oscilloscope/adrv9009/advanced-plugin.html">Advanced plugin</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/iio-oscilloscope/ad9084/index.html">AD9084</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-5" id="toctree-collapse-5"/><div class="collapse"><a class="reference internal" href="../../../software/libiio/index.html">Libiio</a><label for="toctree-collapse-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/libiio/internals.html">About libiio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/libiio/cli.html">Command line utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/libiio/tips-tricks.html">Tips &amp; Tricks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-6" id="toctree-collapse-6"/><div class="collapse"><a class="reference internal" href="../../../software/libm2k/index.html">Libm2k</a><label for="toctree-collapse-6"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/libm2k/calibration.html">Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/libm2k/digital_communication.html">Digital communication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/libm2k/m2kcli.html">Command line utility</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-7" id="toctree-collapse-7"/><div class="collapse"><a class="reference internal" href="../../../software/matlab/index.html">MATLAB &amp; Simulink Toolboxes</a><label for="toctree-collapse-7"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/matlab/hsx-toolbox/index.html">High Speed Converter Toolbox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/matlab/transceiver-toolbox/index.html">Transceiver Toolbox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/matlab/bsp-extend.html">Extending Device Interfaces</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../software/pyadi-iio/index.html">PyADI-IIO</a></li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-8" id="toctree-collapse-8"/><div class="collapse"><a class="reference internal" href="../../../software/zephyr/index.html">Zephyr RTOS</a><label for="toctree-collapse-8"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/zephyr/zephyr-devicetree.html">Intro to Devicetree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/zephyr/kconfig/zephyr-kconfig.html">Introduction to Kconfig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/zephyr/using-zephyr-codefusion-fs/zephyr_codefusion_fs.html">Using Zephyr &amp; Codefusion Studio to Partition a Flash Filesystem</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Devices</span></p>
+<ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-9" id="toctree-collapse-9"/><div class="collapse"><a class="reference internal" href="../../../tools/m2k/index.html">ADALM2000</a><label for="toctree-collapse-9"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/m2k/devs/index.html">For Developers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/m2k/users/index.html">For End Users</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/m2k/help_support.html">Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/m2k/labview.html">Using With LabVIEW</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/m2k/matlab.html">Using with MATLAB</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-10" id="toctree-collapse-10"/><div class="collapse"><a class="reference internal" href="../../../tools/pluto-m2k/index.html">Common PLUTO&amp;M2K</a><label for="toctree-collapse-10"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/pluto-m2k/building_the_image.html">Building the Firmware Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/pluto-m2k/drivers.html">Installing Drivers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/pluto-m2k/firmware.html">Firmware Updates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/pluto-m2k/obtaining_the_sources.html">Obtaining the Build Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/pluto-m2k/reboot.html">Rebooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/pluto-m2k/usb_otg_host.html">USB OTG – HOST function Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-11" id="toctree-collapse-11"/><div class="collapse"><a class="reference internal" href="../../../tools/pluto/index.html">ADALM-PLUTO</a><label for="toctree-collapse-11"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-11-1" id="toctree-collapse-11-1"/><div class="collapse"><a class="reference internal" href="../../../tools/pluto/devs/index.html">For Developers</a><label for="toctree-collapse-11-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tools/pluto/devs/usb_otg.html">USB OTG</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-11-2" id="toctree-collapse-11-2"/><div class="collapse"><a class="reference internal" href="../../../tools/pluto/hacking/index.html">For Hackers</a><label for="toctree-collapse-11-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tools/pluto/hacking/hardware.html">ADALM-PLUTO Hardware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tools/pluto/hacking/listening_to_yourself.html">Self Reception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tools/pluto/hacking/power_amp.html">Controlling External Devices</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-11-3" id="toctree-collapse-11-3"/><div class="collapse"><a class="reference internal" href="../../../tools/pluto/users/index.html">For End Users</a><label for="toctree-collapse-11-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tools/pluto/users/antennas.html">Antennas</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/pluto/help_support.html">Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/pluto/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/pluto/transceiver_transferring_data.html">Controlling the transceiver and transferring data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tools/uartjtag/index.html">ADALM-UARTJTAG</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Apps &amp; Solutions</span></p>
+<ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-12" id="toctree-collapse-12"/><div class="collapse"><a class="reference internal" href="../../../solutions/application-software/index.html">Application Software</a><label for="toctree-collapse-12"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/application-software/lora-software/index.html">ADI Long Range Wireless Radio Software User Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13" id="toctree-collapse-13"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/index.html">Reference Designs</a><label for="toctree-collapse-13"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-1" id="toctree-collapse-13-1"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad-acevsecrdset-sl/index.html">AD-ACEVSECRDSET-SL</a><label for="toctree-collapse-13-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-acevsecrdset-sl/hardware-guide/index.html">Hardware User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-acevsecrdset-sl/software-guide/index.html">Software User Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-2" id="toctree-collapse-13-2"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad-apard32690-sl/index.html">AD-APARD32690-SL</a><label for="toctree-collapse-13-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-apard32690-sl/ad-apardpfwd-sl/index.html">AD-APARDPFW-SL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-apard32690-sl/ad-apardspoe-sl/index.html">AD-APARDSPOE-SL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-apard32690-sl/ad-t1lusb-ebz/index.html">AD-T1LUSB2.0-EBZ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-apard32690-sl/nina-w102/index.html">NINA-W102 Networking Support</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-3" id="toctree-collapse-13-3"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad-bmse2e3w-sl/index.html">AD-BMSE2E3W-SL</a><label for="toctree-collapse-13-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-bmse2e3w-sl/sample_application/index.html">Sample Application</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-bmse2e3w-sl/software_guide/index.html">Software User Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-4" id="toctree-collapse-13-4"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad-cellpackbm-sl/index.html">AD-CELLPACKBM-SL</a><label for="toctree-collapse-13-4"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-cellpackbm-sl/hardware_guide/index.html">Hardware User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-cellpackbm-sl/software_guide/index.html">Software User Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-5" id="toctree-collapse-13-5"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad-ethernetapldevice-sl/index.html">AD-ETHERNETAPLDEVICE-SL</a><label for="toctree-collapse-13-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-ethernetapldevice-sl/ethernet-apl/index.html">Ethernet-APL Considerations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-ethernetapldevice-sl/functional-safety/index.html">Functional Safety Ready Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-ethernetapldevice-sl/intrinsic-safety/index.html">Intrinsic Safety Design</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-ethernetapldevice-sl/power/index.html">Power Description</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-6" id="toctree-collapse-13-6"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad-fmcomms3-ebz/index.html">AD-FMCOMMS3-EBZ</a><label for="toctree-collapse-13-6"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-fmcomms3-ebz/hardware-guide/index.html">Hardware User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-fmcomms3-ebz/card-specifications/index.html">AD-FMCOMMS3-EBZ Specifications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-fmcomms3-ebz/hardware-guide/config-options/index.html">FMCOMMS3 Configuration Options</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/ad-gmsl-d-e-adp/index.html">AD-GMSL-D-E-ADP#</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-7" id="toctree-collapse-13-7"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad-gmsl522-sl/index.html">AD-GMSL522-SL</a><label for="toctree-collapse-13-7"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-gmsl522-sl/hardware-guide/index.html">Hardware Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-gmsl522-sl/software-guide/index.html">Software Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/ad-gmsl716mipi-evk/index.html">AD-GMSL716MIPI-EVK</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/ad-gmsl717mipi-evk/index.html">AD-GMSL717MIPI-EVK</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-8" id="toctree-collapse-13-8"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad-gmslcamrpi-adp/index.html">AD-GMSLCAMRPI-ADP#</a><label for="toctree-collapse-13-8"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-gmslcamrpi-adp/amd-kria/index.html">Using with AMD Kria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-gmslcamrpi-adp/nvidia-jetson/index.html">Using with Nvidia Jetson Orin Nano</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-gmslcamrpi-adp/raspberry-pi-user-guide/index.html">Using with Raspberry Pi</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-9" id="toctree-collapse-13-9"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad-jupiter-ebz/index.html">AD-JUPITER-EBZ</a><label for="toctree-collapse-13-9"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-jupiter-ebz/quickstart/index.html">Jupiter SDR Quick Start Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-jupiter-ebz/hardware-overview.html">Jupiter SDR Hardware Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-jupiter-ebz/mcs-setup.html">Jupiter_SDR MCS Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-jupiter-ebz/known-issues.html">Jupiter SDR - known issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-jupiter-ebz/reference-design.html">Jupiter SDR HDL Reference Design</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-jupiter-ebz/profile-generation.html">Profile generation flow using TES</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/ad-m2kbnc-ebz/index.html">AD-M2KBNC-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/ad-m2kcbl-ebz/index.html">AD-M2KCBL-EBZ</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-10" id="toctree-collapse-13-10"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad-max32lrwise-sl/index.html">AD-MAX32LRWISE-SL</a><label for="toctree-collapse-13-10"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-max32lrwise-sl/ev-cattletag-ardz/index.html">EV-CATTLETAG-ARDZ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-max32lrwise-sl/max32670-lr-ardz/index.html">MAX32670-LR-ARDZ</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-11" id="toctree-collapse-13-11"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad-max32sxwise-sl/index.html">AD-MAX32SXWISE-SL</a><label for="toctree-collapse-13-11"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-max32sxwise-sl/ev-flowmeter-ardz/index.html">EV-FLOWMETER-ARDZ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-max32sxwise-sl/ev-structural-ardz/index.html">EV-STRUCTURAL-ARDZ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-max32sxwise-sl/max32670-sx-ardz/index.html">MAX32670-SX-ARDZ</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-12" id="toctree-collapse-13-12"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad-paarray3552r-sl/index.html">AD-PAARRAY3552R-SL</a><label for="toctree-collapse-13-12"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-paarray3552r-sl/hardware-guide/index.html">Hardware User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-paarray3552r-sl/software-guide/index.html">Software User Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-13" id="toctree-collapse-13-13"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad-pqmon-sl/index.html">AD-PQMON-SL</a><label for="toctree-collapse-13-13"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-pqmon-sl/hardware-guide/index.html">Hardware User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-pqmon-sl/software-guide/index.html">Software User Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/ad-ps3803-rd/index.html">AD-PS3803-RD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/ad-rpi-t1lpse-sl/index.html">AD-RPI-T1LPSE-SL</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-14" id="toctree-collapse-13-14"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad-swiot1l-sl/index.html">AD-SWIOT1L-SL</a><label for="toctree-collapse-13-14"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-swiot1l-sl/hardware-guide/index.html">Hardware User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-swiot1l-sl/software-guide/index.html">Software User Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/ad-synchrona14-ebz/index.html">AD-SYNCHRONA14-EBZ</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-15" id="toctree-collapse-13-15"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad4052-ardz/index.html">EVAL-AD4050/AD4052-ARDZ</a><label for="toctree-collapse-13-15"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad4052-ardz/user-guide.html">Evaluating the device</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-16" id="toctree-collapse-13-16"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad4062-ardz/index.html">EVAL-AD4060/AD4062-ARDZ</a><label for="toctree-collapse-13-16"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad4062-ardz/user-guide/linux.html">Linux User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad4062-ardz/user-guide/no-os.html">No-OS User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad4062-ardz/tools.html">Libraries and GUI Tools</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/adalp2000/index.html">ADALP2000</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-17" id="toctree-collapse-13-17"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/admv96s-wgbe-ek1/index.html">ADMV96S-WGBE-EK1</a><label for="toctree-collapse-13-17"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/admv96s-wgbe-ek1/hardware-guide/index.html">Hardware User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/admv96s-wgbe-ek1/software-guide/index.html">Software User Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-18" id="toctree-collapse-13-18"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/adrd3161-01z/index.html">ADRD3161-01Z</a><label for="toctree-collapse-13-18"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/adrd3161-01z/hardware-guide.html">ADRD3161-01Z Hardware Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/adrd3161-01z/quick-start-guide.html">ADRD3161-01Z Quick Start Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/adrd3161-01z/production-guide.html">ADRD3161-01Z Production Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/adrd8012-01Z/index.html">ADRD8012-01Z</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/adxl355-pmdz/index.html">EVAL-ADXL355-PMDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-ad5592R-pmdz/index.html">EVAL-AD5592R-PMDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-ad5593r-pmdz/index.html">EVAL-AD5593R-PMDZ</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-19" id="toctree-collapse-13-19"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-ad7124-8-pmdz/index.html">EVAL-AD7124-8-PMDZ</a><label for="toctree-collapse-13-19"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-ad7124-8-pmdz/demo/index.html">EVAL-AD7124-8-PMDZ Demo Project</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-20" id="toctree-collapse-13-20"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-ad9081/index.html">AD9081 &amp; AD9082</a><label for="toctree-collapse-13-20"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-ad9081/user-guide.html">User guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-ad9081/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-20-1" id="toctree-collapse-13-20-1"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-ad9081/quickstart/index.html">Quick start guides</a><label for="toctree-collapse-13-20-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../solutions/reference-designs/eval-ad9081/quickstart/a10soc.html">On A10SoC</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../solutions/reference-designs/eval-ad9081/quickstart/vck190.html">On VCK190</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../solutions/reference-designs/eval-ad9081/quickstart/zc706.html">On ZC706</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../solutions/reference-designs/eval-ad9081/quickstart/vcu118.html">On VCU118</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../solutions/reference-designs/eval-ad9081/quickstart/zcu102.html">On ZCU102</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-21" id="toctree-collapse-13-21"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-ad9084/index.html">AD9084-FMCA-EBZ (Apollo)</a><label for="toctree-collapse-13-21"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-ad9084/user-guide.html">User guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-ad9084/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-21-1" id="toctree-collapse-13-21-1"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-ad9084/quickstart/index.html">Quickstart</a><label for="toctree-collapse-13-21-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../solutions/reference-designs/eval-ad9084/quickstart/microblaze.html">Virtex UltraScale+ VCU118/VCU128</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../solutions/reference-designs/eval-ad9084/quickstart/versal.html">Versal ACAP VCK190/VPK180</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../solutions/reference-designs/eval-ad9084/quickstart/agilex.html">Intel Agilex 7 I-Series</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../solutions/reference-designs/eval-ad9084/quickstart/new_usecase.html">Running a new JESD mode on hardware</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-22" id="toctree-collapse-13-22"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-adbms6830bmsw/index.html">EVAL-ADBMS6830BMSW</a><label for="toctree-collapse-13-22"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-adbms6830bmsw/software-guide/index.html">Software User Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-23" id="toctree-collapse-13-23"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-adrv9009/index.html">ADRV9009 &amp; ADRV9008</a><label for="toctree-collapse-13-23"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-adrv9009/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-23-1" id="toctree-collapse-13-23-1"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-adrv9009/quickstart/index.html">Quickstart</a><label for="toctree-collapse-13-23-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../solutions/reference-designs/eval-adrv9009/quickstart/zynqmp.html">ZCU102</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-adrv9009/basic-iq-datafiles.html">Basic IQ Datafiles</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-24" id="toctree-collapse-13-24"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-adrv902x/index.html">EVAL-ADRV902X</a><label for="toctree-collapse-13-24"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-adrv902x/user-guide.html">User guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-adrv902x/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-24-1" id="toctree-collapse-13-24-1"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-adrv902x/quickstart/index.html">Quick start</a><label for="toctree-collapse-13-24-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../solutions/reference-designs/eval-adrv902x/quickstart/vck190.html">On VCK190</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../solutions/reference-designs/eval-adrv902x/quickstart/zcu102.html">On ZCU102</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0359-ebz/index.html">EVAL-CN0359-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0417-ebz/index.html">EVAL-CN0417-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0419-ebz/index.html">EVAL-CN0419-EBZ</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-25" id="toctree-collapse-13-25"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0503-ardz/index.html">EVAL-CN0503-ARDZ</a><label for="toctree-collapse-13-25"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0503-ardz/cn0503-software/index.html">Software User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0503-ardz/fluorescence-measurement/index.html">Fluorescence Measurement Demo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0503-ardz/nitrate-measurement/index.html">Nitrate Measurement Demo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0503-ardz/pH-measurement/index.html">pH Measurement Demo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0503-ardz/turbidity/index.html">Turbidity Measurement Demo</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0518-ebz/index.html">EVAL-CN0518-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0521-ebz/index.html">EVAL-CN0521-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0523-ebz/index.html">EVAL-CN0523-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0534-ebz/index.html">EVAL-CN0534-EBZ</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-26" id="toctree-collapse-13-26"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0540-ardz/index.html">EVAL-CN0540-ARDZ</a><label for="toctree-collapse-13-26"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0540-ardz/user-guide.html">User guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0540-ardz/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0540-ardz/iio-oscilloscope.html">Using the System with IIO Oscilloscope</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-26-1" id="toctree-collapse-13-26-1"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0540-ardz/quickstart/index.html">Quickstart</a><label for="toctree-collapse-13-26-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0540-ardz/quickstart/coraz7s.html">CoraZ7-07s</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0540-ardz/quickstart/de10nano.html">DE10-Nano</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0550-ebz/index.html">EVAL-CN0550-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0554-rpiz/index.html">EVAL-CN0554-RPIZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0555-ebz/index.html">EVAL-CN0555-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0556-ebz/index.html">EVAL-CN0556-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0565-ardz/index.html">EVAL-CN0565-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0575-rpiz/index.html">EVAL-CN0575-RPIZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0577-fmcz/index.html">EVAL-CN0577-FMCZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0579-ardz/index.html">EVAL-CN0579-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0581-ebz/index.html">EVAL-CN0581-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0582-usbz/index.html">EVAL-CN0582-USBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0583-som/index.html">EVAL-CN0583-SOM</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-27" id="toctree-collapse-13-27"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0584-ebz/index.html">EVAL-CN0584-EBZ</a><label for="toctree-collapse-13-27"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0584-ebz/digital-template/index.html">Digital Template Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0584-ebz/matlab-configuration/index.html">MATLAB Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0585-fmcz/index.html">EVAL-CN0585-FMCZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0588-ebz/index.html">EVAL-CN0588-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-ess1-sys/index.html">EVAL-ESS1-SYS</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-28" id="toctree-collapse-13-28"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-isomax/index.html">EVAL-ISOMAX</a><label for="toctree-collapse-13-28"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-isomax/hardware_guide/index.html">Hardware User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-isomax/software_guide/index.html">Software User Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-29" id="toctree-collapse-13-29"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-ltpa-kit/index.html">EVAL-LTPA-KIT (LTpowerAnalyzer Kit)</a><label for="toctree-collapse-13-29"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-ltpa-kit/hardware_guide/index.html">EVAL-LTPA-KIT Hardware User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-ltpa-kit/software_guide/index.html">EVAL-LTPA-KIT Software Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/fthr-pmd-intz/index.html">FTHR-PMD-INTZ</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">University Program</span></p>
+<ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14" id="toctree-collapse-14"/><div class="collapse"><a class="reference internal" href="../../../university/index.html">Engineering University Program</a><label for="toctree-collapse-14"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-1" id="toctree-collapse-14-1"/><div class="collapse"><a class="reference internal" href="../../../university/active_learning/index.html">Active Learning: Student-oriented Lab Exercises</a><label for="toctree-collapse-14-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../university/active_learning/wien_bridge_oscillator/index.html">Activity: The Wien Bridge Oscillator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../university/active_learning/efficiency_power_loss/index.html">Activity: Efficiency, Power Loss, and Thermal Management</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Learning</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-15" id="toctree-collapse-15" checked=""/><div class="collapse"><a class="reference internal" href="../../index.html">Learning! Tutorials, Workshops, Etc</a><label for="toctree-collapse-15"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-15-1" id="toctree-collapse-15-1"/><div class="collapse"><a class="reference internal" href="../../demo_hp_analog_meets_ai/index.html">DEMO High-Performance Analog Meets AI</a><label for="toctree-collapse-15-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../demo_hp_analog_meets_ai/software/index.html">Software Configuration and Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial_prec_adc/index.html">Precision ADC Tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../converter_connectivity_tutorial/index.html">Converter Connectivity Tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../sw_infrastructure/index.html">Software Infrastructure for designing with ADCs, DACs, and Sensors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tools_for_ls/index.html">Tools for Low Speed Mixed Signal System Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tools_for_prec_wb/index.html">Tools for Precision Wideband Mixed Signal System Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tools_for_hs/index.html">Tools for High-Speed Mixed Signal System Design</a></li>
+<li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-15-2" id="toctree-collapse-15-2" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">What software do I need for my SDR?</a><label for="toctree-collapse-15-2"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Just Enough Software and HDL for High-Speed Designs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../workshop_a_precision_converter_fpga_integration_journey/index.html">A Precision Converter FPGA Integration Journey</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../workshop_kuiper/index.html">Customizing ADI Kuiper Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../workshops_software_defined_instrumentation/index.html">Software Defined Instrumentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../workshops_introduction_to_electronics/index.html">Introduction to Electronics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../workshops_embedded_baremetal/index.html">Embedded Baremetal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../workshops_embedded_linux/index.html">Embedded Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../workshops_applied_systems_control/index.html">Applied Systems Control Workshop</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing and Guidelines</span></p>
+<ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-16" id="toctree-collapse-16"/><div class="collapse"><a class="reference internal" href="../../../contributing/creating_new_pages.html">Creating new pages</a><label for="toctree-collapse-16"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing/template/eval.html">Evaluation Boards</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing/docs_guidelines.html">Documentation guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing/forking_publishing.html">Forking and publishing</a></li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+  <nav class="breadcrumb"><ol><li><a href="../../index.html">Learning! Tutorials, Workshops, Etc</a></li><li><a href="../index.html">What software do I need for my SDR?</a></li></ol></nav>
+</div>
+          <div class="body" role="main">
+            
+  <section id="just-enough-software-and-hdl-for-high-speed-designs">
+<h1>Just Enough Software and HDL for High-Speed Designs<a class="headerlink" href="#just-enough-software-and-hdl-for-high-speed-designs" title="Link to this heading"></a></h1>
+<p>This workshop goes through the software tools typically used
+when working with the ADALM Pluto board, demonstrating its versatility
+and showing hands-on exercises to get you up and running quickly.</p>
+<p>This workshop was first presented at the 2023 FTC by Mihai Bancisor and Michael Hennerich.</p>
+<section id="slide-deck-and-booklet">
+<h2>Slide Deck and Booklet<a class="headerlink" href="#slide-deck-and-booklet" title="Link to this heading"></a></h2>
+<p>Since this tutorial is also designed to be presented as a live, hands-on
+workshop, a slide deck is provided here:</p>
+<div class="admonition-download admonition">
+<p class="admonition-title">Download</p>
+<p><a class="icon reference download external" download="" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/Train_Just enough Software and HDL for High Speed designs.pdf"><code class="xref download docutils literal notranslate"><span class="pre">SDR</span> <span class="pre">Lab</span> <span class="pre">Slide</span> <span class="pre">Deck</span></code></a></p>
+</div>
+<p>A complete booklet of the hands-on activity is also provided, as a companion to
+following the tutorial yourself:</p>
+<div class="admonition-download admonition">
+<p class="admonition-title">Download</p>
+<p><a class="icon reference download external" download="" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/instructions_sdr_lab.pdf"><code class="xref download docutils literal notranslate"><span class="pre">SDR</span> <span class="pre">Lab</span> <span class="pre">Booklet</span></code></a></p>
+</div>
+<p>The source code for the hands-on exercises is provided here:</p>
+<div class="admonition-download admonition">
+<p class="admonition-title">Download</p>
+<p><a class="icon reference download external" download="" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/workshop_exercises.zip"><code class="xref download docutils literal notranslate"><span class="pre">SDR</span> <span class="pre">Lab</span> <span class="pre">Source</span> <span class="pre">Code</span></code></a></p>
+</div>
+<p>The USB bootable image for the hands-on exercises is provided here:</p>
+<div class="admonition-download admonition">
+<p class="admonition-title">Download</p>
+<p><a class="icon link reference external" href="https://swdownloads.analog.com/cse/kuiper/FTC2023_SDR.zip" target="_blank">SDR Lab Image</a></p>
+</div>
+<nav class="contents local" id="workshop-contents">
+<p class="topic-title">Workshop Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#prerequisites" id="id57">Prerequisites</a></p></li>
+<li><p><a class="reference internal" href="#learning-objectives" id="id58">Learning Objectives</a></p></li>
+<li><p><a class="reference internal" href="#analysis-control-and-evaluation-tools" id="id59">Analysis, control and evaluation tools</a></p></li>
+<li><p><a class="reference internal" href="#hands-on-exercises" id="id60">Hands-on exercises</a></p></li>
+</ul>
+</nav>
+<section id="prerequisites">
+<h3><a class="toc-backref" href="#id57" role="doc-backlink">Prerequisites</a><a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h3>
+<p><strong>Hardware Requirements</strong>:</p>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/adalm-pluto.html" target="_blank">ADALM-PLUTO</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/ad-jupiter-ebz.html" target="_blank">AD-JUPITER-EBZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/adrv9009-zu11eg.html" target="_blank">ADRV9009-ZU11EG RF-SOM (Talise)</a></p></li>
+<li><p>USB cable</p></li>
+<li><p>SMA cables for loopback connections</p></li>
+<li><p>Two antennas for wireless experiments</p></li>
+<li><p>PC with USB boot capability</p></li>
+<li><p>USB drive (minimum 16GB) with the provided SDR Lab Image (see Downloads section above) or an image that you set up yourself with the required software</p></li>
+<li><p>Monitor, keyboard, and mouse</p></li>
+</ul>
+<p><strong>Software Requirements</strong>:</p>
+<p>The provided USB bootable image contains all necessary software pre-installed. If setting up your own environment, you will need:</p>
+<ul class="simple">
+<li><p><a class="icon link reference external" href="https://www.python.org/" target="_blank">Python</a> 3.7 or newer</p></li>
+<li><p><a class="icon link reference external" href="https://github.com/analogdevicesinc/pyadi-iio" target="_blank">PyADI-IIO</a> library</p></li>
+<li><p><a class="icon link reference external" href="https://www.gnuradio.org/" target="_blank">GNU Radio</a> 3.8 or newer with <a class="icon link reference external" href="https://github.com/analogdevicesinc/gr-iio" target="_blank">gr-iio</a> blocks</p></li>
+<li><p><a class="icon link reference external" href="https://analogdevicesinc.github.io/scopy/" target="_blank">Scopy</a> or <a class="icon link reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope" target="_blank">IIO Oscilloscope</a></p></li>
+<li><p><a class="icon link reference external" href="https://github.com/analogdevicesinc/libiio/" target="_blank">libiio</a> library</p></li>
+</ul>
+</section>
+<section id="learning-objectives">
+<h3><a class="toc-backref" href="#id58" role="doc-backlink">Learning Objectives</a><a class="headerlink" href="#learning-objectives" title="Link to this heading"></a></h3>
+<p>By the end of this workshop, you will have a solid understanding of:</p>
+<ol class="arabic simple">
+<li><p>Typical Customer Design Flow</p></li>
+<li><p>Software in the Design-in Journey</p></li>
+<li><p>Evaluation, Test and Analysis</p></li>
+<li><p>Algorithmic Development, Modeling and Prototyping</p></li>
+<li><p>Building Blocks for development and new revenue streams</p></li>
+<li><p>Common Architecture patterns used for easy transition between platforms</p></li>
+</ol>
+</section>
+<section id="analysis-control-and-evaluation-tools">
+<h3><a class="toc-backref" href="#id59" role="doc-backlink">Analysis, control and evaluation tools</a><a class="headerlink" href="#analysis-control-and-evaluation-tools" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>ACE (Analysis, Control, and Evaluation) Software</p></li>
+<li><p>IIO Oscilloscope</p></li>
+<li><p>Scopy</p></li>
+<li><p>qIQ Receiver</p></li>
+<li><p>Matlab and Simulink</p></li>
+</ol>
+</section>
+<section id="hands-on-exercises">
+<h3><a class="toc-backref" href="#id60" role="doc-backlink">Hands-on exercises</a><a class="headerlink" href="#hands-on-exercises" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>Transmit and receive a complex sinusoid with Python using Pluto SDR</p></li>
+<li><p>Transmit and receive a complex sinusoid with Python using Jupiter or Talise</p></li>
+<li><p>Doppler Radar with GNU Radio (Pluto)</p></li>
+<li><p>Binary Phase Shift Keying (BPSK) in Python using Pluto</p></li>
+<li><p>Binary Shift Keying (BPSK) in Python using Jupiter or Talise</p></li>
+<li><p>Quadrature Phase Shift Keying (QPSK) in GNU Radio using Pluto</p></li>
+<li><p>Receiving QPSK modulated Video with SDRs using Pluto</p></li>
+<li><p>Spectrum Paint using Pluto</p></li>
+</ol>
+</section>
+</section>
+<section id="theoretical-concepts-and-practical-foundations">
+<h2>Theoretical Concepts and Practical Foundations<a class="headerlink" href="#theoretical-concepts-and-practical-foundations" title="Link to this heading"></a></h2>
+<section id="typical-customer-design-flow">
+<h3>Typical Customer Design Flow<a class="headerlink" href="#typical-customer-design-flow" title="Link to this heading"></a></h3>
+<p>Software-defined radio development follows a progressive, stage-based approach that takes designs from initial research through to production deployment.
+The key advantage of ADI’s approach is that the <strong>same HDL, software, and infrastructure components are used throughout the entire flow</strong>,
+reducing the learning curve and development risk at each stage.</p>
+<figure class="align-center" id="id17">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/theoretical_content/customer_design_flow.png"><img alt="Customer Design Flow" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/theoretical_content/customer_design_flow.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 1 </span><span class="caption-text">Typical Customer Design Flow</span><a class="headerlink" href="#id17" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>The typical customer design flow consists of 5 progressive stages, each building upon the previous one.</p>
+<p>In the <strong>research</strong> phase, engineers validate that the chosen ADI device meets application requirements through simulation and measurement.</p>
+<p>Key activities include:</p>
+<ul class="simple">
+<li><p><strong>Behavioral Simulation</strong>: Model the system before building hardware</p></li>
+<li><p><strong>Device Evaluation</strong>: Test actual hardware performance using evaluation boards</p></li>
+<li><p><strong>Measurements</strong>: Characterize critical performance metrics such as SFDR (Spurious-Free Dynamic Range), SNR (Signal-to-Noise Ratio), EVM (Error Vector Magnitude),
+NF (Noise Figure), and NSD (Noise Spectral Density)</p></li>
+</ul>
+<p>Tools used: Evaluation boards, IIO Oscilloscope, ACE software, bench test equipment.</p>
+<p>During the <strong>Algorithm Development</strong> phase, engineers implement signal processing algorithms using high-level languages while streaming real data
+from hardware.
+Here, the focus is on rapid prototyping and validation of algorithms in realistic conditions via <strong>MATLAB/Python/GRC Reference Implementation</strong>,
+<strong>Hardware Streaming</strong>, and <strong>Iterative Development</strong>.</p>
+<p>Development environments at this stage include MATLAB, Simulink with ADI toolboxes, Python with PyADI-IIO, GNU Radio Companion with gr-iio blocks.</p>
+<p>The <strong>Design Elaboration</strong> phase refines algorithms for embedded deployment through modeling and optimization. This stage include modeling using the same
+development tools, validating optimized algorithms with real hardware data, and transitioning from floating-point to fixed-point arithmetic
+for efficient hardware implementation.</p>
+<p>Critical considerations include fixed-point precision, filter coefficient quantization, timing budgets, and FPGA resource utilization.</p>
+<p>While <em>prototyping</em>, algorithms are deployed to development hardware for integration and optimization. This stage includes:</p>
+<ul class="simple">
+<li><p><strong>Deployment to Development Board</strong>: Move algorithms to actual hardware (PlutoSDR, Jupiter, or FMC boards)</p></li>
+<li><p><strong>Design Optimization</strong>: Tune for performance and resource efficiency</p></li>
+<li><p><strong>HDL Integration</strong>: Integrate custom signal processing with ADI reference designs</p></li>
+</ul>
+<p>The final stage, <strong>Production</strong>, includes deployment to custom hardware with complete system validation.</p>
+<p>Throughout all stages, the same HDL IP cores, Linux kernel drivers, and application software are reused, dramatically reducing development risk and
+time-to-market.</p>
+</section>
+<section id="software-in-the-design-in-journey">
+<h3>Software in the Design-in Journey<a class="headerlink" href="#software-in-the-design-in-journey" title="Link to this heading"></a></h3>
+<p>ADI’s software ecosystem provides a cohesive solution across the entire design-in journey, supporting multiple development environments
+while maintaining a common underlying infrastructure. The ecosystem enables engineers to work in their preferred tools—whether GUI-based applications,
+scripting environments, or modeling platforms—all leveraging the same drivers, libraries, and hardware abstraction layers.</p>
+<p><strong>Common Software Infrastructure:</strong></p>
+<ul class="simple">
+<li><p><a class="icon link reference external" href="https://github.com/analogdevicesinc/libiio" target="_blank">libiio</a>: Cross-platform library providing unified hardware access</p></li>
+<li><p><strong>IIO Kernel Drivers</strong>: Linux drivers for ADI converters and transceivers</p></li>
+<li><p><strong>iiod Server</strong>: Network-transparent access to hardware</p></li>
+<li><p><strong>Language Bindings</strong>: Support for C, C++, Python, MATLAB, and more</p></li>
+</ul>
+<p><strong>Development Tools and Environments:</strong></p>
+<ul class="simple">
+<li><p><strong>IIO Oscilloscope</strong> (<a class="icon link reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope" target="_blank">link</a>): Cross-platform GUI for visualizing and controlling IIO devices</p></li>
+<li><p><strong>MATLAB and Simulink</strong>: ADI toolboxes for algorithm development and modeling</p></li>
+<li><p><strong>Python</strong>, <strong>Jupyter</strong> and <strong>PyADI-IIO</strong> (<a class="icon link reference external" href="https://github.com/analogdevicesinc/pyadi-iio" target="_blank">link</a>): Python library for rapid prototyping with ADI hardware</p></li>
+<li><p><strong>GNU Radio</strong> with <strong>gr-iio</strong> (<a class="icon link reference external" href="https://github.com/analogdevicesinc/gr-iio" target="_blank">link</a>) blocks for flowgraph-based development</p></li>
+<li><p><strong>ACE Software</strong> (<a class="icon link reference external" href="https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-development-platforms/ace-software.html" target="_blank">link</a>): Plugin-based framework for evaluation board control</p></li>
+<li><p><strong>Scopy</strong> (<a class="icon link reference external" href="https://analogdevicesinc.github.io/scopy/" target="_blank">link</a>): Modern multi-instrument software suite</p></li>
+</ul>
+</section>
+<section id="evaluation-test-and-analysis">
+<h3>Evaluation, Test and Analysis<a class="headerlink" href="#evaluation-test-and-analysis" title="Link to this heading"></a></h3>
+<p>Analog Devices provides a single cohesive software solution, meeting customers in their ecosystem or at their tools of choice.</p>
+<blockquote>
+<div><figure class="align-center" id="id18">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/theoretical_content/sw_solution.png"><img alt="Software Solution Architecture" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/theoretical_content/sw_solution.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 2 </span><span class="caption-text">Single cohesive software solution supporting multiple user personas and tools</span><a class="headerlink" href="#id18" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+<p><strong>Product Evaluation</strong> uses hardware and software tools to verify that the Converter meets Application requirements.</p>
+<p>Time investment is (very roughly) proportional to complexity and how application specific it needs to be</p>
+<p><strong>Tools:</strong> IIO Oscilloscope, ACE software, Scopy, bench test equipment</p>
+</section>
+<section id="algorithmic-development-modeling-and-prototyping">
+<h3>Algorithmic Development, Modeling and Prototyping<a class="headerlink" href="#algorithmic-development-modeling-and-prototyping" title="Link to this heading"></a></h3>
+<p><strong>Product Prototyping</strong> provides Plug ‘n’ Play hardware and software to see the key features and performance of the part.</p>
+<p>It can configure, capture signals, or generate waveforms in 10-15 minutes, stream real data from hardware into development
+environments (MATLAB, Python, GNU Radio) and develop and validate algorithms with hardware-in-the-loop</p>
+<p><strong>Development Environments:</strong> MATLAB, Simulink, Python, <a class="icon link reference external" href="https://github.com/analogdevicesinc/pyadi-iio" target="_blank">PyADI-IIO</a>, GNU Radio Companion</p>
+<p><strong>Tools:</strong> MATLAB, Simulink, Python, <a class="icon link reference external" href="https://github.com/analogdevicesinc/pyadi-iio" target="_blank">PyADI-IIO</a>, GNU Radio</p>
+</section>
+<section id="building-blocks-for-development-and-new-revenue-streams">
+<h3>Building Blocks for Development and New Revenue Streams<a class="headerlink" href="#building-blocks-for-development-and-new-revenue-streams" title="Link to this heading"></a></h3>
+<p>ADI’s modular architecture provides reusable building blocks that accelerate development and create opportunities for new applications and revenue streams.</p>
+<blockquote>
+<div><figure class="align-center" id="id19">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/theoretical_content/building_blocks.png"><img alt="Building Blocks for Development" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/theoretical_content/building_blocks.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 3 </span><span class="caption-text">Modular building blocks</span><a class="headerlink" href="#id19" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+<p>Modular building blocks enable rapid development and platform scalability. Signal processing components including filters, decimators, interpolators,
+and other DSP primitives are standard offerings that accelerate algorithm implementation. Protocol implementations such as OFDM, QPSK, and FSK
+are pre-implemented for rapid deployment, while pre-validated HDL provides high-performance streaming and buffering for demanding applications.</p>
+<p>Efficient clock and power distribution features enable portable and battery-powered applications. Multiple libraries and frameworks provide flexible
+hardware access and algorithm development: <a class="icon link reference external" href="https://github.com/analogdevicesinc/pyadi-iio" target="_blank">PyADI-IIO</a> for rapid Python prototyping with hardware-in-the-loop,
+MATLAB and Simulink toolboxes for system-level modeling and deployment, GNU Radio with <a class="icon link reference external" href="https://github.com/analogdevicesinc/gr-iio" target="_blank">gr-iio</a> blocks
+for flowgraph-based signal processing, and standardized Linux drivers that reduce integration effort.</p>
+<p>The business benefits are compelling. Faster time-to-market results from pre-validated components that reduce development cycles, while proven building
+blocks minimize integration challenges and eliminate redundant design work through IP reuse. Platform scalability allows you to start with ADALM-PLUTO
+and scale seamlessly to production platforms.</p>
+<p>Revenue opportunities emerge through application-specific solutions for vertical markets, proprietary algorithm development, custom hardware transitions
+with unified software stacks, and IP licensing of optimized implementations.</p>
+</section>
+<section id="common-architecture-for-easy-platform-transition">
+<h3>Common Architecture for Easy Platform Transition<a class="headerlink" href="#common-architecture-for-easy-platform-transition" title="Link to this heading"></a></h3>
+<p>The common architecture across ADI’s platforms makes it easy to transition between hardware as your project evolves from prototype to production.</p>
+<blockquote>
+<div><figure class="align-center" id="id20">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/theoretical_content/common_architecture.png"><img alt="Common Architecture Makes It Easy to Transition Between Platforms" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/theoretical_content/common_architecture.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 4 </span><span class="caption-text">Common architecture enables seamless transitions between platforms</span><a class="headerlink" href="#id20" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+<p><strong>Shared Software and HDL Stack:</strong></p>
+<ul class="simple">
+<li><p><strong>Same libraries</strong>: libiio, PyADI-IIO, and hardware drivers work across all platforms</p></li>
+<li><p><strong>Common Linux image</strong>: ADI Kuiper Linux brings up the same software stack whether on a laptop or embedded board</p></li>
+<li><p><strong>Unified HDL</strong>: Common FPGA designs across all SDR platforms</p></li>
+<li><p><strong>Consistent drivers</strong>: Same drivers whether accessing hardware locally or via USB</p></li>
+</ul>
+<p><strong>Platform Progression:</strong></p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Start with <a class="icon link reference external" href="https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/adalm-pluto.html" target="_blank">ADALM-PLUTO</a>:</dt><dd><p>Provides quick verification, rapid algorithm development, and SIGINT applications at very low cost</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Scale to production</strong>:</dt><dd><p>Same software and HDL seamlessly transfer to higher-performance platforms</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Use modules for clean design</strong>:</dt><dd><p>Leverage ADI’s reference designs and IP cores</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Open Source Repositories:</strong></p>
+<ul class="simple">
+<li><p>Common Linux kernel and drivers: <a class="icon link reference external" href="https://github.com/analogdevicesinc/linux" target="_blank">https://github.com/analogdevicesinc/linux</a></p></li>
+<li><p>Common HDL IP cores: <a class="icon link reference external" href="https://github.com/analogdevicesinc/hdl" target="_blank">https://github.com/analogdevicesinc/hdl</a></p></li>
+</ul>
+<p>This architecture ensures that code developed on entry-level hardware like ADALM-PLUTO can be reused on production platforms with minimal changes,
+dramatically reducing development risk and time-to-market.</p>
+</section>
+</section>
+<section id="analysis-control-evaluation">
+<h2>Analysis | Control | Evaluation<a class="headerlink" href="#analysis-control-evaluation" title="Link to this heading"></a></h2>
+<p>Once you have the IIO framework set up, you need tools to analyze, control, and evaluate your hardware. ADI provides several software tools that
+work seamlessly with IIO devices, from simple command-line utilities to full-featured graphical applications.</p>
+<section id="ace-software-and-plugins">
+<h3>ACE Software and Plugins<a class="headerlink" href="#ace-software-and-plugins" title="Link to this heading"></a></h3>
+<p><strong>ACE (Analysis, Control, Evaluation)</strong> is ADI’s original software framework for interacting with evaluation boards and development platforms.
+It provides a plugin-based architecture where different modules can control specific hardware features.</p>
+<p><strong>ADGenericIIOBoard Plugin</strong> is a key plugin within ACE that enables interaction with any IIO-compatible device.
+This generic approach means you can use the same plugin to control different ADI evaluation boards without requiring board-specific software.</p>
+<blockquote>
+<div><figure class="align-center" id="id21">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/analysis_control_eval/adgeneric_iio_board_plugin.png"><img alt="ADGenericIIOBoard Plugin Interface" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/analysis_control_eval/adgeneric_iio_board_plugin.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 5 </span><span class="caption-text">ADGenericIIOBoard Plugin showing IIO device control</span><a class="headerlink" href="#id21" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+</section>
+<section id="id10">
+<h3>IIO Oscilloscope<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<p><strong>IIO Oscilloscope (IIO-Scope)</strong> is a powerful cross-platform application for visualizing and controlling IIO devices.
+It provides both time-domain and frequency-domain visualization along with device configuration capabilities.</p>
+<p><strong>Key Features:</strong></p>
+<ul>
+<li><p><strong>Multi-platform support</strong>: Runs on Linux, Windows, and macOS</p></li>
+<li><p><strong>Time and frequency domain plots</strong>: View signals in both domains simultaneously</p></li>
+<li><p><strong>Device configuration</strong>: Modify hardware parameters in real-time</p></li>
+<li><p><strong>Plugin architecture</strong>: Extensible with generic and device-specific plugins</p></li>
+<li><p><strong>Remote operation</strong>: Can connect to IIO devices over network using iiod</p>
+<blockquote>
+<div><figure class="align-center" id="id22">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/analysis_control_eval/iio_scope.png"><img alt="IIO Oscilloscope Main Interface" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/analysis_control_eval/iio_scope.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 6 </span><span class="caption-text">IIO Oscilloscope showing time and frequency domain plots</span><a class="headerlink" href="#id22" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+</li>
+</ul>
+<p><strong>Generic Plugins:</strong></p>
+<p>IIO-Scope includes several generic plugins that work with any IIO device:</p>
+<ul>
+<li><dl>
+<dt><strong>DMM (Digital Multimeter) Plugin</strong>:</dt><dd><p>Displays real-time numerical values from device channels, useful for monitoring DC values, temperatures, voltages, and other scalar measurements</p>
+<figure class="align-center" id="id23">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/analysis_control_eval/dmm_plugin.png"><img alt="DMM Plugin Interface" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/analysis_control_eval/dmm_plugin.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 7 </span><span class="caption-text">DMM Plugin showing real-time channel values</span><a class="headerlink" href="#id23" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><strong>Debug Tab/Plugin</strong>:</dt><dd><p>Provides low-level access to all IIO device attributes, allowing direct read/write operations on any device parameter for advanced debugging and development</p>
+<figure class="align-center" id="id24">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/analysis_control_eval/debug_tab.png"><img alt="Debug Tab Interface" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/analysis_control_eval/debug_tab.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 8 </span><span class="caption-text">Debug Tab showing device attributes tree</span><a class="headerlink" href="#id24" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Specific Control Plugins:</strong></p>
+<p>For more complex devices, IIO-Scope offers specialized plugins:</p>
+<ul>
+<li><dl class="simple">
+<dt><strong>FPGA Settings Plugin</strong>:</dt><dd><p>Controls FPGA-specific parameters such as clock configurations, data path settings, and interface modes</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><strong>High Level Device Control Plugins</strong>:</dt><dd><p>Provide intuitive interfaces for complex RF transceivers, DACs, and ADCs with features like frequency tuning, gain control, and filter configuration</p>
+<figure class="align-center" id="id25">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/analysis_control_eval/fpga_settings.png"><img alt="FPGA Settings Plugin" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/analysis_control_eval/fpga_settings.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 9 </span><span class="caption-text">FPGA Settings Plugin for controlling FPGA-specific parameters</span><a class="headerlink" href="#id25" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<figure class="align-center" id="id26">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/analysis_control_eval/high_level_device_ctrl.png"><img alt="High Level Device Control Plugin" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/analysis_control_eval/high_level_device_ctrl.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 10 </span><span class="caption-text">High Level Device Control Plugin providing intuitive interfaces for RF transceivers</span><a class="headerlink" href="#id26" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="iio-command-line-tools">
+<h3>IIO Command Line Tools<a class="headerlink" href="#iio-command-line-tools" title="Link to this heading"></a></h3>
+<p>For automation, scripting, and headless operation, the IIO framework includes command-line utilities:</p>
+<ul class="simple">
+<li><p><strong>iio_info</strong>: Lists all available IIO devices and their attributes</p></li>
+<li><p><strong>iio_attr</strong>: Reads or writes device/channel attributes</p></li>
+<li><p><strong>iio_readdev</strong>: Captures samples from device channels</p></li>
+<li><p><strong>iio_writedev</strong>: Transmits samples to device channels</p></li>
+<li><p><strong>iio_reg</strong>: Direct register access for low-level debugging</p></li>
+</ul>
+<p>These tools are particularly useful for:</p>
+<ul class="simple">
+<li><p>Automated testing and continuous integration</p></li>
+<li><p>Remote device control via SSH</p></li>
+<li><p>Scripting complex measurement sequences</p></li>
+<li><p>Quick parameter verification without GUI overhead</p></li>
+</ul>
+<p><strong>iio_info</strong></p>
+<p>Displays information about all available IIO devices and their attributes, channels, and triggering capabilities.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iio_info
+iio_info<span class="w"> </span>-n<span class="w"> </span><span class="m">192</span>.168.1.100
+</pre></div>
+</div>
+<p><strong>iio_attr</strong></p>
+<p>Reads or writes device and channel attributes for configuration and control.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iio_attr<span class="w"> </span>-d<span class="w"> </span>cf-ad9361-lpc
+iio_attr<span class="w"> </span>-c<span class="w"> </span>voltage0<span class="w"> </span>frequency
+iio_attr<span class="w"> </span>-c<span class="w"> </span>voltage0<span class="w"> </span>frequency<span class="w"> </span><span class="m">2400000000</span>
+</pre></div>
+</div>
+<p><strong>iio_readdev</strong></p>
+<p>Captures samples from device channels and saves to file for analysis.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iio_readdev<span class="w"> </span>-d<span class="w"> </span>cf-ad9361-lpc<span class="w"> </span>-c<span class="w"> </span>voltage0<span class="w"> </span>-s<span class="w"> </span><span class="m">1024</span><span class="w"> </span>&gt;<span class="w"> </span>samples.raw
+</pre></div>
+</div>
+<p><strong>iio_writedev</strong></p>
+<p>Transmits samples from file to device channels.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iio_writedev<span class="w"> </span>-d<span class="w"> </span>cf-ad9361-lpc<span class="w"> </span>-c<span class="w"> </span>voltage0<span class="w"> </span>&lt;<span class="w"> </span>samples.raw
+</pre></div>
+</div>
+<p><strong>Remote Access via iiod</strong></p>
+<p>Connect to IIO devices over network using the iiod server:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iio_info<span class="w"> </span>-n<span class="w"> </span><span class="m">10</span>.48.65.212
+</pre></div>
+</div>
+</section>
+<section id="scopy-next-generation-analysis-tool">
+<h3>Scopy: Next-Generation Analysis Tool<a class="headerlink" href="#scopy-next-generation-analysis-tool" title="Link to this heading"></a></h3>
+<p><a class="icon link reference external" href="https://analogdevicesinc.github.io/scopy/" target="_blank">Scopy</a> is ADI’s modern, next-generation instrument software that supersedes IIO-Scope with enhanced
+capabilities and a more intuitive interface. It transforms your PC into a complete laboratory instrument suite.</p>
+<p><strong>Scopy provides:</strong></p>
+<ul>
+<li><p><strong>Multiple instrument views</strong>: Oscilloscope, spectrum analyzer, network analyzer, signal generator, logic analyzer, pattern generator, and more</p></li>
+<li><p><strong>Modern UI/UX</strong>: Contemporary interface with improved usability</p></li>
+<li><p><strong>Enhanced visualization</strong>: Advanced plotting with zoom, cursors, measurements, and annotations</p></li>
+<li><p><strong>Cross-platform</strong>: Available for Windows, Linux, and macOS</p></li>
+<li><p><strong>Generic IIO support</strong>: Works with any IIO-compatible device, not just ADI hardware</p></li>
+<li><p><strong>Export capabilities</strong>: Save data, screenshots, and configurations for documentation</p>
+<blockquote>
+<div><figure class="align-center" id="id27">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/analysis_control_eval/scopy_interface.png"><img alt="Scopy Main Interface" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/analysis_control_eval/scopy_interface.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 11 </span><span class="caption-text">Scopy interface showing multiple instrument views</span><a class="headerlink" href="#id27" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+</li>
+</ul>
+<p>Scopy is the recommended tool for new projects, offering a more complete and modern experience than the older IIO-Scope application.</p>
+</section>
+<section id="qiq-receiver">
+<h3>qIQ Receiver<a class="headerlink" href="#qiq-receiver" title="Link to this heading"></a></h3>
+<p>qIQ Receiver is a specialized application for analyzing and demodulating various wireless communication standards.
+It’s particularly useful for RF engineers working with:</p>
+<ul>
+<li><p><strong>Digital modulation analysis</strong>: BPSK, QPSK, QAM, and other modulation schemes</p></li>
+<li><p><strong>Constellation diagrams</strong>: Real-time visualization of modulation quality</p></li>
+<li><p><strong>Spectrum analysis</strong>: Detailed frequency domain analysis</p></li>
+<li><p><strong>Recording and playback</strong>: Capture RF signals for offline analysis</p>
+<blockquote>
+<div><figure class="align-center" id="id28">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/analysis_control_eval/qiq_receiver.png"><img alt="qIQ Receiver Interface" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/analysis_control_eval/qiq_receiver.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 12 </span><span class="caption-text">qIQ Receiver showing constellation diagram and spectrum</span><a class="headerlink" href="#id28" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+</li>
+</ul>
+<p>qIQ Receiver bridges the gap between generic oscilloscope tools and specialized protocol analyzers, making it easier to develop and debug wireless communication systems with ADI SDR platforms.</p>
+</section>
+</section>
+<section id="id12">
+<h2>Hands on exercises<a class="headerlink" href="#id12" title="Link to this heading"></a></h2>
+<p>The following hands-on exercises demonstrate real-world software-defined radio applications using ADI’s SDR platforms.
+These exercises showcase the power of reconfigurable software running on specialized hardware, allowing you to implement
+complex signal processing algorithms without custom hardware design.</p>
+<p><strong>Hardware Platforms Used:</strong></p>
+<p>Throughout these exercises, you will work with three ADI SDR platforms, each offering different capabilities:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><a class="icon adi reference external" href="https://www.analog.com/https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/adalm-pluto.html" target="_blank">ADALM-PLUTO</a>:</dt><dd><p>Entry-level SDR ideal for learning and prototyping</p>
+<ul>
+<li><p>2x Tx and 2x Rx ports (50 Ohm matched)</p></li>
+<li><p>LO Frequency Range: 70MHz → 6GHz</p></li>
+<li><p>Bandwidth: 56MHz</p></li>
+<li><p>Sample rate: 61.44MSPS; 14 bits</p></li>
+<li><p>Interfaces: USB2, UART</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="icon adi reference external" href="https://www.analog.com/https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/ad-jupiter-ebz.html" target="_blank">Jupiter (AD-JUPITER-EBZ)</a>:</dt><dd><p>Mid-range platform for advanced development</p>
+<ul>
+<li><p>2x Tx and 2x Rx ports (50 Ohm matched)</p></li>
+<li><p>LO Frequency Range: 30MHz → 6GHz</p></li>
+<li><p>Bandwidth: 40MHz</p></li>
+<li><p>Sample rate: 61.44MSPS; 16 bits</p></li>
+<li><p>Interfaces: USB3, 1Gb Ethernet, Display Port, UART</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="icon adi reference external" href="https://www.analog.com/https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/adrv9009-zu11eg.html" target="_blank">Talise SOM (ADRV9009-ZU11EG)</a>:</dt><dd><p>High-performance platform for production-grade applications</p>
+<ul>
+<li><p>4x Tx and 4x Rx (expandable to 8 TRx)</p></li>
+<li><p>LO Frequency Range: 75MHz → 6GHz</p></li>
+<li><p>RX Bandwidth: 200MHz, TX Bandwidth: 450MHz</p></li>
+<li><p>Interfaces: USB3, 1Gb Ethernet, Display Port, PCIe 3.0, SFP, QSFP, UART</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>All three platforms share the same software stack and HDL architecture, demonstrating ADI’s platform scalability—algorithms
+developed on the entry-level Pluto can be seamlessly transferred to production-grade hardware with minimal code changes.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The following exercises should be run on a PC booted from the provided USB bootable image (available in the Downloads section above).
+The USB bootable image contains all necessary software pre-installed, including Python, GNU Radio, Thonny IDE, and all required libraries.
+Boot your PC from the USB drive with the mouse, keyboard, and monitor connected.
+Connect your SDR hardware (Pluto, Jupiter, or Talise) to the PC via USB before starting the exercises.</p>
+</div>
+<section id="transmit-and-receive-a-complex-sinusoid-with-python-using-pluto-sdr">
+<h3>Transmit and receive a complex sinusoid  with Python using Pluto SDR<a class="headerlink" href="#transmit-and-receive-a-complex-sinusoid-with-python-using-pluto-sdr" title="Link to this heading"></a></h3>
+<p>A complex sinusoid is a fundamental building block in software-defined radio. Unlike a real sinusoid
+(which oscillates in a single dimension), a complex sinusoid consists of two components:</p>
+<ul class="simple">
+<li><p><strong>In-phase (I) component</strong>: Real part of the signal</p></li>
+<li><p><strong>Quadrature (Q) component</strong>: Imaginary part of the signal</p></li>
+</ul>
+<p>Together, they form a single tone in the frequency domain. This exercise transmits a complex sinusoid
+at 20 kHz and receives it back via a loopback connection, allowing you to observe both the transmitted
+signal and its frequency spectrum representation.</p>
+<blockquote>
+<div><figure class="align-center" id="id29">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/sinewave_loopback/complex_sinusoid.png"><img alt="Complex Sinusoid" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/sinewave_loopback/complex_sinusoid.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 13 </span><span class="caption-text">Complex sinusoid with in-phase (I) and quadrature (Q) components</span><a class="headerlink" href="#id29" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<figure class="align-center" id="id30">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/sinewave_loopback/complex_sinusoid_constellation_plot.png"><img alt="Complex Sinusoid Constellation Plot" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/sinewave_loopback/complex_sinusoid_constellation_plot.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 14 </span><span class="caption-text">Constellation plot of a complex sinusoid</span><a class="headerlink" href="#id30" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+<p>Follow the next steps:</p>
+<ol class="arabic">
+<li><p>Make the following setup using Pluto and connect it to your PC:</p>
+<figure class="align-center" id="id31">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/sinewave_loopback/pluto_setup.png"><img alt="Pluto SDR Setup" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/sinewave_loopback/pluto_setup.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 15 </span><span class="caption-text">Pluto SDR setup with loopback connections</span><a class="headerlink" href="#id31" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</li>
+<li><p>Download the SDR Lab Source Code from the link above and unzip it on your desktop.</p></li>
+<li><p>Open <strong>workshop_exercises</strong> folder on your desktop.</p></li>
+<li><p>Go to <strong>python-&gt;sinewave_loopback</strong> subfolder.</p></li>
+<li><p>Right click on <strong>python_loopback_sine_pluto.py -&gt; Open with Other Application</strong> and
+select <strong>Thonny Python IDE</strong> (or any other Python IDE you have installed) from the
+Recommended Applications list.</p>
+<figure class="align-center" id="id32">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/sinewave_loopback/python_ide.png"><img alt="Open Python Script with IDE" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/sinewave_loopback/python_ide.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 16 </span><span class="caption-text">Open the Python script with Thonny Python IDE</span><a class="headerlink" href="#id32" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</li>
+<li><p>To run the script, press the green round button from the top left corner in Thonny IDE as shown below.</p>
+<figure class="align-center" id="id33">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/sinewave_loopback/run_script.png"><img alt="Run Python Script" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/sinewave_loopback/run_script.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 17 </span><span class="caption-text">Run the Python script in Thonny IDE</span><a class="headerlink" href="#id33" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</li>
+<li><p>To zoom on a plot, you can use the zoom option as depicted below. Encircle holding left click the area you want to zoom.
+On this example, if you zoom at the figure below on the received signal, you should see a harmonic at 20KHz.</p>
+<figure class="align-center" id="id34">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/sinewave_loopback/zoom_plot.png"><img alt="Zoom on Plot" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/sinewave_loopback/zoom_plot.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 18 </span><span class="caption-text">Zoom on the plot to see the harmonic at 20KHz</span><a class="headerlink" href="#id34" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</li>
+<li><p>To stop running the Python script (if you want to run it again or run another script), close all the tabs by <strong>right clicking on the
+taskbar icon -&gt; Quit x windows</strong> as shown depicted below or close them manually one by one.</p>
+<figure class="align-center" id="id35">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/sinewave_loopback/close_tabs.png"><img alt="Close Tabs" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/sinewave_loopback/close_tabs.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 19 </span><span class="caption-text">Close all tabs to stop the Python script</span><a class="headerlink" href="#id35" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</li>
+</ol>
+</section>
+<section id="transmit-and-receive-a-complex-sinusoid-with-python-using-jupiter-or-talise">
+<h3>Transmit and receive a complex sinusoid with Python using Jupiter or Talise<a class="headerlink" href="#transmit-and-receive-a-complex-sinusoid-with-python-using-jupiter-or-talise" title="Link to this heading"></a></h3>
+<p>This exercise demonstrates one of the most powerful features of ADI’s software ecosystem: <strong>platform portability</strong>.
+You will run the same complex sinusoid transmission and reception algorithm from the previous exercise, but now
+on higher-performance hardware platforms—Jupiter (ADRV9002) or Talise (ADRV9009-ZU11EG).</p>
+<p><strong>Key Learning Points:</strong></p>
+<ul class="simple">
+<li><p><strong>Minimal code changes</strong>: Only the device configuration section needs to be modified</p></li>
+<li><p><strong>Same PyADI-IIO library</strong>: The identical Python library works across all ADI platforms</p></li>
+<li><p><strong>Common software architecture</strong>: tx(), rx(), and other functions remain the same</p></li>
+<li><p><strong>Seamless scaling</strong>: Move from prototyping on Pluto to production-grade hardware without rewriting algorithms</p></li>
+</ul>
+<p>This demonstrates the design principle discussed earlier: algorithms developed on entry-level hardware like
+ADALM-PLUTO can be directly transferred to production platforms with minimal effort, dramatically reducing
+development time and risk.</p>
+<p>In this exercise, you will observe that only the SDR configuration code (approximately 10-15 lines) changes
+between platforms, while the signal generation, transmission, reception, and visualization code remains identical.</p>
+<p>Follow these steps:</p>
+<ol class="arabic">
+<li><p>Assuming the lab exercise folder is already downloaded and unzipped on your desktop, go to <strong>workshop_exercises-&gt;python-&gt;sinewave_loopback</strong>
+subfolder, open <strong>python_loopback_sine_pluto.py (for Jupiter)</strong> or <strong>python_loopback_sine_talise_zu11eg.py (for Talise)</strong> using <strong>Thonny Python IDE</strong>
+as described in the previous exercise.</p></li>
+<li><p>Observe in the script where only the “Configure SDR” code section was changed in <strong>python_loopback_sine_jupiter.py</strong> and <strong>python_loopback_sine_talise_zu11eg.py</strong>
+compared to <strong>python_loopback_sine_pluto.py</strong>. This is because the same software and HDL building blocks are used across all platforms,
+making it easy to transition between them.</p>
+<figure class="align-center" id="id36">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/tx_rx_jupiter_talise/jupiter_config_code.png"><img alt="Configure SDR Code Section" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/tx_rx_jupiter_talise/jupiter_config_code.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 20 </span><span class="caption-text">Configure SDR code for Jupiter platform</span><a class="headerlink" href="#id36" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<figure class="align-center" id="id37">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/tx_rx_jupiter_talise/talise_config_code.png"><img alt="Configure SDR Code Section" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/tx_rx_jupiter_talise/talise_config_code.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 21 </span><span class="caption-text">Configure SDR code for Talise platform</span><a class="headerlink" href="#id37" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</li>
+<li><p>Insert the IP address on line 12 for Jupiter (in <strong>python_loopback_sine_jupiter.py</strong>) or for Talise (in <strong>python_loopback_sine_talise_zu11eg.py</strong>)
+to remotely connect to Jupiter or Talise.</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># For Jupiter (in python_loopback_sine_jupiter.py):</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">sdr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adi.adrv9002<span class="o">(</span><span class="nv">uri</span><span class="o">=</span><span class="s2">&quot;ip:10.48.65.212&quot;</span><span class="o">)</span><span class="w"> </span><span class="c1"># Create Radio object for Jupiter</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># For Talise (in python_loopback_sine_talise_zu11eg.py):</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">sdr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adi.adrv9009_zu11eg<span class="o">(</span><span class="s2">&quot;ip:10.48.65.182&quot;</span><span class="o">)</span><span class="w"> </span><span class="c1"># Create Radio object for Talise</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
+<li><p>Run the script as indicated in <em>Figure 17</em>. In this example, a sinusoid at 15.360 KHz is transmitted and received.
+This frequency is chosen to have an integer number of periods of the sine at the sample rate of 15.36 Msps.
+More specifically, line 16 (depicted below) should return an integer number.</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">num_samps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>int<span class="o">((</span><span class="m">20</span>*sample_rate<span class="o">)</span>/frequency<span class="o">)</span><span class="w"> </span><span class="c1"># number of samples per call to rx()</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
+<li><p>To zoom on the generated figures, use the instructions shown in <em>Figure 18</em>.</p></li>
+<li><p>To stop running the Python script or if you want to run it again, use the instructions shown in <em>Figure 19</em>.</p></li>
+</ol>
+</section>
+<section id="doppler-radar-with-gnu-radio-pluto">
+<h3>Doppler Radar with GNU Radio (Pluto)<a class="headerlink" href="#doppler-radar-with-gnu-radio-pluto" title="Link to this heading"></a></h3>
+<p>This exercise demonstrates the Doppler radar effect using GNU Radio Companion, a visual programming environment
+for building software-defined radio applications. You will create a continuous-wave (CW) radar system that can
+detect motion and measure relative velocity by observing frequency shifts in the received signal.</p>
+<p><strong>What is GNU Radio?</strong></p>
+<p>GNU Radio is a free, open-source software development toolkit that provides signal processing blocks to implement
+software-defined radios. It uses a visual flowgraph paradigm where signal processing blocks are connected together
+to create complete radio systems. GNU Radio Companion (GRC) provides a graphical interface for building these flowgraphs
+without requiring extensive programming knowledge.</p>
+<p><strong>Key features:</strong></p>
+<ul class="simple">
+<li><p>Visual flowgraph-based development environment</p></li>
+<li><p>Extensive library of signal processing blocks</p></li>
+<li><p>Hardware integration via gr-iio blocks for ADI devices</p></li>
+<li><p>Real-time visualization and debugging tools</p></li>
+<li><p>Python-based backend for custom block development</p></li>
+</ul>
+<p><strong>The Doppler Effect in Radar</strong></p>
+<p>The Doppler effect causes a frequency shift when there is relative motion between the radar and a target.
+When an object moves toward the radar, the reflected signal has a higher frequency (positive Doppler shift).
+When it moves away, the frequency decreases (negative Doppler shift).</p>
+<p><strong>Doppler Frequency Shift:</strong></p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[f_d = \frac{2 \cdot v \cdot f_c}{c}\]</div>
+</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(f_d\)</span> = Doppler frequency shift</p></li>
+<li><p><span class="math notranslate nohighlight">\(v\)</span> = relative velocity of the target</p></li>
+<li><p><span class="math notranslate nohighlight">\(f_c\)</span> = carrier frequency</p></li>
+<li><p><span class="math notranslate nohighlight">\(c\)</span> = speed of light</p></li>
+</ul>
+<p><strong>How This Exercise Works:</strong></p>
+<ol class="arabic">
+<li><p><strong>Transmit</strong>: The Pluto SDR transmits a continuous wave (CW) signal at 2.5 GHz</p></li>
+<li><p><strong>Reflection</strong>: The signal reflects off your moving hand</p></li>
+<li><p><strong>Receive</strong>: The Pluto receives the reflected signal with a Doppler-shifted frequency</p></li>
+<li><p><strong>Processing</strong>: GNU Radio processes the signal to extract the Doppler shift</p></li>
+<li><p><strong>Visualization</strong>: Real-time plots show the frequency shift, and audio output lets you hear the Doppler tone</p>
+<figure class="align-center" id="id38">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/doppler_radar/filter_frequency_diagram.png"><img alt="Band Pass and Reject Filters" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/doppler_radar/filter_frequency_diagram.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 22 </span><span class="caption-text">Frequency domain filtering: Band Reject Filter removes carrier, Band Pass Filter isolates Doppler shift</span><a class="headerlink" href="#id38" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</li>
+</ol>
+<p><strong>What You Will Observe:</strong></p>
+<ul class="simple">
+<li><p>Moving your hand toward the antenna increases the frequency (higher pitch sound)</p></li>
+<li><p>Moving away decreases the frequency (lower pitch sound)</p></li>
+<li><p>The faster the motion, the larger the frequency shift</p></li>
+<li><p>Real-time FFT plots visualize the Doppler shift</p></li>
+</ul>
+<p>This is the same principle used in police speed radar guns, weather radar, and automotive collision avoidance systems.</p>
+<p>Follow these steps to run the Doppler radar experiment:</p>
+<ol class="arabic">
+<li><p>Make the following setup using Pluto and connect it to your PC:</p>
+<figure class="align-center" id="id39">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/doppler_radar/pluto_doppler_setup.png"><img alt="Pluto SDR Doppler Radar Setup" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/doppler_radar/pluto_doppler_setup.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 23 </span><span class="caption-text">Pluto SDR setup for Doppler radar experiment</span><a class="headerlink" href="#id39" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</li>
+<li><p>Open the terminal by simultaneously pressing <strong>Ctrl + Alt + T</strong> on your keyboard.</p></li>
+<li><p>Type the following command in the terminal to open GNU Radio Companion and press Enter:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gnuradio-companion
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
+</ol>
+<p>#. In <em>gnuradio-companion</em>, click on the <strong>File-&gt;Open</strong>, and open from <strong>Desktop-&gt;workshop_exercises-&gt;gnuradio</strong> the
+<strong>doppler_radar_pluto.grc</strong> file.</p>
+<ol class="arabic">
+<li><p>To run the flowgraph, press on the grey arrow from the top function bar as indicated below.</p>
+<figure class="align-center" id="id40">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/doppler_radar/run_grc.png"><img alt="Run GNU Radio Flowgraph" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/doppler_radar/run_grc.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 24 </span><span class="caption-text">Run the GNU Radio flowgraph for Doppler radar experiment</span><a class="headerlink" href="#id40" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</li>
+</ol>
+<p>#. Move your hand toward and away from the antennas and observe how the sound and the frequency of the received harmonic changes
+in real time plots.</p>
+<p>The six plots show the received signal at different processing stages: top row displays time-domain waveforms,
+while the bottom row shows frequency-domain FFT plots where you can see the Doppler shift peak move left (hand moving away) or
+right (hand moving toward) from the center frequency.</p>
+<blockquote>
+<div><figure class="align-center" id="id41">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/doppler_radar/doppler_plots.png"><img alt="Doppler Radar Plots" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/doppler_radar/doppler_plots.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 25 </span><span class="caption-text">Real-time plots of the Doppler radar experiment</span><a class="headerlink" href="#id41" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+</section>
+<section id="binary-phase-shift-keying-bpsk-in-python-using-pluto">
+<h3>Binary Phase Shift Keying (BPSK) in Python using Pluto<a class="headerlink" href="#binary-phase-shift-keying-bpsk-in-python-using-pluto" title="Link to this heading"></a></h3>
+<p>This exercise demonstrates Binary Phase Shift Keying (BPSK), a fundamental digital modulation technique used in modern communication
+systems. You will transmit digital data (binary bits) through the Pluto SDR, receive it back via a loopback connection, and observe
+how software-based signal processing recovers the original data despite real-world impairments.</p>
+<p><strong>What is BPSK?</strong></p>
+<p>Binary Phase Shift Keying is a type of phase modulation where digital information is encoded by shifting the phase of a carrier signal.
+In BPSK:</p>
+<ul class="simple">
+<li><p><strong>Bit 0</strong> is represented by a phase of 180° (or -1 in the I/Q plane)</p></li>
+<li><p><strong>Bit 1</strong> is represented by a phase of 0° (or +1 in the I/Q plane)</p></li>
+</ul>
+<p>This creates two distinct constellation points on the real axis of the I/Q diagram, making BPSK one of the most robust digital
+modulation schemes against noise.</p>
+<blockquote>
+<div><figure class="align-center" id="id42">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/bpsk_loopback/bpsk_modulation_concept.png"><img alt="BPSK Modulation Concept" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/bpsk_loopback/bpsk_modulation_concept.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 26 </span><span class="caption-text">BPSK modulation: binary bits modulate the phase of the carrier signal</span><a class="headerlink" href="#id42" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<figure class="align-center" id="id43">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/bpsk_loopback/bpsk_constellation.png"><img alt="BPSK Constellation Diagram" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/bpsk_loopback/bpsk_constellation.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 27 </span><span class="caption-text">BPSK constellation diagram showing two points at -1 and +1 on the real axis</span><a class="headerlink" href="#id43" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+<p><strong>Where is BPSK Used?</strong></p>
+<p>BPSK and its variants are used in numerous communication systems:</p>
+<ul class="simple">
+<li><p><strong>GSM</strong> - Mobile phone networks</p></li>
+<li><p><strong>Satellite Television</strong> - DVB-S and other satellite broadcasting standards</p></li>
+<li><p><strong>Wi-Fi</strong> - Lower data rate modes (802.11b DSSS)</p></li>
+<li><p><strong>GPS and GNSS</strong> - Satellite navigation systems</p></li>
+<li><p><strong>RFID and NFC</strong> - Contactless communication</p></li>
+<li><p><strong>Deep space communications</strong> - Where robustness is critical</p></li>
+</ul>
+<p><strong>Challenges in Demodulating BPSK Signals</strong></p>
+<p>When receiving BPSK signals in real-world conditions, several impairments must be corrected:</p>
+<ul class="simple">
+<li><p><strong>Phase Offset</strong>: The local oscillator (LO) at the receiver may have a phase difference from the transmitter</p></li>
+<li><p><strong>Frequency Offset</strong>: Small differences in carrier frequency between TX and RX oscillators</p></li>
+<li><p><strong>Timing Offset</strong>: Clock differences require symbol timing recovery to sample at the right moment</p></li>
+<li><p><strong>Variation with time, distance, and temperature</strong>: These offsets change dynamically</p></li>
+</ul>
+<p>As demonstrated in the previous Doppler radar exercise, frequency varies with distance and motion. These same effects impact digital communications.</p>
+<p><strong>The Power of Software-Defined Radio: All These Problems Can Be Solved by Software!</strong></p>
+<p>This exercise demonstrates how modern SDR systems correct all these impairments in software using sophisticated algorithms:</p>
+<blockquote>
+<div><figure class="align-center" id="id44">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/bpsk_loopback/tx_rx_flow_diagram.png"><img alt="BPSK Transmitter and Receiver Architecture" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/bpsk_loopback/tx_rx_flow_diagram.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 28 </span><span class="caption-text">BPSK system architecture showing transmitter and receiver signal processing chain</span><a class="headerlink" href="#id44" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+<p><strong>How the BPSK System Works:</strong></p>
+<p><strong>Transmitter Chain:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Configure SDR</strong>: Set center frequency, sample rate, and gain</p></li>
+<li><p><strong>Create array of bits</strong>: Generate the digital data to transmit (0s and 1s)</p></li>
+<li><p><strong>Interpolate and remap symbols</strong>: Repeat each bit 16 times for pulse shaping, map bit 0 → -1, bit 1 → +1</p></li>
+<li><p><strong>Call tx() function</strong>: Transmit the modulated signal</p></li>
+</ol>
+<p><strong>Receiver Chain:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Call rx() function</strong>: Receive the modulated signal</p></li>
+<li><p><strong>Coarse frequency adjustment</strong>: Square the received signal to measure 2× frequency offset, then correct it</p></li>
+<li><p><strong>Symbol timing recovery</strong>: Use Mueller and Muller clock recovery to select the correct sample from each 16-sample group</p></li>
+<li><p><strong>Fine frequency and phase adjustment</strong>: Apply Costas loop to lock onto the correct phase and remove residual frequency offset</p></li>
+<li><p><strong>Plot data</strong>: Visualize constellation diagrams and waveforms to observe signal quality</p></li>
+</ol>
+<p><strong>Key Signal Processing Techniques:</strong></p>
+<ul class="simple">
+<li><p><strong>Frequency Offset Correction</strong>: The received signal is squared (raising phase errors to become visible as frequency offsets), an FFT identifies the peak at 2× the offset frequency, and samples are corrected by multiplying by <span class="math notranslate nohighlight">\(e^{-j2\pi f_{offset} t}\)</span></p></li>
+<li><p><strong>Symbol Timing Recovery (Mueller and Muller)</strong>: Since each bit is transmitted as 16 samples, the receiver must identify which of the 16 samples represents the optimal sampling point. The Mueller and Muller algorithm iteratively adjusts the timing offset to lock onto the correct samples.</p></li>
+<li><p><strong>Costas Loop (Fine Synchronization)</strong>: Functions like a phase-locked loop (PLL) that multiplies I × Q samples. For ideal BPSK where Q = 0, this error function is minimized when there is no phase or frequency offset, allowing the loop to lock onto the correct carrier phase.</p></li>
+</ul>
+<p><strong>What You Will Observe:</strong></p>
+<p>Starting from a noisy, offset constellation with scattered points, you will see the signal progressively improve:</p>
+<ol class="arabic">
+<li><p><strong>Raw received signal</strong>: Shows significant phase and frequency offset</p></li>
+<li><p><strong>After coarse frequency correction</strong>: Frequency offset mostly removed, but phase offset remains</p></li>
+<li><p><strong>After symbol timing recovery</strong>: Correct samples selected, reducing mid-constellation points</p></li>
+<li><p><strong>After Costas loop</strong>: Clean constellation with two tight clusters at -1 and +1</p>
+<figure class="align-center" id="id45">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/bpsk_loopback/bpsk_constellation_progression.png"><img alt="BPSK Signal Recovery Progression" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/bpsk_loopback/bpsk_constellation_progression.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 29 </span><span class="caption-text">Progression from noisy received signal to clean demodulated constellation</span><a class="headerlink" href="#id45" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</li>
+</ol>
+<p>This exercise demonstrates the power of software-defined radio: complex signal processing algorithms running in software can correct real-world impairments that would be difficult or impossible to handle in analog hardware alone.</p>
+<p>Follow these steps to run the BPSK transmission and reception experiment:</p>
+<ol class="arabic simple">
+<li><p>Make the setup from <em>Figure 15</em> using Pluto and connect it to your PC.</p></li>
+<li><p>Open the <strong>workshop_exercises</strong> folder from your desktop.</p></li>
+<li><p>Go to <strong>python-&gt;bpsk_loopback</strong> subfolder.</p></li>
+</ol>
+<p>#. Right click on <strong>bpsk_pluto_loopback_pluto.py -&gt; Open With Other Application</strong> and select <strong>Thonny Python IDE</strong>
+(or any other Python IDE you have installed) from the Recommended Applications list as in <em>Figure 16</em>.</p>
+<ol class="arabic simple">
+<li><p>To run the script, press the green round button from the top left corner in Thonny IDE as in <em>Figure 17</em>.</p></li>
+<li><p>To zoom on a plot, use the instructions shown in <em>Figure 18</em>.</p></li>
+<li><p>To stop running the Python script (if you want to run it again or run another script), close all the tabs by <strong>right clicking on the
+taskbar icon -&gt; Quit x windows</strong> as shown depicted below in <em>Figure 19</em> or close them manually one by one.</p></li>
+</ol>
+</section>
+<section id="binary-shift-keying-bpsk-in-python-using-jupiter-or-talise">
+<h3>Binary Shift Keying (BPSK) in Python using Jupiter or Talise<a class="headerlink" href="#binary-shift-keying-bpsk-in-python-using-jupiter-or-talise" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p>From <strong>workshop_exercises-&gt;python-&gt;bpsk_loopback</strong> subfolder, open <strong>bpsk_jupiter_loopback_jupiter.py (for Jupiter)</strong>
+or <strong>bpsk_talise_loopback_talise_zu11eg.py (for Talise)</strong> using <strong>Thonny Python IDE</strong> as in <em>Figure 15</em>.</p></li>
+<li><p>Observe in the script that only the “Configure SDR” code section was changed in <strong>bpsk_jupiter_loopback_jupiter.py</strong> and <strong>bpsk_talise_loopback_talise_zu11eg.py</strong>
+compared to <strong>bpsk_pluto_loopback_pluto.py</strong> from the previous exercise.</p>
+<figure class="align-center" id="id46">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/bpsk_loopback/jupiter_config_code.png"><img alt="Configure SDR Code Section" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/bpsk_loopback/jupiter_config_code.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 30 </span><span class="caption-text">Configure SDR code for Jupiter platform</span><a class="headerlink" href="#id46" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<figure class="align-center" id="id47">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/bpsk_loopback/talise_config_code.png"><img alt="Configure SDR Code Section" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/bpsk_loopback/talise_config_code.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 31 </span><span class="caption-text">Configure SDR code for Talise platform</span><a class="headerlink" href="#id47" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</li>
+<li><p>Insert the IP address given for Jupiter (in <strong>bpsk_jupiter_loopback_jupiter.py</strong>) or for Talise (in <strong>bpsk_talise_loopback_talise_zu11eg.py</strong>)
+to remotely connect to Jupiter or Talise.</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># For Jupiter (in bpsk_jupiter_loopback_jupiter.py):</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">sdr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adi.adrv9002<span class="o">(</span><span class="nv">uri</span><span class="o">=</span><span class="s2">&quot;ip:10.48.65.212&quot;</span><span class="o">)</span><span class="w"> </span><span class="c1"># Create Radio object for Jupiter</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># For Talise (in bpsk_talise_loopback_talise_zu11eg.py):</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">sdr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adi.adrv9009_zu11eg<span class="o">(</span><span class="s2">&quot;ip:10.48.65.182&quot;</span><span class="o">)</span><span class="w"> </span><span class="c1"># Create Radio object for Talise</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
+<li><p>Run the script as indicated in <em>Figure 17</em>.</p></li>
+<li><p>To zoom on the generated figures, use the instructions shown in <em>Figure 18</em>.</p></li>
+<li><p>To stop running the Python script or if you want to run it again, use the instructions shown in <em>Figure 19</em>.</p></li>
+</ol>
+</section>
+<section id="quadrature-phase-shift-keying-qpsk-in-gnu-radio-using-pluto">
+<h3>Quadrature Phase Shift Keying (QPSK) in GNU Radio using Pluto<a class="headerlink" href="#quadrature-phase-shift-keying-qpsk-in-gnu-radio-using-pluto" title="Link to this heading"></a></h3>
+<p>This exercise demonstrates Quadrature Phase Shift Keying (QPSK), a digital modulation scheme that transmits 2 bits per symbol instead of BPSK’s 1 bit per symbol. QPSK uses four phase positions in the I/Q plane to encode data, effectively doubling the data rate in the same bandwidth.</p>
+<p><strong>What is QPSK?</strong></p>
+<p>QPSK encodes two bits into each symbol using four constellation points at 45°, 135°, 225°, and 315°:</p>
+<ul class="simple">
+<li><p><strong>00</strong>, <strong>01</strong>, <strong>10</strong>, <strong>11</strong> → Four distinct phase positions</p></li>
+</ul>
+<p>This creates twice the spectral efficiency of BPSK while maintaining good noise immunity.</p>
+<blockquote>
+<div><figure class="align-center" id="id48">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/qpsk_gnuradio/qpsk_constellation.png"><img alt="QPSK Constellation" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/qpsk_gnuradio/qpsk_constellation.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 32 </span><span class="caption-text">QPSK constellation (4 points, 2 bits/symbol)</span><a class="headerlink" href="#id48" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<figure class="align-center" id="id49">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/qpsk_gnuradio/qpsk_ho_modulation.png"><img alt="QPSK Higher Order Modulation Constellation" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/qpsk_gnuradio/qpsk_ho_modulation.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 33 </span><span class="caption-text">QPSK higher-order modulation schemes (16-QAM, 32-QAM, 64-QAM, 256-QAM)</span><a class="headerlink" href="#id49" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+<p><strong>Where is QPSK Used?</strong></p>
+<ul class="simple">
+<li><p>Satellite communications (DVB-S, GPS)</p></li>
+<li><p>Wireless standards (CDMA, LTE, 5G)</p></li>
+<li><p>Cable modems (DOCSIS)</p></li>
+<li><p>Point-to-point microwave links</p></li>
+</ul>
+<p><strong>How This Exercise Works:</strong></p>
+<p>You will receive QPSK-modulated data packets containing hexadecimal values using GNU Radio. The flowgraph performs symbol synchronization,
+frequency locking, and constellation decoding to recover the transmitted data.</p>
+<blockquote>
+<div><figure class="align-center" id="id50">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/qpsk_gnuradio/qpsk_gnuradio_flowgraph.png"><img alt="QPSK GNU Radio Flowgraph" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/qpsk_gnuradio/qpsk_gnuradio_flowgraph.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 34 </span><span class="caption-text">GNU Radio flowgraph for receiving QPSK-modulated data using Pluto SDR</span><a class="headerlink" href="#id50" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+<p>Follow these steps to receive QPSK-modulated data:</p>
+<ol class="arabic">
+<li><p>Make the following setup using Pluto and connect it to your PC:</p>
+<figure class="align-center" id="id51">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/qpsk_pluto/qpsk_pluto_setup.png"><img alt="QPSK Pluto Setup" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/qpsk_pluto/qpsk_pluto_setup.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 35 </span><span class="caption-text">QPSK Pluto Setup</span><a class="headerlink" href="#id51" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</li>
+<li><p>In <em>gnuradio-companion</em>, open <strong>qpsk_point_to_point_rx_console.grc</strong> from <strong>workshop_exercises-&gt;gnuradio-&gt;qpsk_point_to_point_console</strong>.</p>
+<p>Run the flowgraph and observe the received message stored in “msg_var” variable as depicted below.</p>
+<figure class="align-center" id="id52">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/qpsk_pluto/qpsk_point_to_point_rx_console.png"><img alt="QPSK Point to Point RX Console" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/qpsk_pluto/qpsk_point_to_point_rx_console.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 36 </span><span class="caption-text">QPSK Point to Point RX Console</span><a class="headerlink" href="#id52" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</li>
+</ol>
+</section>
+<section id="receiving-qpsk-modulated-video-with-sdrs-using-pluto">
+<h3>Receiving QPSK modulated Video with SDRs using Pluto<a class="headerlink" href="#receiving-qpsk-modulated-video-with-sdrs-using-pluto" title="Link to this heading"></a></h3>
+<p>This exercise demonstrates a real-world application of QPSK modulation: receiving Digital Amateur Television (DATV). Using the open-source <a class="icon link reference external" href="https://www.sdrangel.org/" target="_blank">SDRangel</a> software, you will receive and display live video transmitted over the air using QPSK modulation, the same technique used in satellite TV broadcasting.</p>
+<p><strong>What is DATV?</strong></p>
+<p>Digital Amateur Television (DATV) is a form of amateur radio that transmits video and audio using digital modulation schemes like QPSK. Unlike analog TV, DATV provides:</p>
+<ul class="simple">
+<li><p>Better quality with less interference</p></li>
+<li><p>More efficient use of bandwidth</p></li>
+<li><p>Error correction capabilities</p></li>
+<li><p>Multiple audio/video streams in a single channel</p></li>
+</ul>
+<p><strong>How This Exercise Works:</strong></p>
+<p><a class="icon link reference external" href="https://www.sdrangel.org/" target="_blank">SDRangel</a> is a powerful open-source SDR application that implements a complete DATV receiver chain including QPSK demodulation, Forward Error Correction (FEC), and MPEG-2/H.264 video decoding. The Pluto SDR receives the RF signal, and SDRangel processes it to display the video in real-time.</p>
+<p>Follow these steps to receive QPSK-modulated video:</p>
+<ol class="arabic">
+<li><p>Make the setup using Pluto and connect it to your PC as depicted in <em>Figure 35</em>:</p>
+<figure class="align-center" id="id53">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/qpsk_pluto/qpsk_pluto_setup.png"><img alt="QPSK Pluto Setup" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/qpsk_pluto/qpsk_pluto_setup.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 37 </span><span class="caption-text">QPSK Pluto Setup</span><a class="headerlink" href="#id53" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</li>
+<li><p>Open the terminal by pressing at the same time <strong>Ctrl + Alt + T</strong> on your keyboard.</p></li>
+<li><p>Type the following command in the terminal and press Enter:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sdrangel
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
+<li><p>The application should be preconfigured. Run the program by pressing the purple arrow as depicted below.</p>
+<figure class="align-center" id="id54">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/qpsk_video/sdrangel_run.png"><img alt="Run SDRangel" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/qpsk_video/sdrangel_run.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 38 </span><span class="caption-text">Run SDRangel to receive QPSK modulated video</span><a class="headerlink" href="#id54" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</li>
+<li><p>On DATV window, <strong>check and then uncheck Viterbi</strong> to synchronize the qpsk data <strong>while the program is running</strong> (as shown below).</p>
+<figure class="align-center" id="id55">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/qpsk_video/viterbi_sync.png"><img alt="Viterbi Sync" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/qpsk_video/viterbi_sync.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 39 </span><span class="caption-text">Check and then uncheck Viterbi to synchronize the QPSK data in SDRangel</span><a class="headerlink" href="#id55" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</li>
+</ol>
+</section>
+<section id="spectrum-paint-using-pluto">
+<h3>Spectrum Paint using Pluto<a class="headerlink" href="#spectrum-paint-using-pluto" title="Link to this heading"></a></h3>
+<p>This exercise demonstrates a creative application of SDR: “painting” images in the frequency spectrum. By transmitting signals at different frequencies over time, you can create visible patterns on a waterfall display, which shows frequency on the horizontal axis and time on the vertical axis.</p>
+<p><strong>How Spectrum Paint Works:</strong></p>
+<p>A waterfall display is a spectrogram that shows:</p>
+<ul class="simple">
+<li><p><strong>Frequency</strong> (horizontal axis): Different colors represent signal strength at each frequency</p></li>
+<li><p><strong>Time</strong> (vertical axis): Each new row represents a new time snapshot</p></li>
+<li><p><strong>Amplitude</strong> (color intensity): Brighter colors indicate stronger signals</p></li>
+</ul>
+<p>By carefully controlling which frequencies are transmitted at each moment, you can “draw” images, text, or patterns that become visible as the waterfall scrolls down.</p>
+<p><strong>Applications:</strong></p>
+<p>While spectrum paint is primarily a demonstration, the underlying technique is used in:</p>
+<ul class="simple">
+<li><p>Frequency-hopping spread spectrum (FHSS)</p></li>
+<li><p>Chirp radar systems</p></li>
+<li><p>Multi-carrier communications</p></li>
+<li><p>Signal identification and watermarking</p></li>
+</ul>
+<p>This exercise showcases the flexibility of software-defined radio: the same hardware can transmit any arbitrary frequency pattern by simply changing the software.</p>
+<p>Follow these steps to create a spectrum painting:</p>
+<ol class="arabic">
+<li><p>Make the following setup using Pluto and connect it to your PC.</p></li>
+<li><p>Open in <em>gnuradio-companion</em> the <strong>paint_tx.grc</strong> file from <strong>workshop_exercises-&gt;gnuradio-&gt;spectrum_paint</strong> and run the flowgraph.</p></li>
+<li><p>Observe the waterfall display as the spectrum painting appears, created by the Pluto SDR transmitting the frequency pattern.</p>
+<figure class="align-center" id="id56">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/spectrum_paint/paint_tx.png"><img alt="Spectrum Paint Waterfall Display" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/workshop_just_enough_sw_and_hdl_for_high_speed_designs/images/exercises/spectrum_paint/paint_tx.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 40 </span><span class="caption-text">Waterfall display showing the spectrum painting created by transmitting controlled frequency patterns</span><a class="headerlink" href="#id56" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</li>
+</ol>
+</section>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p><a class="icon link reference external" href="https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/adalm-pluto.html" target="_blank">ADALM-PLUTO</a></p></li>
+<li><p><a class="icon link reference external" href="https://wiki.analog.com/resources/eval/user-guides/jupiter-sdr/hardware-overview" target="_blank">Jupiter SDR Hardware Overview</a></p></li>
+<li><p><a class="icon link reference external" href="https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/adrv9009-zu11eg.html" target="_blank">ADRV9009-ZU11EG SOM</a></p></li>
+<li><ol class="upperalpha simple" start="20">
+<li><ol class="upperalpha simple" start="6">
+<li><p>Collins, R. Getz, Di Pu, A. M. Wyglinski, “Software-Defined Radio for Engineers,” 2018, ISBN-13: 978-1-63081-457-1</p></li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p><a class="icon link reference external" href="https://www.gnuradio.org/" target="_blank">GNU Radio</a></p></li>
+<li><ol class="upperalpha simple" start="13">
+<li><p>Lichtman, <a class="icon link reference external" href="https://pysdr.org/" target="_blank">PySDR: A Guide to SDR and DSP using Python</a></p></li>
+</ol>
+</li>
+<li><ol class="upperalpha simple" start="20">
+<li><ol class="upperalpha simple" start="6">
+<li><p>Collins, <a class="icon link reference external" href="https://www.gnuradio.org/grcon/grcon18/presentations/ADI_Transceivers_A_Deep_Dive/" target="_blank">ADI Transceivers: A Deep Dive</a>, GNU Radio Conference 2018</p></li>
+</ol>
+</li>
+</ol>
+</li>
+<li><ol class="upperalpha simple" start="10">
+<li><p>Gallicchio, <a class="icon link reference external" href="https://github.com/gallicchio/learnSDR" target="_blank">learnSDR</a></p></li>
+</ol>
+</li>
+<li><p><a class="icon link reference external" href="https://www.sdrangel.org/" target="_blank">SDRangel</a></p></li>
+<li><ol class="upperalpha simple" start="11">
+<li><p>Mueller and M. Muller, “Timing recovery in digital synchronous data receivers,” IEEE Trans. Commun., vol. C-24, no. 5, pp. 516-531, May 1976</p></li>
+</ol>
+</li>
+<li><ol class="upperalpha simple" start="10">
+<li><p>Costas, “Synchronous Communications,” Proceedings of the IEEE, vol. 44, p. 1713-1718, 1956</p></li>
+</ol>
+</li>
+</ol>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="../index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">What software do I need for my SDR?</a>
+    <a href="../../workshop_a_precision_converter_fpga_integration_journey/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">A Precision Converter FPGA Integration Journey</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2025, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>
