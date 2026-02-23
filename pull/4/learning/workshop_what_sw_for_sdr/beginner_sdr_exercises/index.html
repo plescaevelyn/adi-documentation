@@ -107,8 +107,13 @@
 <li><a class="reference internal" href="#binary-phase-shift-keying-bpsk-in-python-using-pluto">Binary Phase Shift Keying (BPSK) in Python using Pluto</a></li>
 <li><a class="reference internal" href="#binary-shift-keying-bpsk-in-python-using-jupiter-or-talise">Binary Shift Keying (BPSK) in Python using Jupiter or Talise</a></li>
 <li><a class="reference internal" href="#quadrature-phase-shift-keying-qpsk-in-gnu-radio-using-pluto">Quadrature Phase Shift Keying (QPSK) in GNU Radio using Pluto</a></li>
+<li><a class="reference internal" href="#qpsk-without-additional-digital-processing-in-gnu-radio-using-jupiter">QPSK without additional digital processing in GNU Radio using Jupiter</a></li>
+<li><a class="reference internal" href="#qpsk-constellation-modulator-in-gnu-radio-using-jupiter">QPSK Constellation Modulator in GNU Radio using Jupiter</a></li>
+<li><a class="reference internal" href="#qpsk-frequency-locked-loop-in-gnu-radio-using-jupiter">QPSK Frequency Locked Loop in GNU Radio using Jupiter</a></li>
+<li><a class="reference internal" href="#receiving-qpsk-modulated-message-and-storing-it-to-file-using-pluto">Receiving QPSK modulated message and storing it to file using Pluto</a></li>
 <li><a class="reference internal" href="#receiving-qpsk-modulated-video-with-sdrs-using-pluto">Receiving QPSK modulated Video with SDRs using Pluto</a></li>
 <li><a class="reference internal" href="#spectrum-paint-using-pluto">Spectrum Paint using Pluto</a></li>
+<li><a class="reference internal" href="#amplitude-shift-keying-ask-in-gnu-radio-using-jupiter">Amplitude Shift Keying (ASK) in GNU Radio using Jupiter</a></li>
 </ul>
 </li>
 </ul>
@@ -1139,6 +1144,265 @@ frequency locking, and constellation decoding to recover the transmitted data.</
 </li>
 </ol>
 </section>
+<section id="qpsk-without-additional-digital-processing-in-gnu-radio-using-jupiter">
+<h2>QPSK without additional digital processing in GNU Radio using Jupiter<a class="headerlink" href="#qpsk-without-additional-digital-processing-in-gnu-radio-using-jupiter" title="Link to this heading"></a></h2>
+<p>This exercise demonstrates QPSK communication without proper digital signal processing.
+It shows why synchronization and filtering blocks are essential in real-world systems.</p>
+<p><strong>Simplified Signal Processing:</strong></p>
+<p>The transmitter configures the SDR, creates an array of bits, interpolates and remaps symbols,
+shifts the spectrum, and transmits the signal. Notably absent is the matched filter for pulse shaping.</p>
+<p>The receiver receives the signal, shifts the spectrum back to baseband, and plots the data.
+It lacks the frequency correction, matched filtering, timing recovery, and phase correction that
+would normally be present in a proper QPSK receiver.</p>
+<p><strong>Problems Observed:</strong></p>
+<p>Without these processing blocks, several issues become apparent. The spectrum shows an inefficient
+square wave pattern that wastes bandwidth. A phase offset causes the constellation to rotate from
+ideal positions. Poor timing recovery results in wrong samples being selected from the symbol period.
+The absence of pulse shaping leads to high sidelobes that cause adjacent channel interference.</p>
+<p>Follow these steps to run this demonstration:</p>
+<ol class="arabic">
+<li><p>Make the hardware setup using Jupiter SDR with RX1 and TX1 connected via SMA loopback cable
+and connect it to your PC.</p>
+</li>
+<li><p>Open the terminal and navigate to the Desktop directory, then launch GNU Radio Companion
+with elevated privileges:</p>
+<div class="code-spaced highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/home/analog/Desktop
+sudo<span class="w"> </span>./start-grc.sh
+</pre></div>
+</div>
+</li>
+<li><p>In GNU Radio Companion, open the following file from <strong>File → Open</strong>:</p>
+<div class="code-spaced highlight-bash notranslate"><div class="highlight"><pre><span></span>/home/analog/Desktop/ftc_2024/10_qpsk_raw_loopback_gnuradio/QPSK_raw_loopback_jupiter.grc
+</pre></div>
+</div>
+</li>
+<li><p>Observe the simplified flowgraph showing transmitter and receiver without DSP correction blocks.</p>
+</li>
+<li><p>Click the <strong>Execute</strong> button (green arrow) to run the flowgraph.</p></li>
+<li><p>Observe the output displays. The transmitted spectrum shows wide square wave characteristics
+with high sidelobes. The received constellation displays scattered points with phase offset
+instead of clean clusters at the ideal symbol positions. The received spectrum demonstrates
+wide bandwidth due to the absence of pulse shaping.</p>
+</li>
+<li><p>Click the <strong>Stop</strong> button (red square) when finished.</p></li>
+</ol>
+<p><strong>Conclusions:</strong></p>
+<p>This exercise demonstrates several critical requirements for digital communication systems.
+Frequency and phase offsets must be corrected at the receiver using techniques like Costas loops and PLLs.
+These offsets vary with distance, temperature, and time, requiring continuous adjustment.</p>
+<p>The correct sample timing must be extracted using symbol timing recovery algorithms like Mueller and Muller.
+Pulse shaping with matched filters is essential for spectral efficiency and reducing interference.
+Even with all these corrections in place, constellation ambiguity requires differential encoding
+or preamble sequences to establish the correct reference.</p>
+<p>This is why the standard QPSK implementation includes coarse frequency adjustment, symbol timing recovery,
+Costas loop for fine synchronization, and matched filters for pulse shaping. These blocks are not optional
+but fundamental requirements for reliable communication.</p>
+</section>
+<section id="qpsk-constellation-modulator-in-gnu-radio-using-jupiter">
+<h2>QPSK Constellation Modulator in GNU Radio using Jupiter<a class="headerlink" href="#qpsk-constellation-modulator-in-gnu-radio-using-jupiter" title="Link to this heading"></a></h2>
+<p>This exercise demonstrates QPSK communication with proper pulse shaping using matched Root-Raised Cosine filters.
+It builds upon the previous raw QPSK exercise by adding matched filters at both transmitter and receiver,
+significantly improving spectral efficiency.</p>
+<p><strong>Signal Processing with Matched Filters:</strong></p>
+<p>The transmitter configures the SDR, creates an array of bits, and uses a Constellation Modulator block
+that maps bytes into symbols and applies a Root-Raised Cosine filter for pulse shaping. The signal spectrum
+is then shifted and transmitted. The addition of matched filters at the transmitter optimizes bandwidth usage
+compared to the raw square wave spectrum observed in the previous exercise.</p>
+<p>The receiver receives the signal, applies a matched Root-Raised Cosine filter to maximize signal-to-noise ratio,
+shifts the spectrum back to baseband, and plots the data. However, this implementation still lacks frequency offset correction,
+symbol timing recovery, and phase correction, demonstrating the progressive improvement in QPSK receivers.</p>
+<p><strong>Key Improvements Over Raw QPSK:</strong></p>
+<p>The most significant improvement is spectral efficiency. The Root-Raised Cosine matched filters at transmitter and receiver
+eliminate the high sidelobes seen in the raw QPSK implementation, concentrating signal energy within the necessary bandwidth.
+This reduces adjacent channel interference and allows more efficient spectrum usage.</p>
+<p>The received signal quality improves due to the matched filter maximizing signal-to-noise ratio by correlating
+with the expected pulse shape. However, without symbol timing recovery, the receiver does not yet decimate
+by selecting the optimal samples from each symbol period.</p>
+<p><strong>What is Root-Raised Cosine (RRC) Filtering?</strong></p>
+<p>Root-Raised Cosine filtering is a pulse shaping technique that satisfies the Nyquist criterion for zero
+intersymbol interference. By using matched RRC filters at both transmitter and receiver, the combined response
+forms a complete raised cosine filter that eliminates interference between adjacent symbols while minimizing bandwidth.</p>
+<p>Follow these steps to run this demonstration:</p>
+<ol class="arabic">
+<li><p>Make the hardware setup using Jupiter SDR with RX1 and TX1 connected via SMA loopback cable
+and connect it to your PC.</p>
+</li>
+<li><p>Open the terminal and navigate to the Desktop directory, then launch GNU Radio Companion
+with elevated privileges:</p>
+<div class="code-spaced highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/home/analog/Desktop
+sudo<span class="w"> </span>./start-grc.sh
+</pre></div>
+</div>
+</li>
+<li><p>In GNU Radio Companion, open the following file from <strong>File → Open</strong>:</p>
+<div class="code-spaced highlight-bash notranslate"><div class="highlight"><pre><span></span>/home/analog/Desktop/ftc_2024/12_constellation_modulator_loopback_gnuradio/constellation_modulator_loopback_jupiter.grc
+</pre></div>
+</div>
+</li>
+<li><p>Observe the flowgraph structure showing the Constellation Modulator block and matched RRC filters.</p>
+<p>The Constellation Modulator block in the transmitter maps bytes into symbols and applies the RRC filter
+in a single operation. The receiver includes a separate RRC filter block to complete the matched filter pair.</p>
+</li>
+<li><p>Click the <strong>Execute</strong> button (green arrow) to run the flowgraph.</p></li>
+<li><p>Observe the output displays and compare to the previous raw QPSK exercise.</p>
+<p>The transmitted spectrum shows significantly improved bandwidth efficiency with minimal sidelobes due to
+RRC pulse shaping. The received signal demonstrates better quality from the matched filter processing.
+However, the received signal is not yet decimated by selecting the optimal samples from each symbol period,
+which would be added in a complete receiver implementation.</p>
+</li>
+<li><p>Click the <strong>Stop</strong> button (red square) when finished.</p></li>
+</ol>
+<p><strong>Conclusions:</strong></p>
+<p>Using the Constellation Modulator block, the transmitted bits are mapped into IQ symbols and a Root-Raised Cosine
+filter is applied on the transmitter path. This optimizes the bandwidth used compared to the raw square wave
+spectrum, demonstrating the importance of pulse shaping in digital communications.</p>
+<p>The matched RRC filter at the receiver completes the matched filter pair, maximizing signal-to-noise ratio.
+A complete QPSK receiver would additionally include frequency offset correction, symbol timing recovery to
+decimate by selecting optimal samples, and phase correction using a Costas loop.</p>
+</section>
+<section id="qpsk-frequency-locked-loop-in-gnu-radio-using-jupiter">
+<h2>QPSK Frequency Locked Loop in GNU Radio using Jupiter<a class="headerlink" href="#qpsk-frequency-locked-loop-in-gnu-radio-using-jupiter" title="Link to this heading"></a></h2>
+<p>This exercise builds upon the previous Constellation Modulator demonstration by adding coarse frequency offset
+correction using a Frequency Locked Loop. This represents the next step in building a complete QPSK receiver
+by addressing frequency differences between transmitter and receiver oscillators.</p>
+<p><strong>Signal Processing with Frequency Correction:</strong></p>
+<p>The transmitter chain remains the same as the previous exercise, using the Constellation Modulator to map bits
+into symbols with Root-Raised Cosine pulse shaping, shifting the spectrum, and transmitting the signal.</p>
+<p>The receiver now includes a critical addition to the signal processing chain. After receiving the signal through
+the matched RRC filter, a Frequency Locked Loop block dynamically adjusts the frequency of the received spectrum
+to compensate for oscillator differences between transmitter and receiver. The receiver then shifts the spectrum
+back to baseband and plots the data. However, fine frequency and phase adjustment using a Costas loop and symbol
+timing recovery for optimal sample selection are still missing from this implementation.</p>
+<p><strong>What is a Frequency Locked Loop?</strong></p>
+<p>A Frequency Locked Loop is a control system that automatically adjusts for coarse frequency offsets between
+transmitter and receiver local oscillators. Unlike a Phase Locked Loop which tracks both frequency and phase,
+an FLL focuses specifically on correcting frequency errors, making it useful as a first stage before fine
+synchronization with a PLL or Costas loop.</p>
+<p>The FLL block continuously monitors the received spectrum and adjusts its center frequency to compensate for
+drift, ensuring the signal remains centered around DC (zero frequency) for subsequent processing stages.</p>
+<p><strong>Key Improvements Over Constellation Modulator:</strong></p>
+<p>The most significant improvement is automatic frequency offset correction. Without this correction, frequency
+differences between TX and RX oscillators would cause the constellation to rotate continuously, making reliable
+demodulation impossible. The FLL ensures the spectrum stays centered around DC, enabling subsequent processing stages.</p>
+<p>However, the receiver still lacks fine frequency and phase correction that a Costas loop would provide, and symbol
+timing recovery to select the optimal samples from each symbol period. These will be added in more complete implementations.</p>
+<p>Follow these steps to run this demonstration:</p>
+<ol class="arabic">
+<li><p>Make the hardware setup using Jupiter SDR with RX1 and TX1 connected via SMA loopback cable
+and connect it to your PC.</p>
+</li>
+<li><p>Open the terminal and navigate to the Desktop directory, then launch GNU Radio Companion
+with elevated privileges:</p>
+<div class="code-spaced highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/home/analog/Desktop
+sudo<span class="w"> </span>./start-grc.sh
+</pre></div>
+</div>
+</li>
+<li><p>In GNU Radio Companion, open the following file from <strong>File → Open</strong>:</p>
+<div class="code-spaced highlight-bash notranslate"><div class="highlight"><pre><span></span>/home/analog/Desktop/ftc_2024/13_fll_loopback_gnuradio/FLL_loopback_jupiter.grc
+</pre></div>
+</div>
+</li>
+<li><p>Observe the flowgraph structure showing the FLL Band-Edge block for frequency correction.</p>
+<p>The transmitter section includes the Constellation Modulator with RRC filtering. The receiver section
+now features the FLL Band-Edge filter block highlighted in the flowgraph, which dynamically adjusts
+the frequency of the received spectrum to keep it centered around DC.</p>
+</li>
+<li><p>Click the <strong>Execute</strong> button (green arrow) to run the flowgraph.</p></li>
+<li><p>Observe the output displays and use the frequency offset slider to adjust the offset between TX and RX.</p>
+<p>The transmitted spectrum shows the optimized bandwidth from RRC filtering. The received spectrum after
+the FLL block stays centered around DC even as you adjust the frequency offset slider, demonstrating
+the FLL’s ability to track and correct frequency errors. The received constellation shows improved
+stability compared to implementations without frequency correction.</p>
+<p>Note that while the FLL keeps the spectrum centered, a more precise frequency offset correction using
+a Costas loop would further improve constellation quality. Additionally, the receiver does not yet
+perform symbol timing recovery to select optimal samples.</p>
+</li>
+<li><p>Use the offset slider to introduce frequency offset and observe how the spectrum after the FLL block
+automatically adjusts to stay centered around DC.</p></li>
+<li><p>Click the <strong>Stop</strong> button (red square) when finished.</p></li>
+</ol>
+<p><strong>Conclusions:</strong></p>
+<p>The Frequency Locked Loop adds coarse frequency offset correction to the QPSK receiver, automatically adjusting
+for frequency differences between transmitter and receiver oscillators. This ensures the received spectrum stays
+centered around DC, enabling subsequent processing stages.</p>
+<p>The progression of receiver improvements demonstrates the building blocks of digital communications. Starting with
+raw QPSK, adding matched filters for spectral efficiency, and now adding frequency correction with FLL, each step
+addresses specific challenges in recovering the transmitted signal.</p>
+<p>A complete QPSK receiver would additionally include fine frequency and phase correction using a Costas loop and
+symbol timing recovery using algorithms like Mueller and Muller to select optimal samples from each symbol period.</p>
+</section>
+<section id="receiving-qpsk-modulated-message-and-storing-it-to-file-using-pluto">
+<h2>Receiving QPSK modulated message and storing it to file using Pluto<a class="headerlink" href="#receiving-qpsk-modulated-message-and-storing-it-to-file-using-pluto" title="Link to this heading"></a></h2>
+<p>This exercise builds upon the previous QPSK demonstration by implementing a complete <strong>packet-based communication system</strong>. Instead of displaying the received message on the console, this system receives QPSK-modulated data packets transmitted at regular intervals and extracts the message content to a file, demonstrating how real-world communication systems handle burst transmissions.</p>
+<p><strong>How Packet-Based Communication Works:</strong></p>
+<p>Unlike the continuous QPSK transmission you saw in previous exercises, this system transmits data in <strong>bursts</strong> (packets) at specific time intervals. Each packet contains:</p>
+<ul class="simple">
+<li><p><strong>Access Key (Preamble)</strong>: A known synchronization pattern that helps the receiver detect the start of a packet</p></li>
+<li><p><strong>Payload Length</strong>: Information about how much data is in the packet</p></li>
+<li><p><strong>Message Data</strong>: The actual content being transmitted (e.g., “ANALOG DEVICES INC FTC2024”)</p></li>
+<li><p><strong>CRC32 Checksum</strong>: Error detection code to verify data integrity</p></li>
+</ul>
+<p><strong>Why Packet-Based Transmission?</strong></p>
+<p>Most real-world communication systems use packet-based transmission because:</p>
+<ul class="simple">
+<li><p><strong>Efficiency</strong>: Only transmit when you have data to send, saving power and bandwidth</p></li>
+<li><p><strong>Multiple Access</strong>: Allows multiple users to share the same frequency by taking turns</p></li>
+<li><p><strong>Error Detection</strong>: CRC32 checksum catches transmission errors</p></li>
+<li><p><strong>Synchronization</strong>: The receiver can lock onto each burst independently</p></li>
+</ul>
+<p><strong>GNU Radio Signal Flow:</strong></p>
+<p><strong>Transmitter Chain:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Message Source</strong>: Sends specific messages at regular time intervals</p></li>
+<li><p><strong>Packet Formatter</strong>: Appends access key and payload length to each message</p></li>
+<li><p><strong>CRC32</strong>: Appends checksum for error detection</p></li>
+<li><p><strong>PDU to Tagged Stream</strong>: Converts packets (Protocol Data Units) to a continuous stream of data tagged with metadata</p></li>
+<li><p><strong>QPSK Modulator</strong>: Modulates the data using Quadrature Phase Shift Keying</p></li>
+<li><p><strong>SDR Sink</strong>: Transmits the modulated signal through the antenna</p></li>
+</ol>
+<p><strong>Receiver Chain:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>SDR Source</strong>: Receives the RF signal from the antenna</p></li>
+<li><p><strong>QPSK Demodulator</strong>: Demodulates the signal to recover the symbol stream (similar to the previous exercise with frequency/phase/timing recovery)</p></li>
+<li><p><strong>Packet Extractor</strong>: Extracts the message from the received stream of bits by detecting the access key, reading payload length, extracting data bytes, and verifying CRC32</p></li>
+<li><p><strong>File Sink</strong>: Stores the decoded message to a file instead of displaying on console</p></li>
+</ol>
+<p><strong>Key Observation - Burst Mode Effects:</strong></p>
+<p>When you observe the constellation diagram for this exercise, you’ll notice that <strong>the symbols appear noisier</strong> compared to the continuous QPSK transmission. This is because:</p>
+<ul class="simple">
+<li><p>Data is sent in <strong>bursts</strong> rather than continuously</p></li>
+<li><p>The receiver must re-synchronize for each packet</p></li>
+<li><p>Between bursts, there’s no signal, creating transitions in the constellation</p></li>
+<li><p>The Costas loop and timing recovery have less time to stabilize for each burst</p></li>
+</ul>
+<p>This is normal behavior for packet-based systems and demonstrates the trade-off between efficiency (burst mode) and signal quality (continuous mode).</p>
+<p>Follow these steps to receive and store QPSK-modulated messages:</p>
+<ol class="arabic">
+<li><p>Make the hardware setup using Jupiter SDR and connect it to your PC.</p>
+</li>
+<li><p>Open the terminal and navigate to the Desktop directory, then launch GNU Radio Companion with elevated privileges:</p>
+<div class="code-spaced highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/home/analog/Desktop
+sudo<span class="w"> </span>./start-grc.sh
+</pre></div>
+</div>
+</li>
+<li><p>In GNU Radio Companion, open <strong>qpsk_point_to_point_rx_file.grc</strong> from <strong>workshop_exercises-&gt;gnuradio-&gt;qpsk_point_to_point_file</strong>.</p></li>
+<li><p>Click the <strong>Execute</strong> button (green arrow) to run the flowgraph.</p>
+</li>
+<li><p>Observe the received message and signal quality in the GUI displays:</p>
+<ul class="simple">
+<li><p><strong>Received Samples (After Costas Loop)</strong>: Time-domain I/Q waveform</p></li>
+<li><p><strong>Rx Re and Rx Im (After Costas Loop)</strong>: Zoomed time-domain view of in-phase and quadrature components</p></li>
+<li><p><strong>Received Spectrum</strong>: Frequency-domain representation showing the QPSK signal bandwidth</p></li>
+<li><p><strong>Received Constellation</strong>: QPSK constellation points (note the increased noise due to burst transmission)</p></li>
+<li><p><strong>msg_rx variable</strong>: Displays the decoded message (e.g., “ANALOG DEVICES INC FTC2024”)</p></li>
+</ul>
+</li>
+<li><p>The decoded message is automatically saved to a file in the project directory for later analysis.</p></li>
+<li><p>Click the <strong>Stop</strong> button (red square) when finished.</p></li>
+</ol>
+</section>
 <section id="receiving-qpsk-modulated-video-with-sdrs-using-pluto">
 <h2>Receiving QPSK modulated Video with SDRs using Pluto<a class="headerlink" href="#receiving-qpsk-modulated-video-with-sdrs-using-pluto" title="Link to this heading"></a></h2>
 <p>This exercise demonstrates a real-world application of QPSK modulation: receiving Digital Amateur Television (DATV). Using the open-source <a class="icon link reference external" href="https://www.sdrangel.org/" target="_blank">SDRangel</a> software, you will receive and display live video transmitted over the air using QPSK modulation, the same technique used in satellite TV broadcasting.</p>
@@ -1226,6 +1490,89 @@ frequency locking, and constellation decoding to recover the transmitted data.</
 </figure>
 </li>
 </ol>
+</section>
+<section id="amplitude-shift-keying-ask-in-gnu-radio-using-jupiter">
+<h2>Amplitude Shift Keying (ASK) in GNU Radio using Jupiter<a class="headerlink" href="#amplitude-shift-keying-ask-in-gnu-radio-using-jupiter" title="Link to this heading"></a></h2>
+<p>This exercise demonstrates Amplitude Shift Keying (ASK), a digital modulation technique where information is encoded by varying the amplitude of a carrier signal. Unlike BPSK which varies the phase, or FSK which varies the frequency, ASK varies the signal strength to represent different symbols.</p>
+<p><strong>What is ASK?</strong></p>
+<p>Amplitude Shift Keying is a form of amplitude modulation where digital data is represented by changes in the amplitude of a carrier wave:</p>
+<ul class="simple">
+<li><p><strong>Different amplitude levels</strong> represent different symbols</p></li>
+<li><p>In this exercise, we use <strong>4-ASK</strong> (4 amplitude levels): 0, 1/3, 2/3, and 1</p></li>
+<li><p>Each symbol represents 2 bits of data (00, 01, 10, 11)</p></li>
+<li><p>The carrier phase remains constant while amplitude varies</p></li>
+</ul>
+<p><strong>Where is ASK Used?</strong></p>
+<p>ASK and its variants are used in various communication systems:</p>
+<ul class="simple">
+<li><p><strong>RFID tags</strong> - Simple, low-power devices</p></li>
+<li><p><strong>Optical fiber communications</strong> - On-Off Keying (OOK) is a binary form of ASK</p></li>
+<li><p><strong>Infrared remote controls</strong> - Simple amplitude modulation</p></li>
+<li><p><strong>Combined with PSK</strong> - Forms QAM (Quadrature Amplitude Modulation) used in Wi-Fi, LTE, 5G, cable modems</p></li>
+</ul>
+<p><strong>How This Exercise Works:</strong></p>
+<p>This GNU Radio flowgraph demonstrates 4-level ASK transmission and reception with the following signal processing:</p>
+<p><strong>Transmitter Chain:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Vector Source</strong>: Generates four symbols repeatedly: [0, 1/3, 2/3, 1]</p></li>
+<li><p><strong>Repeat Block</strong>: Repeats each symbol 100 times (100 samples per symbol) to create a visible waveform</p></li>
+<li><p><strong>Multiply by Complex Sinusoid</strong>: Offsets the frequency of the transmitted signal relative to the TX LO frequency</p></li>
+<li><p><strong>SDR Sink (Jupiter)</strong>: Transmits the amplitude-modulated signal</p></li>
+</ol>
+<p><strong>Receiver Chain:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>SDR Source (Jupiter)</strong>: Receives the RF signal from the loopback connection</p></li>
+<li><p><strong>Complex to Magnitude</strong>: Extracts only the amplitude information from the received I/Q signal (discards phase)</p></li>
+<li><p><strong>Keep 1 in N (Decimation)</strong>: Keeps only 1 sample out of every 100 (recovers the original symbol rate)</p></li>
+<li><p><strong>GUI Displays</strong>: Shows constellation, spectrum, time-domain waveforms, and decimated output</p></li>
+</ol>
+<p><strong>Key Observations:</strong></p>
+<ul class="simple">
+<li><p><strong>Constellation Diagram</strong>: You will observe <strong>4 distinct amplitude levels</strong> on the real axis (0, 1/3, 2/3, 1)</p></li>
+<li><p><strong>Magnitude RX Plot</strong>: Shows the varying amplitude levels in the time domain</p></li>
+<li><p><strong>Decimated RX</strong>: After decimation, you see the original symbol sequence recovered</p></li>
+<li><p><strong>Phase Information Discarded</strong>: Unlike BPSK/QPSK, only the magnitude matters in ASK, making it simpler but more susceptible to noise</p></li>
+</ul>
+<p><strong>From ASK to QAM - The Next Step:</strong></p>
+<p>When you combine <strong>Amplitude Shift Keying (ASK)</strong> with <strong>Phase Shift Keying (PSK)</strong>, you get <strong>Quadrature Amplitude Modulation (QAM)</strong>. QAM is one of the most widely used modulation schemes in modern communications because it achieves high data rates by encoding information in both amplitude and phase:</p>
+<ul>
+<li><p><strong>16-QAM</strong>: 4 amplitude levels × 4 phase positions = 16 symbols (4 bits per symbol)</p></li>
+<li><p><strong>32-QAM</strong>: 32 symbols (5 bits per symbol)</p></li>
+<li><p><strong>64-QAM</strong>: 64 symbols (6 bits per symbol) - used in Wi-Fi 802.11n/ac</p></li>
+<li><p><strong>256-QAM</strong>: 256 symbols (8 bits per symbol) - used in Wi-Fi 6, cable modems, LTE Advanced</p>
+<blockquote>
+<div></div></blockquote>
+</li>
+</ul>
+<p>Follow these steps to run the ASK transmission and reception experiment:</p>
+<ol class="arabic">
+<li><p>Make the hardware setup using Jupiter SDR with TX1A connected to RX1A via loopback cable and connect it to your PC.</p>
+</li>
+<li><p>Open the terminal and navigate to the Desktop directory, then launch GNU Radio Companion with elevated privileges:</p>
+<div class="code-spaced highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/home/analog/Desktop
+sudo<span class="w"> </span>./start-grc.sh
+</pre></div>
+</div>
+</li>
+<li><p>In GNU Radio Companion, open <strong>ASK_loopback_jupiter.grc</strong> from <strong>Desktop-&gt;ftc_2024-&gt;8_ask_loopback_gnuradio</strong>.</p></li>
+<li><p>Observe the flowgraph structure showing the transmitter and receiver chains:</p>
+</li>
+<li><p>Click the <strong>Execute</strong> button (green arrow) to run the flowgraph.</p></li>
+<li><p>Observe the output displays:</p>
+<ul class="simple">
+<li><p><strong>Transmitted Samples</strong>: Shows the repeated symbols with 100 samples per symbol</p></li>
+<li><p><strong>Received Samples (Unprocessed)</strong>: Raw I/Q signal from the receiver showing amplitude variations</p></li>
+<li><p><strong>Received Spectrum</strong>: Frequency-domain representation showing the offset carrier</p></li>
+<li><p><strong>Received Constellation</strong>: Shows <strong>4 distinct amplitude levels</strong> on the real axis (0, 1/3, 2/3, 1)</p></li>
+<li><p><strong>Magnitude RX</strong>: Time-domain plot showing only the amplitude of the received signal</p></li>
+<li><p><strong>Decimated RX</strong>: After keeping 1 in 100 samples, showing the recovered symbol sequence</p></li>
+</ul>
+</li>
+<li><p>You can adjust the frequency offset slider to observe how the received signal changes in the spectrum display.</p></li>
+<li><p>Click the <strong>Stop</strong> button (red square) when finished.</p></li>
+</ol>
+<p><strong>Conclusion:</strong></p>
+<p>This exercise demonstrates that by varying only the <strong>amplitude</strong> of the carrier signal, we can transmit digital information. When combined with <strong>phase modulation</strong> (BPSK/QPSK), ASK forms the foundation of <strong>QAM</strong>, which is used in virtually all modern high-speed wireless communication systems including Wi-Fi, LTE, 5G, and cable broadband.</p>
 </section>
 </section>
 
