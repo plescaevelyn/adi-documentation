@@ -1011,51 +1011,62 @@ taskbar icon -&gt; Quit x windows</strong> as shown depicted below in <em>Figure
 or <strong>bpsk_talise_loopback_talise_zu11eg.py (for Talise)</strong> using <strong>Thonny Python IDE</strong> as in <em>Figure 15</em>.</p></li>
 <li><p>Observe in the script that only the “Configure SDR” code section was changed in <strong>bpsk_jupiter_loopback_jupiter.py</strong> and <strong>bpsk_talise_loopback_talise_zu11eg.py</strong>
 compared to <strong>bpsk_pluto_loopback_pluto.py</strong> from the previous exercise.</p>
-<figure class="align-center" id="id18">
-<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/bpsk_loopback/jupiter_config_code.png"><img alt="Configure SDR Code Section" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/bpsk_loopback/jupiter_config_code.png" style="width: 40em;" />
-</a>
-<figcaption>
-<p><span class="caption-number">Figure 17 </span><span class="caption-text">Configure SDR code for Jupiter platform</span><a class="headerlink" href="#id18" title="Link to this image"></a></p>
-</figcaption>
-</figure>
-<figure class="align-center" id="id19">
-<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/bpsk_loopback/talise_config_code.png"><img alt="Configure SDR Code Section" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/bpsk_loopback/talise_config_code.png" style="width: 40em;" />
-</a>
-<figcaption>
-<p><span class="caption-number">Figure 18 </span><span class="caption-text">Configure SDR code for Talise platform</span><a class="headerlink" href="#id19" title="Link to this image"></a></p>
-</figcaption>
-</figure>
+<p><strong>For Jupiter</strong> (in <strong>bpsk_jupiter_loopback_jupiter.py</strong>):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 4</span><span class="c1"># Configure properties</span>
+<span class="linenos"> 5</span><span class="n">sdr</span> <span class="o">=</span> <span class="n">adi</span><span class="o">.</span><span class="n">adrv9002</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="s2">&quot;ip:10.48.65.212&quot;</span><span class="p">)</span>  <span class="c1"># Create Radio</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="n">center_freq</span> <span class="o">=</span> <span class="mi">915000000</span>  <span class="c1"># Hz</span>
+<span class="linenos"> 8</span><span class="n">sample_rate</span> <span class="o">=</span> <span class="mi">30720000</span>  <span class="c1"># TX sample rate</span>
+<span class="linenos"> 9</span><span class="n">tx_buffer_size</span> <span class="o">=</span> <span class="mi">1024</span>  <span class="c1"># TX buffer_size</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span><span class="n">sdr</span><span class="o">.</span><span class="n">rx_ensm_mode_chan0</span> <span class="o">=</span> <span class="s2">&quot;rf_enabled&quot;</span>
+<span class="linenos">12</span><span class="n">sdr</span><span class="o">.</span><span class="n">rx_ensm_mode_chan1</span> <span class="o">=</span> <span class="s2">&quot;rf_enabled&quot;</span>
+<span class="linenos">13</span><span class="n">sdr</span><span class="o">.</span><span class="n">tx_hardwaregain_chan0</span> <span class="o">=</span> <span class="o">-</span><span class="mi">20</span>
+<span class="linenos">14</span><span class="n">sdr</span><span class="o">.</span><span class="n">tx_hardwaregain_chan1</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="linenos">15</span><span class="n">sdr</span><span class="o">.</span><span class="n">rx_ensm_mode_chan0</span> <span class="o">=</span> <span class="s2">&quot;rf_enabled&quot;</span>
+<span class="linenos">16</span><span class="n">sdr</span><span class="o">.</span><span class="n">tx_cyclic_buffer</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="linenos">17</span><span class="n">sdr</span><span class="o">.</span><span class="n">tx_buffer_size</span> <span class="o">=</span> <span class="mi">1024</span>  <span class="c1"># number of samples per call to tx()</span>
+<span class="linenos">18</span><span class="n">sdr</span><span class="o">.</span><span class="n">tx0_lo</span> <span class="o">=</span> <span class="n">center_freq</span>
+<span class="linenos">19</span><span class="n">sdr</span><span class="o">.</span><span class="n">tx0_lo</span> <span class="o">=</span> <span class="n">center_freq</span>
+<span class="linenos">20</span><span class="n">sdr</span><span class="o">.</span><span class="n">rx0_lo</span> <span class="o">=</span> <span class="n">center_freq</span>
+<span class="linenos">21</span>
+<span class="linenos">22</span><span class="n">fs</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sdr</span><span class="o">.</span><span class="n">rx0_sample_rate</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>For Talise</strong> (in <strong>bpsk_talise_loopback_talise_zu11eg.py</strong>):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1"># Configure properties</span>
+<span class="linenos"> 2</span><span class="n">sdr</span> <span class="o">=</span> <span class="n">adi</span><span class="o">.</span><span class="n">adrv9009_zu11eg</span><span class="p">(</span><span class="s2">&quot;ip:10.48.65.182&quot;</span><span class="p">)</span>  <span class="c1"># Create Radio</span>
+<span class="linenos"> 3</span><span class="n">sdr</span><span class="o">.</span><span class="n">rx_enabled_channels</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="linenos"> 4</span><span class="n">sdr</span><span class="o">.</span><span class="n">tx_enabled_channels</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="linenos"> 5</span><span class="n">sdr</span><span class="o">.</span><span class="n">tx_cyclic_buffer</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="linenos"> 6</span><span class="n">sdr</span><span class="o">.</span><span class="n">tx_cyclic_buffer</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="linenos"> 7</span><span class="n">sdr</span><span class="o">.</span><span class="n">gain_control_mode_chan0</span> <span class="o">=</span> <span class="s2">&quot;slow_attack&quot;</span>
+<span class="linenos"> 8</span><span class="n">sdr</span><span class="o">.</span><span class="n">gain_control_mode_chan1</span> <span class="o">=</span> <span class="s2">&quot;slow_attack&quot;</span>
+<span class="linenos"> 9</span><span class="n">sdr</span><span class="o">.</span><span class="n">tx_hardwaregain_chan0</span> <span class="o">=</span> <span class="o">-</span><span class="mi">20</span>
+<span class="linenos">10</span><span class="n">sdr</span><span class="o">.</span><span class="n">tx_hardwaregain_chan1</span> <span class="o">=</span> <span class="o">-</span><span class="mi">20</span>
+<span class="linenos">11</span><span class="n">sdr</span><span class="o">.</span><span class="n">tx_hardwaregain_chan1_chip_b</span> <span class="o">=</span> <span class="o">-</span><span class="mi">80</span>
+<span class="linenos">12</span><span class="n">sdr</span><span class="o">.</span><span class="n">tx_hardwaregain_chan1_chip_b</span> <span class="o">=</span> <span class="o">-</span><span class="mi">80</span>
+<span class="linenos">13</span><span class="n">sdr</span><span class="o">.</span><span class="n">gain_control_mode_chan0</span> <span class="o">=</span> <span class="s2">&quot;slow_attack&quot;</span>
+<span class="linenos">14</span><span class="n">sdr</span><span class="o">.</span><span class="n">gain_control_mode_chan1</span> <span class="o">=</span> <span class="s2">&quot;slow_attack&quot;</span>
+<span class="linenos">15</span><span class="n">sdr</span><span class="o">.</span><span class="n">gain_control_mode_chan0_chip_b</span> <span class="o">=</span> <span class="s2">&quot;slow_attack&quot;</span>
+<span class="linenos">16</span><span class="n">sdr</span><span class="o">.</span><span class="n">gain_control_mode_chan1_chip_b</span> <span class="o">=</span> <span class="s2">&quot;slow_attack&quot;</span>
+<span class="linenos">17</span><span class="n">sdr</span><span class="o">.</span><span class="n">rx_buffer_size</span> <span class="o">=</span> <span class="mi">32768</span>
+<span class="linenos">18</span><span class="n">sdr</span><span class="o">.</span><span class="n">tx_buffer_size</span> <span class="o">=</span> <span class="mi">1024</span>
+<span class="linenos">19</span>
+<span class="linenos">20</span><span class="n">fs</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sdr</span><span class="o">.</span><span class="n">rx_sample_rate</span><span class="p">)</span>
+</pre></div>
+</div>
 </li>
-<li><p>Insert the IP address given for Jupiter (in <strong>bpsk_jupiter_loopback_jupiter.py</strong>) or for Talise (in <strong>bpsk_talise_loopback_talise_zu11eg.py</strong>)
-to remotely connect to Jupiter or Talise.</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+<li><p>Insert the IP address on line 5 (for Jupiter) or line 2 (for Talise) to remotely connect to Jupiter or Talise:</p>
+<p><strong>For Jupiter:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sdr</span> <span class="o">=</span> <span class="n">adi</span><span class="o">.</span><span class="n">adrv9002</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="s2">&quot;ip:10.48.65.212&quot;</span><span class="p">)</span>  <span class="c1"># Create Radio object for Jupiter</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># For Jupiter (in bpsk_jupiter_loopback_jupiter.py):</span>
+<p><strong>For Talise:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sdr</span> <span class="o">=</span> <span class="n">adi</span><span class="o">.</span><span class="n">adrv9009_zu11eg</span><span class="p">(</span><span class="s2">&quot;ip:10.48.65.182&quot;</span><span class="p">)</span>  <span class="c1"># Create Radio object for Talise</span>
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">sdr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adi.adrv9002<span class="o">(</span><span class="nv">uri</span><span class="o">=</span><span class="s2">&quot;ip:10.48.65.212&quot;</span><span class="o">)</span><span class="w"> </span><span class="c1"># Create Radio object for Jupiter</span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># For Talise (in bpsk_talise_loopback_talise_zu11eg.py):</span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">sdr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adi.adrv9009_zu11eg<span class="o">(</span><span class="s2">&quot;ip:10.48.65.182&quot;</span><span class="o">)</span><span class="w"> </span><span class="c1"># Create Radio object for Talise</span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></li>
+</li>
 <li><p>Run the script as indicated in <em>Figure 17</em>.</p></li>
 <li><p>To zoom on the generated figures, use the instructions shown in <em>Figure 18</em>.</p></li>
 <li><p>To stop running the Python script or if you want to run it again, use the instructions shown in <em>Figure 19</em>.</p></li>
@@ -1071,18 +1082,18 @@ to remotely connect to Jupiter or Talise.</p>
 </ul>
 <p>This creates twice the spectral efficiency of BPSK while maintaining good noise immunity.</p>
 <blockquote>
-<div><figure class="align-center" id="id20">
+<div><figure class="align-center" id="id18">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_gnuradio/qpsk_constellation.png"><img alt="QPSK Constellation" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_gnuradio/qpsk_constellation.png" style="width: 40em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 19 </span><span class="caption-text">QPSK constellation (4 points, 2 bits/symbol)</span><a class="headerlink" href="#id20" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 17 </span><span class="caption-text">QPSK constellation (4 points, 2 bits/symbol)</span><a class="headerlink" href="#id18" title="Link to this image"></a></p>
 </figcaption>
 </figure>
-<figure class="align-center" id="id21">
+<figure class="align-center" id="id19">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_gnuradio/qpsk_ho_modulation.png"><img alt="QPSK Higher Order Modulation Constellation" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_gnuradio/qpsk_ho_modulation.png" style="width: 40em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 20 </span><span class="caption-text">QPSK higher-order modulation schemes (16-QAM, 32-QAM, 64-QAM, 256-QAM)</span><a class="headerlink" href="#id21" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 18 </span><span class="caption-text">QPSK higher-order modulation schemes (16-QAM, 32-QAM, 64-QAM, 256-QAM)</span><a class="headerlink" href="#id19" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </div></blockquote>
@@ -1097,32 +1108,32 @@ to remotely connect to Jupiter or Talise.</p>
 <p>You will receive QPSK-modulated data packets containing hexadecimal values using GNU Radio. The flowgraph performs symbol synchronization,
 frequency locking, and constellation decoding to recover the transmitted data.</p>
 <blockquote>
-<div><figure class="align-center" id="id22">
+<div><figure class="align-center" id="id20">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_gnuradio/qpsk_gnuradio_flowgraph.png"><img alt="QPSK GNU Radio Flowgraph" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_gnuradio/qpsk_gnuradio_flowgraph.png" style="width: 40em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 21 </span><span class="caption-text">GNU Radio flowgraph for receiving QPSK-modulated data using Pluto SDR</span><a class="headerlink" href="#id22" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 19 </span><span class="caption-text">GNU Radio flowgraph for receiving QPSK-modulated data using Pluto SDR</span><a class="headerlink" href="#id20" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </div></blockquote>
 <p>Follow these steps to receive QPSK-modulated data:</p>
 <ol class="arabic">
 <li><p>Make the following setup using Pluto and connect it to your PC:</p>
-<figure class="align-center" id="id23">
+<figure class="align-center" id="id21">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_pluto/qpsk_pluto_setup.png"><img alt="QPSK Pluto Setup" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_pluto/qpsk_pluto_setup.png" style="width: 40em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 22 </span><span class="caption-text">QPSK Pluto Setup</span><a class="headerlink" href="#id23" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 20 </span><span class="caption-text">QPSK Pluto Setup</span><a class="headerlink" href="#id21" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </li>
 <li><p>In <em>gnuradio-companion</em>, open <strong>qpsk_point_to_point_rx_console.grc</strong> from <strong>workshop_exercises-&gt;gnuradio-&gt;qpsk_point_to_point_console</strong>.</p>
 <p>Run the flowgraph and observe the received message stored in “msg_var” variable as depicted below.</p>
-<figure class="align-center" id="id24">
+<figure class="align-center" id="id22">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_pluto/qpsk_point_to_point_rx_console.png"><img alt="QPSK Point to Point RX Console" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_pluto/qpsk_point_to_point_rx_console.png" style="width: 40em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 23 </span><span class="caption-text">QPSK Point to Point RX Console</span><a class="headerlink" href="#id24" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 21 </span><span class="caption-text">QPSK Point to Point RX Console</span><a class="headerlink" href="#id22" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </li>
@@ -1144,11 +1155,11 @@ frequency locking, and constellation decoding to recover the transmitted data.</
 <p>Follow these steps to receive QPSK-modulated video:</p>
 <ol class="arabic">
 <li><p>Make the setup using Pluto and connect it to your PC as depicted in <em>Figure 35</em>:</p>
-<figure class="align-center" id="id25">
+<figure class="align-center" id="id23">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_pluto/qpsk_pluto_setup.png"><img alt="QPSK Pluto Setup" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_pluto/qpsk_pluto_setup.png" style="width: 40em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 24 </span><span class="caption-text">QPSK Pluto Setup</span><a class="headerlink" href="#id25" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 22 </span><span class="caption-text">QPSK Pluto Setup</span><a class="headerlink" href="#id23" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </li>
@@ -1162,20 +1173,20 @@ frequency locking, and constellation decoding to recover the transmitted data.</
 </div>
 <div class="clear-left"></div></div></div></li>
 <li><p>The application should be preconfigured. Run the program by pressing the purple arrow as depicted below.</p>
-<figure class="align-center" id="id26">
+<figure class="align-center" id="id24">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_video/sdrangel_run.png"><img alt="Run SDRangel" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_video/sdrangel_run.png" style="width: 40em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 25 </span><span class="caption-text">Run SDRangel to receive QPSK modulated video</span><a class="headerlink" href="#id26" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 23 </span><span class="caption-text">Run SDRangel to receive QPSK modulated video</span><a class="headerlink" href="#id24" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </li>
 <li><p>On DATV window, <strong>check and then uncheck Viterbi</strong> to synchronize the qpsk data <strong>while the program is running</strong> (as shown below).</p>
-<figure class="align-center" id="id27">
+<figure class="align-center" id="id25">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_video/viterbi_sync.png"><img alt="Viterbi Sync" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_video/viterbi_sync.png" style="width: 40em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 26 </span><span class="caption-text">Check and then uncheck Viterbi to synchronize the QPSK data in SDRangel</span><a class="headerlink" href="#id27" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 24 </span><span class="caption-text">Check and then uncheck Viterbi to synchronize the QPSK data in SDRangel</span><a class="headerlink" href="#id25" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </li>
@@ -1206,11 +1217,11 @@ frequency locking, and constellation decoding to recover the transmitted data.</
 <li><p>Make the following setup using Pluto and connect it to your PC.</p></li>
 <li><p>Open in <em>gnuradio-companion</em> the <strong>paint_tx.grc</strong> file from <strong>workshop_exercises-&gt;gnuradio-&gt;spectrum_paint</strong> and run the flowgraph.</p></li>
 <li><p>Observe the waterfall display as the spectrum painting appears, created by the Pluto SDR transmitting the frequency pattern.</p>
-<figure class="align-center" id="id28">
+<figure class="align-center" id="id26">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/spectrum_paint/paint_tx.png"><img alt="Spectrum Paint Waterfall Display" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/spectrum_paint/paint_tx.png" style="width: 40em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 27 </span><span class="caption-text">Waterfall display showing the spectrum painting created by transmitting controlled frequency patterns</span><a class="headerlink" href="#id28" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 25 </span><span class="caption-text">Waterfall display showing the spectrum painting created by transmitting controlled frequency patterns</span><a class="headerlink" href="#id26" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </li>

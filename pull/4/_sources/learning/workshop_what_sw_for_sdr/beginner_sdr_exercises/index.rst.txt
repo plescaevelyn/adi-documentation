@@ -522,33 +522,72 @@ Binary Shift Keying (BPSK) in Python using Jupiter or Talise
 #. Observe in the script that only the "Configure SDR" code section was changed in **bpsk_jupiter_loopback_jupiter.py** and **bpsk_talise_loopback_talise_zu11eg.py**
    compared to **bpsk_pluto_loopback_pluto.py** from the previous exercise.
 
-   .. figure:: images/exercises/bpsk_loopback/jupiter_config_code.png
-      :alt: Configure SDR Code Section
-      :align: center
-      :width: 40em
+   **For Jupiter** (in **bpsk_jupiter_loopback_jupiter.py**):
 
-      Configure SDR code for Jupiter platform
+   .. code-block:: python
+      :linenos:
+      :lineno-start: 4
 
-   .. figure:: images/exercises/bpsk_loopback/talise_config_code.png
-      :alt: Configure SDR Code Section
-      :align: center
-      :width: 40em
+      # Configure properties
+      sdr = adi.adrv9002(uri="ip:10.48.65.212")  # Create Radio
 
-      Configure SDR code for Talise platform
+      center_freq = 915000000  # Hz
+      sample_rate = 30720000  # TX sample rate
+      tx_buffer_size = 1024  # TX buffer_size
 
-#. Insert the IP address given for Jupiter (in **bpsk_jupiter_loopback_jupiter.py**) or for Talise (in **bpsk_talise_loopback_talise_zu11eg.py**)
-   to remotely connect to Jupiter or Talise.
+      sdr.rx_ensm_mode_chan0 = "rf_enabled"
+      sdr.rx_ensm_mode_chan1 = "rf_enabled"
+      sdr.tx_hardwaregain_chan0 = -20
+      sdr.tx_hardwaregain_chan1 = 0
+      sdr.rx_ensm_mode_chan0 = "rf_enabled"
+      sdr.tx_cyclic_buffer = True
+      sdr.tx_buffer_size = 1024  # number of samples per call to tx()
+      sdr.tx0_lo = center_freq
+      sdr.tx0_lo = center_freq
+      sdr.rx0_lo = center_freq
 
-   .. shell::
-      :user: analog
-      :group: analog
-      :show-user:
+      fs = int(sdr.rx0_sample_rate)
 
-      $ # For Jupiter (in bpsk_jupiter_loopback_jupiter.py):
-      $ sdr = adi.adrv9002(uri="ip:10.48.65.212") # Create Radio object for Jupiter
+   **For Talise** (in **bpsk_talise_loopback_talise_zu11eg.py**):
 
-      $ # For Talise (in bpsk_talise_loopback_talise_zu11eg.py):
-      $ sdr = adi.adrv9009_zu11eg("ip:10.48.65.182") # Create Radio object for Talise
+   .. code-block:: python
+      :linenos:
+      :lineno-start: 1
+
+      # Configure properties
+      sdr = adi.adrv9009_zu11eg("ip:10.48.65.182")  # Create Radio
+      sdr.rx_enabled_channels = [0]
+      sdr.tx_enabled_channels = [0]
+      sdr.tx_cyclic_buffer = True
+      sdr.tx_cyclic_buffer = True
+      sdr.gain_control_mode_chan0 = "slow_attack"
+      sdr.gain_control_mode_chan1 = "slow_attack"
+      sdr.tx_hardwaregain_chan0 = -20
+      sdr.tx_hardwaregain_chan1 = -20
+      sdr.tx_hardwaregain_chan1_chip_b = -80
+      sdr.tx_hardwaregain_chan1_chip_b = -80
+      sdr.gain_control_mode_chan0 = "slow_attack"
+      sdr.gain_control_mode_chan1 = "slow_attack"
+      sdr.gain_control_mode_chan0_chip_b = "slow_attack"
+      sdr.gain_control_mode_chan1_chip_b = "slow_attack"
+      sdr.rx_buffer_size = 32768
+      sdr.tx_buffer_size = 1024
+
+      fs = int(sdr.rx_sample_rate)
+
+#. Insert the IP address on line 5 (for Jupiter) or line 2 (for Talise) to remotely connect to Jupiter or Talise:
+
+   **For Jupiter:**
+
+   .. code-block:: python
+
+      sdr = adi.adrv9002(uri="ip:10.48.65.212")  # Create Radio object for Jupiter
+
+   **For Talise:**
+
+   .. code-block:: python
+
+      sdr = adi.adrv9009_zu11eg("ip:10.48.65.182")  # Create Radio object for Talise
 
 #. Run the script as indicated in *Figure 17*.
 
