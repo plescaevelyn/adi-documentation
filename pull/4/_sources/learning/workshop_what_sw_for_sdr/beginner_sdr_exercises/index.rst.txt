@@ -146,14 +146,31 @@ Follow these steps:
 
 #. Observe that only the "Configure SDR" section changed compared to **python_loopback_sine_pluto.py**:
 
-   .. figure:: images/exercises/tx_rx_jupiter_talise/jupiter_config_code.png
-      :alt: Configure SDR Code Section
-      :align: center
-      :width: 40em
+   .. code-block:: python
+      :linenos:
+      :lineno-start: 4
+      :class: code-spaced
 
-      Configure SDR code for Jupiter platform
+      # Configure SDR
+      sdr = adi.adrv9002(uri="ip:10.48.65.212")  # Create Radio
 
-#. Insert the IP address on line 12 to remotely connect to Jupiter:
+      frequency = 15360  # 15.360 KHz sinusoid to be transmitted
+      amplitude = 0.5
+      center_freq = 915000000  # Hz
+      sample_rate = sdr.rx0_sample_rate
+      num_samps = int((sample_rate)/frequency)  # number of samples per call to rx()
+
+      sdr.rx_ensm_mode_chan0 = "rf_enabled"
+      sdr.tx_hardwaregain_chan0 = -5
+      sdr.rx_hardwaregain_chan0 = 0
+      sdr.tx_ensm_mode_chan0 = "rf_enabled"
+      sdr.tx_cyclic_buffer = True
+      sdr.tx_buffer_size = num_samps  # number of samples per call to tx()
+      sdr.rx_buffer_size = num_samps
+      sdr.tx0_lo = center_freq
+      sdr.rx0_lo = center_freq
+
+#. Insert the IP address on line 5 to remotely connect to Jupiter:
 
    .. code-block:: python
       :class: code-spaced
@@ -184,6 +201,8 @@ Follow these steps:
 #. Observe the "Configure SDR" section for Talise:
 
    .. code-block:: python
+      :linenos:
+      :lineno-start: 4
       :class: code-spaced
 
       # Configure properties
