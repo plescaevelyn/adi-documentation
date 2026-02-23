@@ -155,12 +155,9 @@ Follow these steps:
 
 #. Insert the IP address on line 12 to remotely connect to Jupiter:
 
-   .. shell::
-      :user: analog
-      :group: analog
-      :show-user:
+   .. code-block:: python
 
-      $ sdr = adi.adrv9002(uri="ip:10.48.65.212") # Create Radio object for Jupiter
+      sdr = adi.adrv9002(uri="ip:10.48.65.212")  # Create Radio object for Jupiter
 
 #. Run the script. In this example, a sinusoid at 15.360 KHz is transmitted and received (chosen to have an integer
    number of periods at the sample rate of 15.36 Msps).
@@ -185,27 +182,27 @@ Follow these steps:
 
 #. Observe the "Configure SDR" section for Talise:
 
-   .. shell::
-      :user: analog
-      :group: analog
-      :show-user:
+   .. code-block:: python
 
-      $ # Configure properties
-      $ sample_rate = 30720000  # Sample rate
-      $ center_freq = 2000000000  # Center frequency
-      $ num_samps = 100000  # Number of samples per call to rx()
-      $ frequency = 3000000  # Frequency of complex sinusoid
-      $ fc0 = int(center_freq / (sample_rate / 2) * 2**15)  # Digital frequency for TX1
-      $ # Create radio object
-      $ sdr = adi.adrv9009_zu11eg("ip:10.48.65.182")  # IP address of Talise
-      $ # Configure Tx properties
-      $ sdr.tx_hardwaregain_chan0 = -10  # TX attenuation in dB
-      $ sdr.tx_enabled_channels = [0]
-      $ sdr.dds_single_tone(fc0, 0.8, 0)  # Generate tone: freq, scale, channel
-      $ # Configure Rx properties
-      $ sdr.gain_control_mode_chan0 = "slow_attack"
-      $ sdr.rx_enabled_channels = [0]
-      $ sdr.rx_buffer_size = num_samps
+      # Configure properties
+      sample_rate = 30720000  # Sample rate
+      center_freq = 2000000000  # Center frequency
+      num_samps = 100000  # Number of samples per call to rx()
+      frequency = 3000000  # Frequency of complex sinusoid
+      fc0 = int(center_freq / (sample_rate / 2) * 2**15)  # Digital frequency for TX1
+
+      # Create radio object
+      sdr = adi.adrv9009_zu11eg("ip:10.48.65.182")  # IP address of Talise
+
+      # Configure Tx properties
+      sdr.tx_hardwaregain_chan0 = -10  # TX attenuation in dB
+      sdr.tx_enabled_channels = [0]
+      sdr.dds_single_tone(fc0, 0.8, 0)  # Generate tone: freq, scale, channel
+
+      # Configure Rx properties
+      sdr.gain_control_mode_chan0 = "slow_attack"
+      sdr.rx_enabled_channels = [0]
+      sdr.rx_buffer_size = num_samps
 
 #. Run the script and observe the output plots showing transmitted and received signals.
 

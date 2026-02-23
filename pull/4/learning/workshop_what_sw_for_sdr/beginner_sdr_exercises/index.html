@@ -710,13 +710,10 @@ taskbar icon -&gt; Quit x windows</strong> as shown depicted below or close them
 </figure>
 </li>
 <li><p>Insert the IP address on line 12 to remotely connect to Jupiter:</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sdr</span> <span class="o">=</span> <span class="n">adi</span><span class="o">.</span><span class="n">adrv9002</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="s2">&quot;ip:10.48.65.212&quot;</span><span class="p">)</span>  <span class="c1"># Create Radio object for Jupiter</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">sdr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adi.adrv9002<span class="o">(</span><span class="nv">uri</span><span class="o">=</span><span class="s2">&quot;ip:10.48.65.212&quot;</span><span class="o">)</span><span class="w"> </span><span class="c1"># Create Radio object for Jupiter</span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></li>
+</li>
 <li><p>Run the script. In this example, a sinusoid at 15.360 KHz is transmitted and received (chosen to have an integer
 number of periods at the sample rate of 15.36 Msps).</p></li>
 </ol>
@@ -729,103 +726,28 @@ number of periods at the sample rate of 15.36 Msps).</p></li>
 <li><p>Make the following hardware setup with TX1A_P/N connected to RX1A_P/N via loopback cables.</p>
 </li>
 <li><p>Observe the “Configure SDR” section for Talise:</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Configure properties</span>
+<span class="n">sample_rate</span> <span class="o">=</span> <span class="mi">30720000</span>  <span class="c1"># Sample rate</span>
+<span class="n">center_freq</span> <span class="o">=</span> <span class="mi">2000000000</span>  <span class="c1"># Center frequency</span>
+<span class="n">num_samps</span> <span class="o">=</span> <span class="mi">100000</span>  <span class="c1"># Number of samples per call to rx()</span>
+<span class="n">frequency</span> <span class="o">=</span> <span class="mi">3000000</span>  <span class="c1"># Frequency of complex sinusoid</span>
+<span class="n">fc0</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">center_freq</span> <span class="o">/</span> <span class="p">(</span><span class="n">sample_rate</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="o">**</span><span class="mi">15</span><span class="p">)</span>  <span class="c1"># Digital frequency for TX1</span>
+
+<span class="c1"># Create radio object</span>
+<span class="n">sdr</span> <span class="o">=</span> <span class="n">adi</span><span class="o">.</span><span class="n">adrv9009_zu11eg</span><span class="p">(</span><span class="s2">&quot;ip:10.48.65.182&quot;</span><span class="p">)</span>  <span class="c1"># IP address of Talise</span>
+
+<span class="c1"># Configure Tx properties</span>
+<span class="n">sdr</span><span class="o">.</span><span class="n">tx_hardwaregain_chan0</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span>  <span class="c1"># TX attenuation in dB</span>
+<span class="n">sdr</span><span class="o">.</span><span class="n">tx_enabled_channels</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">sdr</span><span class="o">.</span><span class="n">dds_single_tone</span><span class="p">(</span><span class="n">fc0</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># Generate tone: freq, scale, channel</span>
+
+<span class="c1"># Configure Rx properties</span>
+<span class="n">sdr</span><span class="o">.</span><span class="n">gain_control_mode_chan0</span> <span class="o">=</span> <span class="s2">&quot;slow_attack&quot;</span>
+<span class="n">sdr</span><span class="o">.</span><span class="n">rx_enabled_channels</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">sdr</span><span class="o">.</span><span class="n">rx_buffer_size</span> <span class="o">=</span> <span class="n">num_samps</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Configure properties</span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">sample_rate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">30720000</span><span class="w">  </span><span class="c1"># Sample rate</span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">center_freq</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2000000000</span><span class="w">  </span><span class="c1"># Center frequency</span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">num_samps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">100000</span><span class="w">  </span><span class="c1"># Number of samples per call to rx()</span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">frequency</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">3000000</span><span class="w">  </span><span class="c1"># Frequency of complex sinusoid</span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">fc0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>int<span class="o">(</span>center_freq<span class="w"> </span>/<span class="w"> </span><span class="o">(</span>sample_rate<span class="w"> </span>/<span class="w"> </span><span class="m">2</span><span class="o">)</span><span class="w"> </span>*<span class="w"> </span><span class="m">2</span>**15<span class="o">)</span><span class="w">  </span><span class="c1"># Digital frequency for TX1</span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create radio object</span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">sdr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adi.adrv9009_zu11eg<span class="o">(</span><span class="s2">&quot;ip:10.48.65.182&quot;</span><span class="o">)</span><span class="w">  </span><span class="c1"># IP address of Talise</span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Configure Tx properties</span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sdr.tx_hardwaregain_chan0<span class="w"> </span><span class="o">=</span><span class="w"> </span>-10<span class="w">  </span><span class="c1"># TX attenuation in dB</span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sdr.tx_enabled_channels<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="m">0</span><span class="o">]</span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sdr.dds_single_tone<span class="o">(</span>fc0,<span class="w"> </span><span class="m">0</span>.8,<span class="w"> </span><span class="m">0</span><span class="o">)</span><span class="w">  </span><span class="c1"># Generate tone: freq, scale, channel</span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Configure Rx properties</span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sdr.gain_control_mode_chan0<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;slow_attack&quot;</span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sdr.rx_enabled_channels<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="m">0</span><span class="o">]</span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sdr.rx_buffer_size<span class="w"> </span><span class="o">=</span><span class="w"> </span>num_samps
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></li>
+</li>
 <li><p>Run the script and observe the output plots showing transmitted and received signals.</p>
 </li>
 </ol>
