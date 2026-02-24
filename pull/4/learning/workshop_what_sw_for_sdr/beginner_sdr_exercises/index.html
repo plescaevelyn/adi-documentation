@@ -1182,11 +1182,23 @@ shifts the spectrum, and transmits the signal. Notably absent is the matched fil
 <p>The receiver receives the signal, shifts the spectrum back to baseband, and plots the data.
 It lacks the frequency correction, matched filtering, timing recovery, and phase correction that
 would normally be present in a proper QPSK receiver.</p>
-<p><strong>Problems Observed:</strong></p>
-<p>Without these processing blocks, several issues become apparent. The spectrum shows an inefficient
-square wave pattern that wastes bandwidth. A phase offset causes the constellation to rotate from
-ideal positions. Poor timing recovery results in wrong samples being selected from the symbol period.
-The absence of pulse shaping leads to high sidelobes that cause adjacent channel interference.</p>
+<p><strong>What This Demonstrates:</strong></p>
+<p>This exercise reveals several critical requirements for digital communication systems by intentionally omitting them.
+Without proper DSP blocks, you’ll observe:</p>
+<ul class="simple">
+<li><p><strong>Inefficient spectrum</strong> - Square wave pattern wastes bandwidth and causes adjacent channel interference</p></li>
+<li><p><strong>Constellation rotation</strong> - Phase offset causes symbols to drift from ideal positions</p></li>
+<li><p><strong>Poor timing</strong> - Wrong samples selected from each symbol period</p></li>
+<li><p><strong>High sidelobes</strong> - Absence of pulse shaping creates interference</p></li>
+</ul>
+<p>These problems highlight why standard QPSK implementations require:</p>
+<ul class="simple">
+<li><p><strong>Frequency and phase correction</strong> using Costas loops and PLLs (offsets vary with distance, temperature, and time)</p></li>
+<li><p><strong>Symbol timing recovery</strong> algorithms like Mueller and Muller to extract correct sample timing</p></li>
+<li><p><strong>Matched filters</strong> with pulse shaping for spectral efficiency</p></li>
+<li><p><strong>Differential encoding or preambles</strong> to resolve constellation ambiguity</p></li>
+</ul>
+<p>The subsequent exercises add these blocks one by one, showing how each improves the system.</p>
 <p>Follow these steps to run this demonstration:</p>
 <ol class="arabic">
 <li><p>Make the hardware setup using Jupiter SDR with RX1 and TX1 connected via SMA loopback cable
@@ -1225,17 +1237,6 @@ wide bandwidth due to the absence of pulse shaping.</p>
 </li>
 <li><p>Click the <strong>Stop</strong> button (red square) when finished.</p></li>
 </ol>
-<p><strong>Conclusions:</strong></p>
-<p>This exercise demonstrates several critical requirements for digital communication systems.
-Frequency and phase offsets must be corrected at the receiver using techniques like Costas loops and PLLs.
-These offsets vary with distance, temperature, and time, requiring continuous adjustment.</p>
-<p>The correct sample timing must be extracted using symbol timing recovery algorithms like Mueller and Muller.
-Pulse shaping with matched filters is essential for spectral efficiency and reducing interference.
-Even with all these corrections in place, constellation ambiguity requires differential encoding
-or preamble sequences to establish the correct reference.</p>
-<p>This is why the standard QPSK implementation includes coarse frequency adjustment, symbol timing recovery,
-Costas loop for fine synchronization, and matched filters for pulse shaping. These blocks are not optional
-but fundamental requirements for reliable communication.</p>
 </section>
 <section id="qpsk-constellation-modulator-in-gnu-radio-using-jupiter">
 <h2>QPSK Constellation Modulator in GNU Radio using Jupiter<a class="headerlink" href="#qpsk-constellation-modulator-in-gnu-radio-using-jupiter" title="Link to this heading"></a></h2>
@@ -1261,6 +1262,12 @@ by selecting the optimal samples from each symbol period.</p>
 <p>Root-Raised Cosine filtering is a pulse shaping technique that satisfies the Nyquist criterion for zero
 intersymbol interference. By using matched RRC filters at both transmitter and receiver, the combined response
 forms a complete raised cosine filter that eliminates interference between adjacent symbols while minimizing bandwidth.</p>
+<p><strong>What You’ll See in This Exercise:</strong></p>
+<p>When you run this demonstration, observe how the Constellation Modulator maps bits into IQ symbols and applies
+RRC filtering, optimizing bandwidth usage compared to the raw square wave spectrum from the previous exercise.
+The transmitted spectrum will show significantly improved bandwidth efficiency with minimal sidelobes. The matched
+RRC filter at the receiver maximizes signal-to-noise ratio, though the implementation still lacks frequency offset
+correction, symbol timing recovery, and phase correction—improvements that come in subsequent exercises.</p>
 <p>Follow these steps to run this demonstration:</p>
 <ol class="arabic">
 <li><p>Make the hardware setup using Jupiter SDR with RX1 and TX1 connected via SMA loopback cable
@@ -1302,13 +1309,6 @@ which would be added in a complete receiver implementation.</p>
 </li>
 <li><p>Click the <strong>Stop</strong> button (red square) when finished.</p></li>
 </ol>
-<p><strong>Conclusions:</strong></p>
-<p>Using the Constellation Modulator block, the transmitted bits are mapped into IQ symbols and a Root-Raised Cosine
-filter is applied on the transmitter path. This optimizes the bandwidth used compared to the raw square wave
-spectrum, demonstrating the importance of pulse shaping in digital communications.</p>
-<p>The matched RRC filter at the receiver completes the matched filter pair, maximizing signal-to-noise ratio.
-A complete QPSK receiver would additionally include frequency offset correction, symbol timing recovery to
-decimate by selecting optimal samples, and phase correction using a Costas loop.</p>
 </section>
 <section id="qpsk-frequency-locked-loop-in-gnu-radio-using-jupiter">
 <h2>QPSK Frequency Locked Loop in GNU Radio using Jupiter<a class="headerlink" href="#qpsk-frequency-locked-loop-in-gnu-radio-using-jupiter" title="Link to this heading"></a></h2>
@@ -1336,6 +1336,12 @@ differences between TX and RX oscillators would cause the constellation to rotat
 demodulation impossible. The FLL ensures the spectrum stays centered around DC, enabling subsequent processing stages.</p>
 <p>However, the receiver still lacks fine frequency and phase correction that a Costas loop would provide, and symbol
 timing recovery to select the optimal samples from each symbol period. These will be added in more complete implementations.</p>
+<p><strong>What You’ll Observe:</strong></p>
+<p>When running this exercise, watch how the FLL automatically adjusts for frequency differences between transmitter
+and receiver oscillators. The transmitted spectrum shows optimized bandwidth from RRC filtering. Even as you adjust
+the frequency offset slider, the spectrum after the FLL block stays centered around DC, demonstrating automatic
+frequency tracking. The constellation shows improved stability compared to implementations without frequency correction,
+though fine frequency/phase correction (Costas loop) and symbol timing recovery would further improve quality.</p>
 <p>Follow these steps to run this demonstration:</p>
 <ol class="arabic">
 <li><p>Make the hardware setup using Jupiter SDR with RX1 and TX1 connected via SMA loopback cable
@@ -1383,15 +1389,6 @@ perform symbol timing recovery to select optimal samples.</p>
 automatically adjusts to stay centered around DC.</p></li>
 <li><p>Click the <strong>Stop</strong> button (red square) when finished.</p></li>
 </ol>
-<p><strong>Conclusions:</strong></p>
-<p>The Frequency Locked Loop adds coarse frequency offset correction to the QPSK receiver, automatically adjusting
-for frequency differences between transmitter and receiver oscillators. This ensures the received spectrum stays
-centered around DC, enabling subsequent processing stages.</p>
-<p>The progression of receiver improvements demonstrates the building blocks of digital communications. Starting with
-raw QPSK, adding matched filters for spectral efficiency, and now adding frequency correction with FLL, each step
-addresses specific challenges in recovering the transmitted signal.</p>
-<p>A complete QPSK receiver would additionally include fine frequency and phase correction using a Costas loop and
-symbol timing recovery using algorithms like Mueller and Muller to select optimal samples from each symbol period.</p>
 </section>
 <section id="receiving-qpsk-modulated-message-and-storing-it-to-file-using-pluto">
 <h2>Receiving QPSK modulated message and storing it to file using Pluto<a class="headerlink" href="#receiving-qpsk-modulated-message-and-storing-it-to-file-using-pluto" title="Link to this heading"></a></h2>
@@ -1657,8 +1654,6 @@ symbol timing recovery using algorithms like Mueller and Muller to select optima
 <li><p>You can adjust the frequency offset slider to observe how the received signal changes in the spectrum display.</p></li>
 <li><p>Click the <strong>Stop</strong> button (red square) when finished.</p></li>
 </ol>
-<p><strong>Conclusion:</strong></p>
-<p>This exercise demonstrates that by varying only the <strong>amplitude</strong> of the carrier signal, we can transmit digital information. When combined with <strong>phase modulation</strong> (BPSK/QPSK), ASK forms the foundation of <strong>QAM</strong>, which is used in virtually all modern high-speed wireless communication systems including Wi-Fi, LTE, 5G, and cable broadband.</p>
 </section>
 <section id="frequency-shift-keying-fsk-in-gnu-radio-using-jupiter">
 <h2>Frequency Shift Keying (FSK) in GNU Radio using Jupiter<a class="headerlink" href="#frequency-shift-keying-fsk-in-gnu-radio-using-jupiter" title="Link to this heading"></a></h2>
@@ -1761,8 +1756,6 @@ symbol timing recovery using algorithms like Mueller and Muller to select optima
 </li>
 <li><p>Click the <strong>Stop</strong> button (red square) when finished.</p></li>
 </ol>
-<p><strong>Conclusion:</strong></p>
-<p>This exercise demonstrates that by varying only the <strong>frequency</strong> of the carrier signal, we can transmit digital information. FSK is particularly robust in noisy environments and maintains constant power, making it ideal for applications like pagers, telemetry, and Bluetooth. The ability to observe multiple discrete frequencies in the spectrum analyzer highlights how FSK operates in the frequency domain, complementing what we learned about phase domain (BPSK/QPSK) and amplitude domain (ASK) modulation.</p>
 </section>
 </section>
 
