@@ -419,11 +419,11 @@ right (hand moving toward) from the center frequency.
       Real-time plots of the Doppler radar experiment
 
 
-Binary Phase Shift Keying (BPSK) in Python using Pluto
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Binary Phase Shift Keying (BPSK)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This exercise demonstrates Binary Phase Shift Keying (BPSK), a fundamental digital modulation technique used in modern communication
-systems. You will transmit digital data (binary bits) through the Pluto SDR, receive it back via a loopback connection, and observe
+systems. You will transmit digital data (binary bits) through SDR platforms, receive it back via a loopback connection, and observe
 how software-based signal processing recovers the original data despite real-world impairments.
 
 **What is BPSK?**
@@ -527,6 +527,11 @@ Starting from a noisy, offset constellation with scattered points, you will see 
 
 This exercise demonstrates the power of software-defined radio: complex signal processing algorithms running in software can correct real-world impairments that would be difficult or impossible to handle in analog hardware alone.
 
+The following subsections demonstrate different implementations of BPSK using various platforms.
+
+Using PyADI-IIO with Pluto
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 Follow these steps to run the BPSK transmission and reception experiment:
 
 #. Make the setup using Pluto with loopback connection and connect it to your PC.
@@ -546,16 +551,16 @@ Follow these steps to run the BPSK transmission and reception experiment:
    taskbar icon -> Quit x windows** or close them manually one by one.
 
 
-Binary Shift Keying (BPSK) in Python using Jupiter or Talise
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Using PyADI-IIO with Jupiter
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-#. From **workshop_exercises->python->bpsk_loopback** subfolder, open **bpsk_jupiter_loopback_jupiter.py (for Jupiter)**
-   or **bpsk_talise_loopback_talise_zu11eg.py (for Talise)** using **Thonny Python IDE**.
+This demonstrates **platform portability**—running the same BPSK algorithm on higher-performance hardware with minimal code changes.
 
-#. Observe in the script that only the "Configure SDR" code section was changed in **bpsk_jupiter_loopback_jupiter.py** and **bpsk_talise_loopback_talise_zu11eg.py**
-   compared to **bpsk_pluto_loopback_pluto.py** from the previous exercise.
+Follow these steps:
 
-   **For Jupiter** (in **bpsk_jupiter_loopback_jupiter.py**):
+#. From **workshop_exercises->python->bpsk_loopback** subfolder, open **bpsk_jupiter_loopback_jupiter.py** using **Thonny Python IDE**.
+
+#. Observe in the script that only the "Configure SDR" code section changed compared to **bpsk_pluto_loopback_pluto.py**:
 
    .. code-block:: python
       :linenos:
@@ -582,7 +587,31 @@ Binary Shift Keying (BPSK) in Python using Jupiter or Talise
 
       fs = int(sdr.rx0_sample_rate)
 
-   **For Talise** (in **bpsk_talise_loopback_talise_zu11eg.py**):
+#. Insert the IP address on line 5 to remotely connect to Jupiter:
+
+   .. code-block:: python
+      :linenos:
+      :lineno-start: 5
+      :class: code-spaced
+
+      sdr = adi.adrv9002(uri="ip:10.48.65.212")  # Create Radio object for Jupiter
+
+#. To run the script, press the green round button from the top left corner in Thonny IDE.
+
+#. To zoom on a plot, you can use the zoom option. Encircle (holding left click) the area you want to zoom.
+
+#. To stop running the Python script (if you want to run it again or run another script), close all the tabs by **right clicking on the
+   taskbar icon -> Quit x windows** or close them manually one by one.
+
+
+Using PyADI-IIO with Talise
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Follow these steps:
+
+#. From **workshop_exercises->python->bpsk_loopback** subfolder, open **bpsk_talise_loopback_talise_zu11eg.py** using **Thonny Python IDE**.
+
+#. Observe the "Configure SDR" section for Talise:
 
    .. code-block:: python
       :linenos:
@@ -610,18 +639,7 @@ Binary Shift Keying (BPSK) in Python using Jupiter or Talise
 
       fs = int(sdr.rx_sample_rate)
 
-#. Insert the IP address on line 5 (for Jupiter) or line 2 (for Talise) to remotely connect to Jupiter or Talise:
-
-   **For Jupiter:**
-
-   .. code-block:: python
-      :linenos:
-      :lineno-start: 5
-      :class: code-spaced
-
-      sdr = adi.adrv9002(uri="ip:10.48.65.212")  # Create Radio object for Jupiter
-
-   **For Talise:**
+#. Insert the IP address on line 2 to remotely connect to Talise:
 
    .. code-block:: python
       :linenos:
@@ -637,8 +655,9 @@ Binary Shift Keying (BPSK) in Python using Jupiter or Talise
 #. To stop running the Python script (if you want to run it again or run another script), close all the tabs by **right clicking on the
    taskbar icon -> Quit x windows** or close them manually one by one.
 
-Quadrature Phase Shift Keying (QPSK) in GNU Radio using Pluto
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Quadrature Phase Shift Keying (QPSK)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This exercise demonstrates Quadrature Phase Shift Keying (QPSK), a digital modulation scheme that transmits 2 bits per symbol instead of BPSK's 1 bit per symbol. QPSK uses four phase positions in the I/Q plane to encode data, effectively doubling the data rate in the same bandwidth.
 
@@ -671,7 +690,10 @@ This creates twice the spectral efficiency of BPSK while maintaining good noise 
 * Cable modems (DOCSIS)
 * Point-to-point microwave links
 
-**How This Exercise Works:**
+The following subsections demonstrate QPSK implementations ranging from basic reception to progressively more sophisticated receivers with full synchronization chains, showcasing how each processing block improves signal quality.
+
+Using GNU Radio with Pluto - Basic Receiver
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You will receive QPSK-modulated data packets containing hexadecimal values using GNU Radio. The flowgraph performs symbol synchronization,
 frequency locking, and constellation decoding to recover the transmitted data.
@@ -716,8 +738,9 @@ Follow these steps to receive QPSK-modulated data:
 
       QPSK Point to Point RX Console
 
-QPSK without additional digital processing in GNU Radio using Jupiter
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Using GNU Radio with Jupiter - Without Additional DSP
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This exercise demonstrates QPSK communication without proper digital signal processing.
 It shows why synchronization and filtering blocks are essential in real-world systems.
@@ -811,8 +834,8 @@ Follow these steps to run this demonstration:
 #. Click the **Stop** button (red square) when finished.
 
 
-QPSK Constellation Modulator in GNU Radio using Jupiter
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Using GNU Radio with Jupiter - Constellation Modulator
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This exercise demonstrates QPSK communication with proper pulse shaping using matched Root-Raised Cosine filters.
 It builds upon the previous raw QPSK exercise by adding matched filters at both transmitter and receiver,
@@ -919,8 +942,8 @@ Follow these steps to run this demonstration:
 #. Click the **Stop** button (red square) when finished.
 
 
-QPSK Frequency Locked Loop in GNU Radio using Jupiter
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Using GNU Radio with Jupiter - Frequency Locked Loop
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This exercise builds upon the previous Constellation Modulator demonstration by adding coarse frequency offset
 correction using a Frequency Locked Loop. This represents the next step in building a complete QPSK receiver
@@ -1038,10 +1061,10 @@ Follow these steps to run this demonstration:
 #. Click the **Stop** button (red square) when finished.
 
 
-Receiving QPSK modulated message and storing it to file using Pluto
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Using GNU Radio with Pluto - Packet-Based File Storage
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This exercise builds upon the previous QPSK demonstration by implementing a complete **packet-based communication system**. Instead of displaying the received message on the console, this system receives QPSK-modulated data packets transmitted at regular intervals and extracts the message content to a file, demonstrating how real-world communication systems handle burst transmissions.
+This exercise builds upon the previous QPSK demonstrations by implementing a complete **packet-based communication system**. Instead of displaying the received message on the console, this system receives QPSK-modulated data packets transmitted at regular intervals and extracts the message content to a file, demonstrating how real-world communication systems handle burst transmissions.
 
 **How Packet-Based Communication Works:**
 
@@ -1145,8 +1168,8 @@ Follow these steps to receive and store QPSK-modulated messages:
 #. Click the **Stop** button (red square) when finished.
 
 
-Receiving QPSK modulated Video with SDRs using Pluto
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Using SDRangel with Pluto - DATV Video Reception
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This exercise demonstrates a real-world application of QPSK modulation: receiving Digital Amateur Television (DATV). Using the open-source `SDRangel <https://www.sdrangel.org/>`_ software, you will receive and display live video transmitted over the air using QPSK modulation, the same technique used in satellite TV broadcasting.
 
