@@ -8,6 +8,2435 @@ techniques, multi-channel systems, and real-world communication protocols.
 .. note::
 
    These advanced exercises require a solid understanding of SDR fundamentals. If you're new to SDR, we recommend starting
-   with the Beginner SDR Exercises before attempting these advanced topics.
+   with the :doc:`Beginner SDR Exercises <../beginner_sdr_exercises/index>` before attempting these advanced topics.
 
-   **Content coming soon.**
+**What Separates Beginners from Advanced SDR Users:**
+
+Learning to **test your SDR and find mistakes on your own** is the critical step that differentiates a beginner from an advanced-level SDR user. While beginners focus on running predefined exercises and observing expected results, advanced users develop the skills to validate system performance, identify impairments, and troubleshoot issues independently. The following exercises build these advanced capabilities.
+
+First Steps in SDR Testing
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This exercise teaches you how to validate SDR performance and identify common impairments by transmitting a complex sinusoid through a loopback connection and analyzing key metrics. Understanding how to test and characterize your SDR is fundamental to developing robust wireless systems.
+
+**Why Testing Matters:**
+
+Before deploying any wireless communication system, you must validate that your SDR hardware and software are functioning correctly. This exercise demonstrates how to:
+
+* Verify that up/down conversion works accurately
+* Check spectrum cleanliness and identify impairments
+* Validate that software, HDL (Hardware Description Language), and hardware are working together properly
+* Understand the impact of attribute tweaking on performance
+* Ensure proper control integration between software and hardware
+
+**What is a Complex Sinusoid?**
+
+A complex sinusoid is a fundamental test signal in SDR systems, consisting of in-phase (I) and quadrature (Q) components that create a single tone in the frequency domain. As covered in the :ref:`Transmit and receive a complex sinusoid (Sinewave Loopback) <sinewave-loopback>` beginner exercise, the complex exponential is represented as:
+
+.. math::
+
+   s(t) = A \cdot e^{j2\pi ft} = A \cdot (\cos(2\pi ft) + j\sin(2\pi ft))
+
+where:
+
+* :math:`A` = amplitude
+* :math:`f` = frequency
+* :math:`t` = time
+* **Real part (I)**: :math:`A \cdot \cos(2\pi ft)`
+* **Quadrature part (Q)**: :math:`A \cdot \sin(2\pi ft)`
+
+In the constellation diagram, a complex sinusoid appears as a rotating point, tracing a circle around the origin. Its spectrum shows a single peak at the frequency :math:`f`.
+
+**Zero IF Architecture:**
+
+Modern SDR platforms like Pluto, Jupiter, and Talise use a **Zero Intermediate Frequency (Zero IF)** architecture where the signal is directly converted to/from baseband without intermediate frequency stages.
+
+**Transmitter Chain:**
+
+#. **Digital Signal Generation**: Create complex I/Q samples in software
+#. **DAC (Digital-to-Analog Converter)**: Convert digital samples to analog voltages
+#. **Reconstruction Filter**: Remove high-frequency images from the DAC output
+#. **I/Q Modulator**: Mix I and Q signals with the Local Oscillator (LO) at 90° phase difference
+#. **RF Amplifier**: Amplify the upconverted signal to the desired transmit power
+#. **Antenna**: Radiate the RF signal
+
+**Receiver Chain:**
+
+#. **Antenna**: Capture the RF signal
+#. **RF Amplifier (LNA)**: Low-noise amplification
+#. **I/Q Demodulator**: Mix the RF signal with the LO to downconvert to baseband
+#. **Anti-Aliasing Filter**: Remove high-frequency content before sampling
+#. **ADC (Analog-to-Digital Converter)**: Sample the analog I/Q signals
+#. **Digital Processing**: Process the received samples in software
+
+**Key Impairments to Observe:**
+
+When analyzing the received spectrum, you will observe several impairments that characterize real-world SDR performance:
+
+**1. Image (Mirror Signal):**
+
+Due to I/Q gain and phase imbalances in the mixer, a mirror image of the desired signal appears on the opposite side of the LO frequency. The **Image Rejection Ratio (IRR)** quantifies how well the system suppresses this unwanted image:
+
+.. math::
+
+   \text{IRR (dB)} = 10 \log_{10}\left(\frac{P_{\text{wanted}}}{P_{\text{image}}}\right)
+
+**Causes of Poor Image Rejection:**
+
+* **Gain Imbalance**: I and Q channels have different amplification (should be identical)
+* **Phase Imbalance**: I and Q mixer phases deviate from the ideal 90° quadrature relationship
+
+Better SDR hardware achieves higher IRR values (40-60 dB typical for high-quality systems).
+
+**2. LO Leakage (DC Offset):**
+
+Local Oscillator leakage occurs when the LO signal couples into the mixer output, creating a DC offset in the baseband I/Q signals. This appears as a spike at the center frequency (DC in baseband).
+
+**Causes:**
+
+* Imperfect mixer isolation
+* DC offsets in the analog signal chain
+* LO signal leaking through the RF path
+
+**3. Spurs (Spurious Signals):**
+
+Unwanted tones that appear at predictable frequency offsets due to:
+
+* Clock harmonics
+* Intermodulation products
+* Switching noise from power supplies
+* Digital switching transients coupling into analog paths
+
+**4. Signal-to-Noise Ratio (SNR):**
+
+The SNR measures the quality of the received signal relative to the noise floor:
+
+.. math::
+
+   \text{SNR (dB)} = 10 \log_{10}\left(\frac{P_{\text{signal}}}{P_{\text{noise}}}\right)
+
+Higher SNR indicates cleaner signal reception and better ADC/DAC performance.
+
+**What You'll Observe in This Exercise:**
+
+By transmitting a known complex sinusoid through a loopback cable and analyzing the received spectrum, you will:
+
+* **Measure SNR**: Quantify how much the signal stands above the noise floor
+* **Identify Image Rejection**: See the mirror image and calculate IRR
+* **Observe LO Leakage**: Identify the DC offset spike at the center
+* **Detect Spurs**: Find spurious tones and correlate them with system clocks
+* **Validate Frequency Accuracy**: Confirm that transmitted and received frequencies match
+
+This systematic testing approach forms the foundation for troubleshooting more complex communication systems.
+
+Using PyADI-IIO with Pluto
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Follow these steps to perform basic SDR validation:
+
+#. Make the loopback setup using Pluto with TX1 connected to RX1 via an SMA loopback cable and connect it to your PC.
+
+   .. TODO: Add Pluto loopback setup image when available
+   .. .. figure:: images/exercises/sdr_testing/pluto_loopback_setup.png
+   ..    :alt: Pluto SDR Loopback Setup for Testing
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Pluto SDR with TX1 connected to RX1 via loopback cable for performance testing
+
+#. Open the **workshop_exercises** folder from your desktop.
+
+#. Go to **python->sinewave_loopback** subfolder.
+
+#. Right click on **python_loopback_sine_pluto.py -> Open With Other Application** and select **Thonny Python IDE**
+   (or any other Python IDE you have installed) from the Recommended Applications list.
+
+#. To run the script, press the green round button from the top left corner in Thonny IDE.
+
+#. Observe the received spectrum and identify key performance metrics:
+
+   * **Wanted Signal**: The main peak corresponding to your transmitted complex sinusoid
+   * **Image Signal**: Mirror image on the opposite side of DC (calculate IRR)
+   * **LO Leakage**: DC spike at the center frequency
+   * **Spurs**: Spurious tones at various frequency offsets
+   * **Noise Floor**: Background noise level (calculate SNR)
+
+   .. TODO: Add spectrum analysis screenshot when available
+   .. .. figure:: images/exercises/sdr_testing/pluto_spectrum_analysis.png
+   ..    :alt: Pluto SDR Spectrum Analysis
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Received spectrum showing wanted signal, image, LO leakage, spurs, and noise floor
+
+#. Calculate key metrics:
+
+   .. code-block:: python
+      :linenos:
+      :lineno-start: 1
+      :class: code-spaced
+
+      # Example metric calculations (add to your script)
+      import numpy as np
+
+      # Calculate SNR
+      signal_power = np.max(np.abs(fft_magnitude))  # Peak power
+      noise_power = np.mean(noise_floor_samples)     # Average noise
+      snr_db = 10 * np.log10(signal_power / noise_power)
+      print(f"SNR: {snr_db:.2f} dB")
+
+      # Calculate Image Rejection Ratio (IRR)
+      wanted_signal_power = fft_magnitude[wanted_bin]
+      image_signal_power = fft_magnitude[image_bin]
+      irr_db = 10 * np.log10(wanted_signal_power / image_signal_power)
+      print(f"Image Rejection: {irr_db:.2f} dB")
+
+#. To stop running the Python script (if you want to run it again or run another script), close all the tabs by **right clicking on the
+   taskbar icon -> Quit x windows** or close them manually one by one.
+
+
+Using PyADI-IIO with Jupiter
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This demonstrates the same SDR testing methodology on the Jupiter platform, which typically exhibits better performance metrics due to higher-quality components.
+
+Follow these steps:
+
+#. From **workshop_exercises->python->sinewave_loopback** subfolder, open **python_loopback_sine_jupiter.py** using **Thonny Python IDE**.
+
+#. Observe that only the "Configure SDR" section changed compared to **python_loopback_sine_pluto.py**:
+
+   .. code-block:: python
+      :linenos:
+      :lineno-start: 4
+      :class: code-spaced
+
+      # Configure SDR
+      sdr = adi.adrv9002(uri="ip:10.48.65.212")  # Create Radio
+
+      frequency = 15360  # 15.360 KHz sinusoid to be transmitted
+      amplitude = 0.5
+      center_freq = 915000000  # Hz
+      sample_rate = sdr.rx0_sample_rate
+      num_samps = int((sample_rate)/frequency)  # number of samples per call to rx()
+
+      sdr.rx_ensm_mode_chan0 = "rf_enabled"
+      sdr.tx_hardwaregain_chan0 = -5
+      sdr.rx_hardwaregain_chan0 = 0
+      sdr.tx_ensm_mode_chan0 = "rf_enabled"
+      sdr.tx_cyclic_buffer = True
+      sdr.tx_buffer_size = num_samps  # number of samples per call to tx()
+      sdr.rx_buffer_size = num_samps
+      sdr.tx0_lo = center_freq
+      sdr.rx0_lo = center_freq
+
+#. Insert the IP address on line 5 to remotely connect to Jupiter:
+
+   .. code-block:: python
+      :linenos:
+      :lineno-start: 5
+      :class: code-spaced
+
+      sdr = adi.adrv9002(uri="ip:10.48.65.212")  # Create Radio object for Jupiter
+
+#. To run the script, press the green round button from the top left corner in Thonny IDE.
+
+#. Compare the performance metrics between Pluto and Jupiter:
+
+   * **SNR**: Jupiter typically achieves 5-10 dB better SNR due to lower noise floor
+   * **Image Rejection**: Jupiter's better I/Q balance results in higher IRR (50-60 dB vs 35-45 dB)
+   * **LO Leakage**: Improved isolation reduces DC offset
+   * **Spur-Free Dynamic Range**: Cleaner spectrum with fewer spurious tones
+
+   .. TODO: Add Jupiter spectrum comparison when available
+   .. .. figure:: images/exercises/sdr_testing/jupiter_spectrum_analysis.png
+   ..    :alt: Jupiter SDR Spectrum Analysis
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Jupiter spectrum showing improved performance metrics compared to Pluto
+
+#. To stop running the Python script (if you want to run it again or run another script), close all the tabs by **right clicking on the
+   taskbar icon -> Quit x windows** or close them manually one by one.
+
+
+Using PyADI-IIO with Talise
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The Talise platform represents production-grade hardware with the best performance metrics of the three platforms.
+
+Follow these steps:
+
+#. From **workshop_exercises->python->sinewave_loopback** subfolder, open **python_loopback_sine_talise_zu11eg.py** using **Thonny Python IDE**.
+
+#. Observe the "Configure SDR" section for Talise:
+
+   .. code-block:: python
+      :linenos:
+      :lineno-start: 4
+      :class: code-spaced
+
+      # Configure properties
+      sample_rate = 30720000  # Sample rate
+      center_freq = 2000000000  # Center frequency
+      num_samps = 100000  # Number of samples per call to rx()
+      frequency = 3000000  # Frequency of complex sinusoid
+      fc0 = int(center_freq / (sample_rate / 2) * 2**15)  # Digital frequency for TX1
+
+      # Create radio object
+      sdr = adi.adrv9009_zu11eg("ip:10.48.65.182")  # IP address of Talise
+
+      # Configure Tx properties
+      sdr.tx_hardwaregain_chan0 = -10  # TX attenuation in dB
+      sdr.tx_enabled_channels = [0]
+      sdr.dds_single_tone(fc0, 0.8, 0)  # Generate tone: freq, scale, channel
+
+      # Configure Rx properties
+      sdr.gain_control_mode_chan0 = "slow_attack"
+      sdr.rx_enabled_channels = [0]
+      sdr.rx_buffer_size = num_samps
+
+#. Insert the IP address on line 2 to remotely connect to Talise:
+
+   .. code-block:: python
+      :linenos:
+      :lineno-start: 9
+      :class: code-spaced
+
+      sdr = adi.adrv9009_zu11eg("ip:10.48.65.182")  # Create Radio object for Talise
+
+#. To run the script, press the green round button from the top left corner in Thonny IDE.
+
+#. Observe the superior performance metrics of the Talise platform:
+
+   * **SNR**: Typically >70 dB due to high-performance ADC/DAC
+   * **Image Rejection**: >60 dB with excellent I/Q balance
+   * **Spurious-Free Dynamic Range (SFDR)**: >80 dBc
+   * **Phase Noise**: Lower phase noise improves frequency stability
+
+   .. TODO: Add Talise spectrum comparison when available
+   .. .. figure:: images/exercises/sdr_testing/talise_spectrum_analysis.png
+   ..    :alt: Talise SDR Spectrum Analysis
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Talise spectrum demonstrating production-grade performance metrics
+
+#. To stop running the Python script (if you want to run it again or run another script), close all the tabs by **right clicking on the
+   taskbar icon -> Quit x windows** or close them manually one by one.
+
+
+Using Scopy for Visual Analysis
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+While PyADI-IIO provides programmatic control and testing, **Scopy** offers a powerful visual interface for real-time signal analysis and debugging. Scopy is a cross-platform, open-source software oscilloscope and signal analysis suite that functions as a replacement for traditional bench instruments.
+
+**What is Scopy?**
+
+Scopy is ADI's comprehensive software toolset for signal analysis and controlling IIO (Industrial I/O) systems. Originally developed as application software for the ADALM2000, it has evolved into a versatile multi-platform tool with ~120k downloads.
+
+**Key Features:**
+
+* **Cross-platform**: Runs on Windows, Linux, macOS, Android, and embedded Linux targets
+* **Multiple device support**: Control multiple devices from the same Scopy instance
+* **IIO device support**: Full support for IIO devices through IIO instruments
+* **Plugin-based architecture**:
+
+  * General purpose plugins (ADC, Register map, Debugger)
+  * Platform specific plugins (ADALM2000, SWIOT1L, PQM)
+
+* **Open source - GPLv3**: Qt-based with libraries including libiio, libqwt, gnuradio, libsigrokdecode
+* **Developer friendly**:
+
+  * IIO system emulator for hardware-less evaluation and development
+  * Docker images for automated builds
+  * Installers/Executables built on every commit
+  * Single codebase for all platforms
+
+* **Genalyzer support**: Integrated spectral analysis capabilities
+
+**Tools Available for SDR Testing:**
+
+#. **Scopy** - Visual oscilloscope and signal analysis
+#. **GNURadio** - Signal processing flowgraphs
+#. **PyADI-IIO** - Python programmatic control
+#. **qIQ Receiver/Transceiver** - IQ signal visualization
+#. **qIQ with Scopy** - Combined IQ analysis
+#. **Genalyzer with Scopy** - Advanced spectral analysis
+
+**Scopy Architecture:**
+
+Scopy operates as a remote client that communicates with SDR hardware through **libiio**, providing a consistent interface across different platforms:
+
+* **Remote client**: Windows, macOS, or Linux desktop
+* **Scopy application**: User interface and analysis tools
+* **libiio**: Communication layer
+* **Embedded Linux or no-OS platform**: Runs on the SDR hardware
+* **Device drivers**: Platform-specific (Linux Device Driver or no-OS Device Driver)
+* **Hardware**: ADI SDR platforms (Pluto, Jupiter, Talise)
+
+**What You'll Observe with Scopy:**
+
+Starting with Scopy v2.0, the application provides comprehensive analysis capabilities:
+
+* **Time Domain (Oscilloscope)**: Visualize I/Q waveforms in real-time
+* **Frequency Domain (Spectrum Analyzer)**: Observe FFT with configurable parameters
+* **Constellation Diagram**: See IQ points for modulated signals
+* **Signal Analyzer**: Measure SNR, THD, SFDR, and other metrics
+* **Register Map**: Direct access to hardware registers for debugging
+* **Network Analyzer**: Frequency response measurements
+
+Follow these steps to perform visual SDR analysis with Scopy:
+
+#. Make the loopback setup using Pluto with TX1 connected to RX1 via an SMA loopback cable and connect it to your PC.
+
+   .. TODO: Add Scopy Pluto loopback setup image when available
+   .. .. figure:: images/exercises/scopy_testing/pluto_scopy_setup.png
+   ..    :alt: Pluto SDR Setup for Scopy Testing
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Pluto SDR with loopback connection for Scopy analysis
+
+#. Launch Scopy from your applications menu or terminal:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ scopy
+
+#. Connect to your Pluto device:
+
+   * Click **Add Device** or select from the device list
+   * Choose **PlutoSDR (ADALM-PLUTO)** from available devices
+   * Click **Connect**
+
+   .. TODO: Add Scopy device connection screenshot when available
+   .. .. figure:: images/exercises/scopy_testing/scopy_device_connect.png
+   ..    :alt: Scopy Device Connection
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Connecting to PlutoSDR in Scopy
+
+#. Configure the **AD9361 Plugin** for both RX and TX:
+
+   * Open the **AD9361** plugin (AD936X)
+   * Set **RX LO Frequency**: 2450000000 Hz and **press Enter**
+   * Set **TX LO Frequency**: 2450000000 Hz and **press Enter**
+   * Set **RX1 Gain**: 0 dB
+   * Set **RX2 Gain**: 0 dB (unused channel)
+   * Set **TX1 Attenuation**: -10 dB
+   * Set **TX2 Attenuation**: -80 dB (unused channel - disable it)
+
+   .. TODO: Add Scopy AD9361 plugin configuration when available
+   .. .. figure:: images/exercises/scopy_testing/scopy_ad9361_config.png
+   ..    :alt: Scopy AD9361 Plugin Configuration
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Configuring RX/TX LO frequencies and gain settings in the AD9361 plugin
+
+#. Configure the **DDS (Direct Digital Synthesizer)** to generate a test tone:
+
+   * Open the **DDS** tab in the AD9361 plugin
+   * Set **Frequency**: 89000 Hz (baseband tone) and **press Enter**
+   * Set **Amplitude**: 0.9 (scale factor)
+   * Set **Phase**: 90 degrees
+   * Enable **TX1** DDS output
+
+   .. TODO: Add Scopy DDS configuration when available
+   .. .. figure:: images/exercises/scopy_testing/scopy_dds_config.png
+   ..    :alt: Scopy DDS Configuration
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Configuring the DDS to generate an 89 kHz test tone
+
+#. Configure the **Data Logger** (Oscilloscope/Spectrum Analyzer):
+
+   * Open the **Data Logger** instrument
+   * Set **Sample Rate**: 30720000 SPS (samples per second)
+   * Enable **FFT** view for spectrum analysis
+   * **IMPORTANT**: Check the Y-axis scale setting
+
+     * If the default scale shows **-Inf** (negative infinity), you need to change it
+     * Look for the scale settings (usually in the display options or Y-axis configuration)
+     * Set an appropriate scale (e.g., -120 dB to 0 dB for spectrum view)
+     * **Red rectangle indicator**: The scale setting is typically found in the top-right corner of the plot area
+
+   .. TODO: Add Scopy Data Logger configuration with scale setting highlighted when available
+   .. .. figure:: images/exercises/scopy_testing/scopy_data_logger_config.png
+   ..    :alt: Scopy Data Logger Configuration
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Configuring the Data Logger with proper scale settings (note the red rectangle showing where to adjust scale if default is -Inf)
+
+#. Observe the **time domain** signals:
+
+   * **I channel (Real)**: Cosine waveform at 89000 Hz
+   * **Q channel (Imaginary)**: Sine waveform at 89000 Hz (90° phase offset due to DDS phase setting)
+   * Verify both signals have the same amplitude
+   * Check for any DC offset or amplitude imbalance
+
+   .. TODO: Add Scopy time domain screenshot when available
+   .. .. figure:: images/exercises/scopy_testing/scopy_time_domain.png
+   ..    :alt: Scopy Time Domain Display
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Time domain view showing I and Q components of the complex sinusoid at 89 kHz
+
+#. Analyze the **frequency domain** (FFT):
+
+   * Switch to **Spectrum Analyzer** view or enable FFT overlay in the Data Logger
+   * Identify the **wanted signal** peak at +89000 Hz
+   * Identify the **image signal** (mirror) at -89000 Hz
+   * Observe **LO leakage** at DC (0 Hz)
+   * Detect any **spurious tones** (spurs)
+   * Measure the **noise floor**
+
+   .. TODO: Add Scopy spectrum analyzer screenshot when available
+   .. .. figure:: images/exercises/scopy_testing/scopy_spectrum_analysis.png
+   ..    :alt: Scopy Spectrum Analysis
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Spectrum analyzer showing wanted signal at 89 kHz, image, LO leakage, spurs, and noise floor
+
+#. Use **Scopy's built-in measurement tools** to quantify performance:
+
+   * **Cursors**: Place cursors on wanted (at +89 kHz) and image signals (at -89 kHz) to measure power difference (IRR)
+   * **Markers**: Identify peak frequencies and amplitudes
+   * **Statistics**: View min/max/average/RMS values
+   * **SNR Calculator**: Automatic SNR measurement (if available in your Scopy version)
+
+   Example measurements you might observe:
+
+   * Wanted signal power: ~-10 dBFS (set by DDS amplitude and TX attenuation)
+   * Image signal power: ~-45 dBFS (depends on I/Q balance)
+   * **Image Rejection Ratio (IRR)**: Example: -10 - (-45) = 35 dB
+   * Noise floor: ~-90 dBFS (depends on sample rate and ADC performance)
+   * **SNR**: Example: -10 - (-90) = 80 dB
+
+#. Experiment with **Genalyzer integration** (if available):
+
+   * Open the **Genalyzer** plugin
+   * Perform advanced spectral analysis
+   * Calculate metrics: SINAD, THD, SFDR, ENOB
+   * Export data for further analysis
+
+   .. TODO: Add Genalyzer integration screenshot when available
+   .. .. figure:: images/exercises/scopy_testing/scopy_genalyzer.png
+   ..    :alt: Scopy Genalyzer Integration
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Genalyzer plugin providing advanced spectral analysis metrics
+
+#. **Advanced debugging** with Register Map:
+
+   * Open the **Register Map** tool
+   * Inspect RF transceiver registers
+   * Verify LO frequency settings
+   * Check gain control settings
+   * Modify parameters and observe real-time effects
+
+**Comparing Scopy vs PyADI-IIO:**
+
+* **Scopy advantages**:
+
+  * Real-time visual feedback
+  * Interactive parameter adjustment
+  * No programming required
+  * Built-in measurement tools
+  * Ideal for initial debugging and exploration
+
+* **PyADI-IIO advantages**:
+
+  * Automated testing scripts
+  * Batch processing
+  * Integration with data analysis pipelines
+  * Reproducible measurements
+  * Ideal for production testing and validation
+
+For comprehensive SDR testing, use **both tools**: Scopy for visual debugging and parameter optimization, then PyADI-IIO for automated validation and documentation of results.
+
+Debugging and Tweaking IIO Attributes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This advanced exercise teaches you how to interact with the **Industrial I/O (IIO) subsystem** at a low level, giving you direct control over hardware attributes. Understanding IIO attributes is essential for debugging SDR issues, optimizing performance, and integrating SDR control into custom applications.
+
+**What are IIO Attributes?**
+
+IIO attributes are the low-level parameters that control every aspect of your SDR hardware:
+
+* **Channel attributes**: Per-channel settings like gain, frequency, sample rate
+* **Device attributes**: Global settings affecting the entire device
+* **Debug attributes**: Low-level register access for advanced debugging
+
+Every high-level API (PyADI-IIO, GNU Radio, MATLAB, Scopy) ultimately reads and writes these IIO attributes through the Linux kernel. By learning to manipulate them directly, you gain:
+
+* **Debugging skills**: Identify whether issues are in your application or the hardware layer
+* **Fine-grained control**: Access parameters not exposed by high-level APIs
+* **Integration knowledge**: Understand how to integrate SDR control into any application
+* **Troubleshooting ability**: Verify attribute values when behavior seems unexpected
+
+**Three Ways to Access IIO Attributes:**
+
+#. **PyADI-IIO**: Programmatic access through Python (easiest for scripting and automation)
+#. **iio_attr utility**: Command-line tool for quick testing and shell scripts
+#. **Scopy Debugger**: Visual interface for exploring and modifying attributes
+
+This exercise demonstrates all three approaches using the RX gain attribute as an example, showing how the same hardware control can be accessed from different interfaces.
+
+Using PyADI-IIO to Read/Write Attributes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**Why This Approach:** Python scripts provide programmatic access to IIO attributes, making it easy to automate configuration, log values, and integrate SDR control into larger applications.
+
+**Prerequisites:**
+
+* Pluto SDR connected via USB or network
+* ftc_2025 exercises folder on desktop
+
+**Steps:**
+
+#. Navigate to the IIO context exercises folder:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ cd ~/Desktop/ftc_2025/iio_context_exercises
+
+#. Open the IIO exploration script in Thonny IDE:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ thonny iio_explore_pyadi.py
+
+   Or right-click ``iio_explore_pyadi.py`` → Open with → **Thonny**
+
+#. Run the script by clicking the **Run** button (green arrow) in Thonny
+
+**What You'll See:**
+
+The script demonstrates how to:
+
+* Create an IIO context (connection to the SDR)
+* Access device objects (ad9361-phy for Pluto's RF transceiver)
+* Read channel attributes (hardwaregain for RX gain)
+* Write channel attributes (set new gain values)
+* Verify changes by reading back the value
+
+.. code-block:: python
+   :linenos:
+   :lineno-start: 1
+   :class: code-spaced
+
+   import adi
+
+   # Create IIO context - connects to Pluto SDR
+   sdr = adi.Pluto("ip:pluto.local")
+
+   # Access RX channel object
+   rx_channel = sdr.rx()
+
+   # Read current RX gain
+   current_gain = sdr.rx_hardwaregain_chan0
+   print(f"Current RX gain: {current_gain} dB")
+
+   # Set new RX gain value
+   sdr.rx_hardwaregain_chan0 = 10  # Set to 10 dB
+   print("Set RX gain to 10 dB")
+
+   # Read back to verify
+   new_gain = sdr.rx_hardwaregain_chan0
+   print(f"New RX gain: {new_gain} dB")
+
+**Expected Output:**
+
+.. code-block:: text
+
+   Current RX gain: 0 dB
+   Set RX gain to 10 dB
+   New RX gain: 10 dB
+
+**Key Insight:** PyADI-IIO provides a Python-friendly interface to IIO attributes. Under the hood, it's reading and writing the same kernel attributes you'll access with the other tools.
+
+Using iio_attr Command-Line Utility
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**Why This Approach:** The ``iio_attr`` command-line tool provides immediate access to IIO attributes without writing code. It's ideal for:
+
+* Quick verification of settings
+* Shell script automation
+* Debugging when GUI tools aren't available
+* Understanding the raw IIO interface
+
+**Prerequisites:**
+
+* Pluto SDR connected and accessible at ``ip:pluto.local``
+* Terminal access
+
+**Steps:**
+
+#. Read the current RX gain value:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ iio_attr -u ip:pluto.local -c -i ad9361-phy 'voltage0' hardwaregain
+
+   **What this command does:**
+
+   * ``-u ip:pluto.local``: Connect to Pluto via network (use ``-u usb:`` for USB connection)
+   * ``-c``: Access channel-specific attributes
+   * ``-i ad9361-phy``: Target the AD9361 RF transceiver device
+   * ``'voltage0'``: Select RX1 channel (voltage0 = RX1, voltage1 = RX2)
+   * ``hardwaregain``: The attribute name
+
+   **Expected Output:**
+
+   .. code-block:: text
+
+      10
+
+   This shows the value you set in the previous PyADI-IIO exercise (10 dB).
+
+#. Set RX gain to 5 dB:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ iio_attr -u ip:pluto.local -c -i ad9361-phy 'voltage0' hardwaregain 5
+
+   **Expected Output:**
+
+   .. code-block:: text
+
+      5
+
+   The tool automatically reads back and displays the new value after writing it.
+
+#. Experiment with other attributes:
+
+   * List all available devices:
+
+     .. shell::
+        :user: analog
+        :group: analog
+        :show-user:
+
+        $ iio_attr -u ip:pluto.local
+
+   * List all attributes for ad9361-phy device:
+
+     .. shell::
+        :user: analog
+        :group: analog
+        :show-user:
+
+        $ iio_attr -u ip:pluto.local -d ad9361-phy
+
+   * List all channel attributes for voltage0:
+
+     .. shell::
+        :user: analog
+        :group: analog
+        :show-user:
+
+        $ iio_attr -u ip:pluto.local -c -i ad9361-phy 'voltage0'
+
+**Key Insight:** The ``iio_attr`` utility exposes the raw IIO interface. Every attribute you see here can also be accessed through PyADI-IIO, GNU Radio, MATLAB, or Scopy - they all use the same underlying IIO layer.
+
+Using Scopy Debugger Instrument
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**Why This Approach:** Scopy's Debugger instrument provides a visual, hierarchical view of all IIO attributes, making it easy to explore what's available and experiment with different settings in real-time.
+
+**Prerequisites:**
+
+* Pluto SDR connected via USB or network
+* Scopy 2.0 installed and running
+
+**Steps:**
+
+#. Launch Scopy and connect to your Pluto SDR:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ scopy
+
+   * Click on the auto-detected USB device **"AD936x"**
+   * Click **Connect**
+   * For network connection: Click **+** → Enter ``ip:pluto.local`` → **Verify** → **Add Device** → **Connect**
+
+#. Open the **Debugger** instrument:
+
+   * Click **Debugger** in the left sidebar
+
+   .. TODO: Add Scopy Debugger screenshot
+   .. .. figure:: images/exercises/iio_attributes/scopy_debugger_open.png
+   ..    :alt: Scopy Debugger Instrument
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Opening the Scopy Debugger instrument
+
+#. Navigate to the RX gain attribute:
+
+   Expand the hierarchy in this order:
+
+   * **context0** (the IIO context)
+   * **iio:device0:ad9361-phy** (the AD9361 RF transceiver)
+   * **voltage0** (RX1 channel)
+   * Find **hardwaregain** in the list
+
+   .. TODO: Add Scopy Debugger navigation screenshot
+   .. .. figure:: images/exercises/iio_attributes/scopy_debugger_navigate.png
+   ..    :alt: Navigate to hardwaregain attribute
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Expanding the IIO tree to find the hardwaregain attribute
+
+#. Observe the current value:
+
+   You should see the value **5** (or whatever you set in the previous ``iio_attr`` exercise).
+
+   This demonstrates that **all three tools access the same underlying hardware state** - the value persists across different interfaces.
+
+#. Modify the gain value:
+
+   * Click on the **hardwaregain** attribute
+   * Change the value to **15**
+   * Press **Enter** or click **Apply**
+   * Observe the value update in real-time
+
+   .. TODO: Add Scopy Debugger modify screenshot
+   .. .. figure:: images/exercises/iio_attributes/scopy_debugger_modify.png
+   ..    :alt: Modify hardwaregain attribute
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Modifying the RX gain attribute in Scopy Debugger
+
+#. **Explore other attributes:**
+
+   Browse through the IIO tree to discover what's available:
+
+   * **RX/TX LO frequencies**: ``out_altvoltage0_RX_LO_frequency``, ``out_altvoltage1_TX_LO_frequency``
+   * **Sample rates**: ``in_voltage_sampling_frequency``
+   * **RF bandwidth**: ``in_voltage_rf_bandwidth``
+   * **Gain control modes**: ``in_voltage0_gain_control_mode`` (manual, fast_attack, slow_attack, hybrid)
+   * **TX attenuation**: ``out_voltage0_hardwaregain``
+   * **RSSI (Received Signal Strength)**: ``in_voltage0_rssi``
+
+#. Close Scopy when done and reset Pluto:
+
+   * Click **Disconnect** in Scopy
+   * Close Scopy application
+   * **Reset Pluto** by unplugging and replugging the USB connector
+
+   .. important::
+
+      Always reset Pluto after using Scopy to clear any configuration changes and return to default state.
+
+**What You'll Observe:**
+
+The Scopy Debugger reveals the complete IIO device hierarchy:
+
+* **Devices**: Physical hardware components (ad9361-phy, xadc, etc.)
+* **Channels**: Individual data streams (voltage0 = RX1, voltage1 = RX2, etc.)
+* **Attributes**: Configurable parameters for each channel or device
+* **Debug attributes**: Low-level register access (visible in Debug mode)
+
+**Key Insight:** The Debugger instrument shows you the "ground truth" of what's happening in the kernel. When debugging issues with PyADI-IIO scripts or GNU Radio flowgraphs, you can use Scopy Debugger to verify:
+
+* Are attributes being set correctly?
+* Do values match what your application expects?
+* Are there hidden attributes affecting behavior?
+
+**Understanding the IIO Naming Convention:**
+
+IIO attribute names follow a pattern:
+
+* **Direction**: ``in_`` (input/RX) or ``out_`` (output/TX)
+* **Channel type**: ``voltage``, ``altvoltage``, ``temp``, etc.
+* **Channel number**: ``0``, ``1``, ``2``, etc.
+* **Attribute name**: ``hardwaregain``, ``sampling_frequency``, ``rf_bandwidth``, etc.
+
+Examples:
+
+* ``in_voltage0_hardwaregain``: RX1 channel gain (input voltage channel 0)
+* ``out_voltage0_hardwaregain``: TX1 channel attenuation (output voltage channel 0)
+* ``out_altvoltage0_RX_LO_frequency``: RX local oscillator frequency
+* ``in_voltage_sampling_frequency``: Global RX sample rate (applies to all RX channels)
+
+**Advanced Exercise: Create Your Own IIO Script**
+
+Try writing a Python script that:
+
+#. Reads the current RX LO frequency
+#. Reads the current TX LO frequency
+#. Reads the current RX gain
+#. Reads the current TX attenuation
+#. Prints all values in a formatted table
+#. Changes each value to a new setting
+#. Reads back and verifies the changes
+
+This exercise reinforces your understanding of programmatic IIO access and prepares you for integrating SDR control into custom applications.
+
+**Debugging Workflow Summary:**
+
+When troubleshooting SDR issues, use this workflow:
+
+#. **Scopy Debugger**: Visually verify current attribute values
+#. **iio_attr**: Quick command-line checks in terminal
+#. **PyADI-IIO**: Automated scripts for reproducible configurations
+
+Understanding IIO attributes gives you **complete control** over your SDR hardware and the ability to debug issues at every level of the stack.
+
+Digital QAM Modulation: 16QAM Loopback with EVM Measurements
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This advanced exercise explores **16-QAM (Quadrature Amplitude Modulation)**, a higher-order modulation scheme that encodes 4 bits per symbol by varying both phase and amplitude. Unlike BPSK (1 bit/symbol) or QPSK (2 bits/symbol), 16QAM uses 16 distinct constellation points, achieving higher spectral efficiency at the cost of requiring better signal quality.
+
+**Why 16QAM Matters:**
+
+16QAM is widely used in modern wireless standards:
+
+* **4G LTE**: Downlink modulation for medium-to-high SNR conditions
+* **5G NR**: One of the baseline modulation schemes
+* **Wi-Fi (802.11ac/ax)**: High-throughput data transmission
+* **DVB-T2**: Digital television broadcasting
+* **Microwave backhaul**: Point-to-point links
+
+This exercise introduces **Error Vector Magnitude (EVM)** measurements, a critical metric for evaluating digital modulation quality in production systems.
+
+**What is EVM?**
+
+**Error Vector Magnitude** quantifies how much the received constellation points deviate from their ideal positions. It's the industry-standard metric for measuring transmitter and receiver quality.
+
+.. math::
+
+   \text{EVM}_{\text{RMS}} = \sqrt{\frac{1}{N} \sum_{i=1}^{N} \frac{|S_{\text{measured},i} - S_{\text{ideal},i}|^2}{|S_{\text{ideal},i}|^2}} \times 100\%
+
+where:
+
+* :math:`S_{\text{measured},i}` = received symbol
+* :math:`S_{\text{ideal},i}` = ideal constellation point
+* :math:`N` = number of symbols
+
+Lower EVM = better signal quality. Typical requirements:
+
+* **4G LTE**: EVM < 8% for 16QAM
+* **5G NR**: EVM < 7% for 16QAM
+* **Wi-Fi 6**: EVM < 6.5% for 16QAM
+
+**16QAM Constellation:**
+
+16QAM uses a 4×4 grid constellation with 16 points:
+
+* **4 amplitude levels**: Each axis (I and Q) has 4 discrete levels
+* **4 bits per symbol**: 2^4 = 16 possible symbols
+* **Higher spectral efficiency**: 2× more bits per symbol than QPSK
+* **Higher SNR requirement**: More sensitive to noise and impairments
+
+.. TODO: Add 16QAM constellation diagram
+.. .. figure:: images/exercises/16qam/constellation_16qam.png
+..    :alt: 16QAM Constellation Diagram
+..    :align: center
+..    :width: 30em
+..
+..    16QAM constellation with 16 distinct symbol positions
+
+**Key Difference from QPSK:**
+
+* **QPSK**: All symbols have the same amplitude, only phase changes
+* **16QAM**: Symbols have different amplitudes AND phases
+* **Implication**: 16QAM is more sensitive to amplitude distortion (compression, non-linearity)
+
+**GNU Radio Implementation Challenges:**
+
+.. important::
+
+   The GNU Radio **Differential Encoder/Decoder blocks do NOT support 16QAM**. You must manually rotate the constellation after demodulation to align it with the transmitted pattern.
+
+This limitation requires you to:
+
+#. Observe the received constellation rotation
+#. Manually adjust using a phase offset slider
+#. Align until received pattern matches transmitted pattern
+
+This hands-on constellation alignment teaches you how carrier phase ambiguity affects higher-order modulations.
+
+Using GNU Radio with Pluto
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**Prerequisites:**
+
+* Pluto SDR with TX1 and RX1 connected via loopback cable
+* ftc_2025 exercises folder on desktop
+* GNU Radio Companion installed
+
+**Setup:**
+
+#. Connect the loopback cable between TX1 and RX1:
+
+   .. TODO: Add loopback setup image
+   .. .. figure:: images/exercises/16qam/pluto_loopback_setup.png
+   ..    :alt: Pluto SDR Loopback Setup
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Pluto SDR with TX1-RX1 loopback connection
+
+#. Open GNU Radio Companion:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ gnuradio-companion
+
+#. Load the 16QAM flowgraph:
+
+   * Click **File** → **Open**
+   * Navigate to: ``/home/analog/Desktop/ftc_2025/7_16QAM_loopback_gnuradio``
+   * Open: ``16QAM_loopback_pluto.grc``
+
+**What You'll See Before Running:**
+
+The flowgraph contains:
+
+* **Transmitter chain**:
+
+  * Random source → 16QAM modulator → Root Raised Cosine (RRC) filter → PlutoSDR Sink
+
+* **Receiver chain**:
+
+  * PlutoSDR Source → RRC filter → 16QAM demodulator → Constellation sink
+
+* **EVM measurement blocks**:
+
+  * Custom Python blocks that calculate Min, Max, and RMS EVM on 100-symbol windows
+
+**Steps:**
+
+#. Run the flowgraph:
+
+   * Click the **Run** button (green arrow) in the toolbar
+   * Wait for the plots to appear
+
+   .. TODO: Add 16QAM running flowgraph screenshot
+   .. .. figure:: images/exercises/16qam/16qam_flowgraph_running.png
+   ..    :alt: 16QAM Flowgraph Running
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Running 16QAM loopback flowgraph in GNU Radio
+
+#. **Observe the initial constellation mismatch:**
+
+   The **Received Demodulated Symbols** plot will show the constellation rotated compared to the **Transmitted Symbols** plot.
+
+   .. TODO: Add misaligned constellation screenshot
+   .. .. figure:: images/exercises/16qam/constellation_misaligned.png
+   ..    :alt: Misaligned 16QAM Constellation
+   ..    :align: center
+   ..    :width: 35em
+   ..
+   ..    Received constellation rotated relative to transmitted pattern
+
+   **Why this happens:**
+
+   * Carrier phase ambiguity from the receiver's phase-locked loop
+   * Differential encoding doesn't work for 16QAM in GNU Radio
+   * Manual constellation rotation is required
+
+#. **Manually rotate the constellation:**
+
+   * Locate the **Phase Offset** slider under the **Received Demodulated Symbols** plot
+   * Rotate the slider in multiples of **90 degrees** (0°, 90°, 180°, 270°)
+   * Stop when the received pattern matches the transmitted pattern
+
+   .. TODO: Add aligned constellation screenshot
+   .. .. figure:: images/exercises/16qam/constellation_aligned.png
+   ..    :alt: Aligned 16QAM Constellation
+   ..    :align: center
+   ..    :width: 35em
+   ..
+   ..    Correctly aligned 16QAM constellation after manual rotation
+
+   **Key Observation:**
+
+   * 16QAM has **4-fold rotational symmetry** (90° rotations)
+   * Unlike QPSK, you can visually distinguish correct vs incorrect rotation by comparing symbol patterns
+   * In production systems, differential encoding or pilot symbols resolve this ambiguity automatically
+
+#. **Observe EVM measurements:**
+
+   Scroll down in the plots window to find the EVM measurement displays:
+
+   * **Min EVM**: Lowest error vector magnitude observed
+   * **Max EVM**: Highest error vector magnitude observed
+   * **RMS EVM**: Root-mean-square EVM (industry standard metric)
+
+   .. TODO: Add EVM measurements screenshot
+   .. .. figure:: images/exercises/16qam/evm_measurements.png
+   ..    :alt: EVM Measurements for 16QAM
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Min, Max, and RMS EVM measurements on 100-symbol windows
+
+   **Expected EVM values for loopback:**
+
+   * **RMS EVM**: 1-3% (excellent - loopback with minimal impairments)
+   * **Max EVM**: 5-8% (peak distortion on worst symbols)
+   * **Min EVM**: <1% (best-case symbols near constellation center)
+
+   **What EVM tells you:**
+
+   * **Low EVM (< 5%)**: Clean signal, good I/Q balance, low noise
+   * **Medium EVM (5-10%)**: Acceptable for most standards, may indicate minor impairments
+   * **High EVM (> 10%)**: Significant impairments - check gain settings, SNR, or hardware issues
+
+#. **Experiment with impairments:**
+
+   * **Reduce RX gain**: Lower gain → worse SNR → higher EVM
+   * **Increase TX attenuation**: Lower signal power → worse SNR → higher EVM
+   * **Add frequency offset**: Degrade carrier recovery → higher EVM
+
+   Observe how EVM degrades as signal quality worsens.
+
+#. Stop the flowgraph when done:
+
+   * Click the **Stop** button (red square) in the toolbar
+   * Or middle-click on any plot → **Stop**
+
+**Understanding the EVM Measurement Blocks:**
+
+The flowgraph contains **custom Python blocks** that implement EVM calculation:
+
+.. code-block:: python
+   :linenos:
+   :lineno-start: 1
+   :class: code-spaced
+
+   import numpy as np
+
+   class EVM_Calculator:
+       def __init__(self, window_size=100):
+           self.window_size = window_size
+           self.ideal_constellation = generate_16qam_constellation()
+
+       def calculate_evm_rms(self, received_symbols):
+           # Find nearest ideal constellation point for each symbol
+           errors = []
+           for rx_sym in received_symbols:
+               ideal_sym = find_nearest_constellation_point(rx_sym)
+               error = abs(rx_sym - ideal_sym) / abs(ideal_sym)
+               errors.append(error)
+
+           # Calculate RMS EVM as percentage
+           evm_rms = np.sqrt(np.mean(np.array(errors)**2)) * 100
+           return evm_rms
+
+**What You Learned:**
+
+* **16QAM encoding**: 4 bits per symbol using amplitude + phase modulation
+* **Constellation rotation**: Manual phase alignment due to carrier ambiguity
+* **EVM measurement**: Industry-standard metric for modulation quality
+* **Impairment effects**: How noise, gain settings, and offsets degrade EVM
+* **Production testing**: Techniques used to validate transmitter/receiver performance
+
+**Advanced Challenge:**
+
+Modify the flowgraph to:
+
+#. Add a **frequency offset** block to simulate local oscillator mismatch
+#. Observe how EVM degrades as frequency offset increases
+#. Find the maximum frequency offset that keeps EVM below 8% (LTE requirement)
+
+**Comparison to QPSK:**
+
+* **QPSK**: Simpler constellation, easier to demodulate, lower data rate
+* **16QAM**: Higher data rate (2× QPSK), more sensitive to impairments, harder to demodulate
+* **Trade-off**: Spectral efficiency vs robustness
+
+In adaptive modulation schemes (4G/5G), the system switches between QPSK, 16QAM, 64QAM, and 256QAM based on channel conditions:
+
+* **Good channel (high SNR)**: Use 256QAM for maximum throughput
+* **Poor channel (low SNR)**: Fall back to QPSK for reliability
+* **Medium channel**: Use 16QAM or 64QAM as compromise
+
+This exercise demonstrates why EVM measurement is critical: it tells you which modulation order your link can support.
+
+QPSK Wireless Communication with File Storage
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This advanced exercise demonstrates **wireless point-to-point file transfer** using QPSK modulation over the air. Unlike loopback exercises where TX and RX are directly connected via cable, this exercise uses antennas for over-the-air (OTA) transmission, introducing real-world wireless channel effects like fading, multipath, and interference.
+
+**Why Wireless File Transfer Matters:**
+
+This exercise bridges the gap between controlled loopback testing and real-world wireless systems:
+
+* **Real propagation effects**: Signal attenuation, multipath fading, interference
+* **Channel quality variation**: SNR changes based on distance and environment
+* **Packet loss**: Some transmissions may not be received correctly
+* **EVM under wireless conditions**: More realistic performance metrics than loopback
+
+This is how production wireless systems work: data is packetized, transmitted over the air, received, error-checked, and stored.
+
+**What Makes This Advanced:**
+
+* **Over-the-air transmission**: No guaranteed signal delivery (unlike loopback)
+* **Real-time EVM measurement**: Observe how wireless channel affects modulation quality
+* **File reconstruction**: Received packets must be assembled into coherent file
+* **Error handling**: CRC checks ensure data integrity
+* **Timing coordination**: Receiver must start before transmitter begins sending
+
+**System Architecture:**
+
+* **Transmitter** (presenter's SDR):
+
+  * Reads text file
+  * Packetizes data with CRC32 checksums
+  * Modulates as QPSK bursts
+  * Transmits over antenna
+
+* **Receiver** (your Jupiter SDR):
+
+  * Receives QPSK signal via antenna
+  * Demodulates and error-checks packets
+  * Writes valid packets to output file
+  * Measures EVM in real-time
+
+Using GNU Radio with Jupiter
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**Prerequisites:**
+
+* **Jupiter SDR** (or Pluto) with antenna connected to RX1
+* ftc_2025 exercises folder on desktop
+* Presenter will transmit the signal - wait for announcement before running
+
+.. important::
+
+   This exercise requires the presenter to be transmitting. Do NOT run the flowgraph until instructed. Starting early will capture only noise.
+
+**Setup:**
+
+#. Connect antenna to RX1 of your Jupiter SDR:
+
+   .. TODO: Add Jupiter antenna connection image
+   .. .. figure:: images/exercises/wireless_file_transfer/jupiter_antenna_setup.png
+   ..    :alt: Jupiter SDR with Antenna
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Jupiter SDR with antenna connected to RX1
+
+   **Antenna Orientation Tips:**
+
+   * Point antenna toward the transmitter (presenter's location)
+   * Vertical polarization typically provides best reception
+   * Avoid obstructions between TX and RX antennas
+
+#. Open GNU Radio Companion:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ gnuradio-companion
+
+#. Load the QPSK receiver flowgraph:
+
+   * Click **File** → **Open**
+   * Navigate to: ``/home/analog/Desktop/ftc_2025/8_qpsk_point_to_point_txtfile_gnuradio/receiver_pluto``
+   * Open: ``qpsk_receiver_txtfile_pluto.grc``
+
+   .. note::
+
+      Even though the file is named ``receiver_pluto.grc``, you can use it with Jupiter by changing the IIO context in the GNU Radio flowgraph. The flowgraph will auto-detect the connected SDR.
+
+**Steps:**
+
+#. **Wait for presenter announcement:**
+
+   * Presenter will announce: "Starting transmission now"
+   * Only then should you run your receiver flowgraph
+
+#. Run the receiver flowgraph:
+
+   * Click the **Run** button (green arrow) in the toolbar
+   * The receiver starts capturing data immediately
+
+   .. TODO: Add receiver flowgraph running screenshot
+   .. .. figure:: images/exercises/wireless_file_transfer/receiver_flowgraph_running.png
+   ..    :alt: QPSK Receiver Flowgraph Running
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    QPSK wireless receiver flowgraph running in GNU Radio
+
+#. **Observe the received constellation:**
+
+   Watch the constellation plot in real-time:
+
+   * **Noisy constellation**: Signal points spread out due to wireless channel
+   * **Rotation**: Phase may drift over time
+   * **Bursts**: Symbols appear in bursts (not continuous transmission)
+
+   .. TODO: Add wireless QPSK constellation screenshot
+   .. .. figure:: images/exercises/wireless_file_transfer/wireless_qpsk_constellation.png
+   ..    :alt: Wireless QPSK Constellation
+   ..    :align: center
+   ..    :width: 35em
+   ..
+   ..    QPSK constellation under wireless conditions - noisier than loopback
+
+   **Why the constellation is noisier:**
+
+   * **Burst mode transmission**: Data sent in packets with gaps between bursts
+   * **Limited lock time**: Digital synchronization loops (FLL, Costas, Symbol Sync) don't have enough time to fully lock before burst ends
+   * **Channel fading**: Wireless signal strength varies over time
+   * **Interference**: Other RF sources in the 2.4 GHz band
+
+   Compare this to loopback exercises where constellation points are tight and well-defined.
+
+#. **Monitor EVM measurements:**
+
+   Scroll down to observe real-time EVM:
+
+   * **RMS EVM**: Likely **5-15%** (higher than loopback due to wireless channel)
+   * **Max EVM**: May spike to **20-30%** during deep fades
+   * **Min EVM**: Best moments might still achieve **2-5%**
+
+   .. TODO: Add wireless EVM measurements screenshot
+   .. .. figure:: images/exercises/wireless_file_transfer/wireless_evm_measurements.png
+   ..    :alt: EVM Measurements for Wireless QPSK
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    EVM measurements showing degradation due to wireless channel effects
+
+   **What wireless EVM tells you:**
+
+   * **EVM variation**: Unlike stable loopback, wireless EVM fluctuates
+   * **Channel quality indicator**: High EVM = poor link quality
+   * **Modulation limit**: If EVM > 15%, higher-order modulations (16QAM) would fail
+
+#. **Wait for transmission to complete:**
+
+   * Presenter will announce: "Transmission complete"
+   * Let the flowgraph run for a few more seconds to capture any trailing packets
+   * Then stop the flowgraph
+
+#. Stop the receiver:
+
+   * Click the **Stop** button (red square) in the toolbar
+
+#. **Check the received file:**
+
+   Navigate to the receiver folder and open the received file:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ cd ~/Desktop/ftc_2025/8_qpsk_point_to_point_txtfile_gnuradio/receiver_pluto
+      $ cat receive.txt
+
+   **What you'll see:**
+
+   * Multiple instances of the transmitted message (presenter sends it repeatedly for reliability)
+   * Each successfully received packet appears as a new line
+   * Some messages may be missing if packets failed CRC check
+   * Possible corruption if errors bypassed CRC (rare)
+
+   .. TODO: Add received file screenshot
+   .. .. figure:: images/exercises/wireless_file_transfer/received_file_content.png
+   ..    :alt: Contents of receive.txt File
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Successfully received messages stored in receive.txt
+
+   **Example output:**
+
+   .. code-block:: text
+
+      Welcome to ADI FTC 2025 SDR Workshop!
+      Welcome to ADI FTC 2025 SDR Workshop!
+      Welcome to ADI FTC 2025 SDR Workshop!
+      Welcome to ADI FTC 2025 SDR Workshop!
+
+   The repetition is intentional - transmitter sends the same message multiple times to ensure at least some packets get through.
+
+#. **Delete and re-run (optional):**
+
+   If you want to receive fresh data:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ rm receive.txt
+
+   Then run the flowgraph again when presenter transmits.
+
+**Understanding Burst Mode Transmission:**
+
+This exercise uses **burst mode** instead of continuous transmission:
+
+* **Burst mode**:
+
+  * Data sent in packets with idle periods between bursts
+  * More spectrum-efficient (transmit only when you have data)
+  * Harder to demodulate (loops don't have time to fully lock)
+  * Realistic for packet-based protocols (Wi-Fi, LTE, etc.)
+
+* **Continuous mode**:
+
+  * Always transmitting (even if just noise/padding)
+  * Easier to demodulate (loops stay locked)
+  * Less realistic for real systems
+
+**Comparison: Wireless vs Loopback:**
+
++---------------------------+---------------------------+---------------------------+
+| **Metric**                | **Loopback**              | **Wireless (OTA)**        |
++===========================+===========================+===========================+
+| **SNR**                   | 60-80 dB (excellent)      | 10-25 dB (varies)         |
++---------------------------+---------------------------+---------------------------+
+| **RMS EVM**               | 1-3% (stable)             | 5-15% (fluctuates)        |
++---------------------------+---------------------------+---------------------------+
+| **Constellation**         | Tight, well-defined       | Noisy, spread out         |
++---------------------------+---------------------------+---------------------------+
+| **Packet loss**           | Near zero                 | 5-20% (depends on range)  |
++---------------------------+---------------------------+---------------------------+
+| **Channel effects**       | Minimal                   | Fading, multipath         |
++---------------------------+---------------------------+---------------------------+
+
+**What You Learned:**
+
+* **Wireless channel impairments**: Real-world signal degradation
+* **Burst mode challenges**: Synchronization loops have limited lock time
+* **EVM under wireless conditions**: More variable than loopback
+* **Packet-based communication**: CRC checks and file storage
+* **Link budget**: Antenna orientation and distance affect received signal quality
+
+**Advanced Exploration:**
+
+Try these experiments:
+
+#. **Move antenna**: Observe how EVM changes with antenna orientation
+#. **Add distance**: Ask presenter to move transmitter farther away - watch EVM degrade
+#. **Measure packet loss**: Count how many expected packets are missing from receive.txt
+#. **Compare platforms**: Run same receiver on Pluto vs Jupiter - compare EVM performance
+
+**Real-World Applications:**
+
+This exercise mirrors how production wireless systems work:
+
+* **4G/5G base stations**: Transmit data in bursts to multiple users
+* **Wi-Fi access points**: Packet-based transmission with ACKs
+* **Satellite communications**: Burst mode uplinks to save power
+* **IoT devices**: Wake up, transmit packet, sleep (battery efficiency)
+
+Enabling 2×2 MIMO: Using Both TX and RX Channels
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This advanced exercise demonstrates **2×2 MIMO (Multiple-Input Multiple-Output)** operation by enabling and using both TX/RX channel pairs on the AD9361 transceiver. While standard Pluto SDR (Rev B) only exposes TX1/RX1, modified Pluto SDR (Rev C or custom mods) and Jupiter/Talise platforms provide access to all four RF ports.
+
+**Why MIMO Matters:**
+
+MIMO is fundamental to modern wireless systems:
+
+* **4G LTE**: 2×2 or 4×4 MIMO for higher throughput
+* **5G NR**: Up to 8×8 MIMO in sub-6 GHz, massive MIMO in mmWave
+* **Wi-Fi 6/7**: Multi-user MIMO (MU-MIMO) for simultaneous client connections
+* **Beamforming**: Directional signal transmission for better range and interference rejection
+* **Spatial multiplexing**: Transmit independent data streams on each antenna for higher data rates
+
+**Hardware Requirements:**
+
+.. important::
+
+   This exercise requires **BOTH TX/RX channel pairs** to be physically accessible:
+
+   * **Pluto Rev C**: Factory boards with TX2/RX2 exposed via U.FL connectors
+   * **Modified Pluto**: User-modded boards with TX2/RX2 brought out
+   * **Jupiter SDR (AD-JUPITER-EBZ)**: All channels available via SMA connectors
+   * **Talise (ADRV9009-ZU11EG)**: Dual AD9009 transceivers = 4 TX + 4 RX channels
+
+   **Standard Pluto Rev B does NOT support this exercise** - TX2/RX2 are not connected to external ports.
+
+**What This Exercise Demonstrates:**
+
+* **Channel configuration**: Enabling multiple RX and TX channels programmatically
+* **Independent loopback paths**: TX1→RX1 and TX2→RX2 operating simultaneously
+* **Buffer management**: Handling interleaved I/Q data from multiple channels
+* **Phase coherence**: Both channels share the same LO, enabling phase-coherent reception
+* **MIMO foundations**: Building block for beamforming and spatial multiplexing
+
+**AD9361 2×2 MIMO Architecture:**
+
+The AD9361 is a **2×2 transceiver** with:
+
+* **2 independent TX channels**: TX1 and TX2
+* **2 independent RX channels**: RX1 and RX2
+* **Shared LO**: Both channels use the same local oscillator (phase-coherent)
+* **Independent gain/phase control**: Each channel can be tuned separately
+* **Baseband I/Q**: Each channel outputs complex I/Q samples
+
+.. TODO: Add AD9361 block diagram showing 2×2 architecture
+.. .. figure:: images/exercises/mimo_2x2/ad9361_block_diagram.png
+..    :alt: AD9361 2×2 MIMO Architecture
+..    :align: center
+..    :width: 40em
+..
+..    AD9361 transceiver with dual TX/RX paths
+
+**Why This is Advanced:**
+
+* **Hardware modification**: Requires modified Pluto or advanced platform
+* **PyADI-IIO multi-channel API**: Different syntax than single-channel usage
+* **Buffer interleaving**: RX buffer contains alternating samples from RX1 and RX2
+* **Home experimentation**: Not available during workshop, meant for post-workshop learning
+
+Using PyADI-IIO with Modified Pluto
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. note::
+
+   This exercise is **NOT available with standard workshop Pluto SDRs**. It's included for users who:
+
+   * Modify their Pluto at home to expose TX2/RX2
+   * Have Pluto Rev C boards
+   * Use Jupiter or Talise platforms
+   * Want to learn MIMO concepts for future projects
+
+**Prerequisites:**
+
+* Modified Pluto with TX2/RX2 accessible OR Jupiter/Talise platform
+* Loopback cables: TX1→RX1 AND TX2→RX2
+* ftc_2025 exercises folder (or download the workshop materials at home)
+
+**Physical Setup:**
+
+#. Connect loopback cables:
+
+   * Cable 1: TX1 (out) → RX1 (in)
+   * Cable 2: TX2 (out) → RX2 (in)
+
+   .. TODO: Add 2×2 loopback setup image
+   .. .. figure:: images/exercises/mimo_2x2/pluto_2x2_loopback_setup.png
+   ..    :alt: Pluto 2×2 Loopback Setup
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Modified Pluto SDR with both TX/RX pairs connected via loopback
+
+#. Verify both channels are accessible:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ iio_attr -u ip:pluto.local -c -i ad9361-phy
+
+   You should see **four voltage channels**:
+
+   * ``voltage0`` = RX1
+   * ``voltage1`` = RX2 (only on modified/Rev C Pluto)
+   * ``voltage2`` = TX1
+   * ``voltage3`` = TX2 (only on modified/Rev C Pluto)
+
+**Steps:**
+
+#. Navigate to the 2×2 MIMO example folder:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ cd ~/Desktop/ftc_2025/9_sinewave_loopback_python_2rx_2tx
+
+#. Open the Python script in Thonny IDE:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ thonny python_loopback_sine_pluto_2rx_2tx.py
+
+   Or right-click ``python_loopback_sine_pluto_2rx_2tx.py`` → **Open with** → **Thonny**
+
+#. **Examine the code** before running:
+
+   Key differences from single-channel code:
+
+   .. code-block:: python
+      :linenos:
+      :lineno-start: 1
+      :class: code-spaced
+
+      import adi
+      import numpy as np
+      import matplotlib.pyplot as plt
+
+      # Create SDR object
+      sdr = adi.Pluto("ip:pluto.local")
+
+      # Configure for 2×2 MIMO operation
+      sdr.rx_enabled_channels = [0, 1]  # Enable RX1 and RX2
+      sdr.tx_enabled_channels = [0, 1]  # Enable TX1 and TX2
+
+      # Set sample rate (shared by all channels)
+      sdr.sample_rate = int(3e6)  # 3 MSPS
+
+      # Set RX buffer size (samples per channel)
+      sdr.rx_buffer_size = 2**14  # 16384 samples per channel
+
+      # Set LO frequency (shared by all channels - phase coherent)
+      sdr.rx_lo = int(2.4e9)  # 2.4 GHz
+      sdr.tx_lo = int(2.4e9)  # 2.4 GHz
+
+      # Set individual channel gains
+      sdr.rx_hardwaregain_chan0 = 0  # RX1 gain = 0 dB
+      sdr.rx_hardwaregain_chan1 = 0  # RX2 gain = 0 dB
+      sdr.tx_hardwaregain_chan0 = -10  # TX1 attenuation = -10 dB
+      sdr.tx_hardwaregain_chan1 = -10  # TX2 attenuation = -10 dB
+
+      # Generate different complex sinusoids for each TX channel
+      N = 2**14
+      fc0 = int(0.02e6)  # TX1: 20 kHz tone
+      fc1 = int(0.1e6)   # TX2: 100 kHz tone
+      ts = 1 / sdr.sample_rate
+      t = np.arange(0, N * ts, ts)
+
+      # TX1 signal: 20 kHz complex sinusoid
+      tx1_signal = np.exp(1j * 2 * np.pi * fc0 * t) * 0.9
+
+      # TX2 signal: 100 kHz complex sinusoid
+      tx2_signal = np.exp(1j * 2 * np.pi * fc1 * t) * 0.9
+
+      # Interleave TX samples: [tx1[0], tx2[0], tx1[1], tx2[1], ...]
+      tx_interleaved = np.empty(N * 2, dtype=np.complex64)
+      tx_interleaved[0::2] = tx1_signal  # Even indices = TX1
+      tx_interleaved[1::2] = tx2_signal  # Odd indices = TX2
+
+      # Transmit interleaved buffer
+      sdr.tx(tx_interleaved)
+
+      # Receive samples (automatically interleaved)
+      rx_interleaved = sdr.rx()
+
+      # De-interleave RX samples
+      rx1_samples = rx_interleaved[0::2]  # Even indices = RX1
+      rx2_samples = rx_interleaved[1::2]  # Odd indices = RX2
+
+      # Plot results
+      plt.figure(figsize=(12, 8))
+
+      # RX1 spectrum (should show 20 kHz tone from TX1→RX1 loopback)
+      plt.subplot(2, 2, 1)
+      plt.psd(rx1_samples, NFFT=1024, Fs=sdr.sample_rate / 1e6)
+      plt.title("RX1 Spectrum (TX1→RX1 Loopback)")
+      plt.xlabel("Frequency (MHz)")
+
+      # RX2 spectrum (should show 100 kHz tone from TX2→RX2 loopback)
+      plt.subplot(2, 2, 2)
+      plt.psd(rx2_samples, NFFT=1024, Fs=sdr.sample_rate / 1e6)
+      plt.title("RX2 Spectrum (TX2→RX2 Loopback)")
+      plt.xlabel("Frequency (MHz)")
+
+      # RX1 time domain
+      plt.subplot(2, 2, 3)
+      plt.plot(t[:100], rx1_samples.real[:100], label="I (real)")
+      plt.plot(t[:100], rx1_samples.imag[:100], label="Q (imag)")
+      plt.title("RX1 Time Domain")
+      plt.xlabel("Time (s)")
+      plt.legend()
+
+      # RX2 time domain
+      plt.subplot(2, 2, 4)
+      plt.plot(t[:100], rx2_samples.real[:100], label="I (real)")
+      plt.plot(t[:100], rx2_samples.imag[:100], label="Q (imag)")
+      plt.title("RX2 Time Domain")
+      plt.xlabel("Time (s)")
+      plt.legend()
+
+      plt.tight_layout()
+      plt.show()
+
+   **Key Code Patterns:**
+
+   * **Enable channels**: ``sdr.rx_enabled_channels = [0, 1]``
+   * **Individual gain control**: ``sdr.rx_hardwaregain_chan0`` and ``sdr.rx_hardwaregain_chan1``
+   * **Sample interleaving**: TX/RX buffers alternate between channels
+   * **De-interleaving**: ``rx1 = rx_interleaved[0::2]`` (even), ``rx2 = rx_interleaved[1::2]`` (odd)
+
+#. Run the script:
+
+   * Click the **Run** button (green arrow) in Thonny
+
+**What You'll Observe:**
+
+The script generates four plots:
+
+#. **RX1 Spectrum**: Shows a peak at **20 kHz** (from TX1→RX1 loopback)
+
+   * Clean tone at 20 kHz offset from DC
+   * Noise floor around -80 to -90 dBFS
+   * NO 100 kHz tone (channel isolation prevents TX2 from leaking into RX1)
+
+#. **RX2 Spectrum**: Shows a peak at **100 kHz** (from TX2→RX2 loopback)
+
+   * Clean tone at 100 kHz offset from DC
+   * NO 20 kHz tone (channel isolation prevents TX1 from leaking into RX2)
+
+#. **RX1 Time Domain**: 20 kHz sinusoid
+
+   * I and Q components 90° out of phase
+   * Slower oscillation (lower frequency)
+
+#. **RX2 Time Domain**: 100 kHz sinusoid
+
+   * I and Q components 90° out of phase
+   * Faster oscillation (higher frequency)
+
+.. TODO: Add 2×2 MIMO results screenshot
+.. .. figure:: images/exercises/mimo_2x2/2x2_mimo_results.png
+..    :alt: 2×2 MIMO Loopback Results
+..    :align: center
+..    :width: 40em
+..
+..    Four-panel plot showing independent RX1 and RX2 reception
+
+**Key Observations:**
+
+* **Independent paths**: Each TX→RX pair operates independently
+* **Channel isolation**: TX1 doesn't leak into RX2 and vice versa (typically >40 dB isolation)
+* **Phase coherence**: Both channels share the same LO, enabling phase-coherent MIMO algorithms
+* **Buffer management**: Correct interleaving/de-interleaving is critical for multi-channel operation
+
+**Understanding Buffer Interleaving:**
+
+For 2×2 MIMO, PyADI-IIO uses **sample-level interleaving**:
+
+* **TX buffer format**: ``[TX1[0], TX2[0], TX1[1], TX2[1], TX1[2], TX2[2], ...]``
+* **RX buffer format**: ``[RX1[0], RX2[0], RX1[1], RX2[1], RX1[2], RX2[2], ...]``
+
+To separate channels:
+
+* **Channel 0**: Even indices ``buffer[0::2]``
+* **Channel 1**: Odd indices ``buffer[1::2]``
+
+**MIMO Applications You Can Now Build:**
+
+With 2×2 MIMO capability, you can implement:
+
+#. **Beamforming**: Adjust phase/amplitude of TX1 and TX2 to steer the transmitted beam
+
+   .. code-block:: python
+
+      # Steer beam 30° to the right
+      phase_offset = np.pi / 6  # 30 degrees
+      tx1 = signal * np.exp(1j * 0)
+      tx2 = signal * np.exp(1j * phase_offset)
+
+#. **Diversity reception**: Combine RX1 and RX2 to improve SNR
+
+   .. code-block:: python
+
+      # Maximum ratio combining
+      combined = rx1 + rx2
+
+#. **Spatial multiplexing**: Transmit independent data streams on TX1 and TX2
+
+   .. code-block:: python
+
+      tx1 = data_stream_A  # Stream A on antenna 1
+      tx2 = data_stream_B  # Stream B on antenna 2
+      # Double the data rate!
+
+#. **Direction finding**: Use phase difference between RX1 and RX2 to estimate angle of arrival
+
+**What You Learned:**
+
+* **Multi-channel SDR configuration**: Enabling and controlling multiple TX/RX pairs
+* **Sample interleaving**: How multi-channel data is organized in buffers
+* **Channel isolation**: Independent operation of parallel RF paths
+* **MIMO foundations**: Building blocks for advanced antenna techniques
+* **Platform differences**: Standard vs modified hardware capabilities
+
+**Advanced Challenge:**
+
+Modify the script to implement **simple beamforming**:
+
+#. Transmit the same signal on both TX1 and TX2
+#. Add a phase offset to TX2: ``tx2_signal = tx1_signal * np.exp(1j * phase_offset)``
+#. Try different phase offsets: 0°, 45°, 90°, 180°
+#. Use a receiver at different positions to measure how the beam pattern changes
+
+This demonstrates how MIMO systems steer RF energy directionally without mechanically moving antennas!
+
+Deep Dive: Symbol Synchronization for QPSK
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This advanced exercise isolates **Symbol Synchronization** (also called **symbol timing recovery**), a critical DSP block that aligns the receiver's sampling clock with the transmitter's symbol boundaries. Understanding symbol sync is essential for implementing any digital modulation scheme.
+
+**The Synchronization Problem:**
+
+When receiving a digital signal, the receiver faces several challenges:
+
+#. **Frequency offset**: TX and RX local oscillators don't match exactly (handled by FLL)
+#. **Phase offset**: Carrier phase is unknown (handled by Costas Loop)
+#. **Timing offset**: Don't know WHEN symbols start/end (handled by Symbol Sync)
+#. **Sample rate mismatch**: TX and RX clocks drift over time
+
+This exercise focuses on **timing synchronization** - the problem of determining the optimal sampling instant for each symbol.
+
+**Why Symbol Sync Matters:**
+
+* **Without symbol sync**: Sampling at random times within symbol periods → high error rate
+* **With symbol sync**: Sampling at optimal decision points → maximum eye opening, minimal ISI
+
+.. TODO: Add eye diagram showing symbol sync effect
+.. .. figure:: images/exercises/symbol_sync/eye_diagram_before_after.png
+..    :alt: Eye Diagram Before and After Symbol Sync
+..    :align: center
+..    :width: 40em
+..
+..    Eye diagram showing improvement with symbol synchronization
+
+**What Symbol Sync Does:**
+
+The Symbol Sync block:
+
+#. **Estimates symbol timing**: Finds when symbols start and end
+#. **Resamples the signal**: Outputs exactly 1 sample per symbol (SPS = 1)
+#. **Tracks timing drift**: Adapts to clock frequency differences between TX and RX
+#. **Applies matched filtering**: Often includes RRC filter for optimal SNR
+
+**Key Parameters:**
+
+* **Samples per symbol (SPS)**: Input has multiple samples per symbol (e.g., 4 SPS), output has 1 SPS
+* **Loop bandwidth**: Controls how quickly timing adjusts (trade-off: fast acquisition vs noise immunity)
+* **Damping factor**: Controls oscillation behavior during lock acquisition
+* **Timing error detector**: Algorithm that estimates sampling phase error (Mueller-Müller, Gardner, etc.)
+
+**This Exercise's Teaching Approach:**
+
+In beginner QPSK exercises, symbol sync was hidden inside a complete receiver chain. This advanced exercise:
+
+* **Isolates symbol sync**: Shows its effect in isolation
+* **Visual comparison**: Constellation with vs without proper symbol timing
+* **Interactive tuning**: Adjust loop parameters to see their impact
+* **Foundation for custom receivers**: Learn to implement symbol sync in your own DSP chains
+
+Using GNU Radio with Jupiter
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**Prerequisites:**
+
+* Pluto or Jupiter SDR with TX1 and RX1 connected via loopback cable
+* ftc_2025 exercises folder on desktop
+* Understanding of matched filtering and pulse shaping (covered in beginner exercises)
+
+**Setup:**
+
+#. Connect loopback cable between TX1 and RX1
+
+   .. TODO: Add loopback setup image
+   .. .. figure:: images/exercises/symbol_sync/loopback_setup.png
+   ..    :alt: Loopback Setup for Symbol Sync Exercise
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    TX1-RX1 loopback configuration
+
+#. Open GNU Radio Companion:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ gnuradio-companion
+
+#. Load the Symbol Sync flowgraph:
+
+   * Click **File** → **Open**
+   * Navigate to: ``/home/analog/Desktop/ftc_2025/13_symbol_sync_loopback_gnuradio``
+   * Open: ``symbol_sync_loopback_pluto.grc``
+
+**Flowgraph Architecture:**
+
+The flowgraph contains:
+
+* **Transmitter**: Random bits → QPSK modulator → RRC pulse shaping → Pluto TX
+* **Receiver path 1** (without Symbol Sync): Pluto RX → Constellation plot
+* **Receiver path 2** (with Symbol Sync): Pluto RX → FLL → Symbol Sync → Constellation plot
+
+This side-by-side comparison shows the effect of proper symbol timing.
+
+**Steps:**
+
+#. Run the flowgraph:
+
+   * Click the **Run** button (green arrow)
+   * Wait for constellation plots to appear
+
+   .. TODO: Add running flowgraph screenshot
+   .. .. figure:: images/exercises/symbol_sync/flowgraph_running.png
+   ..    :alt: Symbol Sync Flowgraph Running
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Symbol sync demonstration flowgraph in GNU Radio
+
+#. **Observe the constellation WITHOUT Symbol Sync:**
+
+   The first constellation plot shows the received signal with:
+
+   * **FLL applied**: Frequency offset corrected (spectrum centered at DC)
+   * **NO symbol sync**: Still sampling at 4 samples per symbol (oversampled)
+   * **NO matched filter**: RRC filter not yet applied
+
+   .. TODO: Add constellation without symbol sync
+   .. .. figure:: images/exercises/symbol_sync/constellation_no_symbol_sync.png
+   ..    :alt: Constellation Without Symbol Sync
+   ..    :align: center
+   ..    :width: 35em
+   ..
+   ..    Oversampled constellation without symbol synchronization
+
+   **What you'll see:**
+
+   * **4 samples per symbol**: Each QPSK symbol appears as a cluster of 4 points
+   * **Trajectory lines**: Can see the transitions between symbols (not just decision points)
+   * **Blurred constellation**: Hard to identify the 4 QPSK decision regions
+   * **Variable amplitude**: Symbol magnitudes are inconsistent
+
+   **Why this happens:**
+
+   * Sampling at 4 SPS means you capture intermediate points during symbol transitions
+   * Haven't identified the optimal sampling instant within each symbol
+   * Matched filter (RRC) hasn't been applied yet
+
+#. **Observe the constellation WITH Symbol Sync:**
+
+   The second constellation plot shows the same signal after Symbol Sync:
+
+   * **1 sample per symbol**: Downsampled to symbol rate
+   * **Matched filter applied**: RRC filter provides optimal SNR
+   * **Optimal sampling instants**: Only the decision points, not transitions
+
+   .. TODO: Add constellation with symbol sync
+   .. .. figure:: images/exercises/symbol_sync/constellation_with_symbol_sync.png
+   ..    :alt: Constellation With Symbol Sync
+   ..    :align: center
+   ..    :width: 35em
+   ..
+   ..    Clean constellation after symbol synchronization
+
+   **What you'll see:**
+
+   * **Tight symbol clusters**: All symbols have the same magnitude
+   * **Four clear regions**: QPSK constellation is clearly visible
+   * **No transition trails**: Only sampling at optimal decision instants
+   * **Remaining rotation**: Phase/frequency offset still present (needs Costas Loop)
+
+   **What changed:**
+
+   * Symbol Sync found the optimal sampling phase within each symbol period
+   * Downsampled from 4 SPS to 1 SPS
+   * Applied matched filter (RRC) for maximum SNR
+
+#. **Compare the two constellations side-by-side:**
+
+   **Key differences:**
+
+   +---------------------------+----------------------------------+----------------------------------+
+   | **Aspect**                | **Without Symbol Sync**          | **With Symbol Sync**             |
+   +===========================+==================================+==================================+
+   | **Samples per symbol**    | 4 SPS (oversampled)              | 1 SPS (symbol rate)              |
+   +---------------------------+----------------------------------+----------------------------------+
+   | **Amplitude uniformity**  | Variable (transition samples)    | Constant (decision points only)  |
+   +---------------------------+----------------------------------+----------------------------------+
+   | **Constellation clarity** | Blurred, trajectory visible      | Clean, distinct symbol clusters  |
+   +---------------------------+----------------------------------+----------------------------------+
+   | **Matched filter**        | Not applied                      | Applied (optimal SNR)            |
+   +---------------------------+----------------------------------+----------------------------------+
+   | **ISI (Inter-Symbol       | High (wrong sampling instants)   | Minimal (optimal sampling)       |
+   | Interference)**           |                                  |                                  |
+   +---------------------------+----------------------------------+----------------------------------+
+
+#. **Observe remaining impairments:**
+
+   Even with Symbol Sync, you'll notice:
+
+   * **Constellation rotation**: The QPSK points may not align with ±1±j
+   * **Small residual frequency offset**: FLL doesn't correct perfectly
+
+   These impairments will be addressed by the **Costas Loop** in the next exercise.
+
+#. Stop the flowgraph:
+
+   * Click the **Stop** button
+   * Or middle-click on a plot → **Stop**
+
+**Understanding the Symbol Sync Block:**
+
+The GNU Radio **Symbol Sync** block (or **Polyphase Clock Sync**) implements:
+
+#. **Timing error detector**: Estimates whether sampling is early or late
+
+   * **Mueller-Müller algorithm**: Common for PSK modulations
+   * **Gardner algorithm**: Non-data-aided, works without knowing symbol values
+   * **Early-Late Gate**: Simple but effective for pulse-shaped signals
+
+#. **Loop filter**: Smooths timing error estimates
+
+   * Low-pass filters noisy error signals
+   * Determines loop bandwidth and damping
+
+#. **Interpolator**: Resamples signal at optimal timing instants
+
+   * **Polyphase filterbank**: Efficiently resamples with arbitrary fractional delay
+   * Includes matched filter (RRC) for optimal SNR
+
+#. **Timing drift tracking**: Continuously adapts to TX/RX clock frequency differences
+
+**Timing Error Detector Intuition:**
+
+The Mueller-Müller algorithm uses this insight:
+
+* **At optimal sampling instant**: Symbol transitions are abrupt
+* **Early sampling**: Still in previous symbol (transition not complete)
+* **Late sampling**: Already in next symbol (transition overshot)
+
+By analyzing consecutive samples and their differences, the algorithm estimates timing error and adjusts the sampling phase.
+
+**Loop Parameters:**
+
+* **Loop bandwidth**: Typically 0.01 to 0.1 rad/sample
+
+  * **Higher BW**: Faster acquisition, more sensitive to noise
+  * **Lower BW**: Slower acquisition, more robust to noise
+
+* **Damping factor**: Typically 0.707 (critically damped)
+
+  * **Higher damping**: Less overshoot, slower settling
+  * **Lower damping**: Faster settling, more overshoot
+
+**What You Learned:**
+
+* **Symbol timing problem**: Why sampling at correct instants is critical
+* **Symbol Sync effect**: Downsampling from oversampled to symbol rate
+* **Matched filtering**: Integrated into symbol sync for optimal SNR
+* **Timing drift tracking**: Continuous adaptation to clock mismatches
+* **Visual diagnostics**: How constellation changes reveal synchronization quality
+
+**Next Step:**
+
+The **Costas Loop** exercise (next) will address the remaining phase and frequency offsets, completing the QPSK receiver synchronization chain:
+
+#. **FLL**: Coarse frequency offset correction (covered in beginner exercises)
+#. **Symbol Sync**: Timing synchronization + matched filtering (this exercise)
+#. **Costas Loop**: Fine frequency and phase offset correction (next exercise)
+
+Together, these three blocks form the complete synchronization subsystem for QPSK demodulation.
+
+**Advanced Exploration:**
+
+Try modifying the flowgraph:
+
+#. Remove FLL before Symbol Sync - observe how frequency offset affects timing recovery
+#. Change Symbol Sync loop bandwidth (0.01 vs 0.1) - observe acquisition speed vs noise sensitivity
+#. Add intentional sampling frequency offset (TX sample rate ≠ RX sample rate) - watch Symbol Sync track the drift
+
+Deep Dive: Carrier Synchronization with Costas Loop
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This advanced exercise isolates the **Costas Loop**, a phase-locked loop (PLL) that performs **carrier synchronization** by removing residual frequency and phase offsets. The Costas Loop is the final synchronization stage in a complete QPSK receiver, enabling accurate symbol demodulation.
+
+**The Carrier Synchronization Problem:**
+
+Even after FLL (coarse frequency correction) and Symbol Sync (timing recovery), the received constellation still has:
+
+* **Residual frequency offset**: FLL corrects to within ~100 Hz, but not perfectly
+* **Phase offset**: Unknown carrier phase (could be rotated 0°, 90°, 180°, or 270°)
+* **Phase drift**: TX and RX oscillators drift slowly over time
+
+Without carrier synchronization:
+
+* Constellation rotates continuously (frequency offset)
+* Constellation has fixed but unknown rotation (phase offset)
+* Cannot make correct symbol decisions
+
+**What is a Costas Loop?**
+
+The Costas Loop is a **carrier recovery circuit** that:
+
+#. **Estimates phase error**: Computes how much the constellation is rotated
+#. **Generates correction**: Produces a phase offset to counteract the rotation
+#. **Tracks phase drift**: Continuously adapts to changing carrier phase
+
+It's specifically designed for suppressed-carrier modulations (BPSK, QPSK, 8PSK) where there's no pilot tone to lock onto.
+
+**Why "Costas" Loop?**
+
+Named after John P. Costas (1956), who invented this technique for **carrier recovery without a pilot tone**. Before Costas, receivers needed the transmitter to send a separate carrier reference signal. The Costas Loop extracts carrier phase information from the modulated signal itself.
+
+**Costas Loop Architecture:**
+
+.. TODO: Add Costas Loop block diagram
+.. .. figure:: images/exercises/costas_loop/costas_loop_block_diagram.png
+..    :alt: Costas Loop Block Diagram
+..    :align: center
+..    :width: 40em
+..
+..    Costas Loop architecture for QPSK carrier recovery
+
+**Key Components:**
+
+#. **Phase error detector**: Computes ``error = I × Q`` (for QPSK)
+
+   * When constellation is correctly aligned: ``I × Q ≈ 0``
+   * When rotated: ``I × Q ≠ 0``, sign indicates direction
+
+#. **Loop filter**: Low-pass filters the error signal
+
+   * Smooths noisy error estimates
+   * Determines loop bandwidth (trade-off: acquisition speed vs jitter)
+
+#. **NCO (Numerically Controlled Oscillator)**: Generates phase correction
+
+   * Integrates filtered error to produce phase offset
+   * Rotates the constellation to cancel carrier offset
+
+#. **Complex multiplier**: Applies phase correction to input signal
+
+**Phase Error Detector for QPSK:**
+
+The classic Costas error function for QPSK is:
+
+.. math::
+
+   \text{error} = \text{sign}(I) \times Q - \text{sign}(Q) \times I
+
+This is a **decision-directed** error detector:
+
+* Uses hard decisions (sign) on in-phase component
+* Measures error on quadrature component
+* Minimized when constellation aligns with decision boundaries
+
+**This Exercise's Teaching Approach:**
+
+Previous exercises used Costas Loop as part of a complete receiver. This advanced exercise:
+
+* **Isolates Costas Loop effect**: Shows constellation before vs after phase correction
+* **Demonstrates phase tracking**: Observe how loop locks and tracks drift
+* **Visual understanding**: See phase rotation disappear in real-time
+* **Parameter exploration**: Tune loop bandwidth to understand trade-offs
+
+Using GNU Radio with Jupiter
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**Prerequisites:**
+
+* Pluto or Jupiter SDR with TX1 and RX1 connected via loopback cable
+* ftc_2025 exercises folder on desktop
+* Understanding of FLL and Symbol Sync (covered in previous advanced exercises)
+
+**Setup:**
+
+#. Connect loopback cable between TX1 and RX1
+
+   .. TODO: Add loopback setup image
+   .. .. figure:: images/exercises/costas_loop/loopback_setup.png
+   ..    :alt: Loopback Setup for Costas Loop Exercise
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    TX1-RX1 loopback configuration
+
+#. Open GNU Radio Companion:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ gnuradio-companion
+
+#. Load the Costas Loop flowgraph:
+
+   * Click **File** → **Open**
+   * Navigate to: ``/home/analog/Desktop/ftc_2025/14_costas_loop_loopback_gnuradio``
+   * Open: ``costas_loop_loopback_pluto.grc``
+
+**Flowgraph Architecture:**
+
+The flowgraph contains:
+
+* **Transmitter**: Random bits → QPSK modulator → RRC pulse shaping → Pluto TX
+* **Receiver (before Costas)**: Pluto RX → FLL → Symbol Sync → Constellation plot
+* **Receiver (after Costas)**: ... → Costas Loop → Constellation plot
+
+This side-by-side comparison shows the Costas Loop's effect on carrier synchronization.
+
+**Steps:**
+
+#. Run the flowgraph:
+
+   * Click the **Run** button (green arrow)
+   * Wait for constellation plots to appear
+
+   .. TODO: Add running flowgraph screenshot
+   .. .. figure:: images/exercises/costas_loop/flowgraph_running.png
+   ..    :alt: Costas Loop Flowgraph Running
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Costas Loop demonstration flowgraph in GNU Radio
+
+#. **Observe the constellation BEFORE Costas Loop:**
+
+   The first constellation plot shows the received signal after FLL and Symbol Sync but BEFORE Costas Loop:
+
+   * **Frequency mostly corrected**: Spectrum centered near DC (FLL worked)
+   * **Timing synchronized**: 1 sample per symbol, clean symbol clusters (Symbol Sync worked)
+   * **Residual rotation**: Constellation slowly rotates or has fixed offset
+   * **Phase ambiguity**: Might be rotated by 0°, 90°, 180°, or 270°
+
+   .. TODO: Add constellation before Costas Loop
+   .. .. figure:: images/exercises/costas_loop/constellation_before_costas.png
+   ..    :alt: Constellation Before Costas Loop
+   ..    :align: center
+   ..    :width: 35em
+   ..
+   ..    QPSK constellation with residual phase/frequency offset
+
+   **What you'll see:**
+
+   * **Slow rotation**: Constellation spins slowly (residual frequency offset ~10-100 Hz)
+   * **OR fixed rotation**: Constellation locked at wrong angle (phase offset only)
+   * **Clear symbol clusters**: Symbol Sync already gave us good sampling instants
+   * **Wrong decision regions**: Symbols don't align with ±1±j
+
+   **Why this happens:**
+
+   * FLL corrects coarse frequency offset but leaves small residual
+   * No mechanism yet to track fine frequency drift or phase offset
+   * Symbol decisions would have high error rate (symbols near decision boundaries)
+
+#. **Observe the constellation AFTER Costas Loop:**
+
+   The second constellation plot shows the same signal after Costas Loop:
+
+   * **No rotation**: Constellation is stationary
+   * **Aligned with decision regions**: Symbols at ±1±j (or 90° multiples)
+   * **Stable phase**: Tracking and correcting any remaining drift
+
+   .. TODO: Add constellation after Costas Loop
+   .. .. figure:: images/exercises/costas_loop/constellation_after_costas.png
+   ..    :alt: Constellation After Costas Loop
+   ..    :align: center
+   ..    :width: 35em
+   ..
+   ..    Perfectly aligned QPSK constellation after Costas Loop
+
+   **What you'll see:**
+
+   * **Stationary constellation**: No rotation, even over long observations
+   * **Aligned symbols**: Points cluster tightly around ±1±j (ideal QPSK positions)
+   * **Minimal phase jitter**: Small random variations due to noise, but well-controlled
+   * **Ready for demodulation**: Symbol decisions can now be made accurately
+
+   **What the Costas Loop did:**
+
+   * Detected the phase error using the ``I × Q`` error function
+   * Generated a phase correction signal via the loop filter and NCO
+   * Applied correction by rotating the input signal
+   * Continuously tracked and corrected residual frequency drift
+
+#. **Compare the two constellations side-by-side:**
+
+   **Key differences:**
+
+   +---------------------------+----------------------------------+----------------------------------+
+   | **Aspect**                | **Before Costas Loop**           | **After Costas Loop**            |
+   +===========================+==================================+==================================+
+   | **Rotation**              | Slowly rotating or fixed offset  | Stationary (locked)              |
+   +---------------------------+----------------------------------+----------------------------------+
+   | **Phase alignment**       | Random (0°, 90°, 180°, 270°)     | Aligned with decision regions    |
+   +---------------------------+----------------------------------+----------------------------------+
+   | **Frequency offset**      | Small residual (±100 Hz)         | Fully corrected (<1 Hz)          |
+   +---------------------------+----------------------------------+----------------------------------+
+   | **Symbol decisions**      | High error rate                  | Low error rate (near optimal)    |
+   +---------------------------+----------------------------------+----------------------------------+
+   | **Demodulation ready**    | No                               | Yes                              |
+   +---------------------------+----------------------------------+----------------------------------+
+
+#. **Observe phase ambiguity resolution:**
+
+   **Important**: The Costas Loop locks to one of **four possible phase states** (0°, 90°, 180°, 270°) because QPSK has 4-fold rotational symmetry.
+
+   * Run the flowgraph multiple times
+   * Notice the constellation may lock to different rotations
+   * All four rotations are valid Costas Loop lock points
+
+   **Why this happens:**
+
+   * QPSK modulated signal has 90° rotational symmetry
+   * Costas Loop error function has the same symmetry
+   * Cannot distinguish between the four rotations without additional information
+
+   **How production systems resolve this:**
+
+   * **Differential encoding**: Encode information in phase transitions, not absolute phase
+   * **Pilot symbols**: Send known symbols for absolute phase reference
+   * **Framing**: Use frame headers with known patterns to detect rotation
+
+   In this flowgraph, differential encoding is used, so the 90° phase ambiguity doesn't affect data recovery.
+
+#. **Experiment with loop bandwidth:**
+
+   Locate the Costas Loop block parameters:
+
+   * **Loop bandwidth**: Default ~0.01 to 0.05 rad/sample
+
+   Try different values:
+
+   * **Higher bandwidth (0.1)**: Faster lock, more phase jitter, less stable
+   * **Lower bandwidth (0.001)**: Slower lock, less jitter, more stable
+
+   Observe how acquisition time and noise sensitivity change.
+
+#. Stop the flowgraph:
+
+   * Click the **Stop** button
+   * Or middle-click on a plot → **Stop**
+
+**Understanding Costas Loop Parameters:**
+
+The GNU Radio **Costas Loop** block has these key parameters:
+
+* **Loop bandwidth**: Controls how aggressively the loop tracks phase changes
+
+  * **High BW (>0.05)**: Fast acquisition, good for high dynamics, but more sensitive to noise
+  * **Low BW (<0.01)**: Slow acquisition, rejects noise well, but can't track fast phase changes
+
+* **Order**: QPSK uses order=4 (4-PSK)
+
+  * Order = number of constellation points with equal magnitude
+  * BPSK = 2, QPSK = 4, 8PSK = 8
+
+* **Maximum frequency deviation**: How much frequency offset the loop can track
+
+**Costas Loop vs PLL:**
+
+* **Traditional PLL**: Needs a pilot tone (unmodulated carrier)
+* **Costas Loop**: Recovers carrier from modulated signal (no pilot needed)
+
+The Costas Loop is essentially a **data-aided PLL** that uses symbol structure to estimate phase error.
+
+**Phase Error Detector Deep Dive:**
+
+For QPSK, the error function is:
+
+.. code-block:: python
+
+   error = I * sign(Q) - Q * sign(I)
+
+**Intuition:**
+
+* When constellation is aligned (I and Q at ±1): ``error ≈ 0``
+* When rotated clockwise: ``error > 0`` → NCO compensates counterclockwise
+* When rotated counterclockwise: ``error < 0`` → NCO compensates clockwise
+
+The ``sign()`` function makes it **decision-directed**: it assumes symbols are near decision boundaries and uses that assumption to compute error.
+
+**What You Learned:**
+
+* **Carrier synchronization problem**: Residual frequency and phase offsets after FLL
+* **Costas Loop operation**: Phase error detection, loop filtering, NCO correction
+* **Phase tracking**: Continuous adaptation to carrier drift
+* **90° phase ambiguity**: QPSK's 4-fold symmetry and how to resolve it
+* **Loop bandwidth trade-offs**: Acquisition speed vs noise immunity
+
+**Complete QPSK Receiver Synchronization Chain:**
+
+You've now studied all three synchronization stages:
+
+#. **FLL (Frequency-Locked Loop)**:
+
+   * **Function**: Coarse frequency offset correction
+   * **Accuracy**: ±100 Hz
+   * **Speed**: Fast acquisition
+
+#. **Symbol Sync**:
+
+   * **Function**: Timing recovery + matched filtering
+   * **Output**: 1 sample per symbol at optimal decision instants
+   * **Adapts to**: Sample clock differences between TX and RX
+
+#. **Costas Loop**:
+
+   * **Function**: Fine frequency and phase correction
+   * **Accuracy**: <1 Hz frequency error, <5° phase error
+   * **Resolves**: Residual offsets and drift
+
+Together, these blocks form a **complete carrier and timing synchronization subsystem** that enables reliable QPSK demodulation under realistic channel conditions.
+
+**Advanced Challenge:**
+
+Modify the flowgraph to:
+
+#. Remove the FLL block before Costas Loop
+#. Add a large frequency offset (~50 kHz)
+#. Observe whether Costas Loop alone can acquire lock (hint: it usually cannot - FLL is essential)
+#. Restore FLL and observe two-stage frequency correction: FLL (coarse) → Costas (fine)
+
+**Real-World Applications:**
+
+Costas Loop and its variants are used in:
+
+* **GPS receivers**: Tracking carrier phase for position accuracy
+* **Satellite communications**: Maintaining lock on moving spacecraft
+* **4G/5G**: Carrier synchronization before OFDM symbol timing
+* **Deep space communications**: Extremely weak signals with high frequency uncertainty
+
+Understanding the Costas Loop gives you the foundation to implement robust digital receivers for any PSK modulation scheme.

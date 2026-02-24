@@ -111,7 +111,8 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#quadrature-phase-shift-keying-qpsk">Quadrature Phase Shift Keying (QPSK)</a><ul>
-<li><a class="reference internal" href="#using-gnu-radio-with-pluto-basic-receiver">Using GNU Radio with Pluto - Basic Receiver</a></li>
+<li><a class="reference internal" href="#using-gnu-radio-with-pluto-console-messaging">Using GNU Radio with Pluto - Console Messaging</a></li>
+<li><a class="reference internal" href="#using-gnu-radio-with-jupiter-console-messaging">Using GNU Radio with Jupiter - Console Messaging</a></li>
 <li><a class="reference internal" href="#using-gnu-radio-with-jupiter-without-additional-dsp">Using GNU Radio with Jupiter - Without Additional DSP</a></li>
 <li><a class="reference internal" href="#using-gnu-radio-with-jupiter-constellation-modulator">Using GNU Radio with Jupiter - Constellation Modulator</a></li>
 <li><a class="reference internal" href="#using-gnu-radio-with-jupiter-frequency-locked-loop">Using GNU Radio with Jupiter - Frequency Locked Loop</a></li>
@@ -581,7 +582,7 @@ The Kuiper image contains all necessary software pre-installed, including Python
 Connect your SDR hardware (Pluto, Jupiter, or Talise) to the Raspberry Pi 5 before starting the exercises.</p>
 </div>
 <section id="transmit-and-receive-a-complex-sinusoid-sinewave-loopback">
-<h2>Transmit and receive a complex sinusoid (Sinewave Loopback)<a class="headerlink" href="#transmit-and-receive-a-complex-sinusoid-sinewave-loopback" title="Link to this heading"></a></h2>
+<span id="sinewave-loopback"></span><h2>Transmit and receive a complex sinusoid (Sinewave Loopback)<a class="headerlink" href="#transmit-and-receive-a-complex-sinusoid-sinewave-loopback" title="Link to this heading"></a></h2>
 <p>A complex sinusoid is a fundamental building block in software-defined radio. Unlike a real sinusoid
 (which oscillates in a single dimension), a complex sinusoid consists of two components:</p>
 <ul class="simple">
@@ -1110,49 +1111,138 @@ taskbar icon -&gt; Quit x windows</strong> or close them manually one by one.</p
 <li><p>Point-to-point microwave links</p></li>
 </ul>
 <p>The following subsections demonstrate QPSK implementations ranging from basic reception to progressively more sophisticated receivers with full synchronization chains, showcasing how each processing block improves signal quality.</p>
-<section id="using-gnu-radio-with-pluto-basic-receiver">
-<h3>Using GNU Radio with Pluto - Basic Receiver<a class="headerlink" href="#using-gnu-radio-with-pluto-basic-receiver" title="Link to this heading"></a></h3>
-<p>You will receive QPSK-modulated data packets containing hexadecimal values using GNU Radio. The flowgraph performs symbol synchronization,
-frequency locking, and constellation decoding to recover the transmitted data.</p>
+<section id="using-gnu-radio-with-pluto-console-messaging">
+<h3>Using GNU Radio with Pluto - Console Messaging<a class="headerlink" href="#using-gnu-radio-with-pluto-console-messaging" title="Link to this heading"></a></h3>
+<p>This exercise demonstrates a complete <strong>packet-based QPSK communication system</strong> where messages are transmitted in bursts and displayed on the console. Unlike continuous transmission, this system sends data packets at regular intervals, demonstrating real-world wireless communication protocols.</p>
+<p><strong>How Packet-Based Communication Works:</strong></p>
+<p>The system transmits data in <strong>bursts</strong> (packets) at specific time intervals. Each packet contains:</p>
+<ul class="simple">
+<li><p><strong>Access Key (Preamble)</strong>: A known synchronization pattern that helps the receiver detect the start of a packet</p></li>
+<li><p><strong>Payload Length</strong>: Information about how much data is in the packet</p></li>
+<li><p><strong>Message Data</strong>: The actual content being transmitted (e.g., “ANALOG DEVICES INC FTC2025”)</p></li>
+<li><p><strong>CRC32 Checksum</strong>: Error detection code to verify data integrity</p></li>
+</ul>
+<p><strong>Why Packet-Based Transmission?</strong></p>
+<p>Most real-world communication systems use packet-based transmission because:</p>
+<ul class="simple">
+<li><p><strong>Efficiency</strong>: Only transmit when you have data to send, saving power and bandwidth</p></li>
+<li><p><strong>Multiple Access</strong>: Allows multiple users to share the same frequency by taking turns</p></li>
+<li><p><strong>Error Detection</strong>: CRC32 checksum catches transmission errors</p></li>
+<li><p><strong>Synchronization</strong>: The receiver can lock onto each burst independently</p></li>
+</ul>
+<p><strong>GNU Radio Signal Flow:</strong></p>
+<p><strong>Transmitter Chain:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Message Source</strong>: Sends specific messages at regular time intervals</p></li>
+<li><p><strong>Packet Formatter</strong>: Appends access key and payload length to each message</p></li>
+<li><p><strong>CRC32</strong>: Appends checksum for error detection</p></li>
+<li><p><strong>PDU to Tagged Stream</strong>: Converts packets (Protocol Data Units) to a continuous stream of data tagged with metadata</p></li>
+<li><p><strong>QPSK Modulator</strong>: Modulates the data using Quadrature Phase Shift Keying</p></li>
+<li><p><strong>SDR Sink</strong>: Transmits the modulated signal through the antenna</p></li>
+</ol>
+<p><strong>Receiver Chain:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>SDR Source</strong>: Receives the RF signal from the antenna</p></li>
+<li><p><strong>QPSK Demodulator</strong>: Demodulates the signal to recover the symbol stream (includes frequency/phase/timing recovery)</p></li>
+<li><p><strong>Packet Extractor</strong>: Extracts the message from the received stream of bits by detecting the access key, reading payload length, extracting data bytes, and verifying CRC32</p></li>
+<li><p><strong>Message Debug</strong>: Displays the decoded message on the console</p></li>
+</ol>
+<p><strong>What You’ll Observe - Burst Mode Effects:</strong></p>
+<p>When you observe the constellation diagram for this exercise, you’ll notice that <strong>the symbols appear noisier</strong> compared to continuous QPSK transmission. This is because:</p>
+<ul class="simple">
+<li><p>Data is sent in <strong>bursts</strong> rather than continuously</p></li>
+<li><p>The receiver must re-synchronize for each packet</p></li>
+<li><p>Between bursts, there’s no signal, creating transitions in the constellation</p></li>
+<li><p>The Costas loop and timing recovery have less time to stabilize for each burst</p></li>
+</ul>
+<p>This is normal behavior for packet-based systems and demonstrates the trade-off between efficiency (burst mode) and signal quality (continuous mode).</p>
 <blockquote>
-<div><figure class="align-center" id="id22">
-<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_gnuradio/qpsk_gnuradio_flowgraph.png"><img alt="QPSK GNU Radio Flowgraph" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_gnuradio/qpsk_gnuradio_flowgraph.png" style="width: 40em;" />
-</a>
-<figcaption>
-<p><span class="caption-number">Figure 18 </span><span class="caption-text">GNU Radio flowgraph for receiving QPSK-modulated data using Pluto SDR</span><a class="headerlink" href="#id22" title="Link to this image"></a></p>
-</figcaption>
-</figure>
-</div></blockquote>
-<p>Follow these steps to receive QPSK-modulated data:</p>
+<div></div></blockquote>
+<p>Follow these steps to receive and display QPSK-modulated messages:</p>
 <ol class="arabic">
 <li><p>Make the following setup using Pluto and connect it to your PC:</p>
-<figure class="align-center" id="id23">
+<figure class="align-center" id="id22">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_pluto/qpsk_pluto_setup.png"><img alt="QPSK Pluto Setup" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_pluto/qpsk_pluto_setup.png" style="width: 40em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 19 </span><span class="caption-text">QPSK Pluto Setup</span><a class="headerlink" href="#id23" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 18 </span><span class="caption-text">QPSK Pluto Setup</span><a class="headerlink" href="#id22" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </li>
-<li><p>Open the terminal and launch GNU Radio Companion:</p>
+<li><p>Open the terminal and navigate to the Desktop directory, then launch GNU Radio Companion:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/home/analog/Desktop
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~/Desktop$
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gnuradio-companion
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div></li>
-<li><p>In GNU Radio Companion, open <strong>qpsk_point_to_point_rx_console.grc</strong> from <strong>workshop_exercises-&gt;gnuradio-&gt;qpsk_point_to_point_console</strong>.</p></li>
+<li><p>In GNU Radio Companion, open the following file from <strong>File → Open</strong>:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/home/analog/Desktop/ftc_2025/1_console_message_point_to_point_gnuradio/receiver_pluto/console_message_receiver_pluto.grc
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
 <li><p>Click the <strong>Execute</strong> button (green arrow) to run the flowgraph.</p></li>
-<li><p>Observe the received message stored in “msg_var” variable as depicted below.</p>
-<figure class="align-center" id="id24">
-<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_pluto/qpsk_point_to_point_rx_console.png"><img alt="QPSK Point to Point RX Console" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_pluto/qpsk_point_to_point_rx_console.png" style="width: 40em;" />
+<li><p>Observe the received message and signal quality in the GUI displays:</p>
+<ul class="simple">
+<li><p><strong>Received Samples (After Costas Loop)</strong>: Time-domain I/Q waveform</p></li>
+<li><p><strong>Received Spectrum</strong>: Frequency-domain representation showing the QPSK signal bandwidth</p></li>
+<li><p><strong>Received Constellation</strong>: QPSK constellation points (note the increased noise due to burst transmission)</p></li>
+<li><p><strong>msg_rx variable</strong>: Displays the decoded message (e.g., “ANALOG DEVICES INC FTC2025”)</p></li>
+</ul>
+<figure class="align-center" id="id23">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_pluto/qpsk_point_to_point_rx_console.png"><img alt="QPSK Console Message Reception" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_pluto/qpsk_point_to_point_rx_console.png" style="width: 40em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 20 </span><span class="caption-text">QPSK Point to Point RX Console</span><a class="headerlink" href="#id24" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 19 </span><span class="caption-text">Console output showing received QPSK message and signal analysis</span><a class="headerlink" href="#id23" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </li>
+<li><p>Click the <strong>Stop</strong> button (red square) when finished.</p></li>
+</ol>
+</section>
+<section id="using-gnu-radio-with-jupiter-console-messaging">
+<h3>Using GNU Radio with Jupiter - Console Messaging<a class="headerlink" href="#using-gnu-radio-with-jupiter-console-messaging" title="Link to this heading"></a></h3>
+<p>This demonstrates the same console messaging system running on the Jupiter platform, showcasing platform portability.</p>
+<p>Follow these steps:</p>
+<ol class="arabic">
+<li><p>Make the hardware setup using Jupiter SDR and connect it to your PC.</p>
+</li>
+<li><p>Open the terminal and navigate to the Desktop directory, then launch GNU Radio Companion:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/home/analog/Desktop
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~/Desktop$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gnuradio-companion
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
+<li><p>In GNU Radio Companion, open the following file from <strong>File → Open</strong>:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/home/analog/Desktop/ftc_2025/1_console_message_point_to_point_gnuradio/receiver_jupiter/console_message_receiver_jupiter.grc
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
+<li><p>Click the <strong>Execute</strong> button (green arrow) to run the flowgraph.</p></li>
+<li><p>Observe the received message displayed in the <strong>msg_rx variable</strong> on the console, along with the constellation diagram showing the QPSK signal quality.</p>
+</li>
+<li><p>Click the <strong>Stop</strong> button (red square) when finished.</p></li>
 </ol>
 </section>
 <section id="using-gnu-radio-with-jupiter-without-additional-dsp">
@@ -1468,11 +1558,11 @@ automatically adjusts to stay centered around DC.</p></li>
 <p>Follow these steps to receive QPSK-modulated video:</p>
 <ol class="arabic">
 <li><p>Make the setup using Pluto and connect it to your PC:</p>
-<figure class="align-center" id="id25">
+<figure class="align-center" id="id24">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_pluto/qpsk_pluto_setup.png"><img alt="QPSK Pluto Setup" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_pluto/qpsk_pluto_setup.png" style="width: 40em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 21 </span><span class="caption-text">QPSK Pluto Setup</span><a class="headerlink" href="#id25" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 20 </span><span class="caption-text">QPSK Pluto Setup</span><a class="headerlink" href="#id24" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </li>
@@ -1486,20 +1576,20 @@ automatically adjusts to stay centered around DC.</p></li>
 </div>
 <div class="clear-left"></div></div></div></li>
 <li><p>The application should be preconfigured. Run the program by pressing the purple arrow as depicted below.</p>
-<figure class="align-center" id="id26">
+<figure class="align-center" id="id25">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_video/sdrangel_run.png"><img alt="Run SDRangel" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_video/sdrangel_run.png" style="width: 40em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 22 </span><span class="caption-text">Run SDRangel to receive QPSK modulated video</span><a class="headerlink" href="#id26" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 21 </span><span class="caption-text">Run SDRangel to receive QPSK modulated video</span><a class="headerlink" href="#id25" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </li>
 <li><p>On DATV window, <strong>check and then uncheck Viterbi</strong> to synchronize the qpsk data <strong>while the program is running</strong> (as shown below).</p>
-<figure class="align-center" id="id27">
+<figure class="align-center" id="id26">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_video/viterbi_sync.png"><img alt="Viterbi Sync" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_video/viterbi_sync.png" style="width: 40em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 23 </span><span class="caption-text">Check and then uncheck Viterbi to synchronize the QPSK data in SDRangel</span><a class="headerlink" href="#id27" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 22 </span><span class="caption-text">Check and then uncheck Viterbi to synchronize the QPSK data in SDRangel</span><a class="headerlink" href="#id26" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </li>
@@ -1540,11 +1630,11 @@ automatically adjusts to stay centered around DC.</p></li>
 <li><p>In GNU Radio Companion, open the <strong>paint_tx.grc</strong> file from <strong>workshop_exercises-&gt;gnuradio-&gt;spectrum_paint</strong>.</p></li>
 <li><p>Click the <strong>Execute</strong> button (green arrow) to run the flowgraph.</p></li>
 <li><p>Observe the waterfall display as the spectrum painting appears, created by the Pluto SDR transmitting the frequency pattern.</p>
-<figure class="align-center" id="id28">
+<figure class="align-center" id="id27">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/spectrum_paint/paint_tx.png"><img alt="Spectrum Paint Waterfall Display" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/spectrum_paint/paint_tx.png" style="width: 40em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 24 </span><span class="caption-text">Waterfall display showing the spectrum painting created by transmitting controlled frequency patterns</span><a class="headerlink" href="#id28" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 23 </span><span class="caption-text">Waterfall display showing the spectrum painting created by transmitting controlled frequency patterns</span><a class="headerlink" href="#id27" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </li>

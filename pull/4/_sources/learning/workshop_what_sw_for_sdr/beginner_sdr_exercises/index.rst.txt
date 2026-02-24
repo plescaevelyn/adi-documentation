@@ -17,6 +17,8 @@ complex signal processing algorithms without custom hardware design.
 ..
 ..    Download the ADI Kuiper 2.0 image: `Kuiper 2.0 SD Card Image <PLACEHOLDER_URL>`_
 
+.. _sinewave-loopback:
+
 Transmit and receive a complex sinusoid (Sinewave Loopback)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -664,20 +666,67 @@ This creates twice the spectral efficiency of BPSK while maintaining good noise 
 
 The following subsections demonstrate QPSK implementations ranging from basic reception to progressively more sophisticated receivers with full synchronization chains, showcasing how each processing block improves signal quality.
 
-Using GNU Radio with Pluto - Basic Receiver
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Using GNU Radio with Pluto - Console Messaging
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You will receive QPSK-modulated data packets containing hexadecimal values using GNU Radio. The flowgraph performs symbol synchronization,
-frequency locking, and constellation decoding to recover the transmitted data.
+This exercise demonstrates a complete **packet-based QPSK communication system** where messages are transmitted in bursts and displayed on the console. Unlike continuous transmission, this system sends data packets at regular intervals, demonstrating real-world wireless communication protocols.
 
-   .. figure:: images/exercises/qpsk_gnuradio/qpsk_gnuradio_flowgraph.png
-      :alt: QPSK GNU Radio Flowgraph
-      :align: center
-      :width: 40em
+**How Packet-Based Communication Works:**
 
-      GNU Radio flowgraph for receiving QPSK-modulated data using Pluto SDR
+The system transmits data in **bursts** (packets) at specific time intervals. Each packet contains:
 
-Follow these steps to receive QPSK-modulated data:
+* **Access Key (Preamble)**: A known synchronization pattern that helps the receiver detect the start of a packet
+* **Payload Length**: Information about how much data is in the packet
+* **Message Data**: The actual content being transmitted (e.g., "ANALOG DEVICES INC FTC2025")
+* **CRC32 Checksum**: Error detection code to verify data integrity
+
+**Why Packet-Based Transmission?**
+
+Most real-world communication systems use packet-based transmission because:
+
+* **Efficiency**: Only transmit when you have data to send, saving power and bandwidth
+* **Multiple Access**: Allows multiple users to share the same frequency by taking turns
+* **Error Detection**: CRC32 checksum catches transmission errors
+* **Synchronization**: The receiver can lock onto each burst independently
+
+**GNU Radio Signal Flow:**
+
+**Transmitter Chain:**
+
+#. **Message Source**: Sends specific messages at regular time intervals
+#. **Packet Formatter**: Appends access key and payload length to each message
+#. **CRC32**: Appends checksum for error detection
+#. **PDU to Tagged Stream**: Converts packets (Protocol Data Units) to a continuous stream of data tagged with metadata
+#. **QPSK Modulator**: Modulates the data using Quadrature Phase Shift Keying
+#. **SDR Sink**: Transmits the modulated signal through the antenna
+
+**Receiver Chain:**
+
+#. **SDR Source**: Receives the RF signal from the antenna
+#. **QPSK Demodulator**: Demodulates the signal to recover the symbol stream (includes frequency/phase/timing recovery)
+#. **Packet Extractor**: Extracts the message from the received stream of bits by detecting the access key, reading payload length, extracting data bytes, and verifying CRC32
+#. **Message Debug**: Displays the decoded message on the console
+
+**What You'll Observe - Burst Mode Effects:**
+
+When you observe the constellation diagram for this exercise, you'll notice that **the symbols appear noisier** compared to continuous QPSK transmission. This is because:
+
+* Data is sent in **bursts** rather than continuously
+* The receiver must re-synchronize for each packet
+* Between bursts, there's no signal, creating transitions in the constellation
+* The Costas loop and timing recovery have less time to stabilize for each burst
+
+This is normal behavior for packet-based systems and demonstrates the trade-off between efficiency (burst mode) and signal quality (continuous mode).
+
+   .. TODO: Add complete flowgraph diagram when available
+   .. .. figure:: images/exercises/qpsk_console/qpsk_console_flowgraph.png
+   ..    :alt: QPSK Console Messaging Flowgraph
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Complete transmitter and receiver flowgraph for packet-based QPSK console messaging
+
+Follow these steps to receive and display QPSK-modulated messages:
 
 #. Make the following setup using Pluto and connect it to your PC:
 
@@ -688,27 +737,93 @@ Follow these steps to receive QPSK-modulated data:
 
       QPSK Pluto Setup
 
-#. Open the terminal and launch GNU Radio Companion:
+#. Open the terminal and navigate to the Desktop directory, then launch GNU Radio Companion:
 
    .. shell::
       :user: analog
       :group: analog
       :show-user:
 
+      $ cd /home/analog/Desktop
       $ gnuradio-companion
 
-#. In GNU Radio Companion, open **qpsk_point_to_point_rx_console.grc** from **workshop_exercises->gnuradio->qpsk_point_to_point_console**.
+#. In GNU Radio Companion, open the following file from **File → Open**:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ /home/analog/Desktop/ftc_2025/1_console_message_point_to_point_gnuradio/receiver_pluto/console_message_receiver_pluto.grc
 
 #. Click the **Execute** button (green arrow) to run the flowgraph.
 
-#. Observe the received message stored in "msg_var" variable as depicted below.
+#. Observe the received message and signal quality in the GUI displays:
+
+   * **Received Samples (After Costas Loop)**: Time-domain I/Q waveform
+   * **Received Spectrum**: Frequency-domain representation showing the QPSK signal bandwidth
+   * **Received Constellation**: QPSK constellation points (note the increased noise due to burst transmission)
+   * **msg_rx variable**: Displays the decoded message (e.g., "ANALOG DEVICES INC FTC2025")
 
    .. figure:: images/exercises/qpsk_pluto/qpsk_point_to_point_rx_console.png
-      :alt: QPSK Point to Point RX Console
+      :alt: QPSK Console Message Reception
       :align: center
       :width: 40em
 
-      QPSK Point to Point RX Console
+      Console output showing received QPSK message and signal analysis
+
+#. Click the **Stop** button (red square) when finished.
+
+
+Using GNU Radio with Jupiter - Console Messaging
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This demonstrates the same console messaging system running on the Jupiter platform, showcasing platform portability.
+
+Follow these steps:
+
+#. Make the hardware setup using Jupiter SDR and connect it to your PC.
+
+   .. TODO: Add Jupiter hardware setup image when available
+   .. .. figure:: images/exercises/qpsk_console/jupiter_setup.png
+   ..    :alt: Jupiter SDR Hardware Setup for Console Messaging
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Jupiter SDR setup for QPSK console messaging
+
+#. Open the terminal and navigate to the Desktop directory, then launch GNU Radio Companion:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ cd /home/analog/Desktop
+      $ gnuradio-companion
+
+#. In GNU Radio Companion, open the following file from **File → Open**:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ /home/analog/Desktop/ftc_2025/1_console_message_point_to_point_gnuradio/receiver_jupiter/console_message_receiver_jupiter.grc
+
+#. Click the **Execute** button (green arrow) to run the flowgraph.
+
+#. Observe the received message displayed in the **msg_rx variable** on the console, along with the constellation diagram showing the QPSK signal quality.
+
+   .. TODO: Add Jupiter console output when available
+   .. .. figure:: images/exercises/qpsk_console/jupiter_console_output.png
+   ..    :alt: Jupiter QPSK Console Output
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Jupiter console output showing received message and signal analysis
+
+#. Click the **Stop** button (red square) when finished.
 
 
 Using GNU Radio with Jupiter - Without Additional DSP
