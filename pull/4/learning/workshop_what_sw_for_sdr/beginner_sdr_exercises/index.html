@@ -110,10 +110,12 @@
 <li><a class="reference internal" href="#qpsk-without-additional-digital-processing-in-gnu-radio-using-jupiter">QPSK without additional digital processing in GNU Radio using Jupiter</a></li>
 <li><a class="reference internal" href="#qpsk-constellation-modulator-in-gnu-radio-using-jupiter">QPSK Constellation Modulator in GNU Radio using Jupiter</a></li>
 <li><a class="reference internal" href="#qpsk-frequency-locked-loop-in-gnu-radio-using-jupiter">QPSK Frequency Locked Loop in GNU Radio using Jupiter</a></li>
+<li><a class="reference internal" href="#qpsk-costas-loop-in-gnu-radio-using-jupiter">QPSK - Costas Loop in GNU Radio using Jupiter</a></li>
 <li><a class="reference internal" href="#receiving-qpsk-modulated-message-and-storing-it-to-file-using-pluto">Receiving QPSK modulated message and storing it to file using Pluto</a></li>
 <li><a class="reference internal" href="#receiving-qpsk-modulated-video-with-sdrs-using-pluto">Receiving QPSK modulated Video with SDRs using Pluto</a></li>
 <li><a class="reference internal" href="#spectrum-paint-using-pluto">Spectrum Paint using Pluto</a></li>
 <li><a class="reference internal" href="#amplitude-shift-keying-ask-in-gnu-radio-using-jupiter">Amplitude Shift Keying (ASK) in GNU Radio using Jupiter</a></li>
+<li><a class="reference internal" href="#frequency-shift-keying-fsk-in-gnu-radio-using-jupiter">Frequency Shift Keying (FSK) in GNU Radio using Jupiter</a></li>
 </ul>
 </li>
 </ul>
@@ -1378,6 +1380,129 @@ addresses specific challenges in recovering the transmitted signal.</p>
 <p>A complete QPSK receiver would additionally include fine frequency and phase correction using a Costas loop and
 symbol timing recovery using algorithms like Mueller and Muller to select optimal samples from each symbol period.</p>
 </section>
+<section id="qpsk-costas-loop-in-gnu-radio-using-jupiter">
+<h2>QPSK - Costas Loop in GNU Radio using Jupiter<a class="headerlink" href="#qpsk-costas-loop-in-gnu-radio-using-jupiter" title="Link to this heading"></a></h2>
+<p>This exercise demonstrates the addition of a <strong>Costas Loop</strong> to the QPSK receiver chain, providing <strong>fine frequency and phase correction</strong>. Building upon the previous FLL implementation, the Costas Loop represents the final synchronization stage needed for optimal QPSK demodulation, ensuring that constellation points are precisely aligned and symbols are clearly separated.</p>
+<p><strong>What is a Costas Loop?</strong></p>
+<p>A Costas Loop is a phase-locked loop (PLL) specifically designed for carrier synchronization in suppressed-carrier communication systems like BPSK and QPSK. It performs two critical functions:</p>
+<ul class="simple">
+<li><p><strong>Fine Frequency Correction</strong>: Removes residual frequency offset that the FLL might have missed</p></li>
+<li><p><strong>Phase Correction</strong>: Locks the receiver’s local oscillator to the exact phase of the incoming carrier signal</p></li>
+</ul>
+<p><strong>Why Do We Need a Costas Loop?</strong></p>
+<p>While the FLL (Frequency Locked Loop) handles coarse frequency offset correction, it operates on the spectrum edges and doesn’t provide the precision needed for optimal symbol decision. The Costas Loop:</p>
+<ul class="simple">
+<li><p>Operates directly on the baseband I/Q signal</p></li>
+<li><p>Provides <strong>much finer frequency correction</strong> than the FLL</p></li>
+<li><p><strong>Locks the phase</strong> so constellation points align precisely to their expected positions</p></li>
+<li><p>Eliminates constellation rotation caused by residual frequency or phase errors</p></li>
+<li><p>Significantly improves <strong>Signal-to-Noise Ratio (SNR)</strong> by reducing inter-symbol interference</p></li>
+</ul>
+<p><strong>Signal Processing Chain Evolution:</strong></p>
+<p>The progression of QPSK receiver improvements demonstrates the building blocks of digital communications:</p>
+<ol class="arabic simple">
+<li><p><strong>Raw QPSK (No DSP)</strong>: Constellation is unusable, symbols scattered</p></li>
+<li><p><strong>+ Matched Filters (RRC)</strong>: Reduces noise, improves spectral efficiency</p></li>
+<li><p><strong>+ Frequency Locked Loop (FLL)</strong>: Keeps spectrum centered around DC (coarse frequency correction)</p></li>
+<li><p><strong>+ Costas Loop</strong>: Fine frequency and phase lock (THIS EXERCISE)</p></li>
+<li><p><strong>+ Symbol Timing Recovery</strong>: Optimal sampling points (complete receiver)</p></li>
+</ol>
+<p><strong>Transmitter Chain:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Vector Source</strong>: Generates random symbols (0, 1, 2, 3)</p></li>
+<li><p><strong>Constellation Modulator</strong>: Maps symbols to QPSK constellation points with RRC pulse shaping</p></li>
+<li><p><strong>SDR Sink (Jupiter)</strong>: Transmits the modulated signal</p></li>
+</ol>
+<p><strong>Receiver Chain:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>SDR Source (Jupiter)</strong>: Receives the RF signal from the loopback connection</p></li>
+<li><p><strong>FLL Band-Edge</strong>: Coarse frequency offset correction (from previous exercise)</p></li>
+<li><p><strong>Polyphase Clock Sync</strong>: Symbol timing recovery to select optimal samples</p></li>
+<li><p><strong>Costas Loop</strong>: <strong>ADDED</strong> - Fine frequency and phase correction</p></li>
+<li><p><strong>Constellation Decoder</strong>: Maps received constellation points back to symbols</p></li>
+<li><p><strong>GUI Displays</strong>: Shows constellation, spectrum, eye diagrams, and error signals</p></li>
+</ol>
+<p><strong>Key Observations:</strong></p>
+<p>After adding the Costas Loop, you will observe dramatic improvements:</p>
+<ul class="simple">
+<li><p><strong>Constellation Diagram</strong>: Symbols are now <strong>tightly clustered</strong> at the four QPSK positions (±1±j)</p></li>
+<li><p><strong>Eye Diagrams</strong>: Clear “eye openings” with <strong>reduced noise</strong> at the optimal sampling points</p></li>
+<li><p><strong>Phase Stability</strong>: The constellation no longer rotates, remaining locked to the correct phase</p></li>
+<li><p><strong>Error Signal</strong>: The Costas Loop error signal shows how the loop continuously corrects phase deviations</p></li>
+</ul>
+<p><strong>Costas Loop Parameters:</strong></p>
+<p>The Costas Loop has two key tunable parameters:</p>
+<ul class="simple">
+<li><p><strong>Loop Bandwidth</strong>: Controls how quickly the loop responds to phase/frequency changes</p>
+<ul>
+<li><p>Higher bandwidth: Faster acquisition, but more sensitive to noise</p></li>
+<li><p>Lower bandwidth: Smoother tracking, but slower to lock</p></li>
+</ul>
+</li>
+<li><p><strong>Maximum Frequency Deviation</strong>: Sets the range of frequency offsets the loop can correct</p></li>
+</ul>
+<p>Follow these steps to observe the Costas Loop in action:</p>
+<ol class="arabic">
+<li><p>Make the hardware setup using Jupiter SDR with RX1 and TX1 connected via SMA loopback cable and connect it to your PC.</p>
+</li>
+<li><p>Open the terminal and navigate to the Desktop directory, then launch GNU Radio Companion with elevated privileges:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/home/analog/Desktop
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~/Desktop$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>./start-grc.sh
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
+<li><p>In GNU Radio Companion, open the following file from <strong>File → Open</strong>:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/home/analog/Desktop/ftc_2024/15_costas_loopback_gnuradio/Costas_loopback_jupiter.grc
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
+<li><p>Observe the flowgraph structure showing the complete receiver chain with the Costas Loop block highlighted.</p>
+<p>The transmitter section includes the Constellation Modulator with RRC filtering (same as before). The receiver section now features the complete synchronization chain: FLL for coarse frequency correction, Polyphase Clock Sync for timing recovery, and <strong>Costas Loop for fine frequency and phase correction</strong>.</p>
+</li>
+<li><p>Click the <strong>Execute</strong> button (green arrow) to run the flowgraph.</p></li>
+<li><p>Observe the dramatic improvement in signal quality:</p>
+<ul class="simple">
+<li><p><strong>Transmitted Samples</strong>: Original QPSK symbols with RRC pulse shaping</p></li>
+<li><p><strong>Received Samples (After Costas Loop)</strong>: Clean I/Q waveform with phase-locked carrier</p></li>
+<li><p><strong>Transmitted Spectrum</strong>: Optimized bandwidth from RRC filtering</p></li>
+<li><p><strong>Received Spectrum</strong>: Spectrum after FLL correction, centered around DC</p></li>
+<li><p><strong>Received Constellation</strong>: <strong>Symbols are now tightly clustered</strong> at the four QPSK positions (±1±j)</p></li>
+<li><p><strong>Eye Diagrams (I and Q)</strong>: Clear eye openings showing <strong>optimal sampling points</strong> with reduced noise</p></li>
+<li><p><strong>Phase and Frequency Error</strong>: Shows the Costas Loop’s correction signals</p></li>
+</ul>
+<p>Observe how the symbols are now <strong>separated as we wanted</strong> and the transitions in the Eye diagrams are <strong>less noisy</strong> compared to implementations without the Costas Loop.</p>
+</li>
+<li><p>Experiment with Costas Loop parameters to understand their effects:</p>
+<ul class="simple">
+<li><p><strong>Loop Bandwidth</strong>: Adjust the bandwidth slider and observe how it affects lock time and noise sensitivity</p></li>
+<li><p><strong>Phase Shift</strong>: Introduce a phase shift and watch how quickly the Costas Loop re-acquires lock</p></li>
+<li><p><strong>Error Signal</strong>: Monitor the phase correction error signal to see the loop’s tracking behavior</p></li>
+<li><p><strong>Frequency Correction Signal</strong>: Observe the frequency correction output showing fine adjustments</p></li>
+</ul>
+</li>
+<li><p>Click the <strong>Stop</strong> button (red square) when finished.</p></li>
+</ol>
+<p><strong>Conclusions:</strong></p>
+<p>The Costas Loop represents a critical component in modern digital receivers, providing the fine frequency and phase synchronization necessary for optimal symbol decisions. By comparing this exercise to the previous FLL implementation, you can clearly see the improvement in constellation quality and eye diagram clarity.</p>
+<p>This exercise completes the core synchronization chain for QPSK demodulation:</p>
+<ul class="simple">
+<li><p><strong>FLL</strong>: Coarse frequency correction (keeps spectrum centered)</p></li>
+<li><p><strong>Costas Loop</strong>: Fine frequency and phase correction (locks carrier phase)</p></li>
+<li><p><strong>Polyphase Clock Sync</strong>: Symbol timing recovery (selects optimal sampling instants)</p></li>
+</ul>
+<p>With these three synchronization blocks in place, the receiver can reliably demodulate QPSK signals even in the presence of frequency offsets, phase noise, and timing errors. This forms the foundation for more complex packet-based communication systems, which we’ll explore in the next exercise.</p>
+</section>
 <section id="receiving-qpsk-modulated-message-and-storing-it-to-file-using-pluto">
 <h2>Receiving QPSK modulated message and storing it to file using Pluto<a class="headerlink" href="#receiving-qpsk-modulated-message-and-storing-it-to-file-using-pluto" title="Link to this heading"></a></h2>
 <p>This exercise builds upon the previous QPSK demonstration by implementing a complete <strong>packet-based communication system</strong>. Instead of displaying the received message on the console, this system receives QPSK-modulated data packets transmitted at regular intervals and extracts the message content to a file, demonstrating how real-world communication systems handle burst transmissions.</p>
@@ -1635,6 +1760,110 @@ symbol timing recovery using algorithms like Mueller and Muller to select optima
 </ol>
 <p><strong>Conclusion:</strong></p>
 <p>This exercise demonstrates that by varying only the <strong>amplitude</strong> of the carrier signal, we can transmit digital information. When combined with <strong>phase modulation</strong> (BPSK/QPSK), ASK forms the foundation of <strong>QAM</strong>, which is used in virtually all modern high-speed wireless communication systems including Wi-Fi, LTE, 5G, and cable broadband.</p>
+</section>
+<section id="frequency-shift-keying-fsk-in-gnu-radio-using-jupiter">
+<h2>Frequency Shift Keying (FSK) in GNU Radio using Jupiter<a class="headerlink" href="#frequency-shift-keying-fsk-in-gnu-radio-using-jupiter" title="Link to this heading"></a></h2>
+<p>This exercise demonstrates Frequency Shift Keying (FSK), a digital modulation technique where information is encoded by varying the frequency of a carrier signal. Unlike BPSK which varies the phase, or ASK which varies the amplitude, FSK switches between different frequencies to represent different symbols.</p>
+<p><strong>What is FSK?</strong></p>
+<p>Frequency Shift Keying is a form of frequency modulation where digital data is represented by discrete frequency shifts of a carrier wave:</p>
+<ul class="simple">
+<li><p><strong>Different frequencies</strong> represent different symbols</p></li>
+<li><p>In this exercise, we use <strong>4-FSK</strong> (4 distinct frequencies)</p></li>
+<li><p>Each symbol represents 2 bits of data (00, 01, 10, 11)</p></li>
+<li><p>The amplitude and phase remain relatively constant while frequency changes</p></li>
+</ul>
+<p><strong>Where is FSK Used?</strong></p>
+<p>FSK and its variants are widely used in communication systems:</p>
+<ul class="simple">
+<li><p><strong>Caller ID</strong> - Phone systems use FSK to transmit caller information</p></li>
+<li><p><strong>Radio Telemetry</strong> - Weather stations, remote sensors</p></li>
+<li><p><strong>Pagers</strong> - POCSAG and FLEX paging protocols use FSK</p></li>
+<li><p><strong>Bluetooth</strong> - Uses Gaussian FSK (GFSK) for robust communication</p></li>
+<li><p><strong>LoRa</strong> - Long-range IoT uses Chirp Spread Spectrum (CSS), a continuous form of FSK</p></li>
+<li><p><strong>Older modems</strong> - Bell 103 and 202 modems used FSK at 300-1200 baud</p></li>
+<li><p><strong>APRS</strong> - Automatic Packet Reporting System for amateur radio</p></li>
+</ul>
+<p><strong>Advantages of FSK:</strong></p>
+<ul class="simple">
+<li><p><strong>Noise resilience</strong> - Frequency changes are less affected by amplitude noise</p></li>
+<li><p><strong>Constant envelope</strong> - Power remains constant, efficient for power amplifiers</p></li>
+<li><p><strong>Simple demodulation</strong> - Can be demodulated with simple discriminators</p></li>
+<li><p><strong>Works well in fading channels</strong> - Better performance than ASK in multipath environments</p></li>
+</ul>
+<p><strong>How This Exercise Works:</strong></p>
+<p>This GNU Radio flowgraph demonstrates 4-level FSK transmission and reception with the following signal processing:</p>
+<p><strong>Transmitter Chain:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Vector Source</strong>: Generates four symbols repeatedly representing different frequencies</p></li>
+<li><p><strong>Repeat Block</strong>: Repeats each symbol to create longer frequency bursts</p></li>
+<li><p><strong>VCO (Voltage Controlled Oscillator)</strong>: Converts the symbol values to corresponding frequency shifts</p></li>
+<li><p><strong>Multiply Const</strong>: Adjusts the frequency deviation (how far apart the frequencies are)</p></li>
+<li><p><strong>SDR Sink (Jupiter)</strong>: Transmits the frequency-modulated signal</p></li>
+</ol>
+<p><strong>Receiver Chain:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>SDR Source (Jupiter)</strong>: Receives the RF signal from the loopback connection</p></li>
+<li><p><strong>Quadrature Demod</strong>: Converts frequency changes to amplitude changes (FM demodulation)</p></li>
+<li><p><strong>Keep 1 in N (Decimation)</strong>: Recovers the original symbol rate</p></li>
+<li><p><strong>GUI Displays</strong>: Shows spectrum with multiple frequency peaks, time-domain waveforms, and the demodulated output</p></li>
+</ol>
+<p><strong>Key Observations:</strong></p>
+<ul class="simple">
+<li><p><strong>Frequency Spectrum</strong>: You will observe <strong>4 distinct frequency peaks</strong> corresponding to the four FSK tones</p></li>
+<li><p><strong>Time Domain</strong>: The received signal shows frequency transitions between symbols</p></li>
+<li><p><strong>Waterfall Display</strong>: Shows the frequency hopping pattern over time</p></li>
+<li><p><strong>Demodulated Output</strong>: After quadrature demodulation, you see the original symbol sequence recovered</p></li>
+</ul>
+<p><strong>From FSK to More Advanced Modulations:</strong></p>
+<p>FSK represents one dimension of modulation (frequency). Modern communication systems combine multiple dimensions:</p>
+<ul>
+<li><p><strong>FSK + Time</strong>: Frequency-hopping spread spectrum (FHSS) used in Bluetooth</p></li>
+<li><p><strong>Continuous FSK</strong>: Gaussian FSK (GFSK) smooths transitions to reduce bandwidth</p></li>
+<li><p><strong>Chirp Spread Spectrum (CSS)</strong>: Continuously sweeps frequency, used in LoRa for long-range IoT</p></li>
+<li><p><strong>OFDM</strong>: Uses many closely-spaced FSK-like subcarriers, foundation of Wi-Fi and LTE</p>
+<blockquote>
+<div></div></blockquote>
+</li>
+</ul>
+<p>Follow these steps to run the FSK transmission and reception experiment:</p>
+<ol class="arabic">
+<li><p>Make the hardware setup using Jupiter SDR with TX1A connected to RX1A via loopback cable and connect it to your PC.</p>
+</li>
+<li><p>Open the terminal and navigate to the Desktop directory, then launch GNU Radio Companion with elevated privileges:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/home/analog/Desktop
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~/Desktop$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>./start-grc.sh
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
+<li><p>In GNU Radio Companion, open <strong>FSK_loopback_jupiter.grc</strong> from <strong>Desktop-&gt;ftc_2024-&gt;9_fsk_loopback_gnuradio</strong>.</p></li>
+<li><p>Observe the flowgraph structure showing the transmitter and receiver chains:</p>
+</li>
+<li><p>Click the <strong>Execute</strong> button (green arrow) to run the flowgraph.</p></li>
+<li><p>Observe the output displays:</p>
+<ul class="simple">
+<li><p><strong>Transmitted Symbols</strong>: Shows the repeated symbol values that control the VCO</p></li>
+<li><p><strong>Transmitted Spectrum</strong>: Frequency-domain showing <strong>4 distinct frequency peaks</strong> for the 4 FSK tones</p></li>
+<li><p><strong>Waterfall Display</strong>: Time-frequency representation showing frequency hopping pattern</p></li>
+<li><p><strong>Received Spectrum</strong>: Should match the transmitted spectrum showing the 4 FSK tones</p></li>
+<li><p><strong>Received Time Domain</strong>: I/Q waveform showing frequency transitions</p></li>
+<li><p><strong>Demodulated Output</strong>: After quadrature demod and decimation, showing the recovered symbol sequence</p></li>
+</ul>
+</li>
+<li><p>You can adjust the frequency deviation slider (if available) to observe how the spacing between frequency peaks changes.</p></li>
+<li><p>Observe the waterfall display to see the frequency transitions over time:</p>
+</li>
+<li><p>Click the <strong>Stop</strong> button (red square) when finished.</p></li>
+</ol>
+<p><strong>Conclusion:</strong></p>
+<p>This exercise demonstrates that by varying only the <strong>frequency</strong> of the carrier signal, we can transmit digital information. FSK is particularly robust in noisy environments and maintains constant power, making it ideal for applications like pagers, telemetry, and Bluetooth. The ability to observe multiple discrete frequencies in the spectrum analyzer highlights how FSK operates in the frequency domain, complementing what we learned about phase domain (BPSK/QPSK) and amplitude domain (ASK) modulation.</p>
 </section>
 </section>
 
