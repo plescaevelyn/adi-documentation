@@ -10,6 +10,13 @@ techniques, multi-channel systems, and real-world communication protocols.
    These advanced exercises require a solid understanding of SDR fundamentals. If you're new to SDR, we recommend starting
    with the :doc:`Beginner SDR Exercises <../beginner_sdr_exercises/index>` before attempting these advanced topics.
 
+.. note::
+
+   The following exercises should be run on a Raspberry Pi 5 using the provided ADI Kuiper 2.0 Linux image.
+   The Kuiper image contains all necessary software pre-installed, including Python, GNU Radio, Scopy, and all required libraries.
+   Connect your SDR hardware (Pluto, Jupiter, or Talise) to the Raspberry Pi 5 before starting the exercises.
+   Use antennas or loopback cables as shown in the exercise diagrams.
+
 **What Separates Beginners from Advanced SDR Users:**
 
 Learning to **test your SDR and find mistakes on your own** is the critical step that differentiates a beginner from an advanced-level SDR user. While beginners focus on running predefined exercises and observing expected results, advanced users develop the skills to validate system performance, identify impairments, and troubleshoot issues independently. The following exercises build these advanced capabilities.
@@ -329,62 +336,21 @@ Follow these steps:
 Using Scopy for Visual Analysis
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-While PyADI-IIO provides programmatic control and testing, **Scopy** offers a powerful visual interface for real-time signal analysis and debugging. Scopy is a cross-platform, open-source software oscilloscope and signal analysis suite that functions as a replacement for traditional bench instruments.
+While PyADI-IIO provides programmatic control and testing, :adi:`Scopy <scopy>` offers a powerful visual interface for real-time signal analysis and debugging.
 
-**What is Scopy?**
+**Scopy with ADI SDR Platforms:**
 
-Scopy is ADI's comprehensive software toolset for signal analysis and controlling IIO (Industrial I/O) systems. Originally developed as application software for the ADALM2000, it has evolved into a versatile multi-platform tool with ~120k downloads.
+Scopy is ADI's comprehensive software toolset for signal analysis and controlling IIO (Industrial I/O) systems. It provides full support for ADI SDR platforms including:
 
-**Key Features:**
+* **ADALM-PLUTO**: Standard and modified (Rev C) with TX2/RX2 access
+* **AD-JUPITER-EBZ (Jupiter)**: Full 2×2 MIMO support
+* **ADRV9009-ZU11EG (Talise)**: Production-grade evaluation platform
 
-* **Cross-platform**: Runs on Windows, Linux, macOS, Android, and embedded Linux targets
-* **Multiple device support**: Control multiple devices from the same Scopy instance
-* **IIO device support**: Full support for IIO devices through IIO instruments
-* **Plugin-based architecture**:
+For complete documentation on Scopy's features, architecture, and installation, see the :adi:`Scopy documentation <scopy>`.
 
-  * General purpose plugins (ADC, Register map, Debugger)
-  * Platform specific plugins (ADALM2000, SWIOT1L, PQM)
+**Using Scopy for SDR Testing:**
 
-* **Open source - GPLv3**: Qt-based with libraries including libiio, libqwt, gnuradio, libsigrokdecode
-* **Developer friendly**:
-
-  * IIO system emulator for hardware-less evaluation and development
-  * Docker images for automated builds
-  * Installers/Executables built on every commit
-  * Single codebase for all platforms
-
-* **Genalyzer support**: Integrated spectral analysis capabilities
-
-**Tools Available for SDR Testing:**
-
-#. **Scopy** - Visual oscilloscope and signal analysis
-#. **GNURadio** - Signal processing flowgraphs
-#. **PyADI-IIO** - Python programmatic control
-#. **qIQ Receiver/Transceiver** - IQ signal visualization
-#. **qIQ with Scopy** - Combined IQ analysis
-#. **Genalyzer with Scopy** - Advanced spectral analysis
-
-**Scopy Architecture:**
-
-Scopy operates as a remote client that communicates with SDR hardware through **libiio**, providing a consistent interface across different platforms:
-
-* **Remote client**: Windows, macOS, or Linux desktop
-* **Scopy application**: User interface and analysis tools
-* **libiio**: Communication layer
-* **Embedded Linux or no-OS platform**: Runs on the SDR hardware
-* **Device drivers**: Platform-specific (Linux Device Driver or no-OS Device Driver)
-* **Hardware**: ADI SDR platforms (Pluto, Jupiter, Talise)
-
-**What You'll Observe with Scopy:**
-
-Starting with Scopy v2.0, the application provides comprehensive analysis capabilities:
-
-* **Time Domain (Oscilloscope)**: Visualize I/Q waveforms in real-time
-* **Frequency Domain (Spectrum Analyzer)**: Observe FFT with configurable parameters
-* **Constellation Diagram**: See IQ points for modulated signals
-* **Signal Analyzer**: Measure SNR, THD, SFDR, and other metrics
-* **Register Map**: Direct access to hardware registers for debugging
-* **Network Analyzer**: Frequency response measurements
+In this exercise, you'll use Scopy's instruments to visually analyze SDR impairments and performance metrics in real-time, making it easy to identify issues and validate hardware performance without writing code.
 
 Follow these steps to perform visual SDR analysis with Scopy:
 
@@ -587,21 +553,18 @@ Every high-level API (PyADI-IIO, GNU Radio, MATLAB, Scopy) ultimately reads and 
 
 **Three Ways to Access IIO Attributes:**
 
-#. **PyADI-IIO**: Programmatic access through Python (easiest for scripting and automation)
-#. **iio_attr utility**: Command-line tool for quick testing and shell scripts
-#. **Scopy Debugger**: Visual interface for exploring and modifying attributes
+Today's exercises will use:
 
-This exercise demonstrates all three approaches using the RX gain attribute as an example, showing how the same hardware control can be accessed from different interfaces.
+#. :adi:`PyADI-IIO <pyadi-iio>`: Python library for SDR control
+#. :adi:`libiio <libiio>` utilities: Command-line tools (iio_attr)
+#. :adi:`Scopy <scopy>`: Visual instrument and debugging interface
+
+See the official documentation for complete details. This exercise demonstrates all three approaches using the RX gain attribute as an example.
 
 Using PyADI-IIO to Read/Write Attributes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Why This Approach:** Python scripts provide programmatic access to IIO attributes, making it easy to automate configuration, log values, and integrate SDR control into larger applications.
-
-**Prerequisites:**
-
-* Pluto SDR connected via USB or network
-* ftc_2025 exercises folder on desktop
 
 **Steps:**
 
@@ -682,11 +645,6 @@ Using iio_attr Command-Line Utility
 * Debugging when GUI tools aren't available
 * Understanding the raw IIO interface
 
-**Prerequisites:**
-
-* Pluto SDR connected and accessible at ``ip:pluto.local``
-* Terminal access
-
 **Steps:**
 
 #. Read the current RX gain value:
@@ -766,11 +724,6 @@ Using Scopy Debugger Instrument
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Why This Approach:** Scopy's Debugger instrument provides a visual, hierarchical view of all IIO attributes, making it easy to explore what's available and experiment with different settings in real-time.
-
-**Prerequisites:**
-
-* Pluto SDR connected via USB or network
-* Scopy 2.0 installed and running
 
 **Steps:**
 
@@ -990,12 +943,6 @@ This hands-on constellation alignment teaches you how carrier phase ambiguity af
 Using GNU Radio with Pluto
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-**Prerequisites:**
-
-* Pluto SDR with TX1 and RX1 connected via loopback cable
-* ftc_2025 exercises folder on desktop
-* GNU Radio Companion installed
-
 **Setup:**
 
 #. Connect the loopback cable between TX1 and RX1:
@@ -1161,14 +1108,6 @@ The flowgraph contains **custom Python blocks** that implement EVM calculation:
            evm_rms = np.sqrt(np.mean(np.array(errors)**2)) * 100
            return evm_rms
 
-**What You Learned:**
-
-* **16QAM encoding**: 4 bits per symbol using amplitude + phase modulation
-* **Constellation rotation**: Manual phase alignment due to carrier ambiguity
-* **EVM measurement**: Industry-standard metric for modulation quality
-* **Impairment effects**: How noise, gain settings, and offsets degrade EVM
-* **Production testing**: Techniques used to validate transmitter/receiver performance
-
 **Advanced Challenge:**
 
 Modify the flowgraph to:
@@ -1194,26 +1133,7 @@ This exercise demonstrates why EVM measurement is critical: it tells you which m
 QPSK Wireless Communication with File Storage
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This advanced exercise demonstrates **wireless point-to-point file transfer** using QPSK modulation over the air. Unlike loopback exercises where TX and RX are directly connected via cable, this exercise uses antennas for over-the-air (OTA) transmission, introducing real-world wireless channel effects like fading, multipath, and interference.
-
-**Why Wireless File Transfer Matters:**
-
-This exercise bridges the gap between controlled loopback testing and real-world wireless systems:
-
-* **Real propagation effects**: Signal attenuation, multipath fading, interference
-* **Channel quality variation**: SNR changes based on distance and environment
-* **Packet loss**: Some transmissions may not be received correctly
-* **EVM under wireless conditions**: More realistic performance metrics than loopback
-
-This is how production wireless systems work: data is packetized, transmitted over the air, received, error-checked, and stored.
-
-**What Makes This Advanced:**
-
-* **Over-the-air transmission**: No guaranteed signal delivery (unlike loopback)
-* **Real-time EVM measurement**: Observe how wireless channel affects modulation quality
-* **File reconstruction**: Received packets must be assembled into coherent file
-* **Error handling**: CRC checks ensure data integrity
-* **Timing coordination**: Receiver must start before transmitter begins sending
+This exercise demonstrates **wireless point-to-point file transfer** using QPSK modulation over the air with real wireless channel effects.
 
 **System Architecture:**
 
@@ -1233,12 +1153,6 @@ This is how production wireless systems work: data is packetized, transmitted ov
 
 Using GNU Radio with Jupiter
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-**Prerequisites:**
-
-* **Jupiter SDR** (or Pluto) with antenna connected to RX1
-* ftc_2025 exercises folder on desktop
-* Presenter will transmit the signal - wait for announcement before running
 
 .. important::
 
@@ -1442,14 +1356,6 @@ This exercise uses **burst mode** instead of continuous transmission:
 | **Channel effects**       | Minimal                   | Fading, multipath         |
 +---------------------------+---------------------------+---------------------------+
 
-**What You Learned:**
-
-* **Wireless channel impairments**: Real-world signal degradation
-* **Burst mode challenges**: Synchronization loops have limited lock time
-* **EVM under wireless conditions**: More variable than loopback
-* **Packet-based communication**: CRC checks and file storage
-* **Link budget**: Antenna orientation and distance affect received signal quality
-
 **Advanced Exploration:**
 
 Try these experiments:
@@ -1540,12 +1446,6 @@ Using PyADI-IIO with Modified Pluto
    * Have Pluto Rev C boards
    * Use Jupiter or Talise platforms
    * Want to learn MIMO concepts for future projects
-
-**Prerequisites:**
-
-* Modified Pluto with TX2/RX2 accessible OR Jupiter/Talise platform
-* Loopback cables: TX1→RX1 AND TX2→RX2
-* ftc_2025 exercises folder (or download the workshop materials at home)
 
 **Physical Setup:**
 
@@ -1791,14 +1691,6 @@ With 2×2 MIMO capability, you can implement:
 
 #. **Direction finding**: Use phase difference between RX1 and RX2 to estimate angle of arrival
 
-**What You Learned:**
-
-* **Multi-channel SDR configuration**: Enabling and controlling multiple TX/RX pairs
-* **Sample interleaving**: How multi-channel data is organized in buffers
-* **Channel isolation**: Independent operation of parallel RF paths
-* **MIMO foundations**: Building blocks for advanced antenna techniques
-* **Platform differences**: Standard vs modified hardware capabilities
-
 **Advanced Challenge:**
 
 Modify the script to implement **simple beamforming**:
@@ -1866,12 +1758,6 @@ In beginner QPSK exercises, symbol sync was hidden inside a complete receiver ch
 
 Using GNU Radio with Jupiter
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-**Prerequisites:**
-
-* Pluto or Jupiter SDR with TX1 and RX1 connected via loopback cable
-* ftc_2025 exercises folder on desktop
-* Understanding of matched filtering and pulse shaping (covered in beginner exercises)
 
 **Setup:**
 
@@ -2060,14 +1946,6 @@ By analyzing consecutive samples and their differences, the algorithm estimates 
   * **Higher damping**: Less overshoot, slower settling
   * **Lower damping**: Faster settling, more overshoot
 
-**What You Learned:**
-
-* **Symbol timing problem**: Why sampling at correct instants is critical
-* **Symbol Sync effect**: Downsampling from oversampled to symbol rate
-* **Matched filtering**: Integrated into symbol sync for optimal SNR
-* **Timing drift tracking**: Continuous adaptation to clock mismatches
-* **Visual diagnostics**: How constellation changes reveal synchronization quality
-
 **Next Step:**
 
 The **Costas Loop** exercise (next) will address the remaining phase and frequency offsets, completing the QPSK receiver synchronization chain:
@@ -2173,12 +2051,6 @@ Previous exercises used Costas Loop as part of a complete receiver. This advance
 
 Using GNU Radio with Jupiter
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-**Prerequisites:**
-
-* Pluto or Jupiter SDR with TX1 and RX1 connected via loopback cable
-* ftc_2025 exercises folder on desktop
-* Understanding of FLL and Symbol Sync (covered in previous advanced exercises)
 
 **Setup:**
 
@@ -2388,14 +2260,6 @@ For QPSK, the error function is:
 * When rotated counterclockwise: ``error < 0`` → NCO compensates clockwise
 
 The ``sign()`` function makes it **decision-directed**: it assumes symbols are near decision boundaries and uses that assumption to compute error.
-
-**What You Learned:**
-
-* **Carrier synchronization problem**: Residual frequency and phase offsets after FLL
-* **Costas Loop operation**: Phase error detection, loop filtering, NCO correction
-* **Phase tracking**: Continuous adaptation to carrier drift
-* **90° phase ambiguity**: QPSK's 4-fold symmetry and how to resolve it
-* **Loop bandwidth trade-offs**: Acquisition speed vs noise immunity
 
 **Complete QPSK Receiver Synchronization Chain:**
 
