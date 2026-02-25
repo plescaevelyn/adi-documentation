@@ -28,7 +28,7 @@ Content
    #. :dokuwiki:`Schematics <university/tools/m2k/hacking/hardware>`
    #. :dokuwiki:`Detailed Performance <university/tools/m2k/devs/performance>`
    #. :dokuwiki:`Accessing FPGA JTAG <university/tools/m2k/devs/fpga>` with the
-      :dokuwiki:`ADALM-JTAGUART </university/tools/uartjtag>` adapter
+      :ref:`ADALM-JTAGUART <uartjtag>` adapter
 
 #. C Applications or Shell scripts on the Pluto
 
