@@ -42,7 +42,7 @@ instrument. It's interesting note that we are measuring both Rx and Tx
 capabilities. It is possible that the Rx at sub 600MHz could be fine, and it is
 just a Tx problem (unlikely, but I just wanted to point it out).
 
-.. image:: jcg401_full_range.png
+.. image:: images/antennas/jcg401_full_range.png
    :width: 500px
 
 You can see thing over 625 MHz, the antenna has pretty good performance, with
@@ -59,17 +59,17 @@ make it larger).
 .. grid::
    :widths: 50 50
 
-   .. figure:: jcg401_900ism.png
+   .. figure:: images/antennas/jcg401_900ism.png
       :width: 400px
 
       902 - 928 MHz ISM Band
 
-   .. figure:: jcg401_2400ism.png
+   .. figure:: images/antennas/jcg401_2400ism.png
       :width: 400px
 
       2.4 -2.5 GHz ISM Band
 
-   .. figure:: jcg401_5725ism.png
+   .. figure:: images/antennas/jcg401_5725ism.png
       :width: 400px
 
       5.725 - 5.875 GHz ISM Band

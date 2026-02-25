@@ -21,39 +21,39 @@ Contents
 ..
    Make sure all things are in ./users
 
-#. :dokuwiki:`Introduction to the Hardware <university/tools/pluto/users/intro>`
+#. :ref:`Introduction to the Hardware <pluto users intro>`
 
-   #. :dokuwiki:`What's with the name? <university/tools/pluto/users/name>` *PlutoSDR?*
-   #. :dokuwiki:`Understanding the Internals <university/tools/pluto/users/understanding>`
-   #. :dokuwiki:`How hot? <university/tools/pluto/users/temp>`
-   #. :dokuwiki:`How Far, How fast? <university/tools/pluto/users/far_fast>`
+   #. :ref:`What's with the name? <pluto users name>` *PlutoSDR?*
+   #. :ref:`Understanding the Internals <pluto users understanding>`
+   #. :ref:`How hot? <pluto users temp>`
+   #. :ref:`How Far, How fast? <pluto users far_fast>`
 
-      #. :dokuwiki:`RF Output <university/tools/pluto/users/transmit>`
+      #. :ref:`RF Output <pluto users transmit>`
 
-         #. :dokuwiki:`Phase Noise & Accuracy <university/tools/pluto/users/phase_noise>`
+         #. :ref:`Phase Noise & Accuracy <pluto users phase_noise>`
 
-      #. :dokuwiki:`RF Input <university/tools/pluto/users/receive>`
+      #. :ref:`RF Input <pluto users receive>`
 
-         #. :dokuwiki:`Receiver Sensitivity <university/tools/pluto/users/receiver_sensitivity>`
-         #. :dokuwiki:`Dealing with Non-Quadrature signals <university/tools/pluto/users/non_quad>`
+         #. :ref:`Receiver Sensitivity <pluto users receiver_sensitivity>`
+         #. :ref:`Dealing with Non-Quadrature signals <pluto users non_quad>`
 
-   #. :dokuwiki:`Antennas <university/tools/pluto/users/antennas>`
-   #. :dokuwiki:`Letter of Volatility <university/tools/pluto/users/letter_of_volatility_pluto.pdf>`
+   #. :ref:`Antennas <pluto users antennas>`
+   #. :download:`Letter of Volatility <letter_of_volatility_pluto.pdf>`
 
-#. :dokuwiki:`Quick Start <university/tools/pluto/users/quick_start>`
+#. :ref:`Quick Start <pluto users quick_start>`
 #. Intro to the Software. Installing Device Drivers on:
 
    #. :ref:`Windows <pluto-m2k drivers windows>`
    #. :ref:`Linux <pluto-m2k drivers linux>`
    #. :ref:`MAC <pluto-m2k drivers osx>`
 
-#. Upgrading the the ADALM-PLUTO :dokuwiki:`Firmware <university/tools/pluto/users/firmware>` .
-#. :dokuwiki:`Calibrating <university/tools/pluto/users/calibration>` the ADALM-PLUTO.
-#. :dokuwiki:`Customizing <university/tools/pluto/users/customizing>` the ADALM-PLUTO.
+#. Upgrading the the ADALM-PLUTO :ref:`Firmware <pluto users firmware>` .
+#. :ref:`Calibrating <pluto users calibration>` the ADALM-PLUTO.
+#. :ref:`Customizing <pluto users customizing>` the ADALM-PLUTO.
 #. Once the driver are configured and set up, you can interact with the
    :adi:`ADALM-PLUTO` Active Learning Module from:
 
-   #. :dokuwiki:`IIO oscilloscope </resources/tools-software/linux-software/iio_oscilloscope>`
+   #. `Scopy <https://analogdevicesinc.github.io/scopy/index.html>`__
    #. `gqrx <http://gqrx.dk/>`__, an open source software defined radio receiver
       (SDR) powered by the GNU Radio
    #. :mw:`Official support for MATLAB and Simulink <hardware-support/adalm-pluto-radio.html>`
@@ -68,10 +68,10 @@ Contents
       plugin for PlutoSDR can be found here:
       `SoapyPlutoSDR <https://github.com/jocover/SoapyPlutoSDR>`__
    #. `Access and control of PlutoSDR hardware using python bindings to libiio <https://github.com/radiosd/PlutoSdr>`__
-   #. :dokuwiki:`Python Interfaces </resources/tools-software/linux-software/pyadi-iio>`
-   #. :dokuwiki:`C Examples </university/tools/pluto/controlling_the_transceiver_and_transferring_data>`
+   #. `Python Interfaces <https://analogdevicesinc.github.io/pyadi-iio/index.html>`__
+   #. :ref:`C Examples <pluto transceiver_transferring_data>`
 
-#. :dokuwiki:`/university/tools/pluto/Accessories </Accessories>`
+#. :ref:`ASEE Papers <pluto users asee_papers>`
 
 .. toctree::
    :hidden:

@@ -272,7 +272,7 @@ with pin control.
 Testing in IIO Oscilloscope
 ---------------------------
 
-The :dokuwiki:`Advanced Tab </resources/tools-software/linux-software/fmcomms2_advanced_plugin#axillary_io_adc_dac_control_io_temp_sensor>`
+The `Advanced Tab <https://analogdevicesinc.github.io/scopy/plugins/ad936x/index.html>`__
 indicates how to control these in the IIO oscilloscope.
 
 .. [1]
