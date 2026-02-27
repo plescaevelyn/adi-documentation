@@ -2,25 +2,13 @@ Basic Sample Application
 ========================
 
 This simple sample application demonstrates how to get started with the :adi:`AD-RPI-T1LPSE-SL` HAT
-by creating a basic Blinky demo. It uses two :adi:`EVAL-CN0575-RPIZ` HATs,
+by creating a basic Blinky demo. It uses two :adi:`EVAL-CN0575-RPIZ`
+(10BASE-T1L Field Device Development Platform with Class 12 and 13 SPoE) HATs,
 an :adi:`AD-RPI-T1LPSE-SL` HAT as a communication interface, and three Raspberry Pi computers.
 These are set up in a parent-child configuration, where the :adi:`AD-RPI-T1LPSE-SL` HAT acts as the parent device,
 and the two :adi:`EVAL-CN0575-RPIZ` HATs act as child devices.
 The application toggles the on-board LED of a :adi:`EVAL-CN0575-RPIZ` HAT when the button is pressed on the
 other :adi:`EVAL-CN0575-RPIZ` HAT and vice versa.
-
-Prerequisites
--------------
-
-- Python 3.8 or newer (3.8–3.11 tested with pyadi-iio).  
-  Ensure that a compatible version is installed on your system before continuing.  
-  Older versions (<3.8) may not work reliably with pyadi-iio.
-
-- Git command-line tools installed.
-
-- Three Raspberry Pi computers with :adi:`Kuiper 2` image installed.
-  Follow the instructions in the `Kuiper 2 User Guide <https://github.com/analogdevicesinc/adi-kuiper-gen/releases>`_
-  to prepare the Raspberry Pi.
 
 Hardware Setup
 --------------
@@ -39,7 +27,7 @@ Hardware Setup
 
 - 3x Raspberry Pi 5 computers running Kuiper 2
 
-- 1x USB Type-C Power Supply (15V, 3A)
+- 1x USB Type-C Power Supply (at least 9V, 3A; 9V/12V/15V/20V supported)
 
 - 2x T1L Cables
 
@@ -57,13 +45,30 @@ Hardware Setup
 Software Setup
 --------------
 
-When running commands with *sudo*, you might be prompted to enter the password for the **analog** user.
-If you have not changed it, the default password is **analog**.
+Prerequisites
+~~~~~~~~~~~~~
 
-Repository Cloning
-~~~~~~~~~~~~~~~~~~
+- Three Raspberry Pi computers with :adi:`kuiper-linux` image installed.
+  Follow the instructions in the `Kuiper 2 User Guide
+  <https://analogdevicesinc.github.io/documentation/linux/kuiper/index.html>`_
+  to prepare the Raspberry Pi.
 
-1. Clone the repository on both Raspberry Pi computers:
+- ADI Kuiper Linux includes Python and pyadi-iio, but the versions may lag behind
+  that required for this demo. This demo was tested with Python 3.8-3.11, and the
+  main branch of pyadi-iio.
+
+- Git command-line tools installed.
+
+The easiest way to configure Kuiper and install dependencies is with a locally attached
+monitor, keyboard, and network connection. One Raspberry Pi can be used to configure all
+three cards, swapping SD cards accordingly afterwards. Log into Kuiper Linux and open a
+terminal. When running commands with *sudo*, you might be prompted to enter the password
+for the **analog** user. If you have not changed it, the default password is **analog**.
+
+Pyadi-iio Cloning and Installation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. Clone the repository on the parent Raspberry Pi (with the :adi:`AD-RPI-T1LPSE-SL` HAT):
 
    .. shell::
       :user: analog
@@ -73,13 +78,14 @@ Repository Cloning
       $ git clone https://github.com/analogdevicesinc/pyadi-iio.git
       $ cd pyadi-iio
 
-2. Install Python dependencies and open a virtual environment:
+2. From the pyadi-iio directory, install Python dependencies and open a virtual environment:
 
    .. shell::
       :user: analog
       :group: analog
       :show-user:
 
+      $ cd ~/pyadi-iio
       $ python3 -m venv ./venv
       $ source venv/bin/activate
       $ pip install -e .
@@ -100,7 +106,6 @@ In order to apply the overlays, open a terminal on each Raspberry Pi and follow 
 
       $ sudo tee -a /boot/firmware/config.txt <<'EOF'
          dtoverlay=rpi-t1lpse-apl
-         dtoverlay=rpi-t1lpse-class12
          EOF
 
 2. For each child Raspberry Pi:
@@ -233,8 +238,8 @@ Run the application the parent Raspberry Pi only, which will handle communicatio
       :group: analog
       :show-user:
 
-      $ cd examples/cn0575
-      $ source venv/bin/activate
+      $ cd ~/pyadi-iio/examples/rpi_t1lpse
+      $ source ~/pyadi-iio/venv/bin/activate
       $ python3 cn0591_2x_cn0575_button_blinky.py
 
    .. figure:: eval-cn0575-rpiz-sample-application-terminal-result.gif
