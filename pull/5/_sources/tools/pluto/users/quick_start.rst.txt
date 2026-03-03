@@ -52,9 +52,9 @@ chains. Scopy 2.0 provides a cleaner layout with the same controls.
    * - **IIO Oscilloscope**
      - **Scopy 2.0**
    * - .. image:: images/iio_vs_scopy/iio_osc_ad936x_plugin.png
-          :width: 400
+          :width: 22em
      - .. image:: images/iio_vs_scopy/scopy_ad936x_plugin.png
-          :width: 400
+          :width: 22em
 
 Register map comparison
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -69,9 +69,9 @@ bit-level details.
    * - **IIO Oscilloscope**
      - **Scopy 2.0**
    * - .. image:: images/iio_vs_scopy/iio_osc_reg_map.png
-          :width: 400
+          :width: 22em
      - .. image:: images/iio_vs_scopy/scopy_reg_map.png
-          :width: 400
+          :width: 22em
 
 5. Testing PlutoSDR with Scopy 2.0
 -----------------------------------
@@ -86,7 +86,7 @@ Launch Scopy on your host. If your PlutoSDR is connected via USB, it should
 appear automatically as an AD936X device.
 
 .. image:: images/quick_start_pluto/open_scopy.png
-   :width: 600
+   :width: 45em
 
 Connect to the device
 ~~~~~~~~~~~~~~~~~~~~~
@@ -95,7 +95,7 @@ Click the **+** button to add a new device. In the IIO tab, enter
 ``ip:pluto.local`` in the URI field and click **Verify** to connect.
 
 .. image:: images/quick_start_pluto/connect_device_to_scopy.png
-   :width: 600
+   :width: 45em
 
 Configure the transceiver
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -105,7 +105,7 @@ and transmit chain parameters including RF bandwidth, sampling rate, LO
 frequency, and gain settings.
 
 .. image:: images/quick_start_pluto/modify_frequency_val_scopy.png
-   :width: 600
+   :width: 45em
 
 Set up the DAC for signal generation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -115,7 +115,7 @@ use **One CW Tone**. Set the desired frequency, scale (amplitude in dB), and
 phase for your test tone.
 
 .. image:: images/quick_start_pluto/dds_mode_scopy.png
-   :width: 600
+   :width: 45em
 
 View the signal in the time domain
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -125,7 +125,7 @@ Open **ADC - Time** to view the captured signal in the time domain. Click
 your DDS tone.
 
 .. image:: images/quick_start_pluto/adc_time_scopy.png
-   :width: 600
+   :width: 45em
 
 View the signal in the frequency domain
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -134,7 +134,7 @@ Open **ADC - Frequency** to view the FFT of the captured signal. You should
 see a clear peak at your configured DDS frequency.
 
 .. image:: images/quick_start_pluto/adc_frequency_scopy.png
-   :width: 600
+   :width: 45em
 
 Enable markers for analysis
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -144,7 +144,7 @@ power levels. The markers will display frequency and amplitude information
 at the bottom of the screen.
 
 .. image:: images/quick_start_pluto/enable_markers_scopy.png
-   :width: 600
+   :width: 45em
 
 Use Genalyzer for detailed analysis
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -153,7 +153,7 @@ Enable **Genalyzer analysis** in the right panel to compute detailed signal
 quality metrics including SNR, SINAD, SFDR, and other parameters.
 
 .. image:: images/quick_start_pluto/genalyzer_scopy.png
-   :width: 600
+   :width: 45em
 
 Experiment with TX attenuation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -163,10 +163,10 @@ affects the received signal level. The images below show the TX attenuation
 control and the resulting change in signal amplitude.
 
 .. image:: images/quick_start_pluto/tx_attenuation_scopy.png
-   :width: 200
+   :width: 45em
 
 .. image:: images/quick_start_pluto/tx_att_db_scopy.png
-   :width: 600
+   :width: 15em
 
 6. Connect to your favorite SDR framework, and do interesting things
 ---------------------------------------------------------------------
