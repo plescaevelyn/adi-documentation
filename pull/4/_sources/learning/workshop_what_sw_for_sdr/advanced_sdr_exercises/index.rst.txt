@@ -73,6 +73,18 @@ where:
 
 In the constellation diagram, a complex sinusoid appears as a rotating point, tracing a circle around the origin. Its spectrum shows a single peak at the frequency :math:`f`.
 
+.. figure:: images/intro/complex_sin_plot.png
+   :align: center
+   :width: 45em
+
+   Real sinusoid vs complex sinusoid in time and frequency domain
+
+.. figure:: images/intro/complex_sin_constellation_plot.png
+   :align: center
+   :width: 35em
+
+   Complex sinusoid time plot and corresponding constellation plot
+
 **Zero IF Architecture:**
 
 Modern SDR platforms like Pluto, Jupiter, and Talise use a **Zero Intermediate Frequency (Zero IF)** architecture where the signal is directly converted to/from baseband without intermediate frequency stages.
@@ -114,6 +126,12 @@ Due to I/Q gain and phase imbalances in the mixer, a mirror image of the desired
 
 Better SDR hardware achieves higher IRR values (40-60 dB typical for high-quality systems).
 
+.. figure:: images/intro/image_rejection1.png
+   :align: center
+   :width: 35em
+
+   Receiver block diagram showing gain and phase impairments that cause image rejection issues
+
 **2. LO Leakage (DC Offset):**
 
 Local Oscillator leakage occurs when the LO signal couples into the mixer output, creating a DC offset in the baseband I/Q signals. This appears as a spike at the center frequency (DC in baseband).
@@ -123,6 +141,12 @@ Local Oscillator leakage occurs when the LO signal couples into the mixer output
 * Imperfect mixer isolation
 * DC offsets in the analog signal chain
 * LO signal leaking through the RF path
+
+.. figure:: images/intro/lo_leakage.png
+   :align: center
+   :width: 30em
+
+   Receiver block diagram showing LO leakage and DC offset in the signal chain
 
 **3. Spurs (Spurious Signals):**
 
@@ -142,6 +166,12 @@ The SNR measures the quality of the received signal relative to the noise floor:
    \text{SNR (dB)} = 10 \log_{10}\left(\frac{P_{\text{signal}}}{P_{\text{noise}}}\right)
 
 Higher SNR indicates cleaner signal reception and better ADC/DAC performance.
+
+.. figure:: images/intro/rx_loopback.png
+   :align: center
+   :width: 45em
+
+   RX spectrum showing SNR measurement between signal peak and noise floor
 
 **What You'll Observe in This Exercise:**
 
@@ -350,205 +380,6 @@ Follow these steps:
 
 #. To stop running the Python script (if you want to run it again or run another script), close all the tabs by **right clicking on the
    taskbar icon -> Quit x windows** or close them manually one by one.
-
-
-Using Scopy for Visual Analysis
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-While PyADI-IIO provides programmatic control and testing, :adi:`Scopy <scopy>` offers a powerful visual interface for real-time signal analysis and debugging.
-
-**Scopy with ADI SDR Platforms:**
-
-Scopy is ADI's comprehensive software toolset for signal analysis and controlling IIO (Industrial I/O) systems. It provides full support for ADI SDR platforms including:
-
-* **ADALM-PLUTO**: Standard and modified (Rev C) with TX2/RX2 access
-* **AD-JUPITER-EBZ (Jupiter)**: Full 2×2 MIMO support
-* **ADRV9009-ZU11EG (Talise)**: Production-grade evaluation platform
-
-For complete documentation on Scopy's features, architecture, and installation, see the :adi:`Scopy documentation <scopy>`.
-
-**Using Scopy for SDR Testing:**
-
-In this exercise, you'll use Scopy's instruments to visually analyze SDR impairments and performance metrics in real-time, making it easy to identify issues and validate hardware performance without writing code.
-
-Follow these steps to perform visual SDR analysis with Scopy:
-
-#. Make the loopback setup using Pluto with TX1 connected to RX1 via an SMA loopback cable and connect it to your PC.
-
-   .. TODO: Add Scopy Pluto loopback setup image when available
-   .. .. figure:: images/exercises/scopy_testing/pluto_scopy_setup.png
-   ..    :alt: Pluto SDR Setup for Scopy Testing
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    Pluto SDR with loopback connection for Scopy analysis
-
-#. Launch Scopy from your applications menu or terminal:
-
-   .. shell::
-      :user: analog
-      :group: analog
-      :show-user:
-
-      $ scopy
-
-#. Connect to your Pluto device:
-
-   * Click **Add Device** or select from the device list
-   * Choose **PlutoSDR (ADALM-PLUTO)** from available devices
-   * Click **Connect**
-
-   .. TODO: Add Scopy device connection screenshot when available
-   .. .. figure:: images/exercises/scopy_testing/scopy_device_connect.png
-   ..    :alt: Scopy Device Connection
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    Connecting to PlutoSDR in Scopy
-
-#. Configure the **AD9361 Plugin** for both RX and TX:
-
-   * Open the **AD9361** plugin (AD936X)
-   * Set **RX LO Frequency**: 2450000000 Hz and **press Enter**
-   * Set **TX LO Frequency**: 2450000000 Hz and **press Enter**
-   * Set **RX1 Gain**: 0 dB
-   * Set **RX2 Gain**: 0 dB (unused channel)
-   * Set **TX1 Attenuation**: -10 dB
-   * Set **TX2 Attenuation**: -80 dB (unused channel - disable it)
-
-   .. TODO: Add Scopy AD9361 plugin configuration when available
-   .. .. figure:: images/exercises/scopy_testing/scopy_ad9361_config.png
-   ..    :alt: Scopy AD9361 Plugin Configuration
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    Configuring RX/TX LO frequencies and gain settings in the AD9361 plugin
-
-#. Configure the **DDS (Direct Digital Synthesizer)** to generate a test tone:
-
-   * Open the **DDS** tab in the AD9361 plugin
-   * Set **Frequency**: 89000 Hz (baseband tone) and **press Enter**
-   * Set **Amplitude**: 0.9 (scale factor)
-   * Set **Phase**: 90 degrees
-   * Enable **TX1** DDS output
-
-   .. TODO: Add Scopy DDS configuration when available
-   .. .. figure:: images/exercises/scopy_testing/scopy_dds_config.png
-   ..    :alt: Scopy DDS Configuration
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    Configuring the DDS to generate an 89 kHz test tone
-
-#. Configure the **Data Logger** (Oscilloscope/Spectrum Analyzer):
-
-   * Open the **Data Logger** instrument
-   * Set **Sample Rate**: 30720000 SPS (samples per second)
-   * Enable **FFT** view for spectrum analysis
-   * **IMPORTANT**: Check the Y-axis scale setting
-
-     * If the default scale shows **-Inf** (negative infinity), you need to change it
-     * Look for the scale settings (usually in the display options or Y-axis configuration)
-     * Set an appropriate scale (e.g., -120 dB to 0 dB for spectrum view)
-     * **Red rectangle indicator**: The scale setting is typically found in the top-right corner of the plot area
-
-   .. TODO: Add Scopy Data Logger configuration with scale setting highlighted when available
-   .. .. figure:: images/exercises/scopy_testing/scopy_data_logger_config.png
-   ..    :alt: Scopy Data Logger Configuration
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    Configuring the Data Logger with proper scale settings (note the red rectangle showing where to adjust scale if default is -Inf)
-
-#. Observe the **time domain** signals:
-
-   * **I channel (Real)**: Cosine waveform at 89000 Hz
-   * **Q channel (Imaginary)**: Sine waveform at 89000 Hz (90° phase offset due to DDS phase setting)
-   * Verify both signals have the same amplitude
-   * Check for any DC offset or amplitude imbalance
-
-   .. TODO: Add Scopy time domain screenshot when available
-   .. .. figure:: images/exercises/scopy_testing/scopy_time_domain.png
-   ..    :alt: Scopy Time Domain Display
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    Time domain view showing I and Q components of the complex sinusoid at 89 kHz
-
-#. Analyze the **frequency domain** (FFT):
-
-   * Switch to **Spectrum Analyzer** view or enable FFT overlay in the Data Logger
-   * Identify the **wanted signal** peak at +89000 Hz
-   * Identify the **image signal** (mirror) at -89000 Hz
-   * Observe **LO leakage** at DC (0 Hz)
-   * Detect any **spurious tones** (spurs)
-   * Measure the **noise floor**
-
-   .. TODO: Add Scopy spectrum analyzer screenshot when available
-   .. .. figure:: images/exercises/scopy_testing/scopy_spectrum_analysis.png
-   ..    :alt: Scopy Spectrum Analysis
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    Spectrum analyzer showing wanted signal at 89 kHz, image, LO leakage, spurs, and noise floor
-
-#. Use **Scopy's built-in measurement tools** to quantify performance:
-
-   * **Cursors**: Place cursors on wanted (at +89 kHz) and image signals (at -89 kHz) to measure power difference (IRR)
-   * **Markers**: Identify peak frequencies and amplitudes
-   * **Statistics**: View min/max/average/RMS values
-   * **SNR Calculator**: Automatic SNR measurement (if available in your Scopy version)
-
-   Example measurements you might observe:
-
-   * Wanted signal power: ~-10 dBFS (set by DDS amplitude and TX attenuation)
-   * Image signal power: ~-45 dBFS (depends on I/Q balance)
-   * **Image Rejection Ratio (IRR)**: Example: -10 - (-45) = 35 dB
-   * Noise floor: ~-90 dBFS (depends on sample rate and ADC performance)
-   * **SNR**: Example: -10 - (-90) = 80 dB
-
-#. Experiment with **Genalyzer integration** (if available):
-
-   * Open the **Genalyzer** plugin
-   * Perform advanced spectral analysis
-   * Calculate metrics: SINAD, THD, SFDR, ENOB
-   * Export data for further analysis
-
-   .. TODO: Add Genalyzer integration screenshot when available
-   .. .. figure:: images/exercises/scopy_testing/scopy_genalyzer.png
-   ..    :alt: Scopy Genalyzer Integration
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    Genalyzer plugin providing advanced spectral analysis metrics
-
-#. **Advanced debugging** with Register Map:
-
-   * Open the **Register Map** tool
-   * Inspect RF transceiver registers
-   * Verify LO frequency settings
-   * Check gain control settings
-   * Modify parameters and observe real-time effects
-
-**Comparing Scopy vs PyADI-IIO:**
-
-* **Scopy advantages**:
-
-  * Real-time visual feedback
-  * Interactive parameter adjustment
-  * No programming required
-  * Built-in measurement tools
-  * Ideal for initial debugging and exploration
-
-* **PyADI-IIO advantages**:
-
-  * Automated testing scripts
-  * Batch processing
-  * Integration with data analysis pipelines
-  * Reproducible measurements
-  * Ideal for production testing and validation
-
-For comprehensive SDR testing, use **both tools**: Scopy for visual debugging and parameter optimization, then PyADI-IIO for automated validation and documentation of results.
 
 Debugging and Tweaking IIO Attributes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
