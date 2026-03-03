@@ -281,6 +281,175 @@ Follow these steps:
    ..    Output showing transmitted and received signals
 
 
+Using Scopy with Pluto
+^^^^^^^^^^^^^^^^^^^^^^^
+
+Scopy provides a visual interface for real-time signal analysis without writing code.
+This exercise uses Scopy's instruments to transmit a test tone via DDS and observe the received spectrum.
+
+Follow these steps:
+
+#. Make the loopback setup using Pluto with TX1 connected to RX1 via an SMA cable and connect it to your PC.
+
+   .. TODO: Add Scopy Pluto loopback setup image when available
+   .. .. figure:: images/exercises/scopy_sinewave/pluto_scopy_setup.png
+   ..    :alt: Pluto SDR Setup for Scopy
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Pluto SDR with loopback connection for Scopy analysis
+
+#. Double-click the **Scopy** icon on the Desktop to open the application.
+
+#. Click on the auto-detected USB device **AD936X**, then click **Connect**.
+
+   .. TODO: Add Scopy device connection screenshot when available
+   .. .. figure:: images/exercises/scopy_sinewave/scopy_device_connect.png
+   ..    :alt: Scopy Device Connection
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Connecting to PlutoSDR in Scopy
+
+#. Click on the **AD936X** instrument on the left sidebar and configure:
+
+   * Set **RX LO Frequency** to **2450** MHz
+   * Set **TX LO Frequency** to **2450** MHz
+   * Set **RX1 Gain Control Mode** to **manual**
+   * Set **RX2 Gain Control Mode** to **manual** (Rev C Pluto only)
+   * Set **RX2 Gain** to **0** dB (Rev C Pluto only)
+   * Set **TX2 Attenuation** to **-80** dB (Rev C Pluto only)
+
+   .. TODO: Add Scopy AD936X plugin configuration when available
+   .. .. figure:: images/exercises/scopy_sinewave/scopy_ad9361_config.png
+   ..    :alt: Scopy AD936X Configuration
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Configuring RX/TX LO frequencies and gain settings
+
+#. Click on the **DAC** instrument on the left sidebar:
+
+   * Change mode to **DDS**
+   * Set **DDS_MODE** to **One CW Tone**
+   * Set **Frequency** to **0.089 MHz** (89 kHz)
+   * Set **Scale** to **-10** dB
+
+   .. TODO: Add Scopy DDS configuration when available
+   .. .. figure:: images/exercises/scopy_sinewave/scopy_dds_config.png
+   ..    :alt: Scopy DDS Configuration
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Configuring the DDS to generate an 89 kHz test tone
+
+#. Click on the **ADC - Frequency** instrument on the left sidebar:
+
+   * Click the **Complex** button on the bottom left
+   * Set **FFT Size** to **65536** samples using the (+) button
+   * Change **Window** to **No Window** in the right side menu
+   * Click on **voltage2-voltage3** circle to disable the channel (Rev C Pluto only)
+
+   .. TODO: Add Scopy ADC-Frequency configuration when available
+   .. .. figure:: images/exercises/scopy_sinewave/scopy_adc_frequency.png
+   ..    :alt: Scopy ADC-Frequency Configuration
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    ADC-Frequency instrument showing spectrum
+
+#. Click on **voltage0-voltage1** channel to open Settings:
+
+   * Enable the **MARKER** panel from the right side menu
+   * Enable the **AVERAGING** panel and set to **20**
+
+#. Click **Run** (or **Start**) and observe the spectrum plot showing the 89 kHz tone.
+
+   .. TODO: Add Scopy spectrum output when available
+   .. .. figure:: images/exercises/scopy_sinewave/scopy_spectrum_output.png
+   ..    :alt: Scopy Spectrum Output
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Spectrum showing the 89 kHz test tone
+
+#. Click on the **Measure** button (bottom right) and enable **Genalyzer analysis** and **Marker panel**
+   to see detailed measurements.
+
+   .. TODO: Add Scopy Genalyzer screenshot when available
+   .. .. figure:: images/exercises/scopy_sinewave/scopy_genalyzer.png
+   ..    :alt: Scopy Genalyzer Analysis
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Genalyzer analysis with detailed measurements
+
+#. Go back to **AD936X** instrument and change the **TX Attenuation** (range is 0 to -89.5 dB).
+   Observe the changes on the **ADC-Frequency** plot.
+
+#. When done, click **Stop** (orange button) and close Scopy.
+
+#. Reboot Pluto by unplugging and plugging back the USB connector.
+
+
+Using GNU Radio with Pluto
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This exercise implements the sinewave loopback using GNU Radio Companion with interactive sliders
+for real-time parameter adjustment.
+
+Follow these steps:
+
+#. Make the loopback setup using Pluto with TX connected to RX via an SMA cable and connect it to your PC.
+
+   .. TODO: Add GNU Radio Pluto loopback setup image when available
+   .. .. figure:: images/exercises/gnuradio_sinewave_pluto/pluto_gnuradio_setup.png
+   ..    :alt: Pluto SDR Setup for GNU Radio
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Pluto SDR with loopback connection for GNU Radio
+
+#. Open the terminal by pressing **Ctrl + Alt + T** and launch GNU Radio Companion:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ gnuradio-companion
+
+#. In GNU Radio Companion, open **sinewave_loopback_pluto.grc** from
+   **Desktop → ftc_2025 → 2_sinewave_loopback_gnuradio**.
+
+   .. TODO: Add GNU Radio flowgraph screenshot when available
+   .. .. figure:: images/exercises/gnuradio_sinewave_pluto/gnuradio_flowgraph.png
+   ..    :alt: GNU Radio Sinewave Flowgraph
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    GNU Radio flowgraph for sinewave loopback
+
+#. Click the **Execute** button (green arrow) to run the flowgraph.
+
+#. Observe the output plots showing transmitted/received samples, spectrum, and constellation diagram.
+   Use the sliders to adjust parameters in real-time:
+
+   * **Frequency slider**: Changes the offset frequency of the transmitted sinusoid
+   * **RX Gain slider**: Controls receiver gain
+   * **TX Attenuation slider**: Controls transmit power
+
+   .. TODO: Add GNU Radio output plots screenshot when available
+   .. .. figure:: images/exercises/gnuradio_sinewave_pluto/gnuradio_output.png
+   ..    :alt: GNU Radio Sinewave Output
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Output plots with interactive sliders for frequency, RX gain, and TX attenuation
+
+#. Click the **Stop** button (red square) or close the window when finished.
+
+
 Using GNU Radio with Jupiter
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -971,6 +1140,56 @@ Follow these steps:
 #. Click the **Stop** button (red square) when finished.
 
 
+Using GNU Radio with Pluto - QPSK Loopback with Full DSP
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Complete QPSK loopback demonstrating the full DSP chain: differential encoding, constellation modulation,
+FLL for coarse frequency correction, Costas loop for fine phase correction, and eye diagrams.
+
+Follow these steps:
+
+#. Make the loopback setup using Pluto with TX connected to RX via an SMA cable and connect it to your PC.
+
+#. Open the terminal by pressing **Ctrl + Alt + T** and launch GNU Radio Companion:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ gnuradio-companion
+
+#. In GNU Radio Companion, open **qpsk_loopback_pluto.grc** from
+   **Desktop → ftc_2025 → 5_qpsk_loopback_gnuradio**.
+
+#. Click the **Execute** button (green arrow) to run the flowgraph.
+
+#. Observe the output displays:
+
+   * **Transmitted Symbols (Before Constellation Modulator)**: Raw symbol pattern
+   * **Received Demodulated Symbols**: Should match the transmitted pattern due to differential decoding
+   * **Transmitted Samples (After Constellation Modulator)**: Pulse-shaped I/Q samples
+   * **Received Samples (After Costas Loop)**: Time-domain I/Q after carrier recovery
+   * **Transmitted Spectrum**: Shows the RRC-filtered signal bandwidth
+   * **Received Spectrum (After FLL)**: Spectrum centered around DC by the FLL
+   * **Received Constellation**: QPSK constellation after carrier recovery
+   * **Eye Diagram (Rx Re/Im After Costas Loop)**: Shows symbol timing and signal quality
+
+   .. TODO: Add QPSK loopback output screenshot when available
+   .. .. figure:: images/exercises/qpsk_loopback_pluto/qpsk_loopback_output.png
+   ..    :alt: QPSK Loopback Output
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Complete QPSK loopback output showing matched TX/RX symbols, spectrum, constellation, and eye diagram
+
+#. Use the **constellation rotation slider** to rotate the constellation in 90° steps. Observe that the
+   received demodulated symbols remain the same due to **differential decoding** - demonstrating how
+   differential encoding makes the system immune to 90° phase ambiguity.
+
+#. Click the **Stop** button (red square) when finished.
+
+
 Using GNU Radio with Pluto - Packet-Based File Storage
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1112,13 +1331,69 @@ Follow these steps to create a spectrum painting:
 
       Waterfall display showing the spectrum painting created by transmitting controlled frequency patterns
 
-Amplitude Shift Keying (ASK) in GNU Radio using Jupiter
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Amplitude Shift Keying (ASK) in GNU Radio
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ASK encodes data by varying signal amplitude. This exercise uses 4-ASK (levels 0, 1/3, 2/3, 1).
 Receiver extracts magnitude only (discards phase), then decimates to recover symbols.
 
 Combining ASK with PSK gives QAM - used in Wi-Fi, LTE, 5G, cable modems.
+
+
+Using GNU Radio with Pluto
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Follow these steps:
+
+#. Make the loopback setup using Pluto with TX connected to RX via an SMA cable and connect it to your PC.
+
+   .. TODO: Add Pluto hardware setup image when available
+   .. .. figure:: images/exercises/ask_pluto/pluto_ask_setup.png
+   ..    :alt: Pluto SDR Setup for ASK
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Pluto SDR with loopback connection for ASK
+
+#. Open the terminal by pressing **Ctrl + Alt + T** and launch GNU Radio Companion:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ gnuradio-companion
+
+#. In GNU Radio Companion, open **ASK_loopback_pluto.grc** from
+   **Desktop → ftc_2025 → 6_ask_loopback_gnuradio**.
+
+#. Click the **Execute** button (green arrow) to run the flowgraph.
+
+#. Observe the output displays:
+
+   * **Transmitted Samples**: Shows the repeated symbols with 100 samples per symbol (levels 0, 1/3, 2/3, 1)
+   * **Received Samples**: Raw I/Q signal from the receiver showing amplitude variations
+   * **Received Spectrum**: Frequency-domain representation
+   * **Received Constellation**: Shows **4 distinct amplitude levels** on the real axis
+   * **Magnitude RX**: Time-domain plot showing only the amplitude (magnitude) of the received signal
+   * **Decimated Magnitude RX**: After keeping 1 in 100 samples, showing the recovered symbol sequence
+
+   .. TODO: Add ASK Pluto output screenshot when available
+   .. .. figure:: images/exercises/ask_pluto/ask_pluto_output.png
+   ..    :alt: ASK Pluto Output
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    ASK output showing TX symbols, RX constellation with 4 amplitude levels, and magnitude plots
+
+#. Use the frequency offset slider to change the TX signal relative to the LO frequency
+   and observe the changes in the spectrum display.
+
+#. Click the **Stop** button (red square) when finished.
+
+
+Using GNU Radio with Jupiter
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Follow these steps:
 
@@ -1178,13 +1453,67 @@ Follow these steps:
 #. Click the **Stop** button (red square) when finished.
 
 
-Frequency Shift Keying (FSK) in GNU Radio using Jupiter
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Frequency Shift Keying (FSK) in GNU Radio
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 FSK encodes data by switching between different frequencies. This exercise uses 4-FSK.
 Receiver uses quadrature demodulation to convert frequency changes to amplitude, then decimates.
 
 FSK variants: GFSK (Bluetooth), Chirp Spread Spectrum (LoRa), OFDM subcarriers (Wi-Fi, LTE).
+
+
+Using GNU Radio with Pluto
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Follow these steps:
+
+#. Make the loopback setup using Pluto with TX connected to RX via an SMA cable and connect it to your PC.
+
+   .. TODO: Add Pluto hardware setup image when available
+   .. .. figure:: images/exercises/fsk_pluto/pluto_fsk_setup.png
+   ..    :alt: Pluto SDR Setup for FSK
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    Pluto SDR with loopback connection for FSK
+
+#. Open the terminal by pressing **Ctrl + Alt + T** and launch GNU Radio Companion:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ gnuradio-companion
+
+#. In GNU Radio Companion, open **FSK_loopback_pluto.grc** from
+   **Desktop → ftc_2025 → 7_fsk_loopback_gnuradio**.
+
+#. Click the **Execute** button (green arrow) to run the flowgraph.
+
+#. Observe the output displays:
+
+   * **Transmitted Symbols**: Shows the repeated symbol values that control the VCO
+   * **Transmitted Spectrum**: Frequency-domain showing **4 distinct frequency peaks** for the 4 FSK tones
+   * **Received Spectrum**: Should match the transmitted spectrum
+   * **Waterfall Display**: Time-frequency representation showing frequency hopping pattern
+   * **Demodulated Output**: After quadrature demod and decimation, showing the recovered symbol sequence
+
+   .. TODO: Add FSK Pluto output screenshot when available
+   .. .. figure:: images/exercises/fsk_pluto/fsk_pluto_output.png
+   ..    :alt: FSK Pluto Output
+   ..    :align: center
+   ..    :width: 40em
+   ..
+   ..    FSK output showing spectrum with 4 frequency peaks and waterfall display
+
+#. Adjust the frequency offset slider to observe the changes in the spectrum display.
+
+#. Click the **Stop** button (red square) when finished.
+
+
+Using GNU Radio with Jupiter
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Follow these steps:
 
