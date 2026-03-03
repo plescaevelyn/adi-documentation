@@ -916,21 +916,20 @@ the received frequency shifts - higher pitch when moving toward, lower when movi
 </figcaption>
 </figure>
 </li>
-</ol>
-<p>#. Move your hand toward and away from the antennas and observe how the sound and the frequency of the received harmonic changes
-in real time plots.</p>
-<p>The six plots show the received signal at different processing stages: top row displays time-domain waveforms,
-while the bottom row shows frequency-domain FFT plots where you can see the Doppler shift peak move left (hand moving away) or
-right (hand moving toward) from the center frequency.</p>
-<blockquote>
-<div><figure class="align-center" id="id21">
+<li><p>Move your hand toward and away from the antennas and observe how the sound and the frequency
+of the received harmonic changes in real time plots.</p>
+<p>The six plots show the received signal at different processing stages: top row displays
+time-domain waveforms, bottom row shows frequency-domain FFT plots where the Doppler shift
+peak moves left (hand moving away) or right (hand moving toward) from the center frequency.</p>
+<figure class="align-center" id="id21">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/doppler_radar/doppler_plots.png"><img alt="Doppler Radar Plots" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/doppler_radar/doppler_plots.png" style="width: 40em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 18 </span><span class="caption-text">Real-time plots of the Doppler radar experiment</span><a class="headerlink" href="#id21" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 18 </span><span class="caption-text">Real-time plots of the Doppler radar experiment.</span><a class="headerlink" href="#id21" title="Link to this image"></a></p>
 </figcaption>
 </figure>
-</div></blockquote>
+</li>
+</ol>
 </section>
 <section id="binary-phase-shift-keying-bpsk">
 <h2>Binary Phase Shift Keying (BPSK)<a class="headerlink" href="#binary-phase-shift-keying-bpsk" title="Link to this heading"></a></h2>
@@ -1272,8 +1271,8 @@ Each packet contains: access key (preamble), payload length, message data, and C
 </section>
 <section id="using-gnu-radio-with-jupiter-without-additional-dsp">
 <h3>Using GNU Radio with Jupiter - Without Additional DSP<a class="headerlink" href="#using-gnu-radio-with-jupiter-without-additional-dsp" title="Link to this heading"></a></h3>
-<p>QPSK without proper DSP - no matched filter, no frequency correction, no timing recovery.
-Shows why these blocks are essential: inefficient spectrum, constellation rotation, poor timing.</p>
+<p>Intentionally omits matched filter, frequency correction, and timing recovery to show what happens
+without them: wide spectrum, rotating constellation, wrong samples.</p>
 <p>Follow these steps:</p>
 <ol class="arabic">
 <li><p>Make the hardware setup using Jupiter SDR with RX1 and TX1 connected via SMA loopback cable
@@ -1315,8 +1314,8 @@ wide bandwidth due to the absence of pulse shaping.</p>
 </section>
 <section id="using-gnu-radio-with-jupiter-constellation-modulator">
 <h3>Using GNU Radio with Jupiter - Constellation Modulator<a class="headerlink" href="#using-gnu-radio-with-jupiter-constellation-modulator" title="Link to this heading"></a></h3>
-<p>Adds Root-Raised Cosine (RRC) matched filters for pulse shaping.
-Improves spectral efficiency over raw QPSK, but still lacks timing recovery and phase correction.</p>
+<p>Uses Root-Raised Cosine (RRC) filters for pulse shaping, giving a cleaner spectrum than raw QPSK.
+Still missing timing recovery and phase correction.</p>
 <p>Follow these steps:</p>
 <ol class="arabic">
 <li><p>Make the hardware setup using Jupiter SDR with RX1 and TX1 connected via SMA loopback cable
@@ -1361,8 +1360,8 @@ which would be added in a complete receiver implementation.</p>
 </section>
 <section id="using-gnu-radio-with-jupiter-frequency-locked-loop">
 <h3>Using GNU Radio with Jupiter - Frequency Locked Loop<a class="headerlink" href="#using-gnu-radio-with-jupiter-frequency-locked-loop" title="Link to this heading"></a></h3>
-<p>Adds Frequency Locked Loop (FLL) for coarse frequency offset correction.
-The FLL keeps the spectrum centered around DC despite TX/RX oscillator differences.</p>
+<p>Adds a Frequency Locked Loop (FLL) to automatically correct for oscillator differences between
+TX and RX, keeping the spectrum centered.</p>
 <p>Follow these steps:</p>
 <ol class="arabic">
 <li><p>Make the hardware setup using Jupiter SDR with RX1 and TX1 connected via SMA loopback cable
@@ -1416,8 +1415,7 @@ automatically adjusts to stay centered around DC.</p></li>
 <p>Same as Console Messaging, but saves decoded messages to a file instead of displaying on console.</p>
 <p>Follow these steps:</p>
 <ol class="arabic">
-<li><p>Make the hardware setup using Jupiter SDR and connect it to your PC.</p>
-</li>
+<li><p>Make the hardware setup using Pluto and connect it to your PC.</p></li>
 <li><p>Open the terminal and navigate to the Desktop directory, then launch GNU Radio Companion with elevated privileges:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
 </pre></div>
@@ -1435,16 +1433,7 @@ automatically adjusts to stay centered around DC.</p></li>
 <li><p>In GNU Radio Companion, open <strong>qpsk_point_to_point_rx_file.grc</strong> from <strong>workshop_exercises-&gt;gnuradio-&gt;qpsk_point_to_point_file</strong>.</p></li>
 <li><p>Click the <strong>Execute</strong> button (green arrow) to run the flowgraph.</p>
 </li>
-<li><p>Observe the received message and signal quality in the GUI displays:</p>
-<ul class="simple">
-<li><p><strong>Received Samples (After Costas Loop)</strong>: Time-domain I/Q waveform</p></li>
-<li><p><strong>Rx Re and Rx Im (After Costas Loop)</strong>: Zoomed time-domain view of in-phase and quadrature components</p></li>
-<li><p><strong>Received Spectrum</strong>: Frequency-domain representation showing the QPSK signal bandwidth</p></li>
-<li><p><strong>Received Constellation</strong>: QPSK constellation points (note the increased noise due to burst transmission)</p></li>
-<li><p><strong>msg_rx variable</strong>: Displays the decoded message (e.g., “ANALOG DEVICES INC FTC2024”)</p></li>
-</ul>
-</li>
-<li><p>The decoded message is automatically saved to a file in the project directory for later analysis.</p></li>
+<li><p>Observe the received message in the GUI. The decoded message is saved to a file in the project directory.</p></li>
 <li><p>Click the <strong>Stop</strong> button (red square) when finished.</p></li>
 </ol>
 </section>
