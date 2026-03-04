@@ -279,14 +279,13 @@ Only this function needs to be called to receive:
 
 Follow the next steps:
 
-#. Make the following setup using Pluto and connect it to your PC:
+#. Make the loopback setup using Pluto with TX connected to RX via an SMA cable and connect it to your PC.
 
-   .. figure:: images/exercises/sinewave_loopback/pluto_setup.png
-      :alt: Pluto SDR Setup
+   .. figure:: images/exercises/sinewave_loopback/loopback_setup.png
       :align: center
-      :width: 40em
+      :width: 20em
 
-      Pluto SDR setup with loopback connections
+      Pluto SDR with loopback cable connecting TX to RX
 
 #. Download the SDR Lab Source Code from the FTC2023 workshop link and unzip it on your desktop.
 
@@ -497,13 +496,11 @@ Follow these steps:
 
 #. Make the loopback setup using Pluto with TX1 connected to RX1 via an SMA cable and connect it to your PC.
 
-   .. TODO: Add Scopy Pluto loopback setup image when available
-   .. .. figure:: images/exercises/scopy_sinewave/pluto_scopy_setup.png
-   ..    :alt: Pluto SDR Setup for Scopy
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    Pluto SDR with loopback connection for Scopy analysis
+   .. figure:: images/exercises/sinewave_loopback/loopback_setup.png
+      :align: center
+      :width: 20em
+
+      Pluto SDR with loopback cable connecting TX to RX
 
 #. Double-click the **Scopy** icon on the Desktop to open the application.
 
@@ -783,50 +780,219 @@ Follow these steps:
 Binary Phase Shift Keying (BPSK)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-BPSK encodes digital data by shifting the carrier phase: bit 0 → -1, bit 1 → +1.
-This creates two constellation points on the real axis.
+Binary Phase Shift Keying is the simplest type of Phase Modulation where the binary data (bits 0 and 1)
+are encoded using two distinct phase states of the carrier.
 
-   .. figure:: images/exercises/bpsk_loopback/bpsk_modulation_concept.png
-      :alt: BPSK Modulation Concept
-      :align: center
-      :width: 40em
+**Encoding:** bits → symbols × carrier_sinusoid
 
-      BPSK modulation concept.
+* bit 0 → symbol -1+0j
+* bit 1 → symbol +1+0j
 
-   .. figure:: images/exercises/bpsk_loopback/bpsk_constellation.png
-      :alt: BPSK Constellation Diagram
-      :align: center
-      :width: 40em
+For BPSK, Q = 0 (all energy in the In-phase component).
 
-      BPSK constellation - two points at -1 and +1.
+.. figure:: images/exercises/bpsk_loopback/bpsk_modulation_concept.png
+   :align: center
+   :width: 40em
 
-Real-world reception introduces frequency offset, phase offset, and timing errors.
-The receiver corrects these using:
+   BPSK modulation concept showing input bits, symbols, and modulated output
 
-* **Coarse frequency correction** - squares the signal to find 2× offset, then compensates
-* **Symbol timing recovery** - Mueller and Muller algorithm selects optimal sample from each 16-sample symbol
-* **Costas loop** - fine frequency and phase correction
+.. figure:: images/exercises/bpsk_loopback/bpsk_constellation.png
+   :align: center
+   :width: 40em
 
-   .. figure:: images/exercises/bpsk_loopback/tx_rx_flow_diagram.png
-      :alt: BPSK TX/RX Flow
-      :align: center
-      :width: 40em
+   BPSK constellation with two points at -1 and +1 on the real axis
 
-      BPSK transmitter and receiver signal processing chain.
+**Where is Phase Modulation used?**
 
-   .. figure:: images/exercises/bpsk_loopback/bpsk_constellation_progression.png
-      :alt: BPSK Signal Recovery Progression
-      :align: center
-      :width: 40em
+* GSM
+* Satellite Television
+* Wi-Fi
+* Many others
 
-      Constellation progression: raw → coarse freq → timing recovery → Costas loop.
+Ideal World vs Real World
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In an **ideal world** where the LOs of TX and RX are perfectly in sync and where there is no time
+delay between RX and TX: **in = out**
+
+.. figure:: images/exercises/bpsk_loopback/bpsk_loopback_ideal_world.emf
+   :align: center
+   :width: 40em
+
+   Ideal world: transmitted and received symbols are identical
+
+In a **real world**: **in != out** but the information is still there.
+
+.. figure:: images/exercises/bpsk_loopback/bpsk_loopback_real_world.emf
+   :align: center
+   :width: 40em
+
+   Real world: received symbols have phase and frequency offset
+
+**What are the problems when demodulating PSK signals?**
+
+* Phase offset of LO at RX relative to TX
+* Frequency offset of LO at RX relative to TX
+* Variation of these two in time with distance change and temperature change
+
+Luckily, all these can be solved by software!
+
+Differential Encoding and Decoding
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Differential encoding solves the phase ambiguity problem:
+
+* To transmit a bit of **"1"**: change state (if previous is "0", change to "1"; if previous is "1", change to "0")
+* To transmit a bit of **"0"**: repeat state (if previous is "1", repeat "1"; if previous is "0", repeat "0")
+
+.. figure:: images/exercises/bpsk_loopback/bpsk_loopback_encoding_decoding.emf
+   :align: center
+   :width: 40em
+
+   Differential encoder and decoder logic
+
+How the Python Script is Structured
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. figure:: images/exercises/bpsk_loopback/tx_rx_flow_diagram.png
+   :align: center
+   :width: 45em
+
+   BPSK transmitter and receiver signal processing chain
+
+**Transmitter:**
+
+#. Configure SDR
+#. Create array of bits
+#. Differential Encoding
+#. Interpolate with 16 sps and Remap symbols: bit 0 → -1, bit 1 → 1
+#. Shift Spectrum
+#. Call tx() function and transmit
+
+**Receiver:**
+
+#. Call rx() function to receive data
+#. Adjust the frequency offset (coarse)
+#. Select the right samples and decimate (Symbol Sync)
+#. Fine frequency and phase adjustment (Costas Loop)
+#. Differential Decoding
+#. Plot data
+
+Coarse Frequency Offset Adjustment
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+How to adjust the frequency offset:
+
+#. First square the received signal → all symbols (s(t))² will have a constant positive value
+#. Take the FFT and measure the peak → the measured peak will be at 2×offset_frequency
+#. Apply frequency correction on received samples based on the above measurement
+
+.. figure:: images/exercises/bpsk_loopback/bpsk_loopback_init_measurement.png
+   :align: center
+   :width: 40em
+
+   Initial frequency offset measurement using squared signal FFT
+
+Symbol Timing Recovery (Mueller and Muller)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+How to select the right samples (Mueller and Muller timing recovery technique):
+
+The variable "mu" represents the timing offset to add to 16sps because we have to select one from
+each 16 samples. For example, if mu = 2.43 → we have to shift the input by 2.43 samples.
+After a few iterations of the while loop, "mu" stabilizes and only the correct samples are pulled.
+
+We want to sample where the adjacent symbols cross 0 and discard in-between samples.
+
+.. figure:: images/exercises/bpsk_loopback/bpsk_loopback_sampling.png
+   :align: center
+   :width: 40em
+
+   Symbol timing recovery: selecting optimal sample points
+
+Fine Frequency Synchronization (Costas Loop)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The Costas Loop functions like a PLL. We multiply the real part of the sample (I) by the imaginary
+part (Q), and because Q should be equal to zero for BPSK, the error function is minimized when
+there is no phase or frequency offset that causes energy to shift from I to Q.
+
+Q is the error signal - adjust and keep Q = 0.
+
+.. figure:: images/exercises/bpsk_loopback/bpsk_constellation_progression.png
+   :align: center
+   :width: 45em
+
+   Constellation progression: raw → coarse freq → timing recovery → Costas loop
 
 Using PyADI-IIO with Pluto
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+The Python script performs the following steps:
+
+**Transmitter - Create bits and encode:**
+
+.. code-block:: python
+   :linenos:
+
+   # Create the array of bits and encode them with Differential Encoding
+   num_symbols = 1000
+   bits = np.random.randint(0, 2, num_symbols)
+
+   # Differential encoding
+   encoded_bits = np.zeros(num_symbols, dtype=int)
+   encoded_bits[0] = bits[0]
+   for i in range(1, num_symbols):
+       encoded_bits[i] = encoded_bits[i-1] ^ bits[i]
+
+**Transmitter - Interpolate and shift spectrum:**
+
+.. code-block:: python
+   :linenos:
+   :lineno-start: 12
+
+   # Repeat each bit 16 times (interpolate) => 16sps
+   sps = 16
+   samples = np.repeat(encoded_bits * 2 - 1, sps).astype(np.complex64)
+
+   # For BPSK the data is complex (Q = 0)
+   # Shift spectrum to a higher frequency
+   f_offset = 100000  # 100 kHz offset
+   t = np.arange(len(samples)) / sample_rate
+   samples = samples * np.exp(2.0j * np.pi * f_offset * t)
+
+   # Transmit
+   sdr.tx(samples)
+
+**Receiver - Coarse frequency adjustment:**
+
+.. code-block:: python
+   :linenos:
+   :lineno-start: 25
+
+   # Receive samples
+   rx_samples = sdr.rx()
+
+   # Square the signal to find frequency offset
+   squared = rx_samples ** 2
+   fft_squared = np.fft.fftshift(np.fft.fft(squared))
+   freqs = np.fft.fftshift(np.fft.fftfreq(len(squared), 1/sample_rate))
+   max_freq = freqs[np.argmax(np.abs(fft_squared))]
+   offset_freq = max_freq / 2  # Divide by 2 because we squared
+
+   # Apply frequency correction
+   t = np.arange(len(rx_samples)) / sample_rate
+   rx_corrected = rx_samples * np.exp(-2.0j * np.pi * offset_freq * t)
+
 Follow these steps to run the BPSK transmission and reception experiment:
 
-#. Make the setup using Pluto with loopback connection and connect it to your PC.
+#. Make the loopback setup using Pluto with TX connected to RX via an SMA cable and connect it to your PC.
+
+   .. figure:: images/exercises/sinewave_loopback/loopback_setup.png
+      :align: center
+      :width: 20em
+
+      Pluto SDR with loopback cable connecting TX to RX
 
 #. Go to **workshop_exercises→python→bpsk_loopback** and open **bpsk_pluto_loopback_pluto.py**
    using **Thonny Python IDE**.
@@ -1351,6 +1517,12 @@ Follow these steps:
 
 #. Make the loopback setup using Pluto with TX connected to RX via an SMA cable and connect it to your PC.
 
+   .. figure:: images/exercises/sinewave_loopback/loopback_setup.png
+      :align: center
+      :width: 20em
+
+      Pluto SDR with loopback cable connecting TX to RX
+
 #. Open the terminal by pressing **Ctrl + Alt + T** and launch GNU Radio Companion:
 
    .. shell::
@@ -1548,13 +1720,11 @@ Follow these steps:
 
 #. Make the loopback setup using Pluto with TX connected to RX via an SMA cable and connect it to your PC.
 
-   .. TODO: Add Pluto hardware setup image when available
-   .. .. figure:: images/exercises/ask_pluto/pluto_ask_setup.png
-   ..    :alt: Pluto SDR Setup for ASK
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    Pluto SDR with loopback connection for ASK
+   .. figure:: images/exercises/sinewave_loopback/loopback_setup.png
+      :align: center
+      :width: 20em
+
+      Pluto SDR with loopback cable connecting TX to RX
 
 #. Open the terminal by pressing **Ctrl + Alt + T** and launch GNU Radio Companion:
 
@@ -1670,13 +1840,11 @@ Follow these steps:
 
 #. Make the loopback setup using Pluto with TX connected to RX via an SMA cable and connect it to your PC.
 
-   .. TODO: Add Pluto hardware setup image when available
-   .. .. figure:: images/exercises/fsk_pluto/pluto_fsk_setup.png
-   ..    :alt: Pluto SDR Setup for FSK
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    Pluto SDR with loopback connection for FSK
+   .. figure:: images/exercises/sinewave_loopback/loopback_setup.png
+      :align: center
+      :width: 20em
+
+      Pluto SDR with loopback cable connecting TX to RX
 
 #. Open the terminal by pressing **Ctrl + Alt + T** and launch GNU Radio Companion:
 
