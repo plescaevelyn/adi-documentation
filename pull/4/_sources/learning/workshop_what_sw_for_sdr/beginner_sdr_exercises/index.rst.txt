@@ -1180,22 +1180,63 @@ Follow these steps:
 Quadrature Phase Shift Keying (QPSK)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-QPSK encodes 2 bits per symbol using four constellation points at 45°, 135°, 225°, and 315°.
-This doubles spectral efficiency compared to BPSK.
+QPSK is similar to BPSK but has more symbols. It encodes 2 bits per symbol using four
+constellation points at 45°, 135°, 225°, and 315°. This doubles spectral efficiency compared to BPSK.
 
-   .. figure:: images/exercises/qpsk_gnuradio/qpsk_constellation.png
-      :alt: QPSK Constellation
-      :align: center
-      :width: 40em
+.. figure:: images/exercises/qpsk_pluto/psk_symbols.png
+   :align: center
+   :width: 40em
 
-      QPSK constellation - 4 points, 2 bits/symbol.
+   PSK symbol mapping: BPSK (2 symbols), QPSK (4 symbols), 8PSK (8 symbols)
 
-   .. figure:: images/exercises/qpsk_gnuradio/qpsk_ho_modulation.png
-      :alt: QPSK Higher Order Modulation
-      :align: center
-      :width: 40em
+.. figure:: images/exercises/qpsk_gnuradio/qpsk_constellation.png
+   :align: center
+   :width: 40em
 
-      Higher-order modulations: 16-QAM, 32-QAM, 64-QAM, 256-QAM.
+   QPSK constellation - 4 points, 2 bits/symbol
+
+PSK with more than 4 symbols increases spectral efficiency but requires better SNR:
+
+.. figure:: images/exercises/qpsk_gnuradio/qpsk_ho_modulation.png
+   :align: center
+   :width: 40em
+
+   Higher-order modulations: 16-QAM, 32-QAM, 64-QAM, 256-QAM
+
+QPSK GNU Radio Loopback Structure
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The QPSK loopback example in GNU Radio demonstrates the full DSP chain:
+
+.. figure:: images/exercises/qpsk_gnuradio/qpsk_loopback_gnuradio_example.png
+   :align: center
+   :width: 45em
+
+   QPSK loopback GNU Radio flowgraph with TX and RX chains
+
+**Transmitter:**
+
+* Constellation Modulator block: maps bytes into symbols and applies RRC filter
+
+**Receiver:**
+
+* **Frequency Locked Loop (FLL)**: Dynamically adjusts the frequency of the received spectrum
+* **Symbol Sync**: Applies RRC filter and selects the right 1 out of 16 symbols
+* **Differential Decoder**: Decodes the differentially encoded symbols
+* **Constellation Receiver (Costas Loop)**: Fine tunes the remaining frequency and phase error
+
+.. figure:: images/exercises/qpsk_pluto/qpsk_loopback_gnuradio_run_results.png
+   :align: center
+   :width: 45em
+
+   QPSK loopback results: same pattern of symbols at TX and demodulated RX
+
+**Key observations:**
+
+* The green trace shows the RX spectrum after FLL block (centered around DC)
+* The eye diagram after Costas loop shows clean transitions
+* Using the rotation slider, you can rotate the constellation in steps of 90° and observe
+  that the symbols received are the same due to Differential Decoding
 
 Using GNU Radio with Pluto - Console Messaging
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1701,11 +1742,33 @@ Follow these steps to create a spectrum painting:
 Amplitude Shift Keying (ASK) in GNU Radio
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-ASK encodes data by varying signal amplitude. This exercise uses 4-ASK (levels 0, 1/3, 2/3, 1).
-Receiver extracts magnitude only (discards phase), then decimates to recover symbols.
+ASK encodes data by varying signal amplitude. This exercise uses 4-ASK with symbol levels
+between (0, 1/3, 2/3, 1).
 
-Combining ASK with PSK gives QAM - used in Wi-Fi, LTE, 5G, cable modems.
+.. figure:: images/exercises/ask_loopback/ask_gnuradio_example.png
+   :align: center
+   :width: 45em
 
+   ASK GNU Radio flowgraph showing transmitter and receiver
+
+**Transmitter:**
+
+* Generate four symbols repeatedly
+* Repeat each symbol 100 times (100 sps)
+* Offset frequency with a complex sinusoid
+
+**Receiver:**
+
+* Decimate (keep only 1 in 100 samples)
+* Compute the magnitude of the RX signal
+
+**Conclusion:** ASK combined with PSK forms QAM:
+
+.. figure:: images/exercises/ask_loopback/ask_psk_qam.png
+   :align: center
+   :width: 40em
+
+   ASK + PSK = QAM (used in Wi-Fi, LTE, 5G, cable modems)
 
 Using GNU Radio with Pluto
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1736,22 +1799,18 @@ Follow these steps:
 
 #. Observe the output displays:
 
-   * **Transmitted Samples**: Shows the repeated symbols with 100 samples per symbol (levels 0, 1/3, 2/3, 1)
-   * **Received Samples**: Raw I/Q signal from the receiver showing amplitude variations
-   * **Received Spectrum**: Frequency-domain representation
-   * **Received Constellation**: Shows **4 distinct amplitude levels** on the real axis
-   * **Magnitude RX**: Time-domain plot showing only the amplitude (magnitude) of the received signal
-   * **Decimated Magnitude RX**: After keeping 1 in 100 samples, showing the recovered symbol sequence
+   .. figure:: images/exercises/ask_loopback/ask_gnuradio_example_result.png
+      :align: center
+      :width: 45em
 
-   .. TODO: Add ASK Pluto output screenshot when available
-   .. .. figure:: images/exercises/ask_pluto/ask_pluto_output.png
-   ..    :alt: ASK Pluto Output
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    ASK output showing TX symbols, RX constellation with 4 amplitude levels, and magnitude plots
+      ASK output showing TX symbols, RX constellation with 4 amplitude levels, and magnitude plots
 
-#. Use the frequency offset slider to change the TX signal relative to the LO frequency
+   * **TX symbols**: 100 sps for each symbol between (0, 1/3, 2/3, 1)
+   * **RX constellation**: 4 levels of amplitude on the real axis
+   * **RX unprocessed signal**: Raw received I/Q samples
+   * **Magnitude of RX signal (decimated)**: Only the magnitude, after keeping 1 in 100 samples
+
+#. Use the frequency offset slider to offset the TX signal relative to TX LO frequency
    and observe the changes in the spectrum display.
 
 #. Click the **Stop** button (red square) when finished.

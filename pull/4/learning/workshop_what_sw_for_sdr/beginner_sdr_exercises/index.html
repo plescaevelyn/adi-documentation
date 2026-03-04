@@ -123,6 +123,7 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#quadrature-phase-shift-keying-qpsk">Quadrature Phase Shift Keying (QPSK)</a><ul>
+<li><a class="reference internal" href="#qpsk-gnu-radio-loopback-structure">QPSK GNU Radio Loopback Structure</a></li>
 <li><a class="reference internal" href="#using-gnu-radio-with-pluto-console-messaging">Using GNU Radio with Pluto - Console Messaging</a></li>
 <li><a class="reference internal" href="#using-gnu-radio-with-jupiter-console-messaging">Using GNU Radio with Jupiter - Console Messaging</a></li>
 <li><a class="reference internal" href="#using-gnu-radio-with-jupiter-without-additional-dsp">Using GNU Radio with Jupiter - Without Additional DSP</a></li>
@@ -1614,45 +1615,87 @@ using <strong>Thonny Python IDE</strong>.</p></li>
 </section>
 <section id="quadrature-phase-shift-keying-qpsk">
 <h2>Quadrature Phase Shift Keying (QPSK)<a class="headerlink" href="#quadrature-phase-shift-keying-qpsk" title="Link to this heading"></a></h2>
-<p>QPSK encodes 2 bits per symbol using four constellation points at 45°, 135°, 225°, and 315°.
-This doubles spectral efficiency compared to BPSK.</p>
-<blockquote>
-<div><figure class="align-center" id="id57">
-<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_gnuradio/qpsk_constellation.png"><img alt="QPSK Constellation" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_gnuradio/qpsk_constellation.png" style="width: 40em;" />
+<p>QPSK is similar to BPSK but has more symbols. It encodes 2 bits per symbol using four
+constellation points at 45°, 135°, 225°, and 315°. This doubles spectral efficiency compared to BPSK.</p>
+<figure class="align-center" id="id57">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_pluto/psk_symbols.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_pluto/psk_symbols.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_pluto/psk_symbols.png" style="width: 40em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 50 </span><span class="caption-text">QPSK constellation - 4 points, 2 bits/symbol.</span><a class="headerlink" href="#id57" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 50 </span><span class="caption-text">PSK symbol mapping: BPSK (2 symbols), QPSK (4 symbols), 8PSK (8 symbols)</span><a class="headerlink" href="#id57" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <figure class="align-center" id="id58">
-<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_gnuradio/qpsk_ho_modulation.png"><img alt="QPSK Higher Order Modulation" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_gnuradio/qpsk_ho_modulation.png" style="width: 40em;" />
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_gnuradio/qpsk_constellation.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_gnuradio/qpsk_constellation.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_gnuradio/qpsk_constellation.png" style="width: 40em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 51 </span><span class="caption-text">Higher-order modulations: 16-QAM, 32-QAM, 64-QAM, 256-QAM.</span><a class="headerlink" href="#id58" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 51 </span><span class="caption-text">QPSK constellation - 4 points, 2 bits/symbol</span><a class="headerlink" href="#id58" title="Link to this image"></a></p>
 </figcaption>
 </figure>
-</div></blockquote>
+<p>PSK with more than 4 symbols increases spectral efficiency but requires better SNR:</p>
+<figure class="align-center" id="id59">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_gnuradio/qpsk_ho_modulation.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_gnuradio/qpsk_ho_modulation.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_gnuradio/qpsk_ho_modulation.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 52 </span><span class="caption-text">Higher-order modulations: 16-QAM, 32-QAM, 64-QAM, 256-QAM</span><a class="headerlink" href="#id59" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<section id="qpsk-gnu-radio-loopback-structure">
+<h3>QPSK GNU Radio Loopback Structure<a class="headerlink" href="#qpsk-gnu-radio-loopback-structure" title="Link to this heading"></a></h3>
+<p>The QPSK loopback example in GNU Radio demonstrates the full DSP chain:</p>
+<figure class="align-center" id="id60">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_gnuradio/qpsk_loopback_gnuradio_example.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_gnuradio/qpsk_loopback_gnuradio_example.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_gnuradio/qpsk_loopback_gnuradio_example.png" style="width: 45em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 53 </span><span class="caption-text">QPSK loopback GNU Radio flowgraph with TX and RX chains</span><a class="headerlink" href="#id60" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p><strong>Transmitter:</strong></p>
+<ul class="simple">
+<li><p>Constellation Modulator block: maps bytes into symbols and applies RRC filter</p></li>
+</ul>
+<p><strong>Receiver:</strong></p>
+<ul class="simple">
+<li><p><strong>Frequency Locked Loop (FLL)</strong>: Dynamically adjusts the frequency of the received spectrum</p></li>
+<li><p><strong>Symbol Sync</strong>: Applies RRC filter and selects the right 1 out of 16 symbols</p></li>
+<li><p><strong>Differential Decoder</strong>: Decodes the differentially encoded symbols</p></li>
+<li><p><strong>Constellation Receiver (Costas Loop)</strong>: Fine tunes the remaining frequency and phase error</p></li>
+</ul>
+<figure class="align-center" id="id61">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_pluto/qpsk_loopback_gnuradio_run_results.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_pluto/qpsk_loopback_gnuradio_run_results.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_pluto/qpsk_loopback_gnuradio_run_results.png" style="width: 45em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 54 </span><span class="caption-text">QPSK loopback results: same pattern of symbols at TX and demodulated RX</span><a class="headerlink" href="#id61" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p><strong>Key observations:</strong></p>
+<ul class="simple">
+<li><p>The green trace shows the RX spectrum after FLL block (centered around DC)</p></li>
+<li><p>The eye diagram after Costas loop shows clean transitions</p></li>
+<li><p>Using the rotation slider, you can rotate the constellation in steps of 90° and observe
+that the symbols received are the same due to Differential Decoding</p></li>
+</ul>
+</section>
 <section id="using-gnu-radio-with-pluto-console-messaging">
 <h3>Using GNU Radio with Pluto - Console Messaging<a class="headerlink" href="#using-gnu-radio-with-pluto-console-messaging" title="Link to this heading"></a></h3>
 <p>Packet-based QPSK system where messages are transmitted in bursts and displayed on console.
 Each packet contains: access key (preamble), payload length, message data, and CRC32 checksum.</p>
 <blockquote>
-<div><figure class="align-center" id="id59">
+<div><figure class="align-center" id="id62">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_gnuradio/qpsk_point_to_point_schematic.png"><img alt="QPSK Console Messaging Flowgraph" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_gnuradio/qpsk_point_to_point_schematic.png" style="width: 40em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 52 </span><span class="caption-text">Transmitter and receiver flowgraph for packet-based QPSK.</span><a class="headerlink" href="#id59" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 55 </span><span class="caption-text">Transmitter and receiver flowgraph for packet-based QPSK.</span><a class="headerlink" href="#id62" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </div></blockquote>
 <p>Follow these steps:</p>
 <ol class="arabic">
 <li><p>Make the following setup using Pluto and connect it to your PC:</p>
-<figure class="align-center" id="id60">
+<figure class="align-center" id="id63">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_pluto/qpsk_pluto_setup.png"><img alt="QPSK Pluto Setup" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_pluto/qpsk_pluto_setup.png" style="width: 40em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 53 </span><span class="caption-text">QPSK Pluto Setup</span><a class="headerlink" href="#id60" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 56 </span><span class="caption-text">QPSK Pluto Setup</span><a class="headerlink" href="#id63" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </li>
@@ -1674,18 +1717,18 @@ Each packet contains: access key (preamble), payload length, message data, and C
 <strong>Desktop → ftc_2025 → 1_console_message_point_to_point_gnuradio → receiver_pluto</strong>.</p></li>
 <li><p>Click the <strong>Execute</strong> button (green arrow) to run the flowgraph.</p></li>
 <li><p>Observe the output:</p>
-<figure class="align-center" id="id61">
+<figure class="align-center" id="id64">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_pluto/qpsk_point_to_point_rx_console.png"><img alt="QPSK Console Message Reception" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_pluto/qpsk_point_to_point_rx_console.png" style="width: 40em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 54 </span><span class="caption-text">Console output with received message.</span><a class="headerlink" href="#id61" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 57 </span><span class="caption-text">Console output with received message.</span><a class="headerlink" href="#id64" title="Link to this image"></a></p>
 </figcaption>
 </figure>
-<figure class="align-center" id="id62">
+<figure class="align-center" id="id65">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_gnuradio/qpsk_point_to_point_output.png"><img alt="QPSK Signal Analysis Output" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/qpsk_gnuradio/qpsk_point_to_point_output.png" style="width: 40em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 55 </span><span class="caption-text">Received samples, spectrum, and QPSK constellation.</span><a class="headerlink" href="#id62" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 58 </span><span class="caption-text">Received samples, spectrum, and QPSK constellation.</span><a class="headerlink" href="#id65" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </li>
@@ -1851,11 +1894,11 @@ FLL for coarse frequency correction, Costas loop for fine phase correction, and 
 <p>Follow these steps:</p>
 <ol class="arabic">
 <li><p>Make the loopback setup using Pluto with TX connected to RX via an SMA cable and connect it to your PC.</p>
-<figure class="align-center" id="id63">
+<figure class="align-center" id="id66">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/sinewave_loopback/loopback_setup.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/sinewave_loopback/loopback_setup.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/sinewave_loopback/loopback_setup.png" style="width: 20em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 56 </span><span class="caption-text">Pluto SDR with loopback cable connecting TX to RX</span><a class="headerlink" href="#id63" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 59 </span><span class="caption-text">Pluto SDR with loopback cable connecting TX to RX</span><a class="headerlink" href="#id66" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </li>
@@ -1950,11 +1993,11 @@ differential encoding makes the system immune to 90° phase ambiguity.</p></li>
 <li><p>In GNU Radio Companion, open the <strong>paint_tx.grc</strong> file from <strong>workshop_exercises-&gt;gnuradio-&gt;spectrum_paint</strong>.</p></li>
 <li><p>Click the <strong>Execute</strong> button (green arrow) to run the flowgraph.</p></li>
 <li><p>Observe the waterfall display as the spectrum painting appears, created by the Pluto SDR transmitting the frequency pattern.</p>
-<figure class="align-center" id="id64">
+<figure class="align-center" id="id67">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/spectrum_paint/paint_tx.png"><img alt="Spectrum Paint Waterfall Display" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/spectrum_paint/paint_tx.png" style="width: 40em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 57 </span><span class="caption-text">Waterfall display showing the spectrum painting created by transmitting controlled frequency patterns</span><a class="headerlink" href="#id64" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 60 </span><span class="caption-text">Waterfall display showing the spectrum painting created by transmitting controlled frequency patterns</span><a class="headerlink" href="#id67" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </li>
@@ -1962,19 +2005,44 @@ differential encoding makes the system immune to 90° phase ambiguity.</p></li>
 </section>
 <section id="amplitude-shift-keying-ask-in-gnu-radio">
 <h2>Amplitude Shift Keying (ASK) in GNU Radio<a class="headerlink" href="#amplitude-shift-keying-ask-in-gnu-radio" title="Link to this heading"></a></h2>
-<p>ASK encodes data by varying signal amplitude. This exercise uses 4-ASK (levels 0, 1/3, 2/3, 1).
-Receiver extracts magnitude only (discards phase), then decimates to recover symbols.</p>
-<p>Combining ASK with PSK gives QAM - used in Wi-Fi, LTE, 5G, cable modems.</p>
+<p>ASK encodes data by varying signal amplitude. This exercise uses 4-ASK with symbol levels
+between (0, 1/3, 2/3, 1).</p>
+<figure class="align-center" id="id68">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/ask_loopback/ask_gnuradio_example.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/ask_loopback/ask_gnuradio_example.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/ask_loopback/ask_gnuradio_example.png" style="width: 45em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 61 </span><span class="caption-text">ASK GNU Radio flowgraph showing transmitter and receiver</span><a class="headerlink" href="#id68" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p><strong>Transmitter:</strong></p>
+<ul class="simple">
+<li><p>Generate four symbols repeatedly</p></li>
+<li><p>Repeat each symbol 100 times (100 sps)</p></li>
+<li><p>Offset frequency with a complex sinusoid</p></li>
+</ul>
+<p><strong>Receiver:</strong></p>
+<ul class="simple">
+<li><p>Decimate (keep only 1 in 100 samples)</p></li>
+<li><p>Compute the magnitude of the RX signal</p></li>
+</ul>
+<p><strong>Conclusion:</strong> ASK combined with PSK forms QAM:</p>
+<figure class="align-center" id="id69">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/ask_loopback/ask_psk_qam.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/ask_loopback/ask_psk_qam.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/ask_loopback/ask_psk_qam.png" style="width: 40em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 62 </span><span class="caption-text">ASK + PSK = QAM (used in Wi-Fi, LTE, 5G, cable modems)</span><a class="headerlink" href="#id69" title="Link to this image"></a></p>
+</figcaption>
+</figure>
 <section id="id4">
 <h3>Using GNU Radio with Pluto<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
 <p>Follow these steps:</p>
 <ol class="arabic">
 <li><p>Make the loopback setup using Pluto with TX connected to RX via an SMA cable and connect it to your PC.</p>
-<figure class="align-center" id="id65">
+<figure class="align-center" id="id70">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/sinewave_loopback/loopback_setup.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/sinewave_loopback/loopback_setup.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/sinewave_loopback/loopback_setup.png" style="width: 20em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 58 </span><span class="caption-text">Pluto SDR with loopback cable connecting TX to RX</span><a class="headerlink" href="#id65" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 63 </span><span class="caption-text">Pluto SDR with loopback cable connecting TX to RX</span><a class="headerlink" href="#id70" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </li>
@@ -1990,16 +2058,21 @@ Receiver extracts magnitude only (discards phase), then decimates to recover sym
 <strong>Desktop → ftc_2025 → 6_ask_loopback_gnuradio</strong>.</p></li>
 <li><p>Click the <strong>Execute</strong> button (green arrow) to run the flowgraph.</p></li>
 <li><p>Observe the output displays:</p>
+<figure class="align-center" id="id71">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/ask_loopback/ask_gnuradio_example_result.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/ask_loopback/ask_gnuradio_example_result.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/ask_loopback/ask_gnuradio_example_result.png" style="width: 45em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 64 </span><span class="caption-text">ASK output showing TX symbols, RX constellation with 4 amplitude levels, and magnitude plots</span><a class="headerlink" href="#id71" title="Link to this image"></a></p>
+</figcaption>
+</figure>
 <ul class="simple">
-<li><p><strong>Transmitted Samples</strong>: Shows the repeated symbols with 100 samples per symbol (levels 0, 1/3, 2/3, 1)</p></li>
-<li><p><strong>Received Samples</strong>: Raw I/Q signal from the receiver showing amplitude variations</p></li>
-<li><p><strong>Received Spectrum</strong>: Frequency-domain representation</p></li>
-<li><p><strong>Received Constellation</strong>: Shows <strong>4 distinct amplitude levels</strong> on the real axis</p></li>
-<li><p><strong>Magnitude RX</strong>: Time-domain plot showing only the amplitude (magnitude) of the received signal</p></li>
-<li><p><strong>Decimated Magnitude RX</strong>: After keeping 1 in 100 samples, showing the recovered symbol sequence</p></li>
+<li><p><strong>TX symbols</strong>: 100 sps for each symbol between (0, 1/3, 2/3, 1)</p></li>
+<li><p><strong>RX constellation</strong>: 4 levels of amplitude on the real axis</p></li>
+<li><p><strong>RX unprocessed signal</strong>: Raw received I/Q samples</p></li>
+<li><p><strong>Magnitude of RX signal (decimated)</strong>: Only the magnitude, after keeping 1 in 100 samples</p></li>
 </ul>
 </li>
-<li><p>Use the frequency offset slider to change the TX signal relative to the LO frequency
+<li><p>Use the frequency offset slider to offset the TX signal relative to TX LO frequency
 and observe the changes in the spectrum display.</p></li>
 <li><p>Click the <strong>Stop</strong> button (red square) when finished.</p></li>
 </ol>
@@ -2053,11 +2126,11 @@ Receiver uses quadrature demodulation to convert frequency changes to amplitude,
 <p>Follow these steps:</p>
 <ol class="arabic">
 <li><p>Make the loopback setup using Pluto with TX connected to RX via an SMA cable and connect it to your PC.</p>
-<figure class="align-center" id="id66">
+<figure class="align-center" id="id72">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/sinewave_loopback/loopback_setup.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/sinewave_loopback/loopback_setup.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/sinewave_loopback/loopback_setup.png" style="width: 20em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 59 </span><span class="caption-text">Pluto SDR with loopback cable connecting TX to RX</span><a class="headerlink" href="#id66" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 65 </span><span class="caption-text">Pluto SDR with loopback cable connecting TX to RX</span><a class="headerlink" href="#id72" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </li>
