@@ -15,7 +15,7 @@ communication protocols.
    these advanced topics.
 
 Requirements
-------------
+~~~~~~~~~~~~
 
 To follow these exercises, you will need:
 
@@ -328,174 +328,6 @@ directly using standard shell commands via SSH.
 **Key Insight:** Direct filesystem access is useful for embedded applications, shell scripts,
 or when you need the lowest-level access to IIO attributes without any library overhead.
 
-Using Scopy Debugger Instrument
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-**Why This Approach:** Scopy's Debugger instrument provides a visual, hierarchical view of all IIO attributes, making it easy to explore what's available and experiment with different settings in real-time.
-
-**Steps:**
-
-#. Launch Scopy and connect to your Pluto SDR:
-
-   .. shell::
-      :user: analog
-      :group: analog
-      :show-user:
-
-      $ scopy
-
-   * Click on the auto-detected USB device **"AD936x"**
-   * Click **Connect**
-   * For network connection: Click **+** → Enter ``ip:pluto.local`` → **Verify** → **Add Device** → **Connect**
-
-#. Open the **Debugger** instrument:
-
-   * Click **Debugger** in the left sidebar
-
-   .. TODO: Add Scopy Debugger screenshot
-   .. .. figure:: images/exercises/iio_attributes/scopy_debugger_open.png
-   ..    :alt: Scopy Debugger Instrument
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    Opening the Scopy Debugger instrument
-
-#. Navigate to the RX gain attribute:
-
-   Expand the hierarchy in this order:
-
-   * **context0** (the IIO context)
-   * **iio:device0:ad9361-phy** (the AD9361 RF transceiver)
-   * **voltage0** (RX1 channel)
-   * Find **hardwaregain** in the list
-
-   .. TODO: Add Scopy Debugger navigation screenshot
-   .. .. figure:: images/exercises/iio_attributes/scopy_debugger_navigate.png
-   ..    :alt: Navigate to hardwaregain attribute
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    Expanding the IIO tree to find the hardwaregain attribute
-
-#. Observe the current value:
-
-   You should see the value **5** (or whatever you set in the previous ``iio_attr`` exercise).
-
-   This demonstrates that **all three tools access the same underlying hardware state** - the value persists across different interfaces.
-
-#. Modify the gain value:
-
-   * Click on the **hardwaregain** attribute
-   * Change the value to **15**
-   * Press **Enter** or click **Apply**
-   * Observe the value update in real-time
-
-   .. TODO: Add Scopy Debugger modify screenshot
-   .. .. figure:: images/exercises/iio_attributes/scopy_debugger_modify.png
-   ..    :alt: Modify hardwaregain attribute
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    Modifying the RX gain attribute in Scopy Debugger
-
-#. **Explore other attributes:**
-
-   Browse through the IIO tree to discover what's available:
-
-   * **RX/TX LO frequencies**: ``out_altvoltage0_RX_LO_frequency``, ``out_altvoltage1_TX_LO_frequency``
-   * **Sample rates**: ``in_voltage_sampling_frequency``
-   * **RF bandwidth**: ``in_voltage_rf_bandwidth``
-   * **Gain control modes**: ``in_voltage0_gain_control_mode`` (manual, fast_attack, slow_attack, hybrid)
-   * **TX attenuation**: ``out_voltage0_hardwaregain``
-   * **RSSI (Received Signal Strength)**: ``in_voltage0_rssi``
-
-#. Close Scopy when done and reset Pluto:
-
-   * Click **Disconnect** in Scopy
-   * Close Scopy application
-   * **Reset Pluto** by unplugging and replugging the USB connector
-
-   .. important::
-
-      Always reset Pluto after using Scopy to clear any configuration changes and return to default state.
-
-**What You'll Observe:**
-
-The Scopy Debugger reveals the complete IIO device hierarchy:
-
-* **Devices**: Physical hardware components (ad9361-phy, xadc, etc.)
-* **Channels**: Individual data streams (voltage0 = RX1, voltage1 = RX2, etc.)
-* **Attributes**: Configurable parameters for each channel or device
-* **Debug attributes**: Low-level register access (visible in Debug mode)
-
-**Key Insight:** The Debugger instrument shows you the "ground truth" of what's happening in the kernel. When debugging issues with PyADI-IIO scripts or GNU Radio flowgraphs, you can use Scopy Debugger to verify:
-
-* Are attributes being set correctly?
-* Do values match what your application expects?
-* Are there hidden attributes affecting behavior?
-
-**Understanding the IIO Naming Convention:**
-
-IIO attribute names follow a pattern:
-
-* **Direction**: ``in_`` (input/RX) or ``out_`` (output/TX)
-* **Channel type**: ``voltage``, ``altvoltage``, ``temp``, etc.
-* **Channel number**: ``0``, ``1``, ``2``, etc.
-* **Attribute name**: ``hardwaregain``, ``sampling_frequency``, ``rf_bandwidth``, etc.
-
-Examples:
-
-* ``in_voltage0_hardwaregain``: RX1 channel gain (input voltage channel 0)
-* ``out_voltage0_hardwaregain``: TX1 channel attenuation (output voltage channel 0)
-* ``out_altvoltage0_RX_LO_frequency``: RX local oscillator frequency
-* ``in_voltage_sampling_frequency``: Global RX sample rate (applies to all RX channels)
-
-**Advanced Exercise: Create Your Own IIO Script**
-
-Try writing a Python script that:
-
-#. Reads the current RX LO frequency
-#. Reads the current TX LO frequency
-#. Reads the current RX gain
-#. Reads the current TX attenuation
-#. Prints all values in a formatted table
-#. Changes each value to a new setting
-#. Reads back and verifies the changes
-
-This exercise reinforces your understanding of programmatic IIO access and prepares you for integrating SDR control into custom applications.
-
-**Scopy Generate C Example Feature:**
-
-Scopy can automatically generate C code to read or write any IIO attribute. This is extremely
-useful when you need to integrate IIO access into C/C++ applications.
-
-**Steps:**
-
-#. In the Debugger instrument, right-click on any attribute
-#. Select **Generate C example**
-#. Scopy generates complete C code that:
-
-   * Creates an IIO context
-   * Finds the device and channel
-   * Reads or writes the attribute
-   * Includes proper error handling
-
-This feature eliminates the need to manually look up libiio API functions and speeds up
-development of custom IIO applications.
-
-**Debugging Workflow Summary:**
-
-When troubleshooting SDR issues, use this workflow:
-
-#. **Scopy Debugger**: Visually verify current attribute values
-#. **iio_attr**: Quick command-line checks in terminal
-#. **iio_info**: Discover available devices and attributes
-#. **Filesystem access**: Direct sysfs access for embedded/scripted applications
-#. **PyADI-IIO**: Automated scripts for reproducible configurations
-
-Understanding IIO attributes gives you **complete control** over your SDR hardware and the
-ability to debug issues at every level of the stack.
-
 Digital QAM Modulation: 16QAM Loopback with EVM Measurements
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -548,7 +380,7 @@ For 16QAM with M=16, this gives the reference amplitude for normalization.
 
 .. figure:: images/exercises/16qam_with_evm/psk_modulation_noisy_symbol_set.png
    :align: center
-   :width: 35em
+   :width: 45em
 
    Noisy received symbols compared to ideal constellation points
 
@@ -586,7 +418,7 @@ Using GNU Radio with Pluto
 
    .. figure:: ../beginner_sdr_exercises/images/exercises/sinewave_loopback/loopback_setup.png
       :align: center
-      :width: 20em
+      :width: 45em
 
       Pluto SDR with loopback cable connecting TX to RX
 
@@ -733,7 +565,7 @@ To access the 2nd TX and RX channels, you need to add U.FL to SMA cables on Rx2 
 
 .. figure:: images/exercises/mimo/pluto_hardware_mod.png
    :align: center
-   :width: 35em
+   :width: 45em
 
    Hardware modification: Add U.FL to SMA cables on Rx2 and Tx2
 
@@ -862,8 +694,8 @@ Using PyADI-IIO with Modified Pluto
 
 #. Observe the 2Rx 2Tx loopback results showing independent reception on both channels.
 
-Deep Dive: Symbol Synchronization for QPSK
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+QPSK Symbol Sync
+~~~~~~~~~~~~~~~~~
 
 This advanced exercise isolates **Symbol Synchronization** (also called **symbol timing recovery**), a critical DSP block that aligns the receiver's sampling clock with the transmitter's symbol boundaries. Understanding symbol sync is essential for implementing any digital modulation scheme.
 
@@ -887,7 +719,7 @@ We want to sample where the adjacent symbols cross 0:
 
 .. figure:: images/exercises/qpsk_symbol_sync/cross0.png
    :align: center
-   :width: 35em
+   :width: 45em
 
    Symbol timing recovery: sample where adjacent symbols cross zero
 
@@ -925,7 +757,7 @@ Using GNU Radio with Jupiter
 
    .. figure:: ../beginner_sdr_exercises/images/exercises/sinewave_loopback/loopback_setup.png
       :align: center
-      :width: 20em
+      :width: 45em
 
       Pluto SDR with loopback cable connecting TX to RX
 
@@ -1004,19 +836,19 @@ This side-by-side comparison shows the effect of proper symbol timing.
 
    .. figure:: images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result2.png
       :align: center
-      :width: 40em
+      :width: 45em
 
       After symbol sync, constellation points have consistent amplitude
 
    .. figure:: images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result_plot1.png
       :align: center
-      :width: 30em
+      :width: 45em
 
       Symbol sync timing stays around 16 = sps setting
 
    .. figure:: images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result_plot2.png
       :align: center
-      :width: 35em
+      :width: 45em
 
       Symbol sync error stays around 0
 
@@ -1128,8 +960,8 @@ Try modifying the flowgraph:
 #. Change Symbol Sync loop bandwidth (0.01 vs 0.1) - observe acquisition speed vs noise sensitivity
 #. Add intentional sampling frequency offset (TX sample rate ≠ RX sample rate) - watch Symbol Sync track the drift
 
-Deep Dive: Carrier Synchronization with Costas Loop
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+QPSK Costas Loop
+~~~~~~~~~~~~~~~~~
 
 This advanced exercise isolates the **Costas Loop**, a phase-locked loop (PLL) that performs **carrier synchronization** by removing residual frequency and phase offsets. The Costas Loop is the final synchronization stage in a complete QPSK receiver, enabling accurate symbol demodulation.
 
@@ -1167,7 +999,7 @@ Named after John P. Costas (1956), who invented this technique for **carrier rec
 .. .. figure:: images/exercises/costas_loop/costas_loop_block_diagram.png
 ..    :alt: Costas Loop Block Diagram
 ..    :align: center
-..    :width: 40em
+..    :width: 45em
 ..
 ..    Costas Loop architecture for QPSK carrier recovery
 
@@ -1296,7 +1128,7 @@ This side-by-side comparison shows the Costas Loop's effect on carrier synchroni
 
    .. figure:: images/exercises/qpsk_costas_loop/qpsk_costas_loop_example_result2.png
       :align: center
-      :width: 40em
+      :width: 45em
 
       Clean QPSK constellation after Costas Loop correction
 
@@ -1404,7 +1236,7 @@ The GNU Radio **Costas Loop** block has these key parameters:
 
 The Costas Loop is essentially a **data-aided PLL** that uses symbol structure to estimate phase error.
 
-**Phase Error Detector Deep Dive:**
+**Phase Error Detector:**
 
 For QPSK, the error function is:
 
