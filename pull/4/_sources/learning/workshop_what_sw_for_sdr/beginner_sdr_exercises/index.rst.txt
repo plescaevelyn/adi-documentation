@@ -490,109 +490,8 @@ Follow these steps:
 Using Scopy with Pluto
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-This exercise uses Scopy's instruments to transmit a test tone via DDS and observe the received spectrum.
-
-Follow these steps:
-
-#. Make the loopback setup using Pluto with TX1 connected to RX1 via an SMA cable and connect it to your PC.
-
-   .. figure:: images/exercises/sinewave_loopback/loopback_setup.png
-      :align: center
-      :width: 20em
-
-      Pluto SDR with loopback cable connecting TX to RX
-
-#. Double-click the **Scopy** icon on the Desktop to open the application.
-
-#. Click on the auto-detected USB device **AD936X**, then click **Connect**.
-
-   .. TODO: Add Scopy device connection screenshot when available
-   .. .. figure:: images/exercises/scopy_sinewave/scopy_device_connect.png
-   ..    :alt: Scopy Device Connection
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    Connecting to PlutoSDR in Scopy
-
-#. Click on the **AD936X** instrument on the left sidebar and configure:
-
-   * Set **RX LO Frequency** to **2450** MHz
-   * Set **TX LO Frequency** to **2450** MHz
-   * Set **RX1 Gain Control Mode** to **manual**
-   * Set **RX2 Gain Control Mode** to **manual** (Rev C Pluto only)
-   * Set **RX2 Gain** to **0** dB (Rev C Pluto only)
-   * Set **TX2 Attenuation** to **-80** dB (Rev C Pluto only)
-
-   .. TODO: Add Scopy AD936X plugin configuration when available
-   .. .. figure:: images/exercises/scopy_sinewave/scopy_ad9361_config.png
-   ..    :alt: Scopy AD936X Configuration
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    Configuring RX/TX LO frequencies and gain settings
-
-#. Click on the **DAC** instrument on the left sidebar:
-
-   * Change mode to **DDS**
-   * Set **DDS_MODE** to **One CW Tone**
-   * Set **Frequency** to **0.089 MHz** (89 kHz)
-   * Set **Scale** to **-10** dB
-
-   .. TODO: Add Scopy DDS configuration when available
-   .. .. figure:: images/exercises/scopy_sinewave/scopy_dds_config.png
-   ..    :alt: Scopy DDS Configuration
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    Configuring the DDS to generate an 89 kHz test tone
-
-#. Click on the **ADC - Frequency** instrument on the left sidebar:
-
-   * Click the **Complex** button on the bottom left
-   * Set **FFT Size** to **65536** samples using the (+) button
-   * Change **Window** to **No Window** in the right side menu
-   * Click on **voltage2-voltage3** circle to disable the channel (Rev C Pluto only)
-
-   .. TODO: Add Scopy ADC-Frequency configuration when available
-   .. .. figure:: images/exercises/scopy_sinewave/scopy_adc_frequency.png
-   ..    :alt: Scopy ADC-Frequency Configuration
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    ADC-Frequency instrument showing spectrum
-
-#. Click on **voltage0-voltage1** channel to open Settings:
-
-   * Enable the **MARKER** panel from the right side menu
-   * Enable the **AVERAGING** panel and set to **20**
-
-#. Click **Run** (or **Start**) and observe the spectrum plot showing the 89 kHz tone.
-
-   .. TODO: Add Scopy spectrum output when available
-   .. .. figure:: images/exercises/scopy_sinewave/scopy_spectrum_output.png
-   ..    :alt: Scopy Spectrum Output
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    Spectrum showing the 89 kHz test tone
-
-#. Click on the **Measure** button (bottom right) and enable **Genalyzer analysis** and **Marker panel**
-   to see detailed measurements.
-
-   .. TODO: Add Scopy Genalyzer screenshot when available
-   .. .. figure:: images/exercises/scopy_sinewave/scopy_genalyzer.png
-   ..    :alt: Scopy Genalyzer Analysis
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    Genalyzer analysis with detailed measurements
-
-#. Go back to **AD936X** instrument and change the **TX Attenuation** (range is 0 to -89.5 dB).
-   Observe the changes on the **ADC-Frequency** plot.
-
-#. When done, click **Stop** (orange button) and close Scopy.
-
-#. Reboot Pluto by unplugging and plugging back the USB connector.
+For Scopy usage with Pluto, see the
+`Pluto Quick Start Guide <https://analogdevicesinc.github.io/adi-documentation/tools/pluto/users/quick_start.html>`_.
 
 
 Using GNU Radio with Pluto
@@ -1341,212 +1240,27 @@ Follow these steps:
 #. Click the **Stop** button (red square) when finished.
 
 
-Using GNU Radio with Jupiter - Without Additional DSP
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Using GNU Radio with Pluto - QPSK Without Additional DSP
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Intentionally omits matched filter, frequency correction, and timing recovery to show what happens
 without them: wide spectrum, rotating constellation, wrong samples.
 
-Follow these steps:
+.. figure:: images/exercises/qpsk_gnuradio/qpsk_gnuradio_flowgraph.png
+   :align: center
+   :width: 45em
 
-#. Make the hardware setup using Jupiter SDR with RX1 and TX1 connected via SMA loopback cable
-   and connect it to your PC.
+   QPSK flowgraph without additional DSP processing
 
-   .. TODO: Add Jupiter loopback setup image when available
-   .. .. figure:: images/exercises/qpsk_raw/jupiter_loopback_setup.png
-   ..    :alt: Jupiter SDR Loopback Setup
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    Jupiter SDR setup with RX1 and TX1 connected via loopback cable
+**Transmitter:**
 
-#. Open the terminal and navigate to the Desktop directory, then launch GNU Radio Companion
-   with elevated privileges:
+* Generate sequence of bits
+* Map bits onto symbols
+* Offset spectrum to the right to not overlap with DC leakage
 
-   .. shell::
-      :user: analog
-      :group: analog
-      :show-user:
+**Receiver:**
 
-      $ cd /home/analog/Desktop
-      $ sudo ./start-grc.sh
-
-#. In GNU Radio Companion, open **QPSK_raw_loopback_jupiter.grc** from
-   **Desktop → ftc_2024 → 10_qpsk_raw_loopback_gnuradio**.
-
-#. Observe the simplified flowgraph showing transmitter and receiver without DSP correction blocks.
-
-   .. TODO: Add raw QPSK flowgraph image when available
-   .. .. figure:: images/exercises/qpsk_raw/qpsk_raw_flowgraph.png
-   ..    :alt: Simplified QPSK Flowgraph Without DSP
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    Simplified QPSK flowgraph without synchronization and filtering blocks
-
-#. Click the **Execute** button (green arrow) to run the flowgraph.
-
-#. Observe the output displays. The transmitted spectrum shows wide square wave characteristics
-   with high sidelobes. The received constellation displays scattered points with phase offset
-   instead of clean clusters at the ideal symbol positions. The received spectrum demonstrates
-   wide bandwidth due to the absence of pulse shaping.
-
-   .. TODO: Add raw QPSK output comparison image when available
-   .. .. figure:: images/exercises/qpsk_raw/qpsk_raw_output_comparison.png
-   ..    :alt: QPSK Without DSP Output
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    Output showing inefficient spectrum and constellation rotation without DSP
-
-#. Click the **Stop** button (red square) when finished.
-
-
-Using GNU Radio with Jupiter - Constellation Modulator
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Uses Root-Raised Cosine (RRC) filters for pulse shaping, giving a cleaner spectrum than raw QPSK.
-Still missing timing recovery and phase correction.
-
-Follow these steps:
-
-#. Make the hardware setup using Jupiter SDR with RX1 and TX1 connected via SMA loopback cable
-   and connect it to your PC.
-
-   .. TODO: Add Jupiter loopback setup image when available
-   .. .. figure:: images/exercises/qpsk_constellation_mod/jupiter_loopback_setup.png
-   ..    :alt: Jupiter SDR Loopback Setup
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    Jupiter SDR setup with RX1 and TX1 connected via loopback cable
-
-#. Open the terminal and navigate to the Desktop directory, then launch GNU Radio Companion
-   with elevated privileges:
-
-   .. shell::
-      :user: analog
-      :group: analog
-      :show-user:
-
-      $ cd /home/analog/Desktop
-      $ sudo ./start-grc.sh
-
-#. In GNU Radio Companion, open **constellation_modulator_loopback_jupiter.grc** from
-   **Desktop → ftc_2024 → 12_constellation_modulator_loopback_gnuradio**.
-
-#. Observe the flowgraph structure showing the Constellation Modulator block and matched RRC filters.
-
-   The Constellation Modulator block in the transmitter maps bytes into symbols and applies the RRC filter
-   in a single operation. The receiver includes a separate RRC filter block to complete the matched filter pair.
-
-   .. TODO: Add Constellation Modulator flowgraph image when available
-   .. .. figure:: images/exercises/qpsk_constellation_mod/constellation_mod_flowgraph.png
-   ..    :alt: QPSK Constellation Modulator Flowgraph
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    QPSK flowgraph with Constellation Modulator and matched RRC filters
-
-#. Click the **Execute** button (green arrow) to run the flowgraph.
-
-#. Observe the output displays and compare to the previous raw QPSK exercise.
-
-   The transmitted spectrum shows significantly improved bandwidth efficiency with minimal sidelobes due to
-   RRC pulse shaping. The received signal demonstrates better quality from the matched filter processing.
-   However, the received signal is not yet decimated by selecting the optimal samples from each symbol period,
-   which would be added in a complete receiver implementation.
-
-   .. TODO: Add Constellation Modulator output image when available
-   .. .. figure:: images/exercises/qpsk_constellation_mod/constellation_mod_output.png
-   ..    :alt: QPSK Constellation Modulator Output
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    Output showing optimized bandwidth usage with matched RRC filters
-
-#. Click the **Stop** button (red square) when finished.
-
-
-Using GNU Radio with Jupiter - Frequency Locked Loop
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Adds a Frequency Locked Loop (FLL) to automatically correct for oscillator differences between
-TX and RX, keeping the spectrum centered.
-
-Follow these steps:
-
-#. Make the hardware setup using Jupiter SDR with RX1 and TX1 connected via SMA loopback cable
-   and connect it to your PC.
-
-   .. TODO: Add Jupiter loopback setup image when available
-   .. .. figure:: images/exercises/qpsk_fll/jupiter_loopback_setup.png
-   ..    :alt: Jupiter SDR Loopback Setup for FLL
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    Jupiter SDR setup with RX1 and TX1 connected via loopback cable
-
-#. Open the terminal and navigate to the Desktop directory, then launch GNU Radio Companion
-   with elevated privileges:
-
-   .. shell::
-      :user: analog
-      :group: analog
-      :show-user:
-
-      $ cd /home/analog/Desktop
-      $ sudo ./start-grc.sh
-
-#. In GNU Radio Companion, open **FLL_loopback_jupiter.grc** from
-   **Desktop → ftc_2024 → 13_fll_loopback_gnuradio**.
-
-#. Observe the flowgraph structure showing the FLL Band-Edge block for frequency correction.
-
-   The transmitter section includes the Constellation Modulator with RRC filtering. The receiver section
-   now features the FLL Band-Edge filter block highlighted in the flowgraph, which dynamically adjusts
-   the frequency of the received spectrum to keep it centered around DC.
-
-   .. TODO: Add FLL flowgraph image when available
-   .. .. figure:: images/exercises/qpsk_fll/fll_flowgraph.png
-   ..    :alt: QPSK FLL Flowgraph
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    QPSK flowgraph with Frequency Locked Loop for coarse frequency correction
-
-#. Click the **Execute** button (green arrow) to run the flowgraph.
-
-#. Observe the output displays and use the frequency offset slider to adjust the offset between TX and RX.
-
-   The transmitted spectrum shows the optimized bandwidth from RRC filtering. The received spectrum after
-   the FLL block stays centered around DC even as you adjust the frequency offset slider, demonstrating
-   the FLL's ability to track and correct frequency errors. The received constellation shows improved
-   stability compared to implementations without frequency correction.
-
-   Note that while the FLL keeps the spectrum centered, a more precise frequency offset correction using
-   a Costas loop would further improve constellation quality. Additionally, the receiver does not yet
-   perform symbol timing recovery to select optimal samples.
-
-   .. TODO: Add FLL output image when available
-   .. .. figure:: images/exercises/qpsk_fll/fll_output.png
-   ..    :alt: QPSK FLL Output
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    Output showing FLL maintaining spectrum centered around DC despite frequency offset
-
-#. Use the offset slider to introduce frequency offset and observe how the spectrum after the FLL block
-   automatically adjusts to stay centered around DC.
-
-#. Click the **Stop** button (red square) when finished.
-
-
-Using GNU Radio with Pluto - QPSK Loopback with Full DSP
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Complete QPSK loopback demonstrating the full DSP chain: differential encoding, constellation modulation,
-FLL for coarse frequency correction, Costas loop for fine phase correction, and eye diagrams.
+* Shift the spectrum back to DC
 
 Follow these steps:
 
@@ -1558,7 +1272,7 @@ Follow these steps:
 
       Pluto SDR with loopback cable connecting TX to RX
 
-#. Open the terminal by pressing **Ctrl + Alt + T** and launch GNU Radio Companion:
+#. Open the terminal and launch GNU Radio Companion:
 
    .. shell::
       :user: analog
@@ -1567,33 +1281,286 @@ Follow these steps:
 
       $ gnuradio-companion
 
-#. In GNU Radio Companion, open **qpsk_loopback_pluto.grc** from
-   **Desktop → ftc_2025 → 5_qpsk_loopback_gnuradio**.
+#. In GNU Radio Companion, open **QPSK_raw_loopback_pluto.grc** from
+   **Desktop → ftc_2025 → 10_qpsk_raw_loopback_gnuradio**.
 
 #. Click the **Execute** button (green arrow) to run the flowgraph.
 
 #. Observe the output displays:
 
-   * **Transmitted Symbols (Before Constellation Modulator)**: Raw symbol pattern
-   * **Received Demodulated Symbols**: Should match the transmitted pattern due to differential decoding
-   * **Transmitted Samples (After Constellation Modulator)**: Pulse-shaped I/Q samples
-   * **Received Samples (After Costas Loop)**: Time-domain I/Q after carrier recovery
-   * **Transmitted Spectrum**: Shows the RRC-filtered signal bandwidth
-   * **Received Spectrum (After FLL)**: Spectrum centered around DC by the FLL
-   * **Received Constellation**: QPSK constellation after carrier recovery
-   * **Eye Diagram (Rx Re/Im After Costas Loop)**: Shows symbol timing and signal quality
+   .. figure:: images/exercises/qpsk_gnuradio/qpsk_no_processing_result1.png
+      :align: center
+      :width: 45em
 
-   .. TODO: Add QPSK loopback output screenshot when available
-   .. .. figure:: images/exercises/qpsk_loopback_pluto/qpsk_loopback_output.png
-   ..    :alt: QPSK Loopback Output
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    Complete QPSK loopback output showing matched TX/RX symbols, spectrum, constellation, and eye diagram
+      QPSK without DSP: no frequency offset because loopback uses same LO, but has phase offset
 
-#. Use the **constellation rotation slider** to rotate the constellation in 90° steps. Observe that the
-   received demodulated symbols remain the same due to **differential decoding** - demonstrating how
-   differential encoding makes the system immune to 90° phase ambiguity.
+   .. figure:: images/exercises/qpsk_gnuradio/qpsk_no_processing_result2.png
+      :align: center
+      :width: 45em
+
+      The spectrum is inefficiently used (spectrum of square wave)
+
+   **Observations:**
+
+   * No frequency offset because the example works on loopback and the LO is the same for RX and TX
+   * But has a phase offset between the two paths
+   * Try tweaking the frequency offset between TX and RX and see how the data looks - this happens
+     when transmitting and receiving between two different devices
+   * The spectrum is inefficiently used (spectrum of square wave)
+
+#. Click the **Stop** button (red square) when finished.
+
+**Conclusions:**
+
+* The frequency offset and LO drift is required to be corrected at receiver
+* The phase offset of the LO at the receiver is required to be corrected
+* These are varying with distance and temperature in time → need feedback loop to constantly adjust
+* The correct sample from the received signal needs to be extracted (not transitions)
+* Even if we do all these, if we rotate the constellation 180°, the symbols received will be out of place
+
+
+Using GNU Radio with Pluto - QPSK Constellation Modulator
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Uses Root-Raised Cosine (RRC) filters for pulse shaping, giving a cleaner spectrum than raw QPSK.
+
+.. figure:: images/exercises/qpsk_gnuradio_const_modulator/qpsk_modulator_gnuradio_schematic.png
+   :align: center
+   :width: 45em
+
+   QPSK flowgraph with Constellation Modulator and RRC filter
+
+**Constellation Modulator block:** Maps bytes into symbols and applies RRC filter.
+
+**RRC filter at RX:** Completes the matched filter pair.
+
+Follow these steps:
+
+#. Make the loopback setup using Pluto with TX connected to RX via an SMA cable and connect it to your PC.
+
+   .. figure:: images/exercises/sinewave_loopback/loopback_setup.png
+      :align: center
+      :width: 20em
+
+      Pluto SDR with loopback cable connecting TX to RX
+
+#. Open the terminal and launch GNU Radio Companion:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ gnuradio-companion
+
+#. In GNU Radio Companion, open **constellation_modulator_loopback_pluto.grc** from
+   **Desktop → ftc_2025 → 11_constellation_modulator_loopback_gnuradio**.
+
+#. Click the **Execute** button (green arrow) to run the flowgraph.
+
+#. Observe the output displays:
+
+   .. figure:: images/exercises/qpsk_gnuradio_const_modulator/qpsk_modulator_gnuradio_result_optimized_bw.png
+      :align: center
+      :width: 45em
+
+      The bandwidth is optimized due to matched filters (one from Const. Modulator at TX and one at RX)
+
+   .. figure:: images/exercises/qpsk_gnuradio_const_modulator/qpsk_modulator_gnuradio_result_undecimated_rx.png
+      :align: center
+      :width: 45em
+
+      The RX signal is not decimated by selecting the right samples
+
+#. Click the **Stop** button (red square) when finished.
+
+**Conclusion:** Using the Constellation Modulator block, the transmitted bits are mapped into IQ
+symbols and a RRC filter is applied on the Transmitter path, thus the bandwidth used is optimized.
+
+
+Using GNU Radio with Pluto - QPSK Frequency Locked Loop
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Adds a Frequency Locked Loop (FLL) to automatically correct for oscillator differences between
+TX and RX, keeping the spectrum centered.
+
+.. figure:: images/exercises/qpsk_fll/qpsk_fll_gnuradio_schematic.png
+   :align: center
+   :width: 45em
+
+   QPSK flowgraph with FLL block that dynamically adjusts the frequency of the received spectrum
+
+Follow these steps:
+
+#. Make the loopback setup using Pluto with TX connected to RX via an SMA cable and connect it to your PC.
+
+   .. figure:: images/exercises/sinewave_loopback/loopback_setup.png
+      :align: center
+      :width: 20em
+
+      Pluto SDR with loopback cable connecting TX to RX
+
+#. Open the terminal and launch GNU Radio Companion:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ gnuradio-companion
+
+#. In GNU Radio Companion, open **FLL_loopback_pluto.grc** from
+   **Desktop → ftc_2025 → 12_fll_loopback_gnuradio**.
+
+#. Click the **Execute** button (green arrow) to run the flowgraph.
+
+#. Use the slider to tweak the frequency offset between TX and RX. Observe how the spectrum after FLL
+   block stays centered around DC.
+
+   .. figure:: images/exercises/qpsk_fll/qpsk_fll_result1.png
+      :align: center
+      :width: 45em
+
+      Use the slider to tweak the frequency offset - observe spectrum after FLL stays centered around DC
+
+   .. figure:: images/exercises/qpsk_fll/qpsk_fll_result2.png
+      :align: center
+      :width: 40em
+
+      A more precise frequency offset correction still needs to be applied
+
+#. Click the **Stop** button (red square) when finished.
+
+
+Using GNU Radio with Pluto - QPSK Symbol Sync
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Adds Symbol Sync block that applies RRC filter and selects the right 1 out of 16 symbols.
+
+.. figure:: images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_schematic.png
+   :align: center
+   :width: 45em
+
+   QPSK flowgraph with Symbol Sync block
+
+We want to sample where the adjacent symbols cross 0:
+
+.. figure:: images/exercises/qpsk_symbol_sync/cross0.png
+   :align: center
+   :width: 35em
+
+   Symbol timing recovery: sample where adjacent symbols cross zero
+
+Follow these steps:
+
+#. Make the loopback setup using Pluto with TX connected to RX via an SMA cable and connect it to your PC.
+
+   .. figure:: images/exercises/sinewave_loopback/loopback_setup.png
+      :align: center
+      :width: 20em
+
+      Pluto SDR with loopback cable connecting TX to RX
+
+#. Open the terminal and launch GNU Radio Companion:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ gnuradio-companion
+
+#. In GNU Radio Companion, open **symbol_sync_loopback_pluto.grc** from
+   **Desktop → ftc_2025 → 13_symbol_sync_loopback_gnuradio**.
+
+#. Click the **Execute** button (green arrow) to run the flowgraph.
+
+#. Observe the output displays:
+
+   .. figure:: images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result1.png
+      :align: center
+      :width: 45em
+
+      All symbols have same amplitude on constellation but I/Q still varying due to remaining frequency/phase offset
+
+   .. figure:: images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result2.png
+      :align: center
+      :width: 40em
+
+      After symbol sync, constellation points have consistent amplitude
+
+   .. figure:: images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result_plot1.png
+      :align: center
+      :width: 30em
+
+      Symbol sync timing stays around 16 = sps setting
+
+   .. figure:: images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result_plot2.png
+      :align: center
+      :width: 35em
+
+      Symbol sync error stays around 0
+
+#. Click the **Stop** button (red square) when finished.
+
+
+Using GNU Radio with Pluto - QPSK Costas Loop
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Adds Costas Loop block for fine tuning the remaining frequency and phase error.
+
+.. figure:: images/exercises/qpsk_costas_loop/qpsk_costas_loop_gnuradio_schematic.png
+   :align: center
+   :width: 45em
+
+   QPSK flowgraph with Costas Loop for fine frequency and phase correction
+
+Follow these steps:
+
+#. Make the loopback setup using Pluto with TX connected to RX via an SMA cable and connect it to your PC.
+
+   .. figure:: images/exercises/sinewave_loopback/loopback_setup.png
+      :align: center
+      :width: 20em
+
+      Pluto SDR with loopback cable connecting TX to RX
+
+#. Open the terminal and launch GNU Radio Companion:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ gnuradio-companion
+
+#. In GNU Radio Companion, open **costas_loop_loopback_pluto.grc** from
+   **Desktop → ftc_2025 → 14_costas_loop_loopback_gnuradio**.
+
+#. Click the **Execute** button (green arrow) to run the flowgraph.
+
+#. Observe the output displays:
+
+   .. figure:: images/exercises/qpsk_costas_loop/qpsk_costas_loop_example_result1.png
+      :align: center
+      :width: 45em
+
+      Symbols are now separated as expected, transitions in eye diagrams are less noisy
+
+   .. figure:: images/exercises/qpsk_costas_loop/qpsk_costas_loop_example_result2.png
+      :align: center
+      :width: 40em
+
+      Clean QPSK constellation after Costas Loop correction
+
+#. You can tweak the bandwidth of the Costas Loop and see how it influences the error signal
+   and the constellation plot. You can also add a phase shift in radians after Costas Loop.
+
+   .. figure:: images/exercises/qpsk_costas_loop/qpsk_costas_loop_example_result_plot.png
+      :align: center
+      :width: 45em
+
+      Error signal centered around 0, Phase Correction signal between 0 and 2π
 
 #. Click the **Stop** button (red square) when finished.
 
@@ -1686,58 +1653,6 @@ Follow these steps:
 ..       :width: 40em
 ..
 ..       Check and then uncheck Viterbi to synchronize the QPSK data in SDRangel
-
-Spectrum Paint using Pluto
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-This exercise demonstrates a creative application of SDR: "painting" images in the frequency spectrum. By transmitting signals at different frequencies over time, you can create visible patterns on a waterfall display, which shows frequency on the horizontal axis and time on the vertical axis.
-
-**How Spectrum Paint Works:**
-
-A waterfall display is a spectrogram that shows:
-
-* **Frequency** (horizontal axis): Different colors represent signal strength at each frequency
-* **Time** (vertical axis): Each new row represents a new time snapshot
-* **Amplitude** (color intensity): Brighter colors indicate stronger signals
-
-By carefully controlling which frequencies are transmitted at each moment, you can "draw" images, text, or patterns that become visible as the waterfall scrolls down.
-
-**Applications:**
-
-While spectrum paint is primarily a demonstration, the underlying technique is used in:
-
-* Frequency-hopping spread spectrum (FHSS)
-* Chirp radar systems
-* Multi-carrier communications
-* Signal identification and watermarking
-
-This exercise showcases the flexibility of software-defined radio: the same hardware can transmit any arbitrary frequency pattern by simply changing the software.
-
-Follow these steps to create a spectrum painting:
-
-#. Make the following setup using Pluto and connect it to your PC.
-
-#. Open the terminal and launch GNU Radio Companion:
-
-   .. shell::
-      :user: analog
-      :group: analog
-      :show-user:
-
-      $ gnuradio-companion
-
-#. In GNU Radio Companion, open the **paint_tx.grc** file from **workshop_exercises->gnuradio->spectrum_paint**.
-
-#. Click the **Execute** button (green arrow) to run the flowgraph.
-
-#. Observe the waterfall display as the spectrum painting appears, created by the Pluto SDR transmitting the frequency pattern.
-
-   .. figure:: images/exercises/spectrum_paint/paint_tx.png
-      :alt: Spectrum Paint Waterfall Display
-      :align: center
-      :width: 40em
-
-      Waterfall display showing the spectrum painting created by transmitting controlled frequency patterns
 
 Amplitude Shift Keying (ASK) in GNU Radio
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2003,3 +1918,61 @@ Follow these steps:
    ..    Waterfall display showing FSK frequency transitions over time as the transmitter cycles through the four tones
 
 #. Click the **Stop** button (red square) when finished.
+
+
+Spectrum Paint using Pluto
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This exercise demonstrates a creative application of SDR: "painting" images in the frequency spectrum.
+By transmitting signals at different frequencies over time, you can create visible patterns on a
+waterfall display, which shows frequency on the horizontal axis and time on the vertical axis.
+
+**How Spectrum Paint Works:**
+
+A waterfall display is a spectrogram that shows:
+
+* **Frequency** (horizontal axis): Different colors represent signal strength at each frequency
+* **Time** (vertical axis): Each new row represents a new time snapshot
+* **Amplitude** (color intensity): Brighter colors indicate stronger signals
+
+By carefully controlling which frequencies are transmitted at each moment, you can "draw" images,
+text, or patterns that become visible as the waterfall scrolls down.
+
+**Applications:**
+
+While spectrum paint is primarily a demonstration, the underlying technique is used in:
+
+* Frequency-hopping spread spectrum (FHSS)
+* Chirp radar systems
+* Multi-carrier communications
+* Signal identification and watermarking
+
+This exercise showcases the flexibility of software-defined radio: the same hardware can transmit
+any arbitrary frequency pattern by simply changing the software.
+
+Follow these steps to create a spectrum painting:
+
+#. Make the following setup using Pluto and connect it to your PC.
+
+#. Open the terminal and launch GNU Radio Companion:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ gnuradio-companion
+
+#. In GNU Radio Companion, open the **paint_tx.grc** file from **workshop_exercises->gnuradio->spectrum_paint**.
+
+#. Click the **Execute** button (green arrow) to run the flowgraph.
+
+#. Observe the waterfall display as the spectrum painting appears, created by the Pluto SDR
+   transmitting the frequency pattern.
+
+   .. figure:: images/exercises/spectrum_paint/paint_tx.png
+      :alt: Spectrum Paint Waterfall Display
+      :align: center
+      :width: 40em
+
+      Waterfall display showing the spectrum painting created by transmitting controlled frequency patterns
