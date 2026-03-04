@@ -1,21 +1,33 @@
 Beginner SDR Exercises
 ======================
 
-The following hands-on exercises demonstrate real-world software-defined radio applications using ADI's SDR platforms.
-These exercises showcase the power of reconfigurable software running on specialized hardware, allowing you to implement
-complex signal processing algorithms without custom hardware design.
+This page contains beginner SDR exercises that demonstrate real-world software-defined radio
+applications using ADI's SDR platforms.
+These exercises showcase the power of reconfigurable software running on specialized hardware,
+allowing you to implement complex signal processing algorithms without custom hardware design.
+
+Requirements
+------------
+
+To follow these exercises, you will need:
+
+* **Raspberry Pi 5** with power supply
+* **Keyboard and mouse** for the Raspberry Pi
+* **SD card** (16GB or larger recommended) flashed with the FTC 2025 workshop image
+* **ADALM-Pluto SDR** (required for all exercises)
+* **Micro USB cable** to connect the Pluto to the Raspberry Pi
+  (see `Pluto Quick Start <https://wiki.analog.com/university/tools/pluto/users/quick_start>`__ for details)
+* **Jupiter or Talise SDR** (optional, for advanced platform exercises)
+* **SMA loopback cable** (for loopback exercises)
+* **Antennas**: 2.4 GHz or 915 MHz antennas for over-the-air exercises (Doppler radar, etc.)
 
 .. note::
 
-   The following exercises should be run on a Raspberry Pi 5 using the provided ADI Kuiper 2.0 Linux image.
-   The Kuiper image contains all necessary software pre-installed, including Python, GNU Radio, Thonny IDE, and all required libraries.
-   Connect your SDR hardware (Pluto, Jupiter, or Talise) to the Raspberry Pi 5 before starting the exercises.
-
-.. TODO: Add actual download link when available
-.. .. admonition:: Download Kuiper 2.0 Image
-..    :class: download
-..
-..    Download the ADI Kuiper 2.0 image: `Kuiper 2.0 SD Card Image <PLACEHOLDER_URL>`_
+   Flash your SD card with the FTC 2025 workshop image before starting.
+   This image contains all necessary software pre-installed, including Python, GNU Radio, Thonny
+   IDE, and all required libraries.
+   Connect your SDR hardware (Pluto, Jupiter, or Talise) to the Raspberry Pi 5 before starting
+   the exercises.
 
 Familiarize Yourself with the Tools
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -528,7 +540,13 @@ Follow these steps:
 
       GNU Radio flowgraph for sinewave loopback with Pluto TX and RX blocks
 
-#. Click the **Execute** button (green arrow) to run the flowgraph.
+#. To run the flowgraph, click the **Execute** button (green arrow) from the top toolbar.
+
+   .. figure:: images/exercises/doppler_radar/run_grc.png
+      :align: center
+      :width: 45em
+
+      Click the green arrow (Execute) button to run the flowgraph
 
 #. Observe the output plots showing transmitted/received samples, spectrum, and constellation diagram.
    Use the sliders to adjust parameters in real-time:
@@ -1428,139 +1446,6 @@ Follow these steps:
       :width: 40em
 
       A more precise frequency offset correction still needs to be applied
-
-#. Click the **Stop** button (red square) when finished.
-
-
-Using GNU Radio with Pluto - QPSK Symbol Sync
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Adds Symbol Sync block that applies RRC filter and selects the right 1 out of 16 symbols.
-
-.. figure:: images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_schematic.png
-   :align: center
-   :width: 45em
-
-   QPSK flowgraph with Symbol Sync block
-
-We want to sample where the adjacent symbols cross 0:
-
-.. figure:: images/exercises/qpsk_symbol_sync/cross0.png
-   :align: center
-   :width: 35em
-
-   Symbol timing recovery: sample where adjacent symbols cross zero
-
-Follow these steps:
-
-#. Make the loopback setup using Pluto with TX connected to RX via an SMA cable and connect it to your PC.
-
-   .. figure:: images/exercises/sinewave_loopback/loopback_setup.png
-      :align: center
-      :width: 20em
-
-      Pluto SDR with loopback cable connecting TX to RX
-
-#. Open the terminal and launch GNU Radio Companion:
-
-   .. shell::
-      :user: analog
-      :group: analog
-      :show-user:
-
-      $ gnuradio-companion
-
-#. In GNU Radio Companion, open **symbol_sync_loopback_pluto.grc** from
-   **Desktop → ftc_2025 → 13_symbol_sync_loopback_gnuradio**.
-
-#. Click the **Execute** button (green arrow) to run the flowgraph.
-
-#. Observe the output displays:
-
-   .. figure:: images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result1.png
-      :align: center
-      :width: 45em
-
-      All symbols have same amplitude on constellation but I/Q still varying due to remaining frequency/phase offset
-
-   .. figure:: images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result2.png
-      :align: center
-      :width: 40em
-
-      After symbol sync, constellation points have consistent amplitude
-
-   .. figure:: images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result_plot1.png
-      :align: center
-      :width: 30em
-
-      Symbol sync timing stays around 16 = sps setting
-
-   .. figure:: images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result_plot2.png
-      :align: center
-      :width: 35em
-
-      Symbol sync error stays around 0
-
-#. Click the **Stop** button (red square) when finished.
-
-
-Using GNU Radio with Pluto - QPSK Costas Loop
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Adds Costas Loop block for fine tuning the remaining frequency and phase error.
-
-.. figure:: images/exercises/qpsk_costas_loop/qpsk_costas_loop_gnuradio_schematic.png
-   :align: center
-   :width: 45em
-
-   QPSK flowgraph with Costas Loop for fine frequency and phase correction
-
-Follow these steps:
-
-#. Make the loopback setup using Pluto with TX connected to RX via an SMA cable and connect it to your PC.
-
-   .. figure:: images/exercises/sinewave_loopback/loopback_setup.png
-      :align: center
-      :width: 20em
-
-      Pluto SDR with loopback cable connecting TX to RX
-
-#. Open the terminal and launch GNU Radio Companion:
-
-   .. shell::
-      :user: analog
-      :group: analog
-      :show-user:
-
-      $ gnuradio-companion
-
-#. In GNU Radio Companion, open **costas_loop_loopback_pluto.grc** from
-   **Desktop → ftc_2025 → 14_costas_loop_loopback_gnuradio**.
-
-#. Click the **Execute** button (green arrow) to run the flowgraph.
-
-#. Observe the output displays:
-
-   .. figure:: images/exercises/qpsk_costas_loop/qpsk_costas_loop_example_result1.png
-      :align: center
-      :width: 45em
-
-      Symbols are now separated as expected, transitions in eye diagrams are less noisy
-
-   .. figure:: images/exercises/qpsk_costas_loop/qpsk_costas_loop_example_result2.png
-      :align: center
-      :width: 40em
-
-      Clean QPSK constellation after Costas Loop correction
-
-#. You can tweak the bandwidth of the Costas Loop and see how it influences the error signal
-   and the constellation plot. You can also add a phase shift in radians after Costas Loop.
-
-   .. figure:: images/exercises/qpsk_costas_loop/qpsk_costas_loop_example_result_plot.png
-      :align: center
-      :width: 45em
-
-      Error signal centered around 0, Phase Correction signal between 0 and 2π
 
 #. Click the **Stop** button (red square) when finished.
 

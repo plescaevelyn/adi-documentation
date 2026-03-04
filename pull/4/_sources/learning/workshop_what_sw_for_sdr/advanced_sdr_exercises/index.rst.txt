@@ -1235,13 +1235,13 @@ This exercise focuses on **timing synchronization** - the problem of determining
 * **Without symbol sync**: Sampling at random times within symbol periods → high error rate
 * **With symbol sync**: Sampling at optimal decision points → maximum eye opening, minimal ISI
 
-.. TODO: Add eye diagram showing symbol sync effect
-.. .. figure:: images/exercises/symbol_sync/eye_diagram_before_after.png
-..    :alt: Eye Diagram Before and After Symbol Sync
-..    :align: center
-..    :width: 40em
-..
-..    Eye diagram showing improvement with symbol synchronization
+We want to sample where the adjacent symbols cross 0:
+
+.. figure:: images/exercises/qpsk_symbol_sync/cross0.png
+   :align: center
+   :width: 35em
+
+   Symbol timing recovery: sample where adjacent symbols cross zero
 
 **What Symbol Sync Does:**
 
@@ -1298,6 +1298,12 @@ Using GNU Radio with Jupiter
 
 **Flowgraph Architecture:**
 
+.. figure:: images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_schematic.png
+   :align: center
+   :width: 45em
+
+   QPSK flowgraph with Symbol Sync block
+
 The flowgraph contains:
 
 * **Transmitter**: Random bits → QPSK modulator → RRC pulse shaping → Pluto TX
@@ -1313,14 +1319,6 @@ This side-by-side comparison shows the effect of proper symbol timing.
    * Click the **Run** button (green arrow)
    * Wait for constellation plots to appear
 
-   .. TODO: Add running flowgraph screenshot
-   .. .. figure:: images/exercises/symbol_sync/flowgraph_running.png
-   ..    :alt: Symbol Sync Flowgraph Running
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    Symbol sync demonstration flowgraph in GNU Radio
-
 #. **Observe the constellation WITHOUT Symbol Sync:**
 
    The first constellation plot shows the received signal with:
@@ -1329,13 +1327,11 @@ This side-by-side comparison shows the effect of proper symbol timing.
    * **NO symbol sync**: Still sampling at 4 samples per symbol (oversampled)
    * **NO matched filter**: RRC filter not yet applied
 
-   .. TODO: Add constellation without symbol sync
-   .. .. figure:: images/exercises/symbol_sync/constellation_no_symbol_sync.png
-   ..    :alt: Constellation Without Symbol Sync
-   ..    :align: center
-   ..    :width: 35em
-   ..
-   ..    Oversampled constellation without symbol synchronization
+   .. figure:: images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result1.png
+      :align: center
+      :width: 45em
+
+      All symbols have same amplitude on constellation but I/Q still varying due to remaining frequency/phase offset
 
    **What you'll see:**
 
@@ -1358,13 +1354,23 @@ This side-by-side comparison shows the effect of proper symbol timing.
    * **Matched filter applied**: RRC filter provides optimal SNR
    * **Optimal sampling instants**: Only the decision points, not transitions
 
-   .. TODO: Add constellation with symbol sync
-   .. .. figure:: images/exercises/symbol_sync/constellation_with_symbol_sync.png
-   ..    :alt: Constellation With Symbol Sync
-   ..    :align: center
-   ..    :width: 35em
-   ..
-   ..    Clean constellation after symbol synchronization
+   .. figure:: images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result2.png
+      :align: center
+      :width: 40em
+
+      After symbol sync, constellation points have consistent amplitude
+
+   .. figure:: images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result_plot1.png
+      :align: center
+      :width: 30em
+
+      Symbol sync timing stays around 16 = sps setting
+
+   .. figure:: images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result_plot2.png
+      :align: center
+      :width: 35em
+
+      Symbol sync error stays around 0
 
    **What you'll see:**
 
@@ -1583,6 +1589,12 @@ Using GNU Radio with Jupiter
 
 **Flowgraph Architecture:**
 
+.. figure:: images/exercises/qpsk_costas_loop/qpsk_costas_loop_gnuradio_schematic.png
+   :align: center
+   :width: 45em
+
+   QPSK flowgraph with Costas Loop for fine frequency and phase correction
+
 The flowgraph contains:
 
 * **Transmitter**: Random bits → QPSK modulator → RRC pulse shaping → Pluto TX
@@ -1598,14 +1610,6 @@ This side-by-side comparison shows the Costas Loop's effect on carrier synchroni
    * Click the **Run** button (green arrow)
    * Wait for constellation plots to appear
 
-   .. TODO: Add running flowgraph screenshot
-   .. .. figure:: images/exercises/costas_loop/flowgraph_running.png
-   ..    :alt: Costas Loop Flowgraph Running
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    Costas Loop demonstration flowgraph in GNU Radio
-
 #. **Observe the constellation BEFORE Costas Loop:**
 
    The first constellation plot shows the received signal after FLL and Symbol Sync but BEFORE Costas Loop:
@@ -1615,13 +1619,11 @@ This side-by-side comparison shows the Costas Loop's effect on carrier synchroni
    * **Residual rotation**: Constellation slowly rotates or has fixed offset
    * **Phase ambiguity**: Might be rotated by 0°, 90°, 180°, or 270°
 
-   .. TODO: Add constellation before Costas Loop
-   .. .. figure:: images/exercises/costas_loop/constellation_before_costas.png
-   ..    :alt: Constellation Before Costas Loop
-   ..    :align: center
-   ..    :width: 35em
-   ..
-   ..    QPSK constellation with residual phase/frequency offset
+   .. figure:: images/exercises/qpsk_costas_loop/qpsk_costas_loop_example_result1.png
+      :align: center
+      :width: 45em
+
+      Symbols are now separated as expected, transitions in eye diagrams are less noisy
 
    **What you'll see:**
 
@@ -1644,13 +1646,20 @@ This side-by-side comparison shows the Costas Loop's effect on carrier synchroni
    * **Aligned with decision regions**: Symbols at ±1±j (or 90° multiples)
    * **Stable phase**: Tracking and correcting any remaining drift
 
-   .. TODO: Add constellation after Costas Loop
-   .. .. figure:: images/exercises/costas_loop/constellation_after_costas.png
-   ..    :alt: Constellation After Costas Loop
-   ..    :align: center
-   ..    :width: 35em
-   ..
-   ..    Perfectly aligned QPSK constellation after Costas Loop
+   .. figure:: images/exercises/qpsk_costas_loop/qpsk_costas_loop_example_result2.png
+      :align: center
+      :width: 40em
+
+      Clean QPSK constellation after Costas Loop correction
+
+   You can tweak the bandwidth of the Costas Loop and see how it influences the error signal
+   and the constellation plot. You can also add a phase shift in radians after Costas Loop.
+
+   .. figure:: images/exercises/qpsk_costas_loop/qpsk_costas_loop_example_result_plot.png
+      :align: center
+      :width: 45em
+
+      Error signal centered around 0, Phase Correction signal between 0 and 2π
 
    **What you'll see:**
 
