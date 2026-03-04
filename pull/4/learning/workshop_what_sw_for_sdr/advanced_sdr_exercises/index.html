@@ -96,11 +96,13 @@
         <nav>
           <ul>
 <li><a class="reference internal" href="#">Advanced SDR Exercises</a><ul>
-<li><a class="reference internal" href="#familiarize-yourself-with-the-tools">Familiarize Yourself with the Tools</a></li>
+<li><a class="reference internal" href="#requirements">Requirements</a><ul>
 <li><a class="reference internal" href="#first-steps-in-sdr-testing">First Steps in SDR Testing</a></li>
 <li><a class="reference internal" href="#debugging-and-tweaking-iio-attributes">Debugging and Tweaking IIO Attributes</a><ul>
 <li><a class="reference internal" href="#using-pyadi-iio-to-read-write-attributes">Using PyADI-IIO to Read/Write Attributes</a></li>
 <li><a class="reference internal" href="#using-iio-attr-command-line-utility">Using iio_attr Command-Line Utility</a></li>
+<li><a class="reference internal" href="#using-iio-info-to-explore-the-iio-context">Using iio_info to Explore the IIO Context</a></li>
+<li><a class="reference internal" href="#using-direct-filesystem-access-sysfs">Using Direct Filesystem Access (sysfs)</a></li>
 <li><a class="reference internal" href="#using-scopy-debugger-instrument">Using Scopy Debugger Instrument</a></li>
 </ul>
 </li>
@@ -108,20 +110,22 @@
 <li><a class="reference internal" href="#using-gnu-radio-with-pluto">Using GNU Radio with Pluto</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#qpsk-wireless-communication-with-file-storage">QPSK Wireless Communication with File Storage</a><ul>
-<li><a class="reference internal" href="#using-gnu-radio-with-jupiter">Using GNU Radio with Jupiter</a></li>
+<li><a class="reference internal" href="#text-file-messaging-point-to-point-wireless">Text File Messaging Point to Point (Wireless)</a><ul>
+<li><a class="reference internal" href="#id1">Using GNU Radio with Pluto</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#enabling-22-mimo-using-both-tx-and-rx-channels">Enabling 2×2 MIMO: Using Both TX and RX Channels</a><ul>
+<li><a class="reference internal" href="#enabling-2nd-tx-and-rx-channels-of-adalm-pluto">Enabling 2nd TX and RX Channels of ADALM Pluto</a><ul>
 <li><a class="reference internal" href="#using-pyadi-iio-with-modified-pluto">Using PyADI-IIO with Modified Pluto</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#deep-dive-symbol-synchronization-for-qpsk">Deep Dive: Symbol Synchronization for QPSK</a><ul>
-<li><a class="reference internal" href="#id1">Using GNU Radio with Jupiter</a></li>
+<li><a class="reference internal" href="#using-gnu-radio-with-jupiter">Using GNU Radio with Jupiter</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#deep-dive-carrier-synchronization-with-costas-loop">Deep Dive: Carrier Synchronization with Costas Loop</a><ul>
 <li><a class="reference internal" href="#id2">Using GNU Radio with Jupiter</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -601,55 +605,62 @@ Content on this topic
             
   <section id="advanced-sdr-exercises">
 <h1>Advanced SDR Exercises<a class="headerlink" href="#advanced-sdr-exercises" title="Link to this heading"></a></h1>
-<p>The following hands-on exercises demonstrate advanced software-defined radio applications using ADI’s SDR platforms.
-These exercises build upon the fundamentals covered in the beginner exercises and explore more sophisticated signal processing
-techniques, multi-channel systems, and real-world communication protocols.</p>
+<p>The following hands-on exercises demonstrate advanced software-defined radio applications
+using ADI’s SDR platforms.
+These exercises build upon the fundamentals covered in the beginner exercises and explore
+more sophisticated signal processing techniques, multi-channel systems, and real-world
+communication protocols.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>These advanced exercises require a solid understanding of SDR fundamentals. If you’re new to SDR, we recommend starting
-with the <a class="reference internal" href="../beginner_sdr_exercises/index.html"><span class="doc">Beginner SDR Exercises</span></a> before attempting these advanced topics.</p>
+<p>These advanced exercises require a solid understanding of SDR fundamentals.
+If you’re new to SDR, we recommend starting with the
+<a class="reference internal" href="../beginner_sdr_exercises/index.html"><span class="doc">Beginner SDR Exercises</span></a> before attempting
+these advanced topics.</p>
 </div>
+<section id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Link to this heading"></a></h2>
+<p>To follow these exercises, you will need:</p>
+<ul class="simple">
+<li><p><strong>Raspberry Pi 5</strong> with power supply</p></li>
+<li><p><strong>Keyboard and mouse</strong> for the Raspberry Pi</p></li>
+<li><p><strong>SD card</strong> (16GB or larger recommended) flashed with the FTC 2025 workshop image</p></li>
+<li><p><strong>ADALM-Pluto SDR</strong> (required for all exercises)</p></li>
+<li><p><strong>Micro USB cable</strong> to connect the Pluto to the Raspberry Pi
+(see <a class="icon link reference external" href="https://wiki.analog.com/university/tools/pluto/users/quick_start" target="_blank">Pluto Quick Start</a>
+for details)</p></li>
+<li><p><strong>Jupiter or Talise SDR</strong> (optional, for advanced platform exercises)</p></li>
+<li><p><strong>SMA loopback cable</strong> (for loopback exercises)</p></li>
+<li><p><strong>Antennas</strong>: 2.4 GHz or 915 MHz antennas for over-the-air exercises</p></li>
+</ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The following exercises should be run on a Raspberry Pi 5 using the provided ADI Kuiper 2.0 Linux image.
-The Kuiper image contains all necessary software pre-installed, including Python, GNU Radio, Scopy, and all required libraries.
-Connect your SDR hardware (Pluto, Jupiter, or Talise) to the Raspberry Pi 5 before starting the exercises.
-Use antennas or loopback cables as shown in the exercise diagrams.</p>
+<p>Flash your SD card with the FTC 2025 workshop image before starting.
+This image contains all necessary software pre-installed, including Python, GNU Radio,
+Thonny IDE, Scopy, and all required libraries.
+Connect your SDR hardware (Pluto, Jupiter, or Talise) to the Raspberry Pi 5 before
+starting the exercises.</p>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p><strong>Pluto USB Speed Limitation</strong>: USB 2.0 limits data transfer to 20.4 MiB/s,
+which translates to a maximum sample rate of <strong>5.347 MS/s</strong>.
+Keep this in mind when configuring sample rates for your experiments.</p>
 </div>
 <p><strong>What Separates Beginners from Advanced SDR Users:</strong></p>
-<p>Learning to <strong>test your SDR and find mistakes on your own</strong> is the critical step that differentiates a beginner from an advanced-level SDR user. While beginners focus on running predefined exercises and observing expected results, advanced users develop the skills to validate system performance, identify impairments, and troubleshoot issues independently. The following exercises build these advanced capabilities.</p>
-<section id="familiarize-yourself-with-the-tools">
-<h2>Familiarize Yourself with the Tools<a class="headerlink" href="#familiarize-yourself-with-the-tools" title="Link to this heading"></a></h2>
-<p>Before starting these advanced exercises, ensure you’re thoroughly familiar with the SDR hardware and tools you’ll be using. Advanced SDR work requires deep understanding of hardware capabilities, limitations, and performance characteristics.</p>
-<p><strong>Explore the Hardware:</strong></p>
-<figure class="align-center" id="id3">
-<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/tools/pluto/pluto_in_hand.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/tools/pluto/pluto_in_hand.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/tools/pluto/pluto_in_hand.png" style="width: 20em;" />
-</a>
-<figcaption>
-<p><span class="caption-number">Figure 1 </span><span class="caption-text">ADALM-PLUTO SDR Active Learning Module</span><a class="headerlink" href="#id3" title="Link to this image"></a></p>
-</figcaption>
-</figure>
-<ul class="simple">
-<li><p><a class="reference internal" href="../../../tools/pluto/index.html"><span class="doc">ADALM-Pluto (PlutoSDR)</span></a> - Learn about the Pluto SDR platform, including hardware specifications, software drivers, and getting started guides.</p></li>
-</ul>
-<p>These resources provide critical information for advanced work:</p>
-<ul class="simple">
-<li><p>Detailed hardware specifications and RF performance characteristics</p></li>
-<li><p>Understanding hardware impairments (I/Q imbalance, LO leakage, phase noise)</p></li>
-<li><p>Software drivers and advanced API features (PyADI-IIO, GNU Radio, etc.)</p></li>
-<li><p>Calibration procedures and performance optimization</p></li>
-<li><p>System architecture and signal chain details</p></li>
-</ul>
-<p>Advanced SDR users must understand not just <em>how</em> to use the tools, but <em>why</em> they behave the way they do. This knowledge is essential for debugging complex issues and optimizing system performance.</p>
-</section>
+<p>Learning to <strong>test your SDR and find mistakes on your own</strong> is the critical step that
+differentiates a beginner from an advanced-level SDR user.
+While beginners focus on running predefined exercises and observing expected results,
+advanced users develop the skills to validate system performance, identify impairments,
+and troubleshoot issues independently.
+The following exercises build these advanced capabilities.</p>
 <section id="first-steps-in-sdr-testing">
-<h2>First Steps in SDR Testing<a class="headerlink" href="#first-steps-in-sdr-testing" title="Link to this heading"></a></h2>
-<p>For the theoretical background on sinewave loopback testing, including complex sinusoids, Zero IF
-architecture, and key impairments (Image Rejection, LO Leakage, SNR), see the
+<h3>First Steps in SDR Testing<a class="headerlink" href="#first-steps-in-sdr-testing" title="Link to this heading"></a></h3>
+<p>For the theoretical background on sinewave loopback testing, including complex sinusoids,
+Zero IF architecture, and key impairments (Image Rejection, LO Leakage, SNR), see the
 <a class="reference internal" href="../beginner_sdr_exercises/index.html#sinewave-loopback"><span class="std std-ref">Sinewave Loopback</span></a> section in the Beginner SDR Exercises.</p>
 </section>
 <section id="debugging-and-tweaking-iio-attributes">
-<h2>Debugging and Tweaking IIO Attributes<a class="headerlink" href="#debugging-and-tweaking-iio-attributes" title="Link to this heading"></a></h2>
+<h3>Debugging and Tweaking IIO Attributes<a class="headerlink" href="#debugging-and-tweaking-iio-attributes" title="Link to this heading"></a></h3>
 <p>This advanced exercise teaches you how to interact with the <strong>Industrial I/O (IIO) subsystem</strong> at a low level, giving you direct control over hardware attributes. Understanding IIO attributes is essential for debugging SDR issues, optimizing performance, and integrating SDR control into custom applications.</p>
 <p><strong>What are IIO Attributes?</strong></p>
 <p>IIO attributes are the low-level parameters that control every aspect of your SDR hardware:</p>
@@ -674,7 +685,7 @@ architecture, and key impairments (Image Rejection, LO Leakage, SNR), see the
 </ol>
 <p>See the official documentation for complete details. This exercise demonstrates all three approaches using the RX gain attribute as an example.</p>
 <section id="using-pyadi-iio-to-read-write-attributes">
-<h3>Using PyADI-IIO to Read/Write Attributes<a class="headerlink" href="#using-pyadi-iio-to-read-write-attributes" title="Link to this heading"></a></h3>
+<h4>Using PyADI-IIO to Read/Write Attributes<a class="headerlink" href="#using-pyadi-iio-to-read-write-attributes" title="Link to this heading"></a></h4>
 <p><strong>Why This Approach:</strong> Python scripts provide programmatic access to IIO attributes, making it easy to automate configuration, log values, and integrate SDR control into larger applications.</p>
 <p><strong>Steps:</strong></p>
 <ol class="arabic">
@@ -736,7 +747,7 @@ New RX gain: 10 dB
 <p><strong>Key Insight:</strong> PyADI-IIO provides a Python-friendly interface to IIO attributes. Under the hood, it’s reading and writing the same kernel attributes you’ll access with the other tools.</p>
 </section>
 <section id="using-iio-attr-command-line-utility">
-<h3>Using iio_attr Command-Line Utility<a class="headerlink" href="#using-iio-attr-command-line-utility" title="Link to this heading"></a></h3>
+<h4>Using iio_attr Command-Line Utility<a class="headerlink" href="#using-iio-attr-command-line-utility" title="Link to this heading"></a></h4>
 <p><strong>Why This Approach:</strong> The <code class="docutils literal notranslate"><span class="pre">iio_attr</span></code> command-line tool provides immediate access to IIO attributes without writing code. It’s ideal for:</p>
 <ul class="simple">
 <li><p>Quick verification of settings</p></li>
@@ -809,10 +820,78 @@ New RX gain: 10 dB
 </ul>
 </li>
 </ol>
-<p><strong>Key Insight:</strong> The <code class="docutils literal notranslate"><span class="pre">iio_attr</span></code> utility exposes the raw IIO interface. Every attribute you see here can also be accessed through PyADI-IIO, GNU Radio, MATLAB, or Scopy - they all use the same underlying IIO layer.</p>
+<p><strong>Key Insight:</strong> The <code class="docutils literal notranslate"><span class="pre">iio_attr</span></code> utility exposes the raw IIO interface. Every attribute you see
+here can also be accessed through PyADI-IIO, GNU Radio, MATLAB, or Scopy - they all use the same
+underlying IIO layer.</p>
+</section>
+<section id="using-iio-info-to-explore-the-iio-context">
+<h4>Using iio_info to Explore the IIO Context<a class="headerlink" href="#using-iio-info-to-explore-the-iio-context" title="Link to this heading"></a></h4>
+<p>The <code class="docutils literal notranslate"><span class="pre">iio_info</span></code> command provides a quick overview of all devices, channels, and attributes
+available in an IIO context. This is useful for discovering what’s available on your SDR.</p>
+<p><strong>Steps:</strong></p>
+<ol class="arabic">
+<li><p>List all devices and their attributes:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iio_info<span class="w"> </span>-u<span class="w"> </span>ip:pluto.local
+</pre></div>
+</div>
+<p>This command outputs the complete IIO context structure, including:</p>
+<ul class="simple">
+<li><p>All IIO devices (ad9361-phy, cf-ad9361-lpc, cf-ad9361-dds-core-lpc, etc.)</p></li>
+<li><p>All channels for each device</p></li>
+<li><p>All attributes for each channel and device</p></li>
+</ul>
+</li>
+<li><p>For a more compact view, you can filter the output:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iio_info<span class="w"> </span>-u<span class="w"> </span>ip:pluto.local<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;iio:device|Channel&quot;</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="using-direct-filesystem-access-sysfs">
+<h4>Using Direct Filesystem Access (sysfs)<a class="headerlink" href="#using-direct-filesystem-access-sysfs" title="Link to this heading"></a></h4>
+<p>IIO attributes are exposed through the Linux sysfs filesystem. You can read and write them
+directly using standard shell commands via SSH.</p>
+<p><strong>Steps:</strong></p>
+<ol class="arabic">
+<li><p>SSH into the Pluto SDR:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ssh<span class="w"> </span>root@pluto.local
+</pre></div>
+</div>
+<p>Default password: <code class="docutils literal notranslate"><span class="pre">analog</span></code></p>
+</li>
+<li><p>Navigate to the IIO devices directory:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/sys/bus/iio/devices/
+</pre></div>
+</div>
+</li>
+<li><p>List available devices:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-la
+</pre></div>
+</div>
+<p>You’ll see devices like <code class="docutils literal notranslate"><span class="pre">iio:device0</span></code>, <code class="docutils literal notranslate"><span class="pre">iio:device1</span></code>, etc.</p>
+</li>
+<li><p>Read an attribute value directly:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>/sys/bus/iio/devices/iio:device0/in_voltage0_hardwaregain
+</pre></div>
+</div>
+</li>
+<li><p>Write an attribute value:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">10</span><span class="w"> </span>&gt;<span class="w"> </span>/sys/bus/iio/devices/iio:device0/in_voltage0_hardwaregain
+</pre></div>
+</div>
+</li>
+<li><p>Verify the change:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>/sys/bus/iio/devices/iio:device0/in_voltage0_hardwaregain
+</pre></div>
+</div>
+</li>
+</ol>
+<p><strong>Key Insight:</strong> Direct filesystem access is useful for embedded applications, shell scripts,
+or when you need the lowest-level access to IIO attributes without any library overhead.</p>
 </section>
 <section id="using-scopy-debugger-instrument">
-<h3>Using Scopy Debugger Instrument<a class="headerlink" href="#using-scopy-debugger-instrument" title="Link to this heading"></a></h3>
+<h4>Using Scopy Debugger Instrument<a class="headerlink" href="#using-scopy-debugger-instrument" title="Link to this heading"></a></h4>
 <p><strong>Why This Approach:</strong> Scopy’s Debugger instrument provides a visual, hierarchical view of all IIO attributes, making it easy to explore what’s available and experiment with different settings in real-time.</p>
 <p><strong>Steps:</strong></p>
 <ol class="arabic">
@@ -919,83 +998,112 @@ New RX gain: 10 dB
 <li><p>Reads back and verifies the changes</p></li>
 </ol>
 <p>This exercise reinforces your understanding of programmatic IIO access and prepares you for integrating SDR control into custom applications.</p>
+<p><strong>Scopy Generate C Example Feature:</strong></p>
+<p>Scopy can automatically generate C code to read or write any IIO attribute. This is extremely
+useful when you need to integrate IIO access into C/C++ applications.</p>
+<p><strong>Steps:</strong></p>
+<ol class="arabic simple">
+<li><p>In the Debugger instrument, right-click on any attribute</p></li>
+<li><p>Select <strong>Generate C example</strong></p></li>
+<li><p>Scopy generates complete C code that:</p>
+<ul class="simple">
+<li><p>Creates an IIO context</p></li>
+<li><p>Finds the device and channel</p></li>
+<li><p>Reads or writes the attribute</p></li>
+<li><p>Includes proper error handling</p></li>
+</ul>
+</li>
+</ol>
+<p>This feature eliminates the need to manually look up libiio API functions and speeds up
+development of custom IIO applications.</p>
 <p><strong>Debugging Workflow Summary:</strong></p>
 <p>When troubleshooting SDR issues, use this workflow:</p>
 <ol class="arabic simple">
 <li><p><strong>Scopy Debugger</strong>: Visually verify current attribute values</p></li>
 <li><p><strong>iio_attr</strong>: Quick command-line checks in terminal</p></li>
+<li><p><strong>iio_info</strong>: Discover available devices and attributes</p></li>
+<li><p><strong>Filesystem access</strong>: Direct sysfs access for embedded/scripted applications</p></li>
 <li><p><strong>PyADI-IIO</strong>: Automated scripts for reproducible configurations</p></li>
 </ol>
-<p>Understanding IIO attributes gives you <strong>complete control</strong> over your SDR hardware and the ability to debug issues at every level of the stack.</p>
+<p>Understanding IIO attributes gives you <strong>complete control</strong> over your SDR hardware and the
+ability to debug issues at every level of the stack.</p>
 </section>
 </section>
 <section id="digital-qam-modulation-16qam-loopback-with-evm-measurements">
-<h2>Digital QAM Modulation: 16QAM Loopback with EVM Measurements<a class="headerlink" href="#digital-qam-modulation-16qam-loopback-with-evm-measurements" title="Link to this heading"></a></h2>
-<p>This advanced exercise explores <strong>16-QAM (Quadrature Amplitude Modulation)</strong>, a higher-order modulation scheme that encodes 4 bits per symbol by varying both phase and amplitude. Unlike BPSK (1 bit/symbol) or QPSK (2 bits/symbol), 16QAM uses 16 distinct constellation points, achieving higher spectral efficiency at the cost of requiring better signal quality.</p>
-<p><strong>Why 16QAM Matters:</strong></p>
-<p>16QAM is widely used in modern wireless standards:</p>
-<ul class="simple">
-<li><p><strong>4G LTE</strong>: Downlink modulation for medium-to-high SNR conditions</p></li>
-<li><p><strong>5G NR</strong>: One of the baseline modulation schemes</p></li>
-<li><p><strong>Wi-Fi (802.11ac/ax)</strong>: High-throughput data transmission</p></li>
-<li><p><strong>DVB-T2</strong>: Digital television broadcasting</p></li>
-<li><p><strong>Microwave backhaul</strong>: Point-to-point links</p></li>
-</ul>
-<p>This exercise introduces <strong>Error Vector Magnitude (EVM)</strong> measurements, a critical metric for evaluating digital modulation quality in production systems.</p>
-<p><strong>What is EVM?</strong></p>
-<p><strong>Error Vector Magnitude</strong> quantifies how much the received constellation points deviate from their ideal positions. It’s the industry-standard metric for measuring transmitter and receiver quality.</p>
-<div class="math-wrapper docutils container">
-<div class="math notranslate nohighlight">
-\[\text{EVM}_{\text{RMS}} = \sqrt{\frac{1}{N} \sum_{i=1}^{N} \frac{|S_{\text{measured},i} - S_{\text{ideal},i}|^2}{|S_{\text{ideal},i}|^2}} \times 100\%\]</div>
-</div>
-<p>where:</p>
-<ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(S_{\text{measured},i}\)</span> = received symbol</p></li>
-<li><p><span class="math notranslate nohighlight">\(S_{\text{ideal},i}\)</span> = ideal constellation point</p></li>
-<li><p><span class="math notranslate nohighlight">\(N\)</span> = number of symbols</p></li>
-</ul>
-<p>Lower EVM = better signal quality. Typical requirements:</p>
-<ul class="simple">
-<li><p><strong>4G LTE</strong>: EVM &lt; 8% for 16QAM</p></li>
-<li><p><strong>5G NR</strong>: EVM &lt; 7% for 16QAM</p></li>
-<li><p><strong>Wi-Fi 6</strong>: EVM &lt; 6.5% for 16QAM</p></li>
-</ul>
-<p><strong>16QAM Constellation:</strong></p>
-<p>16QAM uses a 4×4 grid constellation with 16 points:</p>
-<ul class="simple">
-<li><p><strong>4 amplitude levels</strong>: Each axis (I and Q) has 4 discrete levels</p></li>
-<li><p><strong>4 bits per symbol</strong>: 2^4 = 16 possible symbols</p></li>
-<li><p><strong>Higher spectral efficiency</strong>: 2× more bits per symbol than QPSK</p></li>
-<li><p><strong>Higher SNR requirement</strong>: More sensitive to noise and impairments</p></li>
-</ul>
-<p><strong>Key Difference from QPSK:</strong></p>
-<ul class="simple">
-<li><p><strong>QPSK</strong>: All symbols have the same amplitude, only phase changes</p></li>
-<li><p><strong>16QAM</strong>: Symbols have different amplitudes AND phases</p></li>
-<li><p><strong>Implication</strong>: 16QAM is more sensitive to amplitude distortion (compression, non-linearity)</p></li>
-</ul>
-<p><strong>GNU Radio Implementation Challenges:</strong></p>
+<h3>Digital QAM Modulation: 16QAM Loopback with EVM Measurements<a class="headerlink" href="#digital-qam-modulation-16qam-loopback-with-evm-measurements" title="Link to this heading"></a></h3>
+<p>This advanced exercise explores <strong>16-QAM (Quadrature Amplitude Modulation)</strong>, a higher-order
+modulation scheme that encodes 4 bits per symbol by varying both phase and amplitude.
+Unlike BPSK (1 bit/symbol) or QPSK (2 bits/symbol), 16QAM uses 16 distinct constellation points,
+achieving higher spectral efficiency at the cost of requiring better signal quality.</p>
+<p>QPSK is similar to BPSK but has more symbols. PSK with more than 4 symbols includes 8PSK,
+16PSK, and beyond.</p>
+<p><strong>GNU Radio Implementation:</strong></p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>The GNU Radio <strong>Differential Encoder/Decoder blocks do NOT support 16QAM</strong>. You must manually rotate the constellation after demodulation to align it with the transmitted pattern.</p>
+<p>The GNU Radio <strong>Differential Encoder/Decoder blocks do NOT support 16QAM</strong>.
+You must manually rotate the constellation after demodulation to align it with the
+transmitted pattern. Use the slider to find the correct rotation of the constellation.</p>
 </div>
-<p>This limitation requires you to:</p>
-<ol class="arabic simple">
-<li><p>Observe the received constellation rotation</p></li>
-<li><p>Manually adjust using a phase offset slider</p></li>
-<li><p>Align until received pattern matches transmitted pattern</p></li>
-</ol>
-<p>This hands-on constellation alignment teaches you how carrier phase ambiguity affects higher-order modulations.</p>
+<figure class="align-center" id="id3">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_gnuradio_schematic.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_gnuradio_schematic.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_gnuradio_schematic.png" style="width: 45em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 1 </span><span class="caption-text">16QAM Loopback flowgraph with EVM measurements - Transmitter and Receiver chains</span><a class="headerlink" href="#id3" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p><strong>Understanding the EVM Measurement Block:</strong></p>
+<p>The flowgraph uses the GNU Radio <strong>Measure EVM</strong> block to calculate Error Vector Magnitude.
+Here’s how the EVM calculation works step by step:</p>
+<p><strong>Step 1: Set of ideal constellation points</strong></p>
+<p>For 16QAM, the ideal constellation points are defined as:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[S_{\text{ideal}} = \{s_0, s_1, ..., s_{M-1}\}\]</div>
+</div>
+<p>where M=16 for 16QAM.</p>
+<p><strong>Step 2: Compute RMS amplitude of the constellation</strong></p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[A_{\text{RMS}} = \sqrt{\frac{1}{M} \sum_{k=0}^{M-1} |s_k|^2}\]</div>
+</div>
+<p>For 16QAM with M=16, this gives the reference amplitude for normalization.</p>
+<p><strong>Step 3: Set of noisy symbols received</strong></p>
+<figure class="align-center" id="id4">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_noisy_symbol_set.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_noisy_symbol_set.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_noisy_symbol_set.png" style="width: 35em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 2 </span><span class="caption-text">Noisy received symbols compared to ideal constellation points</span><a class="headerlink" href="#id4" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>The received symbols form a set:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[R = \{r_0, r_1, ..., r_{N-1}\}\]</div>
+</div>
+<p><strong>Step 4: Find the closest ideal symbol</strong></p>
+<p>For each received noisy symbol <span class="math notranslate nohighlight">\(r_i\)</span>, find the closest ideal symbol <span class="math notranslate nohighlight">\(s_{\text{nearest}}\)</span>.</p>
+<p><strong>Step 5: Compute error value</strong></p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[e_i = r_i - s_{\text{nearest},i}\]</div>
+</div>
+<p><strong>Step 6: Compute instantaneous EVM for one received symbol</strong></p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\text{EVM}_i = \frac{|e_i|}{A_{\text{RMS}}} \times 100\%\]</div>
+</div>
+<p>The open-source code for this block is available at:
+<a class="icon link reference external" href="https://github.com/gnuradio/gnuradio/blob/main/gr-digital/lib/meas_evm_cc_impl.cc" target="_blank">GNU Radio EVM Implementation</a></p>
 <section id="using-gnu-radio-with-pluto">
-<h3>Using GNU Radio with Pluto<a class="headerlink" href="#using-gnu-radio-with-pluto" title="Link to this heading"></a></h3>
+<h4>Using GNU Radio with Pluto<a class="headerlink" href="#using-gnu-radio-with-pluto" title="Link to this heading"></a></h4>
 <p><strong>Setup:</strong></p>
 <ol class="arabic">
 <li><p>Connect the loopback cable between TX1 and RX1:</p>
-<figure class="align-center" id="id4">
+<figure class="align-center" id="id5">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/sinewave_loopback/loopback_setup.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/sinewave_loopback/loopback_setup.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/sinewave_loopback/loopback_setup.png" style="width: 20em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 2 </span><span class="caption-text">Pluto SDR with loopback cable connecting TX to RX</span><a class="headerlink" href="#id4" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 3 </span><span class="caption-text">Pluto SDR with loopback cable connecting TX to RX</span><a class="headerlink" href="#id5" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </li>
@@ -1036,443 +1144,133 @@ New RX gain: 10 dB
 </ul>
 <p><strong>Steps:</strong></p>
 <ol class="arabic">
-<li><p>Run the flowgraph:</p>
-<ul class="simple">
-<li><p>Click the <strong>Run</strong> button (green arrow) in the toolbar</p></li>
-<li><p>Wait for the plots to appear</p></li>
-</ul>
-</li>
-<li><p><strong>Observe the initial constellation mismatch:</strong></p>
-<p>The <strong>Received Demodulated Symbols</strong> plot will show the constellation rotated compared to the <strong>Transmitted Symbols</strong> plot.</p>
-<p><strong>Why this happens:</strong></p>
-<ul class="simple">
-<li><p>Carrier phase ambiguity from the receiver’s phase-locked loop</p></li>
-<li><p>Differential encoding doesn’t work for 16QAM in GNU Radio</p></li>
-<li><p>Manual constellation rotation is required</p></li>
-</ul>
-</li>
-<li><p><strong>Manually rotate the constellation:</strong></p>
-<ul class="simple">
-<li><p>Locate the <strong>Phase Offset</strong> slider under the <strong>Received Demodulated Symbols</strong> plot</p></li>
-<li><p>Rotate the slider in multiples of <strong>90 degrees</strong> (0°, 90°, 180°, 270°)</p></li>
-<li><p>Stop when the received pattern matches the transmitted pattern</p></li>
-</ul>
-<p><strong>Key Observation:</strong></p>
-<ul class="simple">
-<li><p>16QAM has <strong>4-fold rotational symmetry</strong> (90° rotations)</p></li>
-<li><p>Unlike QPSK, you can visually distinguish correct vs incorrect rotation by comparing symbol patterns</p></li>
-<li><p>In production systems, differential encoding or pilot symbols resolve this ambiguity automatically</p></li>
-</ul>
+<li><p>Run the flowgraph by clicking the <strong>Run</strong> button (green arrow) in the toolbar.</p></li>
+<li><p>Observe the output displays:</p>
+<figure class="align-center" id="id6">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_gnuradio_plot1.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_gnuradio_plot1.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_gnuradio_plot1.png" style="width: 45em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 4 </span><span class="caption-text">Same pattern of symbols at TX and demodulated RX. Green shows RX Spectrum after FLL block.</span><a class="headerlink" href="#id6" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<figure class="align-center" id="id7">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_gnuradio_plot2.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_gnuradio_plot2.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_gnuradio_plot2.png" style="width: 45em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 5 </span><span class="caption-text">Eye diagram after Costas loop of the RX. Use the slider to rotate the constellation
+in steps of 90° - observe that symbols received are the same due to Differential Decoding.</span><a class="headerlink" href="#id7" title="Link to this image"></a></p>
+</figcaption>
+</figure>
 </li>
 <li><p><strong>Observe EVM measurements:</strong></p>
-<p>Scroll down in the plots window to find the EVM measurement displays:</p>
+<figure class="align-center" id="id8">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_gnuradio_evm_measurement.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_gnuradio_evm_measurement.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_gnuradio_evm_measurement.png" style="width: 45em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 6 </span><span class="caption-text">EVM measurements: Instantaneous EVM (%) for each received symbol, Min/Max/RMS EVM over 100 symbols</span><a class="headerlink" href="#id8" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>The EVM display shows:</p>
 <ul class="simple">
-<li><p><strong>Min EVM</strong>: Lowest error vector magnitude observed</p></li>
-<li><p><strong>Max EVM</strong>: Highest error vector magnitude observed</p></li>
-<li><p><strong>RMS EVM</strong>: Root-mean-square EVM (industry standard metric)</p></li>
-</ul>
-<p><strong>Expected EVM values for loopback:</strong></p>
-<ul class="simple">
-<li><p><strong>RMS EVM</strong>: 1-3% (excellent - loopback with minimal impairments)</p></li>
-<li><p><strong>Max EVM</strong>: 5-8% (peak distortion on worst symbols)</p></li>
-<li><p><strong>Min EVM</strong>: &lt;1% (best-case symbols near constellation center)</p></li>
-</ul>
-<p><strong>What EVM tells you:</strong></p>
-<ul class="simple">
-<li><p><strong>Low EVM (&lt; 5%)</strong>: Clean signal, good I/Q balance, low noise</p></li>
-<li><p><strong>Medium EVM (5-10%)</strong>: Acceptable for most standards, may indicate minor impairments</p></li>
-<li><p><strong>High EVM (&gt; 10%)</strong>: Significant impairments - check gain settings, SNR, or hardware issues</p></li>
+<li><p><strong>Instantaneous EVM (%)</strong>: EVM for each received symbol</p></li>
+<li><p><strong>Min EVM (%)</strong>: Minimum EVM in 100 symbols</p></li>
+<li><p><strong>RMS EVM (%)</strong>: Root-mean-square EVM for 100 symbols</p></li>
+<li><p><strong>Max EVM (%)</strong>: Maximum EVM for 100 symbols</p></li>
+<li><p><strong>Average EVM (%)</strong>: Running average</p></li>
 </ul>
 </li>
-<li><p><strong>Experiment with impairments:</strong></p>
-<ul class="simple">
-<li><p><strong>Reduce RX gain</strong>: Lower gain → worse SNR → higher EVM</p></li>
-<li><p><strong>Increase TX attenuation</strong>: Lower signal power → worse SNR → higher EVM</p></li>
-<li><p><strong>Add frequency offset</strong>: Degrade carrier recovery → higher EVM</p></li>
-</ul>
-<p>Observe how EVM degrades as signal quality worsens.</p>
+<li><p><strong>Understanding the Python blocks:</strong></p>
+<figure class="align-center" id="id9">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_python_blocks.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_python_blocks.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_python_blocks.png" style="width: 45em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 7 </span><span class="caption-text">Python blocks for EVM calculation - EVM RMS is computed over 100-sample windows</span><a class="headerlink" href="#id9" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>EVM RMS is the RMS value for one window (100 samples) of instantaneous EVM points
+calculated by the EVM Measurement block.</p>
 </li>
-<li><p>Stop the flowgraph when done:</p>
-<ul class="simple">
-<li><p>Click the <strong>Stop</strong> button (red square) in the toolbar</p></li>
-<li><p>Or middle-click on any plot → <strong>Stop</strong></p></li>
-</ul>
-</li>
+<li><p>Click the <strong>Stop</strong> button (red square) when finished.</p></li>
 </ol>
-<p><strong>Understanding the EVM Measurement Blocks:</strong></p>
-<p>The flowgraph contains <strong>custom Python blocks</strong> that implement EVM calculation:</p>
-<div class="code-spaced highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="linenos"> 2</span>
-<span class="linenos"> 3</span><span class="k">class</span><span class="w"> </span><span class="nc">EVM_Calculator</span><span class="p">:</span>
-<span class="linenos"> 4</span>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
-<span class="linenos"> 5</span>        <span class="bp">self</span><span class="o">.</span><span class="n">window_size</span> <span class="o">=</span> <span class="n">window_size</span>
-<span class="linenos"> 6</span>        <span class="bp">self</span><span class="o">.</span><span class="n">ideal_constellation</span> <span class="o">=</span> <span class="n">generate_16qam_constellation</span><span class="p">()</span>
-<span class="linenos"> 7</span>
-<span class="linenos"> 8</span>    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_evm_rms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">received_symbols</span><span class="p">):</span>
-<span class="linenos"> 9</span>        <span class="c1"># Find nearest ideal constellation point for each symbol</span>
-<span class="linenos">10</span>        <span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="linenos">11</span>        <span class="k">for</span> <span class="n">rx_sym</span> <span class="ow">in</span> <span class="n">received_symbols</span><span class="p">:</span>
-<span class="linenos">12</span>            <span class="n">ideal_sym</span> <span class="o">=</span> <span class="n">find_nearest_constellation_point</span><span class="p">(</span><span class="n">rx_sym</span><span class="p">)</span>
-<span class="linenos">13</span>            <span class="n">error</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">rx_sym</span> <span class="o">-</span> <span class="n">ideal_sym</span><span class="p">)</span> <span class="o">/</span> <span class="nb">abs</span><span class="p">(</span><span class="n">ideal_sym</span><span class="p">)</span>
-<span class="linenos">14</span>            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
-<span class="linenos">15</span>
-<span class="linenos">16</span>        <span class="c1"># Calculate RMS EVM as percentage</span>
-<span class="linenos">17</span>        <span class="n">evm_rms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="mi">100</span>
-<span class="linenos">18</span>        <span class="k">return</span> <span class="n">evm_rms</span>
-</pre></div>
-</div>
-<p><strong>Advanced Challenge:</strong></p>
-<p>Modify the flowgraph to:</p>
-<ol class="arabic simple">
-<li><p>Add a <strong>frequency offset</strong> block to simulate local oscillator mismatch</p></li>
-<li><p>Observe how EVM degrades as frequency offset increases</p></li>
-<li><p>Find the maximum frequency offset that keeps EVM below 8% (LTE requirement)</p></li>
-</ol>
-<p><strong>Comparison to QPSK:</strong></p>
-<ul class="simple">
-<li><p><strong>QPSK</strong>: Simpler constellation, easier to demodulate, lower data rate</p></li>
-<li><p><strong>16QAM</strong>: Higher data rate (2× QPSK), more sensitive to impairments, harder to demodulate</p></li>
-<li><p><strong>Trade-off</strong>: Spectral efficiency vs robustness</p></li>
-</ul>
-<p>In adaptive modulation schemes (4G/5G), the system switches between QPSK, 16QAM, 64QAM, and 256QAM based on channel conditions:</p>
-<ul class="simple">
-<li><p><strong>Good channel (high SNR)</strong>: Use 256QAM for maximum throughput</p></li>
-<li><p><strong>Poor channel (low SNR)</strong>: Fall back to QPSK for reliability</p></li>
-<li><p><strong>Medium channel</strong>: Use 16QAM or 64QAM as compromise</p></li>
-</ul>
-<p>This exercise demonstrates why EVM measurement is critical: it tells you which modulation order your link can support.</p>
 </section>
 </section>
-<section id="qpsk-wireless-communication-with-file-storage">
-<h2>QPSK Wireless Communication with File Storage<a class="headerlink" href="#qpsk-wireless-communication-with-file-storage" title="Link to this heading"></a></h2>
-<p>This exercise demonstrates <strong>wireless point-to-point file transfer</strong> using QPSK modulation over the air with real wireless channel effects.</p>
-<p><strong>System Architecture:</strong></p>
-<ul class="simple">
-<li><p><strong>Transmitter</strong> (presenter’s SDR):</p>
-<ul>
-<li><p>Reads text file</p></li>
-<li><p>Packetizes data with CRC32 checksums</p></li>
-<li><p>Modulates as QPSK bursts</p></li>
-<li><p>Transmits over antenna</p></li>
-</ul>
-</li>
-<li><p><strong>Receiver</strong> (your Jupiter SDR):</p>
-<ul>
-<li><p>Receives QPSK signal via antenna</p></li>
-<li><p>Demodulates and error-checks packets</p></li>
-<li><p>Writes valid packets to output file</p></li>
-<li><p>Measures EVM in real-time</p></li>
-</ul>
-</li>
-</ul>
-<section id="using-gnu-radio-with-jupiter">
-<h3>Using GNU Radio with Jupiter<a class="headerlink" href="#using-gnu-radio-with-jupiter" title="Link to this heading"></a></h3>
-<div class="admonition important">
-<p class="admonition-title">Important</p>
-<p>This exercise requires the presenter to be transmitting. Do NOT run the flowgraph until instructed. Starting early will capture only noise.</p>
-</div>
-<p><strong>Setup:</strong></p>
+<section id="text-file-messaging-point-to-point-wireless">
+<h3>Text File Messaging Point to Point (Wireless)<a class="headerlink" href="#text-file-messaging-point-to-point-wireless" title="Link to this heading"></a></h3>
+<p>This exercise demonstrates <strong>wireless point-to-point text file transfer</strong> using QPSK modulation
+over the air.</p>
+<figure class="align-center" id="id10">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/text_file_messaging/text_file_msg_gnuradio_schematic.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/text_file_messaging/text_file_msg_gnuradio_schematic.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/text_file_messaging/text_file_msg_gnuradio_schematic.png" style="width: 45em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 8 </span><span class="caption-text">Text File Messaging flowgraph - Transmitter and Receiver chains</span><a class="headerlink" href="#id10" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<section id="id1">
+<h4>Using GNU Radio with Pluto<a class="headerlink" href="#id1" title="Link to this heading"></a></h4>
+<p>For this example, connect <strong>only one antenna</strong> to the RX of Pluto. We will transmit to you!</p>
+<p><strong>Steps:</strong></p>
 <ol class="arabic">
-<li><p>Connect antenna to RX1 of your Jupiter SDR:</p>
-<p><strong>Antenna Orientation Tips:</strong></p>
-<ul class="simple">
-<li><p>Point antenna toward the transmitter (presenter’s location)</p></li>
-<li><p>Vertical polarization typically provides best reception</p></li>
-<li><p>Avoid obstructions between TX and RX antennas</p></li>
-</ul>
-</li>
 <li><p>Open GNU Radio Companion:</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
-</pre></div>
-</div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gnuradio-companion
 </pre></div>
 </div>
-<div class="clear-left"></div></div></div></li>
-<li><p>Load the QPSK receiver flowgraph:</p>
-<ul class="simple">
-<li><p>Click <strong>File</strong> → <strong>Open</strong></p></li>
-<li><p>Navigate to: <code class="docutils literal notranslate"><span class="pre">/home/analog/Desktop/ftc_2025/8_qpsk_point_to_point_txtfile_gnuradio/receiver_pluto</span></code></p></li>
-<li><p>Open: <code class="docutils literal notranslate"><span class="pre">qpsk_receiver_txtfile_pluto.grc</span></code></p></li>
-</ul>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Even though the file is named <code class="docutils literal notranslate"><span class="pre">receiver_pluto.grc</span></code>, you can use it with Jupiter by changing the IIO context in the GNU Radio flowgraph. The flowgraph will auto-detect the connected SDR.</p>
-</div>
 </li>
-</ol>
-<p><strong>Steps:</strong></p>
-<ol class="arabic">
-<li><p><strong>Wait for presenter announcement:</strong></p>
-<ul class="simple">
-<li><p>Presenter will announce: “Starting transmission now”</p></li>
-<li><p>Only then should you run your receiver flowgraph</p></li>
-</ul>
+<li><p>In GNU Radio Companion, open from <strong>File → Open</strong>:</p>
+<p><code class="docutils literal notranslate"><span class="pre">/home/analog/Desktop/ftc_2025/8_qpsk_point_to_point_txtfile_gnuradio/receiver_pluto/qpsk_receiver_txtfile_pluto.grc</span></code></p>
 </li>
-<li><p>Run the receiver flowgraph:</p>
-<ul class="simple">
-<li><p>Click the <strong>Run</strong> button (green arrow) in the toolbar</p></li>
-<li><p>The receiver starts capturing data immediately</p></li>
-</ul>
-</li>
-<li><p><strong>Observe the received constellation:</strong></p>
-<p>Watch the constellation plot in real-time:</p>
-<ul class="simple">
-<li><p><strong>Noisy constellation</strong>: Signal points spread out due to wireless channel</p></li>
-<li><p><strong>Rotation</strong>: Phase may drift over time</p></li>
-<li><p><strong>Bursts</strong>: Symbols appear in bursts (not continuous transmission)</p></li>
-</ul>
-<p><strong>Why the constellation is noisier:</strong></p>
-<ul class="simple">
-<li><p><strong>Burst mode transmission</strong>: Data sent in packets with gaps between bursts</p></li>
-<li><p><strong>Limited lock time</strong>: Digital synchronization loops (FLL, Costas, Symbol Sync) don’t have enough time to fully lock before burst ends</p></li>
-<li><p><strong>Channel fading</strong>: Wireless signal strength varies over time</p></li>
-<li><p><strong>Interference</strong>: Other RF sources in the 2.4 GHz band</p></li>
-</ul>
-<p>Compare this to loopback exercises where constellation points are tight and well-defined.</p>
-</li>
-<li><p><strong>Monitor EVM measurements:</strong></p>
-<p>Scroll down to observe real-time EVM:</p>
-<ul class="simple">
-<li><p><strong>RMS EVM</strong>: Likely <strong>5-15%</strong> (higher than loopback due to wireless channel)</p></li>
-<li><p><strong>Max EVM</strong>: May spike to <strong>20-30%</strong> during deep fades</p></li>
-<li><p><strong>Min EVM</strong>: Best moments might still achieve <strong>2-5%</strong></p></li>
-</ul>
-<p><strong>What wireless EVM tells you:</strong></p>
-<ul class="simple">
-<li><p><strong>EVM variation</strong>: Unlike stable loopback, wireless EVM fluctuates</p></li>
-<li><p><strong>Channel quality indicator</strong>: High EVM = poor link quality</p></li>
-<li><p><strong>Modulation limit</strong>: If EVM &gt; 15%, higher-order modulations (16QAM) would fail</p></li>
-</ul>
-</li>
-<li><p><strong>Wait for transmission to complete:</strong></p>
-<ul class="simple">
-<li><p>Presenter will announce: “Transmission complete”</p></li>
-<li><p>Let the flowgraph run for a few more seconds to capture any trailing packets</p></li>
-<li><p>Then stop the flowgraph</p></li>
-</ul>
-</li>
-<li><p>Stop the receiver:</p>
-<ul class="simple">
-<li><p>Click the <strong>Stop</strong> button (red square) in the toolbar</p></li>
-</ul>
-</li>
-<li><p><strong>Check the received file:</strong></p>
-<p>Navigate to the receiver folder and open the received file:</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
-</pre></div>
-</div>
+<li><p>Run the flowgraph by clicking the <strong>Run</strong> button (green arrow).</p></li>
+<li><p>After you run the flowgraph for a few seconds, stop it and open the <code class="docutils literal notranslate"><span class="pre">receive.txt</span></code> file:</p>
+<figure class="align-center" id="id11">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/text_file_messaging/text_file_msg_gnuradio_output.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/text_file_messaging/text_file_msg_gnuradio_output.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/text_file_messaging/text_file_msg_gnuradio_output.png" style="width: 45em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 9 </span><span class="caption-text">Open receive.txt to see the decoded message</span><a class="headerlink" href="#id11" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>Navigate to the receiver folder and check the received file:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/Desktop/ftc_2025/8_qpsk_point_to_point_txtfile_gnuradio/receiver_pluto
+cat<span class="w"> </span>receive.txt
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~/Desktop/ftc_2025/8_qpsk_point_to_point_txtfile_gnuradio/receiver_pluto$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>receive.txt
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div><p><strong>What you’ll see:</strong></p>
-<ul class="simple">
-<li><p>Multiple instances of the transmitted message (presenter sends it repeatedly for reliability)</p></li>
-<li><p>Each successfully received packet appears as a new line</p></li>
-<li><p>Some messages may be missing if packets failed CRC check</p></li>
-<li><p>Possible corruption if errors bypassed CRC (rare)</p></li>
-</ul>
-<p><strong>Example output:</strong></p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Welcome to ADI FTC 2025 SDR Workshop!
-Welcome to ADI FTC 2025 SDR Workshop!
-Welcome to ADI FTC 2025 SDR Workshop!
-Welcome to ADI FTC 2025 SDR Workshop!
-</pre></div>
-</div>
-<p>The repetition is intentional - transmitter sends the same message multiple times to ensure at least some packets get through.</p>
-</li>
-<li><p><strong>Delete and re-run (optional):</strong></p>
-<p>If you want to receive fresh data:</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>rm<span class="w"> </span>receive.txt
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div><p>Then run the flowgraph again when presenter transmits.</p>
 </li>
 </ol>
-<p><strong>Understanding Burst Mode Transmission:</strong></p>
-<p>This exercise uses <strong>burst mode</strong> instead of continuous transmission:</p>
-<ul class="simple">
-<li><p><strong>Burst mode</strong>:</p>
-<ul>
-<li><p>Data sent in packets with idle periods between bursts</p></li>
-<li><p>More spectrum-efficient (transmit only when you have data)</p></li>
-<li><p>Harder to demodulate (loops don’t have time to fully lock)</p></li>
-<li><p>Realistic for packet-based protocols (Wi-Fi, LTE, etc.)</p></li>
-</ul>
-</li>
-<li><p><strong>Continuous mode</strong>:</p>
-<ul>
-<li><p>Always transmitting (even if just noise/padding)</p></li>
-<li><p>Easier to demodulate (loops stay locked)</p></li>
-<li><p>Less realistic for real systems</p></li>
-</ul>
-</li>
-</ul>
-<p><strong>Comparison: Wireless vs Loopback:</strong></p>
-<div class="table-wrapper docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p><strong>Metric</strong></p></th>
-<th class="head"><p><strong>Loopback</strong></p></th>
-<th class="head"><p><strong>Wireless (OTA)</strong></p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><strong>SNR</strong></p></td>
-<td><p>60-80 dB (excellent)</p></td>
-<td><p>10-25 dB (varies)</p></td>
-</tr>
-<tr class="row-odd"><td><p><strong>RMS EVM</strong></p></td>
-<td><p>1-3% (stable)</p></td>
-<td><p>5-15% (fluctuates)</p></td>
-</tr>
-<tr class="row-even"><td><p><strong>Constellation</strong></p></td>
-<td><p>Tight, well-defined</p></td>
-<td><p>Noisy, spread out</p></td>
-</tr>
-<tr class="row-odd"><td><p><strong>Packet loss</strong></p></td>
-<td><p>Near zero</p></td>
-<td><p>5-20% (depends on range)</p></td>
-</tr>
-<tr class="row-even"><td><p><strong>Channel effects</strong></p></td>
-<td><p>Minimal</p></td>
-<td><p>Fading, multipath</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><strong>Advanced Exploration:</strong></p>
-<p>Try these experiments:</p>
-<ol class="arabic simple">
-<li><p><strong>Move antenna</strong>: Observe how EVM changes with antenna orientation</p></li>
-<li><p><strong>Add distance</strong>: Ask presenter to move transmitter farther away - watch EVM degrade</p></li>
-<li><p><strong>Measure packet loss</strong>: Count how many expected packets are missing from receive.txt</p></li>
-<li><p><strong>Compare platforms</strong>: Run same receiver on Pluto vs Jupiter - compare EVM performance</p></li>
-</ol>
-<p><strong>Real-World Applications:</strong></p>
-<p>This exercise mirrors how production wireless systems work:</p>
-<ul class="simple">
-<li><p><strong>4G/5G base stations</strong>: Transmit data in bursts to multiple users</p></li>
-<li><p><strong>Wi-Fi access points</strong>: Packet-based transmission with ACKs</p></li>
-<li><p><strong>Satellite communications</strong>: Burst mode uplinks to save power</p></li>
-<li><p><strong>IoT devices</strong>: Wake up, transmit packet, sleep (battery efficiency)</p></li>
-</ul>
 </section>
 </section>
-<section id="enabling-22-mimo-using-both-tx-and-rx-channels">
-<h2>Enabling 2×2 MIMO: Using Both TX and RX Channels<a class="headerlink" href="#enabling-22-mimo-using-both-tx-and-rx-channels" title="Link to this heading"></a></h2>
-<p>This advanced exercise demonstrates <strong>2×2 MIMO (Multiple-Input Multiple-Output)</strong> operation by enabling and using both TX/RX channel pairs on the AD9361 transceiver. While standard Pluto SDR (Rev B) only exposes TX1/RX1, modified Pluto SDR (Rev C or custom mods) and Jupiter/Talise platforms provide access to all four RF ports.</p>
-<p><strong>Why MIMO Matters:</strong></p>
-<p>MIMO is fundamental to modern wireless systems:</p>
+<section id="enabling-2nd-tx-and-rx-channels-of-adalm-pluto">
+<h3>Enabling 2nd TX and RX Channels of ADALM Pluto<a class="headerlink" href="#enabling-2nd-tx-and-rx-channels-of-adalm-pluto" title="Link to this heading"></a></h3>
+<p>This exercise demonstrates how to enable and use both TX/RX channel pairs on the AD9361
+transceiver in Pluto. Using PyADI-IIO, you can reuse the code and run it on different SDRs
+like Pluto, Talise, Jupiter, ADSY1100 (Apollo SoM) and more.</p>
+<p><strong>Prerequisites:</strong></p>
 <ul class="simple">
-<li><p><strong>4G LTE</strong>: 2×2 or 4×4 MIMO for higher throughput</p></li>
-<li><p><strong>5G NR</strong>: Up to 8×8 MIMO in sub-6 GHz, massive MIMO in mmWave</p></li>
-<li><p><strong>Wi-Fi 6/7</strong>: Multi-user MIMO (MU-MIMO) for simultaneous client connections</p></li>
-<li><p><strong>Beamforming</strong>: Directional signal transmission for better range and interference rejection</p></li>
-<li><p><strong>Spatial multiplexing</strong>: Transmit independent data streams on each antenna for higher data rates</p></li>
+<li><p><strong>Pluto hack</strong>: <a class="icon link reference external" href="https://wiki.analog.com/university/tools/pluto/users/customizing" target="_blank">Customizing Pluto</a></p></li>
+<li><p><strong>Pluto firmware update</strong>: <a class="icon link reference external" href="https://wiki.analog.com/university/tools/pluto/users/firmware" target="_blank">Firmware Update Guide</a></p></li>
 </ul>
-<p><strong>Hardware Requirements:</strong></p>
-<div class="admonition important">
-<p class="admonition-title">Important</p>
-<p>This exercise requires <strong>BOTH TX/RX channel pairs</strong> to be physically accessible:</p>
+<p><strong>Hardware Modification:</strong></p>
+<p>To access the 2nd TX and RX channels, you need to add U.FL to SMA cables on Rx2 and Tx2:</p>
+<figure class="align-center" id="id12">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/mimo/pluto_hardware_mod.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/mimo/pluto_hardware_mod.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/mimo/pluto_hardware_mod.png" style="width: 35em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 10 </span><span class="caption-text">Hardware modification: Add U.FL to SMA cables on Rx2 and Tx2</span><a class="headerlink" href="#id12" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p><strong>Cable Part Information:</strong></p>
 <ul class="simple">
-<li><p><strong>Pluto Rev C</strong>: Factory boards with TX2/RX2 exposed via U.FL connectors</p></li>
-<li><p><strong>Modified Pluto</strong>: User-modded boards with TX2/RX2 brought out</p></li>
-<li><p><strong>Jupiter SDR (AD-JUPITER-EBZ)</strong>: All channels available via SMA connectors</p></li>
-<li><p><strong>Talise (ADRV9009-ZU11EG)</strong>: Dual AD9009 transceivers = 4 TX + 4 RX channels</p></li>
-</ul>
-<p><strong>Standard Pluto Rev B does NOT support this exercise</strong> - TX2/RX2 are not connected to external ports.</p>
-</div>
-<p><strong>What This Exercise Demonstrates:</strong></p>
-<ul class="simple">
-<li><p><strong>Channel configuration</strong>: Enabling multiple RX and TX channels programmatically</p></li>
-<li><p><strong>Independent loopback paths</strong>: TX1→RX1 and TX2→RX2 operating simultaneously</p></li>
-<li><p><strong>Buffer management</strong>: Handling interleaved I/Q data from multiple channels</p></li>
-<li><p><strong>Phase coherence</strong>: Both channels share the same LO, enabling phase-coherent reception</p></li>
-<li><p><strong>MIMO foundations</strong>: Building block for beamforming and spatial multiplexing</p></li>
-</ul>
-<p><strong>AD9361 2×2 MIMO Architecture:</strong></p>
-<p>The AD9361 is a <strong>2×2 transceiver</strong> with:</p>
-<ul class="simple">
-<li><p><strong>2 independent TX channels</strong>: TX1 and TX2</p></li>
-<li><p><strong>2 independent RX channels</strong>: RX1 and RX2</p></li>
-<li><p><strong>Shared LO</strong>: Both channels use the same local oscillator (phase-coherent)</p></li>
-<li><p><strong>Independent gain/phase control</strong>: Each channel can be tuned separately</p></li>
-<li><p><strong>Baseband I/Q</strong>: Each channel outputs complex I/Q samples</p></li>
-</ul>
-<p><strong>Why This is Advanced:</strong></p>
-<ul class="simple">
-<li><p><strong>Hardware modification</strong>: Requires modified Pluto or advanced platform</p></li>
-<li><p><strong>PyADI-IIO multi-channel API</strong>: Different syntax than single-channel usage</p></li>
-<li><p><strong>Buffer interleaving</strong>: RX buffer contains alternating samples from RX1 and RX2</p></li>
-<li><p><strong>Home experimentation</strong>: Not available during workshop, meant for post-workshop learning</p></li>
+<li><p><strong>Manufacturer Part Number</strong>: CAB.011 (Taoglas)</p></li>
+<li><p><strong>DigiKey Link</strong>: <a class="icon link reference external" href="https://www.digikey.com/en/products/detail/taoglas-limited/CAB-011/2332725" target="_blank">CAB.011 on DigiKey</a></p></li>
 </ul>
 <section id="using-pyadi-iio-with-modified-pluto">
-<h3>Using PyADI-IIO with Modified Pluto<a class="headerlink" href="#using-pyadi-iio-with-modified-pluto" title="Link to this heading"></a></h3>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This exercise is <strong>NOT available with standard workshop Pluto SDRs</strong>. It’s included for users who:</p>
-<ul class="simple">
-<li><p>Modify their Pluto at home to expose TX2/RX2</p></li>
-<li><p>Have Pluto Rev C boards</p></li>
-<li><p>Use Jupiter or Talise platforms</p></li>
-<li><p>Want to learn MIMO concepts for future projects</p></li>
-</ul>
-</div>
-<p><strong>Physical Setup:</strong></p>
-<ol class="arabic">
-<li><p>Connect loopback cables:</p>
-<ul class="simple">
-<li><p>Cable 1: TX1 (out) → RX1 (in)</p></li>
-<li><p>Cable 2: TX2 (out) → RX2 (in)</p></li>
-</ul>
-</li>
-<li><p>Verify both channels are accessible:</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iio_attr<span class="w"> </span>-u<span class="w"> </span>ip:pluto.local<span class="w"> </span>-c<span class="w"> </span>-i<span class="w"> </span>ad9361-phy
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div><p>You should see <strong>four voltage channels</strong>:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">voltage0</span></code> = RX1</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">voltage1</span></code> = RX2 (only on modified/Rev C Pluto)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">voltage2</span></code> = TX1</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">voltage3</span></code> = TX2 (only on modified/Rev C Pluto)</p></li>
-</ul>
-</li>
-</ol>
+<h4>Using PyADI-IIO with Modified Pluto<a class="headerlink" href="#using-pyadi-iio-with-modified-pluto" title="Link to this heading"></a></h4>
 <p><strong>Steps:</strong></p>
 <ol class="arabic">
-<li><p>Navigate to the 2×2 MIMO example folder:</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/Desktop/ftc_2025/9_sinewave_loopback_python_2rx_2tx
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></li>
 <li><p>Open the Python script in Thonny IDE:</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>thonny<span class="w"> </span>~/Desktop/ftc_2025/9_sinewave_loopback_python_2rx_2tx/python_loopback_sine_pluto_2rx_2tx.py
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>thonny<span class="w"> </span>python_loopback_sine_pluto_2rx_2tx.py
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div><p>Or right-click <code class="docutils literal notranslate"><span class="pre">python_loopback_sine_pluto_2rx_2tx.py</span></code> → <strong>Open with</strong> → <strong>Thonny</strong></p>
 </li>
-<li><p><strong>Examine the code</strong> before running:</p>
-<p>Key differences from single-channel code:</p>
+<li><p><strong>Examine the code changes</strong> to enable Tx2 and Rx2.</p>
+<p>The key additions/changes to the code are:</p>
 <div class="code-spaced highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span><span class="w"> </span><span class="nn">adi</span>
 <span class="linenos"> 2</span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="linenos"> 3</span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
@@ -1571,98 +1369,13 @@ Welcome to ADI FTC 2025 SDR Workshop!
 <li><p><strong>De-interleaving</strong>: <code class="docutils literal notranslate"><span class="pre">rx1</span> <span class="pre">=</span> <span class="pre">rx_interleaved[0::2]</span></code> (even), <code class="docutils literal notranslate"><span class="pre">rx2</span> <span class="pre">=</span> <span class="pre">rx_interleaved[1::2]</span></code> (odd)</p></li>
 </ul>
 </li>
-<li><p>Run the script:</p>
-<ul class="simple">
-<li><p>Click the <strong>Run</strong> button (green arrow) in Thonny</p></li>
-</ul>
-</li>
+<li><p>Run the script by clicking the <strong>Run</strong> button (green arrow) in Thonny.</p></li>
+<li><p>Observe the 2Rx 2Tx loopback results showing independent reception on both channels.</p></li>
 </ol>
-<p><strong>What You’ll Observe:</strong></p>
-<p>The script generates four plots:</p>
-<ol class="arabic simple">
-<li><p><strong>RX1 Spectrum</strong>: Shows a peak at <strong>20 kHz</strong> (from TX1→RX1 loopback)</p>
-<ul class="simple">
-<li><p>Clean tone at 20 kHz offset from DC</p></li>
-<li><p>Noise floor around -80 to -90 dBFS</p></li>
-<li><p>NO 100 kHz tone (channel isolation prevents TX2 from leaking into RX1)</p></li>
-</ul>
-</li>
-<li><p><strong>RX2 Spectrum</strong>: Shows a peak at <strong>100 kHz</strong> (from TX2→RX2 loopback)</p>
-<ul class="simple">
-<li><p>Clean tone at 100 kHz offset from DC</p></li>
-<li><p>NO 20 kHz tone (channel isolation prevents TX1 from leaking into RX2)</p></li>
-</ul>
-</li>
-<li><p><strong>RX1 Time Domain</strong>: 20 kHz sinusoid</p>
-<ul class="simple">
-<li><p>I and Q components 90° out of phase</p></li>
-<li><p>Slower oscillation (lower frequency)</p></li>
-</ul>
-</li>
-<li><p><strong>RX2 Time Domain</strong>: 100 kHz sinusoid</p>
-<ul class="simple">
-<li><p>I and Q components 90° out of phase</p></li>
-<li><p>Faster oscillation (higher frequency)</p></li>
-</ul>
-</li>
-</ol>
-<p><strong>Key Observations:</strong></p>
-<ul class="simple">
-<li><p><strong>Independent paths</strong>: Each TX→RX pair operates independently</p></li>
-<li><p><strong>Channel isolation</strong>: TX1 doesn’t leak into RX2 and vice versa (typically &gt;40 dB isolation)</p></li>
-<li><p><strong>Phase coherence</strong>: Both channels share the same LO, enabling phase-coherent MIMO algorithms</p></li>
-<li><p><strong>Buffer management</strong>: Correct interleaving/de-interleaving is critical for multi-channel operation</p></li>
-</ul>
-<p><strong>Understanding Buffer Interleaving:</strong></p>
-<p>For 2×2 MIMO, PyADI-IIO uses <strong>sample-level interleaving</strong>:</p>
-<ul class="simple">
-<li><p><strong>TX buffer format</strong>: <code class="docutils literal notranslate"><span class="pre">[TX1[0],</span> <span class="pre">TX2[0],</span> <span class="pre">TX1[1],</span> <span class="pre">TX2[1],</span> <span class="pre">TX1[2],</span> <span class="pre">TX2[2],</span> <span class="pre">...]</span></code></p></li>
-<li><p><strong>RX buffer format</strong>: <code class="docutils literal notranslate"><span class="pre">[RX1[0],</span> <span class="pre">RX2[0],</span> <span class="pre">RX1[1],</span> <span class="pre">RX2[1],</span> <span class="pre">RX1[2],</span> <span class="pre">RX2[2],</span> <span class="pre">...]</span></code></p></li>
-</ul>
-<p>To separate channels:</p>
-<ul class="simple">
-<li><p><strong>Channel 0</strong>: Even indices <code class="docutils literal notranslate"><span class="pre">buffer[0::2]</span></code></p></li>
-<li><p><strong>Channel 1</strong>: Odd indices <code class="docutils literal notranslate"><span class="pre">buffer[1::2]</span></code></p></li>
-</ul>
-<p><strong>MIMO Applications You Can Now Build:</strong></p>
-<p>With 2×2 MIMO capability, you can implement:</p>
-<ol class="arabic">
-<li><p><strong>Beamforming</strong>: Adjust phase/amplitude of TX1 and TX2 to steer the transmitted beam</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Steer beam 30° to the right</span>
-<span class="n">phase_offset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">6</span>  <span class="c1"># 30 degrees</span>
-<span class="n">tx1</span> <span class="o">=</span> <span class="n">signal</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="mi">0</span><span class="p">)</span>
-<span class="n">tx2</span> <span class="o">=</span> <span class="n">signal</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">phase_offset</span><span class="p">)</span>
-</pre></div>
-</div>
-</li>
-<li><p><strong>Diversity reception</strong>: Combine RX1 and RX2 to improve SNR</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Maximum ratio combining</span>
-<span class="n">combined</span> <span class="o">=</span> <span class="n">rx1</span> <span class="o">+</span> <span class="n">rx2</span>
-</pre></div>
-</div>
-</li>
-<li><p><strong>Spatial multiplexing</strong>: Transmit independent data streams on TX1 and TX2</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tx1</span> <span class="o">=</span> <span class="n">data_stream_A</span>  <span class="c1"># Stream A on antenna 1</span>
-<span class="n">tx2</span> <span class="o">=</span> <span class="n">data_stream_B</span>  <span class="c1"># Stream B on antenna 2</span>
-<span class="c1"># Double the data rate!</span>
-</pre></div>
-</div>
-</li>
-<li><p><strong>Direction finding</strong>: Use phase difference between RX1 and RX2 to estimate angle of arrival</p></li>
-</ol>
-<p><strong>Advanced Challenge:</strong></p>
-<p>Modify the script to implement <strong>simple beamforming</strong>:</p>
-<ol class="arabic simple">
-<li><p>Transmit the same signal on both TX1 and TX2</p></li>
-<li><p>Add a phase offset to TX2: <code class="docutils literal notranslate"><span class="pre">tx2_signal</span> <span class="pre">=</span> <span class="pre">tx1_signal</span> <span class="pre">*</span> <span class="pre">np.exp(1j</span> <span class="pre">*</span> <span class="pre">phase_offset)</span></code></p></li>
-<li><p>Try different phase offsets: 0°, 45°, 90°, 180°</p></li>
-<li><p>Use a receiver at different positions to measure how the beam pattern changes</p></li>
-</ol>
-<p>This demonstrates how MIMO systems steer RF energy directionally without mechanically moving antennas!</p>
 </section>
 </section>
 <section id="deep-dive-symbol-synchronization-for-qpsk">
-<h2>Deep Dive: Symbol Synchronization for QPSK<a class="headerlink" href="#deep-dive-symbol-synchronization-for-qpsk" title="Link to this heading"></a></h2>
+<h3>Deep Dive: Symbol Synchronization for QPSK<a class="headerlink" href="#deep-dive-symbol-synchronization-for-qpsk" title="Link to this heading"></a></h3>
 <p>This advanced exercise isolates <strong>Symbol Synchronization</strong> (also called <strong>symbol timing recovery</strong>), a critical DSP block that aligns the receiver’s sampling clock with the transmitter’s symbol boundaries. Understanding symbol sync is essential for implementing any digital modulation scheme.</p>
 <p><strong>The Synchronization Problem:</strong></p>
 <p>When receiving a digital signal, the receiver faces several challenges:</p>
@@ -1679,11 +1392,11 @@ Welcome to ADI FTC 2025 SDR Workshop!
 <li><p><strong>With symbol sync</strong>: Sampling at optimal decision points → maximum eye opening, minimal ISI</p></li>
 </ul>
 <p>We want to sample where the adjacent symbols cross 0:</p>
-<figure class="align-center" id="id5">
+<figure class="align-center" id="id13">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/cross0.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/cross0.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/cross0.png" style="width: 35em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 3 </span><span class="caption-text">Symbol timing recovery: sample where adjacent symbols cross zero</span><a class="headerlink" href="#id5" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 11 </span><span class="caption-text">Symbol timing recovery: sample where adjacent symbols cross zero</span><a class="headerlink" href="#id13" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p><strong>What Symbol Sync Does:</strong></p>
@@ -1709,16 +1422,16 @@ Welcome to ADI FTC 2025 SDR Workshop!
 <li><p><strong>Interactive tuning</strong>: Adjust loop parameters to see their impact</p></li>
 <li><p><strong>Foundation for custom receivers</strong>: Learn to implement symbol sync in your own DSP chains</p></li>
 </ul>
-<section id="id1">
-<h3>Using GNU Radio with Jupiter<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<section id="using-gnu-radio-with-jupiter">
+<h4>Using GNU Radio with Jupiter<a class="headerlink" href="#using-gnu-radio-with-jupiter" title="Link to this heading"></a></h4>
 <p><strong>Setup:</strong></p>
 <ol class="arabic">
 <li><p>Connect loopback cable between TX1 and RX1</p>
-<figure class="align-center" id="id6">
+<figure class="align-center" id="id14">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/sinewave_loopback/loopback_setup.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/sinewave_loopback/loopback_setup.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/beginner_sdr_exercises/images/exercises/sinewave_loopback/loopback_setup.png" style="width: 20em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 4 </span><span class="caption-text">Pluto SDR with loopback cable connecting TX to RX</span><a class="headerlink" href="#id6" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 12 </span><span class="caption-text">Pluto SDR with loopback cable connecting TX to RX</span><a class="headerlink" href="#id14" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </li>
@@ -1739,11 +1452,11 @@ Welcome to ADI FTC 2025 SDR Workshop!
 </li>
 </ol>
 <p><strong>Flowgraph Architecture:</strong></p>
-<figure class="align-center" id="id7">
+<figure class="align-center" id="id15">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_schematic.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_schematic.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_schematic.png" style="width: 45em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 5 </span><span class="caption-text">QPSK flowgraph with Symbol Sync block</span><a class="headerlink" href="#id7" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 13 </span><span class="caption-text">QPSK flowgraph with Symbol Sync block</span><a class="headerlink" href="#id15" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p>The flowgraph contains:</p>
@@ -1768,11 +1481,11 @@ Welcome to ADI FTC 2025 SDR Workshop!
 <li><p><strong>NO symbol sync</strong>: Still sampling at 4 samples per symbol (oversampled)</p></li>
 <li><p><strong>NO matched filter</strong>: RRC filter not yet applied</p></li>
 </ul>
-<figure class="align-center" id="id8">
+<figure class="align-center" id="id16">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result1.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result1.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result1.png" style="width: 45em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 6 </span><span class="caption-text">All symbols have same amplitude on constellation but I/Q still varying due to remaining frequency/phase offset</span><a class="headerlink" href="#id8" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 14 </span><span class="caption-text">All symbols have same amplitude on constellation but I/Q still varying due to remaining frequency/phase offset</span><a class="headerlink" href="#id16" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p><strong>What you’ll see:</strong></p>
@@ -1796,25 +1509,25 @@ Welcome to ADI FTC 2025 SDR Workshop!
 <li><p><strong>Matched filter applied</strong>: RRC filter provides optimal SNR</p></li>
 <li><p><strong>Optimal sampling instants</strong>: Only the decision points, not transitions</p></li>
 </ul>
-<figure class="align-center" id="id9">
+<figure class="align-center" id="id17">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result2.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result2.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result2.png" style="width: 40em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 7 </span><span class="caption-text">After symbol sync, constellation points have consistent amplitude</span><a class="headerlink" href="#id9" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 15 </span><span class="caption-text">After symbol sync, constellation points have consistent amplitude</span><a class="headerlink" href="#id17" title="Link to this image"></a></p>
 </figcaption>
 </figure>
-<figure class="align-center" id="id10">
+<figure class="align-center" id="id18">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result_plot1.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result_plot1.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result_plot1.png" style="width: 30em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 8 </span><span class="caption-text">Symbol sync timing stays around 16 = sps setting</span><a class="headerlink" href="#id10" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 16 </span><span class="caption-text">Symbol sync timing stays around 16 = sps setting</span><a class="headerlink" href="#id18" title="Link to this image"></a></p>
 </figcaption>
 </figure>
-<figure class="align-center" id="id11">
+<figure class="align-center" id="id19">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result_plot2.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result_plot2.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result_plot2.png" style="width: 35em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 9 </span><span class="caption-text">Symbol sync error stays around 0</span><a class="headerlink" href="#id11" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 17 </span><span class="caption-text">Symbol sync error stays around 0</span><a class="headerlink" href="#id19" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p><strong>What you’ll see:</strong></p>
@@ -1947,7 +1660,7 @@ Interference)</strong></p></td>
 </section>
 </section>
 <section id="deep-dive-carrier-synchronization-with-costas-loop">
-<h2>Deep Dive: Carrier Synchronization with Costas Loop<a class="headerlink" href="#deep-dive-carrier-synchronization-with-costas-loop" title="Link to this heading"></a></h2>
+<h3>Deep Dive: Carrier Synchronization with Costas Loop<a class="headerlink" href="#deep-dive-carrier-synchronization-with-costas-loop" title="Link to this heading"></a></h3>
 <p>This advanced exercise isolates the <strong>Costas Loop</strong>, a phase-locked loop (PLL) that performs <strong>carrier synchronization</strong> by removing residual frequency and phase offsets. The Costas Loop is the final synchronization stage in a complete QPSK receiver, enabling accurate symbol demodulation.</p>
 <p><strong>The Carrier Synchronization Problem:</strong></p>
 <p>Even after FLL (coarse frequency correction) and Symbol Sync (timing recovery), the received constellation still has:</p>
@@ -2016,7 +1729,7 @@ Interference)</strong></p></td>
 <li><p><strong>Parameter exploration</strong>: Tune loop bandwidth to understand trade-offs</p></li>
 </ul>
 <section id="id2">
-<h3>Using GNU Radio with Jupiter<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<h4>Using GNU Radio with Jupiter<a class="headerlink" href="#id2" title="Link to this heading"></a></h4>
 <p><strong>Setup:</strong></p>
 <ol class="arabic">
 <li><p>Connect loopback cable between TX1 and RX1</p></li>
@@ -2037,11 +1750,11 @@ Interference)</strong></p></td>
 </li>
 </ol>
 <p><strong>Flowgraph Architecture:</strong></p>
-<figure class="align-center" id="id12">
+<figure class="align-center" id="id20">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_costas_loop/qpsk_costas_loop_gnuradio_schematic.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_costas_loop/qpsk_costas_loop_gnuradio_schematic.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_costas_loop/qpsk_costas_loop_gnuradio_schematic.png" style="width: 45em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 10 </span><span class="caption-text">QPSK flowgraph with Costas Loop for fine frequency and phase correction</span><a class="headerlink" href="#id12" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 18 </span><span class="caption-text">QPSK flowgraph with Costas Loop for fine frequency and phase correction</span><a class="headerlink" href="#id20" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p>The flowgraph contains:</p>
@@ -2067,11 +1780,11 @@ Interference)</strong></p></td>
 <li><p><strong>Residual rotation</strong>: Constellation slowly rotates or has fixed offset</p></li>
 <li><p><strong>Phase ambiguity</strong>: Might be rotated by 0°, 90°, 180°, or 270°</p></li>
 </ul>
-<figure class="align-center" id="id13">
+<figure class="align-center" id="id21">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_costas_loop/qpsk_costas_loop_example_result1.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_costas_loop/qpsk_costas_loop_example_result1.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_costas_loop/qpsk_costas_loop_example_result1.png" style="width: 45em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 11 </span><span class="caption-text">Symbols are now separated as expected, transitions in eye diagrams are less noisy</span><a class="headerlink" href="#id13" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 19 </span><span class="caption-text">Symbols are now separated as expected, transitions in eye diagrams are less noisy</span><a class="headerlink" href="#id21" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p><strong>What you’ll see:</strong></p>
@@ -2095,20 +1808,20 @@ Interference)</strong></p></td>
 <li><p><strong>Aligned with decision regions</strong>: Symbols at ±1±j (or 90° multiples)</p></li>
 <li><p><strong>Stable phase</strong>: Tracking and correcting any remaining drift</p></li>
 </ul>
-<figure class="align-center" id="id14">
+<figure class="align-center" id="id22">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_costas_loop/qpsk_costas_loop_example_result2.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_costas_loop/qpsk_costas_loop_example_result2.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_costas_loop/qpsk_costas_loop_example_result2.png" style="width: 40em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 12 </span><span class="caption-text">Clean QPSK constellation after Costas Loop correction</span><a class="headerlink" href="#id14" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 20 </span><span class="caption-text">Clean QPSK constellation after Costas Loop correction</span><a class="headerlink" href="#id22" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p>You can tweak the bandwidth of the Costas Loop and see how it influences the error signal
 and the constellation plot. You can also add a phase shift in radians after Costas Loop.</p>
-<figure class="align-center" id="id15">
+<figure class="align-center" id="id23">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_costas_loop/qpsk_costas_loop_example_result_plot.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_costas_loop/qpsk_costas_loop_example_result_plot.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/ftc2023_sdr/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_costas_loop/qpsk_costas_loop_example_result_plot.png" style="width: 45em;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 13 </span><span class="caption-text">Error signal centered around 0, Phase Correction signal between 0 and 2π</span><a class="headerlink" href="#id15" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 21 </span><span class="caption-text">Error signal centered around 0, Phase Correction signal between 0 and 2π</span><a class="headerlink" href="#id23" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p><strong>What you’ll see:</strong></p>
@@ -2279,6 +1992,7 @@ and the constellation plot. You can also add a phase shift in radians after Cost
 <li><p><strong>Deep space communications</strong>: Extremely weak signals with high frequency uncertainty</p></li>
 </ul>
 <p>Understanding the Costas Loop gives you the foundation to implement robust digital receivers for any PSK modulation scheme.</p>
+</section>
 </section>
 </section>
 </section>

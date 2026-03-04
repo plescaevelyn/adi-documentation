@@ -1,56 +1,63 @@
 Advanced SDR Exercises
 ======================
 
-The following hands-on exercises demonstrate advanced software-defined radio applications using ADI's SDR platforms.
-These exercises build upon the fundamentals covered in the beginner exercises and explore more sophisticated signal processing
-techniques, multi-channel systems, and real-world communication protocols.
+The following hands-on exercises demonstrate advanced software-defined radio applications
+using ADI's SDR platforms.
+These exercises build upon the fundamentals covered in the beginner exercises and explore
+more sophisticated signal processing techniques, multi-channel systems, and real-world
+communication protocols.
 
 .. note::
 
-   These advanced exercises require a solid understanding of SDR fundamentals. If you're new to SDR, we recommend starting
-   with the :doc:`Beginner SDR Exercises <../beginner_sdr_exercises/index>` before attempting these advanced topics.
+   These advanced exercises require a solid understanding of SDR fundamentals.
+   If you're new to SDR, we recommend starting with the
+   :doc:`Beginner SDR Exercises <../beginner_sdr_exercises/index>` before attempting
+   these advanced topics.
+
+Requirements
+------------
+
+To follow these exercises, you will need:
+
+* **Raspberry Pi 5** with power supply
+* **Keyboard and mouse** for the Raspberry Pi
+* **SD card** (16GB or larger recommended) flashed with the FTC 2025 workshop image
+* **ADALM-Pluto SDR** (required for all exercises)
+* **Micro USB cable** to connect the Pluto to the Raspberry Pi
+  (see `Pluto Quick Start <https://wiki.analog.com/university/tools/pluto/users/quick_start>`__
+  for details)
+* **Jupiter or Talise SDR** (optional, for advanced platform exercises)
+* **SMA loopback cable** (for loopback exercises)
+* **Antennas**: 2.4 GHz or 915 MHz antennas for over-the-air exercises
 
 .. note::
 
-   The following exercises should be run on a Raspberry Pi 5 using the provided ADI Kuiper 2.0 Linux image.
-   The Kuiper image contains all necessary software pre-installed, including Python, GNU Radio, Scopy, and all required libraries.
-   Connect your SDR hardware (Pluto, Jupiter, or Talise) to the Raspberry Pi 5 before starting the exercises.
-   Use antennas or loopback cables as shown in the exercise diagrams.
+   Flash your SD card with the FTC 2025 workshop image before starting.
+   This image contains all necessary software pre-installed, including Python, GNU Radio,
+   Thonny IDE, Scopy, and all required libraries.
+   Connect your SDR hardware (Pluto, Jupiter, or Talise) to the Raspberry Pi 5 before
+   starting the exercises.
+
+.. important::
+
+   **Pluto USB Speed Limitation**: USB 2.0 limits data transfer to 20.4 MiB/s,
+   which translates to a maximum sample rate of **5.347 MS/s**.
+   Keep this in mind when configuring sample rates for your experiments.
 
 **What Separates Beginners from Advanced SDR Users:**
 
-Learning to **test your SDR and find mistakes on your own** is the critical step that differentiates a beginner from an advanced-level SDR user. While beginners focus on running predefined exercises and observing expected results, advanced users develop the skills to validate system performance, identify impairments, and troubleshoot issues independently. The following exercises build these advanced capabilities.
-
-Familiarize Yourself with the Tools
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Before starting these advanced exercises, ensure you're thoroughly familiar with the SDR hardware and tools you'll be using. Advanced SDR work requires deep understanding of hardware capabilities, limitations, and performance characteristics.
-
-**Explore the Hardware:**
-
-.. figure:: /tools/pluto/pluto_in_hand.png
-   :align: center
-   :width: 20em
-
-   ADALM-PLUTO SDR Active Learning Module
-
-* :doc:`ADALM-Pluto (PlutoSDR) </tools/pluto/index>` - Learn about the Pluto SDR platform, including hardware specifications, software drivers, and getting started guides.
-
-These resources provide critical information for advanced work:
-
-* Detailed hardware specifications and RF performance characteristics
-* Understanding hardware impairments (I/Q imbalance, LO leakage, phase noise)
-* Software drivers and advanced API features (PyADI-IIO, GNU Radio, etc.)
-* Calibration procedures and performance optimization
-* System architecture and signal chain details
-
-Advanced SDR users must understand not just *how* to use the tools, but *why* they behave the way they do. This knowledge is essential for debugging complex issues and optimizing system performance.
+Learning to **test your SDR and find mistakes on your own** is the critical step that
+differentiates a beginner from an advanced-level SDR user.
+While beginners focus on running predefined exercises and observing expected results,
+advanced users develop the skills to validate system performance, identify impairments,
+and troubleshoot issues independently.
+The following exercises build these advanced capabilities.
 
 First Steps in SDR Testing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-For the theoretical background on sinewave loopback testing, including complex sinusoids, Zero IF
-architecture, and key impairments (Image Rejection, LO Leakage, SNR), see the
+For the theoretical background on sinewave loopback testing, including complex sinusoids,
+Zero IF architecture, and key impairments (Image Rejection, LO Leakage, SNR), see the
 :ref:`Sinewave Loopback <sinewave-loopback>` section in the Beginner SDR Exercises.
 
 Debugging and Tweaking IIO Attributes
@@ -240,7 +247,86 @@ Using iio_attr Command-Line Utility
 
         $ iio_attr -u ip:pluto.local -c -i ad9361-phy 'voltage0'
 
-**Key Insight:** The ``iio_attr`` utility exposes the raw IIO interface. Every attribute you see here can also be accessed through PyADI-IIO, GNU Radio, MATLAB, or Scopy - they all use the same underlying IIO layer.
+**Key Insight:** The ``iio_attr`` utility exposes the raw IIO interface. Every attribute you see
+here can also be accessed through PyADI-IIO, GNU Radio, MATLAB, or Scopy - they all use the same
+underlying IIO layer.
+
+Using iio_info to Explore the IIO Context
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The ``iio_info`` command provides a quick overview of all devices, channels, and attributes
+available in an IIO context. This is useful for discovering what's available on your SDR.
+
+**Steps:**
+
+#. List all devices and their attributes:
+
+   .. code-block:: bash
+
+      iio_info -u ip:pluto.local
+
+   This command outputs the complete IIO context structure, including:
+
+   * All IIO devices (ad9361-phy, cf-ad9361-lpc, cf-ad9361-dds-core-lpc, etc.)
+   * All channels for each device
+   * All attributes for each channel and device
+
+#. For a more compact view, you can filter the output:
+
+   .. code-block:: bash
+
+      iio_info -u ip:pluto.local | grep -E "iio:device|Channel"
+
+Using Direct Filesystem Access (sysfs)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+IIO attributes are exposed through the Linux sysfs filesystem. You can read and write them
+directly using standard shell commands via SSH.
+
+**Steps:**
+
+#. SSH into the Pluto SDR:
+
+   .. code-block:: bash
+
+      ssh root@pluto.local
+
+   Default password: ``analog``
+
+#. Navigate to the IIO devices directory:
+
+   .. code-block:: bash
+
+      cd /sys/bus/iio/devices/
+
+#. List available devices:
+
+   .. code-block:: bash
+
+      ls -la
+
+   You'll see devices like ``iio:device0``, ``iio:device1``, etc.
+
+#. Read an attribute value directly:
+
+   .. code-block:: bash
+
+      cat /sys/bus/iio/devices/iio:device0/in_voltage0_hardwaregain
+
+#. Write an attribute value:
+
+   .. code-block:: bash
+
+      echo 10 > /sys/bus/iio/devices/iio:device0/in_voltage0_hardwaregain
+
+#. Verify the change:
+
+   .. code-block:: bash
+
+      cat /sys/bus/iio/devices/iio:device0/in_voltage0_hardwaregain
+
+**Key Insight:** Direct filesystem access is useful for embedded applications, shell scripts,
+or when you need the lowest-level access to IIO attributes without any library overhead.
 
 Using Scopy Debugger Instrument
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -378,89 +464,118 @@ Try writing a Python script that:
 
 This exercise reinforces your understanding of programmatic IIO access and prepares you for integrating SDR control into custom applications.
 
+**Scopy Generate C Example Feature:**
+
+Scopy can automatically generate C code to read or write any IIO attribute. This is extremely
+useful when you need to integrate IIO access into C/C++ applications.
+
+**Steps:**
+
+#. In the Debugger instrument, right-click on any attribute
+#. Select **Generate C example**
+#. Scopy generates complete C code that:
+
+   * Creates an IIO context
+   * Finds the device and channel
+   * Reads or writes the attribute
+   * Includes proper error handling
+
+This feature eliminates the need to manually look up libiio API functions and speeds up
+development of custom IIO applications.
+
 **Debugging Workflow Summary:**
 
 When troubleshooting SDR issues, use this workflow:
 
 #. **Scopy Debugger**: Visually verify current attribute values
 #. **iio_attr**: Quick command-line checks in terminal
+#. **iio_info**: Discover available devices and attributes
+#. **Filesystem access**: Direct sysfs access for embedded/scripted applications
 #. **PyADI-IIO**: Automated scripts for reproducible configurations
 
-Understanding IIO attributes gives you **complete control** over your SDR hardware and the ability to debug issues at every level of the stack.
+Understanding IIO attributes gives you **complete control** over your SDR hardware and the
+ability to debug issues at every level of the stack.
 
 Digital QAM Modulation: 16QAM Loopback with EVM Measurements
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This advanced exercise explores **16-QAM (Quadrature Amplitude Modulation)**, a higher-order modulation scheme that encodes 4 bits per symbol by varying both phase and amplitude. Unlike BPSK (1 bit/symbol) or QPSK (2 bits/symbol), 16QAM uses 16 distinct constellation points, achieving higher spectral efficiency at the cost of requiring better signal quality.
+This advanced exercise explores **16-QAM (Quadrature Amplitude Modulation)**, a higher-order
+modulation scheme that encodes 4 bits per symbol by varying both phase and amplitude.
+Unlike BPSK (1 bit/symbol) or QPSK (2 bits/symbol), 16QAM uses 16 distinct constellation points,
+achieving higher spectral efficiency at the cost of requiring better signal quality.
 
-**Why 16QAM Matters:**
+QPSK is similar to BPSK but has more symbols. PSK with more than 4 symbols includes 8PSK,
+16PSK, and beyond.
 
-16QAM is widely used in modern wireless standards:
-
-* **4G LTE**: Downlink modulation for medium-to-high SNR conditions
-* **5G NR**: One of the baseline modulation schemes
-* **Wi-Fi (802.11ac/ax)**: High-throughput data transmission
-* **DVB-T2**: Digital television broadcasting
-* **Microwave backhaul**: Point-to-point links
-
-This exercise introduces **Error Vector Magnitude (EVM)** measurements, a critical metric for evaluating digital modulation quality in production systems.
-
-**What is EVM?**
-
-**Error Vector Magnitude** quantifies how much the received constellation points deviate from their ideal positions. It's the industry-standard metric for measuring transmitter and receiver quality.
-
-.. math::
-
-   \text{EVM}_{\text{RMS}} = \sqrt{\frac{1}{N} \sum_{i=1}^{N} \frac{|S_{\text{measured},i} - S_{\text{ideal},i}|^2}{|S_{\text{ideal},i}|^2}} \times 100\%
-
-where:
-
-* :math:`S_{\text{measured},i}` = received symbol
-* :math:`S_{\text{ideal},i}` = ideal constellation point
-* :math:`N` = number of symbols
-
-Lower EVM = better signal quality. Typical requirements:
-
-* **4G LTE**: EVM < 8% for 16QAM
-* **5G NR**: EVM < 7% for 16QAM
-* **Wi-Fi 6**: EVM < 6.5% for 16QAM
-
-**16QAM Constellation:**
-
-16QAM uses a 4×4 grid constellation with 16 points:
-
-* **4 amplitude levels**: Each axis (I and Q) has 4 discrete levels
-* **4 bits per symbol**: 2^4 = 16 possible symbols
-* **Higher spectral efficiency**: 2× more bits per symbol than QPSK
-* **Higher SNR requirement**: More sensitive to noise and impairments
-
-.. TODO: Add 16QAM constellation diagram
-.. .. figure:: images/exercises/16qam/constellation_16qam.png
-..    :alt: 16QAM Constellation Diagram
-..    :align: center
-..    :width: 30em
-..
-..    16QAM constellation with 16 distinct symbol positions
-
-**Key Difference from QPSK:**
-
-* **QPSK**: All symbols have the same amplitude, only phase changes
-* **16QAM**: Symbols have different amplitudes AND phases
-* **Implication**: 16QAM is more sensitive to amplitude distortion (compression, non-linearity)
-
-**GNU Radio Implementation Challenges:**
+**GNU Radio Implementation:**
 
 .. important::
 
-   The GNU Radio **Differential Encoder/Decoder blocks do NOT support 16QAM**. You must manually rotate the constellation after demodulation to align it with the transmitted pattern.
+   The GNU Radio **Differential Encoder/Decoder blocks do NOT support 16QAM**.
+   You must manually rotate the constellation after demodulation to align it with the
+   transmitted pattern. Use the slider to find the correct rotation of the constellation.
 
-This limitation requires you to:
+.. figure:: images/exercises/16qam_with_evm/psk_modulation_gnuradio_schematic.png
+   :align: center
+   :width: 45em
 
-#. Observe the received constellation rotation
-#. Manually adjust using a phase offset slider
-#. Align until received pattern matches transmitted pattern
+   16QAM Loopback flowgraph with EVM measurements - Transmitter and Receiver chains
 
-This hands-on constellation alignment teaches you how carrier phase ambiguity affects higher-order modulations.
+**Understanding the EVM Measurement Block:**
+
+The flowgraph uses the GNU Radio **Measure EVM** block to calculate Error Vector Magnitude.
+Here's how the EVM calculation works step by step:
+
+**Step 1: Set of ideal constellation points**
+
+For 16QAM, the ideal constellation points are defined as:
+
+.. math::
+
+   S_{\text{ideal}} = \{s_0, s_1, ..., s_{M-1}\}
+
+where M=16 for 16QAM.
+
+**Step 2: Compute RMS amplitude of the constellation**
+
+.. math::
+
+   A_{\text{RMS}} = \sqrt{\frac{1}{M} \sum_{k=0}^{M-1} |s_k|^2}
+
+For 16QAM with M=16, this gives the reference amplitude for normalization.
+
+**Step 3: Set of noisy symbols received**
+
+.. figure:: images/exercises/16qam_with_evm/psk_modulation_noisy_symbol_set.png
+   :align: center
+   :width: 35em
+
+   Noisy received symbols compared to ideal constellation points
+
+The received symbols form a set:
+
+.. math::
+
+   R = \{r_0, r_1, ..., r_{N-1}\}
+
+**Step 4: Find the closest ideal symbol**
+
+For each received noisy symbol :math:`r_i`, find the closest ideal symbol :math:`s_{\text{nearest}}`.
+
+**Step 5: Compute error value**
+
+.. math::
+
+   e_i = r_i - s_{\text{nearest},i}
+
+**Step 6: Compute instantaneous EVM for one received symbol**
+
+.. math::
+
+   \text{EVM}_i = \frac{|e_i|}{A_{\text{RMS}}} \times 100\%
+
+The open-source code for this block is available at:
+`GNU Radio EVM Implementation <https://github.com/gnuradio/gnuradio/blob/main/gr-digital/lib/meas_evm_cc_impl.cc>`__
 
 Using GNU Radio with Pluto
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -508,513 +623,139 @@ The flowgraph contains:
 
 **Steps:**
 
-#. Run the flowgraph:
+#. Run the flowgraph by clicking the **Run** button (green arrow) in the toolbar.
 
-   * Click the **Run** button (green arrow) in the toolbar
-   * Wait for the plots to appear
+#. Observe the output displays:
 
-   .. TODO: Add 16QAM running flowgraph screenshot
-   .. .. figure:: images/exercises/16qam/16qam_flowgraph_running.png
-   ..    :alt: 16QAM Flowgraph Running
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    Running 16QAM loopback flowgraph in GNU Radio
+   .. figure:: images/exercises/16qam_with_evm/psk_modulation_gnuradio_plot1.png
+      :align: center
+      :width: 45em
 
-#. **Observe the initial constellation mismatch:**
+      Same pattern of symbols at TX and demodulated RX. Green shows RX Spectrum after FLL block.
 
-   The **Received Demodulated Symbols** plot will show the constellation rotated compared to the **Transmitted Symbols** plot.
+   .. figure:: images/exercises/16qam_with_evm/psk_modulation_gnuradio_plot2.png
+      :align: center
+      :width: 45em
 
-   .. TODO: Add misaligned constellation screenshot
-   .. .. figure:: images/exercises/16qam/constellation_misaligned.png
-   ..    :alt: Misaligned 16QAM Constellation
-   ..    :align: center
-   ..    :width: 35em
-   ..
-   ..    Received constellation rotated relative to transmitted pattern
-
-   **Why this happens:**
-
-   * Carrier phase ambiguity from the receiver's phase-locked loop
-   * Differential encoding doesn't work for 16QAM in GNU Radio
-   * Manual constellation rotation is required
-
-#. **Manually rotate the constellation:**
-
-   * Locate the **Phase Offset** slider under the **Received Demodulated Symbols** plot
-   * Rotate the slider in multiples of **90 degrees** (0°, 90°, 180°, 270°)
-   * Stop when the received pattern matches the transmitted pattern
-
-   .. TODO: Add aligned constellation screenshot
-   .. .. figure:: images/exercises/16qam/constellation_aligned.png
-   ..    :alt: Aligned 16QAM Constellation
-   ..    :align: center
-   ..    :width: 35em
-   ..
-   ..    Correctly aligned 16QAM constellation after manual rotation
-
-   **Key Observation:**
-
-   * 16QAM has **4-fold rotational symmetry** (90° rotations)
-   * Unlike QPSK, you can visually distinguish correct vs incorrect rotation by comparing symbol patterns
-   * In production systems, differential encoding or pilot symbols resolve this ambiguity automatically
+      Eye diagram after Costas loop of the RX. Use the slider to rotate the constellation
+      in steps of 90° - observe that symbols received are the same due to Differential Decoding.
 
 #. **Observe EVM measurements:**
 
-   Scroll down in the plots window to find the EVM measurement displays:
+   .. figure:: images/exercises/16qam_with_evm/psk_modulation_gnuradio_evm_measurement.png
+      :align: center
+      :width: 45em
 
-   * **Min EVM**: Lowest error vector magnitude observed
-   * **Max EVM**: Highest error vector magnitude observed
-   * **RMS EVM**: Root-mean-square EVM (industry standard metric)
+      EVM measurements: Instantaneous EVM (%) for each received symbol, Min/Max/RMS EVM over 100 symbols
 
-   .. TODO: Add EVM measurements screenshot
-   .. .. figure:: images/exercises/16qam/evm_measurements.png
-   ..    :alt: EVM Measurements for 16QAM
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    Min, Max, and RMS EVM measurements on 100-symbol windows
+   The EVM display shows:
 
-   **Expected EVM values for loopback:**
+   * **Instantaneous EVM (%)**: EVM for each received symbol
+   * **Min EVM (%)**: Minimum EVM in 100 symbols
+   * **RMS EVM (%)**: Root-mean-square EVM for 100 symbols
+   * **Max EVM (%)**: Maximum EVM for 100 symbols
+   * **Average EVM (%)**: Running average
 
-   * **RMS EVM**: 1-3% (excellent - loopback with minimal impairments)
-   * **Max EVM**: 5-8% (peak distortion on worst symbols)
-   * **Min EVM**: <1% (best-case symbols near constellation center)
+#. **Understanding the Python blocks:**
 
-   **What EVM tells you:**
+   .. figure:: images/exercises/16qam_with_evm/psk_modulation_python_blocks.png
+      :align: center
+      :width: 45em
 
-   * **Low EVM (< 5%)**: Clean signal, good I/Q balance, low noise
-   * **Medium EVM (5-10%)**: Acceptable for most standards, may indicate minor impairments
-   * **High EVM (> 10%)**: Significant impairments - check gain settings, SNR, or hardware issues
+      Python blocks for EVM calculation - EVM RMS is computed over 100-sample windows
 
-#. **Experiment with impairments:**
+   EVM RMS is the RMS value for one window (100 samples) of instantaneous EVM points
+   calculated by the EVM Measurement block.
 
-   * **Reduce RX gain**: Lower gain → worse SNR → higher EVM
-   * **Increase TX attenuation**: Lower signal power → worse SNR → higher EVM
-   * **Add frequency offset**: Degrade carrier recovery → higher EVM
+#. Click the **Stop** button (red square) when finished.
 
-   Observe how EVM degrades as signal quality worsens.
-
-#. Stop the flowgraph when done:
-
-   * Click the **Stop** button (red square) in the toolbar
-   * Or middle-click on any plot → **Stop**
-
-**Understanding the EVM Measurement Blocks:**
-
-The flowgraph contains **custom Python blocks** that implement EVM calculation:
-
-.. code-block:: python
-   :linenos:
-   :lineno-start: 1
-   :class: code-spaced
-
-   import numpy as np
-
-   class EVM_Calculator:
-       def __init__(self, window_size=100):
-           self.window_size = window_size
-           self.ideal_constellation = generate_16qam_constellation()
-
-       def calculate_evm_rms(self, received_symbols):
-           # Find nearest ideal constellation point for each symbol
-           errors = []
-           for rx_sym in received_symbols:
-               ideal_sym = find_nearest_constellation_point(rx_sym)
-               error = abs(rx_sym - ideal_sym) / abs(ideal_sym)
-               errors.append(error)
-
-           # Calculate RMS EVM as percentage
-           evm_rms = np.sqrt(np.mean(np.array(errors)**2)) * 100
-           return evm_rms
-
-**Advanced Challenge:**
-
-Modify the flowgraph to:
-
-#. Add a **frequency offset** block to simulate local oscillator mismatch
-#. Observe how EVM degrades as frequency offset increases
-#. Find the maximum frequency offset that keeps EVM below 8% (LTE requirement)
-
-**Comparison to QPSK:**
-
-* **QPSK**: Simpler constellation, easier to demodulate, lower data rate
-* **16QAM**: Higher data rate (2× QPSK), more sensitive to impairments, harder to demodulate
-* **Trade-off**: Spectral efficiency vs robustness
-
-In adaptive modulation schemes (4G/5G), the system switches between QPSK, 16QAM, 64QAM, and 256QAM based on channel conditions:
-
-* **Good channel (high SNR)**: Use 256QAM for maximum throughput
-* **Poor channel (low SNR)**: Fall back to QPSK for reliability
-* **Medium channel**: Use 16QAM or 64QAM as compromise
-
-This exercise demonstrates why EVM measurement is critical: it tells you which modulation order your link can support.
-
-QPSK Wireless Communication with File Storage
+Text File Messaging Point to Point (Wireless)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This exercise demonstrates **wireless point-to-point file transfer** using QPSK modulation over the air with real wireless channel effects.
+This exercise demonstrates **wireless point-to-point text file transfer** using QPSK modulation
+over the air.
 
-**System Architecture:**
+.. figure:: images/exercises/text_file_messaging/text_file_msg_gnuradio_schematic.png
+   :align: center
+   :width: 45em
 
-* **Transmitter** (presenter's SDR):
+   Text File Messaging flowgraph - Transmitter and Receiver chains
 
-  * Reads text file
-  * Packetizes data with CRC32 checksums
-  * Modulates as QPSK bursts
-  * Transmits over antenna
+Using GNU Radio with Pluto
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* **Receiver** (your Jupiter SDR):
-
-  * Receives QPSK signal via antenna
-  * Demodulates and error-checks packets
-  * Writes valid packets to output file
-  * Measures EVM in real-time
-
-Using GNU Radio with Jupiter
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. important::
-
-   This exercise requires the presenter to be transmitting. Do NOT run the flowgraph until instructed. Starting early will capture only noise.
-
-**Setup:**
-
-#. Connect antenna to RX1 of your Jupiter SDR:
-
-   .. TODO: Add Jupiter antenna connection image
-   .. .. figure:: images/exercises/wireless_file_transfer/jupiter_antenna_setup.png
-   ..    :alt: Jupiter SDR with Antenna
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    Jupiter SDR with antenna connected to RX1
-
-   **Antenna Orientation Tips:**
-
-   * Point antenna toward the transmitter (presenter's location)
-   * Vertical polarization typically provides best reception
-   * Avoid obstructions between TX and RX antennas
-
-#. Open GNU Radio Companion:
-
-   .. shell::
-      :user: analog
-      :group: analog
-      :show-user:
-
-      $ gnuradio-companion
-
-#. Load the QPSK receiver flowgraph:
-
-   * Click **File** → **Open**
-   * Navigate to: ``/home/analog/Desktop/ftc_2025/8_qpsk_point_to_point_txtfile_gnuradio/receiver_pluto``
-   * Open: ``qpsk_receiver_txtfile_pluto.grc``
-
-   .. note::
-
-      Even though the file is named ``receiver_pluto.grc``, you can use it with Jupiter by changing the IIO context in the GNU Radio flowgraph. The flowgraph will auto-detect the connected SDR.
+For this example, connect **only one antenna** to the RX of Pluto. We will transmit to you!
 
 **Steps:**
 
-#. **Wait for presenter announcement:**
+#. Open GNU Radio Companion:
 
-   * Presenter will announce: "Starting transmission now"
-   * Only then should you run your receiver flowgraph
+   .. code-block:: bash
 
-#. Run the receiver flowgraph:
+      gnuradio-companion
 
-   * Click the **Run** button (green arrow) in the toolbar
-   * The receiver starts capturing data immediately
+#. In GNU Radio Companion, open from **File → Open**:
 
-   .. TODO: Add receiver flowgraph running screenshot
-   .. .. figure:: images/exercises/wireless_file_transfer/receiver_flowgraph_running.png
-   ..    :alt: QPSK Receiver Flowgraph Running
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    QPSK wireless receiver flowgraph running in GNU Radio
+   ``/home/analog/Desktop/ftc_2025/8_qpsk_point_to_point_txtfile_gnuradio/receiver_pluto/qpsk_receiver_txtfile_pluto.grc``
 
-#. **Observe the received constellation:**
+#. Run the flowgraph by clicking the **Run** button (green arrow).
 
-   Watch the constellation plot in real-time:
+#. After you run the flowgraph for a few seconds, stop it and open the ``receive.txt`` file:
 
-   * **Noisy constellation**: Signal points spread out due to wireless channel
-   * **Rotation**: Phase may drift over time
-   * **Bursts**: Symbols appear in bursts (not continuous transmission)
+   .. figure:: images/exercises/text_file_messaging/text_file_msg_gnuradio_output.png
+      :align: center
+      :width: 45em
 
-   .. TODO: Add wireless QPSK constellation screenshot
-   .. .. figure:: images/exercises/wireless_file_transfer/wireless_qpsk_constellation.png
-   ..    :alt: Wireless QPSK Constellation
-   ..    :align: center
-   ..    :width: 35em
-   ..
-   ..    QPSK constellation under wireless conditions - noisier than loopback
+      Open receive.txt to see the decoded message
 
-   **Why the constellation is noisier:**
+   Navigate to the receiver folder and check the received file:
 
-   * **Burst mode transmission**: Data sent in packets with gaps between bursts
-   * **Limited lock time**: Digital synchronization loops (FLL, Costas, Symbol Sync) don't have enough time to fully lock before burst ends
-   * **Channel fading**: Wireless signal strength varies over time
-   * **Interference**: Other RF sources in the 2.4 GHz band
+   .. code-block:: bash
 
-   Compare this to loopback exercises where constellation points are tight and well-defined.
+      cd ~/Desktop/ftc_2025/8_qpsk_point_to_point_txtfile_gnuradio/receiver_pluto
+      cat receive.txt
 
-#. **Monitor EVM measurements:**
+Enabling 2nd TX and RX Channels of ADALM Pluto
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-   Scroll down to observe real-time EVM:
+This exercise demonstrates how to enable and use both TX/RX channel pairs on the AD9361
+transceiver in Pluto. Using PyADI-IIO, you can reuse the code and run it on different SDRs
+like Pluto, Talise, Jupiter, ADSY1100 (Apollo SoM) and more.
 
-   * **RMS EVM**: Likely **5-15%** (higher than loopback due to wireless channel)
-   * **Max EVM**: May spike to **20-30%** during deep fades
-   * **Min EVM**: Best moments might still achieve **2-5%**
+**Prerequisites:**
 
-   .. TODO: Add wireless EVM measurements screenshot
-   .. .. figure:: images/exercises/wireless_file_transfer/wireless_evm_measurements.png
-   ..    :alt: EVM Measurements for Wireless QPSK
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    EVM measurements showing degradation due to wireless channel effects
+* **Pluto hack**: `Customizing Pluto <https://wiki.analog.com/university/tools/pluto/users/customizing>`__
+* **Pluto firmware update**: `Firmware Update Guide <https://wiki.analog.com/university/tools/pluto/users/firmware>`__
 
-   **What wireless EVM tells you:**
+**Hardware Modification:**
 
-   * **EVM variation**: Unlike stable loopback, wireless EVM fluctuates
-   * **Channel quality indicator**: High EVM = poor link quality
-   * **Modulation limit**: If EVM > 15%, higher-order modulations (16QAM) would fail
+To access the 2nd TX and RX channels, you need to add U.FL to SMA cables on Rx2 and Tx2:
 
-#. **Wait for transmission to complete:**
+.. figure:: images/exercises/mimo/pluto_hardware_mod.png
+   :align: center
+   :width: 35em
 
-   * Presenter will announce: "Transmission complete"
-   * Let the flowgraph run for a few more seconds to capture any trailing packets
-   * Then stop the flowgraph
+   Hardware modification: Add U.FL to SMA cables on Rx2 and Tx2
 
-#. Stop the receiver:
+**Cable Part Information:**
 
-   * Click the **Stop** button (red square) in the toolbar
-
-#. **Check the received file:**
-
-   Navigate to the receiver folder and open the received file:
-
-   .. shell::
-      :user: analog
-      :group: analog
-      :show-user:
-
-      $ cd ~/Desktop/ftc_2025/8_qpsk_point_to_point_txtfile_gnuradio/receiver_pluto
-      $ cat receive.txt
-
-   **What you'll see:**
-
-   * Multiple instances of the transmitted message (presenter sends it repeatedly for reliability)
-   * Each successfully received packet appears as a new line
-   * Some messages may be missing if packets failed CRC check
-   * Possible corruption if errors bypassed CRC (rare)
-
-   .. TODO: Add received file screenshot
-   .. .. figure:: images/exercises/wireless_file_transfer/received_file_content.png
-   ..    :alt: Contents of receive.txt File
-   ..    :align: center
-   ..    :width: 40em
-   ..
-   ..    Successfully received messages stored in receive.txt
-
-   **Example output:**
-
-   .. code-block:: text
-
-      Welcome to ADI FTC 2025 SDR Workshop!
-      Welcome to ADI FTC 2025 SDR Workshop!
-      Welcome to ADI FTC 2025 SDR Workshop!
-      Welcome to ADI FTC 2025 SDR Workshop!
-
-   The repetition is intentional - transmitter sends the same message multiple times to ensure at least some packets get through.
-
-#. **Delete and re-run (optional):**
-
-   If you want to receive fresh data:
-
-   .. shell::
-      :user: analog
-      :group: analog
-      :show-user:
-
-      $ rm receive.txt
-
-   Then run the flowgraph again when presenter transmits.
-
-**Understanding Burst Mode Transmission:**
-
-This exercise uses **burst mode** instead of continuous transmission:
-
-* **Burst mode**:
-
-  * Data sent in packets with idle periods between bursts
-  * More spectrum-efficient (transmit only when you have data)
-  * Harder to demodulate (loops don't have time to fully lock)
-  * Realistic for packet-based protocols (Wi-Fi, LTE, etc.)
-
-* **Continuous mode**:
-
-  * Always transmitting (even if just noise/padding)
-  * Easier to demodulate (loops stay locked)
-  * Less realistic for real systems
-
-**Comparison: Wireless vs Loopback:**
-
-+---------------------------+---------------------------+---------------------------+
-| **Metric**                | **Loopback**              | **Wireless (OTA)**        |
-+===========================+===========================+===========================+
-| **SNR**                   | 60-80 dB (excellent)      | 10-25 dB (varies)         |
-+---------------------------+---------------------------+---------------------------+
-| **RMS EVM**               | 1-3% (stable)             | 5-15% (fluctuates)        |
-+---------------------------+---------------------------+---------------------------+
-| **Constellation**         | Tight, well-defined       | Noisy, spread out         |
-+---------------------------+---------------------------+---------------------------+
-| **Packet loss**           | Near zero                 | 5-20% (depends on range)  |
-+---------------------------+---------------------------+---------------------------+
-| **Channel effects**       | Minimal                   | Fading, multipath         |
-+---------------------------+---------------------------+---------------------------+
-
-**Advanced Exploration:**
-
-Try these experiments:
-
-#. **Move antenna**: Observe how EVM changes with antenna orientation
-#. **Add distance**: Ask presenter to move transmitter farther away - watch EVM degrade
-#. **Measure packet loss**: Count how many expected packets are missing from receive.txt
-#. **Compare platforms**: Run same receiver on Pluto vs Jupiter - compare EVM performance
-
-**Real-World Applications:**
-
-This exercise mirrors how production wireless systems work:
-
-* **4G/5G base stations**: Transmit data in bursts to multiple users
-* **Wi-Fi access points**: Packet-based transmission with ACKs
-* **Satellite communications**: Burst mode uplinks to save power
-* **IoT devices**: Wake up, transmit packet, sleep (battery efficiency)
-
-Enabling 2×2 MIMO: Using Both TX and RX Channels
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-This advanced exercise demonstrates **2×2 MIMO (Multiple-Input Multiple-Output)** operation by enabling and using both TX/RX channel pairs on the AD9361 transceiver. While standard Pluto SDR (Rev B) only exposes TX1/RX1, modified Pluto SDR (Rev C or custom mods) and Jupiter/Talise platforms provide access to all four RF ports.
-
-**Why MIMO Matters:**
-
-MIMO is fundamental to modern wireless systems:
-
-* **4G LTE**: 2×2 or 4×4 MIMO for higher throughput
-* **5G NR**: Up to 8×8 MIMO in sub-6 GHz, massive MIMO in mmWave
-* **Wi-Fi 6/7**: Multi-user MIMO (MU-MIMO) for simultaneous client connections
-* **Beamforming**: Directional signal transmission for better range and interference rejection
-* **Spatial multiplexing**: Transmit independent data streams on each antenna for higher data rates
-
-**Hardware Requirements:**
-
-.. important::
-
-   This exercise requires **BOTH TX/RX channel pairs** to be physically accessible:
-
-   * **Pluto Rev C**: Factory boards with TX2/RX2 exposed via U.FL connectors
-   * **Modified Pluto**: User-modded boards with TX2/RX2 brought out
-   * **Jupiter SDR (AD-JUPITER-EBZ)**: All channels available via SMA connectors
-   * **Talise (ADRV9009-ZU11EG)**: Dual AD9009 transceivers = 4 TX + 4 RX channels
-
-   **Standard Pluto Rev B does NOT support this exercise** - TX2/RX2 are not connected to external ports.
-
-**What This Exercise Demonstrates:**
-
-* **Channel configuration**: Enabling multiple RX and TX channels programmatically
-* **Independent loopback paths**: TX1→RX1 and TX2→RX2 operating simultaneously
-* **Buffer management**: Handling interleaved I/Q data from multiple channels
-* **Phase coherence**: Both channels share the same LO, enabling phase-coherent reception
-* **MIMO foundations**: Building block for beamforming and spatial multiplexing
-
-**AD9361 2×2 MIMO Architecture:**
-
-The AD9361 is a **2×2 transceiver** with:
-
-* **2 independent TX channels**: TX1 and TX2
-* **2 independent RX channels**: RX1 and RX2
-* **Shared LO**: Both channels use the same local oscillator (phase-coherent)
-* **Independent gain/phase control**: Each channel can be tuned separately
-* **Baseband I/Q**: Each channel outputs complex I/Q samples
-
-.. TODO: Add AD9361 block diagram showing 2×2 architecture
-.. .. figure:: images/exercises/mimo_2x2/ad9361_block_diagram.png
-..    :alt: AD9361 2×2 MIMO Architecture
-..    :align: center
-..    :width: 40em
-..
-..    AD9361 transceiver with dual TX/RX paths
-
-**Why This is Advanced:**
-
-* **Hardware modification**: Requires modified Pluto or advanced platform
-* **PyADI-IIO multi-channel API**: Different syntax than single-channel usage
-* **Buffer interleaving**: RX buffer contains alternating samples from RX1 and RX2
-* **Home experimentation**: Not available during workshop, meant for post-workshop learning
+* **Manufacturer Part Number**: CAB.011 (Taoglas)
+* **DigiKey Link**: `CAB.011 on DigiKey <https://www.digikey.com/en/products/detail/taoglas-limited/CAB-011/2332725>`__
 
 Using PyADI-IIO with Modified Pluto
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. note::
-
-   This exercise is **NOT available with standard workshop Pluto SDRs**. It's included for users who:
-
-   * Modify their Pluto at home to expose TX2/RX2
-   * Have Pluto Rev C boards
-   * Use Jupiter or Talise platforms
-   * Want to learn MIMO concepts for future projects
-
-**Physical Setup:**
-
-#. Connect loopback cables:
-
-   * Cable 1: TX1 (out) → RX1 (in)
-   * Cable 2: TX2 (out) → RX2 (in)
-
-#. Verify both channels are accessible:
-
-   .. shell::
-      :user: analog
-      :group: analog
-      :show-user:
-
-      $ iio_attr -u ip:pluto.local -c -i ad9361-phy
-
-   You should see **four voltage channels**:
-
-   * ``voltage0`` = RX1
-   * ``voltage1`` = RX2 (only on modified/Rev C Pluto)
-   * ``voltage2`` = TX1
-   * ``voltage3`` = TX2 (only on modified/Rev C Pluto)
-
 **Steps:**
-
-#. Navigate to the 2×2 MIMO example folder:
-
-   .. shell::
-      :user: analog
-      :group: analog
-      :show-user:
-
-      $ cd ~/Desktop/ftc_2025/9_sinewave_loopback_python_2rx_2tx
 
 #. Open the Python script in Thonny IDE:
 
-   .. shell::
-      :user: analog
-      :group: analog
-      :show-user:
+   .. code-block:: bash
 
-      $ thonny python_loopback_sine_pluto_2rx_2tx.py
+      thonny ~/Desktop/ftc_2025/9_sinewave_loopback_python_2rx_2tx/python_loopback_sine_pluto_2rx_2tx.py
 
-   Or right-click ``python_loopback_sine_pluto_2rx_2tx.py`` → **Open with** → **Thonny**
+#. **Examine the code changes** to enable Tx2 and Rx2.
 
-#. **Examine the code** before running:
-
-   Key differences from single-channel code:
+   The key additions/changes to the code are:
 
    .. code-block:: python
       :linenos:
@@ -1117,102 +858,9 @@ Using PyADI-IIO with Modified Pluto
    * **Sample interleaving**: TX/RX buffers alternate between channels
    * **De-interleaving**: ``rx1 = rx_interleaved[0::2]`` (even), ``rx2 = rx_interleaved[1::2]`` (odd)
 
-#. Run the script:
+#. Run the script by clicking the **Run** button (green arrow) in Thonny.
 
-   * Click the **Run** button (green arrow) in Thonny
-
-**What You'll Observe:**
-
-The script generates four plots:
-
-#. **RX1 Spectrum**: Shows a peak at **20 kHz** (from TX1→RX1 loopback)
-
-   * Clean tone at 20 kHz offset from DC
-   * Noise floor around -80 to -90 dBFS
-   * NO 100 kHz tone (channel isolation prevents TX2 from leaking into RX1)
-
-#. **RX2 Spectrum**: Shows a peak at **100 kHz** (from TX2→RX2 loopback)
-
-   * Clean tone at 100 kHz offset from DC
-   * NO 20 kHz tone (channel isolation prevents TX1 from leaking into RX2)
-
-#. **RX1 Time Domain**: 20 kHz sinusoid
-
-   * I and Q components 90° out of phase
-   * Slower oscillation (lower frequency)
-
-#. **RX2 Time Domain**: 100 kHz sinusoid
-
-   * I and Q components 90° out of phase
-   * Faster oscillation (higher frequency)
-
-.. TODO: Add 2×2 MIMO results screenshot
-.. .. figure:: images/exercises/mimo_2x2/2x2_mimo_results.png
-..    :alt: 2×2 MIMO Loopback Results
-..    :align: center
-..    :width: 40em
-..
-..    Four-panel plot showing independent RX1 and RX2 reception
-
-**Key Observations:**
-
-* **Independent paths**: Each TX→RX pair operates independently
-* **Channel isolation**: TX1 doesn't leak into RX2 and vice versa (typically >40 dB isolation)
-* **Phase coherence**: Both channels share the same LO, enabling phase-coherent MIMO algorithms
-* **Buffer management**: Correct interleaving/de-interleaving is critical for multi-channel operation
-
-**Understanding Buffer Interleaving:**
-
-For 2×2 MIMO, PyADI-IIO uses **sample-level interleaving**:
-
-* **TX buffer format**: ``[TX1[0], TX2[0], TX1[1], TX2[1], TX1[2], TX2[2], ...]``
-* **RX buffer format**: ``[RX1[0], RX2[0], RX1[1], RX2[1], RX1[2], RX2[2], ...]``
-
-To separate channels:
-
-* **Channel 0**: Even indices ``buffer[0::2]``
-* **Channel 1**: Odd indices ``buffer[1::2]``
-
-**MIMO Applications You Can Now Build:**
-
-With 2×2 MIMO capability, you can implement:
-
-#. **Beamforming**: Adjust phase/amplitude of TX1 and TX2 to steer the transmitted beam
-
-   .. code-block:: python
-
-      # Steer beam 30° to the right
-      phase_offset = np.pi / 6  # 30 degrees
-      tx1 = signal * np.exp(1j * 0)
-      tx2 = signal * np.exp(1j * phase_offset)
-
-#. **Diversity reception**: Combine RX1 and RX2 to improve SNR
-
-   .. code-block:: python
-
-      # Maximum ratio combining
-      combined = rx1 + rx2
-
-#. **Spatial multiplexing**: Transmit independent data streams on TX1 and TX2
-
-   .. code-block:: python
-
-      tx1 = data_stream_A  # Stream A on antenna 1
-      tx2 = data_stream_B  # Stream B on antenna 2
-      # Double the data rate!
-
-#. **Direction finding**: Use phase difference between RX1 and RX2 to estimate angle of arrival
-
-**Advanced Challenge:**
-
-Modify the script to implement **simple beamforming**:
-
-#. Transmit the same signal on both TX1 and TX2
-#. Add a phase offset to TX2: ``tx2_signal = tx1_signal * np.exp(1j * phase_offset)``
-#. Try different phase offsets: 0°, 45°, 90°, 180°
-#. Use a receiver at different positions to measure how the beam pattern changes
-
-This demonstrates how MIMO systems steer RF energy directionally without mechanically moving antennas!
+#. Observe the 2Rx 2Tx loopback results showing independent reception on both channels.
 
 Deep Dive: Symbol Synchronization for QPSK
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
