@@ -41,34 +41,200 @@ Taking time to understand your hardware will make the exercises more meaningful 
 Transmit and receive a complex sinusoid (Sinewave Loopback)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-A complex sinusoid is a fundamental building block in software-defined radio. Unlike a real sinusoid
-(which oscillates in a single dimension), a complex sinusoid consists of two components:
+What is the easiest way to validate the basic functionalities of an SDR and analyze performance metrics?
+Add a loopback cable between TX and RX channels, transmit a complex sinusoid, and look at the
+spectrum on the receive side.
 
-* **In-phase (I) component**: Real part of the signal
-* **Quadrature (Q) component**: Imaginary part of the signal
+Through this basic test:
 
-Together, they form a single tone in the frequency domain. This exercise transmits a complex sinusoid
-and receives it back via a loopback connection, allowing you to observe both the transmitted
-signal and its frequency spectrum representation.
+* Verify if the up-conversion and down-conversion are accurate
+* See how clean the received spectrum is (Image Rejection, LO leakage, Spurs, SNR, SFDR)
+* Confirm that the software, HDL, and hardware work properly
+* Play with attributes to understand what "knobs" can be tweaked and how
+* Validate proper integration of the controls in your application
 
-   .. figure:: images/exercises/sinewave_loopback/complex_sinusoid.png
-      :alt: Complex Sinusoid
-      :align: center
-      :width: 40em
+What is a Complex Sinusoid?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-      Complex sinusoid with in-phase (I) and quadrature (Q) components
+A complex sinusoid is a fundamental test signal in SDR systems, consisting of in-phase (I) and
+quadrature (Q) components that create a single tone in the frequency domain.
+The complex exponential is represented as:
 
-   .. figure:: images/exercises/sinewave_loopback/complex_sinusoid_constellation_plot.png
-      :alt: Complex Sinusoid Constellation Plot
-      :align: center
-      :width: 40em
+.. math::
 
-      Constellation plot of a complex sinusoid
+   s(t) = A \cdot e^{j2\pi ft} = A \cdot (\cos(2\pi ft) + j\sin(2\pi ft))
+
+where:
+
+* :math:`A` = amplitude
+* :math:`f` = frequency
+* :math:`t` = time
+* **Real part (I)**: :math:`A \cdot \cos(2\pi ft)`
+* **Quadrature part (Q)**: :math:`A \cdot \sin(2\pi ft)`
+
+In the constellation diagram, a complex sinusoid appears as a rotating point, tracing a circle
+around the origin. Its spectrum shows a single peak at the frequency :math:`f`.
+
+.. figure:: images/exercises/sinewave_loopback/complex_sinusoid.png
+   :alt: Complex Sinusoid
+   :align: center
+   :width: 40em
+
+   Complex sinusoid with in-phase (I) and quadrature (Q) components
+
+.. figure:: images/exercises/sinewave_loopback/complex_sinusoid_constellation_plot.png
+   :alt: Complex Sinusoid Constellation Plot
+   :align: center
+   :width: 40em
+
+   Constellation plot of a complex sinusoid
+
+Zero IF Architecture
+^^^^^^^^^^^^^^^^^^^^
+
+Modern SDR platforms like Pluto, Jupiter, and Talise use a **Zero Intermediate Frequency (Zero IF)**
+architecture where the signal is directly converted to/from baseband without intermediate frequency stages.
+
+The phase and frequency difference between TX and RX local oscillators affects Phase Modulation
+applications, requiring real-time phase and frequency correction algorithms.
+
+**Transmitter Chain:**
+
+#. **Digital Signal Generation**: Create complex I/Q samples in software
+#. **DAC (Digital-to-Analog Converter)**: Convert digital samples to analog voltages
+#. **Reconstruction Filter**: Remove high-frequency images from the DAC output
+#. **I/Q Modulator**: Mix I and Q signals with the Local Oscillator (LO) at 90° phase difference
+#. **RF Amplifier**: Amplify the upconverted signal to the desired transmit power
+#. **Antenna**: Radiate the RF signal
+
+**Receiver Chain:**
+
+#. **Antenna**: Capture the RF signal
+#. **RF Amplifier (LNA)**: Low-noise amplification
+#. **I/Q Demodulator**: Mix the RF signal with the LO to downconvert to baseband
+#. **Anti-Aliasing Filter**: Remove high-frequency content before sampling
+#. **ADC (Analog-to-Digital Converter)**: Sample the analog I/Q signals
+#. **Digital Processing**: Process the received samples in software
+
+Key Impairments to Observe
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When analyzing the received spectrum, several impairments characterize real-world SDR performance:
+
+**1. Image (Mirror Signal):**
+
+Due to I/Q gain and phase imbalances in the mixer, a mirror image of the desired signal appears
+on the opposite side of the LO frequency. The **Image Rejection Ratio (IRR)** quantifies how well
+the system suppresses this unwanted image:
+
+.. math::
+
+   \text{IRR (dB)} = 10 \log_{10}\left(\frac{P_{\text{wanted}}}{P_{\text{image}}}\right)
+
+Causes of poor image rejection:
+
+* **Gain Imbalance**: I and Q channels have different amplification (should be identical)
+* **Phase Imbalance**: I and Q mixer phases deviate from the ideal 90° quadrature relationship
+
+**2. LO Leakage (DC Offset):**
+
+Local Oscillator leakage occurs when the LO signal couples into the mixer output, creating a DC
+offset in the baseband I/Q signals. This appears as a spike at the center frequency (DC in baseband).
+
+Causes:
+
+* Imperfect mixer isolation
+* DC offsets in the analog signal chain
+* LO signal leaking through the RF path
+
+**3. Spurs (Spurious Signals):**
+
+Unwanted tones that appear at predictable frequency offsets due to:
+
+* Clock harmonics
+* Intermodulation products
+* Switching noise from power supplies
+* Digital switching transients coupling into analog paths
+
+**4. Signal-to-Noise Ratio (SNR):**
+
+The SNR measures the quality of the received signal relative to the noise floor:
+
+.. math::
+
+   \text{SNR (dB)} = 10 \log_{10}\left(\frac{P_{\text{signal}}}{P_{\text{noise}}}\right)
+
+Higher SNR indicates cleaner signal reception and better ADC/DAC performance.
 
 The following subsections demonstrate different implementations of this exercise using various tools and platforms.
 
 Using PyADI-IIO with Pluto
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The Python script performs the following steps:
+
+#. **Configure SDR** - Set up the radio parameters (sample rate, center frequency, gain, etc.)
+#. **Create a discrete complex sinusoid** - Generate the I/Q samples mathematically
+#. **Call tx() to transmit** - Send the created sinusoid as I and Q data
+#. **Call rx() to receive** - Capture the I and Q data from the receiver
+#. **Plot the received sinusoid** - Visualize the results
+
+**1. Configure SDR:**
+
+.. code-block:: python
+
+   import adi
+   import numpy as np
+
+   sdr = adi.Pluto("ip:pluto.local")  # Create Radio object
+
+   sample_rate = 3000000  # Sample rate in Hz
+   center_freq = 915000000  # Center frequency in Hz
+   num_samps = 100000  # Number of samples
+
+   # Configure TX
+   sdr.tx_lo = center_freq
+   sdr.tx_hardwaregain_chan0 = -10  # TX attenuation in dB
+   sdr.tx_cyclic_buffer = True
+
+   # Configure RX
+   sdr.rx_lo = center_freq
+   sdr.sample_rate = sample_rate
+   sdr.rx_rf_bandwidth = sample_rate
+   sdr.rx_buffer_size = num_samps
+   sdr.gain_control_mode_chan0 = "slow_attack"
+
+**2. Create a discrete complex sinusoid:**
+
+.. code-block:: python
+
+   frequency = 20000  # 20 kHz sinusoid
+   fs = int(sdr.sample_rate)
+   N = num_samps
+   t = np.arange(N) / fs
+   samples = 0.5 * np.exp(2.0j * np.pi * frequency * t)
+
+**3. Call tx() to transmit:**
+
+Using PyADI-IIO, only this function needs to be called to start transmitting:
+
+.. code-block:: python
+
+   sdr.tx(samples)
+
+**4. Call rx() to receive:**
+
+Only this function needs to be called to receive:
+
+.. code-block:: python
+
+   rx_samples = sdr.rx()
+
+.. note::
+
+   If you run the example multiple times, the RX capture will have a different phase shift
+   compared with TX each time. Even if the LO is the same, there are frequency dividers on
+   each channel with random phase shift for each run.
 
 Follow the next steps:
 
@@ -284,7 +450,6 @@ Follow these steps:
 Using Scopy with Pluto
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-Scopy provides a visual interface for real-time signal analysis without writing code.
 This exercise uses Scopy's instruments to transmit a test tone via DDS and observe the received spectrum.
 
 Follow these steps:
