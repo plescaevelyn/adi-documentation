@@ -192,8 +192,8 @@ Higher SNR indicates cleaner signal reception and better ADC/DAC performance.
 
 The following subsections demonstrate different implementations of this exercise using various tools and platforms.
 
-Using PyADI-IIO
-^^^^^^^^^^^^^^^
+Using PyADI-IIO (Pluto, Jupiter, Talise)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Pluto**
 
@@ -376,45 +376,56 @@ Only the "Configure SDR" section changes compared to Pluto.
 
 Follow these steps:
 
-#. Go to **workshop_exercises→python→sinewave_loopback** and open **python_loopback_sine_jupiter.py**
+#. Make the loopback setup using Jupiter with TX1A connected to RX1A via an SMA cable.
+
+   .. figure:: ../images/hw_setup/jupiter_loopback_setup.png
+      :align: center
+      :width: 30em
+
+      Jupiter SDR with loopback cable connecting TX1A to RX1A
+
+#. Go to **Desktop → ftc_2024 → 3_sinewave_loopback_python** and open **python_loopback_sine_jupiter.py**
    using **Thonny Python IDE**.
 
-#. Observe that only the "Configure SDR" section changed compared to **python_loopback_sine_pluto.py**:
+#. Observe the "Configure SDR" section for Jupiter using ``adi.adrv9002``:
 
    .. code-block:: python
       :linenos:
-      :lineno-start: 4
+      :lineno-start: 1
       :class: code-spaced
 
+      import adi
+      import numpy as np
+
       # Configure SDR
-      sdr = adi.adrv9002(uri="ip:10.48.65.212")  # Create Radio
+      sdr = adi.adrv9002(uri="ip:jupiter.local")  # Create Radio
 
       frequency = 15360  # 15.360 KHz sinusoid to be transmitted
-      amplitude = 0.5
       center_freq = 915000000  # Hz
       sample_rate = sdr.rx0_sample_rate
-      num_samps = int((sample_rate)/frequency)  # number of samples per call to rx()
+      num_samps = int((sample_rate)/frequency)
 
       sdr.rx_ensm_mode_chan0 = "rf_enabled"
       sdr.tx_hardwaregain_chan0 = -5
       sdr.rx_hardwaregain_chan0 = 0
       sdr.tx_ensm_mode_chan0 = "rf_enabled"
       sdr.tx_cyclic_buffer = True
-      sdr.tx_buffer_size = num_samps  # number of samples per call to tx()
+      sdr.tx_buffer_size = num_samps
       sdr.rx_buffer_size = num_samps
       sdr.tx0_lo = center_freq
       sdr.rx0_lo = center_freq
 
-#. Insert the IP address on line 5 to remotely connect to Jupiter:
+#. Run the script by pressing the green button in Thonny.
 
-   .. code-block:: python
-      :linenos:
-      :lineno-start: 5
-      :class: code-spaced
+#. Observe the output plots showing transmitted and received sinusoid.
 
-      sdr = adi.adrv9002(uri="ip:10.48.65.212")  # Create Radio object for Jupiter
+   .. figure:: images/exercises/jupiter_exercises/sinewave_loopback/sinewave_loopback_python_plot.png
+      :align: center
+      :width: 40em
 
-#. Run the script by pressing the green button in Thonny. Close all plot windows to stop.
+      TX and RX time domain, FFT, and constellation plots for Jupiter sinewave loopback
+
+#. Close all plot windows to stop.
 
 #. In this example, a sinusoid at 15.360 KHz is transmitted and received (chosen to have an integer
    number of periods at the sample rate of 15.36 Msps).
@@ -482,8 +493,8 @@ Follow these steps:
 For Scopy usage with Pluto, see the
 `Pluto Quick Start Guide <https://analogdevicesinc.github.io/adi-documentation/tools/pluto/users/quick_start.html>`_.
 
-Using GNU Radio
-^^^^^^^^^^^^^^^
+Using GNU Radio (Pluto, Jupiter)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Pluto**
 
@@ -667,8 +678,8 @@ Follow these steps:
 #. Close all plot windows to stop.
 
 
-Doppler Radar with GNU Radio
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Doppler Radar with GNU Radio (Pluto, Jupiter)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The Doppler effect causes a frequency shift when there is relative motion between radar and target.
 This exercise creates a continuous-wave radar using GNU Radio Companion.
@@ -943,8 +954,8 @@ Q is the error signal - adjust and keep Q = 0.
 
    Constellation progression: raw → coarse freq → timing recovery → Costas loop
 
-Using PyADI-IIO
-^^^^^^^^^^^^^^^
+Using PyADI-IIO (Pluto, Jupiter, Talise)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Pluto**
 
@@ -1154,9 +1165,7 @@ Follow these steps:
 
 #. Run the script by pressing the green button in Thonny.
 
-#. Observe the output plots showing the BPSK signal processing stages:
-
-   **Transmitted data with differential encoding:**
+#. Observe the output plots showing the BPSK signal processing stages.
 
    .. figure:: images/exercises/jupiter_exercises/bpsk_loopback/transmitted_data_encoded.png
       :alt: BPSK Transmitted Data Encoded
@@ -1165,79 +1174,61 @@ Follow these steps:
 
       Differentially encoded bits ready for transmission
 
-   **TX samples without frequency shift:**
-
    .. figure:: images/exercises/jupiter_exercises/bpsk_loopback/tx_samples_wo_freq_shift.png
       :alt: BPSK TX Samples Without Frequency Shift
       :align: center
       :width: 40em
 
-      Transmitted samples before frequency shift - symbols at -1 and +1
-
-   **TX samples with frequency shift:**
+      TX samples before frequency shift - symbols at -1 and +1
 
    .. figure:: images/exercises/jupiter_exercises/bpsk_loopback/tx_samples_with_freq_shift.png
       :alt: BPSK TX Samples With Frequency Shift
       :align: center
       :width: 40em
 
-      Transmitted samples after frequency shift - complex sinusoid modulation
-
-   **RX samples without frequency adjustment:**
+      TX samples after frequency shift - complex sinusoid modulation
 
    .. figure:: images/exercises/jupiter_exercises/bpsk_loopback/rx_samples_wo_freq_shift.png
       :alt: BPSK RX Samples Without Frequency Adjustment
       :align: center
       :width: 40em
 
-      Raw received samples before any correction
-
-   **RX constellation with frequency offset:**
+      RX samples before any correction
 
    .. figure:: images/exercises/jupiter_exercises/bpsk_loopback/rx_constellation_with_freq_shift.png
       :alt: BPSK RX Constellation With Frequency Offset
       :align: center
       :width: 40em
 
-      Received constellation showing frequency and phase offset
-
-   **RX samples after coarse frequency adjustment:**
+      RX constellation showing frequency and phase offset
 
    .. figure:: images/exercises/jupiter_exercises/bpsk_loopback/rx_samples_with_freq_adj.png
       :alt: BPSK RX Samples With Frequency Adjustment
       :align: center
       :width: 40em
 
-      Samples after coarse frequency correction
-
-   **RX constellation after symbol sync:**
+      RX samples after coarse frequency correction
 
    .. figure:: images/exercises/jupiter_exercises/bpsk_loopback/rx_constellation_with_symbol_sync.png
       :alt: BPSK RX Constellation With Symbol Sync
       :align: center
       :width: 40em
 
-      Constellation after timing recovery - selecting optimal sample points
-
-   **RX samples after Costas loop:**
+      RX constellation after timing recovery - selecting optimal sample points
 
    .. figure:: images/exercises/jupiter_exercises/bpsk_loopback/rx_samples_with_costas_loop.png
       :alt: BPSK RX Samples With Costas Loop
       :align: center
       :width: 40em
 
-      Samples after fine frequency and phase correction
-
-   **RX constellation after Costas loop:**
+      RX samples after Costas loop - fine frequency and phase correction
 
    .. figure:: images/exercises/jupiter_exercises/bpsk_loopback/rx_constellation_with_costas_loop.png
       :alt: BPSK RX Constellation After Costas Loop
       :align: center
       :width: 40em
 
-      Clean BPSK constellation with clusters at -1 and +1
-
-   **Transmitted and received decoded samples:**
+      RX constellation after Costas loop - clean clusters at -1 and +1
 
    .. figure:: images/exercises/jupiter_exercises/bpsk_loopback/rx_tx_samples_decoded.png
       :alt: BPSK TX RX Decoded Samples
@@ -1356,8 +1347,8 @@ The QPSK loopback example in GNU Radio demonstrates the full DSP chain:
 * Using the rotation slider, you can rotate the constellation in steps of 90° and observe
   that the symbols received are the same due to Differential Decoding
 
-Console Messaging
-^^^^^^^^^^^^^^^^^
+Console Messaging (Pluto, Jupiter)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Pluto**
 
@@ -1452,8 +1443,8 @@ Follow these steps:
 #. Click the **Stop** button (red square) when finished.
 
 
-QPSK Without Additional DSP
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+QPSK Without Additional DSP (Pluto)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Intentionally omits matched filter, frequency correction, and timing recovery to show what happens
 without them: wide spectrum, rotating constellation, wrong samples.
@@ -1531,8 +1522,8 @@ Follow these steps:
 * Even if we do all these, if we rotate the constellation 180°, the symbols received will be out of place
 
 
-QPSK Constellation Modulator
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+QPSK Constellation Modulator (Pluto)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Uses Root-Raised Cosine (RRC) filters for pulse shaping, giving a cleaner spectrum than raw QPSK.
 
@@ -1590,8 +1581,8 @@ Follow these steps:
 symbols and a RRC filter is applied on the Transmitter path, thus the bandwidth used is optimized.
 
 
-QPSK Frequency Locked Loop
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+QPSK Frequency Locked Loop (Pluto)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Adds a Frequency Locked Loop (FLL) to automatically correct for oscillator differences between
 TX and RX, keeping the spectrum centered.
@@ -1644,8 +1635,8 @@ Follow these steps:
 #. Click the **Stop** button (red square) when finished.
 
 
-Packet-Based File Storage
-^^^^^^^^^^^^^^^^^^^^^^^^^
+Packet-Based File Storage (Pluto)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Same as Console Messaging, but saves decoded messages to a file instead of displaying on console.
 
@@ -1733,8 +1724,8 @@ Follow these steps:
 ..
 ..       Check and then uncheck Viterbi to synchronize the QPSK data in SDRangel
 
-Amplitude Shift Keying (ASK) in GNU Radio
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Amplitude Shift Keying (ASK) in GNU Radio (Pluto, Jupiter)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ASK encodes data by varying signal amplitude. This exercise uses 4-ASK with symbol levels
 between (0, 1/3, 2/3, 1).
@@ -1850,8 +1841,8 @@ Follow these steps:
 #. Click the **Stop** button (red square) when finished.
 
 
-Frequency Shift Keying (FSK) in GNU Radio
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Frequency Shift Keying (FSK) in GNU Radio (Pluto, Jupiter)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 FSK encodes data by switching between different frequencies. This exercise uses 4-FSK.
 Receiver uses quadrature demodulation to convert frequency changes to amplitude, then decimates.
