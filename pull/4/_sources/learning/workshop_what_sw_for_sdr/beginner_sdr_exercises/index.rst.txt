@@ -46,8 +46,7 @@ Through this basic test:
 * Play with attributes to understand what "knobs" can be tweaked and how
 * Validate proper integration of the controls in your application
 
-What is a Complex Sinusoid?
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+**What is a Complex Sinusoid?**
 
 A complex sinusoid is a fundamental test signal in SDR systems, consisting of in-phase (I) and
 quadrature (Q) components that create a single tone in the frequency domain.
@@ -80,8 +79,7 @@ around the origin. Its spectrum shows a single peak at the frequency :math:`f`.
 
    Complex sinusoid time plot and corresponding constellation plot
 
-Zero IF Architecture
-^^^^^^^^^^^^^^^^^^^^
+**Zero IF Architecture**
 
 Modern SDR platforms like Pluto, Jupiter, and Talise use a **Zero Intermediate Frequency (Zero IF)**
 architecture where the signal is directly converted to/from baseband without intermediate frequency stages.
@@ -113,8 +111,7 @@ applications, requiring real-time phase and frequency correction algorithms.
 #. **ADC (Analog-to-Digital Converter)**: Sample the analog I/Q signals
 #. **Digital Processing**: Process the received samples in software
 
-Key Impairments to Observe
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+**Key Impairments to Observe**
 
 When analyzing the received spectrum, several impairments characterize real-world SDR performance:
 
@@ -195,8 +192,10 @@ Higher SNR indicates cleaner signal reception and better ADC/DAC performance.
 
 The following subsections demonstrate different implementations of this exercise using various tools and platforms.
 
-Using PyADI-IIO with Pluto
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+Using PyADI-IIO
+^^^^^^^^^^^^^^^
+
+**Pluto**
 
 The Python script performs the following steps:
 
@@ -371,8 +370,7 @@ Follow the next steps:
       Close all tabs to stop the Python script
 
 
-Using PyADI-IIO with Jupiter
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+**Jupiter**
 
 Only the "Configure SDR" section changes compared to Pluto.
 
@@ -422,8 +420,7 @@ Follow these steps:
    number of periods at the sample rate of 15.36 Msps).
 
 
-Using PyADI-IIO with Talise
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+**Talise**
 
 Follow these steps:
 
@@ -480,15 +477,15 @@ Follow these steps:
    ..    Output showing transmitted and received signals
 
 
-Using Scopy with Pluto
-^^^^^^^^^^^^^^^^^^^^^^^
+**Scopy**
 
 For Scopy usage with Pluto, see the
 `Pluto Quick Start Guide <https://analogdevicesinc.github.io/adi-documentation/tools/pluto/users/quick_start.html>`_.
 
+Using GNU Radio
+^^^^^^^^^^^^^^^
 
-Using GNU Radio with Pluto
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+**Pluto**
 
 This exercise implements the sinewave loopback using GNU Radio Companion with interactive sliders
 for real-time parameter adjustment.
@@ -546,8 +543,7 @@ Follow these steps:
 #. Click the **Stop** button (red square) or close the window when finished.
 
 
-Using GNU Radio with Jupiter
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+**Jupiter**
 
 This exercise implements the same complex sinusoid loopback using GNU Radio Companion's visual flowgraph environment instead of Python code.
 
@@ -603,8 +599,7 @@ Follow these steps:
 #. Click the **Stop** button (red square) when finished.
 
 
-Using PyADI-IIO with Jupiter (Double Loopback)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+**Jupiter (Double Loopback)**
 
 This exercise demonstrates a double loopback configuration using both TX/RX channel pairs on Jupiter.
 
@@ -672,13 +667,13 @@ Follow these steps:
 #. Close all plot windows to stop.
 
 
-Doppler Radar with GNU Radio (Pluto)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Doppler Radar with GNU Radio
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The Doppler effect causes a frequency shift when there is relative motion between radar and target.
 This exercise creates a continuous-wave radar using GNU Radio Companion.
 
-The Pluto transmits a CW signal at 2.5 GHz. When the signal reflects off your moving hand,
+The SDR transmits a CW signal at 2.5 GHz. When the signal reflects off your moving hand,
 the received frequency shifts - higher pitch when moving toward, lower when moving away.
 
    .. figure:: images/exercises/pluto_exercises/doppler_radar/filter_frequency_diagram.png
@@ -687,6 +682,8 @@ the received frequency shifts - higher pitch when moving toward, lower when movi
       :width: 40em
 
       Band Reject Filter removes carrier, Band Pass Filter isolates Doppler shift.
+
+**Pluto**
 
 Follow these steps:
 
@@ -744,8 +741,7 @@ Follow these steps:
       Real-time plots of the Doppler radar experiment.
 
 
-Doppler Radar with GNU Radio (Jupiter)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Jupiter**
 
 This exercise implements the same Doppler radar experiment using Jupiter SDR.
 
@@ -843,8 +839,7 @@ For BPSK, Q = 0 (all energy in the In-phase component).
 * Wi-Fi
 * Many others
 
-Ideal World vs Real World
-^^^^^^^^^^^^^^^^^^^^^^^^^
+**Ideal World vs Real World**
 
 In an **ideal world** where the LOs of TX and RX are perfectly in sync and where there is no time
 delay between RX and TX: **in = out**
@@ -871,16 +866,14 @@ In a **real world**: **in != out** but the information is still there.
 
 Luckily, all these can be solved by software!
 
-Differential Encoding and Decoding
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+**Differential Encoding and Decoding**
 
 Differential encoding solves the phase ambiguity problem:
 
 * To transmit a bit of **"1"**: change state (if previous is "0", change to "1"; if previous is "1", change to "0")
 * To transmit a bit of **"0"**: repeat state (if previous is "1", repeat "1"; if previous is "0", repeat "0")
 
-How the Python Script is Structured
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+**How the Python Script is Structured**
 
 .. figure:: images/exercises/pluto_exercises/bpsk_loopback/tx_rx_flow_diagram.png
    :align: center
@@ -906,8 +899,7 @@ How the Python Script is Structured
 #. Differential Decoding
 #. Plot data
 
-Coarse Frequency Offset Adjustment
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+**Coarse Frequency Offset Adjustment**
 
 How to adjust the frequency offset:
 
@@ -921,8 +913,7 @@ How to adjust the frequency offset:
 
    Initial frequency offset measurement using squared signal FFT
 
-Symbol Timing Recovery (Mueller and Muller)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+**Symbol Timing Recovery (Mueller and Muller)**
 
 How to select the right samples (Mueller and Muller timing recovery technique):
 
@@ -938,8 +929,7 @@ We want to sample where the adjacent symbols cross 0 and discard in-between samp
 
    Symbol timing recovery: selecting optimal sample points
 
-Fine Frequency Synchronization (Costas Loop)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+**Fine Frequency Synchronization (Costas Loop)**
 
 The Costas Loop functions like a PLL. We multiply the real part of the sample (I) by the imaginary
 part (Q), and because Q should be equal to zero for BPSK, the error function is minimized when
@@ -953,8 +943,10 @@ Q is the error signal - adjust and keep Q = 0.
 
    Constellation progression: raw → coarse freq → timing recovery → Costas loop
 
-Using PyADI-IIO with Pluto
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Using PyADI-IIO
+^^^^^^^^^^^^^^^
+
+**Pluto**
 
 The Python script performs the following steps:
 
@@ -1114,8 +1106,7 @@ Follow these steps to run the BPSK transmission and reception experiment:
       RX constellation after Costas loop - clean clusters at -1 and +1.
 
 
-Using PyADI-IIO with Jupiter
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+**Jupiter**
 
 This exercise demonstrates BPSK modulation and demodulation using Jupiter SDR with Python.
 
@@ -1258,8 +1249,7 @@ Follow these steps:
 #. Close all plot windows to stop.
 
 
-Using PyADI-IIO with Talise
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+**Talise**
 
 Follow these steps:
 
@@ -1332,8 +1322,7 @@ PSK with more than 4 symbols increases spectral efficiency but requires better S
 
    Higher-order modulations: 16-QAM, 32-QAM, 64-QAM, 256-QAM
 
-QPSK GNU Radio Loopback Structure
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+**QPSK GNU Radio Loopback Structure**
 
 The QPSK loopback example in GNU Radio demonstrates the full DSP chain:
 
@@ -1367,8 +1356,10 @@ The QPSK loopback example in GNU Radio demonstrates the full DSP chain:
 * Using the rotation slider, you can rotate the constellation in steps of 90° and observe
   that the symbols received are the same due to Differential Decoding
 
-Using GNU Radio with Pluto - Console Messaging
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Console Messaging
+^^^^^^^^^^^^^^^^^
+
+**Pluto**
 
 Packet-based QPSK system where messages are transmitted in bursts and displayed on console.
 Each packet contains: access key (preamble), payload length, message data, and CRC32 checksum.
@@ -1425,8 +1416,7 @@ Follow these steps:
 #. Click the **Stop** button (red square) when finished.
 
 
-Using GNU Radio with Jupiter - Console Messaging
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+**Jupiter**
 
 Same as Pluto, with minimal code changes for Jupiter.
 
@@ -1462,8 +1452,8 @@ Follow these steps:
 #. Click the **Stop** button (red square) when finished.
 
 
-Using GNU Radio with Pluto - QPSK Without Additional DSP
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+QPSK Without Additional DSP
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Intentionally omits matched filter, frequency correction, and timing recovery to show what happens
 without them: wide spectrum, rotating constellation, wrong samples.
@@ -1541,8 +1531,8 @@ Follow these steps:
 * Even if we do all these, if we rotate the constellation 180°, the symbols received will be out of place
 
 
-Using GNU Radio with Pluto - QPSK Constellation Modulator
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+QPSK Constellation Modulator
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Uses Root-Raised Cosine (RRC) filters for pulse shaping, giving a cleaner spectrum than raw QPSK.
 
@@ -1600,8 +1590,8 @@ Follow these steps:
 symbols and a RRC filter is applied on the Transmitter path, thus the bandwidth used is optimized.
 
 
-Using GNU Radio with Pluto - QPSK Frequency Locked Loop
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+QPSK Frequency Locked Loop
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Adds a Frequency Locked Loop (FLL) to automatically correct for oscillator differences between
 TX and RX, keeping the spectrum centered.
@@ -1654,8 +1644,8 @@ Follow these steps:
 #. Click the **Stop** button (red square) when finished.
 
 
-Using GNU Radio with Pluto - Packet-Based File Storage
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Packet-Based File Storage
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Same as Console Messaging, but saves decoded messages to a file instead of displaying on console.
 
@@ -1774,8 +1764,7 @@ between (0, 1/3, 2/3, 1).
 
    ASK + PSK = QAM (used in Wi-Fi, LTE, 5G, cable modems)
 
-Using GNU Radio with Pluto
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+**Pluto**
 
 Follow these steps:
 
@@ -1820,8 +1809,7 @@ Follow these steps:
 #. Click the **Stop** button (red square) when finished.
 
 
-Using GNU Radio with Jupiter
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+**Jupiter**
 
 Follow these steps:
 
@@ -1870,9 +1858,7 @@ Receiver uses quadrature demodulation to convert frequency changes to amplitude,
 
 FSK variants: GFSK (Bluetooth), Chirp Spread Spectrum (LoRa), OFDM subcarriers (Wi-Fi, LTE).
 
-
-Using GNU Radio with Pluto
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+**Pluto**
 
 Follow these steps:
 
@@ -1911,8 +1897,7 @@ Follow these steps:
 #. Click the **Stop** button (red square) when finished.
 
 
-Using GNU Radio with Jupiter
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+**Jupiter**
 
 Follow these steps:
 
