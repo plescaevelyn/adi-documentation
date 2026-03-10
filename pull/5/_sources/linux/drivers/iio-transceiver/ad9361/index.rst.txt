@@ -51,7 +51,7 @@ Driver Testing / API
 Show device name
 ~~~~~~~~~~~~~~~~
 
-.. shell::
+.. code:: console
 
    $ cat /sys/bus/iio/devices/iio\:device1/name
    ad9361-phy
@@ -66,7 +66,7 @@ the LO signals for the RF signal paths. One is programmed for the RX channel,
 the other for the TX channel. The tuning range covers 70MHz to 6GHz
 (AD9363: 325-3800 MHz) with 2Hz granularity.
 
-.. shell::
+.. code:: console
 
    $ cat out_altvoltage0_RX_LO_frequency
    2400000000
@@ -82,7 +82,7 @@ into the RX path may occur. TDD mode typically avoids this since only one LO
 operates at a time. FDD mode may benefit from disabling the TX LO, though this
 causes TX QUAD calibration to fail.
 
-.. shell::
+.. code:: console
 
    $ echo 0 > out_altvoltage1_TX_LO_powerdown
    $ cat out_altvoltage1_TX_LO_powerdown
@@ -101,7 +101,7 @@ activates external LO; writing 0 reverts to the internal synthesizer.
 
    Not available on AD9363.
 
-.. shell::
+.. code:: console
 
    $ cat out_altvoltage0_RX_LO_frequency
    2400000000
@@ -118,20 +118,20 @@ configuration including VCO calibration results.
 
 **Create Profile:**
 
-.. shell::
+.. code:: console
 
    $ echo 4242000000 > out_altvoltage0_RX_LO_frequency
    $ echo 0 > out_altvoltage0_RX_LO_fastlock_store
 
 **Recall Profile:**
 
-.. shell::
+.. code:: console
 
    $ echo 0 > out_altvoltage0_RX_LO_fastlock_recall
 
 **Save Profile (for external storage):**
 
-.. shell::
+.. code:: console
 
    $ echo 0 > out_altvoltage0_RX_LO_fastlock_save
    $ cat out_altvoltage0_RX_LO_fastlock_save
@@ -139,7 +139,7 @@ configuration including VCO calibration results.
 
 **Load Previously Saved Profile:**
 
-.. shell::
+.. code:: console
 
    $ echo "0 240,0,202,204,12,80,24,16,187,255,60,238,113,233,93,174" > \
      out_altvoltage0_RX_LO_fastlock_load
@@ -165,7 +165,7 @@ frequency, ADC sample clock, and decimating filter blocks (except the FIR block)
 Setting / Querying the RX Sample Rate
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. shell::
+.. code:: console
 
    $ cat in_voltage_sampling_frequency
    30720000
@@ -203,7 +203,7 @@ This attribute lists rates in various digital blocks:
      - RX sampling/baseband rate
      - RF/RXSAMP (FIR decimation)
 
-.. shell::
+.. code:: console
 
    $ cat rx_path_rates
    BBPLL:983040000 ADC:245760000 R2:122880000 R1:61440000 RF:30720000 RXSAMP:30720000
@@ -227,7 +227,7 @@ DAC clock, and interpolation filter blocks.
 Setting / Querying the TX Sample Rate
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. shell::
+.. code:: console
 
    $ cat out_voltage_sampling_frequency
    30720000
@@ -265,7 +265,7 @@ This attribute lists rates in various digital blocks:
      - Baseband PLL frequency
      - BBPLL/ADC divider
 
-.. shell::
+.. code:: console
 
    $ cat tx_path_rates
    BBPLL:983040000 DAC:122880000 T2:122880000 T1:61440000 TF:30720000 TXSAMP:30720000
@@ -282,7 +282,7 @@ oversampling rates. Decimate-by-3 doesn't necessarily yield higher performance;
 List available Rate Governors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. shell::
+.. code:: console
 
    $ cat trx_rate_governor_available
    nominal highest_osr
@@ -290,7 +290,7 @@ List available Rate Governors
 Selecting Rate Governor
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-.. shell::
+.. code:: console
 
    $ cat trx_rate_governor
    highest_osr
@@ -306,7 +306,7 @@ Digital FIR Filter Controls
 Query current filter Configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. shell::
+.. code:: console
 
    $ cat filter_fir_config
    FIR Rx  0,0 Tx 0,0
@@ -316,7 +316,7 @@ Return format shows "Rx <Num Taps>,<Decimation>" and "Tx <Num Taps>,<Interpolati
 Load a Filter
 ^^^^^^^^^^^^^
 
-.. shell::
+.. code:: console
 
    $ cat LTE20.txt > filter_fir_config
    $ cat filter_fir_config
@@ -337,7 +337,7 @@ coefficients, and optional rate specifications. Example format:
 Filter Enable / Disable
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-.. shell::
+.. code:: console
 
    $ echo 1 > in_voltage_filter_fir_en
    $ cat out_voltage_filter_fir_en
@@ -354,7 +354,7 @@ RX RF Bandwidth Control
 The RX path includes TIA and BB low-pass filters with programmable corner
 frequencies.
 
-.. shell::
+.. code:: console
 
    $ cat in_voltage_rf_bandwidth
    18000000
@@ -369,7 +369,7 @@ TX RF Bandwidth Control
 
 TX filtering includes BB and secondary low-pass filter blocks.
 
-.. shell::
+.. code:: console
 
    $ cat out_voltage_rf_bandwidth
    18000000
@@ -385,7 +385,7 @@ RX Gain Control
 Loading a gain table
 ^^^^^^^^^^^^^^^^^^^^
 
-.. shell::
+.. code:: console
 
    $ cat /lib/firmware/ad9361_std_gaintable > gain_table_config
 
@@ -394,7 +394,7 @@ Reading a gain table
 
 Read gain table for current LO frequency:
 
-.. shell::
+.. code:: console
 
    $ cat gain_table_config
    <gaintable AD9361 type=FULL dest=3 start=1300000000 end=4000000000>
@@ -407,7 +407,7 @@ Read gain table for current LO frequency:
 Gain control modes
 ^^^^^^^^^^^^^^^^^^
 
-.. shell::
+.. code:: console
 
    $ cat in_voltage_gain_control_mode_available
    manual fast_attack slow_attack hybrid
@@ -420,7 +420,7 @@ Gain control modes
 Querying or Setting a Gain Control Mode
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. shell::
+.. code:: console
 
    $ echo manual > in_voltage0_gain_control_mode
    $ cat in_voltage0_gain_control_mode
@@ -429,7 +429,7 @@ Querying or Setting a Gain Control Mode
 Reading the current Gain
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. shell::
+.. code:: console
 
    $ cat in_voltage0_hardwaregain
    61.000000 dB
@@ -437,7 +437,7 @@ Reading the current Gain
 MGC setting the current Gain
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. shell::
+.. code:: console
 
    $ echo 42 > in_voltage0_hardwaregain
    $ cat in_voltage0_hardwaregain
@@ -451,7 +451,7 @@ TX Attenuation Control
 Range spans 0 to -89.75 dB in 0.25dB steps. Values expressed as negative gain.
 Individual control available for TX1 and TX2 channels.
 
-.. shell::
+.. code:: console
 
    $ cat out_voltage0_hardwaregain
    -10.000000 dB
@@ -467,7 +467,7 @@ received strength signal indicator (RSSI) may be setup in one of several
 configurations to optimize results. The device measures RSSI by determining
 power level in dB and compensating for receive path gain.
 
-.. shell::
+.. code:: console
 
    $ cat in_voltage0_rssi
    104.50 dB
@@ -482,7 +482,7 @@ Tx RSSI measurements. This feature is only available in TX MONITOR MODE by
 setting ``in_voltage0_rf_port_select`` to ``TX_MONITOR1``, ``TX_MONITOR2``,
 or ``TX_MONITOR1_2``.
 
-.. shell::
+.. code:: console
 
    $ cat out_voltage0_rssi
    30.50 dB
@@ -492,7 +492,7 @@ or ``TX_MONITOR1_2``.
 Calibration Mode Controls
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. shell::
+.. code:: console
 
    $ cat calib_mode_available
    auto manual manual_tx_quad tx_quad rf_dc_offs rssi_gain_step
@@ -508,7 +508,7 @@ Calibration Mode Controls
 With optional calibration phase offset value
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. shell::
+.. code:: console
 
    $ echo tx_quad > calib_mode
    $ echo tx_quad 14 > calib_mode
@@ -519,7 +519,7 @@ With optional calibration phase offset value
 Calibration Tracking Controls
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. shell::
+.. code:: console
 
    $ cat in_voltage_quadrature_tracking_en
    1
@@ -546,7 +546,7 @@ multiplexed. Similarly, transmitters offer switchable outputs.
 
    If switching the TX output, the calibration must be once manually triggered.
 
-.. shell::
+.. code:: console
 
    $ cat out_voltage_rf_port_select_available
    A B
@@ -570,7 +570,7 @@ as 0.0125 ppm at coarse word zero.
 
    This feature does not exist on the AD9363.
 
-.. shell::
+.. code:: console
 
    $ cat dcxo_tune_coarse
    8
@@ -593,7 +593,7 @@ oscillator is.
    (Tx LO, Rx LO, ADC and DAC sample rates), this should only be updated when
    disturbing the system is acceptable.
 
-.. shell::
+.. code:: console
 
    $ cat xo_correction
    40000000
@@ -619,7 +619,7 @@ Example calibration process:
 #. OFFSETdelta = 24 - 28 = -4
 #. Corrected offset = -50 - 4 = -54 = 0xCA
 
-.. shell::
+.. code:: console
 
    $ cat in_temp0_input
    29825
@@ -633,7 +633,7 @@ Attributes: ``in_voltage2_offset``, ``in_voltage2_raw``, ``in_voltage2_scale``
 
 Calculation: *(in_voltage2_raw + in_voltage2_offset) × in_voltage2_scale*
 
-.. shell::
+.. code:: console
 
    $ grep "" in_voltage2_*
    in_voltage2_offset:57
@@ -648,7 +648,7 @@ There are 2 Auxiliary DACs on the chip.
 Attributes: ``out_voltage2_raw``, ``out_voltage2_scale``, ``out_voltage3_raw``,
 ``out_voltage3_scale``
 
-.. shell::
+.. code:: console
 
    $ grep "" out_voltage2* out_voltage3*
    out_voltage2_raw:306
@@ -668,7 +668,7 @@ Error tables can be read and loaded again anytime using the dedicated sysfs
 attribute. Gain step calibration register values are dependent on the LO
 frequency.
 
-.. shell::
+.. code:: console
 
    $ cat rssi_gain_step_error
    lna_error: 0 15 14 0
@@ -691,14 +691,14 @@ reboot.
 
 To locate the AD9361 device:
 
-.. shell::
+.. code:: console
 
    $ grep "" /sys/bus/iio/devices/iio\:device\*/name
    /sys/bus/iio/devices/iio:device1/name:ad9361-phy
 
 Access debugfs at ``/sys/kernel/debug/iio/iio:deviceX``:
 
-.. shell::
+.. code:: console
 
    $ ls /sys/kernel/debug/iio/iio:device1
    adi,txmon-2-lo-cm
@@ -712,7 +712,7 @@ Access debugfs at ``/sys/kernel/debug/iio/iio:deviceX``:
 Example to change the driver from FDD into TDD mode operation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. shell::
+.. code:: console
 
    $ cat adi,frequency-division-duplex-mode-enable
    1
@@ -727,7 +727,7 @@ The ``gpo_set`` attribute enables GPIO[0..3] control via debugfs when
 
 **Syntax:** ``gpo_set <Identifier> <Value>``
 
-.. shell::
+.. code:: console
 
    $ cd /sys/kernel/debug/iio/iio:device1
    $ echo 1 > adi,gpo-manual-mode-enable
@@ -752,7 +752,7 @@ Injects user-selectable tones into RX or TX paths.
 - Frequencies: 0=FSample/32, 1=FSample/16, 2=FSample×3/32, 3=FSample/8
 - Levels: 0=Full Scale, 6=FS/2, 12=FS/4, 18=FS/8
 
-.. shell::
+.. code:: console
 
    $ echo 2 0 6 0 > bist_tone
 
@@ -763,7 +763,7 @@ Pseudorandom Binary Sequence injection into RX or TX paths.
 
 **Syntax:** ``bist_prbs <Injection Point>``
 
-.. shell::
+.. code:: console
 
    $ echo 2 > bist_prbs
 
@@ -774,7 +774,7 @@ Enables digital TX→RX loopback or RF RX→TX loopback.
 
 **Syntax:** ``loopback <Mode>`` (0=Disable, 1=Digital TX→RX, 2=RF RX→TX)
 
-.. shell::
+.. code:: console
 
    $ echo 1 > loopback
 
@@ -786,7 +786,7 @@ caution, as modifications bypass driver oversight.
 
 **Reading registers:**
 
-.. shell::
+.. code:: console
 
    $ echo 0x7 > direct_reg_access
    $ cat direct_reg_access
@@ -794,7 +794,7 @@ caution, as modifications bypass driver oversight.
 
 **Writing registers:** ``ADDRESS VALUE``
 
-.. shell::
+.. code:: console
 
    $ echo 0x7 0x50 > direct_reg_access
    $ cat direct_reg_access
@@ -803,7 +803,7 @@ caution, as modifications bypass driver oversight.
 **HDL Core registers** (devices with both SPI/I2C and AXI interfaces):
 Set BIT31 when accessing HDL registers.
 
-.. shell::
+.. code:: console
 
    $ echo 0x80000000 > direct_reg_access
    $ cat direct_reg_access

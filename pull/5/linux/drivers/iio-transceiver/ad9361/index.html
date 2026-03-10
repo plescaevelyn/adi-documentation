@@ -729,77 +729,38 @@ different types of converters and sensors.</p>
 <h2>Driver Testing / API<a class="headerlink" href="#driver-testing-api" title="Link to this heading"></a></h2>
 <section id="show-device-name">
 <h3>Show device name<a class="headerlink" href="#show-device-name" title="Link to this heading"></a></h3>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>/sys/bus/iio/devices/iio<span class="se">\:</span>device1/name
+<span class="go">ad9361-phy</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>/sys/bus/iio/devices/iio<span class="se">\:</span>device1/name
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>ad9361-phy
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 <section id="local-oscillator-control-lo">
 <span id="ad9361-lo-control"></span><h3>Local Oscillator Control (LO)<a class="headerlink" href="#local-oscillator-control-lo" title="Link to this heading"></a></h3>
 <p>The AD9361 transceiver contains two identical RFPLL synthesizers to generate
 the LO signals for the RF signal paths. One is programmed for the RX channel,
 the other for the TX channel. The tuning range covers 70MHz to 6GHz
 (AD9363: 325-3800 MHz) with 2Hz granularity.</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>out_altvoltage0_RX_LO_frequency
+<span class="go">2400000000</span>
+<span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="m">2450000000</span><span class="w"> </span>&gt;<span class="w"> </span>out_altvoltage0_RX_LO_frequency
+<span class="gp">$ </span>cat<span class="w"> </span>out_altvoltage0_RX_LO_frequency
+<span class="go">2450000000</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>out_altvoltage0_RX_LO_frequency
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>2400000000
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">2450000000</span><span class="w"> </span>&gt;<span class="w"> </span>out_altvoltage0_RX_LO_frequency
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>out_altvoltage0_RX_LO_frequency
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>2450000000
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div><section id="local-oscillator-power-down">
+<section id="local-oscillator-power-down">
 <h4>Local Oscillator Power-down<a class="headerlink" href="#local-oscillator-power-down" title="Link to this heading"></a></h4>
 <p>When TX and RX LOs are at identical or very similar frequencies, TX LO leakage
 into the RX path may occur. TDD mode typically avoids this since only one LO
 operates at a time. FDD mode may benefit from disabling the TX LO, though this
 causes TX QUAD calibration to fail.</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>&gt;<span class="w"> </span>out_altvoltage1_TX_LO_powerdown
+<span class="gp">$ </span>cat<span class="w"> </span>out_altvoltage1_TX_LO_powerdown
+<span class="go">0</span>
+<span class="gp">$ </span>cat<span class="w"> </span>out_altvoltage0_RX_LO_powerdown
+<span class="go">1</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>&gt;<span class="w"> </span>out_altvoltage1_TX_LO_powerdown
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>out_altvoltage1_TX_LO_powerdown
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>0
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>out_altvoltage0_RX_LO_powerdown
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>1
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 <section id="external-lo-support">
 <h4>External LO Support<a class="headerlink" href="#external-lo-support" title="Link to this heading"></a></h4>
 <p>The driver enables switching between external and internal LO dynamically.
@@ -809,81 +770,40 @@ activates external LO; writing 0 reverts to the internal synthesizer.</p>
 <p class="admonition-title">Note</p>
 <p>Not available on AD9363.</p>
 </div>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>out_altvoltage0_RX_LO_frequency
+<span class="go">2400000000</span>
+<span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="m">1</span><span class="w"> </span>&gt;<span class="w"> </span>out_altvoltage0_RX_LO_external
+<span class="gp">$ </span>cat<span class="w"> </span>out_altvoltage0_RX_LO_external
+<span class="go">1</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>out_altvoltage0_RX_LO_frequency
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>2400000000
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">1</span><span class="w"> </span>&gt;<span class="w"> </span>out_altvoltage0_RX_LO_external
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>out_altvoltage0_RX_LO_external
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>1
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 <section id="fastlock-mode">
 <h4>FASTLOCK MODE<a class="headerlink" href="#fastlock-mode" title="Link to this heading"></a></h4>
 <p>Fast Lock mode stores synthesizer programming information (profiles) for rapid
 frequency changes. Up to 8 RX and 8 TX profiles store complete frequency
 configuration including VCO calibration results.</p>
 <p><strong>Create Profile:</strong></p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="m">4242000000</span><span class="w"> </span>&gt;<span class="w"> </span>out_altvoltage0_RX_LO_frequency
+<span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>&gt;<span class="w"> </span>out_altvoltage0_RX_LO_fastlock_store
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">4242000000</span><span class="w"> </span>&gt;<span class="w"> </span>out_altvoltage0_RX_LO_frequency
+<p><strong>Recall Profile:</strong></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>&gt;<span class="w"> </span>out_altvoltage0_RX_LO_fastlock_recall
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<p><strong>Save Profile (for external storage):</strong></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>&gt;<span class="w"> </span>out_altvoltage0_RX_LO_fastlock_save
+<span class="gp">$ </span>cat<span class="w"> </span>out_altvoltage0_RX_LO_fastlock_save
+<span class="go">0 240,0,202,204,12,80,24,16,187,255,60,238,113,233,93,174</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>&gt;<span class="w"> </span>out_altvoltage0_RX_LO_fastlock_store
+<p><strong>Load Previously Saved Profile:</strong></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;0 240,0,202,204,12,80,24,16,187,255,60,238,113,233,93,174&quot;</span><span class="w"> </span>&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>out_altvoltage0_RX_LO_fastlock_load
 </pre></div>
 </div>
-<div class="clear-left"></div></div></div><p><strong>Recall Profile:</strong></p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>&gt;<span class="w"> </span>out_altvoltage0_RX_LO_fastlock_recall
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div><p><strong>Save Profile (for external storage):</strong></p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>&gt;<span class="w"> </span>out_altvoltage0_RX_LO_fastlock_save
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>out_altvoltage0_RX_LO_fastlock_save
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>0 240,0,202,204,12,80,24,16,187,255,60,238,113,233,93,174
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div><p><strong>Load Previously Saved Profile:</strong></p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;0 240,0,202,204,12,80,24,16,187,255,60,238,113,233,93,174&quot;</span><span class="w"> </span>&gt;<span class="w"> </span><span class="se">\</span>
-<span class="w"> </span>out_altvoltage0_RX_LO_fastlock_load
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 </section>
 <section id="rx-signal-path">
 <h3>RX Signal Path<a class="headerlink" href="#rx-signal-path" title="Link to this heading"></a></h3>
@@ -900,31 +820,14 @@ decimation. Minimum rate with FIR (decimate by 4): 25MSPS/(4×12) = 520.83 kSPS.
 </div>
 <section id="setting-querying-the-rx-sample-rate">
 <span id="ad9361-sample-rate"></span><h4>Setting / Querying the RX Sample Rate<a class="headerlink" href="#setting-querying-the-rx-sample-rate" title="Link to this heading"></a></h4>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>in_voltage_sampling_frequency
+<span class="go">30720000</span>
+<span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="m">10000000</span><span class="w"> </span>&gt;<span class="w"> </span>in_voltage_sampling_frequency
+<span class="gp">$ </span>cat<span class="w"> </span>in_voltage_sampling_frequency
+<span class="go">10000000</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>in_voltage_sampling_frequency
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>30720000
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">10000000</span><span class="w"> </span>&gt;<span class="w"> </span>in_voltage_sampling_frequency
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>in_voltage_sampling_frequency
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>10000000
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 <section id="list-chosen-rx-path-rates">
 <h4>List chosen RX Path Rates<a class="headerlink" href="#list-chosen-rx-path-rates" title="Link to this heading"></a></h4>
 <p>This attribute lists rates in various digital blocks:</p>
@@ -964,16 +867,11 @@ decimation. Minimum rate with FIR (decimate by 4): 25MSPS/(4×12) = 520.83 kSPS.
 </tbody>
 </table>
 </div>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>rx_path_rates
+<span class="go">BBPLL:983040000 ADC:245760000 R2:122880000 R1:61440000 RF:30720000 RXSAMP:30720000</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>rx_path_rates
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>BBPLL:983040000 ADC:245760000 R2:122880000 R1:61440000 RF:30720000 RXSAMP:30720000
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 </section>
 <section id="tx-signal-path">
 <h3>TX Signal Path<a class="headerlink" href="#tx-signal-path" title="Link to this heading"></a></h3>
@@ -990,31 +888,14 @@ interpolation. Minimum rate with FIR (decimate by 4): 25MSPS/(4×12) = 520.83 kS
 </div>
 <section id="setting-querying-the-tx-sample-rate">
 <h4>Setting / Querying the TX Sample Rate<a class="headerlink" href="#setting-querying-the-tx-sample-rate" title="Link to this heading"></a></h4>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>out_voltage_sampling_frequency
+<span class="go">30720000</span>
+<span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="m">10000000</span><span class="w"> </span>&gt;<span class="w"> </span>out_voltage_sampling_frequency
+<span class="gp">$ </span>cat<span class="w"> </span>out_voltage_sampling_frequency
+<span class="go">10000000</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>out_voltage_sampling_frequency
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>30720000
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">10000000</span><span class="w"> </span>&gt;<span class="w"> </span>out_voltage_sampling_frequency
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>out_voltage_sampling_frequency
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>10000000
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 <section id="list-chosen-tx-path-rates">
 <h4>List chosen TX Path Rates<a class="headerlink" href="#list-chosen-tx-path-rates" title="Link to this heading"></a></h4>
 <p>This attribute lists rates in various digital blocks:</p>
@@ -1054,16 +935,11 @@ interpolation. Minimum rate with FIR (decimate by 4): 25MSPS/(4×12) = 520.83 kS
 </tbody>
 </table>
 </div>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>tx_path_rates
+<span class="go">BBPLL:983040000 DAC:122880000 T2:122880000 T1:61440000 TF:30720000 TXSAMP:30720000</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>tx_path_rates
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>BBPLL:983040000 DAC:122880000 T2:122880000 T1:61440000 TF:30720000 TXSAMP:30720000
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 </section>
 <section id="rate-governors">
 <h3>Rate Governors<a class="headerlink" href="#rate-governors" title="Link to this heading"></a></h3>
@@ -1074,77 +950,40 @@ oversampling rates. Decimate-by-3 doesn’t necessarily yield higher performance
 “Nominal” is typically optimal.</p>
 <section id="list-available-rate-governors">
 <h4>List available Rate Governors<a class="headerlink" href="#list-available-rate-governors" title="Link to this heading"></a></h4>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>trx_rate_governor_available
+<span class="go">nominal highest_osr</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>trx_rate_governor_available
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>nominal highest_osr
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 <section id="selecting-rate-governor">
 <h4>Selecting Rate Governor<a class="headerlink" href="#selecting-rate-governor" title="Link to this heading"></a></h4>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>trx_rate_governor
+<span class="go">highest_osr</span>
+<span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span>nominal<span class="w"> </span>&gt;<span class="w"> </span>trx_rate_governor
+<span class="gp">$ </span>cat<span class="w"> </span>trx_rate_governor
+<span class="go">nominal</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>trx_rate_governor
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>highest_osr
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span>nominal<span class="w"> </span>&gt;<span class="w"> </span>trx_rate_governor
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>trx_rate_governor
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>nominal
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 </section>
 <section id="digital-fir-filter-controls">
 <span id="ad9361-digital-fir-filter-controls"></span><h3>Digital FIR Filter Controls<a class="headerlink" href="#digital-fir-filter-controls" title="Link to this heading"></a></h3>
 <section id="query-current-filter-configuration">
 <h4>Query current filter Configuration<a class="headerlink" href="#query-current-filter-configuration" title="Link to this heading"></a></h4>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>filter_fir_config
+<span class="go">FIR Rx  0,0 Tx 0,0</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>filter_fir_config
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>FIR Rx  0,0 Tx 0,0
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div><p>Return format shows “Rx &lt;Num Taps&gt;,&lt;Decimation&gt;” and “Tx &lt;Num Taps&gt;,&lt;Interpolation&gt;”.</p>
+<p>Return format shows “Rx &lt;Num Taps&gt;,&lt;Decimation&gt;” and “Tx &lt;Num Taps&gt;,&lt;Interpolation&gt;”.</p>
 </section>
 <section id="load-a-filter">
 <h4>Load a Filter<a class="headerlink" href="#load-a-filter" title="Link to this heading"></a></h4>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>LTE20.txt<span class="w"> </span>&gt;<span class="w"> </span>filter_fir_config
+<span class="gp">$ </span>cat<span class="w"> </span>filter_fir_config
+<span class="go">FIR Rx  128,2 Tx 128,2</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>LTE20.txt<span class="w"> </span>&gt;<span class="w"> </span>filter_fir_config
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>filter_fir_config
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>FIR Rx  128,2 Tx 128,2
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div><p>The file syntax requires comment lines (prefixed with ‘#’), signed 16-bit
+<p>The file syntax requires comment lines (prefixed with ‘#’), signed 16-bit
 coefficients, and optional rate specifications. Example format:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RX</span> <span class="mi">3</span> <span class="n">GAIN</span> <span class="o">-</span><span class="mi">6</span> <span class="n">DEC</span> <span class="mi">2</span>
 <span class="n">TX</span> <span class="mi">3</span> <span class="n">GAIN</span> <span class="mi">0</span> <span class="n">INT</span> <span class="mi">2</span>
@@ -1157,22 +996,12 @@ coefficients, and optional rate specifications. Example format:</p>
 </section>
 <section id="filter-enable-disable">
 <h4>Filter Enable / Disable<a class="headerlink" href="#filter-enable-disable" title="Link to this heading"></a></h4>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="m">1</span><span class="w"> </span>&gt;<span class="w"> </span>in_voltage_filter_fir_en
+<span class="gp">$ </span>cat<span class="w"> </span>out_voltage_filter_fir_en
+<span class="go">0</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">1</span><span class="w"> </span>&gt;<span class="w"> </span>in_voltage_filter_fir_en
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>out_voltage_filter_fir_en
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>0
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 </section>
 <section id="rf-bandwidth-analog-filter-control">
 <span id="ad9361-rx-rf-bandwidth"></span><h3>RF Bandwidth Analog Filter Control<a class="headerlink" href="#rf-bandwidth-analog-filter-control" title="Link to this heading"></a></h3>
@@ -1180,103 +1009,52 @@ coefficients, and optional rate specifications. Example format:</p>
 <h4>RX RF Bandwidth Control<a class="headerlink" href="#rx-rf-bandwidth-control" title="Link to this heading"></a></h4>
 <p>The RX path includes TIA and BB low-pass filters with programmable corner
 frequencies.</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>in_voltage_rf_bandwidth
+<span class="go">18000000</span>
+<span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="m">9000000</span><span class="w"> </span>&gt;<span class="w"> </span>in_voltage_rf_bandwidth
+<span class="gp">$ </span>cat<span class="w"> </span>in_voltage_rf_bandwidth
+<span class="go">9000000</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>in_voltage_rf_bandwidth
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>18000000
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">9000000</span><span class="w"> </span>&gt;<span class="w"> </span>in_voltage_rf_bandwidth
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>in_voltage_rf_bandwidth
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>9000000
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 <section id="tx-rf-bandwidth-control">
 <span id="ad9361-tx-rf-bandwidth"></span><h4>TX RF Bandwidth Control<a class="headerlink" href="#tx-rf-bandwidth-control" title="Link to this heading"></a></h4>
 <p>TX filtering includes BB and secondary low-pass filter blocks.</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>out_voltage_rf_bandwidth
+<span class="go">18000000</span>
+<span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="m">9000000</span><span class="w"> </span>&gt;<span class="w"> </span>out_voltage_rf_bandwidth
+<span class="gp">$ </span>cat<span class="w"> </span>out_voltage_rf_bandwidth
+<span class="go">9000000</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>out_voltage_rf_bandwidth
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>18000000
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">9000000</span><span class="w"> </span>&gt;<span class="w"> </span>out_voltage_rf_bandwidth
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>out_voltage_rf_bandwidth
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>9000000
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 </section>
 <section id="rx-gain-control">
 <span id="ad9361-rx-gain-control"></span><h3>RX Gain Control<a class="headerlink" href="#rx-gain-control" title="Link to this heading"></a></h3>
 <section id="loading-a-gain-table">
 <h4>Loading a gain table<a class="headerlink" href="#loading-a-gain-table" title="Link to this heading"></a></h4>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>/lib/firmware/ad9361_std_gaintable<span class="w"> </span>&gt;<span class="w"> </span>gain_table_config
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>/lib/firmware/ad9361_std_gaintable<span class="w"> </span>&gt;<span class="w"> </span>gain_table_config
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 <section id="reading-a-gain-table">
 <h4>Reading a gain table<a class="headerlink" href="#reading-a-gain-table" title="Link to this heading"></a></h4>
 <p>Read gain table for current LO frequency:</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>gain_table_config
+<span class="go">&lt;gaintable AD9361 type=FULL dest=3 start=1300000000 end=4000000000&gt;</span>
+<span class="go">-3, 0x00, 0x00, 0x20</span>
+<span class="go">-2, 0x00, 0x01, 0x00</span>
+<span class="go">0, 0x00, 0x03, 0x00</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>gain_table_config
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>&lt;gaintable AD9361 type=FULL dest=3 start=1300000000 end=4000000000&gt;
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>-3, 0x00, 0x00, 0x20
--2, 0x00, 0x01, 0x00
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>0, 0x00, 0x03, 0x00
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 <section id="gain-control-modes">
 <span id="ad9361-rx-gain-control-mode"></span><h4>Gain control modes<a class="headerlink" href="#gain-control-modes" title="Link to this heading"></a></h4>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>in_voltage_gain_control_mode_available
+<span class="go">manual fast_attack slow_attack hybrid</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>in_voltage_gain_control_mode_available
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>manual fast_attack slow_attack hybrid
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div><ul class="simple">
+<ul class="simple">
 <li><p><strong>manual</strong>: BBP controls gain via SPI writes</p></li>
 <li><p><strong>slow_attack</strong>: Intended for FDD applications with slowly changing signals</p></li>
 <li><p><strong>hybrid</strong>: Hybrid AGC where BBP controls some aspects</p></li>
@@ -1285,144 +1063,73 @@ frequencies.</p>
 </section>
 <section id="querying-or-setting-a-gain-control-mode">
 <h4>Querying or Setting a Gain Control Mode<a class="headerlink" href="#querying-or-setting-a-gain-control-mode" title="Link to this heading"></a></h4>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span>manual<span class="w"> </span>&gt;<span class="w"> </span>in_voltage0_gain_control_mode
+<span class="gp">$ </span>cat<span class="w"> </span>in_voltage0_gain_control_mode
+<span class="go">manual</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span>manual<span class="w"> </span>&gt;<span class="w"> </span>in_voltage0_gain_control_mode
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>in_voltage0_gain_control_mode
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>manual
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 <section id="reading-the-current-gain">
 <h4>Reading the current Gain<a class="headerlink" href="#reading-the-current-gain" title="Link to this heading"></a></h4>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>in_voltage0_hardwaregain
+<span class="go">61.000000 dB</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>in_voltage0_hardwaregain
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>61.000000 dB
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 <section id="mgc-setting-the-current-gain">
 <h4>MGC setting the current Gain<a class="headerlink" href="#mgc-setting-the-current-gain" title="Link to this heading"></a></h4>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="m">42</span><span class="w"> </span>&gt;<span class="w"> </span>in_voltage0_hardwaregain
+<span class="gp">$ </span>cat<span class="w"> </span>in_voltage0_hardwaregain
+<span class="go">42.000000 dB</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">42</span><span class="w"> </span>&gt;<span class="w"> </span>in_voltage0_hardwaregain
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>in_voltage0_hardwaregain
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>42.000000 dB
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 </section>
 <section id="tx-attenuation-control">
 <span id="ad9361-tx-attenuation-control"></span><h3>TX Attenuation Control<a class="headerlink" href="#tx-attenuation-control" title="Link to this heading"></a></h3>
 <p>Range spans 0 to -89.75 dB in 0.25dB steps. Values expressed as negative gain.
 Individual control available for TX1 and TX2 channels.</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>out_voltage0_hardwaregain
+<span class="go">-10.000000 dB</span>
+<span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span>-42.25<span class="w"> </span>&gt;<span class="w"> </span>out_voltage0_hardwaregain
+<span class="gp">$ </span>cat<span class="w"> </span>out_voltage0_hardwaregain
+<span class="go">-42.250000 dB</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>out_voltage0_hardwaregain
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>-10.000000 dB
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span>-42.25<span class="w"> </span>&gt;<span class="w"> </span>out_voltage0_hardwaregain
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>out_voltage0_hardwaregain
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>-42.250000 dB
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 <section id="received-strength-signal-indicator-rssi">
 <h3>Received Strength Signal Indicator (RSSI)<a class="headerlink" href="#received-strength-signal-indicator-rssi" title="Link to this heading"></a></h3>
 <p>Given the wide variety of applications for which the AD9361 is suited, the
 received strength signal indicator (RSSI) may be setup in one of several
 configurations to optimize results. The device measures RSSI by determining
 power level in dB and compensating for receive path gain.</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>in_voltage0_rssi
+<span class="go">104.50 dB</span>
+<span class="gp">$ </span>cat<span class="w"> </span>in_voltage1_rssi
+<span class="go">116.75 dB</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>in_voltage0_rssi
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>104.50 dB
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>in_voltage1_rssi
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>116.75 dB
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 <section id="tx-received-strength-signal-indicator-tx-rssi">
 <h3>TX Received Strength Signal Indicator (TX RSSI)<a class="headerlink" href="#tx-received-strength-signal-indicator-tx-rssi" title="Link to this heading"></a></h3>
 <p>This capability reuses receiver circuitry during transmit bursts for accurate
 Tx RSSI measurements. This feature is only available in TX MONITOR MODE by
 setting <code class="docutils literal notranslate"><span class="pre">in_voltage0_rf_port_select</span></code> to <code class="docutils literal notranslate"><span class="pre">TX_MONITOR1</span></code>, <code class="docutils literal notranslate"><span class="pre">TX_MONITOR2</span></code>,
 or <code class="docutils literal notranslate"><span class="pre">TX_MONITOR1_2</span></code>.</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>out_voltage0_rssi
+<span class="go">30.50 dB</span>
+<span class="gp">$ </span>cat<span class="w"> </span>out_voltage1_rssi
+<span class="go">0.00 dB</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>out_voltage0_rssi
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>30.50 dB
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>out_voltage1_rssi
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>0.00 dB
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 <section id="calibration-mode-controls">
 <h3>Calibration Mode Controls<a class="headerlink" href="#calibration-mode-controls" title="Link to this heading"></a></h3>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>calib_mode_available
+<span class="go">auto manual manual_tx_quad tx_quad rf_dc_offs rssi_gain_step</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>calib_mode_available
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>auto manual manual_tx_quad tx_quad rf_dc_offs rssi_gain_step
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div><ul class="simple">
+<ul class="simple">
 <li><p><strong>auto</strong>: Run TX Quadrature Calibration when moving to a new carrier frequency
 that is more than 100 MHz away</p></li>
 <li><p><strong>manual</strong>: Disables automatic calibration</p></li>
@@ -1433,61 +1140,24 @@ that is more than 100 MHz away</p></li>
 </ul>
 <section id="with-optional-calibration-phase-offset-value">
 <h4>With optional calibration phase offset value<a class="headerlink" href="#with-optional-calibration-phase-offset-value" title="Link to this heading"></a></h4>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span>tx_quad<span class="w"> </span>&gt;<span class="w"> </span>calib_mode
+<span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span>tx_quad<span class="w"> </span><span class="m">14</span><span class="w"> </span>&gt;<span class="w"> </span>calib_mode
+<span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span>tx_quad<span class="w"> </span>-2<span class="w"> </span>&gt;<span class="w"> </span>calib_mode
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span>tx_quad<span class="w"> </span>&gt;<span class="w"> </span>calib_mode
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span>tx_quad<span class="w"> </span><span class="m">14</span><span class="w"> </span>&gt;<span class="w"> </span>calib_mode
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span>tx_quad<span class="w"> </span>-2<span class="w"> </span>&gt;<span class="w"> </span>calib_mode
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 <section id="calibration-tracking-controls">
 <span id="ad9361-calibration-tracking-controls"></span><h4>Calibration Tracking Controls<a class="headerlink" href="#calibration-tracking-controls" title="Link to this heading"></a></h4>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>in_voltage_quadrature_tracking_en
+<span class="go">1</span>
+<span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>&gt;<span class="w"> </span>in_voltage_quadrature_tracking_en
+<span class="gp">$ </span>cat<span class="w"> </span>in_voltage_bb_dc_offset_tracking_en
+<span class="go">1</span>
+<span class="gp">$ </span>cat<span class="w"> </span>in_voltage_rf_dc_offset_tracking_en
+<span class="go">1</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>in_voltage_quadrature_tracking_en
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>1
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>&gt;<span class="w"> </span>in_voltage_quadrature_tracking_en
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>in_voltage_bb_dc_offset_tracking_en
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>1
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>in_voltage_rf_dc_offset_tracking_en
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>1
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 </section>
 <section id="rf-port-selection">
 <span id="ad9361-rf-port-selection"></span><h3>RF Port Selection<a class="headerlink" href="#rf-port-selection" title="Link to this heading"></a></h3>
@@ -1502,31 +1172,14 @@ run the calibration also, once with other input band/port selected.</p>
 <p class="admonition-title">Warning</p>
 <p>If switching the TX output, the calibration must be once manually triggered.</p>
 </div>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>out_voltage_rf_port_select_available
+<span class="go">A B</span>
+<span class="gp">$ </span>cat<span class="w"> </span>in_voltage_rf_port_select_available
+<span class="go">A_BALANCED B_BALANCED C_BALANCED A_N A_P B_N B_P C_N C_P TX_MONITOR1 TX_MONITOR2 TX_MONITOR1_2</span>
+<span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span>B_BALANCED<span class="w"> </span>&gt;<span class="w"> </span>in_voltage0_rf_port_select
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>out_voltage_rf_port_select_available
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>A B
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>in_voltage_rf_port_select_available
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>A_BALANCED B_BALANCED C_BALANCED A_N A_P B_N B_P C_N C_P TX_MONITOR1 TX_MONITOR2 TX_MONITOR1_2
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span>B_BALANCED<span class="w"> </span>&gt;<span class="w"> </span>in_voltage0_rf_port_select
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 <section id="dcxo-tuning">
 <h3>DCXO Tuning<a class="headerlink" href="#dcxo-tuning" title="Link to this heading"></a></h3>
 <img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/pluto/docs/linux/drivers/iio-transceiver/ad9361/dcxo.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/pluto/docs/linux/drivers/iio-transceiver/ad9361/dcxo.png" />
@@ -1539,40 +1192,16 @@ as 0.0125 ppm at coarse word zero.</p>
 <p class="admonition-title">Note</p>
 <p>This feature does not exist on the AD9363.</p>
 </div>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>dcxo_tune_coarse
+<span class="go">8</span>
+<span class="gp">$ </span>cat<span class="w"> </span>dcxo_tune_fine
+<span class="go">5920</span>
+<span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="m">5930</span><span class="w"> </span>&gt;<span class="w"> </span>dcxo_tune_fine
+<span class="gp">$ </span>cat<span class="w"> </span>dcxo_tune_fine
+<span class="go">5930</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>dcxo_tune_coarse
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>8
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>dcxo_tune_fine
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>5920
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">5930</span><span class="w"> </span>&gt;<span class="w"> </span>dcxo_tune_fine
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>dcxo_tune_fine
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>5930
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 <section id="xo-correction">
 <h3>XO Correction<a class="headerlink" href="#xo-correction" title="Link to this heading"></a></h3>
 <p>For systems using single-ended crystal oscillators or external clock sources,
@@ -1584,31 +1213,14 @@ oscillator is.</p>
 (Tx LO, Rx LO, ADC and DAC sample rates), this should only be updated when
 disturbing the system is acceptable.</p>
 </div>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>xo_correction
+<span class="go">40000000</span>
+<span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="m">40000005</span><span class="w"> </span>&gt;<span class="w"> </span>xo_correction
+<span class="gp">$ </span>cat<span class="w"> </span>xo_correction
+<span class="go">40000005</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>xo_correction
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>40000000
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">40000005</span><span class="w"> </span>&gt;<span class="w"> </span>xo_correction
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>xo_correction
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>40000005
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 <section id="die-temperature-reading">
 <h3>Die Temperature Reading<a class="headerlink" href="#die-temperature-reading" title="Link to this heading"></a></h3>
 <p>For accurate results this read back requires a one-point factory calibration.
@@ -1624,57 +1236,37 @@ device temperature.</p>
 <li><p>OFFSETdelta = 24 - 28 = -4</p></li>
 <li><p>Corrected offset = -50 - 4 = -54 = 0xCA</p></li>
 </ol>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>in_temp0_input
+<span class="go">29825</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>in_temp0_input
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>29825
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 <section id="auxadc-reading">
 <h3>AuxADC Reading<a class="headerlink" href="#auxadc-reading" title="Link to this heading"></a></h3>
 <p>There is an Auxiliary ADC on the chip that can be read like any other IIO ADC.</p>
 <p>Attributes: <code class="docutils literal notranslate"><span class="pre">in_voltage2_offset</span></code>, <code class="docutils literal notranslate"><span class="pre">in_voltage2_raw</span></code>, <code class="docutils literal notranslate"><span class="pre">in_voltage2_scale</span></code></p>
 <p>Calculation: <em>(in_voltage2_raw + in_voltage2_offset) × in_voltage2_scale</em></p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>grep<span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span>in_voltage2_*
+<span class="go">in_voltage2_offset:57</span>
+<span class="go">in_voltage2_raw:1494</span>
+<span class="go">in_voltage2_scale:0.305250</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>grep<span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span>in_voltage2_*
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>in_voltage2_offset:57
-in_voltage2_raw:1494
-in_voltage2_scale:0.305250
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 <section id="auxdac-writing">
 <h3>AuxDAC Writing<a class="headerlink" href="#auxdac-writing" title="Link to this heading"></a></h3>
 <p>There are 2 Auxiliary DACs on the chip.</p>
 <p>Attributes: <code class="docutils literal notranslate"><span class="pre">out_voltage2_raw</span></code>, <code class="docutils literal notranslate"><span class="pre">out_voltage2_scale</span></code>, <code class="docutils literal notranslate"><span class="pre">out_voltage3_raw</span></code>,
 <code class="docutils literal notranslate"><span class="pre">out_voltage3_scale</span></code></p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>grep<span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span>out_voltage2*<span class="w"> </span>out_voltage3*
+<span class="go">out_voltage2_raw:306</span>
+<span class="go">out_voltage2_scale:1.000000</span>
+<span class="go">out_voltage3_raw:306</span>
+<span class="go">out_voltage3_scale:1.000000</span>
+<span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="m">1000</span><span class="w"> </span>&gt;<span class="w"> </span>out_voltage2_raw
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>grep<span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span>out_voltage2*<span class="w"> </span>out_voltage3*
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>out_voltage2_raw:306
-out_voltage2_scale:1.000000
-out_voltage3_raw:306
-out_voltage3_scale:1.000000
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">1000</span><span class="w"> </span>&gt;<span class="w"> </span>out_voltage2_raw
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 <section id="rssi-gain-step-calibration">
 <h3>RSSI Gain Step Calibration<a class="headerlink" href="#rssi-gain-step-calibration" title="Link to this heading"></a></h3>
 <p>Run calibration by setting <code class="docutils literal notranslate"><span class="pre">calib_mode</span></code> to <code class="docutils literal notranslate"><span class="pre">rssi_gain_step</span></code>. Before running
@@ -1683,22 +1275,13 @@ the received data.</p>
 <p>Error tables can be read and loaded again anytime using the dedicated sysfs
 attribute. Gain step calibration register values are dependent on the LO
 frequency.</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>rssi_gain_step_error
+<span class="go">lna_error: 0 15 14 0</span>
+<span class="go">mixer_error: 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 0</span>
+<span class="go">gain_step_calib_reg_val: 192 44 16 6 0</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>rssi_gain_step_error
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>lna_error: 0 15 14 0
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>mixer_error: 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 0
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>gain_step_calib_reg_val: 192 44 16 6 0
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 </section>
 <section id="advanced-debug-facilities">
 <h2>Advanced Debug Facilities<a class="headerlink" href="#advanced-debug-facilities" title="Link to this heading"></a></h2>
@@ -1711,99 +1294,45 @@ modified at runtime for evaluation purposes. Changes require writing <code class
 the <code class="docutils literal notranslate"><span class="pre">initialize</span></code> attribute and will be lost upon device unbinding or platform
 reboot.</p>
 <p>To locate the AD9361 device:</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>grep<span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span>/sys/bus/iio/devices/iio<span class="se">\:</span>device<span class="se">\*</span>/name
+<span class="go">/sys/bus/iio/devices/iio:device1/name:ad9361-phy</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>grep<span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span>/sys/bus/iio/devices/iio<span class="se">\:</span>device<span class="se">\*</span>/name
+<p>Access debugfs at <code class="docutils literal notranslate"><span class="pre">/sys/kernel/debug/iio/iio:deviceX</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ls<span class="w"> </span>/sys/kernel/debug/iio/iio:device1
+<span class="go">adi,txmon-2-lo-cm</span>
+<span class="go">adi,txmon-dc-tracking-enable</span>
+<span class="go">adi,txmon-delay</span>
+<span class="go">adi,txmon-duration</span>
+<span class="go">adi,txmon-high-gain</span>
+<span class="go">initialize</span>
+<span class="go">loopback</span>
 </pre></div>
 </div>
-<div class="clear-left"></div></div></div><p>Access debugfs at <code class="docutils literal notranslate"><span class="pre">/sys/kernel/debug/iio/iio:deviceX</span></code>:</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>/sys/kernel/debug/iio/iio:device1
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>adi,txmon-2-lo-cm
-adi,txmon-dc-tracking-enable
-adi,txmon-delay
-adi,txmon-duration
-adi,txmon-high-gain
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>initialize
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>loopback
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div><section id="example-to-change-the-driver-from-fdd-into-tdd-mode-operation">
+<section id="example-to-change-the-driver-from-fdd-into-tdd-mode-operation">
 <h4>Example to change the driver from FDD into TDD mode operation<a class="headerlink" href="#example-to-change-the-driver-from-fdd-into-tdd-mode-operation" title="Link to this heading"></a></h4>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>adi,frequency-division-duplex-mode-enable
+<span class="go">1</span>
+<span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>&gt;<span class="w"> </span>adi,frequency-division-duplex-mode-enable
+<span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="m">1</span><span class="w"> </span>&gt;<span class="w"> </span>initialize
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>adi,frequency-division-duplex-mode-enable
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>1
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>&gt;<span class="w"> </span>adi,frequency-division-duplex-mode-enable
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">1</span><span class="w"> </span>&gt;<span class="w"> </span>initialize
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 </section>
 <section id="gpo-manual-control">
 <h3>GPO Manual Control<a class="headerlink" href="#gpo-manual-control" title="Link to this heading"></a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">gpo_set</span></code> attribute enables GPIO[0..3] control via debugfs when
 <code class="docutils literal notranslate"><span class="pre">adi,gpo-manual-mode-enable</span></code> is activated.</p>
 <p><strong>Syntax:</strong> <code class="docutils literal notranslate"><span class="pre">gpo_set</span> <span class="pre">&lt;Identifier&gt;</span> <span class="pre">&lt;Value&gt;</span></code></p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>/sys/kernel/debug/iio/iio:device1
+<span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="m">1</span><span class="w"> </span>&gt;<span class="w"> </span>adi,gpo-manual-mode-enable
+<span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">1</span><span class="w"> </span>&gt;<span class="w"> </span>gpo_set
+<span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>&gt;<span class="w"> </span>gpo_set
+<span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span>0xF<span class="w"> </span>0xF<span class="w"> </span>&gt;<span class="w"> </span>gpo_set
+<span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span>0xF<span class="w"> </span><span class="m">0</span><span class="w"> </span>&gt;<span class="w"> </span>gpo_set
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/sys/kernel/debug/iio/iio:device1
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>/sys/kernel/debug/iio/iio:device1$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">1</span><span class="w"> </span>&gt;<span class="w"> </span>adi,gpo-manual-mode-enable
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>/sys/kernel/debug/iio/iio:device1$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">1</span><span class="w"> </span>&gt;<span class="w"> </span>gpo_set
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>/sys/kernel/debug/iio/iio:device1$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>&gt;<span class="w"> </span>gpo_set
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>/sys/kernel/debug/iio/iio:device1$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span>0xF<span class="w"> </span>0xF<span class="w"> </span>&gt;<span class="w"> </span>gpo_set
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>/sys/kernel/debug/iio/iio:device1$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span>0xF<span class="w"> </span><span class="m">0</span><span class="w"> </span>&gt;<span class="w"> </span>gpo_set
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 <section id="build-in-self-test-bist">
 <h3>Build-In Self-Test (BIST)<a class="headerlink" href="#build-in-self-test-bist" title="Link to this heading"></a></h3>
 <p>BIST controls take immediate effect without requiring <code class="docutils literal notranslate"><span class="pre">initialize</span></code> sequence.</p>
@@ -1816,35 +1345,26 @@ adi,txmon-high-gain
 <li><p>Frequencies: 0=FSample/32, 1=FSample/16, 2=FSample×3/32, 3=FSample/8</p></li>
 <li><p>Levels: 0=Full Scale, 6=FS/2, 12=FS/4, 18=FS/8</p></li>
 </ul>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">6</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>&gt;<span class="w"> </span>bist_tone
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">6</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>&gt;<span class="w"> </span>bist_tone
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 <section id="prbs">
 <h4>PRBS<a class="headerlink" href="#prbs" title="Link to this heading"></a></h4>
 <p>Pseudorandom Binary Sequence injection into RX or TX paths.</p>
 <p><strong>Syntax:</strong> <code class="docutils literal notranslate"><span class="pre">bist_prbs</span> <span class="pre">&lt;Injection</span> <span class="pre">Point&gt;</span></code></p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="m">2</span><span class="w"> </span>&gt;<span class="w"> </span>bist_prbs
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">2</span><span class="w"> </span>&gt;<span class="w"> </span>bist_prbs
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 <section id="bist-loopback">
 <h4>BIST Loopback<a class="headerlink" href="#bist-loopback" title="Link to this heading"></a></h4>
 <p>Enables digital TX→RX loopback or RF RX→TX loopback.</p>
 <p><strong>Syntax:</strong> <code class="docutils literal notranslate"><span class="pre">loopback</span> <span class="pre">&lt;Mode&gt;</span></code> (0=Disable, 1=Digital TX→RX, 2=RF RX→TX)</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="m">1</span><span class="w"> </span>&gt;<span class="w"> </span>loopback
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">1</span><span class="w"> </span>&gt;<span class="w"> </span>loopback
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 </section>
 </section>
 <section id="low-level-register-access-via-debugfs">
@@ -1852,55 +1372,25 @@ adi,txmon-high-gain
 <p>Direct register access enables reading/writing device registers. Exercise
 caution, as modifications bypass driver oversight.</p>
 <p><strong>Reading registers:</strong></p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span>0x7<span class="w"> </span>&gt;<span class="w"> </span>direct_reg_access
+<span class="gp">$ </span>cat<span class="w"> </span>direct_reg_access
+<span class="go">0x40</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span>0x7<span class="w"> </span>&gt;<span class="w"> </span>direct_reg_access
+<p><strong>Writing registers:</strong> <code class="docutils literal notranslate"><span class="pre">ADDRESS</span> <span class="pre">VALUE</span></code></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span>0x7<span class="w"> </span>0x50<span class="w"> </span>&gt;<span class="w"> </span>direct_reg_access
+<span class="gp">$ </span>cat<span class="w"> </span>direct_reg_access
+<span class="go">0x50</span>
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>direct_reg_access
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>0x40
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div><p><strong>Writing registers:</strong> <code class="docutils literal notranslate"><span class="pre">ADDRESS</span> <span class="pre">VALUE</span></code></p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span>0x7<span class="w"> </span>0x50<span class="w"> </span>&gt;<span class="w"> </span>direct_reg_access
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>direct_reg_access
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>0x50
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div><p><strong>HDL Core registers</strong> (devices with both SPI/I2C and AXI interfaces):
+<p><strong>HDL Core registers</strong> (devices with both SPI/I2C and AXI interfaces):
 Set BIT31 when accessing HDL registers.</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span>0x80000000<span class="w"> </span>&gt;<span class="w"> </span>direct_reg_access
+<span class="gp">$ </span>cat<span class="w"> </span>direct_reg_access
+<span class="go">0x80062</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span>0x80000000<span class="w"> </span>&gt;<span class="w"> </span>direct_reg_access
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>direct_reg_access
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>0x80062
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 <section id="more-information">
 <h2>More Information<a class="headerlink" href="#more-information" title="Link to this heading"></a></h2>
 <ul class="simple">
