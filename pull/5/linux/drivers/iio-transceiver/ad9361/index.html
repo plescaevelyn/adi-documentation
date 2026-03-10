@@ -1,0 +1,1938 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="The AD9361 is a high performance, highly integrated RF Agile Transceiver. Its programmability and wideband capability make it ideal for a broad range of transceiver applications." name="description" />
+
+    <title>AD9361 Linux Device Driver &#8212; System Level Documentation  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/app.min.css?v=a525f648" />
+    <script async="async" src="../../../../_static/app.umd.js?v=fcf3088a"></script>
+    <link rel="icon" href="../../../../_static/icon.svg"/>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  
+  
+  <meta name="repository" content="documentation">
+  <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head>
+  
+    <body>
+  
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
+        <div class="vertical-divider"></div>
+        
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        
+        <a id="logo" href="../../../../index.html">
+          <div>System Level</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../../../index.html" class="current">System Level</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div class="header localtoc-header">
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">AD9361 Linux Device Driver</a><ul>
+<li><a class="reference internal" href="#supported-devices">Supported Devices</a></li>
+<li><a class="reference internal" href="#evaluation-boards">Evaluation Boards</a></li>
+<li><a class="reference internal" href="#source-code">Source Code</a></li>
+<li><a class="reference internal" href="#driver-testing-api">Driver Testing / API</a><ul>
+<li><a class="reference internal" href="#show-device-name">Show device name</a></li>
+<li><a class="reference internal" href="#local-oscillator-control-lo">Local Oscillator Control (LO)</a><ul>
+<li><a class="reference internal" href="#local-oscillator-power-down">Local Oscillator Power-down</a></li>
+<li><a class="reference internal" href="#external-lo-support">External LO Support</a></li>
+<li><a class="reference internal" href="#fastlock-mode">FASTLOCK MODE</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#rx-signal-path">RX Signal Path</a><ul>
+<li><a class="reference internal" href="#setting-querying-the-rx-sample-rate">Setting / Querying the RX Sample Rate</a></li>
+<li><a class="reference internal" href="#list-chosen-rx-path-rates">List chosen RX Path Rates</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tx-signal-path">TX Signal Path</a><ul>
+<li><a class="reference internal" href="#setting-querying-the-tx-sample-rate">Setting / Querying the TX Sample Rate</a></li>
+<li><a class="reference internal" href="#list-chosen-tx-path-rates">List chosen TX Path Rates</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#rate-governors">Rate Governors</a><ul>
+<li><a class="reference internal" href="#list-available-rate-governors">List available Rate Governors</a></li>
+<li><a class="reference internal" href="#selecting-rate-governor">Selecting Rate Governor</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#digital-fir-filter-controls">Digital FIR Filter Controls</a><ul>
+<li><a class="reference internal" href="#query-current-filter-configuration">Query current filter Configuration</a></li>
+<li><a class="reference internal" href="#load-a-filter">Load a Filter</a></li>
+<li><a class="reference internal" href="#filter-enable-disable">Filter Enable / Disable</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#rf-bandwidth-analog-filter-control">RF Bandwidth Analog Filter Control</a><ul>
+<li><a class="reference internal" href="#rx-rf-bandwidth-control">RX RF Bandwidth Control</a></li>
+<li><a class="reference internal" href="#tx-rf-bandwidth-control">TX RF Bandwidth Control</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#rx-gain-control">RX Gain Control</a><ul>
+<li><a class="reference internal" href="#loading-a-gain-table">Loading a gain table</a></li>
+<li><a class="reference internal" href="#reading-a-gain-table">Reading a gain table</a></li>
+<li><a class="reference internal" href="#gain-control-modes">Gain control modes</a></li>
+<li><a class="reference internal" href="#querying-or-setting-a-gain-control-mode">Querying or Setting a Gain Control Mode</a></li>
+<li><a class="reference internal" href="#reading-the-current-gain">Reading the current Gain</a></li>
+<li><a class="reference internal" href="#mgc-setting-the-current-gain">MGC setting the current Gain</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tx-attenuation-control">TX Attenuation Control</a></li>
+<li><a class="reference internal" href="#received-strength-signal-indicator-rssi">Received Strength Signal Indicator (RSSI)</a></li>
+<li><a class="reference internal" href="#tx-received-strength-signal-indicator-tx-rssi">TX Received Strength Signal Indicator (TX RSSI)</a></li>
+<li><a class="reference internal" href="#calibration-mode-controls">Calibration Mode Controls</a><ul>
+<li><a class="reference internal" href="#with-optional-calibration-phase-offset-value">With optional calibration phase offset value</a></li>
+<li><a class="reference internal" href="#calibration-tracking-controls">Calibration Tracking Controls</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#rf-port-selection">RF Port Selection</a></li>
+<li><a class="reference internal" href="#dcxo-tuning">DCXO Tuning</a></li>
+<li><a class="reference internal" href="#xo-correction">XO Correction</a></li>
+<li><a class="reference internal" href="#die-temperature-reading">Die Temperature Reading</a></li>
+<li><a class="reference internal" href="#auxadc-reading">AuxADC Reading</a></li>
+<li><a class="reference internal" href="#auxdac-writing">AuxDAC Writing</a></li>
+<li><a class="reference internal" href="#rssi-gain-step-calibration">RSSI Gain Step Calibration</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#advanced-debug-facilities">Advanced Debug Facilities</a><ul>
+<li><a class="reference internal" href="#runtime-device-driver-customization">Runtime Device Driver Customization</a><ul>
+<li><a class="reference internal" href="#example-to-change-the-driver-from-fdd-into-tdd-mode-operation">Example to change the driver from FDD into TDD mode operation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#gpo-manual-control">GPO Manual Control</a></li>
+<li><a class="reference internal" href="#build-in-self-test-bist">Build-In Self-Test (BIST)</a><ul>
+<li><a class="reference internal" href="#bist-tone">BIST Tone</a></li>
+<li><a class="reference internal" href="#prbs">PRBS</a></li>
+<li><a class="reference internal" href="#bist-loopback">BIST Loopback</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#low-level-register-access-via-debugfs">Low level register access via debugfs</a></li>
+<li><a class="reference internal" href="#more-information">More Information</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../../../../index.html">
+      System Level Documentation
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../../../index.html" class="current">System Level</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <p class="caption" role="heading">
+  <span class="caption-text">Product Categories</span>
+</p>
+
+<ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../../../../products/adsp/index.html">Digital Signal Processors (ADSP)</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../products/adsp/sc598-clock-tree.html">SC598 Clock Tree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../products/adsp/setup.html">Getting started</a></li>
+</ul>
+</li>
+</ul>
+
+<p class="caption" role="heading">
+  <span class="caption-text">Kuiper &amp; Linux Kernel</span>
+</p>
+
+<ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../../index.html">Linux drivers</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../../iio/index.html">Linux Industrial I/O Subsystem</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../iio/iio-trig-sysfs.html">iio-trig-sysfs driver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../iio/iio-trig-bfin-timer.html">iio-trig-bfin-timer driver</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../../../kernel/index.html">Kernel and devicetrees</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../kernel/zynq.html">Build Zynq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../kernel/zynqmp.html">Build ZynqMP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../kernel/microblaze.html">Build MicroBlaze</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3-1" id="toctree-collapse-3-1"/><div class="collapse"><a class="reference internal" href="../../../kernel/petalinux.html">Build with Petalinux</a><label for="toctree-collapse-3-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3-1-1" id="toctree-collapse-3-1-1"/><div class="collapse"><a class="reference internal" href="../../../kernel/petalinux-dts/index.html">Petalinux Device Trees</a><label for="toctree-collapse-3-1-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../kernel/petalinux-dts/petalinux-custom-dts.html">Custom Device Trees with meta-adi</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../kernel/petalinux-dts/petalinux-meta-adi-bypass.html">Custom Device Trees with DTG (meta-adi Bypass)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../kernel/petalinux-dts/petalinux-system-user.html">Device Tree Modifications with system-user.dtsi</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../kuiper/index.html">Kuiper</a></li>
+</ul>
+
+<p class="caption" role="heading">
+  <span class="caption-text">Software</span>
+</p>
+
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../software/ad9084-profile-generator/index.html">AD9084 (Apollo) Profile Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../software/gnuradio/index.html">GNU Radio and IIO Devices: gr-iio</a></li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-4" id="toctree-collapse-4"/><div class="collapse"><a class="reference internal" href="../../../../software/iio-oscilloscope/index.html">IIO Oscilloscope</a><label for="toctree-collapse-4"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-4-1" id="toctree-collapse-4-1"/><div class="collapse"><a class="reference internal" href="../../../../software/iio-oscilloscope/adrv9009/index.html">ADRV9009</a><label for="toctree-collapse-4-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../software/iio-oscilloscope/adrv9009/plugin.html">Standard Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../software/iio-oscilloscope/adrv9009/advanced-plugin.html">Advanced plugin</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../software/iio-oscilloscope/ad9084/index.html">AD9084</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-5" id="toctree-collapse-5"/><div class="collapse"><a class="reference internal" href="../../../../software/libiio/index.html">Libiio</a><label for="toctree-collapse-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../software/libiio/internals.html">About libiio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../software/libiio/cli.html">Command line utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../software/libiio/tips-tricks.html">Tips &amp; Tricks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../software/libiio/matlab_simulink/index.html">IIO System Object</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-6" id="toctree-collapse-6"/><div class="collapse"><a class="reference internal" href="../../../../software/libm2k/index.html">Libm2k</a><label for="toctree-collapse-6"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../software/libm2k/calibration.html">Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../software/libm2k/digital_communication.html">Digital communication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../software/libm2k/m2kcli.html">Command line utility</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-7" id="toctree-collapse-7"/><div class="collapse"><a class="reference internal" href="../../../../software/matlab/index.html">MATLAB &amp; Simulink Toolboxes</a><label for="toctree-collapse-7"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../software/matlab/hsx-toolbox/index.html">High Speed Converter Toolbox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../software/matlab/transceiver-toolbox/index.html">Transceiver Toolbox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../software/matlab/bsp-extend.html">Extending Device Interfaces</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../software/pyadi-iio/index.html">PyADI-IIO</a></li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-8" id="toctree-collapse-8"/><div class="collapse"><a class="reference internal" href="../../../../software/zephyr/index.html">Zephyr RTOS</a><label for="toctree-collapse-8"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../software/zephyr/zephyr-devicetree.html">Intro to Devicetree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../software/zephyr/kconfig/zephyr-kconfig.html">Introduction to Kconfig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../software/zephyr/using-zephyr-codefusion-fs/zephyr_codefusion_fs.html">Using Zephyr &amp; Codefusion Studio to Partition a Flash Filesystem</a></li>
+</ul>
+</li>
+</ul>
+
+<p class="caption" role="heading">
+  <span class="caption-text">Devices</span>
+</p>
+
+<ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-9" id="toctree-collapse-9"/><div class="collapse"><a class="reference internal" href="../../../../tools/m2k/index.html">ADALM2000</a><label for="toctree-collapse-9"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../tools/m2k/devs/index.html">For Developers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../tools/m2k/users/index.html">For End Users</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../tools/m2k/help_support.html">Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../tools/m2k/labview.html">Using With LabVIEW</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../tools/m2k/matlab.html">Using with MATLAB</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-10" id="toctree-collapse-10"/><div class="collapse"><a class="reference internal" href="../../../../tools/pluto-m2k/index.html">Common PLUTO&amp;M2K</a><label for="toctree-collapse-10"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../tools/pluto-m2k/building_the_image.html">Building the Firmware Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../tools/pluto-m2k/drivers.html">Installing Drivers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../tools/pluto-m2k/firmware.html">Firmware Updates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../tools/pluto-m2k/obtaining_the_sources.html">Obtaining the Build Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../tools/pluto-m2k/reboot.html">Rebooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../tools/pluto-m2k/usb_otg_host.html">USB OTG – HOST function Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-11" id="toctree-collapse-11"/><div class="collapse"><a class="reference internal" href="../../../../tools/pluto/index.html">ADALM-PLUTO</a><label for="toctree-collapse-11"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-11-1" id="toctree-collapse-11-1"/><div class="collapse"><a class="reference internal" href="../../../../tools/pluto/devs/index.html">For Developers</a><label for="toctree-collapse-11-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../tools/pluto/devs/usb_otg.html">USB OTG</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-11-2" id="toctree-collapse-11-2"/><div class="collapse"><a class="reference internal" href="../../../../tools/pluto/hacking/index.html">Advanced Users</a><label for="toctree-collapse-11-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../tools/pluto/hacking/hardware.html">Hardware User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../tools/pluto/hacking/listening_to_yourself.html">Self Reception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../tools/pluto/hacking/power_amp.html">Controlling External Devices</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-11-3" id="toctree-collapse-11-3"/><div class="collapse"><a class="reference internal" href="../../../../tools/pluto/users/index.html">For End Users</a><label for="toctree-collapse-11-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../tools/pluto/users/antennas.html">Antennas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../tools/pluto/users/asee_papers.html">ASEE Papers using the Pluto SDR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../tools/pluto/users/calibration.html">Calibrating the ADALM-PLUTO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../tools/pluto/users/customizing.html">Customizing the ADALM-PLUTO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../tools/pluto/users/far_fast.html">How far/fast?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../tools/pluto/users/firmware.html">Pluto/M2k Firmware Updates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../tools/pluto/users/intro.html">Introduction to the ADALM-PLUTO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../tools/pluto/users/name.html">Why “Pluto”</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../tools/pluto/users/non_quad.html">Dealing with non-Quadrature Signals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../tools/pluto/users/phase_noise.html">ADALM-PLUTO Phase Noise and Frequency Accuracy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../tools/pluto/users/quick_start.html">PlutoSDR Quick Start</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../tools/pluto/users/receive.html">ADALM-PLUTO Receive</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../tools/pluto/users/receiver_sensitivity.html">ADALM-PLUTO Receiver Sensitivity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../tools/pluto/users/temp.html">PlutoSDR Thermals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../tools/pluto/users/transmit.html">ADALM-PLUTO Transmit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../tools/pluto/users/understanding.html">Basic internals of Pluto</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../tools/pluto/help_support.html">Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../tools/pluto/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../tools/pluto/transceiver_transferring_data.html">Controlling the transceiver and transferring data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tools/uartjtag/index.html">ADALM-UARTJTAG</a></li>
+</ul>
+
+<p class="caption" role="heading">
+  <span class="caption-text">Apps &amp; Solutions</span>
+</p>
+
+<ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-12" id="toctree-collapse-12"/><div class="collapse"><a class="reference internal" href="../../../../solutions/application-software/index.html">Application Software</a><label for="toctree-collapse-12"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/application-software/lora-software/index.html">ADI Long Range Wireless Radio Software User Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13" id="toctree-collapse-13"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/index.html">Reference Designs</a><label for="toctree-collapse-13"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-1" id="toctree-collapse-13-1"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/ad-acevsecrdset-sl/index.html">AD-ACEVSECRDSET-SL</a><label for="toctree-collapse-13-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-acevsecrdset-sl/hardware-guide/index.html">Hardware User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-acevsecrdset-sl/software-guide/index.html">Software User Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-2" id="toctree-collapse-13-2"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/ad-apard32690-sl/index.html">AD-APARD32690-SL</a><label for="toctree-collapse-13-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-apard32690-sl/ad-apardpfwd-sl/index.html">AD-APARDPFW-SL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-apard32690-sl/ad-apardspoe-sl/index.html">AD-APARDSPOE-SL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-apard32690-sl/ad-t1lusb-ebz/index.html">AD-T1LUSB2.0-EBZ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-apard32690-sl/nina-w102/index.html">NINA-W102 Networking Support</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-3" id="toctree-collapse-13-3"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/ad-bmse2e3w-sl/index.html">AD-BMSE2E3W-SL</a><label for="toctree-collapse-13-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-bmse2e3w-sl/sample_application/index.html">Sample Application</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-bmse2e3w-sl/software_guide/index.html">Software User Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-4" id="toctree-collapse-13-4"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/ad-cellpackbm-sl/index.html">AD-CELLPACKBM-SL</a><label for="toctree-collapse-13-4"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-cellpackbm-sl/hardware_guide/index.html">Hardware User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-cellpackbm-sl/software_guide/index.html">Software User Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-5" id="toctree-collapse-13-5"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/ad-ethernetapldevice-sl/index.html">AD-ETHERNETAPLDEVICE-SL</a><label for="toctree-collapse-13-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-ethernetapldevice-sl/ethernet-apl/index.html">Ethernet-APL Considerations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-ethernetapldevice-sl/functional-safety/index.html">Functional Safety Ready Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-ethernetapldevice-sl/intrinsic-safety/index.html">Intrinsic Safety Design</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-ethernetapldevice-sl/power/index.html">Power Description</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-6" id="toctree-collapse-13-6"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/ad-fmcomms3-ebz/index.html">AD-FMCOMMS3-EBZ</a><label for="toctree-collapse-13-6"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-fmcomms3-ebz/hardware-guide/index.html">Hardware User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-fmcomms3-ebz/card-specifications/index.html">AD-FMCOMMS3-EBZ Specifications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-fmcomms3-ebz/hardware-guide/config-options/index.html">FMCOMMS3 Configuration Options</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/reference-designs/ad-gmsl-d-e-adp/index.html">AD-GMSL-D-E-ADP#</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-7" id="toctree-collapse-13-7"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/ad-gmsl522-sl/index.html">AD-GMSL522-SL</a><label for="toctree-collapse-13-7"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-gmsl522-sl/hardware-guide/index.html">Hardware Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-gmsl522-sl/software-guide/index.html">Software Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/reference-designs/ad-gmsl716mipi-evk/index.html">AD-GMSL716MIPI-EVK</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/reference-designs/ad-gmsl717mipi-evk/index.html">AD-GMSL717MIPI-EVK</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-8" id="toctree-collapse-13-8"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/ad-gmslcamrpi-adp/index.html">AD-GMSLCAMRPI-ADP#</a><label for="toctree-collapse-13-8"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-gmslcamrpi-adp/amd-kria/index.html">Using with AMD Kria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-gmslcamrpi-adp/nvidia-jetson/index.html">Using with Nvidia Jetson Orin Nano</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-gmslcamrpi-adp/raspberry-pi-user-guide/index.html">Using with Raspberry Pi</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-9" id="toctree-collapse-13-9"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/ad-jupiter-ebz/index.html">AD-JUPITER-EBZ</a><label for="toctree-collapse-13-9"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-jupiter-ebz/quickstart/index.html">Jupiter SDR Quick Start Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-jupiter-ebz/hardware-overview.html">Jupiter SDR Hardware Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-jupiter-ebz/mcs-setup.html">Jupiter_SDR MCS Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-jupiter-ebz/known-issues.html">Jupiter SDR - known issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-jupiter-ebz/reference-design.html">Jupiter SDR HDL Reference Design</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-jupiter-ebz/profile-generation.html">Profile generation flow using TES</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/reference-designs/ad-m2kbnc-ebz/index.html">AD-M2KBNC-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/reference-designs/ad-m2kcbl-ebz/index.html">AD-M2KCBL-EBZ</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-10" id="toctree-collapse-13-10"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/ad-max32lrwise-sl/index.html">AD-MAX32LRWISE-SL</a><label for="toctree-collapse-13-10"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-max32lrwise-sl/ev-cattletag-ardz/index.html">EV-CATTLETAG-ARDZ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-max32lrwise-sl/max32670-lr-ardz/index.html">MAX32670-LR-ARDZ</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-11" id="toctree-collapse-13-11"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/ad-max32sxwise-sl/index.html">AD-MAX32SXWISE-SL</a><label for="toctree-collapse-13-11"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-max32sxwise-sl/ev-flowmeter-ardz/index.html">EV-FLOWMETER-ARDZ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-max32sxwise-sl/ev-structural-ardz/index.html">EV-STRUCTURAL-ARDZ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-max32sxwise-sl/max32670-sx-ardz/index.html">MAX32670-SX-ARDZ</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-12" id="toctree-collapse-13-12"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/ad-paarray3552r-sl/index.html">AD-PAARRAY3552R-SL</a><label for="toctree-collapse-13-12"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-paarray3552r-sl/hardware-guide/index.html">Hardware User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-paarray3552r-sl/software-guide/index.html">Software User Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-13" id="toctree-collapse-13-13"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/ad-pqmon-sl/index.html">AD-PQMON-SL</a><label for="toctree-collapse-13-13"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-pqmon-sl/hardware-guide/index.html">Hardware User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-pqmon-sl/software-guide/index.html">Software User Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/reference-designs/ad-ps3803-rd/index.html">AD-PS3803-RD</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-14" id="toctree-collapse-13-14"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/ad-rpi-t1lpse-sl/index.html">AD-RPI-T1LPSE-SL</a><label for="toctree-collapse-13-14"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-rpi-t1lpse-sl/basic-sample-application/index.html">Basic Sample Application</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-15" id="toctree-collapse-13-15"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/ad-swiot1l-sl/index.html">AD-SWIOT1L-SL</a><label for="toctree-collapse-13-15"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-swiot1l-sl/hardware-guide/index.html">Hardware User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-swiot1l-sl/firmware-guide/index.html">Firmware User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad-swiot1l-sl/software-guide/index.html">Software User Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/reference-designs/ad-synchrona14-ebz/index.html">AD-SYNCHRONA14-EBZ</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-16" id="toctree-collapse-13-16"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/ad4052-ardz/index.html">EVAL-AD4050/AD4052-ARDZ</a><label for="toctree-collapse-13-16"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad4052-ardz/user-guide.html">Evaluating the device</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-17" id="toctree-collapse-13-17"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/ad4062-ardz/index.html">EVAL-AD4060/AD4062-ARDZ</a><label for="toctree-collapse-13-17"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad4062-ardz/user-guide/linux.html">Linux User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad4062-ardz/user-guide/no-os.html">No-OS User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad4062-ardz/tools.html">Libraries and GUI Tools</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-18" id="toctree-collapse-13-18"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/ad9084_ebz/index.html">AD9084-FMCA-EBZ (Apollo)</a><label for="toctree-collapse-13-18"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad9084_ebz/user-guide.html">User guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/ad9084_ebz/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-18-1" id="toctree-collapse-13-18-1"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/ad9084_ebz/quickstart/index.html">Quickstart</a><label for="toctree-collapse-13-18-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../solutions/reference-designs/ad9084_ebz/quickstart/microblaze.html">Virtex UltraScale+ VCU118/VCU128</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../solutions/reference-designs/ad9084_ebz/quickstart/versal.html">Versal ACAP VCK190/VPK180</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../solutions/reference-designs/ad9084_ebz/quickstart/agilex.html">Intel Agilex 7 I-Series</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../solutions/reference-designs/ad9084_ebz/quickstart/new_usecase.html">Running a new JESD mode on hardware</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/reference-designs/adalp2000/index.html">ADALP2000</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-19" id="toctree-collapse-13-19"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/admv96s-wgbe-ek1/index.html">ADMV96S-WGBE-EK1</a><label for="toctree-collapse-13-19"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/admv96s-wgbe-ek1/hardware-guide/index.html">Hardware User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/admv96s-wgbe-ek1/software-guide/index.html">Software User Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-20" id="toctree-collapse-13-20"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/adrd3161-01z/index.html">ADRD3161-01Z</a><label for="toctree-collapse-13-20"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/adrd3161-01z/hardware-guide.html">ADRD3161-01Z Hardware Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/adrd3161-01z/quick-start-guide.html">ADRD3161-01Z Quick Start Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/adrd3161-01z/production-guide.html">ADRD3161-01Z Production Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/reference-designs/adrd8012-01Z/index.html">ADRD8012-01Z</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/reference-designs/adxl355-pmdz/index.html">EVAL-ADXL355-PMDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/reference-designs/eval-ad5592R-pmdz/index.html">EVAL-AD5592R-PMDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/reference-designs/eval-ad5593r-pmdz/index.html">EVAL-AD5593R-PMDZ</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-21" id="toctree-collapse-13-21"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/eval-ad7124-8-pmdz/index.html">EVAL-AD7124-8-PMDZ</a><label for="toctree-collapse-13-21"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/eval-ad7124-8-pmdz/demo/index.html">EVAL-AD7124-8-PMDZ Demo Project</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-22" id="toctree-collapse-13-22"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/eval-ad9081/index.html">AD9081 &amp; AD9082</a><label for="toctree-collapse-13-22"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/eval-ad9081/user-guide.html">User guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/eval-ad9081/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-22-1" id="toctree-collapse-13-22-1"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/eval-ad9081/quickstart/index.html">Quick start guides</a><label for="toctree-collapse-13-22-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../solutions/reference-designs/eval-ad9081/quickstart/a10soc.html">On A10SoC</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../solutions/reference-designs/eval-ad9081/quickstart/vck190.html">On VCK190</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../solutions/reference-designs/eval-ad9081/quickstart/zc706.html">On ZC706</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../solutions/reference-designs/eval-ad9081/quickstart/vcu118.html">On VCU118</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../solutions/reference-designs/eval-ad9081/quickstart/zcu102.html">On ZCU102</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-23" id="toctree-collapse-13-23"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/eval-adbms6830bmsw/index.html">EVAL-ADBMS6830BMSW</a><label for="toctree-collapse-13-23"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/eval-adbms6830bmsw/software-guide/index.html">Software User Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-24" id="toctree-collapse-13-24"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/eval-adrv9009/index.html">ADRV9009 &amp; ADRV9008</a><label for="toctree-collapse-13-24"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/eval-adrv9009/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-24-1" id="toctree-collapse-13-24-1"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/eval-adrv9009/quickstart/index.html">Quickstart</a><label for="toctree-collapse-13-24-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../solutions/reference-designs/eval-adrv9009/quickstart/zynqmp.html">ZCU102</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/eval-adrv9009/basic-iq-datafiles.html">Basic IQ Datafiles</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-25" id="toctree-collapse-13-25"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/eval-adrv902x/index.html">EVAL-ADRV902X</a><label for="toctree-collapse-13-25"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/eval-adrv902x/user-guide.html">User guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/eval-adrv902x/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-25-1" id="toctree-collapse-13-25-1"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/eval-adrv902x/quickstart/index.html">Quick start</a><label for="toctree-collapse-13-25-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../solutions/reference-designs/eval-adrv902x/quickstart/vck190.html">On VCK190</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../solutions/reference-designs/eval-adrv902x/quickstart/zcu102.html">On ZCU102</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-26" id="toctree-collapse-13-26"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/eval-adrv9032/index.html">EVAL-ADRV9032</a><label for="toctree-collapse-13-26"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/eval-adrv9032/user-guide.html">User guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/eval-adrv9032/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-26-1" id="toctree-collapse-13-26-1"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/eval-adrv9032/quickstart/index.html">Quick start</a><label for="toctree-collapse-13-26-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../solutions/reference-designs/eval-adrv9032/quickstart/zcu102.html">On ZCU102</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-27" id="toctree-collapse-13-27"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/eval-adrv904x/index.html">EVAL-ADRV904x</a><label for="toctree-collapse-13-27"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/eval-adrv904x/user-guide.html">User guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/eval-adrv904x/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-27-1" id="toctree-collapse-13-27-1"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/eval-adrv904x/quickstart/index.html">Quick start</a><label for="toctree-collapse-13-27-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../solutions/reference-designs/eval-adrv904x/quickstart/zcu102.html">On ZCU102</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0359-ebz/index.html">EVAL-CN0359-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0417-ebz/index.html">EVAL-CN0417-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0419-ebz/index.html">EVAL-CN0419-EBZ</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-28" id="toctree-collapse-13-28"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0503-ardz/index.html">EVAL-CN0503-ARDZ</a><label for="toctree-collapse-13-28"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0503-ardz/cn0503-software/index.html">Software User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0503-ardz/fluorescence-measurement/index.html">Fluorescence Measurement Demo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0503-ardz/nitrate-measurement/index.html">Nitrate Measurement Demo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0503-ardz/pH-measurement/index.html">pH Measurement Demo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0503-ardz/turbidity/index.html">Turbidity Measurement Demo</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0518-ebz/index.html">EVAL-CN0518-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0521-ebz/index.html">EVAL-CN0521-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0523-ebz/index.html">EVAL-CN0523-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0534-ebz/index.html">EVAL-CN0534-EBZ</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-29" id="toctree-collapse-13-29"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0540-ardz/index.html">EVAL-CN0540-ARDZ</a><label for="toctree-collapse-13-29"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0540-ardz/user-guide.html">User guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0540-ardz/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0540-ardz/iio-oscilloscope.html">Using the System with IIO Oscilloscope</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-29-1" id="toctree-collapse-13-29-1"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0540-ardz/quickstart/index.html">Quickstart</a><label for="toctree-collapse-13-29-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0540-ardz/quickstart/coraz7s.html">CoraZ7-07s</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0540-ardz/quickstart/de10nano.html">DE10-Nano</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0550-ebz/index.html">EVAL-CN0550-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0554-rpiz/index.html">EVAL-CN0554-RPIZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0555-ebz/index.html">EVAL-CN0555-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0556-ebz/index.html">EVAL-CN0556-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0565-ardz/index.html">EVAL-CN0565-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0575-rpiz/index.html">EVAL-CN0575-RPIZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0577-fmcz/index.html">EVAL-CN0577-FMCZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0579-ardz/index.html">EVAL-CN0579-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0581-ebz/index.html">EVAL-CN0581-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0582-usbz/index.html">EVAL-CN0582-USBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0583-som/index.html">EVAL-CN0583-SOM</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-30" id="toctree-collapse-13-30"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0584-ebz/index.html">EVAL-CN0584-EBZ</a><label for="toctree-collapse-13-30"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0584-ebz/digital-template/index.html">Digital Template Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0584-ebz/matlab-configuration/index.html">MATLAB Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0585-fmcz/index.html">EVAL-CN0585-FMCZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/reference-designs/eval-cn0588-ebz/index.html">EVAL-CN0588-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/reference-designs/eval-ess1-sys/index.html">EVAL-ESS1-SYS</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-31" id="toctree-collapse-13-31"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/eval-isomax/index.html">EVAL-ISOMAX</a><label for="toctree-collapse-13-31"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/eval-isomax/hardware_guide/index.html">Hardware User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/eval-isomax/software_guide/index.html">Software User Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-32" id="toctree-collapse-13-32"/><div class="collapse"><a class="reference internal" href="../../../../solutions/reference-designs/eval-ltpa-kit/index.html">EVAL-LTPA-KIT (LTpowerAnalyzer Kit)</a><label for="toctree-collapse-13-32"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/eval-ltpa-kit/hardware_guide/index.html">EVAL-LTPA-KIT Hardware User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../solutions/reference-designs/eval-ltpa-kit/software_guide/index.html">EVAL-LTPA-KIT Software Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../solutions/reference-designs/fthr-pmd-intz/index.html">FTHR-PMD-INTZ</a></li>
+</ul>
+</li>
+</ul>
+
+<p class="caption" role="heading">
+  <span class="caption-text">University Program</span>
+</p>
+
+<ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14" id="toctree-collapse-14"/><div class="collapse"><a class="reference internal" href="../../../../university/index.html">Engineering University Program</a><label for="toctree-collapse-14"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-1" id="toctree-collapse-14-1"/><div class="collapse"><a class="reference internal" href="../../../../university/active_learning/index.html">Active Learning: Student-oriented Lab Exercises</a><label for="toctree-collapse-14-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../university/active_learning/wien_bridge_oscillator/index.html">Activity: The Wien Bridge Oscillator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../university/active_learning/efficiency_power_loss/index.html">Activity: Efficiency, Power Loss, and Thermal Management</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<p class="caption" role="heading">
+  <span class="caption-text">Learning</span>
+</p>
+
+<ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-15" id="toctree-collapse-15"/><div class="collapse"><a class="reference internal" href="../../../../learning/index.html">Learning! Tutorials, Workshops, Etc</a><label for="toctree-collapse-15"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-15-1" id="toctree-collapse-15-1"/><div class="collapse"><a class="reference internal" href="../../../../learning/demo_hp_analog_meets_ai/index.html">DEMO High-Performance Analog Meets AI</a><label for="toctree-collapse-15-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../learning/demo_hp_analog_meets_ai/software/index.html">Software Configuration and Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../learning/tutorial_prec_adc/index.html">Precision ADC Tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../learning/converter_connectivity_tutorial/index.html">Converter Connectivity Tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../learning/sw_infrastructure/index.html">Software Infrastructure for designing with ADCs, DACs, and Sensors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../learning/tools_for_ls/index.html">Tools for Low Speed Mixed Signal System Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../learning/tools_for_prec_wb/index.html">Tools for Precision Wideband Mixed Signal System Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../learning/tools_for_hs/index.html">Tools for High-Speed Mixed Signal System Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../learning/workshop_what_sw_for_sdr/index.html">What software do I need for my SDR?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../learning/workshop_a_precision_converter_fpga_integration_journey/index.html">A Precision Converter FPGA Integration Journey</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../learning/workshop_kuiper/index.html">Customizing ADI Kuiper Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../learning/workshops_software_defined_instrumentation/index.html">Software Defined Instrumentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../learning/workshops_introduction_to_electronics/index.html">Introduction to Electronics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../learning/workshops_embedded_baremetal/index.html">Embedded Baremetal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../learning/workshops_embedded_linux/index.html">Embedded Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../learning/workshops_applied_systems_control/index.html">Applied Systems Control Workshop</a></li>
+</ul>
+</li>
+</ul>
+
+<p class="caption" role="heading">
+  <span class="caption-text">Contributing and Guidelines</span>
+</p>
+
+<ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-16" id="toctree-collapse-16"/><div class="collapse"><a class="reference internal" href="../../../../contributing/creating_new_pages.html">Creating new pages</a><label for="toctree-collapse-16"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../contributing/template/eval.html">Evaluation Boards</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing/docs_guidelines.html">Documentation guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing/forking_publishing.html">Forking and publishing</a></li>
+</ul>
+
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+  <nav class="breadcrumb empty"><ol></ol></nav>
+</div>
+          <div class="body" role="main">
+            
+  <section id="ad9361-linux-device-driver">
+<span id="ad9361"></span><h1>AD9361 Linux Device Driver<a class="headerlink" href="#ad9361-linux-device-driver" title="Link to this heading"></a></h1>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/AD9361" target="_blank">AD9361</a> is a high performance, highly integrated RF Agile Transceiver.
+Its programmability and wideband capability make it ideal for a broad range of
+transceiver applications.</p>
+<p>This is a Linux industrial I/O (IIO) subsystem driver, targeting RF Transceivers.
+The industrial I/O subsystem provides a unified framework for drivers for many
+different types of converters and sensors.</p>
+<section id="supported-devices">
+<h2>Supported Devices<a class="headerlink" href="#supported-devices" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9361" target="_blank">AD9361</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9363" target="_blank">AD9363</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9364" target="_blank">AD9364</a></p></li>
+</ul>
+</section>
+<section id="evaluation-boards">
+<h2>Evaluation Boards<a class="headerlink" href="#evaluation-boards" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz" target="_blank">AD-FMCOMMS2-EBZ</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms3-ebz" target="_blank">AD-FMCOMMS3-EBZ</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms4-ebz" target="_blank">AD-FMCOMMS4-EBZ</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms5-ebz" target="_blank">AD-FMCOMMS5-EBZ</a></p></li>
+</ul>
+</section>
+<section id="source-code">
+<h2>Source Code<a class="headerlink" href="#source-code" title="Link to this heading"></a></h2>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Type</p></th>
+<th class="head"><p>File</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Driver</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/adc/ad9361.c" target="_blank">drivers/iio/adc/ad9361.c</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Driver</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/adc/ad9361_conv.c" target="_blank">drivers/iio/adc/ad9361_conv.c</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Include</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/adc/ad9361.h" target="_blank">drivers/iio/adc/ad9361.h</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Devicetree</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/Documentation/devicetree/bindings/iio/adc/adi,ad9361.txt" target="_blank">Documentation/devicetree/bindings/iio/adc/adi,ad9361.txt</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="driver-testing-api">
+<h2>Driver Testing / API<a class="headerlink" href="#driver-testing-api" title="Link to this heading"></a></h2>
+<section id="show-device-name">
+<h3>Show device name<a class="headerlink" href="#show-device-name" title="Link to this heading"></a></h3>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>/sys/bus/iio/devices/iio<span class="se">\:</span>device1/name
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>ad9361-phy
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+<section id="local-oscillator-control-lo">
+<span id="ad9361-lo-control"></span><h3>Local Oscillator Control (LO)<a class="headerlink" href="#local-oscillator-control-lo" title="Link to this heading"></a></h3>
+<p>The AD9361 transceiver contains two identical RFPLL synthesizers to generate
+the LO signals for the RF signal paths. One is programmed for the RX channel,
+the other for the TX channel. The tuning range covers 70MHz to 6GHz
+(AD9363: 325-3800 MHz) with 2Hz granularity.</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>out_altvoltage0_RX_LO_frequency
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>2400000000
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">2450000000</span><span class="w"> </span>&gt;<span class="w"> </span>out_altvoltage0_RX_LO_frequency
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>out_altvoltage0_RX_LO_frequency
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>2450000000
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><section id="local-oscillator-power-down">
+<h4>Local Oscillator Power-down<a class="headerlink" href="#local-oscillator-power-down" title="Link to this heading"></a></h4>
+<p>When TX and RX LOs are at identical or very similar frequencies, TX LO leakage
+into the RX path may occur. TDD mode typically avoids this since only one LO
+operates at a time. FDD mode may benefit from disabling the TX LO, though this
+causes TX QUAD calibration to fail.</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>&gt;<span class="w"> </span>out_altvoltage1_TX_LO_powerdown
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>out_altvoltage1_TX_LO_powerdown
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>0
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>out_altvoltage0_RX_LO_powerdown
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>1
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+<section id="external-lo-support">
+<h4>External LO Support<a class="headerlink" href="#external-lo-support" title="Link to this heading"></a></h4>
+<p>The driver enables switching between external and internal LO dynamically.
+Writing 1 to <code class="docutils literal notranslate"><span class="pre">out_altvoltage0_RX_LO_external</span></code> or <code class="docutils literal notranslate"><span class="pre">out_altvoltage1_TX_LO_external</span></code>
+activates external LO; writing 0 reverts to the internal synthesizer.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Not available on AD9363.</p>
+</div>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>out_altvoltage0_RX_LO_frequency
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>2400000000
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">1</span><span class="w"> </span>&gt;<span class="w"> </span>out_altvoltage0_RX_LO_external
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>out_altvoltage0_RX_LO_external
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>1
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+<section id="fastlock-mode">
+<h4>FASTLOCK MODE<a class="headerlink" href="#fastlock-mode" title="Link to this heading"></a></h4>
+<p>Fast Lock mode stores synthesizer programming information (profiles) for rapid
+frequency changes. Up to 8 RX and 8 TX profiles store complete frequency
+configuration including VCO calibration results.</p>
+<p><strong>Create Profile:</strong></p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">4242000000</span><span class="w"> </span>&gt;<span class="w"> </span>out_altvoltage0_RX_LO_frequency
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>&gt;<span class="w"> </span>out_altvoltage0_RX_LO_fastlock_store
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p><strong>Recall Profile:</strong></p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>&gt;<span class="w"> </span>out_altvoltage0_RX_LO_fastlock_recall
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p><strong>Save Profile (for external storage):</strong></p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>&gt;<span class="w"> </span>out_altvoltage0_RX_LO_fastlock_save
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>out_altvoltage0_RX_LO_fastlock_save
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>0 240,0,202,204,12,80,24,16,187,255,60,238,113,233,93,174
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p><strong>Load Previously Saved Profile:</strong></p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;0 240,0,202,204,12,80,24,16,187,255,60,238,113,233,93,174&quot;</span><span class="w"> </span>&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w"> </span>out_altvoltage0_RX_LO_fastlock_load
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+</section>
+<section id="rx-signal-path">
+<h3>RX Signal Path<a class="headerlink" href="#rx-signal-path" title="Link to this heading"></a></h3>
+<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/pluto/docs/linux/drivers/iio-transceiver/ad9361/rx_signal_path.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/pluto/docs/linux/drivers/iio-transceiver/ad9361/rx_signal_path.png" />
+<p>The RX path passes downconverted I and Q signals to the baseband receiver.
+It comprises two programmable analog low-pass filters, a 12-bit ADC, and four
+digital decimating filter stages. Each decimating filter is independently
+bypassable. The <code class="docutils literal notranslate"><span class="pre">in_voltage_sampling_frequency</span></code> attribute controls the BBPLL
+frequency, ADC sample clock, and decimating filter blocks (except the FIR block).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Minimum ADC rate is 25MSPS. Baseband rates below 2.083 MSPS require FIR
+decimation. Minimum rate with FIR (decimate by 4): 25MSPS/(4×12) = 520.83 kSPS.</p>
+</div>
+<section id="setting-querying-the-rx-sample-rate">
+<span id="ad9361-sample-rate"></span><h4>Setting / Querying the RX Sample Rate<a class="headerlink" href="#setting-querying-the-rx-sample-rate" title="Link to this heading"></a></h4>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>in_voltage_sampling_frequency
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>30720000
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">10000000</span><span class="w"> </span>&gt;<span class="w"> </span>in_voltage_sampling_frequency
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>in_voltage_sampling_frequency
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>10000000
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+<section id="list-chosen-rx-path-rates">
+<h4>List chosen RX Path Rates<a class="headerlink" href="#list-chosen-rx-path-rates" title="Link to this heading"></a></h4>
+<p>This attribute lists rates in various digital blocks:</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Stage</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Ratio</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>BBPLL</p></td>
+<td><p>Baseband PLL frequency</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p>ADC</p></td>
+<td><p>ADC sample rate</p></td>
+<td><p>BBPLL/ADC divider</p></td>
+</tr>
+<tr class="row-even"><td><p>R2</p></td>
+<td><p>HB3/DEC3 filter rate</p></td>
+<td><p>ADC/R2</p></td>
+</tr>
+<tr class="row-odd"><td><p>R1</p></td>
+<td><p>HB2 filter rate</p></td>
+<td><p>R2/R1</p></td>
+</tr>
+<tr class="row-even"><td><p>RF</p></td>
+<td><p>HB1 filter rate</p></td>
+<td><p>R1/RF</p></td>
+</tr>
+<tr class="row-odd"><td><p>RXSAMP</p></td>
+<td><p>RX sampling/baseband rate</p></td>
+<td><p>RF/RXSAMP (FIR decimation)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>rx_path_rates
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>BBPLL:983040000 ADC:245760000 R2:122880000 R1:61440000 RF:30720000 RXSAMP:30720000
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+</section>
+<section id="tx-signal-path">
+<h3>TX Signal Path<a class="headerlink" href="#tx-signal-path" title="Link to this heading"></a></h3>
+<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/pluto/docs/linux/drivers/iio-transceiver/ad9361/tx_signal_path.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/pluto/docs/linux/drivers/iio-transceiver/ad9361/tx_signal_path.png" />
+<p>The TX path receives 12-bit 2’s complement I-Q data through four digital
+interpolating filters to a 12-bit DAC. Each interpolating filter is bypassable.
+The DAC output passes through two low-pass filters before the RF mixer.
+The <code class="docutils literal notranslate"><span class="pre">out_voltage_sampling_frequency</span></code> attribute controls the BBPLL frequency,
+DAC clock, and interpolation filter blocks.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Minimum ADC rate is 25MSPS. Baseband rates below 2.083 MSPS require FIR
+interpolation. Minimum rate with FIR (decimate by 4): 25MSPS/(4×12) = 520.83 kSPS.</p>
+</div>
+<section id="setting-querying-the-tx-sample-rate">
+<h4>Setting / Querying the TX Sample Rate<a class="headerlink" href="#setting-querying-the-tx-sample-rate" title="Link to this heading"></a></h4>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>out_voltage_sampling_frequency
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>30720000
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">10000000</span><span class="w"> </span>&gt;<span class="w"> </span>out_voltage_sampling_frequency
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>out_voltage_sampling_frequency
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>10000000
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+<section id="list-chosen-tx-path-rates">
+<h4>List chosen TX Path Rates<a class="headerlink" href="#list-chosen-tx-path-rates" title="Link to this heading"></a></h4>
+<p>This attribute lists rates in various digital blocks:</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Stage</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Ratio</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>TXSAMP</p></td>
+<td><p>TX sampling/baseband rate</p></td>
+<td><p>TF/TXSAMP (FIR interpolation)</p></td>
+</tr>
+<tr class="row-odd"><td><p>TF</p></td>
+<td><p>HB1 filter rate</p></td>
+<td><p>T1/TF</p></td>
+</tr>
+<tr class="row-even"><td><p>T1</p></td>
+<td><p>HB2 filter rate</p></td>
+<td><p>T2/T1</p></td>
+</tr>
+<tr class="row-odd"><td><p>T2</p></td>
+<td><p>HB3/INT3 filter rate</p></td>
+<td><p>DAC/T2</p></td>
+</tr>
+<tr class="row-even"><td><p>DAC</p></td>
+<td><p>DAC sample rate</p></td>
+<td><p>ADC/DAC divider</p></td>
+</tr>
+<tr class="row-odd"><td><p>BBPLL</p></td>
+<td><p>Baseband PLL frequency</p></td>
+<td><p>BBPLL/ADC divider</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>tx_path_rates
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>BBPLL:983040000 DAC:122880000 T2:122880000 T1:61440000 TF:30720000 TXSAMP:30720000
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+</section>
+<section id="rate-governors">
+<h3>Rate Governors<a class="headerlink" href="#rate-governors" title="Link to this heading"></a></h3>
+<p>The rate governor influences ADC sample rate and decimation/interpolation
+selections in following digital blocks. It primarily affects whether RX HB3/DEC3
+and TX HB3/INT3 decimate/interpolate by 3 or 2, resulting in different
+oversampling rates. Decimate-by-3 doesn’t necessarily yield higher performance;
+“Nominal” is typically optimal.</p>
+<section id="list-available-rate-governors">
+<h4>List available Rate Governors<a class="headerlink" href="#list-available-rate-governors" title="Link to this heading"></a></h4>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>trx_rate_governor_available
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>nominal highest_osr
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+<section id="selecting-rate-governor">
+<h4>Selecting Rate Governor<a class="headerlink" href="#selecting-rate-governor" title="Link to this heading"></a></h4>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>trx_rate_governor
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>highest_osr
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span>nominal<span class="w"> </span>&gt;<span class="w"> </span>trx_rate_governor
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>trx_rate_governor
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>nominal
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+</section>
+<section id="digital-fir-filter-controls">
+<span id="ad9361-digital-fir-filter-controls"></span><h3>Digital FIR Filter Controls<a class="headerlink" href="#digital-fir-filter-controls" title="Link to this heading"></a></h3>
+<section id="query-current-filter-configuration">
+<h4>Query current filter Configuration<a class="headerlink" href="#query-current-filter-configuration" title="Link to this heading"></a></h4>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>filter_fir_config
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>FIR Rx  0,0 Tx 0,0
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>Return format shows “Rx &lt;Num Taps&gt;,&lt;Decimation&gt;” and “Tx &lt;Num Taps&gt;,&lt;Interpolation&gt;”.</p>
+</section>
+<section id="load-a-filter">
+<h4>Load a Filter<a class="headerlink" href="#load-a-filter" title="Link to this heading"></a></h4>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>LTE20.txt<span class="w"> </span>&gt;<span class="w"> </span>filter_fir_config
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>filter_fir_config
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>FIR Rx  128,2 Tx 128,2
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>The file syntax requires comment lines (prefixed with ‘#’), signed 16-bit
+coefficients, and optional rate specifications. Example format:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RX</span> <span class="mi">3</span> <span class="n">GAIN</span> <span class="o">-</span><span class="mi">6</span> <span class="n">DEC</span> <span class="mi">2</span>
+<span class="n">TX</span> <span class="mi">3</span> <span class="n">GAIN</span> <span class="mi">0</span> <span class="n">INT</span> <span class="mi">2</span>
+<span class="n">RTX</span> <span class="mi">983040000</span> <span class="mi">245760000</span> <span class="mi">245760000</span> <span class="mi">122880000</span> <span class="mi">61440000</span> <span class="mi">30720000</span>
+<span class="n">RRX</span> <span class="mi">983040000</span> <span class="mi">491520000</span> <span class="mi">245760000</span> <span class="mi">122880000</span> <span class="mi">61440000</span> <span class="mi">30720000</span>
+<span class="n">BWTX</span> <span class="mi">19365438</span>
+<span class="n">BWRX</span> <span class="mi">19365514</span>
+</pre></div>
+</div>
+</section>
+<section id="filter-enable-disable">
+<h4>Filter Enable / Disable<a class="headerlink" href="#filter-enable-disable" title="Link to this heading"></a></h4>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">1</span><span class="w"> </span>&gt;<span class="w"> </span>in_voltage_filter_fir_en
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>out_voltage_filter_fir_en
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>0
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+</section>
+<section id="rf-bandwidth-analog-filter-control">
+<span id="ad9361-rx-rf-bandwidth"></span><h3>RF Bandwidth Analog Filter Control<a class="headerlink" href="#rf-bandwidth-analog-filter-control" title="Link to this heading"></a></h3>
+<section id="rx-rf-bandwidth-control">
+<h4>RX RF Bandwidth Control<a class="headerlink" href="#rx-rf-bandwidth-control" title="Link to this heading"></a></h4>
+<p>The RX path includes TIA and BB low-pass filters with programmable corner
+frequencies.</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>in_voltage_rf_bandwidth
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>18000000
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">9000000</span><span class="w"> </span>&gt;<span class="w"> </span>in_voltage_rf_bandwidth
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>in_voltage_rf_bandwidth
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>9000000
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+<section id="tx-rf-bandwidth-control">
+<span id="ad9361-tx-rf-bandwidth"></span><h4>TX RF Bandwidth Control<a class="headerlink" href="#tx-rf-bandwidth-control" title="Link to this heading"></a></h4>
+<p>TX filtering includes BB and secondary low-pass filter blocks.</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>out_voltage_rf_bandwidth
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>18000000
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">9000000</span><span class="w"> </span>&gt;<span class="w"> </span>out_voltage_rf_bandwidth
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>out_voltage_rf_bandwidth
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>9000000
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+</section>
+<section id="rx-gain-control">
+<span id="ad9361-rx-gain-control"></span><h3>RX Gain Control<a class="headerlink" href="#rx-gain-control" title="Link to this heading"></a></h3>
+<section id="loading-a-gain-table">
+<h4>Loading a gain table<a class="headerlink" href="#loading-a-gain-table" title="Link to this heading"></a></h4>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>/lib/firmware/ad9361_std_gaintable<span class="w"> </span>&gt;<span class="w"> </span>gain_table_config
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+<section id="reading-a-gain-table">
+<h4>Reading a gain table<a class="headerlink" href="#reading-a-gain-table" title="Link to this heading"></a></h4>
+<p>Read gain table for current LO frequency:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>gain_table_config
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>&lt;gaintable AD9361 type=FULL dest=3 start=1300000000 end=4000000000&gt;
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>-3, 0x00, 0x00, 0x20
+-2, 0x00, 0x01, 0x00
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>0, 0x00, 0x03, 0x00
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+<section id="gain-control-modes">
+<span id="ad9361-rx-gain-control-mode"></span><h4>Gain control modes<a class="headerlink" href="#gain-control-modes" title="Link to this heading"></a></h4>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>in_voltage_gain_control_mode_available
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>manual fast_attack slow_attack hybrid
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><ul class="simple">
+<li><p><strong>manual</strong>: BBP controls gain via SPI writes</p></li>
+<li><p><strong>slow_attack</strong>: Intended for FDD applications with slowly changing signals</p></li>
+<li><p><strong>hybrid</strong>: Hybrid AGC where BBP controls some aspects</p></li>
+<li><p><strong>fast_attack</strong>: Designed for TDD bursting waveforms</p></li>
+</ul>
+</section>
+<section id="querying-or-setting-a-gain-control-mode">
+<h4>Querying or Setting a Gain Control Mode<a class="headerlink" href="#querying-or-setting-a-gain-control-mode" title="Link to this heading"></a></h4>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span>manual<span class="w"> </span>&gt;<span class="w"> </span>in_voltage0_gain_control_mode
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>in_voltage0_gain_control_mode
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>manual
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+<section id="reading-the-current-gain">
+<h4>Reading the current Gain<a class="headerlink" href="#reading-the-current-gain" title="Link to this heading"></a></h4>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>in_voltage0_hardwaregain
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>61.000000 dB
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+<section id="mgc-setting-the-current-gain">
+<h4>MGC setting the current Gain<a class="headerlink" href="#mgc-setting-the-current-gain" title="Link to this heading"></a></h4>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">42</span><span class="w"> </span>&gt;<span class="w"> </span>in_voltage0_hardwaregain
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>in_voltage0_hardwaregain
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>42.000000 dB
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+</section>
+<section id="tx-attenuation-control">
+<span id="ad9361-tx-attenuation-control"></span><h3>TX Attenuation Control<a class="headerlink" href="#tx-attenuation-control" title="Link to this heading"></a></h3>
+<p>Range spans 0 to -89.75 dB in 0.25dB steps. Values expressed as negative gain.
+Individual control available for TX1 and TX2 channels.</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>out_voltage0_hardwaregain
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>-10.000000 dB
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span>-42.25<span class="w"> </span>&gt;<span class="w"> </span>out_voltage0_hardwaregain
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>out_voltage0_hardwaregain
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>-42.250000 dB
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+<section id="received-strength-signal-indicator-rssi">
+<h3>Received Strength Signal Indicator (RSSI)<a class="headerlink" href="#received-strength-signal-indicator-rssi" title="Link to this heading"></a></h3>
+<p>Given the wide variety of applications for which the AD9361 is suited, the
+received strength signal indicator (RSSI) may be setup in one of several
+configurations to optimize results. The device measures RSSI by determining
+power level in dB and compensating for receive path gain.</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>in_voltage0_rssi
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>104.50 dB
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>in_voltage1_rssi
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>116.75 dB
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+<section id="tx-received-strength-signal-indicator-tx-rssi">
+<h3>TX Received Strength Signal Indicator (TX RSSI)<a class="headerlink" href="#tx-received-strength-signal-indicator-tx-rssi" title="Link to this heading"></a></h3>
+<p>This capability reuses receiver circuitry during transmit bursts for accurate
+Tx RSSI measurements. This feature is only available in TX MONITOR MODE by
+setting <code class="docutils literal notranslate"><span class="pre">in_voltage0_rf_port_select</span></code> to <code class="docutils literal notranslate"><span class="pre">TX_MONITOR1</span></code>, <code class="docutils literal notranslate"><span class="pre">TX_MONITOR2</span></code>,
+or <code class="docutils literal notranslate"><span class="pre">TX_MONITOR1_2</span></code>.</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>out_voltage0_rssi
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>30.50 dB
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>out_voltage1_rssi
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>0.00 dB
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+<section id="calibration-mode-controls">
+<h3>Calibration Mode Controls<a class="headerlink" href="#calibration-mode-controls" title="Link to this heading"></a></h3>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>calib_mode_available
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>auto manual manual_tx_quad tx_quad rf_dc_offs rssi_gain_step
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><ul class="simple">
+<li><p><strong>auto</strong>: Run TX Quadrature Calibration when moving to a new carrier frequency
+that is more than 100 MHz away</p></li>
+<li><p><strong>manual</strong>: Disables automatic calibration</p></li>
+<li><p><strong>manual_tx_quad</strong>: Prevents TX Quad Calibration unless manually invoked</p></li>
+<li><p><strong>rf_dc_offs</strong>: Issues RF DC Offset Calibration</p></li>
+<li><p><strong>tx_quad</strong>: Issues TX Quadrature Calibration</p></li>
+<li><p><strong>rssi_gain_step</strong>: Runs the RSSI gain step calibration</p></li>
+</ul>
+<section id="with-optional-calibration-phase-offset-value">
+<h4>With optional calibration phase offset value<a class="headerlink" href="#with-optional-calibration-phase-offset-value" title="Link to this heading"></a></h4>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span>tx_quad<span class="w"> </span>&gt;<span class="w"> </span>calib_mode
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span>tx_quad<span class="w"> </span><span class="m">14</span><span class="w"> </span>&gt;<span class="w"> </span>calib_mode
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span>tx_quad<span class="w"> </span>-2<span class="w"> </span>&gt;<span class="w"> </span>calib_mode
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+<section id="calibration-tracking-controls">
+<span id="ad9361-calibration-tracking-controls"></span><h4>Calibration Tracking Controls<a class="headerlink" href="#calibration-tracking-controls" title="Link to this heading"></a></h4>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>in_voltage_quadrature_tracking_en
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>1
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>&gt;<span class="w"> </span>in_voltage_quadrature_tracking_en
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>in_voltage_bb_dc_offset_tracking_en
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>1
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>in_voltage_rf_dc_offset_tracking_en
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>1
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+</section>
+<section id="rf-port-selection">
+<span id="ad9361-rf-port-selection"></span><h3>RF Port Selection<a class="headerlink" href="#rf-port-selection" title="Link to this heading"></a></h3>
+<p>Each receive channel has 3 differential or 6 single ended inputs that can be
+multiplexed. Similarly, transmitters offer switchable outputs.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If using the RF RX B or C inputs along with the RF RX A input, you should
+run the calibration also, once with other input band/port selected.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If switching the TX output, the calibration must be once manually triggered.</p>
+</div>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>out_voltage_rf_port_select_available
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>A B
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>in_voltage_rf_port_select_available
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>A_BALANCED B_BALANCED C_BALANCED A_N A_P B_N B_P C_N C_P TX_MONITOR1 TX_MONITOR2 TX_MONITOR1_2
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span>B_BALANCED<span class="w"> </span>&gt;<span class="w"> </span>in_voltage0_rf_port_select
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+<section id="dcxo-tuning">
+<h3>DCXO Tuning<a class="headerlink" href="#dcxo-tuning" title="Link to this heading"></a></h3>
+<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/pluto/docs/linux/drivers/iio-transceiver/ad9361/dcxo.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/pluto/docs/linux/drivers/iio-transceiver/ad9361/dcxo.png" />
+<p>Digital correction (DCXO) can be used to tune the external component. This only
+works with AT cut fundamental mode crystal resonators with load capacitance
+under 10pF connected between XTALP and XTALN pins.</p>
+<p>The DCXO can vary the frequency over a ±60 ppm range with resolution as fine
+as 0.0125 ppm at coarse word zero.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This feature does not exist on the AD9363.</p>
+</div>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>dcxo_tune_coarse
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>8
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>dcxo_tune_fine
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>5920
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">5930</span><span class="w"> </span>&gt;<span class="w"> </span>dcxo_tune_fine
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>dcxo_tune_fine
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>5930
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+<section id="xo-correction">
+<h3>XO Correction<a class="headerlink" href="#xo-correction" title="Link to this heading"></a></h3>
+<p>For systems using single-ended crystal oscillators or external clock sources,
+digitally correct for the oscillator offset, by determining what the actual
+oscillator is.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Since writing this attribute recalculates and reprograms all the PLL settings
+(Tx LO, Rx LO, ADC and DAC sample rates), this should only be updated when
+disturbing the system is acceptable.</p>
+</div>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>xo_correction
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>40000000
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">40000005</span><span class="w"> </span>&gt;<span class="w"> </span>xo_correction
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>xo_correction
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>40000005
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+<section id="die-temperature-reading">
+<h3>Die Temperature Reading<a class="headerlink" href="#die-temperature-reading" title="Link to this heading"></a></h3>
+<p>For accurate results this read back requires a one-point factory calibration.
+Determine the offset between this readback in millidegree Celsius and the known
+device temperature.</p>
+<p>Calibration involves adjusting the device tree property
+<code class="docutils literal notranslate"><span class="pre">adi,temp-sense-offset-signed</span></code> or directly writing register 0x0B.</p>
+<p>Example calibration process:</p>
+<ol class="arabic simple">
+<li><p>Temp Sensor Offset (Reg 0x0B) = 0xCE = -50</p></li>
+<li><p>in_temp0_input readback = 28123 m°C → 28°C</p></li>
+<li><p>Actual device temperature = 24°C</p></li>
+<li><p>OFFSETdelta = 24 - 28 = -4</p></li>
+<li><p>Corrected offset = -50 - 4 = -54 = 0xCA</p></li>
+</ol>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>in_temp0_input
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>29825
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+<section id="auxadc-reading">
+<h3>AuxADC Reading<a class="headerlink" href="#auxadc-reading" title="Link to this heading"></a></h3>
+<p>There is an Auxiliary ADC on the chip that can be read like any other IIO ADC.</p>
+<p>Attributes: <code class="docutils literal notranslate"><span class="pre">in_voltage2_offset</span></code>, <code class="docutils literal notranslate"><span class="pre">in_voltage2_raw</span></code>, <code class="docutils literal notranslate"><span class="pre">in_voltage2_scale</span></code></p>
+<p>Calculation: <em>(in_voltage2_raw + in_voltage2_offset) × in_voltage2_scale</em></p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>grep<span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span>in_voltage2_*
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>in_voltage2_offset:57
+in_voltage2_raw:1494
+in_voltage2_scale:0.305250
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+<section id="auxdac-writing">
+<h3>AuxDAC Writing<a class="headerlink" href="#auxdac-writing" title="Link to this heading"></a></h3>
+<p>There are 2 Auxiliary DACs on the chip.</p>
+<p>Attributes: <code class="docutils literal notranslate"><span class="pre">out_voltage2_raw</span></code>, <code class="docutils literal notranslate"><span class="pre">out_voltage2_scale</span></code>, <code class="docutils literal notranslate"><span class="pre">out_voltage3_raw</span></code>,
+<code class="docutils literal notranslate"><span class="pre">out_voltage3_scale</span></code></p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>grep<span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span>out_voltage2*<span class="w"> </span>out_voltage3*
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>out_voltage2_raw:306
+out_voltage2_scale:1.000000
+out_voltage3_raw:306
+out_voltage3_scale:1.000000
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">1000</span><span class="w"> </span>&gt;<span class="w"> </span>out_voltage2_raw
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+<section id="rssi-gain-step-calibration">
+<h3>RSSI Gain Step Calibration<a class="headerlink" href="#rssi-gain-step-calibration" title="Link to this heading"></a></h3>
+<p>Run calibration by setting <code class="docutils literal notranslate"><span class="pre">calib_mode</span></code> to <code class="docutils literal notranslate"><span class="pre">rssi_gain_step</span></code>. Before running
+this calibration, provide a single tone within the channel bandwidth and monitor
+the received data.</p>
+<p>Error tables can be read and loaded again anytime using the dedicated sysfs
+attribute. Gain step calibration register values are dependent on the LO
+frequency.</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>rssi_gain_step_error
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>lna_error: 0 15 14 0
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>mixer_error: 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 0
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>gain_step_calib_reg_val: 192 44 16 6 0
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+</section>
+<section id="advanced-debug-facilities">
+<h2>Advanced Debug Facilities<a class="headerlink" href="#advanced-debug-facilities" title="Link to this heading"></a></h2>
+<p>The AD9361 driver offers debugging controls via kernel debugfs. These advanced
+features enable device testing and validation.</p>
+<section id="runtime-device-driver-customization">
+<h3>Runtime Device Driver Customization<a class="headerlink" href="#runtime-device-driver-customization" title="Link to this heading"></a></h3>
+<p>Extensive customization options exist via devicetree, though they can be
+modified at runtime for evaluation purposes. Changes require writing <code class="docutils literal notranslate"><span class="pre">1</span></code> to
+the <code class="docutils literal notranslate"><span class="pre">initialize</span></code> attribute and will be lost upon device unbinding or platform
+reboot.</p>
+<p>To locate the AD9361 device:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>grep<span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span>/sys/bus/iio/devices/iio<span class="se">\:</span>device<span class="se">\*</span>/name
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>Access debugfs at <code class="docutils literal notranslate"><span class="pre">/sys/kernel/debug/iio/iio:deviceX</span></code>:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>/sys/kernel/debug/iio/iio:device1
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>adi,txmon-2-lo-cm
+adi,txmon-dc-tracking-enable
+adi,txmon-delay
+adi,txmon-duration
+adi,txmon-high-gain
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>initialize
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>loopback
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><section id="example-to-change-the-driver-from-fdd-into-tdd-mode-operation">
+<h4>Example to change the driver from FDD into TDD mode operation<a class="headerlink" href="#example-to-change-the-driver-from-fdd-into-tdd-mode-operation" title="Link to this heading"></a></h4>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>adi,frequency-division-duplex-mode-enable
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>1
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>&gt;<span class="w"> </span>adi,frequency-division-duplex-mode-enable
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">1</span><span class="w"> </span>&gt;<span class="w"> </span>initialize
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+</section>
+<section id="gpo-manual-control">
+<h3>GPO Manual Control<a class="headerlink" href="#gpo-manual-control" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">gpo_set</span></code> attribute enables GPIO[0..3] control via debugfs when
+<code class="docutils literal notranslate"><span class="pre">adi,gpo-manual-mode-enable</span></code> is activated.</p>
+<p><strong>Syntax:</strong> <code class="docutils literal notranslate"><span class="pre">gpo_set</span> <span class="pre">&lt;Identifier&gt;</span> <span class="pre">&lt;Value&gt;</span></code></p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/sys/kernel/debug/iio/iio:device1
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>/sys/kernel/debug/iio/iio:device1$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">1</span><span class="w"> </span>&gt;<span class="w"> </span>adi,gpo-manual-mode-enable
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>/sys/kernel/debug/iio/iio:device1$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">1</span><span class="w"> </span>&gt;<span class="w"> </span>gpo_set
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>/sys/kernel/debug/iio/iio:device1$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>&gt;<span class="w"> </span>gpo_set
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>/sys/kernel/debug/iio/iio:device1$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span>0xF<span class="w"> </span>0xF<span class="w"> </span>&gt;<span class="w"> </span>gpo_set
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>/sys/kernel/debug/iio/iio:device1$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span>0xF<span class="w"> </span><span class="m">0</span><span class="w"> </span>&gt;<span class="w"> </span>gpo_set
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+<section id="build-in-self-test-bist">
+<h3>Build-In Self-Test (BIST)<a class="headerlink" href="#build-in-self-test-bist" title="Link to this heading"></a></h3>
+<p>BIST controls take immediate effect without requiring <code class="docutils literal notranslate"><span class="pre">initialize</span></code> sequence.</p>
+<section id="bist-tone">
+<h4>BIST Tone<a class="headerlink" href="#bist-tone" title="Link to this heading"></a></h4>
+<p>Injects user-selectable tones into RX or TX paths.</p>
+<p><strong>Syntax:</strong> <code class="docutils literal notranslate"><span class="pre">bist_tone</span> <span class="pre">&lt;Injection</span> <span class="pre">Point&gt;</span> <span class="pre">&lt;Frequency&gt;</span> <span class="pre">&lt;Level&gt;</span> <span class="pre">&lt;Mask&gt;</span></code></p>
+<ul class="simple">
+<li><p>Injection points: 0=Disable, 1=TX, 2=RX</p></li>
+<li><p>Frequencies: 0=FSample/32, 1=FSample/16, 2=FSample×3/32, 3=FSample/8</p></li>
+<li><p>Levels: 0=Full Scale, 6=FS/2, 12=FS/4, 18=FS/8</p></li>
+</ul>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">6</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>&gt;<span class="w"> </span>bist_tone
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+<section id="prbs">
+<h4>PRBS<a class="headerlink" href="#prbs" title="Link to this heading"></a></h4>
+<p>Pseudorandom Binary Sequence injection into RX or TX paths.</p>
+<p><strong>Syntax:</strong> <code class="docutils literal notranslate"><span class="pre">bist_prbs</span> <span class="pre">&lt;Injection</span> <span class="pre">Point&gt;</span></code></p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">2</span><span class="w"> </span>&gt;<span class="w"> </span>bist_prbs
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+<section id="bist-loopback">
+<h4>BIST Loopback<a class="headerlink" href="#bist-loopback" title="Link to this heading"></a></h4>
+<p>Enables digital TX→RX loopback or RF RX→TX loopback.</p>
+<p><strong>Syntax:</strong> <code class="docutils literal notranslate"><span class="pre">loopback</span> <span class="pre">&lt;Mode&gt;</span></code> (0=Disable, 1=Digital TX→RX, 2=RF RX→TX)</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">1</span><span class="w"> </span>&gt;<span class="w"> </span>loopback
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+</section>
+</section>
+<section id="low-level-register-access-via-debugfs">
+<h2>Low level register access via debugfs<a class="headerlink" href="#low-level-register-access-via-debugfs" title="Link to this heading"></a></h2>
+<p>Direct register access enables reading/writing device registers. Exercise
+caution, as modifications bypass driver oversight.</p>
+<p><strong>Reading registers:</strong></p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span>0x7<span class="w"> </span>&gt;<span class="w"> </span>direct_reg_access
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>direct_reg_access
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>0x40
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p><strong>Writing registers:</strong> <code class="docutils literal notranslate"><span class="pre">ADDRESS</span> <span class="pre">VALUE</span></code></p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span>0x7<span class="w"> </span>0x50<span class="w"> </span>&gt;<span class="w"> </span>direct_reg_access
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>direct_reg_access
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>0x50
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p><strong>HDL Core registers</strong> (devices with both SPI/I2C and AXI interfaces):
+Set BIT31 when accessing HDL registers.</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span>0x80000000<span class="w"> </span>&gt;<span class="w"> </span>direct_reg_access
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>direct_reg_access
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>0x80062
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+<section id="more-information">
+<h2>More Information<a class="headerlink" href="#more-information" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>IIO mailing list: <a class="reference external" href="mailto:linux-iio&#37;&#52;&#48;vger&#46;kernel&#46;org">linux-iio<span>&#64;</span>vger<span>&#46;</span>kernel<span>&#46;</span>org</a></p></li>
+<li><p><a class="icon link reference external" href="https://www.kernel.org/doc/Documentation/ABI/testing" target="_blank">IIO Linux Kernel Documentation</a></p></li>
+<li><p><a class="reference internal" href="../../../../software/iio-oscilloscope/index.html#iio-oscilloscope"><span class="std std-ref">IIO Oscilloscope</span></a></p></li>
+<li><p><a class="reference internal" href="../../../../software/libiio/index.html#libiio"><span class="std std-ref">Libiio</span></a></p></li>
+</ul>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <div></div>
+    <div></div>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2025, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>
