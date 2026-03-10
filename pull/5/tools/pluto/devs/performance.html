@@ -4,18 +4,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="Main receivers are handled by the axi-ad9081-rx-hpc IIO device, The number of channels depend on the JESD mode (M) parameter and can vary from case to case. When using complex IQ, two channels index by _i and _q from a receiver." name="description" />
+<meta content="Add receiver performance metrics" name="description" />
 
-    <title>AD9084 &#8212; System Level Documentation  documentation</title>
+    <title>ADALM-PLUTO Performance Metrics &#8212; System Level Documentation  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/app.min.css?v=a525f648" />
     <script async="async" src="../../../_static/app.umd.js?v=fcf3088a"></script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <link rel="icon" href="../../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Libiio" href="../../libiio/index.html" />
-    <link rel="prev" title="Advanced plugin" href="../adrv9009/advanced-plugin.html" />
+    <link rel="next" title="USB OTG" href="usb_otg.html" />
+    <link rel="prev" title="For Developers" href="index.html" />
    
   
   
@@ -95,27 +94,13 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">AD9084</a><ul>
-<li><a class="reference internal" href="#capture-window">Capture Window</a><ul>
-<li><a class="reference internal" href="#screenshots">Screenshots</a><ul>
-<li><a class="reference internal" href="#time-domain-view">Time Domain View</a></li>
-<li><a class="reference internal" href="#frequency-domain-view">Frequency Domain View</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a class="reference internal" href="#plugin">Plugin</a><ul>
-<li><a class="reference internal" href="#receive-chain">Receive Chain</a></li>
-<li><a class="reference internal" href="#transmit-chain">Transmit Chain</a></li>
-<li><a class="reference internal" href="#fpga-settings">FPGA Settings</a><ul>
-<li><a class="reference internal" href="#transmit-dds">Transmit/DDS</a></li>
-<li><a class="reference internal" href="#one-cw-tone">One CW Tone</a></li>
-<li><a class="reference internal" href="#two-cw-tone">Two CW Tone</a></li>
-<li><a class="reference internal" href="#independent-i-q-control">Independent I/Q Control</a></li>
-<li><a class="reference internal" href="#dac-buffer-output">DAC Buffer Output</a></li>
-<li><a class="reference internal" href="#disable">Disable</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#">ADALM-PLUTO Performance Metrics</a><ul>
+<li><a class="reference internal" href="#receiver">Receiver</a></li>
+<li><a class="reference internal" href="#transmitter">Transmitter</a></li>
+<li><a class="reference internal" href="#data-throughput">Data Throughput</a><ul>
+<li><a class="reference internal" href="#via-iiod-usb-backend">Via IIOD USB backend</a></li>
+<li><a class="reference internal" href="#via-iiod-network-backend-with-rndis">Via IIOD Network backend with RNDIS</a></li>
+<li><a class="reference internal" href="#via-local-iio-device">Via local IIO device</a></li>
 </ul>
 </li>
 </ul>
@@ -192,42 +177,42 @@ Content on this topic
   <span class="caption-text">Software</span>
 </p>
 
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../ad9084-profile-generator/index.html">AD9084 (Apollo) Profile Generator</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../gnuradio/index.html">GNU Radio and IIO Devices: gr-iio</a></li>
-<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-4" id="toctree-collapse-4" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">IIO Oscilloscope</a><label for="toctree-collapse-4"><div class="icon"></div></label></div><ul class="current">
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-4-1" id="toctree-collapse-4-1"/><div class="collapse"><a class="reference internal" href="../adrv9009/index.html">ADRV9009</a><label for="toctree-collapse-4-1"><div class="icon"></div></label></div><ul>
-<li class="toctree-l3"><a class="reference internal" href="../adrv9009/plugin.html">Standard Plugin</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../adrv9009/advanced-plugin.html">Advanced plugin</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../software/ad9084-profile-generator/index.html">AD9084 (Apollo) Profile Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../software/gnuradio/index.html">GNU Radio and IIO Devices: gr-iio</a></li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-4" id="toctree-collapse-4"/><div class="collapse"><a class="reference internal" href="../../../software/iio-oscilloscope/index.html">IIO Oscilloscope</a><label for="toctree-collapse-4"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-4-1" id="toctree-collapse-4-1"/><div class="collapse"><a class="reference internal" href="../../../software/iio-oscilloscope/adrv9009/index.html">ADRV9009</a><label for="toctree-collapse-4-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../software/iio-oscilloscope/adrv9009/plugin.html">Standard Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../software/iio-oscilloscope/adrv9009/advanced-plugin.html">Advanced plugin</a></li>
 </ul>
 </li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">AD9084</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/iio-oscilloscope/ad9084/index.html">AD9084</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-5" id="toctree-collapse-5"/><div class="collapse"><a class="reference internal" href="../../libiio/index.html">Libiio</a><label for="toctree-collapse-5"><div class="icon"></div></label></div><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../libiio/internals.html">About libiio</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../libiio/cli.html">Command line utility</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../libiio/tips-tricks.html">Tips &amp; Tricks</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../libiio/matlab_simulink/index.html">IIO System Object</a></li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-5" id="toctree-collapse-5"/><div class="collapse"><a class="reference internal" href="../../../software/libiio/index.html">Libiio</a><label for="toctree-collapse-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/libiio/internals.html">About libiio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/libiio/cli.html">Command line utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/libiio/tips-tricks.html">Tips &amp; Tricks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/libiio/matlab_simulink/index.html">IIO System Object</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-6" id="toctree-collapse-6"/><div class="collapse"><a class="reference internal" href="../../libm2k/index.html">Libm2k</a><label for="toctree-collapse-6"><div class="icon"></div></label></div><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../libm2k/calibration.html">Calibration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../libm2k/digital_communication.html">Digital communication</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../libm2k/m2kcli.html">Command line utility</a></li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-6" id="toctree-collapse-6"/><div class="collapse"><a class="reference internal" href="../../../software/libm2k/index.html">Libm2k</a><label for="toctree-collapse-6"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/libm2k/calibration.html">Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/libm2k/digital_communication.html">Digital communication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/libm2k/m2kcli.html">Command line utility</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-7" id="toctree-collapse-7"/><div class="collapse"><a class="reference internal" href="../../matlab/index.html">MATLAB &amp; Simulink Toolboxes</a><label for="toctree-collapse-7"><div class="icon"></div></label></div><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../matlab/hsx-toolbox/index.html">High Speed Converter Toolbox</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../matlab/transceiver-toolbox/index.html">Transceiver Toolbox</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../matlab/bsp-extend.html">Extending Device Interfaces</a></li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-7" id="toctree-collapse-7"/><div class="collapse"><a class="reference internal" href="../../../software/matlab/index.html">MATLAB &amp; Simulink Toolboxes</a><label for="toctree-collapse-7"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/matlab/hsx-toolbox/index.html">High Speed Converter Toolbox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/matlab/transceiver-toolbox/index.html">Transceiver Toolbox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/matlab/bsp-extend.html">Extending Device Interfaces</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../pyadi-iio/index.html">PyADI-IIO</a></li>
-<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-8" id="toctree-collapse-8"/><div class="collapse"><a class="reference internal" href="../../zephyr/index.html">Zephyr RTOS</a><label for="toctree-collapse-8"><div class="icon"></div></label></div><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../zephyr/zephyr-devicetree.html">Intro to Devicetree</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../zephyr/kconfig/zephyr-kconfig.html">Introduction to Kconfig</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../zephyr/using-zephyr-codefusion-fs/zephyr_codefusion_fs.html">Using Zephyr &amp; Codefusion Studio to Partition a Flash Filesystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../software/pyadi-iio/index.html">PyADI-IIO</a></li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-8" id="toctree-collapse-8"/><div class="collapse"><a class="reference internal" href="../../../software/zephyr/index.html">Zephyr RTOS</a><label for="toctree-collapse-8"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/zephyr/zephyr-devicetree.html">Intro to Devicetree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/zephyr/kconfig/zephyr-kconfig.html">Introduction to Kconfig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/zephyr/using-zephyr-codefusion-fs/zephyr_codefusion_fs.html">Using Zephyr &amp; Codefusion Studio to Partition a Flash Filesystem</a></li>
 </ul>
 </li>
 </ul>
@@ -236,61 +221,61 @@ Content on this topic
   <span class="caption-text">Devices</span>
 </p>
 
-<ul>
-<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-9" id="toctree-collapse-9"/><div class="collapse"><a class="reference internal" href="../../../tools/m2k/index.html">ADALM2000</a><label for="toctree-collapse-9"><div class="icon"></div></label></div><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../tools/m2k/devs/index.html">For Developers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../tools/m2k/users/index.html">For End Users</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../tools/m2k/help_support.html">Support</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../tools/m2k/labview.html">Using With LabVIEW</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../tools/m2k/matlab.html">Using with MATLAB</a></li>
+<ul class="current">
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-9" id="toctree-collapse-9"/><div class="collapse"><a class="reference internal" href="../../m2k/index.html">ADALM2000</a><label for="toctree-collapse-9"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../m2k/devs/index.html">For Developers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../m2k/users/index.html">For End Users</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../m2k/help_support.html">Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../m2k/labview.html">Using With LabVIEW</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../m2k/matlab.html">Using with MATLAB</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-10" id="toctree-collapse-10"/><div class="collapse"><a class="reference internal" href="../../../tools/pluto-m2k/index.html">Common PLUTO&amp;M2K</a><label for="toctree-collapse-10"><div class="icon"></div></label></div><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../tools/pluto-m2k/building_the_image.html">Building the Firmware Image</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../tools/pluto-m2k/drivers.html">Installing Drivers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../tools/pluto-m2k/firmware.html">Firmware Updates</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../tools/pluto-m2k/obtaining_the_sources.html">Obtaining the Build Sources</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../tools/pluto-m2k/reboot.html">Rebooting</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../tools/pluto-m2k/usb_otg_host.html">USB OTG – HOST function Support</a></li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-10" id="toctree-collapse-10"/><div class="collapse"><a class="reference internal" href="../../pluto-m2k/index.html">Common PLUTO&amp;M2K</a><label for="toctree-collapse-10"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../pluto-m2k/building_the_image.html">Building the Firmware Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pluto-m2k/drivers.html">Installing Drivers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pluto-m2k/firmware.html">Firmware Updates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pluto-m2k/obtaining_the_sources.html">Obtaining the Build Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pluto-m2k/reboot.html">Rebooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pluto-m2k/usb_otg_host.html">USB OTG – HOST function Support</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-11" id="toctree-collapse-11"/><div class="collapse"><a class="reference internal" href="../../../tools/pluto/index.html">ADALM-PLUTO</a><label for="toctree-collapse-11"><div class="icon"></div></label></div><ul>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-11-1" id="toctree-collapse-11-1"/><div class="collapse"><a class="reference internal" href="../../../tools/pluto/devs/index.html">For Developers</a><label for="toctree-collapse-11-1"><div class="icon"></div></label></div><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../tools/pluto/devs/performance.html">ADALM-PLUTO Performance Metrics</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../tools/pluto/devs/usb_otg.html">USB OTG</a></li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-11" id="toctree-collapse-11" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">ADALM-PLUTO</a><label for="toctree-collapse-11"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-11-1" id="toctree-collapse-11-1" checked=""/><div class="collapse"><a class="reference internal" href="index.html">For Developers</a><label for="toctree-collapse-11-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">ADALM-PLUTO Performance Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_otg.html">USB OTG</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-11-2" id="toctree-collapse-11-2"/><div class="collapse"><a class="reference internal" href="../../../tools/pluto/hacking/index.html">Advanced Users</a><label for="toctree-collapse-11-2"><div class="icon"></div></label></div><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../tools/pluto/hacking/hardware.html">Hardware User Guide</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../tools/pluto/hacking/listening_to_yourself.html">Self Reception</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../tools/pluto/hacking/power_amp.html">Controlling External Devices</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-11-2" id="toctree-collapse-11-2"/><div class="collapse"><a class="reference internal" href="../hacking/index.html">Advanced Users</a><label for="toctree-collapse-11-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../hacking/hardware.html">Hardware User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../hacking/listening_to_yourself.html">Self Reception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../hacking/power_amp.html">Controlling External Devices</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-11-3" id="toctree-collapse-11-3"/><div class="collapse"><a class="reference internal" href="../../../tools/pluto/users/index.html">For End Users</a><label for="toctree-collapse-11-3"><div class="icon"></div></label></div><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../tools/pluto/users/antennas.html">Antennas</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../tools/pluto/users/asee_papers.html">ASEE Papers using the Pluto SDR</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../tools/pluto/users/calibration.html">Calibrating the ADALM-PLUTO</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../tools/pluto/users/customizing.html">Customizing the ADALM-PLUTO</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../tools/pluto/users/far_fast.html">How far/fast?</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../tools/pluto/users/firmware.html">Pluto/M2k Firmware Updates</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../tools/pluto/users/intro.html">Introduction to the ADALM-PLUTO</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../tools/pluto/users/name.html">Why “Pluto”</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../tools/pluto/users/non_quad.html">Dealing with non-Quadrature Signals</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../tools/pluto/users/phase_noise.html">ADALM-PLUTO Phase Noise and Frequency Accuracy</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../tools/pluto/users/quick_start.html">PlutoSDR Quick Start</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../tools/pluto/users/receive.html">ADALM-PLUTO Receive</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../tools/pluto/users/receiver_sensitivity.html">ADALM-PLUTO Receiver Sensitivity</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../tools/pluto/users/temp.html">PlutoSDR Thermals</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../tools/pluto/users/transmit.html">ADALM-PLUTO Transmit</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../tools/pluto/users/understanding.html">Basic internals of Pluto</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-11-3" id="toctree-collapse-11-3"/><div class="collapse"><a class="reference internal" href="../users/index.html">For End Users</a><label for="toctree-collapse-11-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users/antennas.html">Antennas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users/asee_papers.html">ASEE Papers using the Pluto SDR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users/calibration.html">Calibrating the ADALM-PLUTO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users/customizing.html">Customizing the ADALM-PLUTO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users/far_fast.html">How far/fast?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users/firmware.html">Pluto/M2k Firmware Updates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users/intro.html">Introduction to the ADALM-PLUTO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users/name.html">Why “Pluto”</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users/non_quad.html">Dealing with non-Quadrature Signals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users/phase_noise.html">ADALM-PLUTO Phase Noise and Frequency Accuracy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users/quick_start.html">PlutoSDR Quick Start</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users/receive.html">ADALM-PLUTO Receive</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users/receiver_sensitivity.html">ADALM-PLUTO Receiver Sensitivity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users/temp.html">PlutoSDR Thermals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users/transmit.html">ADALM-PLUTO Transmit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users/understanding.html">Basic internals of Pluto</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../tools/pluto/help_support.html">Support</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../tools/pluto/prerequisites.html">Prerequisites</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../tools/pluto/transceiver_transferring_data.html">Controlling the transceiver and transferring data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../help_support.html">Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../transceiver_transferring_data.html">Controlling the transceiver and transferring data</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../tools/uartjtag/index.html">ADALM-UARTJTAG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../uartjtag/index.html">ADALM-UARTJTAG</a></li>
 </ul>
 
 <p class="caption" role="heading">
@@ -617,164 +602,48 @@ Content on this topic
       <div class="documentwrapper">
         <div class="bodywrapper" id="top-anchor">
           <div class="body-header">
-  <nav class="breadcrumb"><ol><li><a href="../index.html">IIO Oscilloscope</a></li></ol></nav>
+  <nav class="breadcrumb"><ol><li><a href="../index.html">ADALM-PLUTO</a></li><li><a href="index.html">For Developers</a></li></ol></nav>
 </div>
           <div class="body" role="main">
             
-  <section id="ad9084">
-<span id="ad9084-iio-oscilloscope"></span><h1>AD9084<a class="headerlink" href="#ad9084" title="Link to this heading"></a></h1>
-<section id="capture-window">
-<h2>Capture Window<a class="headerlink" href="#capture-window" title="Link to this heading"></a></h2>
-<p>Main receivers are handled by the axi-ad9081-rx-hpc IIO device,
-The number of channels depend on the JESD mode (M) parameter and
-can vary from case to case. When using complex IQ,
-two channels index by _i and _q from a receiver.</p>
-<section id="screenshots">
-<h3>Screenshots<a class="headerlink" href="#screenshots" title="Link to this heading"></a></h3>
-<section id="time-domain-view">
-<h4>Time Domain View<a class="headerlink" href="#time-domain-view" title="Link to this heading"></a></h4>
-<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/pluto/docs/software/iio-oscilloscope/ad9084/ad9084_osc_time.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/pluto/docs/software/iio-oscilloscope/ad9084/ad9084_osc_time.png" />
-</section>
-<section id="frequency-domain-view">
-<h4>Frequency Domain View<a class="headerlink" href="#frequency-domain-view" title="Link to this heading"></a></h4>
-<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/pluto/docs/software/iio-oscilloscope/ad9084/ad9084_osc_fft.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/pluto/docs/software/iio-oscilloscope/ad9084/ad9084_osc_fft.png" />
-<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/pluto/docs/software/iio-oscilloscope/ad9084/ad9084_osc_tone_fft.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/pluto/docs/software/iio-oscilloscope/ad9084/ad9084_osc_tone_fft.png" />
-</section>
-</section>
-</section>
-<section id="plugin">
-<span id="ad9084-iio-oscilloscope-plugin"></span><h2>Plugin<a class="headerlink" href="#plugin" title="Link to this heading"></a></h2>
-<p>The AD9084 plugin works with the IIO Oscilloscope. You should always use the
-latest version if possible. Changing any field will immediately write changes
-which have been made to the AD9084 settings to the hardware, and then read it
-back to make sure the setting is valid. If you want to set something that the GUI
-changes to a different number, that either means that GUI is rounding (sorry),
-or the hardware (either the AD9084 or the FPGA fabric) does not support
-that mode/precision.</p>
-<p>If you want to play with /sys/bus/iio/devices/…. and manipulate the devices behind
-the back of the GUI, it’s still possible to see the settings by clicking the
-Reload Settings button at the bottom of the GUI.</p>
-<p>The AD9084 view is divided in three sections:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>Receive Chain</p></li>
-<li><p>Transmit Chain</p></li>
-<li><p>FPGA Settings</p></li>
-</ul>
-</div></blockquote>
-<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/pluto/docs/software/iio-oscilloscope/ad9084/ad9084_osc_plugin.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/pluto/docs/software/iio-oscilloscope/ad9084/ad9084_osc_plugin.png" />
-<section id="receive-chain">
-<h3>Receive Chain<a class="headerlink" href="#receive-chain" title="Link to this heading"></a></h3>
-<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/pluto/docs/software/iio-oscilloscope/ad9084/ad9084_osc_plugin_rx.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/pluto/docs/software/iio-oscilloscope/ad9084/ad9084_osc_plugin_rx.png" />
-<ul class="simple">
-<li><p>ADC Rate(MHz): Displays the ADC Sample Rate. <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-mxfe/ad9081#adc_rate" target="_blank">Read More</a></p></li>
-<li><p>ADC Nyquist Zone Control: Selects the Nyquist Zone. <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-mxfe/ad9081#adc_nyquist_zone_control" target="_blank">Read More</a></p></li>
-<li><p>RX Main NCO Frequency Control: Controls the Main NCO. <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-mxfe/ad9081#main_data_path" target="_blank">Read More</a></p></li>
-<li><p>RX Main NCO Phase Control: Controls the Main NCO Phase. <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-mxfe/ad9081#main_data_path1" target="_blank">Read More</a></p></li>
-<li><p>RX Channel NCO Frequency Control: Controls the Channel NCO Frequency. <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-mxfe/ad9081#channel_data_path" target="_blank">Read More</a></p></li>
-<li><p>RX Channel NCO Phase Control: Controls the Channel NCO Phase. <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-mxfe/ad9081#channel_data_path1" target="_blank">Read More</a></p></li>
-</ul>
-</section>
-<section id="transmit-chain">
-<h3>Transmit Chain<a class="headerlink" href="#transmit-chain" title="Link to this heading"></a></h3>
-<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/pluto/docs/software/iio-oscilloscope/ad9084/ad9084_osc_plugin_tx.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/pluto/docs/software/iio-oscilloscope/ad9084/ad9084_osc_plugin_tx.png" />
-<ul class="simple">
-<li><p>DAC Rate(MHz): Displays the DAC Sample Rate. <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-mxfe/ad9081#dac_rate" target="_blank">Read More</a></p></li>
-<li><p>TX Main NCO Frequency Control: Controls the Main NCO Frequency. <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-mxfe/ad9081#main_data_path" target="_blank">Read More</a></p></li>
-<li><p>TX Main NCO Phase Control: Controls the Main NCO Phase. <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-mxfe/ad9081#main_data_path1" target="_blank">Read More</a></p></li>
-<li><p>TX Channel NCO Frequency Control: Controls the Channel. NCO Frequency <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-mxfe/ad9081#channel_data_path" target="_blank">Read More</a></p></li>
-<li><p>TX Channel NCO Phase Control: Controls the Channel NCO Phase. <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-mxfe/ad9081#channel_data_path1" target="_blank">Read More</a></p></li>
-<li><p>TX NCO Channel Digital Gain: Controls the Channel NCO digital gain. <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-mxfe/ad9081#tx_nco_channel_digital_gain" target="_blank">Read More</a></p></li>
-<li><p>TX NCO Test Tone Modes: Controls the Test Tone generation. <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-mxfe/ad9081#tx_nco_test_tone_modes" target="_blank">Read More</a></p></li>
-</ul>
-</section>
-<section id="fpga-settings">
-<h3>FPGA Settings<a class="headerlink" href="#fpga-settings" title="Link to this heading"></a></h3>
-<section id="transmit-dds">
-<h4>Transmit/DDS<a class="headerlink" href="#transmit-dds" title="Link to this heading"></a></h4>
-<p>The plugin provides several options on how the transmitted data is generated.</p>
-<p>It is possible to either use the built-in two tone <strong>Direct Digital Synthesizer (DDS)</strong>
-to transmit a bi-tonal signal on channels I and Q of the DAC.
-Or it is possible to use the <strong>Direct Memory Access (DMA)</strong> facility to transmit
-custom data that you have stored in a file.</p>
-<p>This can be achieved by selecting one of the following options listed by the <strong>DDS Mode</strong>:</p>
-</section>
-<section id="one-cw-tone">
-<h4>One CW Tone<a class="headerlink" href="#one-cw-tone" title="Link to this heading"></a></h4>
-<p>In <strong>One CW Tone</strong> mode one continuous wave (CW) tone will be outputted.
-The plugin displays the controls to set the Frequency, Amplitude and Phase
-for just one tone and makes sure that the amplitude of the other tone is set to 0.
-The resulting signal will be outputted on the Channel I of the DAC and the exact
-same signal but with a difference in phase of 90 degrees will be outputted
-on the Channel Q of the DAC.</p>
-<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/pluto/docs/software/iio-oscilloscope/ad9084/one_cw_tone.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/pluto/docs/software/iio-oscilloscope/ad9084/one_cw_tone.png" />
-</section>
-<section id="two-cw-tone">
-<h4>Two CW Tone<a class="headerlink" href="#two-cw-tone" title="Link to this heading"></a></h4>
-<p>In <strong>Two CW Tone</strong> mode two continuous wave (CW) tones will be outputted.
-The plugin displays the controls to set the frequencies F1 and F2,
-amplitudes A1 and A2, phases P1 and P2 for the two tones. The resulting
-signal will be outputted on the Channel I of the DAC and the exact same
-signal but with a difference in phase of 90 degrees will be outputted
-on the Channel Q of the DAC.</p>
-<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/pluto/docs/software/iio-oscilloscope/ad9084/two_cw_tones.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/pluto/docs/software/iio-oscilloscope/ad9084/two_cw_tones.png" />
-</section>
-<section id="independent-i-q-control">
-<h4>Independent I/Q Control<a class="headerlink" href="#independent-i-q-control" title="Link to this heading"></a></h4>
-<p>In <strong>Independent I/Q Control</strong> the plugin displays the controls to set the frequencies,
-amplitudes and phases for the two tones that will be outputted on channel
-I and additionally it allows for the two tones that will be outputted on
-channel Q of the DAC to be configured independently.</p>
-<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/pluto/docs/software/iio-oscilloscope/ad9084/iq_independent.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/pluto/docs/software/iio-oscilloscope/ad9084/iq_independent.png" />
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The bi-tonal signal (T) is defined as the sum of two tones:</p>
-<div class="math-wrapper docutils container">
-<div class="math notranslate nohighlight">
-\[T(t) = A1 * sin(2 * p * F1 * t + P1) + A2 * sin(2 * p * F2 * t + P2)\]</div>
-</div>
-<p>where:</p>
-<ul class="simple">
-<li><p>A — Amplitude</p></li>
-<li><p>F — Frequency</p></li>
-<li><p>P — Phase</p></li>
-</ul>
+  <section id="adalm-pluto-performance-metrics">
+<span id="pluto-devs-performance"></span><h1>ADALM-PLUTO Performance Metrics<a class="headerlink" href="#adalm-pluto-performance-metrics" title="Link to this heading"></a></h1>
+<section id="receiver">
+<h2>Receiver<a class="headerlink" href="#receiver" title="Link to this heading"></a></h2>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>Add receiver performance metrics</p>
 </div>
 </section>
-<section id="dac-buffer-output">
-<h4>DAC Buffer Output<a class="headerlink" href="#dac-buffer-output" title="Link to this heading"></a></h4>
-<p>The file selector under the File Selection section is used to locate and choose
-the desired data file. Under the DAC Channels section the enabled channels will
-be used to transmit the data stored in the file. To finalize the process,
-a click on the Load button is required.</p>
-<div class="admonition important">
-<p class="admonition-title">Important</p>
-<ul class="simple">
-<li><p>There are two types of files than can be loaded: .txt or .mat.
-The IIO-Oscilloscope comes with several data files that can be used.
-If you want to create your own data files please take a look at the
-<a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/software/basic_iq_datafiles" target="_blank">Basic IQ Data Files</a>
-documentation first.</p></li>
-<li><p>Due to hardware limitation only specific combinations of enabled channels are possible.
-You can enable a total of 1, 2, 4, etc. channels. If 1 channel is enabled then it can be
-any of them. If two channels are enabled then channels 0, 1 or channels 2, 3 can be
-enabled and so on.</p></li>
-</ul>
+<section id="transmitter">
+<h2>Transmitter<a class="headerlink" href="#transmitter" title="Link to this heading"></a></h2>
+<div class="admonition-todo admonition" id="id2">
+<p class="admonition-title">Todo</p>
+<p>Add transmitter performance metrics</p>
 </div>
 </section>
-<section id="disable">
-<h4>Disable<a class="headerlink" href="#disable" title="Link to this heading"></a></h4>
-<p>In this mode both DDS and DMA are disabled causing the DAC channels to stop transmitting any data.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<ul class="simple">
-<li><p>Upon pressing the <strong>Reload Settings</strong> button the values will be reloaded with the corresponding driver values.
-Useful in scenarios where the diver values get changed outside this plugin and a refresh on plugin’s values
-is needed.</p></li>
-<li><p>Some plugin values will be rounded to the nearest value supported by the hardware.</p></li>
-</ul>
+<section id="data-throughput">
+<h2>Data Throughput<a class="headerlink" href="#data-throughput" title="Link to this heading"></a></h2>
+<section id="via-iiod-usb-backend">
+<h3>Via IIOD USB backend<a class="headerlink" href="#via-iiod-usb-backend" title="Link to this heading"></a></h3>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>iio_readdev<span class="w"> </span>-u<span class="w"> </span>usb:1.100.5<span class="w"> </span>-b<span class="w"> </span><span class="m">100000</span><span class="w"> </span>cf-ad9361-lpc<span class="w"> </span><span class="p">|</span><span class="w"> </span>pv<span class="w"> </span>&gt;<span class="w"> </span>/dev/null
+<span class="go">210GiB 1:19:51 [26,1MiB/s]</span>
+</pre></div>
 </div>
 </section>
+<section id="via-iiod-network-backend-with-rndis">
+<h3>Via IIOD Network backend with RNDIS<a class="headerlink" href="#via-iiod-network-backend-with-rndis" title="Link to this heading"></a></h3>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>iio_readdev<span class="w"> </span>-n<span class="w"> </span><span class="m">192</span>.168.2.1<span class="w"> </span>-b<span class="w"> </span><span class="m">100000</span><span class="w"> </span>cf-ad9361-lpc<span class="w"> </span><span class="p">|</span><span class="w"> </span>pv<span class="w"> </span>&gt;<span class="w"> </span>/dev/null
+<span class="go">203MiB 0:00:10 [20,4MiB/s]</span>
+</pre></div>
+</div>
+</section>
+<section id="via-local-iio-device">
+<h3>Via local IIO device<a class="headerlink" href="#via-local-iio-device" title="Link to this heading"></a></h3>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>iio_readdev<span class="w"> </span>-u<span class="w"> </span>local:<span class="w"> </span>-b<span class="w"> </span><span class="m">100000</span><span class="w"> </span>cf-ad9361-lpc<span class="w"> </span><span class="p">|</span><span class="w"> </span>pv<span class="w"> </span>&gt;<span class="w"> </span>/dev/null
+<span class="go">13.5GiB 0:02:09 [107MiB/s]</span>
+</pre></div>
+</div>
 </section>
 </section>
 </section>
@@ -783,8 +652,8 @@ is needed.</p></li>
           </div>
               <div class="related">
                 &nbsp;
-    <a href="../adrv9009/advanced-plugin.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">Advanced plugin</a>
-    <a href="../../libiio/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">Libiio</a>
+    <a href="index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">For Developers</a>
+    <a href="usb_otg.html" title="Next document (Alt+Shift+RightArrow)" class="next">USB OTG</a>
               </div>
           
         </div>

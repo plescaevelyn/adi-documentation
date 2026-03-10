@@ -248,6 +248,7 @@ Content on this topic
 </li>
 <li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-11" id="toctree-collapse-11" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">ADALM-PLUTO</a><label for="toctree-collapse-11"><div class="icon"></div></label></div><ul class="current">
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-11-1" id="toctree-collapse-11-1"/><div class="collapse"><a class="reference internal" href="../devs/index.html">For Developers</a><label for="toctree-collapse-11-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../devs/performance.html">ADALM-PLUTO Performance Metrics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../devs/usb_otg.html">USB OTG</a></li>
 </ul>
 </li>
@@ -723,19 +724,19 @@ make sure that the Rx and Tx PLLs have a frequency offset greater than 10 Hz.
 For most standards, there is always a frequency offset in place, so this won’t
 be an issue. For simple loopback - it can be a PITA.</p>
 <p>To check the offset, you can use:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>analog@analog:~$<span class="w"> </span>iio_attr<span class="w"> </span>-a<span class="w"> </span>-c<span class="w"> </span>ad9361-phy<span class="w"> </span>RX_LO<span class="w"> </span>frequency
-dev<span class="w"> </span><span class="s1">&#39;ad9361-phy&#39;</span>,<span class="w"> </span>channel<span class="w"> </span><span class="s1">&#39;altvoltage0&#39;</span><span class="w"> </span><span class="o">(</span>output<span class="o">)</span>,<span class="w"> </span>id<span class="w"> </span><span class="s1">&#39;RX_LO&#39;</span>,<span class="w"> </span>attr<span class="w"> </span><span class="s1">&#39;frequency&#39;</span>,<span class="w"> </span>value<span class="w"> </span><span class="s1">&#39;2400000000&#39;</span>
-analog@analog:~$<span class="w"> </span>iio_attr<span class="w"> </span>-a<span class="w"> </span>-c<span class="w"> </span>ad9361-phy<span class="w"> </span>TX_LO<span class="w"> </span>frequency
-dev<span class="w"> </span><span class="s1">&#39;ad9361-phy&#39;</span>,<span class="w"> </span>channel<span class="w"> </span><span class="s1">&#39;altvoltage1&#39;</span><span class="w"> </span><span class="o">(</span>output<span class="o">)</span>,<span class="w"> </span>id<span class="w"> </span><span class="s1">&#39;TX_LO&#39;</span>,<span class="w"> </span>attr<span class="w"> </span><span class="s1">&#39;frequency&#39;</span>,<span class="w"> </span>value<span class="w"> </span><span class="s1">&#39;2400000000&#39;</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">analog@analog:~$ </span>iio_attr<span class="w"> </span>-a<span class="w"> </span>-c<span class="w"> </span>ad9361-phy<span class="w"> </span>RX_LO<span class="w"> </span>frequency
+<span class="go">dev &#39;ad9361-phy&#39;, channel &#39;altvoltage0&#39; (output), id &#39;RX_LO&#39;, attr &#39;frequency&#39;, value &#39;2400000000&#39;</span>
+<span class="gp">analog@analog:~$ </span>iio_attr<span class="w"> </span>-a<span class="w"> </span>-c<span class="w"> </span>ad9361-phy<span class="w"> </span>TX_LO<span class="w"> </span>frequency
+<span class="go">dev &#39;ad9361-phy&#39;, channel &#39;altvoltage1&#39; (output), id &#39;TX_LO&#39;, attr &#39;frequency&#39;, value &#39;2400000000&#39;</span>
 </pre></div>
 </div>
 <p>To manually make an offset:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>analog@analog:~$<span class="w"> </span>iio_attr<span class="w"> </span>-D<span class="w"> </span>ad9361-phy<span class="w"> </span>loopback<span class="w"> </span><span class="m">1</span>
-iio_attr<span class="w"> </span>-D<span class="w"> </span>ad9361-phy<span class="w"> </span>loopback<span class="w"> </span>:<span class="w"> </span>SUCCESS<span class="w"> </span><span class="o">(</span><span class="m">1</span><span class="o">)</span>
-analog@analog:~$<span class="w"> </span>iio_attr<span class="w"> </span>-c<span class="w"> </span>ad9361-phy<span class="w"> </span>voltage0<span class="w"> </span>gain_control_mode<span class="w"> </span>manual
-dev<span class="w"> </span><span class="s1">&#39;ad9361-phy&#39;</span>,<span class="w"> </span>channel<span class="w"> </span><span class="s1">&#39;voltage0&#39;</span><span class="w"> </span><span class="o">(</span>input<span class="o">)</span>,<span class="w"> </span>attr<span class="w"> </span><span class="s1">&#39;gain_control_mode&#39;</span>,<span class="w"> </span>value<span class="w"> </span><span class="s1">&#39;manual&#39;</span>
-analog@analog:~$<span class="w"> </span>iio_attr<span class="w"> </span>-c<span class="w"> </span>ad9361-phy<span class="w"> </span>voltage0<span class="w"> </span>quadrature_tracking_en<span class="w"> </span><span class="m">1</span>
-dev<span class="w"> </span><span class="s1">&#39;ad9361-phy&#39;</span>,<span class="w"> </span>channel<span class="w"> </span><span class="s1">&#39;voltage0&#39;</span><span class="w"> </span><span class="o">(</span>input<span class="o">)</span>,<span class="w"> </span>attr<span class="w"> </span><span class="s1">&#39;quadrature_tracking_en&#39;</span>,<span class="w"> </span>value<span class="w"> </span><span class="s1">&#39;1&#39;</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">analog@analog:~$ </span>iio_attr<span class="w"> </span>-D<span class="w"> </span>ad9361-phy<span class="w"> </span>loopback<span class="w"> </span><span class="m">1</span>
+<span class="go">iio_attr -D ad9361-phy loopback : SUCCESS (1)</span>
+<span class="gp">analog@analog:~$ </span>iio_attr<span class="w"> </span>-c<span class="w"> </span>ad9361-phy<span class="w"> </span>voltage0<span class="w"> </span>gain_control_mode<span class="w"> </span>manual
+<span class="go">dev &#39;ad9361-phy&#39;, channel &#39;voltage0&#39; (input), attr &#39;gain_control_mode&#39;, value &#39;manual&#39;</span>
+<span class="gp">analog@analog:~$ </span>iio_attr<span class="w"> </span>-c<span class="w"> </span>ad9361-phy<span class="w"> </span>voltage0<span class="w"> </span>quadrature_tracking_en<span class="w"> </span><span class="m">1</span>
+<span class="go">dev &#39;ad9361-phy&#39;, channel &#39;voltage0&#39; (input), attr &#39;quadrature_tracking_en&#39;, value &#39;1&#39;</span>
 </pre></div>
 </div>
 <img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/pluto/docs/tools/pluto/users/images/non_quad/0khz_offset.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/pluto/docs/tools/pluto/users/images/non_quad/0khz_offset.png" />

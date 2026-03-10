@@ -235,6 +235,7 @@ Content on this topic
 </li>
 <li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-11" id="toctree-collapse-11" checked=""/><div class="collapse"><a class="reference internal" href="index.html">ADALM-PLUTO</a><label for="toctree-collapse-11"><div class="icon"></div></label></div><ul class="current">
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-11-1" id="toctree-collapse-11-1"/><div class="collapse"><a class="reference internal" href="devs/index.html">For Developers</a><label for="toctree-collapse-11-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="devs/performance.html">ADALM-PLUTO Performance Metrics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="devs/usb_otg.html">USB OTG</a></li>
 </ul>
 </li>
@@ -635,36 +636,36 @@ shows how to control the AD936x transceiver via a remote connection.</p>
 <li><p>Create IIO IP Network context. Instead of <code class="docutils literal notranslate"><span class="pre">ip:xxx.xxx.xxx.xxx</span></code> it’ll also
 accept <code class="docutils literal notranslate"><span class="pre">usb:XX.XX.X</span></code></p></li>
 <li><p>Get the AD936x PHY device structure</p></li>
-<li><p>Set the TX LO frequency (see <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-transceiver/ad9361" target="_blank">AD9361 device driver documentation</a>)</p></li>
+<li><p>Set the TX LO frequency (see <a class="reference internal" href="../../linux/drivers/iio-transceiver/ad9361/index.html#ad9361"><span class="std std-ref">AD9361 device driver documentation</span></a>)</p></li>
 <li><p>Set RX baseband rate</p></li>
 </ol>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iio.h&gt;</span>
-
-<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">iio_context</span><span class="w"> </span><span class="o">*</span><span class="n">ctx</span><span class="p">;</span>
-<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">iio_device</span><span class="w"> </span><span class="o">*</span><span class="n">phy</span><span class="p">;</span>
-
-<span class="w">    </span><span class="n">ctx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iio_create_context_from_uri</span><span class="p">(</span><span class="s">&quot;ip:192.168.2.1&quot;</span><span class="p">);</span>
-
-<span class="w">    </span><span class="n">phy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iio_context_find_device</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ad9361-phy&quot;</span><span class="p">);</span>
-
-<span class="w">    </span><span class="n">iio_channel_attr_write_longlong</span><span class="p">(</span>
-<span class="w">        </span><span class="n">iio_device_find_channel</span><span class="p">(</span><span class="n">phy</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;altvoltage0&quot;</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">),</span>
-<span class="w">        </span><span class="s">&quot;frequency&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="mi">2400000000</span><span class="p">);</span><span class="w"> </span><span class="cm">/* RX LO frequency 2.4GHz */</span>
-
-<span class="w">    </span><span class="n">iio_channel_attr_write_longlong</span><span class="p">(</span>
-<span class="w">        </span><span class="n">iio_device_find_channel</span><span class="p">(</span><span class="n">phy</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;voltage0&quot;</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">),</span>
-<span class="w">        </span><span class="s">&quot;sampling_frequency&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="mi">5000000</span><span class="p">);</span><span class="w"> </span><span class="cm">/* RX baseband rate 5 MSPS */</span>
-
-<span class="w">    </span><span class="n">receive</span><span class="p">(</span><span class="n">ctx</span><span class="p">);</span>
-
-<span class="w">    </span><span class="n">iio_context_destroy</span><span class="p">(</span><span class="n">ctx</span><span class="p">);</span>
-
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iio.h&gt;</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span>
+<span class="linenos"> 4</span><span class="p">{</span>
+<span class="linenos"> 5</span><span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">iio_context</span><span class="w"> </span><span class="o">*</span><span class="n">ctx</span><span class="p">;</span>
+<span class="linenos"> 6</span><span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">iio_device</span><span class="w"> </span><span class="o">*</span><span class="n">phy</span><span class="p">;</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="w">    </span><span class="n">ctx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iio_create_context_from_uri</span><span class="p">(</span><span class="s">&quot;ip:192.168.2.1&quot;</span><span class="p">);</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span><span class="w">    </span><span class="n">phy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iio_context_find_device</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ad9361-phy&quot;</span><span class="p">);</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span><span class="w">    </span><span class="n">iio_channel_attr_write_longlong</span><span class="p">(</span>
+<span class="linenos">13</span><span class="w">        </span><span class="n">iio_device_find_channel</span><span class="p">(</span><span class="n">phy</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;altvoltage0&quot;</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">),</span>
+<span class="linenos">14</span><span class="w">        </span><span class="s">&quot;frequency&quot;</span><span class="p">,</span>
+<span class="linenos">15</span><span class="w">        </span><span class="mi">2400000000</span><span class="p">);</span><span class="w"> </span><span class="cm">/* RX LO frequency 2.4GHz */</span>
+<span class="linenos">16</span>
+<span class="linenos">17</span><span class="w">    </span><span class="n">iio_channel_attr_write_longlong</span><span class="p">(</span>
+<span class="linenos">18</span><span class="w">        </span><span class="n">iio_device_find_channel</span><span class="p">(</span><span class="n">phy</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;voltage0&quot;</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">),</span>
+<span class="linenos">19</span><span class="w">        </span><span class="s">&quot;sampling_frequency&quot;</span><span class="p">,</span>
+<span class="linenos">20</span><span class="w">        </span><span class="mi">5000000</span><span class="p">);</span><span class="w"> </span><span class="cm">/* RX baseband rate 5 MSPS */</span>
+<span class="linenos">21</span>
+<span class="linenos">22</span><span class="w">    </span><span class="n">receive</span><span class="p">(</span><span class="n">ctx</span><span class="p">);</span>
+<span class="linenos">23</span>
+<span class="linenos">24</span><span class="w">    </span><span class="n">iio_context_destroy</span><span class="p">(</span><span class="n">ctx</span><span class="p">);</span>
+<span class="linenos">25</span>
+<span class="linenos">26</span><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos">27</span><span class="p">}</span>
 </pre></div>
 </div>
 </section>
@@ -678,47 +679,47 @@ accept <code class="docutils literal notranslate"><span class="pre">usb:XX.XX.X<
 <li><p>Fill the buffer</p></li>
 <li><p>Process samples</p></li>
 </ol>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">receive</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">iio_context</span><span class="w"> </span><span class="o">*</span><span class="n">ctx</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">iio_device</span><span class="w"> </span><span class="o">*</span><span class="n">dev</span><span class="p">;</span>
-<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">iio_channel</span><span class="w"> </span><span class="o">*</span><span class="n">rx0_i</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">rx0_q</span><span class="p">;</span>
-<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">iio_buffer</span><span class="w"> </span><span class="o">*</span><span class="n">rxbuf</span><span class="p">;</span>
-
-<span class="w">    </span><span class="n">dev</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iio_context_find_device</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;cf-ad9361-lpc&quot;</span><span class="p">);</span>
-
-<span class="w">    </span><span class="n">rx0_i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iio_device_find_channel</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;voltage0&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
-<span class="w">    </span><span class="n">rx0_q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iio_device_find_channel</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;voltage1&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
-
-<span class="w">    </span><span class="n">iio_channel_enable</span><span class="p">(</span><span class="n">rx0_i</span><span class="p">);</span>
-<span class="w">    </span><span class="n">iio_channel_enable</span><span class="p">(</span><span class="n">rx0_q</span><span class="p">);</span>
-
-<span class="w">    </span><span class="n">rxbuf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iio_device_create_buffer</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span><span class="w"> </span><span class="mi">4096</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">);</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">rxbuf</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">perror</span><span class="p">(</span><span class="s">&quot;Could not create RX buffer&quot;</span><span class="p">);</span>
-<span class="w">        </span><span class="n">shutdown</span><span class="p">();</span>
-<span class="w">    </span><span class="p">}</span>
-
-<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">p_dat</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">p_end</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">t_dat</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">ptrdiff_t</span><span class="w"> </span><span class="n">p_inc</span><span class="p">;</span>
-
-<span class="w">        </span><span class="n">iio_buffer_refill</span><span class="p">(</span><span class="n">rxbuf</span><span class="p">);</span>
-
-<span class="w">        </span><span class="n">p_inc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iio_buffer_step</span><span class="p">(</span><span class="n">rxbuf</span><span class="p">);</span>
-<span class="w">        </span><span class="n">p_end</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iio_buffer_end</span><span class="p">(</span><span class="n">rxbuf</span><span class="p">);</span>
-
-<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">p_dat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iio_buffer_first</span><span class="p">(</span><span class="n">rxbuf</span><span class="p">,</span><span class="w"> </span><span class="n">rx0_i</span><span class="p">);</span><span class="w"> </span><span class="n">p_dat</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">p_end</span><span class="p">;</span><span class="w"> </span><span class="n">p_dat</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">p_inc</span><span class="p">,</span><span class="w"> </span><span class="n">t_dat</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">p_inc</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">const</span><span class="w"> </span><span class="kt">int16_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">((</span><span class="kt">int16_t</span><span class="o">*</span><span class="p">)</span><span class="n">p_dat</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span><span class="w"> </span><span class="c1">// Real (I)</span>
-<span class="w">            </span><span class="k">const</span><span class="w"> </span><span class="kt">int16_t</span><span class="w"> </span><span class="n">q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">((</span><span class="kt">int16_t</span><span class="o">*</span><span class="p">)</span><span class="n">p_dat</span><span class="p">)[</span><span class="mi">1</span><span class="p">];</span><span class="w"> </span><span class="c1">// Imag (Q)</span>
-
-<span class="w">            </span><span class="cm">/* Process here */</span>
-
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
-
-<span class="w">    </span><span class="n">iio_buffer_destroy</span><span class="p">(</span><span class="n">rxbuf</span><span class="p">);</span>
-
-<span class="p">}</span>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kt">int</span><span class="w"> </span><span class="nf">receive</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">iio_context</span><span class="w"> </span><span class="o">*</span><span class="n">ctx</span><span class="p">)</span>
+<span class="linenos"> 2</span><span class="p">{</span>
+<span class="linenos"> 3</span><span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">iio_device</span><span class="w"> </span><span class="o">*</span><span class="n">dev</span><span class="p">;</span>
+<span class="linenos"> 4</span><span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">iio_channel</span><span class="w"> </span><span class="o">*</span><span class="n">rx0_i</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">rx0_q</span><span class="p">;</span>
+<span class="linenos"> 5</span><span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">iio_buffer</span><span class="w"> </span><span class="o">*</span><span class="n">rxbuf</span><span class="p">;</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="w">    </span><span class="n">dev</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iio_context_find_device</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;cf-ad9361-lpc&quot;</span><span class="p">);</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span><span class="w">    </span><span class="n">rx0_i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iio_device_find_channel</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;voltage0&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="linenos">10</span><span class="w">    </span><span class="n">rx0_q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iio_device_find_channel</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;voltage1&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span><span class="w">    </span><span class="n">iio_channel_enable</span><span class="p">(</span><span class="n">rx0_i</span><span class="p">);</span>
+<span class="linenos">13</span><span class="w">    </span><span class="n">iio_channel_enable</span><span class="p">(</span><span class="n">rx0_q</span><span class="p">);</span>
+<span class="linenos">14</span>
+<span class="linenos">15</span><span class="w">    </span><span class="n">rxbuf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iio_device_create_buffer</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span><span class="w"> </span><span class="mi">4096</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">);</span>
+<span class="linenos">16</span><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">rxbuf</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">17</span><span class="w">        </span><span class="n">perror</span><span class="p">(</span><span class="s">&quot;Could not create RX buffer&quot;</span><span class="p">);</span>
+<span class="linenos">18</span><span class="w">        </span><span class="n">shutdown</span><span class="p">();</span>
+<span class="linenos">19</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">20</span>
+<span class="linenos">21</span><span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">22</span><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">p_dat</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">p_end</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">t_dat</span><span class="p">;</span>
+<span class="linenos">23</span><span class="w">        </span><span class="kt">ptrdiff_t</span><span class="w"> </span><span class="n">p_inc</span><span class="p">;</span>
+<span class="linenos">24</span>
+<span class="linenos">25</span><span class="w">        </span><span class="n">iio_buffer_refill</span><span class="p">(</span><span class="n">rxbuf</span><span class="p">);</span>
+<span class="linenos">26</span>
+<span class="linenos">27</span><span class="w">        </span><span class="n">p_inc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iio_buffer_step</span><span class="p">(</span><span class="n">rxbuf</span><span class="p">);</span>
+<span class="linenos">28</span><span class="w">        </span><span class="n">p_end</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iio_buffer_end</span><span class="p">(</span><span class="n">rxbuf</span><span class="p">);</span>
+<span class="linenos">29</span>
+<span class="linenos">30</span><span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">p_dat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iio_buffer_first</span><span class="p">(</span><span class="n">rxbuf</span><span class="p">,</span><span class="w"> </span><span class="n">rx0_i</span><span class="p">);</span><span class="w"> </span><span class="n">p_dat</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">p_end</span><span class="p">;</span><span class="w"> </span><span class="n">p_dat</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">p_inc</span><span class="p">,</span><span class="w"> </span><span class="n">t_dat</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">p_inc</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">31</span><span class="w">            </span><span class="k">const</span><span class="w"> </span><span class="kt">int16_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">((</span><span class="kt">int16_t</span><span class="o">*</span><span class="p">)</span><span class="n">p_dat</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span><span class="w"> </span><span class="c1">// Real (I)</span>
+<span class="linenos">32</span><span class="w">            </span><span class="k">const</span><span class="w"> </span><span class="kt">int16_t</span><span class="w"> </span><span class="n">q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">((</span><span class="kt">int16_t</span><span class="o">*</span><span class="p">)</span><span class="n">p_dat</span><span class="p">)[</span><span class="mi">1</span><span class="p">];</span><span class="w"> </span><span class="c1">// Imag (Q)</span>
+<span class="linenos">33</span>
+<span class="linenos">34</span><span class="w">            </span><span class="cm">/* Process here */</span>
+<span class="linenos">35</span>
+<span class="linenos">36</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">37</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">38</span>
+<span class="linenos">39</span><span class="w">    </span><span class="n">iio_buffer_destroy</span><span class="p">(</span><span class="n">rxbuf</span><span class="p">);</span>
+<span class="linenos">40</span>
+<span class="linenos">41</span><span class="p">}</span>
 </pre></div>
 </div>
 </section>

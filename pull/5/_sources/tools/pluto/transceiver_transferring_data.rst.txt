@@ -39,10 +39,11 @@ shows how to control the AD936x transceiver via a remote connection.
 #. Create IIO IP Network context. Instead of ``ip:xxx.xxx.xxx.xxx`` it'll also
    accept ``usb:XX.XX.X``
 #. Get the AD936x PHY device structure
-#. Set the TX LO frequency (see :dokuwiki:`AD9361 device driver documentation </resources/tools-software/linux-drivers/iio-transceiver/ad9361>`)
+#. Set the TX LO frequency (see :ref:`AD9361 device driver documentation <ad9361>`)
 #. Set RX baseband rate
 
-.. code:: c
+.. code-block:: c
+   :linenos:
 
    #include <iio.h>
 
@@ -82,7 +83,8 @@ Receiving data
 #. Fill the buffer
 #. Process samples
 
-.. code:: c
+.. code-block:: c
+   :linenos:
 
    int receive(struct iio_context *ctx)
    {
