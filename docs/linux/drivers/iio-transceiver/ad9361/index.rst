@@ -1,0 +1,818 @@
+:orphan:
+
+.. _ad9361:
+
+AD9361 Linux Device Driver
+==========================
+
+The :adi:`AD9361` is a high performance, highly integrated RF Agile Transceiver.
+Its programmability and wideband capability make it ideal for a broad range of
+transceiver applications.
+
+This is a Linux industrial I/O (IIO) subsystem driver, targeting RF Transceivers.
+The industrial I/O subsystem provides a unified framework for drivers for many
+different types of converters and sensors.
+
+Supported Devices
+-----------------
+
+- :adi:`AD9361`
+- :adi:`AD9363`
+- :adi:`AD9364`
+
+Evaluation Boards
+-----------------
+
+- :dokuwiki:`AD-FMCOMMS2-EBZ </resources/eval/user-guides/ad-fmcomms2-ebz>`
+- :dokuwiki:`AD-FMCOMMS3-EBZ </resources/eval/user-guides/ad-fmcomms3-ebz>`
+- :dokuwiki:`AD-FMCOMMS4-EBZ </resources/eval/user-guides/ad-fmcomms4-ebz>`
+- :dokuwiki:`AD-FMCOMMS5-EBZ </resources/eval/user-guides/ad-fmcomms5-ebz>`
+
+Source Code
+-----------
+
+.. list-table::
+   :header-rows: 1
+
+   - - Type
+     - File
+   - - Driver
+     - :git-linux:`drivers/iio/adc/ad9361.c`
+   - - Driver
+     - :git-linux:`drivers/iio/adc/ad9361_conv.c`
+   - - Include
+     - :git-linux:`drivers/iio/adc/ad9361.h`
+   - - Devicetree
+     - :git-linux:`Documentation/devicetree/bindings/iio/adc/adi,ad9361.txt`
+
+Driver Testing / API
+--------------------
+
+Show device name
+~~~~~~~~~~~~~~~~
+
+.. code:: console
+
+   $ cat /sys/bus/iio/devices/iio\:device1/name
+   ad9361-phy
+
+.. _ad9361 lo_control:
+
+Local Oscillator Control (LO)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The AD9361 transceiver contains two identical RFPLL synthesizers to generate
+the LO signals for the RF signal paths. One is programmed for the RX channel,
+the other for the TX channel. The tuning range covers 70MHz to 6GHz
+(AD9363: 325-3800 MHz) with 2Hz granularity.
+
+.. code:: console
+
+   $ cat out_altvoltage0_RX_LO_frequency
+   2400000000
+   $ echo 2450000000 > out_altvoltage0_RX_LO_frequency
+   $ cat out_altvoltage0_RX_LO_frequency
+   2450000000
+
+Local Oscillator Power-down
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When TX and RX LOs are at identical or very similar frequencies, TX LO leakage
+into the RX path may occur. TDD mode typically avoids this since only one LO
+operates at a time. FDD mode may benefit from disabling the TX LO, though this
+causes TX QUAD calibration to fail.
+
+.. code:: console
+
+   $ echo 0 > out_altvoltage1_TX_LO_powerdown
+   $ cat out_altvoltage1_TX_LO_powerdown
+   0
+   $ cat out_altvoltage0_RX_LO_powerdown
+   1
+
+External LO Support
+^^^^^^^^^^^^^^^^^^^
+
+The driver enables switching between external and internal LO dynamically.
+Writing 1 to ``out_altvoltage0_RX_LO_external`` or ``out_altvoltage1_TX_LO_external``
+activates external LO; writing 0 reverts to the internal synthesizer.
+
+.. note::
+
+   Not available on AD9363.
+
+.. code:: console
+
+   $ cat out_altvoltage0_RX_LO_frequency
+   2400000000
+   $ echo 1 > out_altvoltage0_RX_LO_external
+   $ cat out_altvoltage0_RX_LO_external
+   1
+
+FASTLOCK MODE
+^^^^^^^^^^^^^
+
+Fast Lock mode stores synthesizer programming information (profiles) for rapid
+frequency changes. Up to 8 RX and 8 TX profiles store complete frequency
+configuration including VCO calibration results.
+
+**Create Profile:**
+
+.. code:: console
+
+   $ echo 4242000000 > out_altvoltage0_RX_LO_frequency
+   $ echo 0 > out_altvoltage0_RX_LO_fastlock_store
+
+**Recall Profile:**
+
+.. code:: console
+
+   $ echo 0 > out_altvoltage0_RX_LO_fastlock_recall
+
+**Save Profile (for external storage):**
+
+.. code:: console
+
+   $ echo 0 > out_altvoltage0_RX_LO_fastlock_save
+   $ cat out_altvoltage0_RX_LO_fastlock_save
+   0 240,0,202,204,12,80,24,16,187,255,60,238,113,233,93,174
+
+**Load Previously Saved Profile:**
+
+.. code:: console
+
+   $ echo "0 240,0,202,204,12,80,24,16,187,255,60,238,113,233,93,174" > \
+     out_altvoltage0_RX_LO_fastlock_load
+
+RX Signal Path
+~~~~~~~~~~~~~~
+
+.. image:: rx_signal_path.png
+
+The RX path passes downconverted I and Q signals to the baseband receiver.
+It comprises two programmable analog low-pass filters, a 12-bit ADC, and four
+digital decimating filter stages. Each decimating filter is independently
+bypassable. The ``in_voltage_sampling_frequency`` attribute controls the BBPLL
+frequency, ADC sample clock, and decimating filter blocks (except the FIR block).
+
+.. note::
+
+   Minimum ADC rate is 25MSPS. Baseband rates below 2.083 MSPS require FIR
+   decimation. Minimum rate with FIR (decimate by 4): 25MSPS/(4×12) = 520.83 kSPS.
+
+.. _ad9361 sample_rate:
+
+Setting / Querying the RX Sample Rate
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code:: console
+
+   $ cat in_voltage_sampling_frequency
+   30720000
+   $ echo 10000000 > in_voltage_sampling_frequency
+   $ cat in_voltage_sampling_frequency
+   10000000
+
+List chosen RX Path Rates
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This attribute lists rates in various digital blocks:
+
+.. list-table::
+   :header-rows: 1
+
+   - - Stage
+     - Description
+     - Ratio
+   - - BBPLL
+     - Baseband PLL frequency
+     - —
+   - - ADC
+     - ADC sample rate
+     - BBPLL/ADC divider
+   - - R2
+     - HB3/DEC3 filter rate
+     - ADC/R2
+   - - R1
+     - HB2 filter rate
+     - R2/R1
+   - - RF
+     - HB1 filter rate
+     - R1/RF
+   - - RXSAMP
+     - RX sampling/baseband rate
+     - RF/RXSAMP (FIR decimation)
+
+.. code:: console
+
+   $ cat rx_path_rates
+   BBPLL:983040000 ADC:245760000 R2:122880000 R1:61440000 RF:30720000 RXSAMP:30720000
+
+TX Signal Path
+~~~~~~~~~~~~~~
+
+.. image:: tx_signal_path.png
+
+The TX path receives 12-bit 2's complement I-Q data through four digital
+interpolating filters to a 12-bit DAC. Each interpolating filter is bypassable.
+The DAC output passes through two low-pass filters before the RF mixer.
+The ``out_voltage_sampling_frequency`` attribute controls the BBPLL frequency,
+DAC clock, and interpolation filter blocks.
+
+.. note::
+
+   Minimum ADC rate is 25MSPS. Baseband rates below 2.083 MSPS require FIR
+   interpolation. Minimum rate with FIR (decimate by 4): 25MSPS/(4×12) = 520.83 kSPS.
+
+Setting / Querying the TX Sample Rate
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code:: console
+
+   $ cat out_voltage_sampling_frequency
+   30720000
+   $ echo 10000000 > out_voltage_sampling_frequency
+   $ cat out_voltage_sampling_frequency
+   10000000
+
+List chosen TX Path Rates
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This attribute lists rates in various digital blocks:
+
+.. list-table::
+   :header-rows: 1
+
+   - - Stage
+     - Description
+     - Ratio
+   - - TXSAMP
+     - TX sampling/baseband rate
+     - TF/TXSAMP (FIR interpolation)
+   - - TF
+     - HB1 filter rate
+     - T1/TF
+   - - T1
+     - HB2 filter rate
+     - T2/T1
+   - - T2
+     - HB3/INT3 filter rate
+     - DAC/T2
+   - - DAC
+     - DAC sample rate
+     - ADC/DAC divider
+   - - BBPLL
+     - Baseband PLL frequency
+     - BBPLL/ADC divider
+
+.. code:: console
+
+   $ cat tx_path_rates
+   BBPLL:983040000 DAC:122880000 T2:122880000 T1:61440000 TF:30720000 TXSAMP:30720000
+
+Rate Governors
+~~~~~~~~~~~~~~
+
+The rate governor influences ADC sample rate and decimation/interpolation
+selections in following digital blocks. It primarily affects whether RX HB3/DEC3
+and TX HB3/INT3 decimate/interpolate by 3 or 2, resulting in different
+oversampling rates. Decimate-by-3 doesn't necessarily yield higher performance;
+"Nominal" is typically optimal.
+
+List available Rate Governors
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code:: console
+
+   $ cat trx_rate_governor_available
+   nominal highest_osr
+
+Selecting Rate Governor
+^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code:: console
+
+   $ cat trx_rate_governor
+   highest_osr
+   $ echo nominal > trx_rate_governor
+   $ cat trx_rate_governor
+   nominal
+
+.. _ad9361 digital_fir_filter_controls:
+
+Digital FIR Filter Controls
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Query current filter Configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code:: console
+
+   $ cat filter_fir_config
+   FIR Rx  0,0 Tx 0,0
+
+Return format shows "Rx <Num Taps>,<Decimation>" and "Tx <Num Taps>,<Interpolation>".
+
+Load a Filter
+^^^^^^^^^^^^^
+
+.. code:: console
+
+   $ cat LTE20.txt > filter_fir_config
+   $ cat filter_fir_config
+   FIR Rx  128,2 Tx 128,2
+
+The file syntax requires comment lines (prefixed with '#'), signed 16-bit
+coefficients, and optional rate specifications. Example format:
+
+.. code::
+
+   RX 3 GAIN -6 DEC 2
+   TX 3 GAIN 0 INT 2
+   RTX 983040000 245760000 245760000 122880000 61440000 30720000
+   RRX 983040000 491520000 245760000 122880000 61440000 30720000
+   BWTX 19365438
+   BWRX 19365514
+
+Filter Enable / Disable
+^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code:: console
+
+   $ echo 1 > in_voltage_filter_fir_en
+   $ cat out_voltage_filter_fir_en
+   0
+
+.. _ad9361 rx_rf_bandwidth:
+
+RF Bandwidth Analog Filter Control
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+RX RF Bandwidth Control
+^^^^^^^^^^^^^^^^^^^^^^^
+
+The RX path includes TIA and BB low-pass filters with programmable corner
+frequencies.
+
+.. code:: console
+
+   $ cat in_voltage_rf_bandwidth
+   18000000
+   $ echo 9000000 > in_voltage_rf_bandwidth
+   $ cat in_voltage_rf_bandwidth
+   9000000
+
+.. _ad9361 tx_rf_bandwidth:
+
+TX RF Bandwidth Control
+^^^^^^^^^^^^^^^^^^^^^^^
+
+TX filtering includes BB and secondary low-pass filter blocks.
+
+.. code:: console
+
+   $ cat out_voltage_rf_bandwidth
+   18000000
+   $ echo 9000000 > out_voltage_rf_bandwidth
+   $ cat out_voltage_rf_bandwidth
+   9000000
+
+.. _ad9361 rx_gain_control:
+
+RX Gain Control
+~~~~~~~~~~~~~~~
+
+Loading a gain table
+^^^^^^^^^^^^^^^^^^^^
+
+.. code:: console
+
+   $ cat /lib/firmware/ad9361_std_gaintable > gain_table_config
+
+Reading a gain table
+^^^^^^^^^^^^^^^^^^^^
+
+Read gain table for current LO frequency:
+
+.. code:: console
+
+   $ cat gain_table_config
+   <gaintable AD9361 type=FULL dest=3 start=1300000000 end=4000000000>
+   -3, 0x00, 0x00, 0x20
+   -2, 0x00, 0x01, 0x00
+   0, 0x00, 0x03, 0x00
+
+.. _ad9361 rx_gain_control_mode:
+
+Gain control modes
+^^^^^^^^^^^^^^^^^^
+
+.. code:: console
+
+   $ cat in_voltage_gain_control_mode_available
+   manual fast_attack slow_attack hybrid
+
+- **manual**: BBP controls gain via SPI writes
+- **slow_attack**: Intended for FDD applications with slowly changing signals
+- **hybrid**: Hybrid AGC where BBP controls some aspects
+- **fast_attack**: Designed for TDD bursting waveforms
+
+Querying or Setting a Gain Control Mode
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code:: console
+
+   $ echo manual > in_voltage0_gain_control_mode
+   $ cat in_voltage0_gain_control_mode
+   manual
+
+Reading the current Gain
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code:: console
+
+   $ cat in_voltage0_hardwaregain
+   61.000000 dB
+
+MGC setting the current Gain
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code:: console
+
+   $ echo 42 > in_voltage0_hardwaregain
+   $ cat in_voltage0_hardwaregain
+   42.000000 dB
+
+.. _ad9361 tx_attenuation_control:
+
+TX Attenuation Control
+~~~~~~~~~~~~~~~~~~~~~~
+
+Range spans 0 to -89.75 dB in 0.25dB steps. Values expressed as negative gain.
+Individual control available for TX1 and TX2 channels.
+
+.. code:: console
+
+   $ cat out_voltage0_hardwaregain
+   -10.000000 dB
+   $ echo -42.25 > out_voltage0_hardwaregain
+   $ cat out_voltage0_hardwaregain
+   -42.250000 dB
+
+Received Strength Signal Indicator (RSSI)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given the wide variety of applications for which the AD9361 is suited, the
+received strength signal indicator (RSSI) may be setup in one of several
+configurations to optimize results. The device measures RSSI by determining
+power level in dB and compensating for receive path gain.
+
+.. code:: console
+
+   $ cat in_voltage0_rssi
+   104.50 dB
+   $ cat in_voltage1_rssi
+   116.75 dB
+
+TX Received Strength Signal Indicator (TX RSSI)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This capability reuses receiver circuitry during transmit bursts for accurate
+Tx RSSI measurements. This feature is only available in TX MONITOR MODE by
+setting ``in_voltage0_rf_port_select`` to ``TX_MONITOR1``, ``TX_MONITOR2``,
+or ``TX_MONITOR1_2``.
+
+.. code:: console
+
+   $ cat out_voltage0_rssi
+   30.50 dB
+   $ cat out_voltage1_rssi
+   0.00 dB
+
+Calibration Mode Controls
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code:: console
+
+   $ cat calib_mode_available
+   auto manual manual_tx_quad tx_quad rf_dc_offs rssi_gain_step
+
+- **auto**: Run TX Quadrature Calibration when moving to a new carrier frequency
+  that is more than 100 MHz away
+- **manual**: Disables automatic calibration
+- **manual_tx_quad**: Prevents TX Quad Calibration unless manually invoked
+- **rf_dc_offs**: Issues RF DC Offset Calibration
+- **tx_quad**: Issues TX Quadrature Calibration
+- **rssi_gain_step**: Runs the RSSI gain step calibration
+
+With optional calibration phase offset value
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code:: console
+
+   $ echo tx_quad > calib_mode
+   $ echo tx_quad 14 > calib_mode
+   $ echo tx_quad -2 > calib_mode
+
+.. _ad9361 calibration_tracking_controls:
+
+Calibration Tracking Controls
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code:: console
+
+   $ cat in_voltage_quadrature_tracking_en
+   1
+   $ echo 0 > in_voltage_quadrature_tracking_en
+   $ cat in_voltage_bb_dc_offset_tracking_en
+   1
+   $ cat in_voltage_rf_dc_offset_tracking_en
+   1
+
+.. _ad9361 rf_port_selection:
+
+RF Port Selection
+~~~~~~~~~~~~~~~~~
+
+Each receive channel has 3 differential or 6 single ended inputs that can be
+multiplexed. Similarly, transmitters offer switchable outputs.
+
+.. warning::
+
+   If using the RF RX B or C inputs along with the RF RX A input, you should
+   run the calibration also, once with other input band/port selected.
+
+.. warning::
+
+   If switching the TX output, the calibration must be once manually triggered.
+
+.. code:: console
+
+   $ cat out_voltage_rf_port_select_available
+   A B
+   $ cat in_voltage_rf_port_select_available
+   A_BALANCED B_BALANCED C_BALANCED A_N A_P B_N B_P C_N C_P TX_MONITOR1 TX_MONITOR2 TX_MONITOR1_2
+   $ echo B_BALANCED > in_voltage0_rf_port_select
+
+DCXO Tuning
+~~~~~~~~~~~
+
+.. image:: dcxo.png
+
+Digital correction (DCXO) can be used to tune the external component. This only
+works with AT cut fundamental mode crystal resonators with load capacitance
+under 10pF connected between XTALP and XTALN pins.
+
+The DCXO can vary the frequency over a ±60 ppm range with resolution as fine
+as 0.0125 ppm at coarse word zero.
+
+.. note::
+
+   This feature does not exist on the AD9363.
+
+.. code:: console
+
+   $ cat dcxo_tune_coarse
+   8
+   $ cat dcxo_tune_fine
+   5920
+   $ echo 5930 > dcxo_tune_fine
+   $ cat dcxo_tune_fine
+   5930
+
+XO Correction
+~~~~~~~~~~~~~
+
+For systems using single-ended crystal oscillators or external clock sources,
+digitally correct for the oscillator offset, by determining what the actual
+oscillator is.
+
+.. note::
+
+   Since writing this attribute recalculates and reprograms all the PLL settings
+   (Tx LO, Rx LO, ADC and DAC sample rates), this should only be updated when
+   disturbing the system is acceptable.
+
+.. code:: console
+
+   $ cat xo_correction
+   40000000
+   $ echo 40000005 > xo_correction
+   $ cat xo_correction
+   40000005
+
+Die Temperature Reading
+~~~~~~~~~~~~~~~~~~~~~~~
+
+For accurate results this read back requires a one-point factory calibration.
+Determine the offset between this readback in millidegree Celsius and the known
+device temperature.
+
+Calibration involves adjusting the device tree property
+``adi,temp-sense-offset-signed`` or directly writing register 0x0B.
+
+Example calibration process:
+
+#. Temp Sensor Offset (Reg 0x0B) = 0xCE = -50
+#. in_temp0_input readback = 28123 m°C → 28°C
+#. Actual device temperature = 24°C
+#. OFFSETdelta = 24 - 28 = -4
+#. Corrected offset = -50 - 4 = -54 = 0xCA
+
+.. code:: console
+
+   $ cat in_temp0_input
+   29825
+
+AuxADC Reading
+~~~~~~~~~~~~~~
+
+There is an Auxiliary ADC on the chip that can be read like any other IIO ADC.
+
+Attributes: ``in_voltage2_offset``, ``in_voltage2_raw``, ``in_voltage2_scale``
+
+Calculation: *(in_voltage2_raw + in_voltage2_offset) × in_voltage2_scale*
+
+.. code:: console
+
+   $ grep "" in_voltage2_*
+   in_voltage2_offset:57
+   in_voltage2_raw:1494
+   in_voltage2_scale:0.305250
+
+AuxDAC Writing
+~~~~~~~~~~~~~~
+
+There are 2 Auxiliary DACs on the chip.
+
+Attributes: ``out_voltage2_raw``, ``out_voltage2_scale``, ``out_voltage3_raw``,
+``out_voltage3_scale``
+
+.. code:: console
+
+   $ grep "" out_voltage2* out_voltage3*
+   out_voltage2_raw:306
+   out_voltage2_scale:1.000000
+   out_voltage3_raw:306
+   out_voltage3_scale:1.000000
+   $ echo 1000 > out_voltage2_raw
+
+RSSI Gain Step Calibration
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Run calibration by setting ``calib_mode`` to ``rssi_gain_step``. Before running
+this calibration, provide a single tone within the channel bandwidth and monitor
+the received data.
+
+Error tables can be read and loaded again anytime using the dedicated sysfs
+attribute. Gain step calibration register values are dependent on the LO
+frequency.
+
+.. code:: console
+
+   $ cat rssi_gain_step_error
+   lna_error: 0 15 14 0
+   mixer_error: 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 0
+   gain_step_calib_reg_val: 192 44 16 6 0
+
+Advanced Debug Facilities
+-------------------------
+
+The AD9361 driver offers debugging controls via kernel debugfs. These advanced
+features enable device testing and validation.
+
+Runtime Device Driver Customization
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Extensive customization options exist via devicetree, though they can be
+modified at runtime for evaluation purposes. Changes require writing ``1`` to
+the ``initialize`` attribute and will be lost upon device unbinding or platform
+reboot.
+
+To locate the AD9361 device:
+
+.. code:: console
+
+   $ grep "" /sys/bus/iio/devices/iio\:device\*/name
+   /sys/bus/iio/devices/iio:device1/name:ad9361-phy
+
+Access debugfs at ``/sys/kernel/debug/iio/iio:deviceX``:
+
+.. code:: console
+
+   $ ls /sys/kernel/debug/iio/iio:device1
+   adi,txmon-2-lo-cm
+   adi,txmon-dc-tracking-enable
+   adi,txmon-delay
+   adi,txmon-duration
+   adi,txmon-high-gain
+   initialize
+   loopback
+
+Example to change the driver from FDD into TDD mode operation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code:: console
+
+   $ cat adi,frequency-division-duplex-mode-enable
+   1
+   $ echo 0 > adi,frequency-division-duplex-mode-enable
+   $ echo 1 > initialize
+
+GPO Manual Control
+~~~~~~~~~~~~~~~~~~
+
+The ``gpo_set`` attribute enables GPIO[0..3] control via debugfs when
+``adi,gpo-manual-mode-enable`` is activated.
+
+**Syntax:** ``gpo_set <Identifier> <Value>``
+
+.. code:: console
+
+   $ cd /sys/kernel/debug/iio/iio:device1
+   $ echo 1 > adi,gpo-manual-mode-enable
+   $ echo 0 1 > gpo_set
+   $ echo 0 0 > gpo_set
+   $ echo 0xF 0xF > gpo_set
+   $ echo 0xF 0 > gpo_set
+
+Build-In Self-Test (BIST)
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+BIST controls take immediate effect without requiring ``initialize`` sequence.
+
+BIST Tone
+^^^^^^^^^
+
+Injects user-selectable tones into RX or TX paths.
+
+**Syntax:** ``bist_tone <Injection Point> <Frequency> <Level> <Mask>``
+
+- Injection points: 0=Disable, 1=TX, 2=RX
+- Frequencies: 0=FSample/32, 1=FSample/16, 2=FSample×3/32, 3=FSample/8
+- Levels: 0=Full Scale, 6=FS/2, 12=FS/4, 18=FS/8
+
+.. code:: console
+
+   $ echo 2 0 6 0 > bist_tone
+
+PRBS
+^^^^
+
+Pseudorandom Binary Sequence injection into RX or TX paths.
+
+**Syntax:** ``bist_prbs <Injection Point>``
+
+.. code:: console
+
+   $ echo 2 > bist_prbs
+
+BIST Loopback
+^^^^^^^^^^^^^
+
+Enables digital TX→RX loopback or RF RX→TX loopback.
+
+**Syntax:** ``loopback <Mode>`` (0=Disable, 1=Digital TX→RX, 2=RF RX→TX)
+
+.. code:: console
+
+   $ echo 1 > loopback
+
+Low level register access via debugfs
+-------------------------------------
+
+Direct register access enables reading/writing device registers. Exercise
+caution, as modifications bypass driver oversight.
+
+**Reading registers:**
+
+.. code:: console
+
+   $ echo 0x7 > direct_reg_access
+   $ cat direct_reg_access
+   0x40
+
+**Writing registers:** ``ADDRESS VALUE``
+
+.. code:: console
+
+   $ echo 0x7 0x50 > direct_reg_access
+   $ cat direct_reg_access
+   0x50
+
+**HDL Core registers** (devices with both SPI/I2C and AXI interfaces):
+Set BIT31 when accessing HDL registers.
+
+.. code:: console
+
+   $ echo 0x80000000 > direct_reg_access
+   $ cat direct_reg_access
+   0x80062
+
+More Information
+----------------
+
+- IIO mailing list: linux-iio@vger.kernel.org
+- `IIO Linux Kernel Documentation <https://www.kernel.org/doc/Documentation/ABI/testing>`__
+- :ref:`IIO Oscilloscope <iio-oscilloscope>`
+- :ref:`libiio`

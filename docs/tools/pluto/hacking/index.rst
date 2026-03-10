@@ -1,7 +1,7 @@
 .. _pluto hacking:
 
-For Hackers
-===========
+Advanced Users
+==============
 
 `Hacking <https://en.wikipedia.org/wiki/Hacker_culture>`__ the ADALM-PLUTO is
 possible (and encouraged). In this case - what we mean by *hacking* is the act
@@ -11,9 +11,8 @@ familiar with the device, from a :ref:`user <pluto users>` and
 :ref:`developer <pluto devs>` standpoint.
 
 Many aspects of the PlutoSDR are based from the
-:dokuwiki:`AD-FMCOMMS3-EBZ </resources/eval/user-guides/ad-fmcomms3-ebz>`, and you
-should be familiar with that, as it will help understand how to extend the
-PlutoSDR.
+:ref:`AD-FMCOMMS3-EBZ <ad-fmcomms3-ebz>`, and you should be familiar with that,
+as it will help understand how to extend the PlutoSDR.
 
 #. :ref:`pluto hacking hardware`
 #. :ref:`Picking up yourself by accident <pluto hacking listening_to_yourself>`
@@ -31,11 +30,7 @@ Resources For Building Your Own SDR
 -----------------------------------
 
 Hopefully you have reviewed the documentation on the
-:dokuwiki:`AD9361 </resources/eval/user-guides/ad-fmcomms2-ebz/ad9361>`, and the
-:dokuwiki:`FMCOMMS2 </resources/eval/user-guides/ad-fmcomms2-ebz>`,
-:dokuwiki:`FMCOMMS3 </resources/eval/user-guides/ad-fmcomms3-ebz>`,
-:dokuwiki:`FMCOMMS4 </resources/eval/user-guides/ad-fmcomms4-ebz>`.
-Those guides provide alot of background on the combination of the :adi:`AD9361`,
+:ref:`AD9361 <ad9361>`, and the :ref:`FMCOMMS2 <ad-fmcomms2-ebz>`,
+:ref:`FMCOMMS3 <ad-fmcomms3-ebz>`, :ref:`FMCOMMS4 <ad-fmcomms4-ebz>`.
+Those guides provide a lot of background on the combination of the :adi:`AD9361`,
 :adi:`AD9363`, or :adi:`AD9364` and the Xilinx Zynq.
-
-#. :dokuwiki:`Testing </engineers/testing>` the ADALM-PLUTO SDR.

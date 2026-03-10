@@ -26,27 +26,26 @@ Content
 
    #. :dokuwiki:`Detailed Specifications <university/tools/m2k/devs/specs>`
    #. :dokuwiki:`Schematics <university/tools/m2k/hacking/hardware>`
-   #. :dokuwiki:`Detailed Performance <university/tools/m2k/devs/performance>`
+   #. :ref:`Performance Metrics <pluto devs performance>`
    #. :dokuwiki:`Accessing FPGA JTAG <university/tools/m2k/devs/fpga>` with the
-      :dokuwiki:`ADALM-JTAGUART </university/tools/uartjtag>` adapter
+      :ref:`ADALM-JTAGUART <uartjtag>` adapter
 
 #. C Applications or Shell scripts on the Pluto
 
    #. :dokuwiki:`Running Scripts from USB drive <university/tools/m2k/devs/usb_otg>`
    #. :dokuwiki:`Creating compiled apps to run on-device <university/tools/m2k/devs/embedded_code>`
 
-#. :dokuwiki:`ADI Reference Designs HDL User Guide </resources/fpga/docs/hdl>`
+#. :ref:`ADI Reference Designs HDL User Guide <fpga hdl>`
 
-   #. :dokuwiki:`AD9361 HDL reference design </resources/eval/user-guides/ad-fmcomms2-ebz/reference_hdl>`
-   #. :dokuwiki:`AXI_AD9361 </resources/fpga/docs/axi_ad9361>`
-   #. :dokuwiki:`High-Speed DMA Controller Peripheral </resources/fpga/docs/axi_dmac>`
+   #. AD9361 HDL reference design
+   #. :ref:`AXI_AD9361 <fpga axi_ad9361>`
+   #. :ref:`High-Speed DMA Controller Peripheral <fpga axi_dmac>`
 
 
-   #. `AD9361 high performance, highly integrated RF Agile Transceiver™ Linux
-      device driver </resources/tools-software/linux-drivers/iio-transceiver/ad9361>`__
-   #. :dokuwiki:`AXI ADC HDL Linux Driver </resources/tools-software/linux-drivers/iio-adc/axi-adc-hdl>`
-   #. :dokuwiki:`AXI DAC HDL Linux Driver </resources/tools-software/linux-drivers/iio-dds/axi-dac-dds-hdl>`
-   #. :dokuwiki:`AXI-DMAC DMA Controller Linux Driver </resources/tools-software/linux-drivers/axi-dmac>`
+   #. :ref:`AD9361 Linux device driver <ad9361>`
+   #. :ref:`AXI ADC HDL Linux Driver <linux axi_adc_hdl>`
+   #. :ref:`AXI DAC HDL Linux Driver <linux axi_dac_hdl>`
+   #. :ref:`AXI-DMAC DMA Controller Linux Driver <linux axi_dmac>`
    #. :adi:`ADM1177` Digital Power Monitor Linux Driver
    #. etc.
 
@@ -57,10 +56,10 @@ Content
 #. Accessing the AD9363 inside Pluto from userspace
 
    #. :git-libiio:`libiio local mode example <examples/ad9361-iiostream.c>`
-   #. :dokuwiki:`Linux driver </resources/tools-software/linux-drivers/iio-transceiver/ad9361>`
+   #. :ref:`Linux driver <ad9361>`
 
 #. :dokuwiki:`Connecting the Pluto to the Internet <university/tools/m2k/devs/port_forwarding>`
-#. :dokuwiki:`Using U-Boot's DFU modes </university/tools/pluto/users/firmware#dfu_update>`
+#. :ref:`Using U-Boot's DFU modes <pluto users firmware>`
 #. :dokuwiki:`Boot magic explained <university/tools/m2k/devs/booting>`
 #. :dokuwiki:`Reboot Modes <university/tools/m2k/devs/reboot>`
 
