@@ -690,59 +690,39 @@ nets and test points.</p>
 out the <a class="reference internal" href="../../../linux/drivers/iio-transceiver/ad9361/customization.html#ad9361-customization"><span class="std std-ref">documentation</span></a>) <a class="footnote-reference brackets" href="#id2" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> :</p>
 <ol class="arabic">
 <li><p>set up the part in TDD mode (<code class="docutils literal notranslate"><span class="pre">0</span></code> is TDD mode, <code class="docutils literal notranslate"><span class="pre">1</span></code> is FDD mode):</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">analog@analog:~$ </span>iio_attr<span class="w"> </span>-a<span class="w"> </span>-D<span class="w"> </span>ad9361-phy<span class="w"> </span>adi,frequency-division-duplex-mode-enable<span class="w"> </span><span class="m">0</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iio_attr<span class="w"> </span>-a<span class="w"> </span>-D<span class="w"> </span>ad9361-phy<span class="w"> </span>adi,frequency-division-duplex-mode-enable<span class="w"> </span><span class="m">0</span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></li>
+</li>
 <li><p>set up <code class="docutils literal notranslate"><span class="pre">GPO_0</span></code> to assert when in Tx mode</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">analog@analog:~$ </span>iio_attr<span class="w"> </span>-a<span class="w"> </span>-D<span class="w"> </span>ad9361-phy<span class="w"> </span>adi,gpo0-slave-tx-enable<span class="w"> </span><span class="m">1</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iio_attr<span class="w"> </span>-a<span class="w"> </span>-D<span class="w"> </span>ad9361-phy<span class="w"> </span>adi,gpo0-slave-tx-enable<span class="w"> </span><span class="m">1</span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></li>
+</li>
 <li><p>write the new configuration to the part</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">analog@analog:~$ </span>iio_attr<span class="w"> </span>-a<span class="w"> </span>-D<span class="w"> </span>ad9361-phy<span class="w"> </span>initialize<span class="w"> </span><span class="m">1</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iio_attr<span class="w"> </span>-a<span class="w"> </span>-D<span class="w"> </span>ad9361-phy<span class="w">  </span>initialize<span class="w"> </span><span class="m">1</span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></li>
+</li>
 </ol>
 <p>Verify the setup is in TDD mode, by checking the <code class="docutils literal notranslate"><span class="pre">ensm_mode_available</span></code>
 attribute, and making sure it includes <code class="docutils literal notranslate"><span class="pre">rx</span></code> and <code class="docutils literal notranslate"><span class="pre">tx</span></code> and not <code class="docutils literal notranslate"><span class="pre">fdd</span></code>.</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">analog@analog:~$ </span>iio_attr<span class="w"> </span>-a<span class="w"> </span>-d<span class="w"> </span>ad9361-phy<span class="w"> </span>ensm_mode_available
+<span class="go">dev &#39;ad9361-phy&#39;, attr &#39;ensm_mode_available&#39;, value :&#39;sleep wait alert rx tx pinctrl&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iio_attr<span class="w"> </span>-a<span class="w"> </span>-d<span class="w"> </span>ad9361-phy<span class="w"> </span>ensm_mode_available
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>dev &#39;ad9361-phy&#39;, attr &#39;ensm_mode_available&#39;, value :&#39;sleep wait alert rx tx pinctrl&#39;
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div><p>Then there is a run time configuration that is needed.</p>
+<p>Then there is a run time configuration that is needed.</p>
 <ol class="arabic">
 <li><p>To set the part into Receive only mode:</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">analog@analog:~$ </span>iio_attr<span class="w"> </span>-a<span class="w"> </span>-d<span class="w"> </span>ad9361-phy<span class="w"> </span>ensm_mode<span class="w"> </span>rx
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iio_attr<span class="w"> </span>-a<span class="w"> </span>-d<span class="w"> </span>ad9361-phy<span class="w"> </span>ensm_mode<span class="w"> </span>rx
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></li>
+</li>
 <li><p>To set the part into Tx only mode:</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">analog@analog:~$ </span>iio_attr<span class="w"> </span>-a<span class="w"> </span>-d<span class="w"> </span>ad9361-phy<span class="w"> </span>ensm_mode<span class="w"> </span>tx
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iio_attr<span class="w"> </span>-a<span class="w"> </span>-d<span class="w"> </span>ad9361-phy<span class="w"> </span>ensm_mode<span class="w"> </span>tx
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></li>
+</li>
 </ol>
 <p>When you change from Rx mode to Tx mode, any of the four pins will
 assert/de-assert.</p>
