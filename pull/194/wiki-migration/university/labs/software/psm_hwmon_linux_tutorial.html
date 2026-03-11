@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="This video includes installation and configuration of Kuiper Linux, as well as building and installing the development branch of the libiio with HWMON support. The video will be re-done (and re-hosted on the CftL YouTube channel) once these features are merged to master and included in a Kuiper release." name="description" />
+<meta content="The goal of this tutorial is to equip the reader with a collection of hardware and software tools for working with Power System Management devices, and more generally, devices that fall under the Linux hardware monitoring kernel API (HWMON) framework." name="description" />
 
     <title>Power System Management on Linux Tutorial &#8212; System Level Documentation  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=8e8a900e" />
@@ -95,8 +95,10 @@
 <li><a class="reference internal" href="#">Power System Management on Linux Tutorial</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
 <li><a class="reference internal" href="#videos">Videos</a></li>
+<li><a class="reference internal" href="#materials">Materials</a></li>
 <li><a class="reference internal" href="#hardware-setup-linux-raspberry-pi">Hardware Setup: Linux / Raspberry Pi</a></li>
 <li><a class="reference internal" href="#toolbox-item-i2cdetect">Toolbox Item: i2cdetect</a></li>
+<li><a class="reference internal" href="#toolbox-item-lm-sensors-utilities">Toolbox Item: LM Sensors utilities</a></li>
 <li><a class="reference internal" href="#toolbox-item-hwmon-python-library">Toolbox Item: HWMON Python library</a></li>
 <li><a class="reference internal" href="#toolbox-item-iio-utilities">Toolbox Item: IIO Utilities</a></li>
 <li><a class="reference internal" href="#toolbox-item-pmbus-dpsm-utilities">Toolbox Item: pmbus_dpsm utilities</a></li>
@@ -593,27 +595,20 @@ Content on this topic
 <h1>Power System Management on Linux Tutorial<a class="headerlink" href="#power-system-management-on-linux-tutorial" title="Link to this heading"></a></h1>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
-<div class="line-block">
-<div class="line">The goal of this tutorial is to equip the reader with a collection of hardware and software tools for working with Power System Management devices, and more generally, devices that fall under the Linux hardware monitoring kernel API (HWMON) framework.</div>
-<div class="line">The tutorial will focus on using standard tools and simple examples that can be used for debug and development.</div>
-<div class="line">Also note that the tutorial is geared toward Linux-based systems, in contrast to bare-metal, no-OS applications. A great resource for learning about this use case is the <cite>Linduino to PSM adapter shield &lt;ad&gt;:adi:`dc2294a&gt;`__</cite>. The instructions for this board go over how to run several examples on the Linduino (A clone of the Arduino UNO).</div>
-</div>
+<p>The goal of this tutorial is to equip the reader with a collection of hardware and software tools for working with Power System Management devices, and more generally, devices that fall under the Linux hardware monitoring kernel API (HWMON) framework.</p>
+<p>The tutorial will focus on using standard tools and simple examples that can be used for debug and development.</p>
+<p>Also note that the tutorial is geared toward Linux-based systems, in contrast to bare-metal, no-OS applications. A great resource for learning about this use case is the <cite>Linduino to PSM adapter shield &lt;ad&gt;:adi:`dc2294a&gt;`__</cite>. The instructions for this board go over how to run several examples on the Linduino (A clone of the Arduino UNO).</p>
 </section>
 <section id="videos">
 <h2>Videos<a class="headerlink" href="#videos" title="Link to this heading"></a></h2>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This video includes installation and configuration of Kuiper Linux, as well as building and installing the development branch of the libiio with HWMON support. The video will be re-done (and re-hosted on the CftL YouTube channel) once these features are merged to master and included in a Kuiper release.</p>
-<div class="line-block">
-<div class="line"><img alt="youtube&gt;mR9V8uN390M" src="https://wiki.analog.com/_media/youtube&gt;mR9V8uN390M" /></div>
+<p><img alt="youtube&gt;mR9V8uN390M" src="https://wiki.analog.com/_media/youtube&gt;mR9V8uN390M" /></p>
 </div>
-</div>
-<div class="line-block">
-<div class="line">==== Materials ====</div>
-</div>
+</section>
+<section id="materials">
+<h2>Materials<a class="headerlink" href="#materials" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Raspberry Pi 4; 2G, 4G, or 8G version. (3B, 3B Plus will work, but you will want the 4 :-) )</p></li>
 <li><p>5V USB-C wall adapter for Raspberry Pi (micro USB for model 3)</p></li>
@@ -633,52 +628,32 @@ Content on this topic
 </li>
 <li><p>Multimeters <a class="icon link reference external" href="https://www.harborfreight.com/7-function-digital-multimeter-63759.html" target="_blank">7-Function Cen Tech</a> or equivalent</p></li>
 </ul>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
 </section>
 <section id="hardware-setup-linux-raspberry-pi">
 <h2>Hardware Setup: Linux / Raspberry Pi<a class="headerlink" href="#hardware-setup-linux-raspberry-pi" title="Link to this heading"></a></h2>
-<div class="line-block">
-<div class="line">Follow the directions for downloading and burning the ADI Kuiper Linux image to the SD card:</div>
-<div class="line"><a class="reference internal" href="../../../resources/tools-software/linux-software/kuiper-linux.html"><span class="doc">Kuiper Linux</span></a></div>
-<div class="line">Add the following line to config.txt:</div>
-</div>
+<p>Follow the directions for downloading and burning the ADI Kuiper Linux image to the SD card: <a class="reference internal" href="../../../resources/tools-software/linux-software/kuiper-linux.html"><span class="doc">Kuiper Linux</span></a></p>
+<p>Add the following line to config.txt:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dtoverlay</span><span class="o">=</span><span class="n">rpi</span><span class="o">-</span><span class="n">dc1962c</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">Make the fllowing connections between the DC1962C and the Raspberry Pi, following the pin mapping in Figure 1 and corresponding photo in Figure 2.</div>
-<div class="line"><br /></div>
-</div>
+<p>Make the fllowing connections between the DC1962C and the Raspberry Pi, following the pin mapping in Figure 1 and corresponding photo in Figure 2.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Pin mapping diagram</p>
 </div>
 <div class="centeralign docutils container">
 <p>Figure 1. Pin Mapping Diagram</p>
-</div>
-<div class="line-block">
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/psm_hwmon_linux_tutorial/rpi_power_stick_jumpers.jpg"><img alt="image1" src="https://wiki.analog.com/_media/university/labs/software/psm_hwmon_linux_tutorial/rpi_power_stick_jumpers.jpg" style="width: 600px;" /></a></div>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/psm_hwmon_linux_tutorial/rpi_power_stick_jumpers.jpg"><img alt="image1" src="https://wiki.analog.com/_media/university/labs/software/psm_hwmon_linux_tutorial/rpi_power_stick_jumpers.jpg" style="width: 600px;" /></a></p>
 </div>
 <div class="centeralign docutils container">
 <p>Figure 2. Connections with Discrete Wires</p>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Update photo when production boards arrive</p>
-<div class="line-block">
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/psm_hwmon_linux_tutorial/rpi_adapter_power_stick.jpg"><img alt="image2" src="https://wiki.analog.com/_media/university/labs/software/psm_hwmon_linux_tutorial/rpi_adapter_power_stick.jpg" style="width: 600px;" /></a></div>
-</div>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/psm_hwmon_linux_tutorial/rpi_adapter_power_stick.jpg"><img alt="image2" src="https://wiki.analog.com/_media/university/labs/software/psm_hwmon_linux_tutorial/rpi_adapter_power_stick.jpg" style="width: 600px;" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 3. Connections with DesignSpark adapter</p>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
 </div>
 </div>
 </section>
@@ -688,9 +663,7 @@ Content on this topic
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">i2cdetect</span> <span class="o">-</span><span class="n">y</span> <span class="mi">1</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line">And observe the output as shown in Figure X.</div>
-</div>
+<p>And observe the output as shown in Figure X.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Re-take screenshot with other EEPROMs on experimenter setup disabled (0x50-0x53)</p>
@@ -699,9 +672,10 @@ Content on this topic
 <p>Figure 4. Scanning I2C Bus 1 with i2c-detect</p>
 </div>
 </div>
-<p>The LTC2974, LTC2977, and LTC3880 are at I2C addresses 0x32, 0x33, and 0x30, respectively. i2c-detect reports “UU” for these addresses because these devices are controlled from kernelspace, and users cannot access them directly. The onboard 24AA02 EEPROM is not associated with a driver. The upper nibble of the i2c address is 0x5, and the lower 3 bits select banks within the device. Externally, addresses 0x50 to 0x57 are acknowledged.
-| Note that no data transfer actually occurs, the i2c-detect command is simply testing which devices acknowledge, then a stop condition is issued.
-| ==== Toolbox Item: LM Sensors utilities ====</p>
+<p>The LTC2974, LTC2977, and LTC3880 are at I2C addresses 0x32, 0x33, and 0x30, respectively. i2c-detect reports “UU” for these addresses because these devices are controlled from kernelspace, and users cannot access them directly. The onboard 24AA02 EEPROM is not associated with a driver. The upper nibble of the i2c address is 0x5, and the lower 3 bits select banks within the device. Externally, addresses 0x50 to 0x57 are acknowledged. Note that no data transfer actually occurs, the i2c-detect command is simply testing which devices acknowledge, then a stop condition is issued.</p>
+</section>
+<section id="toolbox-item-lm-sensors-utilities">
+<h2>Toolbox Item: LM Sensors utilities<a class="headerlink" href="#toolbox-item-lm-sensors-utilities" title="Link to this heading"></a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>ToDo: add issue to Kuiper repo - add lm-sensors</p>
@@ -738,15 +712,10 @@ Content on this topic
 <span class="n">sudo</span> <span class="n">reboot</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
 </div>
-</div>
-<div class="line-block">
-<div class="line">iio_info</div>
-<div class="line">IIO Oscilloscope</div>
-<div class="line">Hopefully PyADI-IIO in the not too distant future</div>
-</div>
+<p>iio_info</p>
+<p>IIO Oscilloscope</p>
+<p>Hopefully PyADI-IIO in the not too distant future</p>
 </section>
 <section id="toolbox-item-pmbus-dpsm-utilities">
 <h2>Toolbox Item: pmbus_dpsm utilities<a class="headerlink" href="#toolbox-item-pmbus-dpsm-utilities" title="Link to this heading"></a></h2>
@@ -759,10 +728,7 @@ Content on this topic
 </section>
 <section id="conclusion">
 <h2>Conclusion<a class="headerlink" href="#conclusion" title="Link to this heading"></a></h2>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">Existing PSM tools are the workhorse of system design and bringup. The Linux HWMON drivers and utilities are additional tools available for run-time debug and monitoring. (obviously this conclusion needs work…)</div>
-</div>
+<p>Existing PSM tools are the workhorse of system design and bringup. The Linux HWMON drivers and utilities are additional tools available for run-time debug and monitoring. (obviously this conclusion needs work…)</p>
 </section>
 </section>
 

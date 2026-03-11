@@ -92,7 +92,16 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">Creating and Running SigmaStudio Scripts</a></li>
+<li><a class="reference internal" href="#">Creating and Running SigmaStudio Scripts</a><ul>
+<li><a class="reference internal" href="#opening-the-script-editor">Opening the Script Editor</a></li>
+<li><a class="reference internal" href="#writing-a-script">Writing a Script</a></li>
+<li><a class="reference internal" href="#running-a-script">Running a Script</a></li>
+<li><a class="reference internal" href="#pause-and-resume-a-script">Pause and Resume a Script</a></li>
+<li><a class="reference internal" href="#stop-a-script">Stop a Script</a></li>
+<li><a class="reference internal" href="#object-names">Object Names</a></li>
+<li><a class="reference internal" href="#advanced-script-support">Advanced Script Support</a></li>
+</ul>
+</li>
 </ul>
 
         </nav>
@@ -581,115 +590,119 @@ Content on this topic
   <p><a class="reference internal" href="../scripting.html"><span class="doc">Click here to return to ‘SigmaStudio Scripting’ page.</span></a></p>
 <section id="creating-and-running-sigmastudio-scripts">
 <h1>Creating and Running SigmaStudio Scripts<a class="headerlink" href="#creating-and-running-sigmastudio-scripts" title="Link to this heading"></a></h1>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">SigmaStudio scripts allow project files to be created and manipulated using textual commands. The scripting interface is defined in the C# language and supports scripts written in either C# or Visual Basic languages. No previous knowledge of C# is required to write simple SigmaStudio scripts.</div>
-<div class="line">SigmaStudio scripts can be created in any text editor or within SigmaStudio using the “Script Editor” tool. The Script Editor provides IntelliPrompt display of the script interfaces and syntax highlighting functionality. Script files can be saved as text files (*.txt) or SigmaStudio Script files (*.sss). Scripts are loaded and run, pause, and stop from the Script Editor window. Pause, Resume and Stop supports by adding the “ALLOW_PAUSE_STOP() “ API in Script.</div>
-<div class="line">=====Opening the Script Editor===== In SigmaStudio, click on ToolsScript in main menu to start the Script Editor shown in Figure 2.</div>
-<div class="line">To create a new script file, open the Script Editor window and click File  New (or CTRL + N). This creates a new script file and automatically inserts <code class="docutils literal notranslate"><span class="pre">“//</span> <span class="pre">#LANGUAGE#</span> <span class="pre">C#”</span></code> on the first line. This identifies the script language as C# (c-sharp) the default SigmaStudio scripting language. Visual Basic scripts are also supported. The language identifier is optional for C# scripts but is required for Visual Basic scripts.</div>
-<div class="line">C# (c-sharp) script language identifier — #LANGUAGE# C#</div>
-<div class="line">Visual Basic script language identifier — #LANGUAGE# VB</div>
-<div class="line"><img alt="image1" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/usingsigmastudio/scripting/4.1.jpg" /></div>
-<div class="line">Figure 2: Script Editor</div>
-<div class="line">=====Writing a Script===== To access the IScripted interface list, type “sigmastudio” (or optionally “ss”) followed by a period in the Script Editor window. This will display the IntelliPrompt window listing all available IScripted methods. (“sigmastudio” and “ss” are public references to the SigmaStudio IScripted interface, see the following usage example).</div>
-<div class="line">An example script is given below:</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">//</span> <span class="pre">#LANGUAGE#</span> <span class="pre">C#</span>
-<span class="pre">sigmastudio.ProjectNew();</span>
-<span class="pre">sigmastudio.ObjectInsert(</span> <span class="pre">&quot;USBi&quot;</span> <span class="pre">);</span>
-<span class="pre">sigmastudio.ObjectInsert(</span> <span class="pre">&quot;ADSP-214xx&quot;</span> <span class="pre">);</span>
-<span class="pre">sigmastudio.ObjectConnect(</span> <span class="pre">&quot;USB</span> <span class="pre">Interface&quot;,</span> <span class="pre">0,</span> <span class="pre">&quot;IC</span> <span class="pre">1&quot;,</span> <span class="pre">0</span> <span class="pre">);</span>
-<span class="pre">sigmastudio.ObjectInsert(</span> <span class="pre">&quot;Audio</span> <span class="pre">Input&quot;</span> <span class="pre">);</span>
-<span class="pre">sigmastudio.ObjectInsert(</span> <span class="pre">&quot;Output&quot;</span> <span class="pre">);</span>
-<span class="pre">sigmastudio.ObjectInsert(</span> <span class="pre">&quot;Output&quot;</span> <span class="pre">);</span>
-<span class="pre">sigmastudio.ObjectConnect(</span> <span class="pre">&quot;Audio</span> <span class="pre">Input1&quot;,</span> <span class="pre">0,</span> <span class="pre">&quot;Output1&quot;,</span> <span class="pre">0</span> <span class="pre">);</span>
-<span class="pre">sigmastudio.ObjectConnect(</span> <span class="pre">&quot;Audio</span> <span class="pre">Input1&quot;,</span> <span class="pre">1,</span> <span class="pre">&quot;Output2&quot;,</span> <span class="pre">0</span> <span class="pre">);</span>
-<span class="pre">sigmastudio.ProjectLinkCompileDownload();</span>
-<span class="pre">sigmastudio.ProjectSaveAs(</span> <span class="pre">&#64;&quot;C:\SStudioProjects\SampleScript.dspproj&quot;</span> <span class="pre">);</span>
-<span class="pre">sigmastudio.ProjectClose();</span></code></div>
-<div class="line">This example creates a new project, inserts an ADSP-214xx processor and a USB communication channel, and connects them with a wire. Next, it inserts an input object and 2 output objects, connecting the 2 input pins to the output object pins. The project is then linked, compiled, downloaded, saved to disk and closed.</div>
-<div class="line">=====Running a Script===== To run a SigmaStudio Script, in the Script Editor Window, click on main menu Tools &gt; RunScript or press “F5”, see Figure 3. <img alt="image2" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/usingsigmastudio/scripting/4.3_1.jpg" /> Figure 3: Running Script</div>
-<div class="line">If there are any errors in the script code, a dialog detailing the errors is displayed and “Script Failure” is shown in the status bar. If the script successfully compiles and runs, “Success” is shown in the Script Editor status bar. <img alt="image3" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/usingsigmastudio/scripting/4.3_2.jpg" /> Figure 4: Script Error</div>
-<div class="line">=====Pause and Resume a Script===== To pause a SigmaStudio Script, in the Script Editor Window, click on main menu Tools &gt; Pause, see Figure 5. <img alt="image4" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/usingsigmastudio/scripting/pausescript.png" /></div>
-<div class="line">if the script successfully paused, “Paused” is shown in the Script Editor status bar. Figure 5: Pause Script</div>
-<div class="line">To Resume a SigmaStudio Script, in the Script Editor Window, click on main menu Tools &gt; Resume, see Figure 6. <img alt="image5" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/usingsigmastudio/scripting/scriptresume.png" /> Figure 6: Resume Script</div>
-<div class="line">=====Stop a Script===== To stop a SigmaStudio Script, in the Script Editor Window, click on main menu Tools &gt; Stop, see Figure 7. <img alt="image6" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/usingsigmastudio/scripting/stopscript.png" /></div>
-<div class="line">if the script successfully stops, a dialog detailing the script execution halted is displayed and “Script Aborted” is shown in the status bar. <img alt="image7" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/usingsigmastudio/scripting/scriptstopdialog.png" /></div>
-<div class="line"><img alt="image8" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/usingsigmastudio/scripting/scriptaborted.png" /></div>
-<div class="line">=====Object Names===== To reference Schematic objects contained in hierarchy boards, the complete object name must be used. The “complete name” consists of the object’s name preceded by the names of all parent Hierarchy boards separated by periods (‘.’).</div>
-<div class="line">For example, in Figure 5 “Filter2” is contained in a Hierarchy board named “Board1”. The complete name of this object is “Board1.Filter2”.</div>
+<p>SigmaStudio scripts allow project files to be created and manipulated using textual commands. The scripting interface is defined in the C# language and supports scripts written in either C# or Visual Basic languages. No previous knowledge of C# is required to write simple SigmaStudio scripts.</p>
+<p>SigmaStudio scripts can be created in any text editor or within SigmaStudio using the “Script Editor” tool. The Script Editor provides IntelliPrompt display of the script interfaces and syntax highlighting functionality. Script files can be saved as text files (*.txt) or SigmaStudio Script files (*.sss). Scripts are loaded and run, pause, and stop from the Script Editor window. Pause, Resume and Stop supports by adding the “ALLOW_PAUSE_STOP() “ API in Script.</p>
+<section id="opening-the-script-editor">
+<h2>Opening the Script Editor<a class="headerlink" href="#opening-the-script-editor" title="Link to this heading"></a></h2>
+<p>In SigmaStudio, click on ToolsScript in main menu to start the Script Editor shown in Figure 2.</p>
+<p>To create a new script file, open the Script Editor window and click File  New (or CTRL + N). This creates a new script file and automatically inserts <code class="docutils literal notranslate"><span class="pre">“//</span> <span class="pre">#LANGUAGE#</span> <span class="pre">C#”</span></code> on the first line. This identifies the script language as C# (c-sharp) the default SigmaStudio scripting language. Visual Basic scripts are also supported. The language identifier is optional for C# scripts but is required for Visual Basic scripts.</p>
+<p>C# (c-sharp) script language identifier — #LANGUAGE# C#</p>
+<p>Visual Basic script language identifier — #LANGUAGE# VB</p>
+<img alt="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/usingsigmastudio/scripting/4.1.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/usingsigmastudio/scripting/4.1.jpg" />
+<p>Figure 2: Script Editor</p>
+</section>
+<section id="writing-a-script">
+<h2>Writing a Script<a class="headerlink" href="#writing-a-script" title="Link to this heading"></a></h2>
+<p>To access the IScripted interface list, type “sigmastudio” (or optionally “ss”) followed by a period in the Script Editor window. This will display the IntelliPrompt window listing all available IScripted methods. (“sigmastudio” and “ss” are public references to the SigmaStudio IScripted interface, see the following usage example).</p>
+<p>An example script is given below:</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="c1">// #LANGUAGE# C#</span>
+<span class="n">sigmastudio</span><span class="p">.</span><span class="n">ProjectNew</span><span class="p">();</span>
+<span class="n">sigmastudio</span><span class="p">.</span><span class="n">ObjectInsert</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;USBi&quot;</span><span class="w"> </span><span class="p">);</span>
+<span class="n">sigmastudio</span><span class="p">.</span><span class="n">ObjectInsert</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;ADSP-214xx&quot;</span><span class="w"> </span><span class="p">);</span>
+<span class="n">sigmastudio</span><span class="p">.</span><span class="n">ObjectConnect</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;USB Interface&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;IC 1&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">);</span>
+<span class="n">sigmastudio</span><span class="p">.</span><span class="n">ObjectInsert</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Audio Input&quot;</span><span class="w"> </span><span class="p">);</span>
+<span class="n">sigmastudio</span><span class="p">.</span><span class="n">ObjectInsert</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Output&quot;</span><span class="w"> </span><span class="p">);</span>
+<span class="n">sigmastudio</span><span class="p">.</span><span class="n">ObjectInsert</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Output&quot;</span><span class="w"> </span><span class="p">);</span>
+<span class="n">sigmastudio</span><span class="p">.</span><span class="n">ObjectConnect</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Audio Input1&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Output1&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">);</span>
+<span class="n">sigmastudio</span><span class="p">.</span><span class="n">ObjectConnect</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Audio Input1&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Output2&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">);</span>
+<span class="n">sigmastudio</span><span class="p">.</span><span class="n">ProjectLinkCompileDownload</span><span class="p">();</span>
+<span class="n">sigmastudio</span><span class="p">.</span><span class="n">ProjectSaveAs</span><span class="p">(</span><span class="w"> </span><span class="s">@&quot;C:\SStudioProjects\SampleScript.dspproj&quot;</span><span class="w"> </span><span class="p">);</span>
+<span class="n">sigmastudio</span><span class="p">.</span><span class="n">ProjectClose</span><span class="p">();</span>
+</pre></div>
 </div>
-<div class="line-block">
-<div class="line"><img alt="image9" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/usingsigmastudio/scripting/4.4_1.jpg" /> Figure 5: Script Object Name Usage</div>
-<div class="line">The following script would remove the Filter2 object:</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">sigmastudio.ObjectRemove(</span> <span class="pre">&quot;Board1.Filter2&quot;</span> <span class="pre">);</span></code></div>
-<div class="line">In the next example (Figure 6), Board2 is contained within Board1, so the full name of object in Board2 includes both board names, “Board1.Board2.Gen 1st Order1”.</div>
+<p>This example creates a new project, inserts an ADSP-214xx processor and a USB communication channel, and connects them with a wire. Next, it inserts an input object and 2 output objects, connecting the 2 input pins to the output object pins. The project is then linked, compiled, downloaded, saved to disk and closed.</p>
+</section>
+<section id="running-a-script">
+<h2>Running a Script<a class="headerlink" href="#running-a-script" title="Link to this heading"></a></h2>
+<p>To run a SigmaStudio Script, in the Script Editor Window, click on main menu Tools &gt; RunScript or press “F5”, see Figure 3. <img alt="image1" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/usingsigmastudio/scripting/4.3_1.jpg" /> Figure 3: Running Script</p>
+<p>If there are any errors in the script code, a dialog detailing the errors is displayed and “Script Failure” is shown in the status bar. If the script successfully compiles and runs, “Success” is shown in the Script Editor status bar. <img alt="image2" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/usingsigmastudio/scripting/4.3_2.jpg" /> Figure 4: Script Error</p>
+</section>
+<section id="pause-and-resume-a-script">
+<h2>Pause and Resume a Script<a class="headerlink" href="#pause-and-resume-a-script" title="Link to this heading"></a></h2>
+<p>To pause a SigmaStudio Script, in the Script Editor Window, click on main menu Tools &gt; Pause, see Figure 5.</p>
+<p><img alt="image3" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/usingsigmastudio/scripting/pausescript.png" /></p>
+<p>if the script successfully paused, “Paused” is shown in the Script Editor status bar. Figure 5: Pause Script</p>
+<p>To Resume a SigmaStudio Script, in the Script Editor Window, click on main menu Tools &gt; Resume, see Figure 6. <img alt="image4" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/usingsigmastudio/scripting/scriptresume.png" /> Figure 6: Resume Script</p>
+</section>
+<section id="stop-a-script">
+<h2>Stop a Script<a class="headerlink" href="#stop-a-script" title="Link to this heading"></a></h2>
+<p>To stop a SigmaStudio Script, in the Script Editor Window, click on main menu Tools &gt; Stop, see Figure 7.</p>
+<p><img alt="image5" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/usingsigmastudio/scripting/stopscript.png" /></p>
+<p>if the script successfully stops, a dialog detailing the script execution halted is displayed and “Script Aborted” is shown in the status bar.</p>
+<p><img alt="image6" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/usingsigmastudio/scripting/scriptstopdialog.png" /></p>
+<img alt="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/usingsigmastudio/scripting/scriptaborted.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/usingsigmastudio/scripting/scriptaborted.png" />
+</section>
+<section id="object-names">
+<h2>Object Names<a class="headerlink" href="#object-names" title="Link to this heading"></a></h2>
+<p>To reference Schematic objects contained in hierarchy boards, the complete object name must be used. The “complete name” consists of the object’s name preceded by the names of all parent Hierarchy boards separated by periods (‘.’).</p>
+<p>For example, in Figure 5 “Filter2” is contained in a Hierarchy board named “Board1”. The complete name of this object is “Board1.Filter2”.</p>
+<p><img alt="image7" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/usingsigmastudio/scripting/4.4_1.jpg" /> Figure 5: Script Object Name Usage</p>
+<p>The following script would remove the Filter2 object:</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="n">sigmastudio</span><span class="p">.</span><span class="n">ObjectRemove</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Board1.Filter2&quot;</span><span class="w"> </span><span class="p">);</span>
+</pre></div>
 </div>
-<div class="line-block">
-<div class="line"><img alt="image10" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/usingsigmastudio/scripting/4.4_2.jpg" /> Figure 6: Script Object Name for Board</div>
-<div class="line">=====Advanced Script Support===== Scripts are not limited to the IScripted interface functions. Scripts can take advantage of the C# language and some elements of the .NET framework. A sample script to add object to a Schematic, modify its attributes and interconnect them is given below.</div>
-<div class="line"><a href="#id1"><span class="problematic" id="id2">``</span></a>// #LANGUAGE# C#
-ss.ProjectOpen( &#64;”C:SStudioProjectsSampleScript.dspproj”);
-ss.ObjectDisconnect( “Audio Input1”, 0, “Output1”, 0 );
-ss.ObjectDisconnect( “Audio Input1”, 1, “Output2”, 0 );</div>
+<p>In the next example (Figure 6), Board2 is contained within Board1, so the full name of object in Board2 includes both board names, “Board1.Board2.Gen 1st Order1”.</p>
+<p><img alt="image8" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/usingsigmastudio/scripting/4.4_2.jpg" /> Figure 6: Script Object Name for Board</p>
+</section>
+<section id="advanced-script-support">
+<h2>Advanced Script Support<a class="headerlink" href="#advanced-script-support" title="Link to this heading"></a></h2>
+<p>Scripts are not limited to the IScripted interface functions. Scripts can take advantage of the C# language and some elements of the .NET framework. A sample script to add object to a Schematic, modify its attributes and interconnect them is given below.</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="c1">// #LANGUAGE# C#</span>
+<span class="n">ss</span><span class="p">.</span><span class="n">ProjectOpen</span><span class="p">(</span><span class="w"> </span><span class="s">@&quot;C:\SStudioProjects\SampleScript.dspproj&quot;</span><span class="p">);</span>
+<span class="n">ss</span><span class="p">.</span><span class="n">ObjectDisconnect</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Audio Input1&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Output1&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">);</span>
+<span class="n">ss</span><span class="p">.</span><span class="n">ObjectDisconnect</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Audio Input1&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Output2&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">);</span>
+
+<span class="k">try</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">nNumFilters</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">nNumFilters</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">object</span><span class="w"> </span><span class="n">oFilter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ss</span><span class="p">.</span><span class="n">ObjectInsert</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;General (2nd order)&quot;</span><span class="w"> </span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">null</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">oFilter</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">string</span><span class="w"> </span><span class="n">strNewName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Filter_&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">            </span><span class="n">ss</span><span class="p">.</span><span class="n">ObjectSetProperties</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;setName&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">oFilter</span><span class="p">,</span><span class="w"> </span><span class="n">strNewName</span><span class="w"> </span><span class="p">);</span>
+<span class="w">            </span><span class="n">ss</span><span class="p">.</span><span class="n">ObjectSetProperties</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;addAlgorithm&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">strNewName</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;IC 1&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2 Channel - Single Precision&quot;</span><span class="w"> </span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">else</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nf">Exception</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;ln 11&quot;</span><span class="w"> </span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">HResult</span><span class="w"> </span><span class="n">hr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HResult</span><span class="p">.</span><span class="n">S_OK</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">ixPin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">ixPin</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">ixPin</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">HResult</span><span class="p">.</span><span class="n">S_OK</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">sigmastudio</span><span class="p">.</span><span class="n">ObjectConnect</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Audio Input1&quot;</span><span class="p">,</span><span class="n">ixPin</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Filter_1&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ixPin</span><span class="w"> </span><span class="p">))</span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nf">Exception</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;ln 28&quot;</span><span class="w"> </span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">HResult</span><span class="p">.</span><span class="n">S_OK</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">sigmastudio</span><span class="p">.</span><span class="n">ObjectConnect</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Filter_1&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ixPin</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Filter_2&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ixPin</span><span class="w"> </span><span class="p">))</span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nf">Exception</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;ln 31&quot;</span><span class="w"> </span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">HResult</span><span class="p">.</span><span class="n">S_OK</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">sigmastudio</span><span class="p">.</span><span class="n">ObjectConnect</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Filter_2&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ixPin</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Filter_3&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ixPin</span><span class="w"> </span><span class="p">))</span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nf">Exception</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;ln 34&quot;</span><span class="w"> </span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">HResult</span><span class="p">.</span><span class="n">S_OK</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">sigmastudio</span><span class="p">.</span><span class="n">ObjectConnect</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Filter_3&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ixPin</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Filter_4&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ixPin</span><span class="w"> </span><span class="p">))</span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nf">Exception</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;ln 37&quot;</span><span class="w"> </span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">HResult</span><span class="p">.</span><span class="n">S_OK</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">sigmastudio</span><span class="p">.</span><span class="n">ObjectConnect</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Filter_4&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Output1&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">))</span>
+<span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nf">Exception</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;ln 42&quot;</span><span class="w"> </span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">HResult</span><span class="p">.</span><span class="n">S_OK</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">sigmastudio</span><span class="p">.</span><span class="n">ObjectConnect</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Filter_4&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Output2&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">))</span>
+<span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nf">Exception</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;ln 45&quot;</span><span class="w"> </span><span class="p">);</span>
+<span class="p">}</span>
+<span class="k">catch</span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">e</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="n">Windows</span><span class="p">.</span><span class="n">Forms</span><span class="p">.</span><span class="n">MessageBox</span><span class="p">.</span><span class="n">Show</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;FAILURE: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">ToString</span><span class="p">()</span><span class="w"> </span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
 </div>
-<blockquote>
-<div><p>try
-{</p>
-<blockquote>
-<div><p>int nNumFilters = 4;
-for (int i = 0; i &lt; nNumFilters; ++i)
-{</p>
-<blockquote>
-<div><p>object oFilter = ss.ObjectInsert( “General (2nd order)” );
-if (null != oFilter)
-{</p>
-<blockquote>
-<div><p>string strNewName = “<a href="#id3"><span class="problematic" id="id4">Filter_</span></a>” + (i + 1);
-ss.ObjectSetProperties( “setName”, oFilter, strNewName );
-ss.ObjectSetProperties( “addAlgorithm”, strNewName, “IC 1”, “2 Channel - Single Precision” );</p>
-</div></blockquote>
-<p>}
-else
-{</p>
-<blockquote>
-<div><p>throw new Exception( “ln 11” );</p>
-</div></blockquote>
-<p>}</p>
-</div></blockquote>
-<p>}
-HResult hr = HResult.S_OK;
-for (int ixPin = 0; ixPin &lt; 2; ++ixPin)
-{</p>
-<blockquote>
-<div><dl class="simple">
-<dt>if (HResult.S_OK != sigmastudio.ObjectConnect( “Audio Input1”,ixPin, “Filter_1”, ixPin ))</dt><dd><p>throw new Exception( “ln 28” );</p>
-</dd>
-<dt>if (HResult.S_OK != sigmastudio.ObjectConnect( “Filter_1”, ixPin, “Filter_2”, ixPin ))</dt><dd><p>throw new Exception( “ln 31” );</p>
-</dd>
-<dt>if (HResult.S_OK != sigmastudio.ObjectConnect( “Filter_2”, ixPin, “Filter_3”, ixPin ))</dt><dd><p>throw new Exception( “ln 34” );</p>
-</dd>
-<dt>if (HResult.S_OK != sigmastudio.ObjectConnect( “Filter_3”, ixPin, “Filter_4”, ixPin ))</dt><dd><p>throw new Exception( “ln 37” );</p>
-</dd>
-</dl>
-</div></blockquote>
-<p>}
-if (HResult.S_OK != sigmastudio.ObjectConnect( “Filter_4”, 0, “Output1”, 0 ))</p>
-<blockquote>
-<div><p>throw new Exception( “ln 42” );</p>
-</div></blockquote>
-<dl class="simple">
-<dt>if (HResult.S_OK != sigmastudio.ObjectConnect( “Filter_4”, 1, “Output2”, 0 ))</dt><dd><p>throw new Exception( “ln 45” );</p>
-</dd>
-</dl>
-</div></blockquote>
-<p>}
-catch(Exception e)
-{</p>
-<blockquote>
-<div><p>System.Windows.Forms.MessageBox.Show( “FAILURE: “ + e.ToString() );</p>
-</div></blockquote>
-<p>}``</p>
-</div></blockquote>
+</section>
 </section>
 
 

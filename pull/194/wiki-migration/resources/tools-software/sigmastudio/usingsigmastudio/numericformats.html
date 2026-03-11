@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="Audio data at the serial inputs and outputs is formatted as 24 bit, signed, integer values. SigmaDSP cores, however, use numeric formats with more than 24 bits for intermediate values, coefficients, and parameters to provide additional headroom and precision. The numeric format has increased in the more powerful DSP core architectures." name="description" />
+<meta content="Click here to return to the Using Sigma Studio page" name="description" />
 
     <title>Numeric Formats &#8212; System Level Documentation  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=8e8a900e" />
@@ -98,9 +98,9 @@
 <li><a class="reference internal" href="#decimal-format">8.24 (Decimal) Format</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#bit-architectures-1">28 bit architectures</a><ul>
-<li><a class="reference internal" href="#integer-format-1">28.0 (Integer) Format</a></li>
-<li><a class="reference internal" href="#decimal-format-1">5.23 (Decimal) Format</a></li>
+<li><a class="reference internal" href="#id1">28 bit architectures</a><ul>
+<li><a class="reference internal" href="#id2">28.0 (Integer) Format</a></li>
+<li><a class="reference internal" href="#id3">5.23 (Decimal) Format</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#hardware-readback-format">5.19 (Hardware Readback) Format</a></li>
@@ -594,9 +594,7 @@ Content on this topic
             
   <section id="numeric-formats">
 <h1>Numeric Formats<a class="headerlink" href="#numeric-formats" title="Link to this heading"></a></h1>
-<div class="line-block">
-<div class="line"><a class="reference internal" href="../usingsigmastudio.html"><span class="doc">Click here to return to the Using Sigma Studio page</span></a></div>
-</div>
+<p><a class="reference internal" href="../usingsigmastudio.html"><span class="doc">Click here to return to the Using Sigma Studio page</span></a></p>
 <p>Audio data at the serial inputs and outputs is formatted as 24 bit, signed, integer values. SigmaDSP cores, however, use numeric formats with more than 24 bits for intermediate values, coefficients, and parameters to provide additional headroom and precision. The numeric format has increased in the more powerful DSP core architectures.</p>
 <p>To represent non-integer values, all of the SigmaDSP architectures use fixed-point numeric formats (rather than the more common floating point) to maximize the precision needed for audio signal processing. Fixed-point numbers are simply formatted as <strong>A.B</strong>, where A is the number of bits to the left of the decimal point (the integer part) and B is the number of bits to the right of the decimal point (the fractional part).</p>
 <p>The combined value A.B is in 2’s complement format enabling both positive and negative values. For more information on two’s complement representations, please read the comprehensive article on Wikipedia here: <a class="icon link reference external" href="https://en.wikipedia.org/wiki/Two%27s_complement" target="_blank">Two’s complement</a></p>
@@ -670,11 +668,11 @@ Content on this topic
 <p>When outputting to the serial ports or DACs, signals will saturate to 24 bits by right shifting by one and ignoring the upper 8 bits. This means any signal with a peak outside the range (1.0 - LSB) to -1 in 8.24 format will be clipped to full-scale on the outputs.</p>
 </section>
 </section>
-<section id="bit-architectures-1">
-<span id="id1"></span><h2>28 bit architectures<a class="headerlink" href="#bit-architectures-1" title="Link to this heading"></a></h2>
+<section id="id1">
+<h2>28 bit architectures<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
 <p>In 28 bit SigmaDSP architectures, audio is represented with A = 5 and B = 23, resulting in a 5.23 bit number. However, control signals and index table values generally require an integer representation, and are therefore represented as A = 28 and B = 0 for a 28.0 value with no fractional part.</p>
-<section id="integer-format-1">
-<span id="id2"></span><h3>28.0 (Integer) Format<a class="headerlink" href="#integer-format-1" title="Link to this heading"></a></h3>
+<section id="id2">
+<h3>28.0 (Integer) Format<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
 <p>Signals that are in integer format follow standard binary rules for representation.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">0</span><span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="n">b</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="n">b</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">11</span><span class="n">b</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">100</span><span class="n">b</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">et</span> <span class="n">cetera</span><span class="o">.</span>
 </pre></div>
@@ -703,8 +701,8 @@ Content on this topic
 <p>In general, negative integers are not used in SigmaStudio or SigmaDSP algorithms.</p>
 <p>As mentioned, the serial ports and DACs are 24 bit integer values. In 28 bit architectures, the 24 least significant bit signals map to 0 dBFS. The four extra MSBs added for processing headroom are ignored. This means any signal exceeding 8388608 in 28.0 format will be limited to full-scale on the outputs. This clipping operation is one of the reasons negative 28 bit integers are avoided.</p>
 </section>
-<section id="decimal-format-1">
-<span id="id3"></span><h3>5.23 (Decimal) Format<a class="headerlink" href="#decimal-format-1" title="Link to this heading"></a></h3>
+<section id="id3">
+<h3>5.23 (Decimal) Format<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
 <p>Audio, unlike control signals, is formatted intuitively as a decimal value in the range of 1 to -1. If a full-scale audio signal with a peak amplitude of 1 has -3 dB of gain applied, it should have an amplitude of approximately 0.707. If -6 dB of gain is applied, the signal has an amplitude of 0.5.</p>
 <p>A full scale 24-bit input signal has a positive peak value in common 24 bit, 2’s complement representation of:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">1000</span> <span class="mi">0000</span> <span class="mi">0000</span> <span class="mi">0000</span> <span class="mi">0000</span> <span class="mi">0000</span> <span class="o">=</span> <span class="mi">2</span><span class="o">^</span><span class="mi">23</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">=</span> <span class="mi">0</span><span class="n">dBFS</span>
@@ -749,9 +747,7 @@ Content on this topic
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">0000</span> <span class="mi">1000</span> <span class="mi">0000</span> <span class="mi">0000</span> <span class="mi">0000</span> <span class="mi">0000</span> <span class="mi">0000</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line">would have its lower 4 bits truncated for 5.19 representation:</div>
-</div>
+<p>would have its lower 4 bits truncated for 5.19 representation:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">0000</span> <span class="mi">1000</span> <span class="mi">0000</span> <span class="mi">0000</span> <span class="mi">0000</span> <span class="mi">0000</span>
 </pre></div>
 </div>
@@ -765,7 +761,7 @@ Content on this topic
 <li><p>Count the number of leading 0s (minus 4) and multiply by 6; this is the integer part of the dB scale.</p></li>
 <li><p>Use the bits after the leading 1 to linearly interpolate between the 6 dB points.</p></li>
 </ul>
-<p><img alt="numericpic1.png" src="https://wiki.analog.com/_media/numericpic1.png" /></p>
+<img alt="numericpic1.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/usingsigmastudio/numericpic1.png" />
 <p>In order to get a linear value into a hex/binary number that can be written to the SigmaDSP, and vice versa, it is important to understand number conversions.</p>
 <p>The actual level parameters that you need to write are only the last 28 bits, and this value is simply a linear gain value. Using -40 dB as an example, convert this value to a linear value using the standard dB equation:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">20</span><span class="n">log10</span> <span class="p">(</span><span class="n">x</span><span class="o">/</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="mi">40</span><span class="n">dB</span>      <span class="n">x</span> <span class="o">=</span> <span class="mf">.01</span>

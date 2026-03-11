@@ -99,9 +99,7 @@
 <li><a class="reference internal" href="#configuration-parameters">Configuration Parameters</a></li>
 <li><a class="reference internal" href="#interfaces">Interfaces</a></li>
 <li><a class="reference internal" href="#detailed-description">Detailed description</a></li>
-<li><a class="reference internal" href="#register-map">Register Map</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#register-map">Register Map</a><ul>
 <li><a class="reference internal" href="#base-common-to-all-cores">Base (common to all cores)</a></li>
 <li><a class="reference internal" href="#adc-common-axi-ad">ADC Common (axi_ad*)</a></li>
 <li><a class="reference internal" href="#adc-channel-axi-ad">ADC Channel (axi_ad*)</a></li>
@@ -123,7 +121,9 @@
 <li><a class="reference internal" href="#general-purpose-registers-axi-gpreg">General Purpose Registers (axi_gpreg)</a></li>
 <li><a class="reference internal" href="#spi-engine-axi-spi-engine">SPI Engine (axi_spi_engine)</a></li>
 <li><a class="reference internal" href="#xilinx-xcvr-axi-xcvr-regmap">Xilinx XCVR (axi_xcvr) Regmap</a></li>
-<li><a class="reference internal" href="#pwm-generator-axi-pwm-gen">PWM Generator (axi_pwm_gen)</a><ul>
+<li><a class="reference internal" href="#pwm-generator-axi-pwm-gen">PWM Generator (axi_pwm_gen)</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#design-considerations">Design considerations</a><ul>
 <li><a class="reference internal" href="#additional-ips-needed">Additional IPs needed:</a></li>
 </ul>
@@ -881,14 +881,14 @@ Content on this topic
 </section>
 <section id="detailed-description">
 <h2>Detailed description<a class="headerlink" href="#detailed-description" title="Link to this heading"></a></h2>
-<div class="line-block">
-<div class="line">The top module (<strong>axi_hdmi_tx</strong>), instantiates:</div>
-<div class="line">* axi_hdmi_tx_core module</div>
-<div class="line">* axi_hdmi_tx_vdma module</div>
-<div class="line">* the HDMI TX register map</div>
-<div class="line">* the AXI handling interface</div>
-<div class="line">In <strong>axi_hdmi_tx_core</strong> module the video information is manipulated by passing through several processing blocks (see <a class="icon link reference external" href="https://wiki.analog.com/" target="_blank">#block_diagram</a>):</div>
-</div>
+<p>The top module (<strong>axi_hdmi_tx</strong>), instantiates:</p>
+<ul class="simple">
+<li><p>axi_hdmi_tx_core module</p></li>
+<li><p>axi_hdmi_tx_vdma module</p></li>
+<li><p>the HDMI TX register map</p></li>
+<li><p>the AXI handling interface</p></li>
+</ul>
+<p>In <strong>axi_hdmi_tx_core</strong> module the video information is manipulated by passing through several processing blocks (see <a class="icon link reference external" href="https://wiki.analog.com/" target="_blank">#block_diagram</a>):</p>
 <ul class="simple">
 <li><p><strong>CSC (Color Space Converter)</strong> –converts the video information from RGB color space to YCbCr color space. If RGB is the desired output color space the CSC block can be bypassed by setting to 1 the value of CSC_BYPASS register.</p></li>
 <li><p><strong>Data Clipping</strong> bloc gives the possibility of limiting the minimum and maximum color range values. This block is controlled by FULL_RANGE, REG_CLIPP_MAX and REG_CLIPP_MIN registers.</p></li>
@@ -896,16 +896,12 @@ Content on this topic
 <li><p><strong>Embedded Sync</strong> module interleaves the video synchronization signals with the video information, obtaining a more compact transmission path.</p></li>
 <li><p><strong>Sync Signals</strong> block is responsible for generating the video synchronization signals for video resolutions written in HDMI interface Control register.</p></li>
 </ul>
-<div class="line-block">
-<div class="line">The <strong>axi_hdmi_tx_vdma</strong> module ensures the clock domain crossing circuit between the video source, typically a <a class="reference internal" href="axi_dmac.html"><span class="doc">DMAC</span></a> core and the <strong>axi_hdmi_core</strong>, which works at different clock speeds depending on the required resolution.</div>
-</div>
+<p>The <strong>axi_hdmi_tx_vdma</strong> module ensures the clock domain crossing circuit between the video source, typically a <a class="reference internal" href="axi_dmac.html"><span class="doc">DMAC</span></a> core and the <strong>axi_hdmi_core</strong>, which works at different clock speeds depending on the required resolution.</p>
 </section>
 <section id="register-map">
 <h2>Register Map<a class="headerlink" href="#register-map" title="Link to this heading"></a></h2>
-</section>
-</section>
 <section id="base-common-to-all-cores">
-<h1>Base (common to all cores)<a class="headerlink" href="#base-common-to-all-cores" title="Link to this heading"></a></h1>
+<h3>Base (common to all cores)<a class="headerlink" href="#base-common-to-all-cores" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -1146,9 +1142,8 @@ Content on this topic
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="adc-common-axi-ad">
-<h1>ADC Common (axi_ad*)<a class="headerlink" href="#adc-common-axi-ad" title="Link to this heading"></a></h1>
+<h3>ADC Common (axi_ad*)<a class="headerlink" href="#adc-common-axi-ad" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -1327,7 +1322,7 @@ Content on this topic
 <td><p>CUSTOM_CONTROL</p></td>
 <td><p>RW</p></td>
 <td><p>0x00</p></td>
-<td></td>
+<td><p><img alt="regmap_adc_custom" src="https://wiki.analog.com/_media/page&gt;/resources/fpga/docs/hdl/regmap_adc_custom" /></p></td>
 </tr>
 <tr class="row-odd"><td><p>0x0015</p></td>
 <td><p>0x0054</p></td>
@@ -1781,9 +1776,8 @@ Content on this topic
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="adc-channel-axi-ad">
-<h1>ADC Channel (axi_ad*)<a class="headerlink" href="#adc-channel-axi-ad" title="Link to this heading"></a></h1>
+<h3>ADC Channel (axi_ad*)<a class="headerlink" href="#adc-channel-axi-ad" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -2153,9 +2147,8 @@ Content on this topic
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="io-delay-control-axi-ad">
-<h1>IO Delay Control (axi_ad*)<a class="headerlink" href="#io-delay-control-axi-ad" title="Link to this heading"></a></h1>
+<h3>IO Delay Control (axi_ad*)<a class="headerlink" href="#io-delay-control-axi-ad" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -2252,9 +2245,8 @@ Content on this topic
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="dac-common-axi-ad">
-<h1>DAC Common (axi_ad)<a class="headerlink" href="#dac-common-axi-ad" title="Link to this heading"></a></h1>
+<h3>DAC Common (axi_ad)<a class="headerlink" href="#dac-common-axi-ad" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -2775,9 +2767,8 @@ Content on this topic
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="dac-channel-axi-ad">
-<h1>DAC Channel (axi_ad*)<a class="headerlink" href="#dac-channel-axi-ad" title="Link to this heading"></a></h1>
+<h3>DAC Channel (axi_ad*)<a class="headerlink" href="#dac-channel-axi-ad" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -3174,9 +3165,8 @@ Content on this topic
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="generic-tdd-control-axi-tdd">
-<h1>Generic TDD Control (axi_tdd)<a class="headerlink" href="#generic-tdd-control-axi-tdd" title="Link to this heading"></a></h1>
+<h3>Generic TDD Control (axi_tdd)<a class="headerlink" href="#generic-tdd-control-axi-tdd" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -4569,9 +4559,8 @@ Content on this topic
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="transceiver-tdd-control-axi-ad">
-<h1>Transceiver TDD Control (axi_ad*)<a class="headerlink" href="#transceiver-tdd-control-axi-ad" title="Link to this heading"></a></h1>
+<h3>Transceiver TDD Control (axi_ad*)<a class="headerlink" href="#transceiver-tdd-control-axi-ad" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -5132,9 +5121,8 @@ Content on this topic
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="jesd-tpl-up-tpl-common">
-<h1>JESD TPL (up_tpl_common)<a class="headerlink" href="#jesd-tpl-up-tpl-common" title="Link to this heading"></a></h1>
+<h3>JESD TPL (up_tpl_common)<a class="headerlink" href="#jesd-tpl-up-tpl-common" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -5279,9 +5267,8 @@ Content on this topic
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="jesd204-rx-axi-jesd204-rx">
-<h1>JESD204 RX (axi_jesd204_rx)<a class="headerlink" href="#jesd204-rx-axi-jesd204-rx" title="Link to this heading"></a></h1>
+<h3>JESD204 RX (axi_jesd204_rx)<a class="headerlink" href="#jesd204-rx-axi-jesd204-rx" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -6013,8 +6000,8 @@ Content on this topic
 <td><p>STATUS_STATE</p></td>
 <td><p>RO-V</p></td>
 <td><p>0x00</p></td>
-<td><p>8B/10B : State of the <a class="icon link reference external" href="https://wiki.analog.com/" target="_blank">8B/10B link state machine</a>. (0 = RESET, 1 = WAIT_FOR_PHY, 2 = CGS, 3 = SYNCHRONIZED)
-64B/66B : State of the <a class="icon link reference external" href="https://wiki.analog.com/" target="_blank">64B/66B link state machine</a>. (0 = RESET, 1 = WAIT_BS, 2 = BLOCK_SYNC, 3 = DATA)</p></td>
+<td><p>8B/10B : State of the <a class="reference external" href="#b10b_link_state_machine">8B/10B link state machine</a>. (0 = RESET, 1 = WAIT_FOR_PHY, 2 = CGS, 3 = SYNCHRONIZED)
+64B/66B : State of the <a class="reference external" href="#b66b_link_state_machine">64B/66B link state machine</a>. (0 = RESET, 1 = WAIT_BS, 2 = BLOCK_SYNC, 3 = DATA)</p></td>
 </tr>
 <tr class="row-even"><td><p>0xc0 + 0x08*n</p></td>
 <td><p>0x0300 +0x20*n</p></td>
@@ -6384,9 +6371,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="jesd204-tx-axi-jesd204-tx">
-<h1>JESD204 TX (axi_jesd204_tx)<a class="headerlink" href="#jesd204-tx-axi-jesd204-tx" title="Link to this heading"></a></h1>
+<h3>JESD204 TX (axi_jesd204_tx)<a class="headerlink" href="#jesd204-tx-axi-jesd204-tx" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -7308,9 +7294,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="dma-controller-axi-dmac">
-<h1>DMA Controller (axi_dmac)<a class="headerlink" href="#dma-controller-axi-dmac" title="Link to this heading"></a></h1>
+<h3>DMA Controller (axi_dmac)<a class="headerlink" href="#dma-controller-axi-dmac" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -8010,9 +7995,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="fan-controller-axi-fan-control">
-<h1>Fan Controller (axi_fan_control)<a class="headerlink" href="#fan-controller-axi-fan-control" title="Link to this heading"></a></h1>
+<h3>Fan Controller (axi_fan_control)<a class="headerlink" href="#fan-controller-axi-fan-control" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -8637,9 +8621,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="system-id-axi-system-id">
-<h1>System ID (axi_system_id)<a class="headerlink" href="#system-id-axi-system-id" title="Link to this heading"></a></h1>
+<h3>System ID (axi_system_id)<a class="headerlink" href="#system-id-axi-system-id" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -8784,9 +8767,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="clock-generator-axi-clkgen">
-<h1>Clock Generator (axi_clkgen)<a class="headerlink" href="#clock-generator-axi-clkgen" title="Link to this heading"></a></h1>
+<h3>Clock Generator (axi_clkgen)<a class="headerlink" href="#clock-generator-axi-clkgen" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -8955,9 +8937,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="clock-monitor-axi-clock-monitor">
-<h1>Clock Monitor (axi_clock_monitor)<a class="headerlink" href="#clock-monitor-axi-clock-monitor" title="Link to this heading"></a></h1>
+<h3>Clock Monitor (axi_clock_monitor)<a class="headerlink" href="#clock-monitor-axi-clock-monitor" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -9310,9 +9291,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="hdmi-transmit-axi-hdmi-tx">
-<h1>HDMI Transmit (axi_hdmi_tx)<a class="headerlink" href="#hdmi-transmit-axi-hdmi-tx" title="Link to this heading"></a></h1>
+<h3>HDMI Transmit (axi_hdmi_tx)<a class="headerlink" href="#hdmi-transmit-axi-hdmi-tx" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -9713,9 +9693,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="hdmi-receive-axi-hdmi-rx">
-<h1>HDMI Receive (axi_hdmi_rx)<a class="headerlink" href="#hdmi-receive-axi-hdmi-rx" title="Link to this heading"></a></h1>
+<h3>HDMI Receive (axi_hdmi_rx)<a class="headerlink" href="#hdmi-receive-axi-hdmi-rx" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -9964,9 +9943,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="general-purpose-registers-axi-gpreg">
-<h1>General Purpose Registers (axi_gpreg)<a class="headerlink" href="#general-purpose-registers-axi-gpreg" title="Link to this heading"></a></h1>
+<h3>General Purpose Registers (axi_gpreg)<a class="headerlink" href="#general-purpose-registers-axi-gpreg" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -10127,9 +10105,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="spi-engine-axi-spi-engine">
-<h1>SPI Engine (axi_spi_engine)<a class="headerlink" href="#spi-engine-axi-spi-engine" title="Link to this heading"></a></h1>
+<h3>SPI Engine (axi_spi_engine)<a class="headerlink" href="#spi-engine-axi-spi-engine" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -10538,9 +10515,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="xilinx-xcvr-axi-xcvr-regmap">
-<h1>Xilinx XCVR (axi_xcvr) Regmap<a class="headerlink" href="#xilinx-xcvr-axi-xcvr-regmap" title="Link to this heading"></a></h1>
+<h3>Xilinx XCVR (axi_xcvr) Regmap<a class="headerlink" href="#xilinx-xcvr-axi-xcvr-regmap" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -10735,7 +10711,7 @@ Valid for 64b66b encoder.</p></td>
 <td><p>SYSCLK_SEL[1:0]</p></td>
 <td><p>RW</p></td>
 <td><p>0x00</p></td>
-<td><p>For GTX drives directly the (RX/TX)SYSCLKSEL pin of the transceiver. Refer to Xilinx documentation. For GTH/GTY drives directly the (RX/TX)PLLCLKSEL pin of the transceiver and indirectly the (RX/TX)SYSCLKSEL pin of the transceiver see <a class="reference internal" href="axi_adxcvr.html"><span class="doc">axi_adxcvr#table_1</span></a>.</p></td>
+<td><p>For GTX drives directly the (RX/TX)SYSCLKSEL pin of the transceiver. Refer to Xilinx documentation. For GTH/GTY drives directly the (RX/TX)PLLCLKSEL pin of the transceiver and indirectly the (RX/TX)SYSCLKSEL pin of the transceiver see <a class="reference internal" href="axi_adxcvr.html"><span class="doc">axi_adxcvr#Table 1</span></a>.</p></td>
 </tr>
 <tr class="row-odd"><td></td>
 <td></td>
@@ -10743,7 +10719,7 @@ Valid for 64b66b encoder.</p></td>
 <td><p>OUTCLK_SEL[2:0]</p></td>
 <td><p>RW</p></td>
 <td><p>0x00</p></td>
-<td><p>Transceiver primitive control <a class="reference internal" href="axi_adxcvr.html"><span class="doc">axi_adxcvr#table_2</span></a>, refer Xilinx documentation.</p></td>
+<td><p>Transceiver primitive control <a class="reference internal" href="axi_adxcvr.html"><span class="doc">axi_adxcvr#Table 2</span></a>, refer Xilinx documentation.</p></td>
 </tr>
 <tr class="row-even"><td><p>0x0009</p></td>
 <td><p>0x0024</p></td>
@@ -11245,9 +11221,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="pwm-generator-axi-pwm-gen">
-<h1>PWM Generator (axi_pwm_gen)<a class="headerlink" href="#pwm-generator-axi-pwm-gen" title="Link to this heading"></a></h1>
+<h3>PWM Generator (axi_pwm_gen)<a class="headerlink" href="#pwm-generator-axi-pwm-gen" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
@@ -11427,7 +11402,8 @@ Valid for 64b66b encoder.</p></td>
 </tbody>
 </table>
 </div>
-<hr class="docutils" />
+</section>
+</section>
 <section id="design-considerations">
 <h2>Design considerations<a class="headerlink" href="#design-considerations" title="Link to this heading"></a></h2>
 <section id="additional-ips-needed">
@@ -11446,15 +11422,12 @@ Valid for 64b66b encoder.</p></td>
 <span class="n">ad_ip_parameter</span> <span class="n">axi_hdmi_dma</span> <span class="n">CONFIG</span><span class="o">.</span><span class="n">DMA_DATA_WIDTH_DEST</span> <span class="mi">64</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line">The audio path is separated from the video path, for audio <strong>axi_spdif_tx</strong> core (<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_spdif_tx" target="_blank">library/axi_spdif_tx</a>) is needed to transmit the audio information to the ADV7511 device. The whole system needs to be controlled by a processor (ARM or a soft core) that can programs the registers.</div>
-<div class="line">Axi_clkgen generates the clock frequency required for the desired resolution (pixel clock), the frequency is software configurable (<a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/adv7511" target="_blank">Example adv7511_zc706 no-Os software</a>).</div>
-</div>
+<p>The audio path is separated from the video path, for audio <strong>axi_spdif_tx</strong> core (<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_spdif_tx" target="_blank">library/axi_spdif_tx</a>) is needed to transmit the audio information to the ADV7511 device. The whole system needs to be controlled by a processor (ARM or a soft core) that can programs the registers. Axi_clkgen generates the clock frequency required for the desired resolution (pixel clock), the frequency is software configurable (<a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/adv7511" target="_blank">Example adv7511_zc706 no-Os software</a>).</p>
 <p>=== Examples for different data width configurations ===</p>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/ADV7511_Hardware_Users_Guide.pdf" target="_blank">ADV7511</a> can accept video data from as few as eight pins (either YCbCr 4:2:2 double data rate [DDR] or YCbCr 4:2:2 with 2x pixel clock) to as many as 36 pins (RGB 4:4:4 or YCbCr 4:4:4). In addition it can accept HSYNC, VSYNC and DE (Data Enable)</p>
 <p>The <strong>axi_hdmi_tx</strong> core support the following video input connections:</p>
 <ul class="simple">
-<li><p>36 bits with HSYNC, VSYNC and DE (<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adv7511/vc707" target="_blank">VC707</a> development board)</p></li>
+<li><p>36 bits with HSYNC, VSYNC and DE (<a class="icon link reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2017_r1/projects/adv7511/vc707" target="_blank">VC707</a> development board)</p></li>
 <li><p>24 bits with HSYNC, VSYNC and DE (<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adv7511/zc706" target="_blank">ZC706</a> development board)</p></li>
 <li><p>16 bits with HSYNC, VSYNC and DE (<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adv7511/zed" target="_blank">ZedBoard</a>)</p></li>
 <li><p>16 bits with embedded SYNC (TX interface of the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/imageon" target="_blank">IMAGEON</a> board)</p></li>
@@ -11467,9 +11440,8 @@ Valid for 64b66b encoder.</p></td>
 <a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/docs/hdl/hdmi_test_pattern.jpg"><img alt="hdmi_test_pattern.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/hdmi_test_pattern.jpg" style="width: 550px;" />
 </a>
 <p>VGA interface with 1024x760 resolution:</p>
-<div class="line-block">
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/fpga/docs/hdl/vga_test_pattern.jpg"><img alt="vga_test_pattern.jpg" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/vga_test_pattern.jpg" style="width: 550px;" /></a></div>
-</div>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/docs/hdl/vga_test_pattern.jpg"><img alt="vga_test_pattern.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/vga_test_pattern.jpg" style="width: 550px;" />
+</a>
 </section>
 <section id="software-support">
 <h2>Software support<a class="headerlink" href="#software-support" title="Link to this heading"></a></h2>
@@ -11477,7 +11449,7 @@ Valid for 64b66b encoder.</p></td>
 <ul class="simple">
 <li><p><a class="reference internal" href="../../tools-software/linux-drivers/drm/adv7511.html"><span class="doc">Linux Driver</span></a></p></li>
 <li><p><a class="reference internal" href="../xilinx/kc705/adv7511.html"><span class="doc">Reference design with no-Os example</span></a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/adv7511" target="_blank">no-Os sources</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/adv7511" target="_blank">no-Os sources</a> |</p></li>
 </ul>
 </section>
 <section id="references">
@@ -11488,7 +11460,7 @@ Valid for 64b66b encoder.</p></td>
 <li><p><a class="reference internal" href="../xilinx/fmc/fmc-imageon.html"><span class="doc">FMC-IMAGEON Xilinx Reference Design</span></a></p></li>
 <li><p><a class="reference internal" href="../xilinx/kc705/adv7511.html"><span class="doc">ADV7511 Xilinx Evaluation Boards Reference Design</span></a></p></li>
 </ul>
-<img alt="IP cores#hdl|Main page#tips|Using and modifying the HDL design" src="https://wiki.analog.com/_media/navigationHDLUserGuide#ip_cores" />
+<img alt="IP cores#hdl|Main page#tips|Using and modifying the HDL design" src="https://wiki.analog.com/_media/resources/fpga/docs/navigationHDLUserGuide#ip_cores" />
 </section>
 </section>
 

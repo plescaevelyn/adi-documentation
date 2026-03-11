@@ -94,8 +94,11 @@
           <ul>
 <li><a class="reference internal" href="#">Extended Serial Peripheral Interface(xSPI) Integration For Delay Line Buffer Read/Write Access</a><ul>
 <li><a class="reference internal" href="#description">Description</a></li>
+<li><a class="reference internal" href="#xspi-integration-steps-within-the-target-application">xSPI Integration Steps within the Target Application</a></li>
+<li><a class="reference internal" href="#adsp-21568-preload-and-init-application-update-for-xspi-speed">ADSP-21568 Preload and Init application update for xSPI Speed</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#supported-processor">Supported Processor</a></li>
 </ul>
 
         </nav>
@@ -586,76 +589,68 @@ Content on this topic
 <h1>Extended Serial Peripheral Interface(xSPI) Integration For Delay Line Buffer Read/Write Access<a class="headerlink" href="#extended-serial-peripheral-interface-xspi-integration-for-delay-line-buffer-read-write-access" title="Link to this heading"></a></h1>
 <section id="description">
 <h2>Description<a class="headerlink" href="#description" title="Link to this heading"></a></h2>
-<div class="line-block">
-<div class="line">The octal Serial Peripheral Interface (xSPI0/HyperBus) port enables a wider external memory data bus, supporting up to eight parallel bits. For detailed information on xSPI, please consult the relevant hardware reference manual. A dedicated driver is required to configure the xSPI for read/write operations when used as a delay line buffer in SigmaStudio+ schematic delay blocks. If the system lacks DDR RAM support, this delay line buffer will be allocated in external RAM.</div>
-<div class="line">===== xSPI Integration Steps within the Target Application ===== <strong>1)</strong> Enable the xSPI peripheral using “Pin Multiplexing” option in “system.svc” settings.</div>
-<div class="line"><img alt="xspipinmux.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/xspipinmux.png" /></div>
-<div class="line"><strong>2)</strong> Add the xSPI driver library <strong>“ADSP-21568_xSPI_Driver_Lib.dlb”</strong> into CCES application using project settings. The xSPI driver library is available in SigmaStudio+ installation folder <strong>“C:\Analog Devices\SigmaStudioPlus-Relx.x.x\Target\Lib-CCES”</strong>.</div>
-<div class="line"><br /></div>
-</div>
+<p>The octal Serial Peripheral Interface (xSPI0/HyperBus) port enables a wider external memory data bus, supporting up to eight parallel bits. For detailed information on xSPI, please consult the relevant hardware reference manual. A dedicated driver is required to configure the xSPI for read/write operations when used as a delay line buffer in SigmaStudio+ schematic delay blocks. If the system lacks DDR RAM support, this delay line buffer will be allocated in external RAM.</p>
+</section>
+<section id="xspi-integration-steps-within-the-target-application">
+<h2>xSPI Integration Steps within the Target Application<a class="headerlink" href="#xspi-integration-steps-within-the-target-application" title="Link to this heading"></a></h2>
+<p><strong>1)</strong> Enable the xSPI peripheral using “Pin Multiplexing” option in “system.svc” settings.</p>
+<img alt="xspipinmux.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/xspipinmux.png" />
+<p><strong>2)</strong> Add the xSPI driver library <strong>“ADSP-21568_xSPI_Driver_Lib.dlb”</strong> into CCES application using project settings. The xSPI driver library is available in SigmaStudio+ installation folder <strong>“C:\Analog Devices\SigmaStudioPlus-Relx.x.x\Target\Lib-CCES”</strong>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The ADSP-21568 xSPI support for delay line buffer added from SigmaStudio+ version 2.4.0 onwards</p>
 </div>
-<div class="line-block">
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/xspidriverlibrary.png"><img alt="xspidriverlibrary.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/xspidriverlibrary.png" style="width: 1080px;" /></a></div>
-<div class="line"><strong>3)</strong> A few global variables are used to manage external RAM memory addresses, enabling support for multiple instances of xSPI-based delay blocks. These variables can be integrated into the application as needed. SigmaStudio+ examples use the <strong>XSPI_ENABLE</strong> macro to group all xSPI-related configuration updates across both compiler and linker project settings.</div>
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/xspicompilermacro.png"><img alt="xspicompilermacro.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/xspicompilermacro.png" style="width: 1080px;" /></a></div>
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/xspilinkermacro.png"><img alt="xspilinkermacro.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/xspilinkermacro.png" style="width: 1080px;" /></a></div>
-<div class="line"><strong>Application code updates:</strong></div>
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/xspicodeupdate1.png"><img alt="xspicodeupdate1.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/xspicodeupdate1.png" style="width: 1080px;" /></a></div>
-<div class="line"><br /></div>
-</div>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/xspidriverlibrary.png"><img alt="xspidriverlibrary.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/xspidriverlibrary.png" style="width: 1080px;" />
+</a>
+<p><strong>3)</strong> A few global variables are used to manage external RAM memory addresses, enabling support for multiple instances of xSPI-based delay blocks. These variables can be integrated into the application as needed. SigmaStudio+ examples use the <strong>XSPI_ENABLE</strong> macro to group all xSPI-related configuration updates across both compiler and linker project settings.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/xspicompilermacro.png"><img alt="xspicompilermacro.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/xspicompilermacro.png" style="width: 1080px;" />
+</a>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/xspilinkermacro.png"><img alt="xspilinkermacro.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/xspilinkermacro.png" style="width: 1080px;" />
+</a>
+<p><strong>Application code updates:</strong></p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/xspicodeupdate1.png"><img alt="xspicodeupdate1.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/xspicodeupdate1.png" style="width: 1080px;" />
+</a>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The ADSP-21568 xSPI memory mapping is 0x60000000 to 0x7FFFFFFF. The end address is depends on the size of the external RAM used in the target platform.</p>
 </div>
-<div class="line-block">
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/xspicodeupdate2.png"><img alt="xspicodeupdate2.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/xspicodeupdate2.png" style="width: 1080px;" /></a></div>
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/xspicodeupdate3.png"><img alt="xspicodeupdate3.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/xspicodeupdate3.png" style="width: 1080px;" /></a></div>
-<div class="line"><br /></div>
-</div>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/xspicodeupdate2.png"><img alt="xspicodeupdate2.png" class="align-right" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/xspicodeupdate2.png" style="width: 1080px;" />
+</a>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/xspicodeupdate3.png"><img alt="xspicodeupdate3.png" class="align-right" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/xspicodeupdate3.png" style="width: 1080px;" />
+</a>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The <strong>xSPI_RAM_Init</strong> function is responsible for configuring the xSPI interface and initializing the external memory by setting its contents to zero. On the ADSP-21568 SOM EVAL board, which includes 32MB of external RAM, the size is defined as 0x02000000 bytes. This size should be adjusted to match the actual RAM capacity used on the target platform.</p>
 </div>
-<div class="line-block">
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/xspicodeupdate4.png"><img alt="xspicodeupdate4.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/xspicodeupdate4.png" style="width: 1080px;" /></a></div>
-<div class="line"><br /></div>
-</div>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/xspicodeupdate4.png"><img alt="xspicodeupdate4.png" class="align-right" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/xspicodeupdate4.png" style="width: 1080px;" />
+</a>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The read and program functions are invoked from SigmaStudio+ schematic blocks. As a result, these symbols may be removed during a “Release” build. To ensure the xSPI delay blocks function correctly, these symbols must be placed in the preserve section. Otherwise, a schematic compilation error will occur.</p>
 </div>
-<div class="line-block">
-<div class="line">===== ADSP-21568 Preload and Init application update for xSPI Speed =====</div>
-<div class="line">The ADSP-21568 Preload and Init application is initially set to use an xSPI speed of 30 MHz by default. To enhance the performance of xSPI-based delay blocks in SigmaStudio+, it is recommended to increase this speed to 70 MHz.</div>
-</div>
+</section>
+<section id="adsp-21568-preload-and-init-application-update-for-xspi-speed">
+<h2>ADSP-21568 Preload and Init application update for xSPI Speed<a class="headerlink" href="#adsp-21568-preload-and-init-application-update-for-xspi-speed" title="Link to this heading"></a></h2>
+<p>The ADSP-21568 Preload and Init application is initially set to use an xSPI speed of 30 MHz by default. To enhance the performance of xSPI-based delay blocks in SigmaStudio+, it is recommended to increase this speed to 70 MHz.</p>
 <p>You can build the preload application in <strong>Release</strong> mode. Once compiled, the resulting .dxe file can be used to launch the target application via CrossCore Embedded Studio (CCES).</p>
 <p>The Preload CCES application is located at: <strong>C:\analog\cces\3.0.2\SHARC\ldr\init_code\2156x_Init\21568w_preload</strong></p>
-<div class="line-block">
-<div class="line">The <strong>CFG0_BIT_CGU0_DIV_DSEL</strong> value need to be changed to <strong>14</strong> for 70Mhz support. <img alt="image1" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/speedsettings.png" /></div>
-<div class="line">The Init application can be built in <strong>Release</strong> mode, and the resulting .dxe file can be used to generate the application loader (.ldr) file for flash boot(<a class="reference internal" href="../../gettingstarted/flash_the_loader_file.html"><span class="doc">Loader file Generation</span></a>).</div>
-</div>
-<div class="line-block">
-<div class="line">The Init CCES application can be found at: <strong>C:\analog\cces\3.0.2\SHARC\ldr\init_code\2156x_Init\21568w_init</strong></div>
-<div class="line"><br /></div>
-</div>
+<p>The <strong>CFG0_BIT_CGU0_DIV_DSEL</strong> value need to be changed to <strong>14</strong> for 70Mhz support.</p>
+<p><img alt="image1" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/speedsettings.png" /></p>
+<p>The Init application can be built in <strong>Release</strong> mode, and the resulting .dxe file can be used to generate the application loader (.ldr) file for flash boot(<a class="reference internal" href="../../gettingstarted/flash_the_loader_file.html"><span class="doc">Loader file Generation</span></a>).</p>
+<p>The Init CCES application can be found at: <strong>C:\analog\cces\3.0.2\SHARC\ldr\init_code\2156x_Init\21568w_init</strong></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The current version of the evaluation (Eval) board supports xSPI clock speeds up to 70 MHz. Future versions are expected to support speeds up to 160 MHz, which will enable maximum performance for this module.</p>
 <p>To support higher speeds, updates will be made to the xSPI driver library and the framework’s xSPI initialization, including enabling auto command mode for memory clearing. Currently, since external RAM is cleared during the xSPI initialization process, this introduces additional delay during application boot-up. As a result, there is a wait time before the SigmaStudio+ schematic can be downloaded.</p>
-<div class="line-block">
-<div class="line">These limitations are expected to be addressed in upcoming Eval board revisions, leading to improved performance and reduced initialization delays.</div>
+<p>These limitations are expected to be addressed in upcoming Eval board revisions, leading to improved performance and reduced initialization delays.</p>
 </div>
-</div>
-<div class="line-block">
-<div class="line">====== Supported Processor ======</div>
-</div>
+</section>
+</section>
+<section id="supported-processor">
+<h1>Supported Processor<a class="headerlink" href="#supported-processor" title="Link to this heading"></a></h1>
 <ul class="simple">
 <li><p>ADSP-21568</p></li>
 </ul>
-</section>
 </section>
 
 

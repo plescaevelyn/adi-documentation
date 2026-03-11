@@ -600,7 +600,7 @@ Content on this topic
 <section id="software-configuration">
 <h2>Software Configuration<a class="headerlink" href="#software-configuration" title="Link to this heading"></a></h2>
 <p>On the Yocto, Configure the linux-kernel as below to set the USB controller in Gadget only mode, and enable the USB Gadget Filesystem relevant options.</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">$</span><span class="w"> </span><span class="n">bitbake</span><span class="w"> </span><span class="n">linux</span><span class="o">-</span><span class="n">adi</span><span class="w"> </span><span class="o">-</span><span class="n">c</span><span class="w"> </span><span class="n">menuconfig</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>bitbake<span class="w"> </span>linux-adi<span class="w"> </span>-c<span class="w"> </span>menuconfig
 </pre></div>
 </div>
 <p><strong>Configure the USB drivers to Gadget only mode (or Dual role mode )</strong></p>
@@ -608,15 +608,15 @@ Content on this topic
 <span class="w">    </span><span class="o">[</span>*<span class="o">]</span><span class="w"> </span>USB<span class="w"> </span>support<span class="w">  </span>---&gt;
 <span class="w">                </span>&lt;*&gt;<span class="w">   </span>Inventra<span class="w"> </span>Highspeed<span class="w"> </span>Dual<span class="w"> </span>Role<span class="w"> </span>Controller
 <span class="w">                        </span>MUSB<span class="w"> </span>Mode<span class="w"> </span>Selection<span class="w"> </span><span class="o">(</span>Gadget<span class="w"> </span>only<span class="w"> </span>mode<span class="o">)</span><span class="w">  </span>---&gt;
-<span class="w">                        </span>***<span class="w"> </span>Platform<span class="w"> </span>Glue<span class="w"> </span>Layer<span class="w"> </span>***
+<span class="w">                        </span>**<span class="w"> </span>Platform<span class="w"> </span>Glue<span class="w"> </span>Layer<span class="w"> </span>**
 <span class="w">                </span>&lt;*&gt;<span class="w">     </span>ADI
-<span class="w">                        </span>***<span class="w"> </span>MUSB<span class="w"> </span>DMA<span class="w"> </span>mode<span class="w"> </span>***
+<span class="w">                        </span>**<span class="w"> </span>MUSB<span class="w"> </span>DMA<span class="w"> </span>mode<span class="w"> </span>**
 <span class="w">                </span><span class="o">[</span>N<span class="o">]</span><span class="w">     </span>Disable<span class="w"> </span>DMA<span class="w"> </span><span class="o">(</span>always<span class="w"> </span>use<span class="w"> </span>PIO<span class="o">)</span>
 <span class="w">                </span><span class="o">[</span>*<span class="o">]</span><span class="w">       </span>Inventra
 <span class="w">                </span>&lt;*&gt;<span class="w">   </span>USB<span class="w"> </span>Gadget<span class="w"> </span>Support<span class="w">  </span>---&gt;
 </pre></div>
 </div>
-<p>**Configure the Gadget Filesyetm support **</p>
+<p><strong>Configure the Gadget Filesyetm support</strong></p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>Device<span class="w"> </span>Drivers<span class="w">  </span>--
 -&gt;
 <span class="w">    </span><span class="o">[</span>*<span class="o">]</span><span class="w"> </span>USB<span class="w"> </span>support<span class="w">  </span>---&gt;
@@ -630,41 +630,41 @@ Content on this topic
 <section id="example-usage">
 <h2>Example Usage<a class="headerlink" href="#example-usage" title="Link to this heading"></a></h2>
 <p><strong>on the target Ez-Kit board</strong></p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="err">@</span><span class="n">adsp</span><span class="o">-</span><span class="n">sc589</span><span class="o">-</span><span class="n">ezkit</span><span class="o">:~</span><span class="err">#</span><span class="w"> </span><span class="n">modprobe</span><span class="w"> </span><span class="n">gadgetfs</span>
-<span class="nl">gadgetfs</span><span class="p">:</span><span class="w"> </span><span class="n">USB</span><span class="w"> </span><span class="n">Gadget</span><span class="w"> </span><span class="n">filesystem</span><span class="p">,</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="mi">24</span><span class="w"> </span><span class="n">Aug</span><span class="w"> </span><span class="mi">2004</span>
-<span class="n">root</span><span class="err">@</span><span class="n">adsp</span><span class="o">-</span><span class="n">sc589</span><span class="o">-</span><span class="n">ezkit</span><span class="o">:~</span><span class="err">#</span><span class="w"> </span><span class="n">mkdir</span><span class="w"> </span><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">gadget</span>
-<span class="n">root</span><span class="err">@</span><span class="n">adsp</span><span class="o">-</span><span class="n">sc589</span><span class="o">-</span><span class="n">ezkit</span><span class="o">:~</span><span class="err">#</span><span class="w"> </span><span class="n">mount</span><span class="w"> </span><span class="o">-</span><span class="n">t</span><span class="w"> </span><span class="n">gadgetfs</span><span class="w"> </span><span class="n">gadgetfs</span><span class="w"> </span><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">gadget</span>
-<span class="n">root</span><span class="err">@</span><span class="n">adsp</span><span class="o">-</span><span class="n">sc589</span><span class="o">-</span><span class="n">ezkit</span><span class="o">:~</span><span class="err">#</span><span class="w"> </span><span class="n">ls</span><span class="w"> </span><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">gadget</span><span class="o">/</span><span class="w"> </span><span class="o">-</span><span class="n">l</span>
-<span class="n">total</span><span class="w"> </span><span class="mi">0</span>
-<span class="o">-</span><span class="n">rw</span><span class="o">-------</span><span class="w">    </span><span class="mi">1</span><span class="w"> </span><span class="n">root</span><span class="w">     </span><span class="n">root</span><span class="w">             </span><span class="mi">0</span><span class="w"> </span><span class="n">Jul</span><span class="w"> </span><span class="mi">13</span><span class="w"> </span><span class="mi">08</span><span class="o">:</span><span class="mi">12</span><span class="w"> </span><span class="n">musb</span><span class="o">-</span><span class="n">hdrc</span>
-<span class="n">root</span><span class="err">@</span><span class="n">adsp</span><span class="o">-</span><span class="n">sc589</span><span class="o">-</span><span class="n">ezkit</span><span class="o">:~</span><span class="err">#</span><span class="w"> </span><span class="n">gadgetfs</span><span class="o">-</span><span class="n">test</span><span class="w"> </span><span class="o">-</span><span class="n">r</span><span class="w"> </span><span class="s">&quot;1.3&quot;</span><span class="w"> </span><span class="o">-</span><span class="n">v</span>
-<span class="nl">gadgetfs</span><span class="p">:</span><span class="w"> </span><span class="n">bound</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">musb</span><span class="o">-</span><span class="n">hdrc</span><span class="w"> </span><span class="n">driver</span>
-<span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">gadget</span><span class="o">/</span><span class="n">musb</span><span class="o">-</span><span class="n">hdrc</span><span class="w"> </span><span class="n">ep0</span><span class="w"> </span><span class="n">configured</span>
-<span class="n">serial</span><span class="o">=</span><span class="s">&quot;1.3&quot;</span>
-<span class="nl">gadgetfs</span><span class="p">:</span><span class="w"> </span><span class="n">connected</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">root@adsp-sc589-ezkit:~# </span>modprobe<span class="w"> </span>gadgetfs
+<span class="go">gadgetfs: USB Gadget filesystem, version 24 Aug 2004</span>
+<span class="gp">root@adsp-sc589-ezkit:~# </span>mkdir<span class="w"> </span>/dev/gadget
+<span class="gp">root@adsp-sc589-ezkit:~# </span>mount<span class="w"> </span>-t<span class="w"> </span>gadgetfs<span class="w"> </span>gadgetfs<span class="w"> </span>/dev/gadget
+<span class="gp">root@adsp-sc589-ezkit:~# </span>ls<span class="w"> </span>/dev/gadget/<span class="w"> </span>-l
+<span class="go">total 0</span>
+<span class="go">-rw-------    1 root     root             0 Jul 13 08:12 musb-hdrc</span>
+<span class="gp">root@adsp-sc589-ezkit:~# </span>gadgetfs-test<span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;1.3&quot;</span><span class="w"> </span>-v
+<span class="go">gadgetfs: bound to musb-hdrc driver</span>
+<span class="go">/dev/gadget/musb-hdrc ep0 configured</span>
+<span class="go">serial=&quot;1.3&quot;</span>
+<span class="go">gadgetfs: connected</span>
 
-<span class="o">**</span><span class="w"> </span><span class="n">Mon</span><span class="w"> </span><span class="n">Jul</span><span class="w"> </span><span class="mi">13</span><span class="w"> </span><span class="mi">08</span><span class="o">:</span><span class="mi">13</span><span class="o">:</span><span class="mi">28</span><span class="w"> </span><span class="mi">2020</span><span class="n">gadgetfs</span><span class="o">:</span><span class="w"> </span><span class="n">disconnected</span>
+<span class="go">** Mon Jul 13 08:13:28 2020gadgetfs: disconnected</span>
 
-<span class="n">CONNECT</span><span class="w"> </span><span class="n">high</span><span class="w"> </span><span class="n">speed</span>
-<span class="n">DISCONNECT</span>
-<span class="nl">gadgetfs</span><span class="p">:</span><span class="w"> </span><span class="n">connected</span>
-<span class="n">read</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="n">ep0</span><span class="w"> </span><span class="n">eventsgadgetfs</span><span class="o">:</span><span class="w"> </span><span class="n">configuration</span><span class="w"> </span><span class="err">#</span><span class="mi">3</span>
+<span class="go">CONNECT high speed</span>
+<span class="go">DISCONNECT</span>
+<span class="go">gadgetfs: connected</span>
+<span class="go">read 2 ep0 eventsgadgetfs: configuration #3</span>
 
-<span class="n">CONNECT</span><span class="w"> </span><span class="n">high</span><span class="w"> </span><span class="n">speed</span>
-<span class="n">SETUP</span><span class="w"> </span><span class="mf">80.06</span><span class="w"> </span><span class="n">v0300</span><span class="w"> </span><span class="n">i0000</span><span class="w"> </span><span class="mi">255</span>
-<span class="n">SETUP</span><span class="w"> </span><span class="mf">80.06</span><span class="w"> </span><span class="n">v0302</span><span class="w"> </span><span class="n">i0409</span><span class="w"> </span><span class="mi">255</span>
-<span class="n">SETUP</span><span class="w"> </span><span class="mf">80.06</span><span class="w"> </span><span class="n">v0301</span><span class="w"> </span><span class="n">i0409</span><span class="w"> </span><span class="mi">255</span>
-<span class="n">SETUP</span><span class="w"> </span><span class="mf">80.06</span><span class="w"> </span><span class="n">v0303</span><span class="w"> </span><span class="n">i0409</span><span class="w"> </span><span class="mi">255</span>
-<span class="n">SETUP</span><span class="w"> </span><span class="mf">00.09</span><span class="w"> </span><span class="n">v0003</span><span class="w"> </span><span class="n">i0000</span><span class="w"> </span><span class="mi">0</span>
-<span class="n">CONFIG</span><span class="w"> </span><span class="err">#</span><span class="mi">3</span>
-<span class="n">SETUP</span><span class="w"> </span><span class="mf">80.06</span><span class="w"> </span><span class="n">v0304</span><span class="w"> </span><span class="n">i0409</span><span class="w"> </span><span class="mi">255</span>
-<span class="n">SETUP</span><span class="w"> </span><span class="mf">80.06</span><span class="w"> </span><span class="n">v0305</span><span class="w"> </span><span class="n">i0409</span><span class="w"> </span><span class="mi">255</span>
-<span class="n">simple_sink_thread</span><span class="w"> </span><span class="n">start</span><span class="w"> </span><span class="mi">-1234897824</span><span class="w"> </span><span class="n">fd</span><span class="w"> </span><span class="mi">4</span>
-<span class="n">simple_source_thread</span><span class="w"> </span><span class="n">start</span><span class="w"> </span><span class="mi">-1226505120</span><span class="w"> </span><span class="n">fd</span><span class="w"> </span><span class="mi">5</span>
-<span class="n">SETUP</span><span class="w"> </span><span class="mf">80.06</span><span class="w"> </span><span class="n">v0300</span><span class="w"> </span><span class="n">i0000</span><span class="w"> </span><span class="mi">255</span>
-<span class="n">SETUP</span><span class="w"> </span><span class="mf">80.06</span><span class="w"> </span><span class="n">v0305</span><span class="w"> </span><span class="n">i0409</span><span class="w"> </span><span class="mi">255</span>
-<span class="n">SETUP</span><span class="w"> </span><span class="mf">80.06</span><span class="w"> </span><span class="n">v03ee</span><span class="w"> </span><span class="n">i0000</span><span class="w"> </span><span class="mi">1024</span>
-<span class="p">...</span><span class="w"> </span><span class="n">protocol</span><span class="w"> </span><span class="n">stall</span><span class="w"> </span><span class="mf">80.06</span>
+<span class="go">CONNECT high speed</span>
+<span class="go">SETUP 80.06 v0300 i0000 255</span>
+<span class="go">SETUP 80.06 v0302 i0409 255</span>
+<span class="go">SETUP 80.06 v0301 i0409 255</span>
+<span class="go">SETUP 80.06 v0303 i0409 255</span>
+<span class="go">SETUP 00.09 v0003 i0000 0</span>
+<span class="go">CONFIG #3</span>
+<span class="go">SETUP 80.06 v0304 i0409 255</span>
+<span class="go">SETUP 80.06 v0305 i0409 255</span>
+<span class="go">simple_sink_thread start -1234897824 fd 4</span>
+<span class="go">simple_source_thread start -1226505120 fd 5</span>
+<span class="go">SETUP 80.06 v0300 i0000 255</span>
+<span class="go">SETUP 80.06 v0305 i0409 255</span>
+<span class="go">SETUP 80.06 v03ee i0000 1024</span>
+<span class="go">... protocol stall 80.06</span>
 </pre></div>
 </div>
 <p><strong>On the Linux-Host PC</strong></p>
@@ -678,69 +678,69 @@ Content on this topic
 <ul class="simple">
 <li><p><strong>run the gadget fs test</strong></p></li>
 </ul>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#!/bin/sh</span>
-<span class="cp">#set -x</span>
-<span class="n">lsmod</span><span class="w"> </span><span class="o">|</span><span class="n">grep</span><span class="w"> </span><span class="n">usbtest</span>
-<span class="n">sudo</span><span class="w"> </span><span class="n">modprobe</span><span class="w"> </span><span class="n">usbtest</span>
-<span class="n">lsmod</span><span class="w"> </span><span class="o">|</span><span class="n">grep</span><span class="w"> </span><span class="n">usbtest</span>
-<span class="n">sudo</span><span class="w"> </span><span class="n">cat</span><span class="w"> </span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">usb</span><span class="o">/</span><span class="n">devices</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">grep</span><span class="w"> </span><span class="o">-</span><span class="n">i</span><span class="w"> </span><span class="s">&quot;Manufacturer=Licensed to Code, LLC&quot;</span>
-<span class="n">sudo</span><span class="w"> </span><span class="n">cat</span><span class="w"> </span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">usb</span><span class="o">/</span><span class="n">devices</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">grep</span><span class="w"> </span><span class="o">-</span><span class="n">i</span><span class="w"> </span><span class="s">&quot;Product=My Source/Sink Product&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#set -x</span>
+lsmod<span class="w"> </span><span class="p">|</span>grep<span class="w"> </span>usbtest
+sudo<span class="w"> </span>modprobe<span class="w"> </span>usbtest
+lsmod<span class="w"> </span><span class="p">|</span>grep<span class="w"> </span>usbtest
+sudo<span class="w"> </span>cat<span class="w"> </span>/sys/kernel/debug/usb/devices<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;Manufacturer=Licensed to Code, LLC&quot;</span>
+sudo<span class="w"> </span>cat<span class="w"> </span>/sys/kernel/debug/usb/devices<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;Product=My Source/Sink Product&quot;</span>
 
-<span class="n">lsusb</span><span class="o">|</span><span class="n">grep</span><span class="w"> </span><span class="o">-</span><span class="n">i</span><span class="w"> </span><span class="s">&quot;Netchip Technology&quot;</span><span class="o">|</span><span class="n">awk</span><span class="w"> </span><span class="err">&#39;</span><span class="p">{</span><span class="n">print</span><span class="w"> </span><span class="n">$2</span><span class="s">&quot; &quot;</span><span class="n">$4</span><span class="p">}</span><span class="err">&#39;</span>
-<span class="n">gadget_bus</span><span class="o">=</span><span class="n">$</span><span class="p">(</span><span class="n">lsusb</span><span class="o">|</span><span class="n">grep</span><span class="w"> </span><span class="o">-</span><span class="n">i</span><span class="w"> </span><span class="s">&quot;Netchip Technology&quot;</span><span class="o">|</span><span class="n">awk</span><span class="w"> </span><span class="err">&#39;</span><span class="p">{</span><span class="n">print</span><span class="w"> </span><span class="n">$2</span><span class="p">}</span><span class="err">&#39;</span><span class="p">)</span>
-<span class="n">gadget_bus</span><span class="o">=</span><span class="err">`</span><span class="n">echo</span><span class="w"> </span><span class="n">$gadget_bus</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">tr</span><span class="w"> </span><span class="o">-</span><span class="n">cd</span><span class="w"> </span><span class="s">&quot;[0-9]&quot;</span><span class="err">`</span>
-<span class="n">gadget_dev</span><span class="o">=</span><span class="n">$</span><span class="p">(</span><span class="n">lsusb</span><span class="o">|</span><span class="n">grep</span><span class="w"> </span><span class="o">-</span><span class="n">i</span><span class="w"> </span><span class="s">&quot;Netchip Technology&quot;</span><span class="o">|</span><span class="n">awk</span><span class="w"> </span><span class="err">&#39;</span><span class="p">{</span><span class="n">print</span><span class="w"> </span><span class="n">$4</span><span class="p">}</span><span class="err">&#39;</span><span class="p">)</span>
-<span class="n">gadget_dev</span><span class="o">=</span><span class="err">`</span><span class="n">echo</span><span class="w"> </span><span class="n">$gadget_dev</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">tr</span><span class="w"> </span><span class="o">-</span><span class="n">cd</span><span class="w"> </span><span class="s">&quot;[0-9]&quot;</span><span class="err">`</span>
+lsusb<span class="p">|</span>grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;Netchip Technology&quot;</span><span class="p">|</span>awk<span class="w"> </span><span class="s1">&#39;{print $2&quot; &quot;$4}&#39;</span>
+<span class="nv">gadget_bus</span><span class="o">=</span><span class="k">$(</span>lsusb<span class="p">|</span>grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;Netchip Technology&quot;</span><span class="p">|</span>awk<span class="w"> </span><span class="s1">&#39;{print $2}&#39;</span><span class="k">)</span>
+<span class="nv">gadget_bus</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span><span class="w"> </span><span class="nv">$gadget_bus</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tr<span class="w"> </span>-cd<span class="w"> </span><span class="s2">&quot;[0-9]&quot;</span><span class="sb">`</span>
+<span class="nv">gadget_dev</span><span class="o">=</span><span class="k">$(</span>lsusb<span class="p">|</span>grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;Netchip Technology&quot;</span><span class="p">|</span>awk<span class="w"> </span><span class="s1">&#39;{print $4}&#39;</span><span class="k">)</span>
+<span class="nv">gadget_dev</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span><span class="w"> </span><span class="nv">$gadget_dev</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tr<span class="w"> </span>-cd<span class="w"> </span><span class="s2">&quot;[0-9]&quot;</span><span class="sb">`</span>
 
-<span class="n">do_test</span><span class="p">()</span>
-<span class="p">{</span>
-<span class="w">  </span><span class="n">sudo</span><span class="w"> </span><span class="p">.</span><span class="o">/</span><span class="n">testusb</span><span class="w"> </span><span class="o">-</span><span class="n">D</span><span class="w"> </span><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">usb</span><span class="o">/</span><span class="n">$gadget_bus</span><span class="o">/</span><span class="n">$gadget_dev</span><span class="w"> </span><span class="o">-</span><span class="n">t$</span><span class="p">{</span><span class="mi">1</span><span class="p">}</span>
-<span class="p">}</span>
+do_test<span class="o">()</span>
+<span class="o">{</span>
+<span class="w">  </span>sudo<span class="w"> </span>./testusb<span class="w"> </span>-D<span class="w"> </span>/dev/bus/usb/<span class="nv">$gadget_bus</span>/<span class="nv">$gadget_dev</span><span class="w"> </span>-t<span class="si">${</span><span class="nv">1</span><span class="si">}</span>
+<span class="o">}</span>
 
-<span class="n">echo</span><span class="w"> </span><span class="s">&quot;Gadget fs bulk mode test &quot;</span>
-<span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="n">$</span><span class="p">(</span><span class="n">seq</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Gadget fs bulk mode test &quot;</span>
+<span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>seq<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">8</span><span class="k">)</span>
 <span class="k">do</span>
-<span class="n">do_test</span><span class="w"> </span><span class="n">$i</span>
-<span class="n">done</span>
+do_test<span class="w"> </span><span class="nv">$i</span>
+<span class="k">done</span>
 
-<span class="n">echo</span><span class="w"> </span><span class="s">&quot;Gadget fs control mode test &quot;</span>
-<span class="n">do_test</span><span class="w"> </span><span class="mi">9</span>
-<span class="n">do_test</span><span class="w"> </span><span class="mi">10</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Gadget fs control mode test &quot;</span>
+do_test<span class="w"> </span><span class="m">9</span>
+do_test<span class="w"> </span><span class="m">10</span>
 </pre></div>
 </div>
 <ul class="simple">
 <li><p><strong>Test log:</strong></p></li>
 </ul>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">test</span><span class="err">@</span><span class="n">madara</span><span class="o">:~</span><span class="n">$</span><span class="w"> </span><span class="n">sh</span><span class="w"> </span><span class="n">usb_gadget_fs</span><span class="p">.</span><span class="n">sh</span>
-<span class="n">usbtest</span><span class="w">                </span><span class="mi">36864</span><span class="w">  </span><span class="mi">0</span>
-<span class="nl">S</span><span class="p">:</span><span class="w">  </span><span class="n">Manufacturer</span><span class="o">=</span><span class="n">Licensed</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">Code</span><span class="p">,</span><span class="w"> </span><span class="n">LLC</span>
-<span class="nl">S</span><span class="p">:</span><span class="w">  </span><span class="n">Product</span><span class="o">=</span><span class="n">My</span><span class="w"> </span><span class="n">Source</span><span class="o">/</span><span class="n">Sink</span><span class="w"> </span><span class="n">Product</span>
-<span class="mo">002</span><span class="w"> </span><span class="mo">040</span><span class="o">:</span>
-<span class="n">Gadget</span><span class="w"> </span><span class="n">fs</span><span class="w"> </span><span class="n">bulk</span><span class="w"> </span><span class="n">mode</span><span class="w"> </span><span class="n">test</span>
-<span class="p">.</span><span class="o">/</span><span class="n">testusb</span><span class="o">:</span><span class="w"> </span><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">usb</span><span class="o">/</span><span class="mo">002</span><span class="o">/</span><span class="mo">040</span><span class="w"> </span><span class="n">may</span><span class="w"> </span><span class="n">see</span><span class="w"> </span><span class="n">only</span><span class="w"> </span><span class="n">control</span><span class="w"> </span><span class="n">tests</span>
-<span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">usb</span><span class="o">/</span><span class="mo">002</span><span class="o">/</span><span class="mo">040</span><span class="w"> </span><span class="n">test</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="mi">110</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">timed</span><span class="w"> </span><span class="n">out</span><span class="p">)</span>
-<span class="p">.</span><span class="o">/</span><span class="n">testusb</span><span class="o">:</span><span class="w"> </span><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">usb</span><span class="o">/</span><span class="mo">002</span><span class="o">/</span><span class="mo">040</span><span class="w"> </span><span class="n">may</span><span class="w"> </span><span class="n">see</span><span class="w"> </span><span class="n">only</span><span class="w"> </span><span class="n">control</span><span class="w"> </span><span class="n">tests</span>
-<span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">usb</span><span class="o">/</span><span class="mo">002</span><span class="o">/</span><span class="mo">040</span><span class="w"> </span><span class="n">test</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="mi">110</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">timed</span><span class="w"> </span><span class="n">out</span><span class="p">)</span>
-<span class="p">.</span><span class="o">/</span><span class="n">testusb</span><span class="o">:</span><span class="w"> </span><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">usb</span><span class="o">/</span><span class="mo">002</span><span class="o">/</span><span class="mo">040</span><span class="w"> </span><span class="n">may</span><span class="w"> </span><span class="n">see</span><span class="w"> </span><span class="n">only</span><span class="w"> </span><span class="n">control</span><span class="w"> </span><span class="n">tests</span>
-<span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">usb</span><span class="o">/</span><span class="mo">002</span><span class="o">/</span><span class="mo">040</span><span class="w"> </span><span class="n">test</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="mi">110</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">timed</span><span class="w"> </span><span class="n">out</span><span class="p">)</span>
-<span class="p">.</span><span class="o">/</span><span class="n">testusb</span><span class="o">:</span><span class="w"> </span><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">usb</span><span class="o">/</span><span class="mo">002</span><span class="o">/</span><span class="mo">040</span><span class="w"> </span><span class="n">may</span><span class="w"> </span><span class="n">see</span><span class="w"> </span><span class="n">only</span><span class="w"> </span><span class="n">control</span><span class="w"> </span><span class="n">tests</span>
-<span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">usb</span><span class="o">/</span><span class="mo">002</span><span class="o">/</span><span class="mo">040</span><span class="w"> </span><span class="n">test</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="mi">110</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">timed</span><span class="w"> </span><span class="n">out</span><span class="p">)</span>
-<span class="p">.</span><span class="o">/</span><span class="n">testusb</span><span class="o">:</span><span class="w"> </span><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">usb</span><span class="o">/</span><span class="mo">002</span><span class="o">/</span><span class="mo">040</span><span class="w"> </span><span class="n">may</span><span class="w"> </span><span class="n">see</span><span class="w"> </span><span class="n">only</span><span class="w"> </span><span class="n">control</span><span class="w"> </span><span class="n">tests</span>
-<span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">usb</span><span class="o">/</span><span class="mo">002</span><span class="o">/</span><span class="mo">040</span><span class="w"> </span><span class="n">test</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="mi">110</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">timed</span><span class="w"> </span><span class="n">out</span><span class="p">)</span>
-<span class="p">.</span><span class="o">/</span><span class="n">testusb</span><span class="o">:</span><span class="w"> </span><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">usb</span><span class="o">/</span><span class="mo">002</span><span class="o">/</span><span class="mo">040</span><span class="w"> </span><span class="n">may</span><span class="w"> </span><span class="n">see</span><span class="w"> </span><span class="n">only</span><span class="w"> </span><span class="n">control</span><span class="w"> </span><span class="n">tests</span>
-<span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">usb</span><span class="o">/</span><span class="mo">002</span><span class="o">/</span><span class="mo">040</span><span class="w"> </span><span class="n">test</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="mi">110</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">timed</span><span class="w"> </span><span class="n">out</span><span class="p">)</span>
-<span class="p">.</span><span class="o">/</span><span class="n">testusb</span><span class="o">:</span><span class="w"> </span><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">usb</span><span class="o">/</span><span class="mo">002</span><span class="o">/</span><span class="mo">040</span><span class="w"> </span><span class="n">may</span><span class="w"> </span><span class="n">see</span><span class="w"> </span><span class="n">only</span><span class="w"> </span><span class="n">control</span><span class="w"> </span><span class="n">tests</span>
-<span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">usb</span><span class="o">/</span><span class="mo">002</span><span class="o">/</span><span class="mo">040</span><span class="w"> </span><span class="n">test</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="mi">110</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">timed</span><span class="w"> </span><span class="n">out</span><span class="p">)</span>
-<span class="p">.</span><span class="o">/</span><span class="n">testusb</span><span class="o">:</span><span class="w"> </span><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">usb</span><span class="o">/</span><span class="mo">002</span><span class="o">/</span><span class="mo">040</span><span class="w"> </span><span class="n">may</span><span class="w"> </span><span class="n">see</span><span class="w"> </span><span class="n">only</span><span class="w"> </span><span class="n">control</span><span class="w"> </span><span class="n">tests</span>
-<span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">usb</span><span class="o">/</span><span class="mo">002</span><span class="o">/</span><span class="mo">040</span><span class="w"> </span><span class="n">test</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="mi">110</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">timed</span><span class="w"> </span><span class="n">out</span><span class="p">)</span>
-<span class="n">Gadget</span><span class="w"> </span><span class="n">fs</span><span class="w"> </span><span class="n">control</span><span class="w"> </span><span class="n">mode</span><span class="w"> </span><span class="n">test</span>
-<span class="p">.</span><span class="o">/</span><span class="n">testusb</span><span class="o">:</span><span class="w"> </span><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">usb</span><span class="o">/</span><span class="mo">002</span><span class="o">/</span><span class="mo">040</span><span class="w"> </span><span class="n">may</span><span class="w"> </span><span class="n">see</span><span class="w"> </span><span class="n">only</span><span class="w"> </span><span class="n">control</span><span class="w"> </span><span class="n">tests</span>
-<span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">usb</span><span class="o">/</span><span class="mo">002</span><span class="o">/</span><span class="mo">040</span><span class="w"> </span><span class="n">test</span><span class="w"> </span><span class="mi">9</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="mi">110</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">timed</span><span class="w"> </span><span class="n">out</span><span class="p">)</span>
-<span class="p">.</span><span class="o">/</span><span class="n">testusb</span><span class="o">:</span><span class="w"> </span><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">usb</span><span class="o">/</span><span class="mo">002</span><span class="o">/</span><span class="mo">040</span><span class="w"> </span><span class="n">may</span><span class="w"> </span><span class="n">see</span><span class="w"> </span><span class="n">only</span><span class="w"> </span><span class="n">control</span><span class="w"> </span><span class="n">tests</span>
-<span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">usb</span><span class="o">/</span><span class="mo">002</span><span class="o">/</span><span class="mo">040</span><span class="w"> </span><span class="n">test</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="mi">110</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">timed</span><span class="w"> </span><span class="n">out</span><span class="p">)</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">test@madara:~$ </span>sh<span class="w"> </span>usb_gadget_fs.sh
+<span class="go">usbtest                36864  0</span>
+<span class="go">S:  Manufacturer=Licensed to Code, LLC</span>
+<span class="go">S:  Product=My Source/Sink Product</span>
+<span class="go">002 040:</span>
+<span class="go">Gadget fs bulk mode test</span>
+<span class="go">./testusb: /dev/bus/usb/002/040 may see only control tests</span>
+<span class="go">/dev/bus/usb/002/040 test 1 --&gt; 110 (Connection timed out)</span>
+<span class="go">./testusb: /dev/bus/usb/002/040 may see only control tests</span>
+<span class="go">/dev/bus/usb/002/040 test 2 --&gt; 110 (Connection timed out)</span>
+<span class="go">./testusb: /dev/bus/usb/002/040 may see only control tests</span>
+<span class="go">/dev/bus/usb/002/040 test 3 --&gt; 110 (Connection timed out)</span>
+<span class="go">./testusb: /dev/bus/usb/002/040 may see only control tests</span>
+<span class="go">/dev/bus/usb/002/040 test 4 --&gt; 110 (Connection timed out)</span>
+<span class="go">./testusb: /dev/bus/usb/002/040 may see only control tests</span>
+<span class="go">/dev/bus/usb/002/040 test 5 --&gt; 110 (Connection timed out)</span>
+<span class="go">./testusb: /dev/bus/usb/002/040 may see only control tests</span>
+<span class="go">/dev/bus/usb/002/040 test 6 --&gt; 110 (Connection timed out)</span>
+<span class="go">./testusb: /dev/bus/usb/002/040 may see only control tests</span>
+<span class="go">/dev/bus/usb/002/040 test 7 --&gt; 110 (Connection timed out)</span>
+<span class="go">./testusb: /dev/bus/usb/002/040 may see only control tests</span>
+<span class="go">/dev/bus/usb/002/040 test 8 --&gt; 110 (Connection timed out)</span>
+<span class="go">Gadget fs control mode test</span>
+<span class="go">./testusb: /dev/bus/usb/002/040 may see only control tests</span>
+<span class="go">/dev/bus/usb/002/040 test 9 --&gt; 110 (Connection timed out)</span>
+<span class="go">./testusb: /dev/bus/usb/002/040 may see only control tests</span>
+<span class="go">/dev/bus/usb/002/040 test 10 --&gt; 110 (Connection timed out)</span>
 </pre></div>
 </div>
-<p>&lt;fc #ff0000&gt;<strong>error log one board side</strong>&lt;/fc&gt;</p>
+<p><strong>error log one board side</strong></p>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">SETUP</span><span class="w"> </span><span class="mf">01.0</span><span class="n">b</span><span class="w"> </span><span class="n">v0000</span><span class="w"> </span><span class="n">i0000</span><span class="w"> </span><span class="mi">0</span>
 <span class="n">musb_g_ep0_irq</span><span class="w"> </span><span class="mi">691</span><span class="o">:</span><span class="w"> </span><span class="n">SetupEnd</span><span class="w"> </span><span class="n">came</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">wrong</span><span class="w"> </span><span class="n">ep0stage</span><span class="w"> </span><span class="n">wait</span>
 <span class="n">musb_g_ep0_irq</span><span class="w"> </span><span class="mi">691</span><span class="o">:</span><span class="w"> </span><span class="n">SetupEnd</span><span class="w"> </span><span class="n">came</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">wrong</span><span class="w"> </span><span class="n">ep0stage</span><span class="w"> </span><span class="n">wait</span>

@@ -93,14 +93,20 @@
         <nav>
           <ul>
 <li><a class="reference internal" href="#">Enable and Disable SHARC Cores</a><ul>
-<li><a class="reference internal" href="#introduction">Introduction</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#method-1-enable-sharc-cores-with-u-boot-icc-command">Method 1: Enable SHARC cores with u-boot ICC command</a><ul>
 <li><a class="reference internal" href="#configure-u-boot-to-enable-slave-cores">Configure u-boot to Enable Slave Cores</a></li>
 <li><a class="reference internal" href="#u-boot-icc-command-usage">U-boot ICC command usage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#method-2-enable-sharc-cores-with-corecontrol-utility-in-linux">Method 2: Enable SHARC Cores with corecontrol Utility in Linux</a><ul>
 <li><a class="reference internal" href="#linux-core-control-driver">Linux Core Control Driver</a><ul>
 <li><a class="reference internal" href="#the-corectrl-device">The corectrl Device</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#example-use-corectrl-device-from-source-code">Example: Use corectrl device from source code</a></li>
+<li><a class="reference internal" href="#package-configuration">Package Configuration</a></li>
+<li><a class="reference internal" href="#example-use-corecontrol-from-user-space">Example: Use corecontrol from user space</a></li>
 </ul>
 </li>
 </ul>
@@ -595,10 +601,9 @@ Content on this topic
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
 <p>This document introduces two kind of core control solutions which support ADSP-SC573, SC584, SC589 EZ-Kits and SC589-MINI. One method is to control SHARC Cores with u-boot ICC command. Other way includes a kernel device driver and a command-line utility, for enabling and disabling the SHARC cores (Core 1 &amp; 2) from the ARM core (Core 0), which have been added to the Yocto Linux distribution for ADSP-SC573, SC584, SC589 and SHARC AUDIO MODULE.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">===== Method 1: Enable SHARC cores with u-boot ICC command =====</div>
-</div>
+</section>
+<section id="method-1-enable-sharc-cores-with-u-boot-icc-command">
+<h2>Method 1: Enable SHARC cores with u-boot ICC command<a class="headerlink" href="#method-1-enable-sharc-cores-with-u-boot-icc-command" title="Link to this heading"></a></h2>
 <section id="configure-u-boot-to-enable-slave-cores">
 <h3>Configure u-boot to Enable Slave Cores<a class="headerlink" href="#configure-u-boot-to-enable-slave-cores" title="Link to this heading"></a></h3>
 <p>The slave SHARC core 0 and 1 in SC5xx silicon can be enabled and disabled in u-boot command console. In order to include this ICC command into u-boot, you need to select it in u-boot configuration.</p>
@@ -625,11 +630,10 @@ ARM architecture  ---&gt;
   <span class="o">*</span> <span class="n">disable</span> <span class="n">coreid</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">===== Method 2: Enable SHARC Cores with corecontrol Utility in Linux =====</div>
-</div>
 </section>
+</section>
+<section id="method-2-enable-sharc-cores-with-corecontrol-utility-in-linux">
+<h2>Method 2: Enable SHARC Cores with corecontrol Utility in Linux<a class="headerlink" href="#method-2-enable-sharc-cores-with-corecontrol-utility-in-linux" title="Link to this heading"></a></h2>
 <section id="linux-core-control-driver">
 <h3>Linux Core Control Driver<a class="headerlink" href="#linux-core-control-driver" title="Link to this heading"></a></h3>
 <section id="the-corectrl-device">
@@ -699,19 +703,18 @@ CONFIG_CORE_CONTROL:
 <span class="p">}</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Package Configuration ==== The SHARC cores can be controlled from the Linux command line using the corecontrol utility. To use corecontrol, first add the package in local.conf:</div>
-</div>
+</section>
+<section id="package-configuration">
+<h3>Package Configuration<a class="headerlink" href="#package-configuration" title="Link to this heading"></a></h3>
+<p>The SHARC cores can be controlled from the Linux command line using the corecontrol utility. To use corecontrol, first add the package in local.conf:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ vim /build/conf/local.conf
 IMAGE_INSTALL_append = &quot; sc5xx-corecontrol&quot;
 </pre></div>
 </div>
 <p>With the corecontrol utility, sharc cores can be controlled to start or stop.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Example: Use corecontrol from user space ====</div>
-</div>
+</section>
+<section id="example-use-corecontrol-from-user-space">
+<h3>Example: Use corecontrol from user space<a class="headerlink" href="#example-use-corecontrol-from-user-space" title="Link to this heading"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># corecontrol -h</span>
 <span class="n">Valid</span> <span class="n">options</span>
 <span class="o">--</span><span class="n">start</span> <span class="n">CORE_NUM</span>
@@ -720,10 +723,8 @@ IMAGE_INSTALL_append = &quot; sc5xx-corecontrol&quot;
 <span class="c1"># corecontrol --stop 1</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">—- <strong>BACK TO</strong> <a class="reference internal" href="start.html"><span class="doc">Multi-Core Support</span></a></div>
-</div>
+<hr class="docutils" />
+<p><strong>BACK TO</strong> <a class="reference internal" href="start.html"><span class="doc">Multi-Core Support</span></a></p>
 </section>
 </section>
 </section>

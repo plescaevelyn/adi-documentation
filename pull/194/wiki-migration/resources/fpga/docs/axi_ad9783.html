@@ -112,10 +112,6 @@
 <li><a class="reference internal" href="#calibration-of-the-device">Calibration of the device</a></li>
 <li><a class="reference internal" href="#register-map">Register map</a><ul>
 <li><a class="reference internal" href="#register-map-base-addresses-for-axi-ad9783">Register map - Base addresses for axi_ad9783</a></li>
-</ul>
-</li>
-</ul>
-</li>
 <li><a class="reference internal" href="#id1">Base (common to all cores)</a></li>
 <li><a class="reference internal" href="#adc-common-axi-ad">ADC Common (axi_ad*)</a></li>
 <li><a class="reference internal" href="#adc-channel-axi-ad">ADC Channel (axi_ad*)</a></li>
@@ -181,7 +177,9 @@
 <li><a class="reference internal" href="#id46">General Purpose Registers (axi_gpreg)</a></li>
 <li><a class="reference internal" href="#id47">SPI Engine (axi_spi_engine)</a></li>
 <li><a class="reference internal" href="#id48">Xilinx XCVR (axi_xcvr) Regmap</a></li>
-<li><a class="reference internal" href="#id49">PWM Generator (axi_pwm_gen)</a><ul>
+<li><a class="reference internal" href="#id49">PWM Generator (axi_pwm_gen)</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#software-guidelines">Software Guidelines</a></li>
 <li><a class="reference internal" href="#references">References</a></li>
 </ul>
@@ -677,10 +675,8 @@ Content on this topic
 <p class="admonition-title">Important</p>
 <p>We are in the process of migrating our documentation to GitHubIO. This page is outdated and the new one can be found at <a class="icon link reference external" href="https://analogdevicesinc.github.io/hdl/library/axi_ad9783/index.html" target="_blank">https://analogdevicesinc.github.io/hdl/library/axi_ad9783/index.html</a></p>
 </div>
-<div class="line-block">
-<div class="line">The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9783" target="_blank">library/axi_ad9783</a> IP core interfaces to the <a class="icon adi reference external" href="https://www.analog.com/en/products/ad9783.html" target="_blank">AD9783</a> device. It is a dual DAC with 16 bits resolution, interfaced through LVDS, and with sample rates up to 500 MSPS. This documentation only covers the IP core and requires that one must be familiar with the device for a complete and better understanding.</div>
-<div class="line">More about the generic framework interfacing DACs can be read here: <a class="reference internal" href="axi_dac_ip.html"><span class="doc">axi_dac_ip</span></a>.</div>
-</div>
+<p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9783" target="_blank">library/axi_ad9783</a> IP core interfaces to the <a class="icon adi reference external" href="https://www.analog.com/en/products/ad9783.html" target="_blank">AD9783</a> device. It is a dual DAC with 16 bits resolution, interfaced through LVDS, and with sample rates up to 500 MSPS. This documentation only covers the IP core and requires that one must be familiar with the device for a complete and better understanding.</p>
+<p>More about the generic framework interfacing DACs can be read here: <a class="reference internal" href="axi_dac_ip.html"><span class="doc">axi_dac_ip</span></a>.</p>
 <section id="features">
 <h2>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
 <ul class="simple">
@@ -698,18 +694,22 @@ Content on this topic
 </section>
 <section id="functional-description">
 <h2>Functional Description<a class="headerlink" href="#functional-description" title="Link to this heading"></a></h2>
-<div class="line-block">
-<div class="line">The axi_ad9783 cores architecture contains:</div>
-<div class="line">* <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9783/axi_ad9783.v#L135" target="_blank">Interface</a> module in LVDS mode for Xilinx devices</div>
-<div class="line">* <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9783/axi_ad9783_core.v" target="_blank">Transmit</a> module, which contains:</div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  * [[:git-hdl:`library/axi_ad9783/axi_ad9783_channel`.v| DAC channel processing]] modules, one for each channel \\
-    * Different data generators ([[:git-hdl:`library/common/ad_dds`.v| DDS]], pattern, PRBS)
-    * [[:git-hdl:`library/common/up_dac_channel`.v| DAC Channel register map]]
-  * [[:git-hdl:`library/common/up_dac_common`.v| DAC Common register map]]
-* [[:git-hdl:`library/common/up_axi`.v| AXI control and status]] modules. \\
-</pre></div>
-</div>
+<p>The axi_ad9783 cores architecture contains:</p>
+<ul class="simple">
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9783/axi_ad9783.v#L135" target="_blank">Interface</a> module in LVDS mode for Xilinx devices</p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9783/axi_ad9783_core.v" target="_blank">Transmit</a> module, which contains:</p>
+<ul>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9783/axi_ad9783_channel.v" target="_blank">DAC channel processing</a> modules, one for each channel</p>
+<ul>
+<li><p>Different data generators (<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds.v" target="_blank">DDS</a>, pattern, PRBS)</p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_dac_channel.v" target="_blank">DAC Channel register map</a></p></li>
+</ul>
+</li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_dac_common.v" target="_blank">DAC Common register map</a></p></li>
+</ul>
+</li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_axi.v" target="_blank">AXI control and status</a> modules.</p></li>
+</ul>
 </section>
 <section id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
@@ -878,23 +878,13 @@ Content on this topic
 </section>
 <section id="parallel-data-port-interface">
 <h2>Parallel data port interface<a class="headerlink" href="#parallel-data-port-interface" title="Link to this heading"></a></h2>
-<div class="line-block">
-<div class="line">The parallel port data interface consists of up to 18 differential signals, <code class="docutils literal notranslate"><span class="pre">dac_clk_out_*</span></code>, <code class="docutils literal notranslate"><span class="pre">dac_clk_in_*</span></code>, and up to 16 data lines (<code class="docutils literal notranslate"><span class="pre">dac_data_out_*</span></code>[15:0]).</div>
-<div class="line">DCO is the output clock generated by the AD9783 that is used to clock out the data from the digital data engine.</div>
-<div class="line">The data lines transmit the multiplexed I and Q data words for the I and Q DACs, respectively.</div>
-<div class="line">DCI provides timing information about the parallel data and signals the I/Q status of the data.</div>
-<div class="line">The incoming LVDS data is latched by an internally generated clock referred to as the data sampling signal (DSS). DSS is a delayed version of the main DAC clock signal.</div>
-<div class="line">The clock input signal provides timing information about the parallel data, as well as indicating the destination (that is, I DAC or Q DAC) of the data. The data that is processed on rising edge will be outputted on the I DAC, and the data that is on falling edge will be outputted on Q DAC (see figure below).</div>
-</div>
+<p>The parallel port data interface consists of up to 18 differential signals, <code class="docutils literal notranslate"><span class="pre">dac_clk_out_*</span></code>, <code class="docutils literal notranslate"><span class="pre">dac_clk_in_*</span></code>, and up to 16 data lines (<code class="docutils literal notranslate"><span class="pre">dac_data_out_*</span></code>[15:0]). DCO is the output clock generated by the AD9783 that is used to clock out the data from the digital data engine. The data lines transmit the multiplexed I and Q data words for the I and Q DACs, respectively. DCI provides timing information about the parallel data and signals the I/Q status of the data. The incoming LVDS data is latched by an internally generated clock referred to as the data sampling signal (DSS). DSS is a delayed version of the main DAC clock signal. The clock input signal provides timing information about the parallel data, as well as indicating the destination (that is, I DAC or Q DAC) of the data. The data that is processed on rising edge will be outputted on the I DAC, and the data that is on falling edge will be outputted on Q DAC (see figure below).</p>
 <a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/docs/axi_ad9783_parallel_interface.jpg"><img alt="https://wiki.analog.com/_media/resources/fpga/docs/axi_ad9783_parallel_interface.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/docs/axi_ad9783_parallel_interface.jpg" style="width: 800px;" />
 </a>
 </section>
 <section id="calibration-of-the-device">
 <h2>Calibration of the device<a class="headerlink" href="#calibration-of-the-device" title="Link to this heading"></a></h2>
-<div class="line-block">
-<div class="line">Calibrating the device means finding the proper value for the SMP_DLY register (see datasheet) in order for the PRBS function (PN23 in this case) to work properly when generating the 4096 samples of data.</div>
-<div class="line">The BIST feature in the AD9783 is a simple type adder and is a user synchronizable BIST feature. When a reading is performed, it adds up all the data that was generated on the rising edges of the <code class="docutils literal notranslate"><span class="pre">dac_div_clk</span></code> and it writes it in the registers accessible by the user: the low part of the result is written in register 0x1B, and the high part in 0x1C. For the sum of data from falling edges, read 0x1D and 0x1E respectively.</div>
-</div>
+<p>Calibrating the device means finding the proper value for the SMP_DLY register (see datasheet) in order for the PRBS function (PN23 in this case) to work properly when generating the 4096 samples of data. The BIST feature in the AD9783 is a simple type adder and is a user synchronizable BIST feature. When a reading is performed, it adds up all the data that was generated on the rising edges of the <code class="docutils literal notranslate"><span class="pre">dac_div_clk</span></code> and it writes it in the registers accessible by the user: the low part of the result is written in register 0x1B, and the high part in 0x1C. For the sum of data from falling edges, read 0x1D and 0x1E respectively.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">register</span> <span class="mh">0x1A</span> <span class="o">&lt;-</span> <span class="mh">0x20</span>
 <span class="n">register</span> <span class="mh">0x1A</span> <span class="o">&lt;-</span> <span class="mh">0x00</span> <span class="c1"># to clear the BIST registers</span>
 <span class="n">register</span> <span class="mh">0x1A</span> <span class="o">&lt;-</span> <span class="mh">0x80</span> <span class="c1"># enable BIST</span>
@@ -905,12 +895,7 @@ Content on this topic
 <span class="c1"># read registers 0x1D, 0x1E for the sum of data from falling edges</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line">In register 0x1A, write 0x20 then 0x00 to clear the BIST registers while the IP is writing zeros to the data bits. To enable BIST, write 0x80 to register 0x1A. Afterwards, 4096 samples of data are generated by PN23 PRBS and are sent to the data inputs.</div>
-<div class="line">When all samples are sent, the IP is continuously sending zeros after the samples, while the BIST read is being performed. Sending zeroes after the samples is required in order to maintain the sums unchanged in the registers.</div>
-<div class="line">Perform a BIST read by writing 0xC0 to register 0x1A to receive the unique sum of rising edge data in register 0x1B and register 0x1C and a unique sum of falling edge data in register 0x1D and register 0x1E. These register contents must always give the same values for the same samples each time they are sent.</div>
-<div class="line">In order to change what data is sent, the DAC_DDS_SEL register value should be changed. To send PN23, 0x9 should be written in the register. The address for the DAC_DDS_SEL register is calculated by adding 0x418 (for the first channel) to the offset found in the devicetree, for the device.</div>
-</div>
+<p>In register 0x1A, write 0x20 then 0x00 to clear the BIST registers while the IP is writing zeros to the data bits. To enable BIST, write 0x80 to register 0x1A. Afterwards, 4096 samples of data are generated by PN23 PRBS and are sent to the data inputs. When all samples are sent, the IP is continuously sending zeros after the samples, while the BIST read is being performed. Sending zeroes after the samples is required in order to maintain the sums unchanged in the registers. Perform a BIST read by writing 0xC0 to register 0x1A to receive the unique sum of rising edge data in register 0x1B and register 0x1C and a unique sum of falling edge data in register 0x1D and register 0x1E. These register contents must always give the same values for the same samples each time they are sent. In order to change what data is sent, the DAC_DDS_SEL register value should be changed. To send PN23, 0x9 should be written in the register. The address for the DAC_DDS_SEL register is calculated by adding 0x418 (for the first channel) to the offset found in the devicetree, for the device.</p>
 </section>
 <section id="register-map">
 <h2>Register map<a class="headerlink" href="#register-map" title="Link to this heading"></a></h2>
@@ -962,10 +947,8 @@ Content on this topic
 </table>
 </div>
 </section>
-</section>
-</section>
 <section id="id1">
-<h1>Base (common to all cores)<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<h3>Base (common to all cores)<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -1206,9 +1189,8 @@ Content on this topic
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="adc-common-axi-ad">
-<h1>ADC Common (axi_ad*)<a class="headerlink" href="#adc-common-axi-ad" title="Link to this heading"></a></h1>
+<h3>ADC Common (axi_ad*)<a class="headerlink" href="#adc-common-axi-ad" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -1387,7 +1369,7 @@ Content on this topic
 <td><p>CUSTOM_CONTROL</p></td>
 <td><p>RW</p></td>
 <td><p>0x00</p></td>
-<td></td>
+<td><p><img alt="regmap_adc_custom" src="https://wiki.analog.com/_media/page&gt;/resources/fpga/docs/hdl/regmap_adc_custom" /></p></td>
 </tr>
 <tr class="row-odd"><td><p>0x0015</p></td>
 <td><p>0x0054</p></td>
@@ -1841,9 +1823,8 @@ Content on this topic
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="adc-channel-axi-ad">
-<h1>ADC Channel (axi_ad*)<a class="headerlink" href="#adc-channel-axi-ad" title="Link to this heading"></a></h1>
+<h3>ADC Channel (axi_ad*)<a class="headerlink" href="#adc-channel-axi-ad" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -2213,9 +2194,8 @@ Content on this topic
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="io-delay-control-axi-ad">
-<h1>IO Delay Control (axi_ad*)<a class="headerlink" href="#io-delay-control-axi-ad" title="Link to this heading"></a></h1>
+<h3>IO Delay Control (axi_ad*)<a class="headerlink" href="#io-delay-control-axi-ad" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -2312,9 +2292,8 @@ Content on this topic
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="dac-common-axi-ad">
-<h1>DAC Common (axi_ad)<a class="headerlink" href="#dac-common-axi-ad" title="Link to this heading"></a></h1>
+<h3>DAC Common (axi_ad)<a class="headerlink" href="#dac-common-axi-ad" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -2835,9 +2814,8 @@ Content on this topic
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="dac-channel-axi-ad">
-<h1>DAC Channel (axi_ad*)<a class="headerlink" href="#dac-channel-axi-ad" title="Link to this heading"></a></h1>
+<h3>DAC Channel (axi_ad*)<a class="headerlink" href="#dac-channel-axi-ad" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -3234,9 +3212,8 @@ Content on this topic
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="generic-tdd-control-axi-tdd">
-<h1>Generic TDD Control (axi_tdd)<a class="headerlink" href="#generic-tdd-control-axi-tdd" title="Link to this heading"></a></h1>
+<h3>Generic TDD Control (axi_tdd)<a class="headerlink" href="#generic-tdd-control-axi-tdd" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -4629,9 +4606,8 @@ Content on this topic
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="transceiver-tdd-control-axi-ad">
-<h1>Transceiver TDD Control (axi_ad*)<a class="headerlink" href="#transceiver-tdd-control-axi-ad" title="Link to this heading"></a></h1>
+<h3>Transceiver TDD Control (axi_ad*)<a class="headerlink" href="#transceiver-tdd-control-axi-ad" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -5192,9 +5168,8 @@ Content on this topic
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="jesd-tpl-up-tpl-common">
-<h1>JESD TPL (up_tpl_common)<a class="headerlink" href="#jesd-tpl-up-tpl-common" title="Link to this heading"></a></h1>
+<h3>JESD TPL (up_tpl_common)<a class="headerlink" href="#jesd-tpl-up-tpl-common" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -5339,9 +5314,8 @@ Content on this topic
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="jesd204-rx-axi-jesd204-rx">
-<h1>JESD204 RX (axi_jesd204_rx)<a class="headerlink" href="#jesd204-rx-axi-jesd204-rx" title="Link to this heading"></a></h1>
+<h3>JESD204 RX (axi_jesd204_rx)<a class="headerlink" href="#jesd204-rx-axi-jesd204-rx" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -6073,8 +6047,8 @@ Content on this topic
 <td><p>STATUS_STATE</p></td>
 <td><p>RO-V</p></td>
 <td><p>0x00</p></td>
-<td><p>8B/10B : State of the <a class="icon link reference external" href="https://wiki.analog.com/" target="_blank">8B/10B link state machine</a>. (0 = RESET, 1 = WAIT_FOR_PHY, 2 = CGS, 3 = SYNCHRONIZED)
-64B/66B : State of the <a class="icon link reference external" href="https://wiki.analog.com/" target="_blank">64B/66B link state machine</a>. (0 = RESET, 1 = WAIT_BS, 2 = BLOCK_SYNC, 3 = DATA)</p></td>
+<td><p>8B/10B : State of the <a class="reference external" href="#b10b_link_state_machine">8B/10B link state machine</a>. (0 = RESET, 1 = WAIT_FOR_PHY, 2 = CGS, 3 = SYNCHRONIZED)
+64B/66B : State of the <a class="reference external" href="#b66b_link_state_machine">64B/66B link state machine</a>. (0 = RESET, 1 = WAIT_BS, 2 = BLOCK_SYNC, 3 = DATA)</p></td>
 </tr>
 <tr class="row-even"><td><p>0xc0 + 0x08*n</p></td>
 <td><p>0x0300 +0x20*n</p></td>
@@ -6444,9 +6418,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="jesd204-tx-axi-jesd204-tx">
-<h1>JESD204 TX (axi_jesd204_tx)<a class="headerlink" href="#jesd204-tx-axi-jesd204-tx" title="Link to this heading"></a></h1>
+<h3>JESD204 TX (axi_jesd204_tx)<a class="headerlink" href="#jesd204-tx-axi-jesd204-tx" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -7368,9 +7341,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="dma-controller-axi-dmac">
-<h1>DMA Controller (axi_dmac)<a class="headerlink" href="#dma-controller-axi-dmac" title="Link to this heading"></a></h1>
+<h3>DMA Controller (axi_dmac)<a class="headerlink" href="#dma-controller-axi-dmac" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -8070,9 +8042,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="fan-controller-axi-fan-control">
-<h1>Fan Controller (axi_fan_control)<a class="headerlink" href="#fan-controller-axi-fan-control" title="Link to this heading"></a></h1>
+<h3>Fan Controller (axi_fan_control)<a class="headerlink" href="#fan-controller-axi-fan-control" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -8697,9 +8668,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="system-id-axi-system-id">
-<h1>System ID (axi_system_id)<a class="headerlink" href="#system-id-axi-system-id" title="Link to this heading"></a></h1>
+<h3>System ID (axi_system_id)<a class="headerlink" href="#system-id-axi-system-id" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -8844,9 +8814,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="clock-generator-axi-clkgen">
-<h1>Clock Generator (axi_clkgen)<a class="headerlink" href="#clock-generator-axi-clkgen" title="Link to this heading"></a></h1>
+<h3>Clock Generator (axi_clkgen)<a class="headerlink" href="#clock-generator-axi-clkgen" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -9015,9 +8984,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="clock-monitor-axi-clock-monitor">
-<h1>Clock Monitor (axi_clock_monitor)<a class="headerlink" href="#clock-monitor-axi-clock-monitor" title="Link to this heading"></a></h1>
+<h3>Clock Monitor (axi_clock_monitor)<a class="headerlink" href="#clock-monitor-axi-clock-monitor" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -9370,9 +9338,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="hdmi-transmit-axi-hdmi-tx">
-<h1>HDMI Transmit (axi_hdmi_tx)<a class="headerlink" href="#hdmi-transmit-axi-hdmi-tx" title="Link to this heading"></a></h1>
+<h3>HDMI Transmit (axi_hdmi_tx)<a class="headerlink" href="#hdmi-transmit-axi-hdmi-tx" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -9773,9 +9740,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="hdmi-receive-axi-hdmi-rx">
-<h1>HDMI Receive (axi_hdmi_rx)<a class="headerlink" href="#hdmi-receive-axi-hdmi-rx" title="Link to this heading"></a></h1>
+<h3>HDMI Receive (axi_hdmi_rx)<a class="headerlink" href="#hdmi-receive-axi-hdmi-rx" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -10024,9 +9990,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="general-purpose-registers-axi-gpreg">
-<h1>General Purpose Registers (axi_gpreg)<a class="headerlink" href="#general-purpose-registers-axi-gpreg" title="Link to this heading"></a></h1>
+<h3>General Purpose Registers (axi_gpreg)<a class="headerlink" href="#general-purpose-registers-axi-gpreg" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -10187,9 +10152,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="spi-engine-axi-spi-engine">
-<h1>SPI Engine (axi_spi_engine)<a class="headerlink" href="#spi-engine-axi-spi-engine" title="Link to this heading"></a></h1>
+<h3>SPI Engine (axi_spi_engine)<a class="headerlink" href="#spi-engine-axi-spi-engine" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -10598,9 +10562,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="xilinx-xcvr-axi-xcvr-regmap">
-<h1>Xilinx XCVR (axi_xcvr) Regmap<a class="headerlink" href="#xilinx-xcvr-axi-xcvr-regmap" title="Link to this heading"></a></h1>
+<h3>Xilinx XCVR (axi_xcvr) Regmap<a class="headerlink" href="#xilinx-xcvr-axi-xcvr-regmap" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -10795,7 +10758,7 @@ Valid for 64b66b encoder.</p></td>
 <td><p>SYSCLK_SEL[1:0]</p></td>
 <td><p>RW</p></td>
 <td><p>0x00</p></td>
-<td><p>For GTX drives directly the (RX/TX)SYSCLKSEL pin of the transceiver. Refer to Xilinx documentation. For GTH/GTY drives directly the (RX/TX)PLLCLKSEL pin of the transceiver and indirectly the (RX/TX)SYSCLKSEL pin of the transceiver see <a class="reference internal" href="axi_adxcvr.html"><span class="doc">axi_adxcvr#table_1</span></a>.</p></td>
+<td><p>For GTX drives directly the (RX/TX)SYSCLKSEL pin of the transceiver. Refer to Xilinx documentation. For GTH/GTY drives directly the (RX/TX)PLLCLKSEL pin of the transceiver and indirectly the (RX/TX)SYSCLKSEL pin of the transceiver see <a class="reference internal" href="axi_adxcvr.html"><span class="doc">axi_adxcvr#Table 1</span></a>.</p></td>
 </tr>
 <tr class="row-odd"><td></td>
 <td></td>
@@ -10803,7 +10766,7 @@ Valid for 64b66b encoder.</p></td>
 <td><p>OUTCLK_SEL[2:0]</p></td>
 <td><p>RW</p></td>
 <td><p>0x00</p></td>
-<td><p>Transceiver primitive control <a class="reference internal" href="axi_adxcvr.html"><span class="doc">axi_adxcvr#table_2</span></a>, refer Xilinx documentation.</p></td>
+<td><p>Transceiver primitive control <a class="reference internal" href="axi_adxcvr.html"><span class="doc">axi_adxcvr#Table 2</span></a>, refer Xilinx documentation.</p></td>
 </tr>
 <tr class="row-even"><td><p>0x0009</p></td>
 <td><p>0x0024</p></td>
@@ -11305,9 +11268,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="pwm-generator-axi-pwm-gen">
-<h1>PWM Generator (axi_pwm_gen)<a class="headerlink" href="#pwm-generator-axi-pwm-gen" title="Link to this heading"></a></h1>
+<h3>PWM Generator (axi_pwm_gen)<a class="headerlink" href="#pwm-generator-axi-pwm-gen" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
@@ -11488,9 +11450,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id2">
-<h1>Base (common to all cores)<a class="headerlink" href="#id2" title="Link to this heading"></a></h1>
+<h3>Base (common to all cores)<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -11731,9 +11692,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id3">
-<h1>ADC Common (axi_ad*)<a class="headerlink" href="#id3" title="Link to this heading"></a></h1>
+<h3>ADC Common (axi_ad*)<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -11912,7 +11872,7 @@ Valid for 64b66b encoder.</p></td>
 <td><p>CUSTOM_CONTROL</p></td>
 <td><p>RW</p></td>
 <td><p>0x00</p></td>
-<td></td>
+<td><p><img alt="regmap_adc_custom" src="https://wiki.analog.com/_media/page&gt;/resources/fpga/docs/hdl/regmap_adc_custom" /></p></td>
 </tr>
 <tr class="row-odd"><td><p>0x0015</p></td>
 <td><p>0x0054</p></td>
@@ -12366,9 +12326,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id4">
-<h1>ADC Channel (axi_ad*)<a class="headerlink" href="#id4" title="Link to this heading"></a></h1>
+<h3>ADC Channel (axi_ad*)<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -12738,9 +12697,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id5">
-<h1>IO Delay Control (axi_ad*)<a class="headerlink" href="#id5" title="Link to this heading"></a></h1>
+<h3>IO Delay Control (axi_ad*)<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -12837,9 +12795,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id6">
-<h1>DAC Common (axi_ad)<a class="headerlink" href="#id6" title="Link to this heading"></a></h1>
+<h3>DAC Common (axi_ad)<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -13360,9 +13317,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id7">
-<h1>DAC Channel (axi_ad*)<a class="headerlink" href="#id7" title="Link to this heading"></a></h1>
+<h3>DAC Channel (axi_ad*)<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -13759,9 +13715,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id8">
-<h1>Generic TDD Control (axi_tdd)<a class="headerlink" href="#id8" title="Link to this heading"></a></h1>
+<h3>Generic TDD Control (axi_tdd)<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -15154,9 +15109,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id9">
-<h1>Transceiver TDD Control (axi_ad*)<a class="headerlink" href="#id9" title="Link to this heading"></a></h1>
+<h3>Transceiver TDD Control (axi_ad*)<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -15717,9 +15671,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id10">
-<h1>JESD TPL (up_tpl_common)<a class="headerlink" href="#id10" title="Link to this heading"></a></h1>
+<h3>JESD TPL (up_tpl_common)<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -15864,9 +15817,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id11">
-<h1>JESD204 RX (axi_jesd204_rx)<a class="headerlink" href="#id11" title="Link to this heading"></a></h1>
+<h3>JESD204 RX (axi_jesd204_rx)<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -16598,8 +16550,8 @@ Valid for 64b66b encoder.</p></td>
 <td><p>STATUS_STATE</p></td>
 <td><p>RO-V</p></td>
 <td><p>0x00</p></td>
-<td><p>8B/10B : State of the <a class="icon link reference external" href="https://wiki.analog.com/" target="_blank">8B/10B link state machine</a>. (0 = RESET, 1 = WAIT_FOR_PHY, 2 = CGS, 3 = SYNCHRONIZED)
-64B/66B : State of the <a class="icon link reference external" href="https://wiki.analog.com/" target="_blank">64B/66B link state machine</a>. (0 = RESET, 1 = WAIT_BS, 2 = BLOCK_SYNC, 3 = DATA)</p></td>
+<td><p>8B/10B : State of the <a class="reference external" href="#b10b_link_state_machine">8B/10B link state machine</a>. (0 = RESET, 1 = WAIT_FOR_PHY, 2 = CGS, 3 = SYNCHRONIZED)
+64B/66B : State of the <a class="reference external" href="#b66b_link_state_machine">64B/66B link state machine</a>. (0 = RESET, 1 = WAIT_BS, 2 = BLOCK_SYNC, 3 = DATA)</p></td>
 </tr>
 <tr class="row-even"><td><p>0xc0 + 0x08*n</p></td>
 <td><p>0x0300 +0x20*n</p></td>
@@ -16969,9 +16921,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id14">
-<h1>JESD204 TX (axi_jesd204_tx)<a class="headerlink" href="#id14" title="Link to this heading"></a></h1>
+<h3>JESD204 TX (axi_jesd204_tx)<a class="headerlink" href="#id14" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -17893,9 +17844,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id15">
-<h1>DMA Controller (axi_dmac)<a class="headerlink" href="#id15" title="Link to this heading"></a></h1>
+<h3>DMA Controller (axi_dmac)<a class="headerlink" href="#id15" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -18595,9 +18545,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id16">
-<h1>Fan Controller (axi_fan_control)<a class="headerlink" href="#id16" title="Link to this heading"></a></h1>
+<h3>Fan Controller (axi_fan_control)<a class="headerlink" href="#id16" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -19222,9 +19171,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id17">
-<h1>System ID (axi_system_id)<a class="headerlink" href="#id17" title="Link to this heading"></a></h1>
+<h3>System ID (axi_system_id)<a class="headerlink" href="#id17" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -19369,9 +19317,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id18">
-<h1>Clock Generator (axi_clkgen)<a class="headerlink" href="#id18" title="Link to this heading"></a></h1>
+<h3>Clock Generator (axi_clkgen)<a class="headerlink" href="#id18" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -19540,9 +19487,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id19">
-<h1>Clock Monitor (axi_clock_monitor)<a class="headerlink" href="#id19" title="Link to this heading"></a></h1>
+<h3>Clock Monitor (axi_clock_monitor)<a class="headerlink" href="#id19" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -19895,9 +19841,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id20">
-<h1>HDMI Transmit (axi_hdmi_tx)<a class="headerlink" href="#id20" title="Link to this heading"></a></h1>
+<h3>HDMI Transmit (axi_hdmi_tx)<a class="headerlink" href="#id20" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -20298,9 +20243,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id21">
-<h1>HDMI Receive (axi_hdmi_rx)<a class="headerlink" href="#id21" title="Link to this heading"></a></h1>
+<h3>HDMI Receive (axi_hdmi_rx)<a class="headerlink" href="#id21" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -20549,9 +20493,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id22">
-<h1>General Purpose Registers (axi_gpreg)<a class="headerlink" href="#id22" title="Link to this heading"></a></h1>
+<h3>General Purpose Registers (axi_gpreg)<a class="headerlink" href="#id22" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -20712,9 +20655,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id23">
-<h1>SPI Engine (axi_spi_engine)<a class="headerlink" href="#id23" title="Link to this heading"></a></h1>
+<h3>SPI Engine (axi_spi_engine)<a class="headerlink" href="#id23" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -21123,9 +21065,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id24">
-<h1>Xilinx XCVR (axi_xcvr) Regmap<a class="headerlink" href="#id24" title="Link to this heading"></a></h1>
+<h3>Xilinx XCVR (axi_xcvr) Regmap<a class="headerlink" href="#id24" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -21320,7 +21261,7 @@ Valid for 64b66b encoder.</p></td>
 <td><p>SYSCLK_SEL[1:0]</p></td>
 <td><p>RW</p></td>
 <td><p>0x00</p></td>
-<td><p>For GTX drives directly the (RX/TX)SYSCLKSEL pin of the transceiver. Refer to Xilinx documentation. For GTH/GTY drives directly the (RX/TX)PLLCLKSEL pin of the transceiver and indirectly the (RX/TX)SYSCLKSEL pin of the transceiver see <a class="reference internal" href="axi_adxcvr.html"><span class="doc">axi_adxcvr#table_1</span></a>.</p></td>
+<td><p>For GTX drives directly the (RX/TX)SYSCLKSEL pin of the transceiver. Refer to Xilinx documentation. For GTH/GTY drives directly the (RX/TX)PLLCLKSEL pin of the transceiver and indirectly the (RX/TX)SYSCLKSEL pin of the transceiver see <a class="reference internal" href="axi_adxcvr.html"><span class="doc">axi_adxcvr#Table 1</span></a>.</p></td>
 </tr>
 <tr class="row-odd"><td></td>
 <td></td>
@@ -21328,7 +21269,7 @@ Valid for 64b66b encoder.</p></td>
 <td><p>OUTCLK_SEL[2:0]</p></td>
 <td><p>RW</p></td>
 <td><p>0x00</p></td>
-<td><p>Transceiver primitive control <a class="reference internal" href="axi_adxcvr.html"><span class="doc">axi_adxcvr#table_2</span></a>, refer Xilinx documentation.</p></td>
+<td><p>Transceiver primitive control <a class="reference internal" href="axi_adxcvr.html"><span class="doc">axi_adxcvr#Table 2</span></a>, refer Xilinx documentation.</p></td>
 </tr>
 <tr class="row-even"><td><p>0x0009</p></td>
 <td><p>0x0024</p></td>
@@ -21830,9 +21771,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id25">
-<h1>PWM Generator (axi_pwm_gen)<a class="headerlink" href="#id25" title="Link to this heading"></a></h1>
+<h3>PWM Generator (axi_pwm_gen)<a class="headerlink" href="#id25" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
@@ -22013,9 +21953,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id26">
-<h1>Base (common to all cores)<a class="headerlink" href="#id26" title="Link to this heading"></a></h1>
+<h3>Base (common to all cores)<a class="headerlink" href="#id26" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -22256,9 +22195,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id27">
-<h1>ADC Common (axi_ad*)<a class="headerlink" href="#id27" title="Link to this heading"></a></h1>
+<h3>ADC Common (axi_ad*)<a class="headerlink" href="#id27" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -22437,7 +22375,7 @@ Valid for 64b66b encoder.</p></td>
 <td><p>CUSTOM_CONTROL</p></td>
 <td><p>RW</p></td>
 <td><p>0x00</p></td>
-<td></td>
+<td><p><img alt="regmap_adc_custom" src="https://wiki.analog.com/_media/page&gt;/resources/fpga/docs/hdl/regmap_adc_custom" /></p></td>
 </tr>
 <tr class="row-odd"><td><p>0x0015</p></td>
 <td><p>0x0054</p></td>
@@ -22891,9 +22829,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id28">
-<h1>ADC Channel (axi_ad*)<a class="headerlink" href="#id28" title="Link to this heading"></a></h1>
+<h3>ADC Channel (axi_ad*)<a class="headerlink" href="#id28" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -23263,9 +23200,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id29">
-<h1>IO Delay Control (axi_ad*)<a class="headerlink" href="#id29" title="Link to this heading"></a></h1>
+<h3>IO Delay Control (axi_ad*)<a class="headerlink" href="#id29" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -23362,9 +23298,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id30">
-<h1>DAC Common (axi_ad)<a class="headerlink" href="#id30" title="Link to this heading"></a></h1>
+<h3>DAC Common (axi_ad)<a class="headerlink" href="#id30" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -23885,9 +23820,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id31">
-<h1>DAC Channel (axi_ad*)<a class="headerlink" href="#id31" title="Link to this heading"></a></h1>
+<h3>DAC Channel (axi_ad*)<a class="headerlink" href="#id31" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -24284,9 +24218,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id32">
-<h1>Generic TDD Control (axi_tdd)<a class="headerlink" href="#id32" title="Link to this heading"></a></h1>
+<h3>Generic TDD Control (axi_tdd)<a class="headerlink" href="#id32" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -25679,9 +25612,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id33">
-<h1>Transceiver TDD Control (axi_ad*)<a class="headerlink" href="#id33" title="Link to this heading"></a></h1>
+<h3>Transceiver TDD Control (axi_ad*)<a class="headerlink" href="#id33" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -26242,9 +26174,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id34">
-<h1>JESD TPL (up_tpl_common)<a class="headerlink" href="#id34" title="Link to this heading"></a></h1>
+<h3>JESD TPL (up_tpl_common)<a class="headerlink" href="#id34" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -26389,9 +26320,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id35">
-<h1>JESD204 RX (axi_jesd204_rx)<a class="headerlink" href="#id35" title="Link to this heading"></a></h1>
+<h3>JESD204 RX (axi_jesd204_rx)<a class="headerlink" href="#id35" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -27123,8 +27053,8 @@ Valid for 64b66b encoder.</p></td>
 <td><p>STATUS_STATE</p></td>
 <td><p>RO-V</p></td>
 <td><p>0x00</p></td>
-<td><p>8B/10B : State of the <a class="icon link reference external" href="https://wiki.analog.com/" target="_blank">8B/10B link state machine</a>. (0 = RESET, 1 = WAIT_FOR_PHY, 2 = CGS, 3 = SYNCHRONIZED)
-64B/66B : State of the <a class="icon link reference external" href="https://wiki.analog.com/" target="_blank">64B/66B link state machine</a>. (0 = RESET, 1 = WAIT_BS, 2 = BLOCK_SYNC, 3 = DATA)</p></td>
+<td><p>8B/10B : State of the <a class="reference external" href="#b10b_link_state_machine">8B/10B link state machine</a>. (0 = RESET, 1 = WAIT_FOR_PHY, 2 = CGS, 3 = SYNCHRONIZED)
+64B/66B : State of the <a class="reference external" href="#b66b_link_state_machine">64B/66B link state machine</a>. (0 = RESET, 1 = WAIT_BS, 2 = BLOCK_SYNC, 3 = DATA)</p></td>
 </tr>
 <tr class="row-even"><td><p>0xc0 + 0x08*n</p></td>
 <td><p>0x0300 +0x20*n</p></td>
@@ -27494,9 +27424,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id38">
-<h1>JESD204 TX (axi_jesd204_tx)<a class="headerlink" href="#id38" title="Link to this heading"></a></h1>
+<h3>JESD204 TX (axi_jesd204_tx)<a class="headerlink" href="#id38" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -28418,9 +28347,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id39">
-<h1>DMA Controller (axi_dmac)<a class="headerlink" href="#id39" title="Link to this heading"></a></h1>
+<h3>DMA Controller (axi_dmac)<a class="headerlink" href="#id39" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -29120,9 +29048,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id40">
-<h1>Fan Controller (axi_fan_control)<a class="headerlink" href="#id40" title="Link to this heading"></a></h1>
+<h3>Fan Controller (axi_fan_control)<a class="headerlink" href="#id40" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -29747,9 +29674,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id41">
-<h1>System ID (axi_system_id)<a class="headerlink" href="#id41" title="Link to this heading"></a></h1>
+<h3>System ID (axi_system_id)<a class="headerlink" href="#id41" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -29894,9 +29820,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id42">
-<h1>Clock Generator (axi_clkgen)<a class="headerlink" href="#id42" title="Link to this heading"></a></h1>
+<h3>Clock Generator (axi_clkgen)<a class="headerlink" href="#id42" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -30065,9 +29990,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id43">
-<h1>Clock Monitor (axi_clock_monitor)<a class="headerlink" href="#id43" title="Link to this heading"></a></h1>
+<h3>Clock Monitor (axi_clock_monitor)<a class="headerlink" href="#id43" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -30420,9 +30344,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id44">
-<h1>HDMI Transmit (axi_hdmi_tx)<a class="headerlink" href="#id44" title="Link to this heading"></a></h1>
+<h3>HDMI Transmit (axi_hdmi_tx)<a class="headerlink" href="#id44" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -30823,9 +30746,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id45">
-<h1>HDMI Receive (axi_hdmi_rx)<a class="headerlink" href="#id45" title="Link to this heading"></a></h1>
+<h3>HDMI Receive (axi_hdmi_rx)<a class="headerlink" href="#id45" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -31074,9 +30996,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id46">
-<h1>General Purpose Registers (axi_gpreg)<a class="headerlink" href="#id46" title="Link to this heading"></a></h1>
+<h3>General Purpose Registers (axi_gpreg)<a class="headerlink" href="#id46" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -31237,9 +31158,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id47">
-<h1>SPI Engine (axi_spi_engine)<a class="headerlink" href="#id47" title="Link to this heading"></a></h1>
+<h3>SPI Engine (axi_spi_engine)<a class="headerlink" href="#id47" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -31648,9 +31568,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id48">
-<h1>Xilinx XCVR (axi_xcvr) Regmap<a class="headerlink" href="#id48" title="Link to this heading"></a></h1>
+<h3>Xilinx XCVR (axi_xcvr) Regmap<a class="headerlink" href="#id48" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -31845,7 +31764,7 @@ Valid for 64b66b encoder.</p></td>
 <td><p>SYSCLK_SEL[1:0]</p></td>
 <td><p>RW</p></td>
 <td><p>0x00</p></td>
-<td><p>For GTX drives directly the (RX/TX)SYSCLKSEL pin of the transceiver. Refer to Xilinx documentation. For GTH/GTY drives directly the (RX/TX)PLLCLKSEL pin of the transceiver and indirectly the (RX/TX)SYSCLKSEL pin of the transceiver see <a class="reference internal" href="axi_adxcvr.html"><span class="doc">axi_adxcvr#table_1</span></a>.</p></td>
+<td><p>For GTX drives directly the (RX/TX)SYSCLKSEL pin of the transceiver. Refer to Xilinx documentation. For GTH/GTY drives directly the (RX/TX)PLLCLKSEL pin of the transceiver and indirectly the (RX/TX)SYSCLKSEL pin of the transceiver see <a class="reference internal" href="axi_adxcvr.html"><span class="doc">axi_adxcvr#Table 1</span></a>.</p></td>
 </tr>
 <tr class="row-odd"><td></td>
 <td></td>
@@ -31853,7 +31772,7 @@ Valid for 64b66b encoder.</p></td>
 <td><p>OUTCLK_SEL[2:0]</p></td>
 <td><p>RW</p></td>
 <td><p>0x00</p></td>
-<td><p>Transceiver primitive control <a class="reference internal" href="axi_adxcvr.html"><span class="doc">axi_adxcvr#table_2</span></a>, refer Xilinx documentation.</p></td>
+<td><p>Transceiver primitive control <a class="reference internal" href="axi_adxcvr.html"><span class="doc">axi_adxcvr#Table 2</span></a>, refer Xilinx documentation.</p></td>
 </tr>
 <tr class="row-even"><td><p>0x0009</p></td>
 <td><p>0x0024</p></td>
@@ -32355,9 +32274,8 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 </section>
-<hr class="docutils" />
 <section id="id49">
-<h1>PWM Generator (axi_pwm_gen)<a class="headerlink" href="#id49" title="Link to this heading"></a></h1>
+<h3>PWM Generator (axi_pwm_gen)<a class="headerlink" href="#id49" title="Link to this heading"></a></h3>
 <p>++++ Click to expand regmap |</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
@@ -32537,27 +32455,25 @@ Valid for 64b66b encoder.</p></td>
 </tbody>
 </table>
 </div>
-<hr class="docutils" />
+</section>
+</section>
 <section id="software-guidelines">
 <h2>Software Guidelines<a class="headerlink" href="#software-guidelines" title="Link to this heading"></a></h2>
-<div class="line-block">
-<div class="line">The software for this IP can be found as part of the ZCU102 Reference Design at: <a class="icon link reference external" href="https://github.com/analogdevicesinc/linux" target="_blank">ADI Linux repository</a>.</div>
-<div class="line">The IP expects the software run a calibration at least once. It has to find out what value for the SMP_DLY (see in datasheet) is good for the PRBS to work.</div>
-</div>
+<p>The software for this IP can be found as part of the ZCU102 Reference Design at: <a class="icon link reference external" href="https://github.com/analogdevicesinc/linux" target="_blank">ADI Linux repository</a>. The IP expects the software run a calibration at least once. It has to find out what value for the SMP_DLY (see in datasheet) is good for the PRBS to work.</p>
 </section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9783" target="_blank">AD9783 DAC information</a>
-* <a class="icon adi reference external" href="https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD9783.html" target="_blank">EVAL-AD9783</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9783" target="_blank">AD9783 DAC information</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD9783.html" target="_blank">EVAL-AD9783</a></p></li>
 <li><p><a class="reference internal" href="../xilinx/interposer/ad9783.html"><span class="doc">EVAL-AD9783 with ZCU102 reference design description</span></a></p></li>
-<li><p><a class="reference internal" href="arch.html"><span class="doc">ADI Reference designs architecture</span></a>
-* <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9783" target="_blank">AD9783 IP source code</a>
-* :git-linux&gt;`__</p></li>
-<li><p><cite>Ultrascale SelectIO &lt;https::`ADI Linux repository &lt;/www.xilinx.com/support/documentation/user_guides/ug571-ultrascale-selectio.pdf&gt;</cite>
-* <a class="icon link reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug572-ultrascale-clocking.pdf" target="_blank">UltraScale Architecture Clocking Resources User Guide</a></p></li>
+<li><p><a class="reference internal" href="arch.html"><span class="doc">ADI Reference designs architecture</span></a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9783" target="_blank">AD9783 IP source code</a></p></li>
+<li><p>:git-linux&gt;`__</p></li>
+<li><p><cite>Ultrascale SelectIO &lt;https::`ADI Linux repository &lt;/www.xilinx.com/support/documentation/user_guides/ug571-ultrascale-selectio.pdf&gt;</cite></p></li>
+<li><p><a class="icon link reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug572-ultrascale-clocking.pdf" target="_blank">UltraScale Architecture Clocking Resources User Guide</a></p></li>
 </ul>
-<img alt="IP cores#hdl|Main page#tips|Using and modifying the HDL design" src="https://wiki.analog.com/_media/navigationHDLUserGuide#ip_cores" />
+<img alt="IP cores#hdl|Main page#tips|Using and modifying the HDL design" src="https://wiki.analog.com/_media/resources/fpga/docs/navigationHDLUserGuide#ip_cores" />
 </section>
 </section>
 

@@ -95,12 +95,16 @@
 <li><a class="reference internal" href="#">How to Boot Linux From Network File System</a><ul>
 <li><a class="reference internal" href="#filesystem-setup">Filesystem Setup</a><ul>
 <li><a class="reference internal" href="#generate-the-filesystem-for-nfs-boot">Generate the Filesystem for NFS boot</a></li>
+<li><a class="reference internal" href="#setting-up-nfs-server">Setting Up NFS Server</a></li>
+<li><a class="reference internal" href="#unzip-filesystem-to-nfs-root-directory">Unzip Filesystem to NFS root Directory</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#copy-zimage-and-dtb-file">Copy zImage and dtb File</a></li>
 <li><a class="reference internal" href="#boot-linux-from-nfs">Boot Linux From NFS</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#trouble-shooting">Trouble Shooting</a></li>
+<li><a class="reference internal" href="#appendix-macro-definition">Appendix: Macro Definition</a></li>
 </ul>
 
         </nav>
@@ -607,18 +611,16 @@ Content on this topic
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ bitbake adsp-sc5xx-minimal
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line">If you want to compile and deploy the images at your second time, run the command “<strong>bitbake &lt;TARGET&gt; -C compile</strong>”.</div>
-<div class="line">If you want to add packages to filesystem, you could add package to <strong>IMAGE_INSTALL_append = “&lt;PACKAGE_NAME&gt;”</strong> in build/conf/local.conf file.</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Setting Up NFS Server ==== First follow the section <strong>Setting Up NFS Server</strong> in <a class="reference internal" href="../setting_up_your_host_pc.html"><span class="doc">Setting Up The Host</span></a> to set up the nfs server in HOST Ubuntu.</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Unzip Filesystem to NFS root Directory ==== Second unzip the filesystem tar image in deploy directory to NFS root diretory.</div>
-</div>
+<p>If you want to compile and deploy the images at your second time, run the command “<strong>bitbake &lt;TARGET&gt; -C compile</strong>”.</p>
+<p>If you want to add packages to filesystem, you could add package to <strong>IMAGE_INSTALL_append = “&lt;PACKAGE_NAME&gt;”</strong> in build/conf/local.conf file.</p>
+</section>
+<section id="setting-up-nfs-server">
+<h3>Setting Up NFS Server<a class="headerlink" href="#setting-up-nfs-server" title="Link to this heading"></a></h3>
+<p>First follow the section <strong>Setting Up NFS Server</strong> in <a class="reference internal" href="../setting_up_your_host_pc.html"><span class="doc">Setting Up The Host</span></a> to set up the nfs server in HOST Ubuntu.</p>
+</section>
+<section id="unzip-filesystem-to-nfs-root-directory">
+<h3>Unzip Filesystem to NFS root Directory<a class="headerlink" href="#unzip-filesystem-to-nfs-root-directory" title="Link to this heading"></a></h3>
+<p>Second unzip the filesystem tar image in deploy directory to NFS root diretory.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd build/tmp/deploy/images/&lt;MACHINE&gt;/
 $ sudo tar -xf &lt;FULL_FS_IMAGE/MINIMAL_FS_IMAGE&gt; -C /romfs
 $ ls /romfs
@@ -626,9 +628,6 @@ bin  boot  dev  etc  home  lib  media  mnt  opt  proc  run  sbin  sys  tmp  usr 
 </pre></div>
 </div>
 <p>See the <strong>Appendix</strong> at the bottom of this page to expand the &lt;MACHINE&gt; and &lt;FULL_FS_IMAGE&gt;or &lt;MINIMAL_FS_IMAGE&gt;.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
 </section>
 </section>
 <section id="copy-zimage-and-dtb-file">
@@ -637,9 +636,6 @@ bin  boot  dev  etc  home  lib  media  mnt  opt  proc  run  sbin  sys  tmp  usr 
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cp build/tmp/deploy/images/&lt;MACHINE&gt;/zImage /tftpboot
 $ cp build/tmp/deploy/images/&lt;MACHINE&gt;/&lt;DTB_FILE&gt; /tftpboot
 </pre></div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
 </div>
 </section>
 <section id="boot-linux-from-nfs">
@@ -698,10 +694,11 @@ $ cp build/tmp/deploy/images/&lt;MACHINE&gt;/&lt;DTB_FILE&gt; /tftpboot
 </pre></div>
 </div>
 <p>The default username is <strong>root</strong> and the password is <strong>adi</strong>.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">====== Trouble Shooting ====== If the kernel stuck in the below and cannot enter into the login console, it should be a problem related with NFS server setup, you should run the above section “<strong>Setting Up NFS Server</strong>” again.</div>
-</div>
+</section>
+</section>
+<section id="trouble-shooting">
+<h1>Trouble Shooting<a class="headerlink" href="#trouble-shooting" title="Link to this heading"></a></h1>
+<p>If the kernel stuck in the below and cannot enter into the login console, it should be a problem related with NFS server setup, you should run the above section “<strong>Setting Up NFS Server</strong>” again.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">......</span>
 <span class="n">cfg80211</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">compiled</span><span class="o">-</span><span class="ow">in</span> <span class="n">X</span><span class="mf">.509</span> <span class="n">certificates</span> <span class="k">for</span> <span class="n">regulatory</span> <span class="n">database</span>
 <span class="n">cfg80211</span><span class="p">:</span> <span class="n">Loaded</span> <span class="n">X</span><span class="mf">.509</span> <span class="n">cert</span> <span class="s1">&#39;sforshee: 00b28ddf47aef9cea7&#39;</span>
@@ -711,10 +708,9 @@ $ cp build/tmp/deploy/images/&lt;MACHINE&gt;/&lt;DTB_FILE&gt; /tftpboot
 <span class="n">cfg80211</span><span class="p">:</span> <span class="n">failed</span> <span class="n">to</span> <span class="n">load</span> <span class="n">regulatory</span><span class="o">.</span><span class="n">db</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">====== Appendix: Macro Definition ======</div>
-</div>
+</section>
+<section id="appendix-macro-definition">
+<h1>Appendix: Macro Definition<a class="headerlink" href="#appendix-macro-definition" title="Link to this heading"></a></h1>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -750,9 +746,8 @@ $ cp build/tmp/deploy/images/&lt;MACHINE&gt;/&lt;DTB_FILE&gt; /tftpboot
 </div>
 <div class="line-block">
 <div class="line"><br /></div>
-<div class="line">—- **BACK TO: ** <a class="reference internal" href="../installing.html"><span class="doc">Installing Linux On The Hardware</span></a> **HOME PAGE: ** <a class="reference internal" href="../../../../linuxdsp.html"><span class="doc">Linux for ADSP-SC5xx Processors</span></a></div>
+<div class="line">—- **BACK TO:** <a class="reference internal" href="../installing.html"><span class="doc">Installing Linux On The Hardware</span></a> **HOME PAGE:** <a class="reference internal" href="../../../../linuxdsp.html"><span class="doc">Linux for ADSP-SC5xx Processors</span></a></div>
 </div>
-</section>
 </section>
 
 

@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="P(z) is the system to be modeled (noise source)" name="description" />
+<meta content="Click here to return to the Filters section." name="description" />
 
     <title>Modified FXLMS(ADAU145x) &#8212; System Level Documentation  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../../../_static/pygments.css?v=8e8a900e" />
@@ -94,15 +94,22 @@
           <ul>
 <li><a class="reference internal" href="#">Modified FXLMS(ADAU145x)</a><ul>
 <li><a class="reference internal" href="#input-pins">Input Pins</a></li>
-<li><a class="reference internal" href="#grow-algorithm">Grow Algorithm</a><ul>
+<li><a class="reference internal" href="#grow-algorithm">Grow Algorithm</a></li>
+<li><a class="reference internal" href="#configurations">Configurations</a></li>
+<li><a class="reference internal" href="#gui-controls">GUI Controls</a><ul>
+<li><a class="reference internal" href="#training">Training</a></li>
 <li><a class="reference internal" href="#runtime">Runtime</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#dsp-parameter-information">DSP Parameter Information</a></li>
+<li><a class="reference internal" href="#dsp-parameter-information">DSP Parameter Information</a><ul>
+<li><a class="reference internal" href="#id1">Training</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#example">Example</a><ul>
 <li><a class="reference internal" href="#active-noise-cancellation-using-mfxlms-filter">Active Noise Cancellation using MFXLMS filter</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#supported-ics">Supported ICs</a></li>
 </ul>
 </li>
 </ul>
@@ -592,15 +599,14 @@ Content on this topic
             
   <section id="modified-fxlms-adau145x">
 <h1>Modified FXLMS(ADAU145x)<a class="headerlink" href="#modified-fxlms-adau145x" title="Link to this heading"></a></h1>
-<div class="line-block">
-<div class="line"><a class="reference internal" href="../filters.html"><span class="doc">Click here to return to the Filters section.</span></a></div>
-<div class="line">|| This module implements the Modified Filtered-X LMS algorithm which is an adaptive FIR filter based on minimizing the least mean squared value of the error signal. The algorithm is applied to noise cancellation applications where it takes into account the fact that the point of cancellation is not at the anti-noise output speaker but at the position of the error microphone. The module provides a training mode which enables training and estimating the secondary paths between the output speakers and the error microphones as FIR filter coefficients. These coefficients are then used in the run-time mode of the module to take into account the paths and provide effective noise cancellation based on the reference inputs.</div>
-<div class="line">The module can be found at the below location in the tree tool box:</div>
-<div class="line"><img alt="image1" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/mfxlms-ttbox.png" /></div>
-<div class="line"><img alt="image2" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/mfxlms-cell.png" /></div>
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/mfxlms-block_diagram.png"><img alt="image3" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/mfxlms-block_diagram.png" style="width: 700px;" /></a></div>
-<div class="line">The above figure shows the block diagram of the MFxLMS system where,</div>
-</div>
+<p><a class="reference internal" href="../filters.html"><span class="doc">Click here to return to the Filters section.</span></a></p>
+<p>This module implements the Modified Filtered-X LMS algorithm which is an adaptive FIR filter based on minimizing the least mean squared value of the error signal. The algorithm is applied to noise cancellation applications where it takes into account the fact that the point of cancellation is not at the anti-noise output speaker but at the position of the error microphone. The module provides a training mode which enables training and estimating the secondary paths between the output speakers and the error microphones as FIR filter coefficients. These coefficients are then used in the run-time mode of the module to take into account the paths and provide effective noise cancellation based on the reference inputs.</p>
+<p>The module can be found at the below location in the tree tool box:</p>
+<img alt="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/mfxlms-ttbox.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/mfxlms-ttbox.png" />
+<img alt="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/mfxlms-cell.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/mfxlms-cell.png" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/mfxlms-block_diagram.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/mfxlms-block_diagram.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/mfxlms-block_diagram.png" style="width: 700px;" />
+</a>
+<p>The above figure shows the block diagram of the MFxLMS system where,</p>
 <ul class="simple">
 <li><p><strong>P(z)</strong> is the system to be modeled (noise source)</p></li>
 <li><p><strong>S(z)</strong> is the secondary path in the acoustic domain</p></li>
@@ -615,10 +621,8 @@ Content on this topic
 <li><p><strong>y’(n)</strong> is the output of filtering xf(n) with the LMS coefficients</p></li>
 <li><p><strong>e(n)</strong> is the total error feedback to the LMS system which is computed as e(n) = error+ yf(n)- y’(n)</p></li>
 </ul>
-<div class="line-block">
-<div class="line">the coefficient update equation is given as:</div>
-<div class="line">W(n)= W(n-1)+ step size *(e(n-1)* xf(n-1))</div>
-</div>
+<p>the coefficient update equation is given as:</p>
+<p>W(n)= W(n-1)+ step size *(e(n-1)* xf(n-1))</p>
 <section id="input-pins">
 <h2>Input Pins<a class="headerlink" href="#input-pins" title="Link to this heading"></a></h2>
 <div class="table-wrapper docutils container">
@@ -671,50 +675,53 @@ Content on this topic
 </section>
 <section id="grow-algorithm">
 <h2>Grow Algorithm<a class="headerlink" href="#grow-algorithm" title="Link to this heading"></a></h2>
-<div class="line-block">
-<div class="line">The reference, error and anti-noise can be grown independently. Undo and Redo will not be supported for this module’s growth functionality.</div>
-<div class="line"><img alt="image4" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/mfxlms-growth.png" /></div>
-<div class="line">===== Configurations ===== The module features two modes</div>
-</div>
+<p>The reference, error and anti-noise can be grown independently. Undo and Redo will not be supported for this module’s growth functionality.</p>
+<img alt="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/mfxlms-growth.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/mfxlms-growth.png" />
+</section>
+<section id="configurations">
+<h2>Configurations<a class="headerlink" href="#configurations" title="Link to this heading"></a></h2>
+<p>The module features two modes</p>
 <ul class="simple">
 <li><p>Training mode- In this mode secondary path estimation is done using an internally generated white noise source for each output selection.</p></li>
 <li><p>Run-time mode- In this mode the adaptive filter converges to provide an anti noise output opposite in phase to the noise signal to be cancelled.</p></li>
 </ul>
 <p>The modes can be selected by selecting the appropriate mode tab in the MFXLMS settings form.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line"><img alt="image5" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/mxlmswindows.jpg" /></div>
-<div class="line"><br /></div>
-</div>
+<img alt="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/mxlmswindows.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/mxlmswindows.jpg" />
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>NOTE: Changing modes requires a re-download operation to be performed.</p>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">===== GUI Controls =====</div>
-<div class="line">==== Training ====</div>
-<div class="line">^GUI Control Name^Default Value^Range^Function Description^</div>
-</div>
+</section>
+<section id="gui-controls">
+<h2>GUI Controls<a class="headerlink" href="#gui-controls" title="Link to this heading"></a></h2>
+<section id="training">
+<h3>Training<a class="headerlink" href="#training" title="Link to this heading"></a></h3>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>GUI Control Name</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Range</p></th>
+<th class="head"><p>Function Description</p></th>
+</tr>
+</thead>
 <tbody>
-<tr class="row-odd"><td><p>Current Output</p></td>
+<tr class="row-even"><td><p>Current Output</p></td>
 <td><p>0</p></td>
 <td><p>0-Number of Outputs-1</p></td>
 <td><p>Output selection for which secondary paths are to be estimated</p></td>
 </tr>
-<tr class="row-even"><td><p>Step Size</p></td>
+<tr class="row-odd"><td><p>Step Size</p></td>
 <td><p>0.9</p></td>
 <td><p>0.000001- 0.999999</p></td>
 <td><p>LMS step size</p></td>
 </tr>
-<tr class="row-odd"><td><p>Start</p></td>
+<tr class="row-even"><td><p>Start</p></td>
 <td><p>0</p></td>
 <td><p>0/1</p></td>
 <td><p>Starts or stops secondary path training</p></td>
 </tr>
-<tr class="row-even"><td><p>Upload</p></td>
+<tr class="row-odd"><td><p>Upload</p></td>
 <td><ul class="simple">
 <li></li>
 </ul>
@@ -725,7 +732,7 @@ Content on this topic
 </td>
 <td><p>Opens up SP coefficient form from where SP coefficients can be saved</p></td>
 </tr>
-<tr class="row-odd"><td><p>Secondary Path Filter Length</p></td>
+<tr class="row-even"><td><p>Secondary Path Filter Length</p></td>
 <td><p>32</p></td>
 <td><p>8-256</p></td>
 <td><p>Secondary path LMS filter tap length</p></td>
@@ -736,38 +743,40 @@ Content on this topic
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
+</section>
 <section id="runtime">
 <h3>Runtime<a class="headerlink" href="#runtime" title="Link to this heading"></a></h3>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="line-block">
-<div class="line">^GUI Control Name^Default Value^Range^Function Description^</div>
-</div>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>GUI Control Name</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Range</p></th>
+<th class="head"><p>Function Description</p></th>
+</tr>
+</thead>
 <tbody>
-<tr class="row-odd"><td><p>Filter Length</p></td>
+<tr class="row-even"><td><p>Filter Length</p></td>
 <td><p>32</p></td>
 <td><p>8-256</p></td>
 <td><p>MFXLMS Filter length</p></td>
 </tr>
-<tr class="row-even"><td><p>Step Size</p></td>
+<tr class="row-odd"><td><p>Step Size</p></td>
 <td><p>0.9</p></td>
 <td><p>0.000001- 0.999999</p></td>
 <td><p>LMS step size</p></td>
 </tr>
-<tr class="row-odd"><td><p>Pause</p></td>
+<tr class="row-even"><td><p>Pause</p></td>
 <td><p>0</p></td>
 <td><p>0/1</p></td>
 <td><p>Pause or resume MFXLMS coefficient update</p></td>
 </tr>
-<tr class="row-even"><td><p>Reset</p></td>
+<tr class="row-odd"><td><p>Reset</p></td>
 <td><p>0</p></td>
 <td><p>0/1</p></td>
 <td><p>Resets the MFXLMS Filter coefficients and states</p></td>
 </tr>
-<tr class="row-odd"><td><p>Initial LMS Coefficients</p></td>
+<tr class="row-even"><td><p>Initial LMS Coefficients</p></td>
 <td><ul class="simple">
 <li></li>
 </ul>
@@ -778,7 +787,7 @@ Content on this topic
 </td>
 <td><p>Opens up LMS coefficient form from where the initial LMS coefficients can be loaded</p></td>
 </tr>
-<tr class="row-even"><td><p>Current LMS Coefficients</p></td>
+<tr class="row-odd"><td><p>Current LMS Coefficients</p></td>
 <td><ul class="simple">
 <li></li>
 </ul>
@@ -799,30 +808,41 @@ Content on this topic
 </section>
 <section id="dsp-parameter-information">
 <h2>DSP Parameter Information<a class="headerlink" href="#dsp-parameter-information" title="Link to this heading"></a></h2>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="line-block">
-<div class="line">==== Training ====</div>
-<div class="line">^GUI Control Name^Compiler Name^Function Description^</div>
+<section id="id1">
+<h3>Training<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>GUI Control Name</p></th>
+<th class="head"><p>Compiler Name</p></th>
+<th class="head"><p>Function Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p>coeffsSP</p></td>
-<td><p>&lt;fc #008000&gt;MFxLMSS300Alg&lt;/fc&gt;&lt;fc #ff0000&gt;1&lt;/fc&gt;&lt;fc #000080&gt;coeffsSP&lt;/fc&gt;&lt;fc #800000&gt;1&lt;/fc&gt;</p></td>
+<td><p>MFxLMSS300Alg1coeffsSP1</p></td>
 <td><p>Secondary path LMS filter coefficient set</p></td>
 </tr>
 <tr class="row-even"><td><p>StepSizeSP</p></td>
-<td><p>&lt;fc #008000&gt;MFxLMSS300Alg&lt;/fc&gt;&lt;fc #ff0000&gt;1&lt;/fc&gt;&lt;fc #000080&gt;StepSizeSP&lt;/fc&gt;&lt;fc #800000&gt;1&lt;/fc&gt;</p></td>
+<td><p>MFxLMSS300Alg1StepSizeSP1</p></td>
 <td><p>Secondary path LMS filter step size</p></td>
 </tr>
 <tr class="row-odd"><td><p>Start</p></td>
-<td><p>&lt;fc #008000&gt;MFxLMSS300Alg&lt;/fc&gt;&lt;fc #ff0000&gt;1&lt;/fc&gt;&lt;fc #000080&gt;Start&lt;/fc&gt;&lt;fc #800000&gt;1&lt;/fc&gt;</p></td>
+<td><p>MFxLMSS300Alg1Start1</p></td>
 <td><p>Start Secondary path LMS training</p></td>
 </tr>
 <tr class="row-even"><td><p>currentOutput</p></td>
-<td><p>&lt;fc #008000&gt;MFxLMSS300Alg&lt;/fc&gt;&lt;fc #ff0000&gt;1&lt;/fc&gt;&lt;fc #000080&gt;CurrentOutput&lt;/fc&gt;&lt;fc #800000&gt;1&lt;/fc&gt;</p></td>
+<td><p>MFxLMSS300Alg1CurrentOutput1</p></td>
 <td><p>Output selection for secondary path training</p></td>
 </tr>
 </tbody>
@@ -831,29 +851,34 @@ Content on this topic
 <div class="line-block">
 <div class="line"><br /></div>
 <div class="line">==== Runtime ====</div>
-<div class="line">^GUI Control Name^Compiler Name^Function Description^</div>
 </div>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>GUI Control Name</p></th>
+<th class="head"><p>Compiler Name</p></th>
+<th class="head"><p>Function Description</p></th>
+</tr>
+</thead>
 <tbody>
-<tr class="row-odd"><td><p>coeffs</p></td>
-<td><p>&lt;fc #008000&gt;MFxLMSS300Alg&lt;/fc&gt;&lt;fc #ff0000&gt;1&lt;/fc&gt;&lt;fc #000080&gt;coeffs&lt;/fc&gt;&lt;fc #800000&gt;1&lt;/fc&gt;</p></td>
+<tr class="row-even"><td><p>coeffs</p></td>
+<td><p>MFxLMSS300Alg1coeffs1</p></td>
 <td><p>Run-time LMS filter coefficient set</p></td>
 </tr>
-<tr class="row-even"><td><p>coeffsSP</p></td>
-<td><p>&lt;fc #008000&gt;MFxLMSS300Alg&lt;/fc&gt;&lt;fc #ff0000&gt;1&lt;/fc&gt;&lt;fc #000080&gt;coeffsSP&lt;/fc&gt;&lt;fc #800000&gt;1&lt;/fc&gt;</p></td>
+<tr class="row-odd"><td><p>coeffsSP</p></td>
+<td><p>MFxLMSS300Alg1coeffsSP1</p></td>
 <td><p>Secondary path LMS filter coefficient set</p></td>
 </tr>
-<tr class="row-odd"><td><p>StepSizeLMS</p></td>
-<td><p>&lt;fc #008000&gt;MFxLMSS300Alg&lt;/fc&gt;&lt;fc #ff0000&gt;1&lt;/fc&gt;&lt;fc #000080&gt;StepSizeLMS&lt;/fc&gt;&lt;fc #800000&gt;1&lt;/fc&gt;</p></td>
+<tr class="row-even"><td><p>StepSizeLMS</p></td>
+<td><p>MFxLMSS300Alg1StepSizeLMS1</p></td>
 <td><p>Run-time LMS filter step size</p></td>
 </tr>
-<tr class="row-even"><td><p>Pause</p></td>
-<td><p>&lt;fc #008000&gt;MFxLMSS300Alg&lt;/fc&gt;&lt;fc #ff0000&gt;1&lt;/fc&gt;&lt;fc #000080&gt;Pause&lt;/fc&gt;&lt;fc #800000&gt;1&lt;/fc&gt;</p></td>
+<tr class="row-odd"><td><p>Pause</p></td>
+<td><p>MFxLMSS300Alg1Pause1</p></td>
 <td><p>Pause/resume LMS training</p></td>
 </tr>
-<tr class="row-odd"><td><p>Reset</p></td>
-<td><p>&lt;fc #008000&gt;MFxLMSS300Alg&lt;/fc&gt;&lt;fc #ff0000&gt;1&lt;/fc&gt;&lt;fc #000080&gt;Reset&lt;/fc&gt;&lt;fc #800000&gt;1&lt;/fc&gt;</p></td>
+<tr class="row-even"><td><p>Reset</p></td>
+<td><p>MFxLMSS300Alg1Reset1</p></td>
 <td><p>Reset LMS Filter</p></td>
 </tr>
 </tbody>
@@ -864,31 +889,32 @@ Content on this topic
 <div class="line">Here,</div>
 </div>
 <ul class="simple">
-<li><p>&lt;fc #008000&gt; Green&lt;/fc&gt; - Algorithm Name</p></li>
-<li><p>&lt;fc #ff0000&gt; Red&lt;/fc&gt; - Instance Number (Changes for each instance)</p></li>
-<li><p>&lt;fc #000080&gt; Blue&lt;/fc&gt; - Parameter Name</p></li>
-<li><p>&lt;fc #800000&gt; Brown&lt;/fc&gt; - Stage number</p></li>
+<li><p>Green - Algorithm Name</p></li>
+<li><p>Red - Instance Number (Changes for each instance)</p></li>
+<li><p>Blue - Parameter Name</p></li>
+<li><p>Brown - Stage number</p></li>
 </ul>
+</section>
 </section>
 <section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h2>
 <section id="active-noise-cancellation-using-mfxlms-filter">
 <h3>Active Noise Cancellation using MFXLMS filter<a class="headerlink" href="#active-noise-cancellation-using-mfxlms-filter" title="Link to this heading"></a></h3>
-<div class="line-block">
-<div class="line">This section demonstrates active noise cancellation using the MFXLMS filter module. The module is run at a lower sample rate of 2000Hz by means of a down-sampling module, the output is later up-sampled to the input sample rate by means of a up sampling module.The down and up sampling module chain is constructed in hierarchy boards as show below. the Anti- aliasing filters are included in the signal chain.</div>
-<div class="line"><img alt="image6" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/mfxlms-down_sampler.png" /></div>
-<div class="line"><img alt="image7" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/mfxlms-upsampler.png" /></div>
-<div class="line">The below schematic shows the module in the training mode. The inputs are muted. To obtain the secondary path coefficients, the training tab is opened in the form, the tap length, step size and the output selection is set and the module is downloaded in the training mode. To start the training the start button is clicked. The training is stopped by clicking on the stop button. Then click on Upload button, the coefficients will be displayed in a window. This can be saved in a text file.</div>
-<div class="line"><img alt="image8" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/mfxlms-training.png" /></div>
-<div class="line">The below schematic shows the module in the run time mode. The Run-time LMS tap-length, Step size are set. The Secondary path coefficients can be set by using the file exported in the training mode. The input reference approximates the error signal to be cancelled. The error microphone output is fed to the error pin( this error input is the residual from the destructive interference between the noise and the anti-noise signal in the acoustic domain). The Anti noise pin is connected to the cancellation speaker to cancel the noise in the acoustic domain. The schematic is link compile downloaded. The mean square error pin is monitored to observe the drop in the error levels indicating noise cancellation.</div>
-<div class="line">On convergence, the LMS coefficients may be read and saved to a text file by clicking the current LMS coefficients button. These coefficients can be loaded as the initial LMS coefficients using the initial LMS coefficients for faster convergence.</div>
-<div class="line"><img alt="image9" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/mfxlms-runtime.png" /></div>
-<div class="line">===== Supported ICs =====</div>
-</div>
+<p>This section demonstrates active noise cancellation using the MFXLMS filter module. The module is run at a lower sample rate of 2000Hz by means of a down-sampling module, the output is later up-sampled to the input sample rate by means of a up sampling module.The down and up sampling module chain is constructed in hierarchy boards as show below. the Anti- aliasing filters are included in the signal chain.</p>
+<img alt="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/mfxlms-down_sampler.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/mfxlms-down_sampler.png" />
+<img alt="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/mfxlms-upsampler.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/mfxlms-upsampler.png" />
+<p>The below schematic shows the module in the training mode. The inputs are muted. To obtain the secondary path coefficients, the training tab is opened in the form, the tap length, step size and the output selection is set and the module is downloaded in the training mode. To start the training the start button is clicked. The training is stopped by clicking on the stop button. Then click on Upload button, the coefficients will be displayed in a window. This can be saved in a text file.</p>
+<img alt="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/mfxlms-training.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/mfxlms-training.png" />
+<p>The below schematic shows the module in the run time mode. The Run-time LMS tap-length, Step size are set. The Secondary path coefficients can be set by using the file exported in the training mode. The input reference approximates the error signal to be cancelled. The error microphone output is fed to the error pin( this error input is the residual from the destructive interference between the noise and the anti-noise signal in the acoustic domain). The Anti noise pin is connected to the cancellation speaker to cancel the noise in the acoustic domain. The schematic is link compile downloaded. The mean square error pin is monitored to observe the drop in the error levels indicating noise cancellation.</p>
+<p>On convergence, the LMS coefficients may be read and saved to a text file by clicking the current LMS coefficients button. These coefficients can be loaded as the initial LMS coefficients using the initial LMS coefficients for faster convergence.</p>
+<img alt="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/mfxlms-runtime.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/mfxlms-runtime.png" />
+</section>
+</section>
+<section id="supported-ics">
+<h2>Supported ICs<a class="headerlink" href="#supported-ics" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>ADAU145x</p></li>
 </ul>
-</section>
 </section>
 </section>
 

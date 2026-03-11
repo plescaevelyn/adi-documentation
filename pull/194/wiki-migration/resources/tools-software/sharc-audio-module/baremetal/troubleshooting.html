@@ -614,7 +614,7 @@ Content on this topic
 <li><p>The SRU (Signal Routing Unit) isn’t configured to properly route the I2S/TDM signals to the right processor pins and internal SPORTs.</p></li>
 </ul>
 <p>Sources #3-5 may be encountered when modifying the framework itself (beyond the callbacks) such as when porting the framework to a new hardware platform. If you’re working within the audio callbacks, these are unlikely the source of the issue. The following steps are designed to help identify the source of the issue.</p>
-<p>**Step 1: Confirm that the cables, audio source device and audio output device are working as expected **</p>
+<p><strong>Step 1: Confirm that the cables, audio source device and audio output device are working as expected</strong></p>
 <p>The best place to start is to confirm that the cables connected to the SHARC Audio Module are working, that there is line-level audio coming from your audio source (e.g., smartphone, PC, etc.) connected to the SHARC Audio Module, and that whatever audio output device (e.g., amplifier, headphones, etc.) the SHARC Audio Module is connected to is working as expected. A simple test is to connect the audio source directly to the audio output device to ensure that all of the hardware and cabling connected to the SHARC Audio Module is working as expected.</p>
 <p><strong>Step 2: Confirm that audio is flowing through the unmodified framework</strong></p>
 <p>If the issue still persists, the next step is to ensure that the unmodified Bare Metal Framework is properly passing audio from the input 1/8” jack (LINE IN) to the output 1/8” jack (LINE OUT). The framework is configured to pass audio from LINE IN to LINE OUT by default. Download and run the unmodified Bare Metal Framework on the SHARC Audio Module via CCES. Once all three cores are running, all three LEDs (LED10-LED12) on the SHARC Audio Module should be strobing about once per second (if the LEDs are strobing rapidly, scroll down to the “rapid LED strobing” issue). If one of the three LEDs is not strobing, it means that core is not yet running. Make sure to click “Run-&gt;Resume” for each core via the Debug window in the CCES IDE.</p>
@@ -633,9 +633,9 @@ Content on this topic
 <span class="w">    </span><span class="c1">// Otherwise, perform our C-based block processing here!</span>
 <span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">AUDIO_BLOCK_SIZE</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 
-<span class="w">        </span><span class="c1">// *******************************************************************************</span>
+<span class="w">        </span><span class="c1">// ******************************************************************************</span>
 <span class="w">        </span><span class="c1">// Replace the pass-through code below with your custom audio processing code here</span>
-<span class="w">        </span><span class="c1">// *******************************************************************************</span>
+<span class="w">        </span><span class="c1">// ******************************************************************************</span>
 
 <span class="w">                        </span><span class="kt">float</span><span class="w"> </span><span class="n">sine_val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.5</span><span class="err">\</span><span class="o">*</span><span class="n">sinf</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
 <span class="w">                        </span><span class="n">t</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mf">0.05</span><span class="p">;</span>
@@ -652,9 +652,9 @@ Content on this topic
 <p>If there is no audio, the SHARC Audio Module may be damaged.</p>
 <p>** Step 5: Try your code on just one core **</p>
 <p>If the unmodified framework is passing audio from the LINE IN to the LINE OUT jack, start by configuring the Bare Metal Framework to operating using just one SHARC Core. This can be accomplished by opening <code class="docutils literal notranslate"><span class="pre">shared/audio_system_config.h</span></code> and changing <code class="docutils literal notranslate"><span class="pre">USE_BOTH_CORES_TO_PROCESS_AUDIO</span></code> to <code class="docutils literal notranslate"><span class="pre">FALSE</span></code>.</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//*****************************************************************************</span>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//****************************************************************************</span>
 <span class="c1">// 2. Set audio processing parameters</span>
-<span class="c1">//*****************************************************************************</span>
+<span class="c1">//****************************************************************************</span>
 
 <span class="c1">// This should be a base 2 number from 8 to 128</span>
 <span class="cp">#define AUDIO_BLOCK_SIZE                                (32)</span>
@@ -698,7 +698,7 @@ Content on this topic
 <h2>Generally unexpected behavior<a class="headerlink" href="#generally-unexpected-behavior" title="Link to this heading"></a></h2>
 <p><strong>Different build profiles across each core</strong> : Each project has a build profile (typically “Debug” or “Release”). It’s possible to have one of the three projects set to one profile and the other two projects set to the other. For example, the ARM and SHARC Core 1 can be set for Debug while SHARC Core 2 is set to Release. In this case, the binary files generated by the linker will go into the respective /Debug and /Release folders within each project. The emulator “Debug Configuration” in the IDE is typically configured to use files from either the /Debug directories on each core or the /Release directories (but not a mix of the two). So when SHARC Core 2 is set to “Release” build and the emulator configuration is loading the binary files from the /Debug directories, the changes made with each compile on SHARC Core 2 aren’t being downloaded. The IDE is loading an older binary from the /Debug directory for SHARC Core 2. Thus it’s important to ensure all three projects are set to the same build profile AND to ensure the emulator “Debug Configuration” is also pulling from those same folders.</p>
 <hr class="docutils" />
-<img alt="Programming BM Framework to Flash#.|Bare Metal Framework#using-both-cores|Audio Processing Basics" src="https://wiki.analog.com/_media/navigationSHARCAudioModule#flashing" />
+<img alt="Programming BM Framework to Flash#.|Bare Metal Framework#using-both-cores|Audio Processing Basics" src="https://wiki.analog.com/_media/resources/tools-software/sharc-audio-module/baremetal/navigationSHARCAudioModule#flashing" />
 </section>
 </section>
 

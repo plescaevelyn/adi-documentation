@@ -606,11 +606,7 @@ Content on this topic
 </section>
 <section id="materials">
 <h3>Materials:<a class="headerlink" href="#materials" title="Link to this heading"></a></h3>
-<div class="line-block">
-<div class="line">ADALM1000 hardware module</div>
-<div class="line">2 - 74HC541 octal drivers</div>
-<div class="line">1 - 5 V Stepper motor (Mitsumi M35SP-7T bipolar stepper motor or similar)</div>
-</div>
+<p>ADALM1000 hardware module 2 - 74HC541 octal drivers 1 - 5 V Stepper motor (Mitsumi M35SP-7T bipolar stepper motor or similar)</p>
 </section>
 <section id="directions">
 <h3>Directions:<a class="headerlink" href="#directions" title="Link to this heading"></a></h3>
@@ -648,43 +644,33 @@ Content on this topic
 <p>The Python layer contains a function to configure and control the digital input / output pins on the ALM1000. The digital outputs can be configured as either static inputs or outputs.</p>
 <p><strong>Code example 1:</strong></p>
 <p>In this first code example we configure the four digital pins, PIO 0 - 3, as outputs using the basic devx.ctrl_transfer () function to turn them on and off one at a time in the desired sequence by looping through a look-up table.</p>
-<div class="line-block">
-<div class="line"># step tables for full steps</div>
-<div class="line">D0steptab = [1, 0, 0, 0]</div>
-<div class="line">D1steptab = [0, 1, 0, 0]</div>
-<div class="line">D2steptab = [0, 0, 1, 0]</div>
-<div class="line">D3steptab = [0, 0, 0, 1]</div>
-</div>
+<p># step tables for full steps D0steptab = [1, 0, 0, 0] D1steptab = [0, 1, 0, 0] D2steptab = [0, 0, 1, 0] D3steptab = [0, 0, 0, 1]</p>
 <p>While this is a fairly simple approach it is sort of brute force and the width and frequency of the pulses is highly dependent on the speed and activity level of the computer being used.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">StepCount</span><span class="p">:</span>
     <span class="n">pointer</span> <span class="o">=</span> <span class="n">pointer</span> <span class="o">+</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="n">pointer</span> <span class="o">&gt;</span> <span class="n">pointermax</span><span class="p">:</span>
         <span class="n">pointer</span> <span class="o">=</span> <span class="mi">0</span>
-
-    <span class="n">D0stepcode</span> <span class="o">=</span> <span class="mh">0x50</span> <span class="o">+</span> <span class="n">D0steptab</span><span class="p">[</span><span class="n">pointer</span><span class="p">]</span> <span class="c1"># 0x50 = set to 0, 0x51 = set to 1</span>
-    <span class="n">D1stepcode</span> <span class="o">=</span> <span class="mh">0x50</span> <span class="o">+</span> <span class="n">D1steptab</span><span class="p">[</span><span class="n">pointer</span><span class="p">]</span>
-    <span class="n">D2stepcode</span> <span class="o">=</span> <span class="mh">0x50</span> <span class="o">+</span> <span class="n">D2steptab</span><span class="p">[</span><span class="n">pointer</span><span class="p">]</span>
-    <span class="n">D3stepcode</span> <span class="o">=</span> <span class="mh">0x50</span> <span class="o">+</span> <span class="n">D3steptab</span><span class="p">[</span><span class="n">pointer</span><span class="p">]</span>
-    <span class="n">devx</span><span class="o">.</span><span class="n">ctrl_transfer</span><span class="p">(</span><span class="n">DevID</span><span class="p">,</span> <span class="mh">0x40</span><span class="p">,</span> <span class="n">D0stepcode</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="c1"># set PIO 0</span>
-    <span class="n">devx</span><span class="o">.</span><span class="n">ctrl_transfer</span><span class="p">(</span><span class="n">DevID</span><span class="p">,</span> <span class="mh">0x40</span><span class="p">,</span> <span class="n">D1stepcode</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="c1"># set PIO 1</span>
-    <span class="n">devx</span><span class="o">.</span><span class="n">ctrl_transfer</span><span class="p">(</span><span class="n">DevID</span><span class="p">,</span> <span class="mh">0x40</span><span class="p">,</span> <span class="n">D2stepcode</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="c1"># set PIO 2</span>
-    <span class="n">devx</span><span class="o">.</span><span class="n">ctrl_transfer</span><span class="p">(</span><span class="n">DevID</span><span class="p">,</span> <span class="mh">0x40</span><span class="p">,</span> <span class="n">D3stepcode</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="c1"># set PIO 3</span>
-
-    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">steptime</span><span class="p">)</span>
-    <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">D0stepcode</span> <span class="o">=</span> <span class="mh">0x50</span> <span class="o">+</span> <span class="n">D0steptab</span><span class="p">[</span><span class="n">pointer</span><span class="p">]</span> <span class="c1"># 0x50 = set to 0, 0x51 = set to 1</span>
+<span class="n">D1stepcode</span> <span class="o">=</span> <span class="mh">0x50</span> <span class="o">+</span> <span class="n">D1steptab</span><span class="p">[</span><span class="n">pointer</span><span class="p">]</span>
+<span class="n">D2stepcode</span> <span class="o">=</span> <span class="mh">0x50</span> <span class="o">+</span> <span class="n">D2steptab</span><span class="p">[</span><span class="n">pointer</span><span class="p">]</span>
+<span class="n">D3stepcode</span> <span class="o">=</span> <span class="mh">0x50</span> <span class="o">+</span> <span class="n">D3steptab</span><span class="p">[</span><span class="n">pointer</span><span class="p">]</span>
+<span class="n">devx</span><span class="o">.</span><span class="n">ctrl_transfer</span><span class="p">(</span><span class="n">DevID</span><span class="p">,</span> <span class="mh">0x40</span><span class="p">,</span> <span class="n">D0stepcode</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="c1"># set PIO 0</span>
+<span class="n">devx</span><span class="o">.</span><span class="n">ctrl_transfer</span><span class="p">(</span><span class="n">DevID</span><span class="p">,</span> <span class="mh">0x40</span><span class="p">,</span> <span class="n">D1stepcode</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="c1"># set PIO 1</span>
+<span class="n">devx</span><span class="o">.</span><span class="n">ctrl_transfer</span><span class="p">(</span><span class="n">DevID</span><span class="p">,</span> <span class="mh">0x40</span><span class="p">,</span> <span class="n">D2stepcode</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="c1"># set PIO 2</span>
+<span class="n">devx</span><span class="o">.</span><span class="n">ctrl_transfer</span><span class="p">(</span><span class="n">DevID</span><span class="p">,</span> <span class="mh">0x40</span><span class="p">,</span> <span class="n">D3stepcode</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="c1"># set PIO 3</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">steptime</span><span class="p">)</span>
+<span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
 </pre></div>
 </div>
 <p>We need to define two functions, one for forward rotation and one for reverse rotation. All that is different is the way we step through the look-up table by incrementing the pointer to go forward and decrementing the pointer to go in reverse. The time.sleep(steptime) function adds a delay which determines the time a bit is on before the next in the sequence is turned on. The StepCount variable is used to determine how many times the bit pattern is sent.</p>
 <p><strong>Code example 2:</strong></p>
 <p>To rotate the motor using half steps all we need to do is expand the look-up table as shown here:</p>
-<div class="line-block">
-<div class="line"># step tables for 1/2 steps</div>
-<div class="line">D0steptab = [1, 1, 0, 0, 0, 0, 0, 1]</div>
-<div class="line">D1steptab = [0, 1, 1, 1, 0, 0, 0, 0]</div>
-<div class="line">D2steptab = [0, 0, 0, 1, 1, 1, 0, 0]</div>
-<div class="line">D3steptab = [0, 0, 0, 0, 0, 1, 1, 1]</div>
-<div class="line">As we can see there are now 8 patterns in the table. The half way between steps are produced when both coils are on at the same time.</div>
-</div>
+<p># step tables for 1/2 steps D0steptab = [1, 1, 0, 0, 0, 0, 0, 1] D1steptab = [0, 1, 1, 1, 0, 0, 0, 0] D2steptab = [0, 0, 0, 1, 1, 1, 0, 0] D3steptab = [0, 0, 0, 0, 0, 1, 1, 1]</p>
+<p>As we can see there are now 8 patterns in the table. The half way between steps are produced when both coils are on at the same time.</p>
 </section>
 <section id="questions">
 <h3>Questions:<a class="headerlink" href="#questions" title="Link to this heading"></a></h3>

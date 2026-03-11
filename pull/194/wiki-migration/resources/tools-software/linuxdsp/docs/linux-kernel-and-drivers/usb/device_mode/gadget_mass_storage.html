@@ -600,7 +600,7 @@ Content on this topic
 <section id="software-configuration">
 <h2>Software Configuration<a class="headerlink" href="#software-configuration" title="Link to this heading"></a></h2>
 <p>On the Yocto, Configure the linux-kernel as below to set the USB controller in Gadget only mode, and enable the USB Gadget Mass Storage relevant options.</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">$</span><span class="w"> </span><span class="n">bitbake</span><span class="w"> </span><span class="n">linux</span><span class="o">-</span><span class="n">adi</span><span class="w"> </span><span class="o">-</span><span class="n">c</span><span class="w"> </span><span class="n">menuconfig</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>bitbake<span class="w"> </span>linux-adi<span class="w"> </span>-c<span class="w"> </span>menuconfig
 </pre></div>
 </div>
 <p><strong>Configure the USB drivers to Gadget only mode (or Dual role mode )</strong></p>
@@ -608,15 +608,15 @@ Content on this topic
 <span class="w">    </span><span class="o">[</span>*<span class="o">]</span><span class="w"> </span>USB<span class="w"> </span>support<span class="w">  </span>---&gt;
 <span class="w">                </span>&lt;*&gt;<span class="w">   </span>Inventra<span class="w"> </span>Highspeed<span class="w"> </span>Dual<span class="w"> </span>Role<span class="w"> </span>Controller
 <span class="w">                        </span>MUSB<span class="w"> </span>Mode<span class="w"> </span>Selection<span class="w"> </span><span class="o">(</span>Gadget<span class="w"> </span>only<span class="w"> </span>mode<span class="o">)</span><span class="w">  </span>---&gt;
-<span class="w">                        </span>***<span class="w"> </span>Platform<span class="w"> </span>Glue<span class="w"> </span>Layer<span class="w"> </span>***
+<span class="w">                        </span>**<span class="w"> </span>Platform<span class="w"> </span>Glue<span class="w"> </span>Layer<span class="w"> </span>**
 <span class="w">                </span>&lt;*&gt;<span class="w">     </span>ADI
-<span class="w">                        </span>***<span class="w"> </span>MUSB<span class="w"> </span>DMA<span class="w"> </span>mode<span class="w"> </span>***
+<span class="w">                        </span>**<span class="w"> </span>MUSB<span class="w"> </span>DMA<span class="w"> </span>mode<span class="w"> </span>**
 <span class="w">                </span><span class="o">[</span>N<span class="o">]</span><span class="w">     </span>Disable<span class="w"> </span>DMA<span class="w"> </span><span class="o">(</span>always<span class="w"> </span>use<span class="w"> </span>PIO<span class="o">)</span>
 <span class="w">                </span><span class="o">[</span>*<span class="o">]</span><span class="w">       </span>Inventra
 <span class="w">                </span>&lt;*&gt;<span class="w">   </span>USB<span class="w"> </span>Gadget<span class="w"> </span>Support<span class="w">  </span>---&gt;
 </pre></div>
 </div>
-<p>**Configure the Gadget Mass Storage Support **</p>
+<p><strong>Configure the Gadget Mass Storage Support</strong></p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>Device<span class="w"> </span>Drivers<span class="w">  </span>--
 -&gt;
 <span class="w">    </span><span class="o">[</span>*<span class="o">]</span><span class="w"> </span>USB<span class="w"> </span>support<span class="w">  </span>---&gt;
@@ -630,90 +630,90 @@ Content on this topic
 <section id="example-usage">
 <h2>Example Usage<a class="headerlink" href="#example-usage" title="Link to this heading"></a></h2>
 <p><strong>on the target Ez-Kit board</strong></p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="err">@</span><span class="n">adsp</span><span class="o">-</span><span class="n">sc589</span><span class="o">-</span><span class="n">ezkit</span><span class="o">:~</span><span class="err">#</span><span class="w"> </span><span class="n">dd</span><span class="w"> </span><span class="k">if</span><span class="o">=/</span><span class="n">dev</span><span class="o">/</span><span class="n">zero</span><span class="w"> </span><span class="n">of</span><span class="o">=/</span><span class="n">fsg</span><span class="p">.</span><span class="n">block</span><span class="w"> </span><span class="n">bs</span><span class="o">=</span><span class="mi">1</span><span class="n">M</span><span class="w"> </span><span class="n">count</span><span class="o">=</span><span class="mi">16</span>
-<span class="mi">16</span><span class="o">+</span><span class="mi">0</span><span class="w"> </span><span class="n">records</span><span class="w"> </span><span class="n">in</span>
-<span class="mi">16</span><span class="o">+</span><span class="mi">0</span><span class="w"> </span><span class="n">records</span><span class="w"> </span><span class="n">out</span>
-<span class="n">root</span><span class="err">@</span><span class="n">adsp</span><span class="o">-</span><span class="n">sc589</span><span class="o">-</span><span class="n">ezkit</span><span class="o">:~</span><span class="err">#</span><span class="w"> </span><span class="n">modprobe</span><span class="w"> </span><span class="n">g_mass_storage</span><span class="w"> </span><span class="n">file</span><span class="o">=/</span><span class="n">fsg</span><span class="p">.</span><span class="n">block</span><span class="w"> </span><span class="n">stall</span><span class="o">=</span><span class="mi">0</span>
-<span class="n">Mass</span><span class="w"> </span><span class="n">Storage</span><span class="w"> </span><span class="n">Function</span><span class="p">,</span><span class="w"> </span><span class="n">version</span><span class="o">:</span><span class="w"> </span><span class="mi">2009</span><span class="o">/</span><span class="mi">09</span><span class="o">/</span><span class="mi">11</span>
-<span class="nl">LUN</span><span class="p">:</span><span class="w"> </span><span class="n">removable</span><span class="w"> </span><span class="n">file</span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="n">no</span><span class="w"> </span><span class="n">medium</span><span class="p">)</span>
-<span class="nl">LUN</span><span class="p">:</span><span class="w"> </span><span class="n">file</span><span class="o">:</span><span class="w"> </span><span class="o">/</span><span class="n">fsg</span><span class="p">.</span><span class="n">block</span>
-<span class="n">Number</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">LUNs</span><span class="o">=</span><span class="mi">1</span>
-<span class="n">g_mass_storage</span><span class="w"> </span><span class="n">gadget</span><span class="o">:</span><span class="w"> </span><span class="n">Mass</span><span class="w"> </span><span class="n">Storage</span><span class="w"> </span><span class="n">Gadget</span><span class="p">,</span><span class="w"> </span><span class="n">version</span><span class="o">:</span><span class="w"> </span><span class="mi">2009</span><span class="o">/</span><span class="mi">09</span><span class="o">/</span><span class="mi">11</span>
-<span class="n">g_mass_storage</span><span class="w"> </span><span class="n">gadget</span><span class="o">:</span><span class="w"> </span><span class="n">userspace</span><span class="w"> </span><span class="n">failed</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">provide</span><span class="w"> </span><span class="n">iSerialNumber</span>
-<span class="n">g_mass_storage</span><span class="w"> </span><span class="n">gadget</span><span class="o">:</span><span class="w"> </span><span class="n">g_mass_storage</span><span class="w"> </span><span class="n">ready</span>
-<span class="n">g_mass_storage</span><span class="w"> </span><span class="n">gadget</span><span class="o">:</span><span class="w"> </span><span class="n">high</span><span class="o">-</span><span class="n">speed</span><span class="w"> </span><span class="n">config</span><span class="w"> </span><span class="err">#</span><span class="mi">1</span><span class="o">:</span><span class="w"> </span><span class="n">Linux</span><span class="w"> </span><span class="n">File</span><span class="o">-</span><span class="n">Backed</span><span class="w"> </span><span class="n">Storage</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">root@adsp-sc589-ezkit:~# </span>dd<span class="w"> </span><span class="k">if</span><span class="o">=</span>/dev/zero<span class="w"> </span><span class="nv">of</span><span class="o">=</span>/fsg.block<span class="w"> </span><span class="nv">bs</span><span class="o">=</span>1M<span class="w"> </span><span class="nv">count</span><span class="o">=</span><span class="m">16</span>
+<span class="go">16+0 records in</span>
+<span class="go">16+0 records out</span>
+<span class="gp">root@adsp-sc589-ezkit:~# </span>modprobe<span class="w"> </span>g_mass_storage<span class="w"> </span><span class="nv">file</span><span class="o">=</span>/fsg.block<span class="w"> </span><span class="nv">stall</span><span class="o">=</span><span class="m">0</span>
+<span class="go">Mass Storage Function, version: 2009/09/11</span>
+<span class="go">LUN: removable file: (no medium)</span>
+<span class="go">LUN: file: /fsg.block</span>
+<span class="go">Number of LUNs=1</span>
+<span class="go">g_mass_storage gadget: Mass Storage Gadget, version: 2009/09/11</span>
+<span class="go">g_mass_storage gadget: userspace failed to provide iSerialNumber</span>
+<span class="go">g_mass_storage gadget: g_mass_storage ready</span>
+<span class="go">g_mass_storage gadget: high-speed config #1: Linux File-Backed Storage</span>
 </pre></div>
 </div>
 <p><strong>On the Linux-Host PC</strong></p>
 <ul class="simple">
 <li><p><strong>Fdisk and format the usb mass storage</strong></p></li>
 </ul>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="err">@</span><span class="n">madara</span><span class="o">:~</span><span class="err">#</span><span class="w"> </span><span class="n">sudo</span><span class="w"> </span><span class="n">su</span>
-<span class="n">root</span><span class="err">@</span><span class="n">madara</span><span class="o">:~</span><span class="err">#</span><span class="w"> </span><span class="n">ls</span><span class="w"> </span><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sdb</span>
-<span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sdb</span>
-<span class="n">root</span><span class="err">@</span><span class="n">madara</span><span class="o">:~</span><span class="err">#</span><span class="w">  </span><span class="n">time</span><span class="w"> </span><span class="n">fdisk</span><span class="w"> </span><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sdb</span>
-<span class="n">Welcome</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">fdisk</span><span class="w"> </span><span class="p">(</span><span class="n">util</span><span class="o">-</span><span class="n">linux</span><span class="w"> </span><span class="mf">2.31.1</span><span class="p">).</span>
-<span class="n">Changes</span><span class="w"> </span><span class="n">will</span><span class="w"> </span><span class="n">remain</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="n">memory</span><span class="w"> </span><span class="n">only</span><span class="p">,</span><span class="w"> </span><span class="n">until</span><span class="w"> </span><span class="n">you</span><span class="w"> </span><span class="n">decide</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">write</span><span class="w"> </span><span class="n">them</span><span class="p">.</span>
-<span class="n">Be</span><span class="w"> </span><span class="n">careful</span><span class="w"> </span><span class="n">before</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">write</span><span class="w"> </span><span class="n">command</span><span class="p">.</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">root@madara:~# </span>sudo<span class="w"> </span>su
+<span class="gp">root@madara:~# </span>ls<span class="w"> </span>/dev/sdb
+<span class="go">/dev/sdb</span>
+<span class="gp">root@madara:~#  </span><span class="nb">time</span><span class="w"> </span>fdisk<span class="w"> </span>/dev/sdb
+<span class="go">Welcome to fdisk (util-linux 2.31.1).</span>
+<span class="go">Changes will remain in memory only, until you decide to write them.</span>
+<span class="go">Be careful before using the write command.</span>
 
-<span class="n">Device</span><span class="w"> </span><span class="n">does</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="n">contain</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">recognized</span><span class="w"> </span><span class="n">partition</span><span class="w"> </span><span class="n">table</span><span class="p">.</span>
-<span class="n">Created</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">DOS</span><span class="w"> </span><span class="n">disklabel</span><span class="w"> </span><span class="n">with</span><span class="w"> </span><span class="n">disk</span><span class="w"> </span><span class="n">identifier</span><span class="w"> </span><span class="mh">0x7459b8e4</span><span class="p">.</span>
+<span class="go">Device does not contain a recognized partition table.</span>
+<span class="go">Created a new DOS disklabel with disk identifier 0x7459b8e4.</span>
 
-<span class="n">Command</span><span class="w"> </span><span class="p">(</span><span class="n">m</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">help</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="n">n</span>
-<span class="n">Partition</span><span class="w"> </span><span class="n">type</span>
-<span class="w">   </span><span class="n">p</span><span class="w">   </span><span class="n">primary</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="w"> </span><span class="n">primary</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="n">extended</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="n">free</span><span class="p">)</span>
-<span class="w">   </span><span class="n">e</span><span class="w">   </span><span class="n">extended</span><span class="w"> </span><span class="p">(</span><span class="n">container</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">logical</span><span class="w"> </span><span class="n">partitions</span><span class="p">)</span>
-<span class="n">Select</span><span class="w"> </span><span class="p">(</span><span class="k">default</span><span class="w"> </span><span class="n">p</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="n">p</span>
-<span class="n">Partition</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="p">(</span><span class="mi">1-4</span><span class="p">,</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="mi">1</span>
-<span class="n">First</span><span class="w"> </span><span class="n">sector</span><span class="w"> </span><span class="p">(</span><span class="mi">2048-32767</span><span class="p">,</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="mi">2048</span><span class="p">)</span><span class="o">:</span>
-<span class="n">Last</span><span class="w"> </span><span class="n">sector</span><span class="p">,</span><span class="w"> </span><span class="o">+</span><span class="n">sectors</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="o">+</span><span class="n">size</span><span class="p">{</span><span class="n">K</span><span class="p">,</span><span class="n">M</span><span class="p">,</span><span class="n">G</span><span class="p">,</span><span class="n">T</span><span class="p">,</span><span class="n">P</span><span class="p">}</span><span class="w"> </span><span class="p">(</span><span class="mi">2048-32767</span><span class="p">,</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="mi">32767</span><span class="p">)</span><span class="o">:</span>
+<span class="go">Command (m for help): n</span>
+<span class="go">Partition type</span>
+<span class="go">   p   primary (0 primary, 0 extended, 4 free)</span>
+<span class="go">   e   extended (container for logical partitions)</span>
+<span class="go">Select (default p): p</span>
+<span class="go">Partition number (1-4, default 1): 1</span>
+<span class="go">First sector (2048-32767, default 2048):</span>
+<span class="go">Last sector, +sectors or +size{K,M,G,T,P} (2048-32767, default 32767):</span>
 
-<span class="n">Created</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">partition</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="err">&#39;</span><span class="n">Linux</span><span class="err">&#39;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="mi">15</span><span class="w"> </span><span class="n">MiB</span><span class="p">.</span>
+<span class="go">Created a new partition 1 of type &#39;Linux&#39; and of size 15 MiB.</span>
 
-<span class="n">Command</span><span class="w"> </span><span class="p">(</span><span class="n">m</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">help</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="n">w</span>
-<span class="n">The</span><span class="w"> </span><span class="n">partition</span><span class="w"> </span><span class="n">table</span><span class="w"> </span><span class="n">has</span><span class="w"> </span><span class="n">been</span><span class="w"> </span><span class="n">altered</span><span class="p">.</span>
-<span class="n">Calling</span><span class="w"> </span><span class="n">ioctl</span><span class="p">()</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">re</span><span class="o">-</span><span class="n">read</span><span class="w"> </span><span class="n">partition</span><span class="w"> </span><span class="n">table</span><span class="p">.</span>
-<span class="n">Syncing</span><span class="w"> </span><span class="n">disks</span><span class="p">.</span>
-<span class="n">real</span><span class="w">    </span><span class="mi">0</span><span class="n">m10</span><span class="mf">.807</span><span class="n">s</span>
-<span class="n">user</span><span class="w">    </span><span class="mi">0</span><span class="n">m0</span><span class="mf">.000</span><span class="n">s</span>
-<span class="n">sys</span><span class="w">     </span><span class="mi">0</span><span class="n">m0</span><span class="mf">.008</span><span class="n">s</span>
+<span class="go">Command (m for help): w</span>
+<span class="go">The partition table has been altered.</span>
+<span class="go">Calling ioctl() to re-read partition table.</span>
+<span class="go">Syncing disks.</span>
+<span class="go">real    0m10.807s</span>
+<span class="go">user    0m0.000s</span>
+<span class="go">sys     0m0.008s</span>
 
-<span class="n">root</span><span class="err">@</span><span class="n">madara</span><span class="o">:~</span><span class="err">#</span><span class="w"> </span><span class="n">mke2fs</span><span class="w"> </span><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sdb1</span>
-<span class="n">mke2fs</span><span class="w"> </span><span class="mf">1.44.1</span><span class="w"> </span><span class="p">(</span><span class="mi">24</span><span class="o">-</span><span class="n">Mar</span><span class="mi">-2018</span><span class="p">)</span>
-<span class="n">Creating</span><span class="w"> </span><span class="n">filesystem</span><span class="w"> </span><span class="n">with</span><span class="w"> </span><span class="mi">15360</span><span class="w"> </span><span class="mi">1</span><span class="n">k</span><span class="w"> </span><span class="n">blocks</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="mi">3840</span><span class="w"> </span><span class="n">inodes</span>
-<span class="n">Filesystem</span><span class="w"> </span><span class="n">UUID</span><span class="o">:</span><span class="w"> </span><span class="mi">3</span><span class="n">bd2120b</span><span class="o">-</span><span class="n">eca2</span><span class="mi">-4</span><span class="n">c8f</span><span class="mi">-9</span><span class="n">eb6</span><span class="o">-</span><span class="n">c408f9c1c0d9</span>
-<span class="n">Superblock</span><span class="w"> </span><span class="n">backups</span><span class="w"> </span><span class="n">stored</span><span class="w"> </span><span class="n">on</span><span class="w"> </span><span class="n">blocks</span><span class="o">:</span>
-<span class="w">        </span><span class="mi">8193</span>
+<span class="gp">root@madara:~# </span>mke2fs<span class="w"> </span>/dev/sdb1
+<span class="go">mke2fs 1.44.1 (24-Mar-2018)</span>
+<span class="go">Creating filesystem with 15360 1k blocks and 3840 inodes</span>
+<span class="go">Filesystem UUID: 3bd2120b-eca2-4c8f-9eb6-c408f9c1c0d9</span>
+<span class="go">Superblock backups stored on blocks:</span>
+<span class="go">        8193</span>
 
-<span class="n">Allocating</span><span class="w"> </span><span class="n">group</span><span class="w"> </span><span class="n">tables</span><span class="o">:</span><span class="w"> </span><span class="n">done</span>
-<span class="n">Writing</span><span class="w"> </span><span class="n">inode</span><span class="w"> </span><span class="n">tables</span><span class="o">:</span><span class="w"> </span><span class="n">done</span>
-<span class="n">Writing</span><span class="w"> </span><span class="n">superblocks</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">filesystem</span><span class="w"> </span><span class="n">accounting</span><span class="w"> </span><span class="n">information</span><span class="o">:</span><span class="w"> </span><span class="n">done</span>
+<span class="go">Allocating group tables: done</span>
+<span class="go">Writing inode tables: done</span>
+<span class="go">Writing superblocks and filesystem accounting information: done</span>
 </pre></div>
 </div>
 <ul class="simple">
 <li><p><strong>Read/write test</strong></p></li>
 </ul>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="err">@</span><span class="n">madara</span><span class="o">:~</span><span class="err">#</span><span class="w"> </span><span class="n">mkdir</span><span class="w"> </span><span class="o">/</span><span class="n">met</span><span class="o">/</span><span class="n">usb</span>
-<span class="n">root</span><span class="err">@</span><span class="n">madara</span><span class="o">:~</span><span class="err">#</span><span class="w"> </span><span class="n">mount</span><span class="w"> </span><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sdb1</span><span class="w"> </span><span class="o">/</span><span class="n">mnt</span><span class="o">/</span><span class="n">usb</span><span class="o">/</span>
-<span class="n">root</span><span class="err">@</span><span class="n">madara</span><span class="o">:~</span><span class="err">#</span><span class="w"> </span><span class="n">date</span><span class="p">;</span><span class="w"> </span><span class="n">time</span><span class="w"> </span><span class="n">dd</span><span class="w"> </span><span class="k">if</span><span class="o">=/</span><span class="n">dev</span><span class="o">/</span><span class="n">zero</span><span class="w"> </span><span class="n">of</span><span class="o">=/</span><span class="n">mnt</span><span class="o">/</span><span class="n">usb</span><span class="o">/</span><span class="mi">10</span><span class="n">m</span><span class="p">.</span><span class="n">bin</span><span class="w"> </span><span class="n">bs</span><span class="o">=</span><span class="mi">1</span><span class="n">M</span>
-<span class="n">Tuesday</span><span class="w"> </span><span class="mi">14</span><span class="w"> </span><span class="n">July</span><span class="w"> </span><span class="mi">2020</span><span class="w"> </span><span class="mi">15</span><span class="o">:</span><span class="mi">09</span><span class="o">:</span><span class="mi">16</span><span class="w"> </span><span class="n">CST</span>
-<span class="nl">dd</span><span class="p">:</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="n">writing</span><span class="w"> </span><span class="err">&#39;</span><span class="o">/</span><span class="n">mnt</span><span class="o">/</span><span class="n">usb</span><span class="o">/</span><span class="mi">10</span><span class="n">m</span><span class="p">.</span><span class="n">bin</span><span class="err">&#39;</span><span class="o">:</span><span class="w"> </span><span class="n">No</span><span class="w"> </span><span class="n">space</span><span class="w"> </span><span class="n">left</span><span class="w"> </span><span class="n">on</span><span class="w"> </span><span class="n">device</span>
-<span class="mi">15</span><span class="o">+</span><span class="mi">0</span><span class="w"> </span><span class="n">records</span><span class="w"> </span><span class="n">in</span>
-<span class="mi">14</span><span class="o">+</span><span class="mi">0</span><span class="w"> </span><span class="n">records</span><span class="w"> </span><span class="n">out</span>
-<span class="mi">15032320</span><span class="w"> </span><span class="n">bytes</span><span class="w"> </span><span class="p">(</span><span class="mi">15</span><span class="w"> </span><span class="n">MB</span><span class="p">,</span><span class="w"> </span><span class="mi">14</span><span class="w"> </span><span class="n">MiB</span><span class="p">)</span><span class="w"> </span><span class="n">copied</span><span class="p">,</span><span class="w"> </span><span class="mf">8.89978</span><span class="w"> </span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="mf">1.7</span><span class="w"> </span><span class="n">MB</span><span class="o">/</span><span class="n">s</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">root@madara:~# </span>mkdir<span class="w"> </span>/met/usb
+<span class="gp">root@madara:~# </span>mount<span class="w"> </span>/dev/sdb1<span class="w"> </span>/mnt/usb/
+<span class="gp">root@madara:~# </span>date<span class="p">;</span><span class="w"> </span><span class="nb">time</span><span class="w"> </span>dd<span class="w"> </span><span class="k">if</span><span class="o">=</span>/dev/zero<span class="w"> </span><span class="nv">of</span><span class="o">=</span>/mnt/usb/10m.bin<span class="w"> </span><span class="nv">bs</span><span class="o">=</span>1M
+<span class="go">Tuesday 14 July 2020 15:09:16 CST</span>
+<span class="go">dd: error writing &#39;/mnt/usb/10m.bin&#39;: No space left on device</span>
+<span class="go">15+0 records in</span>
+<span class="go">14+0 records out</span>
+<span class="go">15032320 bytes (15 MB, 14 MiB) copied, 8.89978 s, 1.7 MB/s</span>
 
-<span class="n">real</span><span class="w">    </span><span class="mi">0</span><span class="n">m8</span><span class="mf">.901</span><span class="n">s</span>
-<span class="n">user</span><span class="w">    </span><span class="mi">0</span><span class="n">m0</span><span class="mf">.000</span><span class="n">s</span>
-<span class="n">sys</span><span class="w">     </span><span class="mi">0</span><span class="n">m0</span><span class="mf">.309</span><span class="n">s</span>
-<span class="n">root</span><span class="err">@</span><span class="n">madara</span><span class="o">:~</span><span class="err">#</span><span class="w"> </span><span class="n">ls</span><span class="w"> </span><span class="o">-</span><span class="n">lh</span><span class="w"> </span><span class="o">/</span><span class="n">mnt</span><span class="o">/</span><span class="n">usb</span>
-<span class="n">total</span><span class="w"> </span><span class="mi">15</span><span class="n">M</span>
-<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">root</span><span class="w"> </span><span class="n">root</span><span class="w"> </span><span class="mi">15</span><span class="n">M</span><span class="w"> </span><span class="n">July</span><span class="w">  </span><span class="mi">14</span><span class="w"> </span><span class="mi">16</span><span class="o">:</span><span class="mi">08</span><span class="w"> </span><span class="mi">10</span><span class="n">m</span><span class="p">.</span><span class="n">bin</span>
-<span class="n">drwx</span><span class="o">------</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="n">root</span><span class="w"> </span><span class="n">root</span><span class="w"> </span><span class="mi">12</span><span class="n">K</span><span class="w"> </span><span class="n">July</span><span class="w"> </span><span class="mi">14</span><span class="w"> </span><span class="mi">15</span><span class="o">:</span><span class="mi">52</span><span class="w"> </span><span class="n">lost</span><span class="o">+</span><span class="n">found</span>
-<span class="n">root</span><span class="err">@</span><span class="n">madara</span><span class="o">:~</span><span class="err">#</span><span class="w"> </span><span class="n">rm</span><span class="w"> </span><span class="o">/</span><span class="n">mnt</span><span class="o">/</span><span class="n">usb</span><span class="o">/</span><span class="mi">10</span><span class="n">m</span><span class="p">.</span><span class="n">bin</span>
-<span class="n">root</span><span class="err">@</span><span class="n">madara</span><span class="o">:~</span><span class="err">#</span><span class="w"> </span><span class="n">ls</span><span class="w"> </span><span class="o">-</span><span class="n">lh</span><span class="w"> </span><span class="o">/</span><span class="n">mnt</span><span class="o">/</span><span class="n">usb</span><span class="o">/</span>
-<span class="n">total</span><span class="w"> </span><span class="mi">12</span><span class="n">K</span>
-<span class="n">drwx</span><span class="o">------</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="n">root</span><span class="w"> </span><span class="n">root</span><span class="w"> </span><span class="mi">12</span><span class="n">K</span><span class="w"> </span><span class="n">July</span><span class="w">  </span><span class="mi">14</span><span class="w"> </span><span class="mi">15</span><span class="o">:</span><span class="mi">52</span><span class="w"> </span><span class="n">lost</span><span class="o">+</span><span class="n">found</span>
-<span class="n">root</span><span class="err">@</span><span class="n">madara</span><span class="o">:~</span><span class="err">#</span><span class="w"> </span><span class="n">umount</span><span class="w"> </span><span class="o">/</span><span class="n">mnt</span><span class="o">/</span><span class="n">usb</span>
+<span class="go">real    0m8.901s</span>
+<span class="go">user    0m0.000s</span>
+<span class="go">sys     0m0.309s</span>
+<span class="gp">root@madara:~# </span>ls<span class="w"> </span>-lh<span class="w"> </span>/mnt/usb
+<span class="go">total 15M</span>
+<span class="go">-rw-r--r-- 1 root root 15M July  14 16:08 10m.bin</span>
+<span class="go">drwx------ 2 root root 12K July 14 15:52 lost+found</span>
+<span class="gp">root@madara:~# </span>rm<span class="w"> </span>/mnt/usb/10m.bin
+<span class="gp">root@madara:~# </span>ls<span class="w"> </span>-lh<span class="w"> </span>/mnt/usb/
+<span class="go">total 12K</span>
+<span class="go">drwx------ 2 root root 12K July  14 15:52 lost+found</span>
+<span class="gp">root@madara:~# </span>umount<span class="w"> </span>/mnt/usb
 </pre></div>
 </div>
 <hr class="docutils" />

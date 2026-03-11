@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="// ADE7913 dev SPI init params ade7913_ip.spi_init = &amp;ade7913_spi_ip; // ADE7913 dev DATA_RDY init params ade7913_ip.gpio_rdy = &amp;ade7913_gpio_rdy_ip; // ADE7913 dev RESET init params ade7913_ip.gpio_reset = &amp;ade7913_gpio_reset_ip; // IRQ deviuce descriptor used to handle interrupt routine for GPIO RDY ade7913_ip.irq_ctrl = ade7913_irq_desc;" name="description" />
+<meta content="no-OS is a software framework by Analog Devices Inc for systems that don’t include an operating system (OS), otherwise known as baremetal. This framework defines a common interface (API) for accessing typical baremetal peripherals such as GPIO, SPI, I2C, RTC, Timer, Interrupt Controller, and other. This common API may be then used to initialize and control these peripherals in a common way across multiple microcontroller platforms. The framework currently supports Intel and Xilinx microprocessors and SoC’s as well as Analog Devices’ own precision microcontrollers, several Maxim Integrated MAX32xxx microcontrollers, STMicroelectronics’ STM32, Raspberry Pi’s Pico, and mbedOS-based devices. By using this common driver API, following its own coding style, the no-OS is able to provide reference projects for Analog Devices Inc evaluation boards running on various underlying hardware. Thanks to the no-OS build system, no-OS users may generate standalone reference projects in a short period of time and use them as the starting point for their own development. no-OS is an open-source software, and its official repository is the :git-no-OS&gt;`__. Users are free to use and distribute no-OS, provided that they comply with the license &lt;https::`no-OS Github Repository &lt;/github.com/analogdevicesinc/no-OS/blob/master/LICENSE&gt;. The no-OS main drivers used in the firmware are the ones concerned with the MAX32655 microcontroller, the ADE7913 isolated, 3-channel Σ-Δ ADC, and the ADT75 temperature monitoring system." name="description" />
 
     <title>AD-ACEVSECRDSET-SL Software User Guide &#8212; System Level Documentation  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=8e8a900e" />
@@ -97,17 +97,23 @@
 <li><a class="reference internal" href="#no-os-general-description">no-OS general description</a></li>
 <li><a class="reference internal" href="#no-os-support-for-maxim-microcontrollers">no-OS support for Maxim microcontrollers</a></li>
 <li><a class="reference internal" href="#ade7913-no-os-driver">ADE7913 no-OS driver</a></li>
-<li><a class="reference internal" href="#adt75-no-os-driver">ADT75 no-OS driver</a></li>
+<li><a class="reference internal" href="#adt75-no-os-driver">ADT75 no-OS driver</a><ul>
+<li><a class="reference internal" href="#resources">Resources</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a class="reference internal" href="#flashing-and-debugging-the-firmware-for-the-ad-acevsecrdset-sl-using-the-max32625pico">Flashing and debugging the firmware for the AD-ACEVSECRDSET-SL using the max32625pico</a><ul>
 <li><a class="reference internal" href="#what-is-needed">What is needed:</a></li>
 <li><a class="reference internal" href="#step-1-max32625pico-firmware-update">STEP 1 max32625pico firmware update</a></li>
 <li><a class="reference internal" href="#step-2-connect-the-max32625pico-to-the-board">STEP 2 Connect the max32625pico to the board</a></li>
+<li><a class="reference internal" href="#step-3-connect-the-board-to-mains">Step 3 Connect the board to mains</a></li>
 <li><a class="reference internal" href="#step-4-flashing-the-firmware-to-the-board">Step 4 Flashing the firmware to the board</a></li>
 <li><a class="reference internal" href="#step-5-verify-that-the-firmware-was-written-correctly">Step 5 Verify that the firmware was written correctly.</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#revision-a">Revision A</a></li>
+<li><a class="reference internal" href="#revision-d">Revision D</a></li>
 </ul>
 </li>
 </ul>
@@ -606,36 +612,33 @@ Content on this topic
 <h2>The no-OS framework and the drivers for the main components<a class="headerlink" href="#the-no-os-framework-and-the-drivers-for-the-main-components" title="Link to this heading"></a></h2>
 <section id="no-os-general-description">
 <h3>no-OS general description<a class="headerlink" href="#no-os-general-description" title="Link to this heading"></a></h3>
-<div class="line-block">
-<div class="line"><a class="reference internal" href="../../../no-os.html"><span class="doc">no-OS</span></a> is a software framework by <a class="icon adi reference external" href="https://www.analog.com/en/index.html" target="_blank">Analog Devices Inc</a> for systems that don’t include an operating system (OS), otherwise known as baremetal. This framework defines a <a class="reference internal" href="../../../no-os/api.html"><span class="doc">common interface (API)</span></a> for accessing typical baremetal peripherals such as GPIO, SPI, I2C, RTC, Timer, Interrupt Controller, and other. This common API may be then used to initialize and control these peripherals in a common way across multiple microcontroller platforms. The framework currently supports Intel and Xilinx microprocessors and SoC’s as well as <a class="icon adi reference external" href="https://www.analog.com/en/index.html" target="_blank">Analog Devices</a>’ own precision microcontrollers, several Maxim Integrated MAX32xxx microcontrollers, STMicroelectronics’ STM32, Raspberry Pi’s Pico, and mbedOS-based devices. By using this common driver API, following its own <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/wiki/Code-Style-guidelines" target="_blank">coding style</a>, the <a class="reference internal" href="../../../no-os.html"><span class="doc">no-OS</span></a> is able to provide reference projects for Analog Devices Inc evaluation boards running on various underlying hardware. Thanks to the <a class="reference internal" href="../../../no-os/build.html"><span class="doc">no-OS build system</span></a>, no-OS users may generate standalone reference projects in a short period of time and use them as the starting point for their own development. no-OS is an open-source software, and its official repository is the :git-no-OS&gt;`__. Users are free to use and distribute no-OS, provided that they comply with the <cite>license &lt;https::`no-OS Github Repository &lt;/github.com/analogdevicesinc/no-OS/blob/master/LICENSE&gt;</cite>. The no-OS main drivers used in the firmware are the ones concerned with the <a class="icon adi reference external" href="https://www.analog.com/MAX32655" target="_blank">MAX32655</a> microcontroller, the <a class="icon adi reference external" href="https://www.analog.com/ADE7913" target="_blank">ADE7913</a> isolated, 3-channel Σ-Δ ADC, and the <a class="icon adi reference external" href="https://www.analog.com/ADT75" target="_blank">ADT75</a> temperature monitoring system.</div>
-</div>
+<p><a class="reference internal" href="../../../no-os.html"><span class="doc">no-OS</span></a> is a software framework by <a class="icon adi reference external" href="https://www.analog.com/en/index.html" target="_blank">Analog Devices Inc</a> for systems that don’t include an operating system (OS), otherwise known as baremetal. This framework defines a <a class="reference internal" href="../../../no-os/api.html"><span class="doc">common interface (API)</span></a> for accessing typical baremetal peripherals such as GPIO, SPI, I2C, RTC, Timer, Interrupt Controller, and other. This common API may be then used to initialize and control these peripherals in a common way across multiple microcontroller platforms. The framework currently supports Intel and Xilinx microprocessors and SoC’s as well as <a class="icon adi reference external" href="https://www.analog.com/en/index.html" target="_blank">Analog Devices</a>’ own precision microcontrollers, several Maxim Integrated MAX32xxx microcontrollers, STMicroelectronics’ STM32, Raspberry Pi’s Pico, and mbedOS-based devices. By using this common driver API, following its own <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/wiki/Code-Style-guidelines" target="_blank">coding style</a>, the <a class="reference internal" href="../../../no-os.html"><span class="doc">no-OS</span></a> is able to provide reference projects for Analog Devices Inc evaluation boards running on various underlying hardware. Thanks to the <a class="reference internal" href="../../../no-os/build.html"><span class="doc">no-OS build system</span></a>, no-OS users may generate standalone reference projects in a short period of time and use them as the starting point for their own development. no-OS is an open-source software, and its official repository is the :git-no-OS&gt;`__. Users are free to use and distribute no-OS, provided that they comply with the <cite>license &lt;https::`no-OS Github Repository &lt;/github.com/analogdevicesinc/no-OS/blob/master/LICENSE&gt;</cite>. The no-OS main drivers used in the firmware are the ones concerned with the <a class="icon adi reference external" href="https://www.analog.com/MAX32655" target="_blank">MAX32655</a> microcontroller, the <a class="icon adi reference external" href="https://www.analog.com/ADE7913" target="_blank">ADE7913</a> isolated, 3-channel Σ-Δ ADC, and the <a class="icon adi reference external" href="https://www.analog.com/ADT75" target="_blank">ADT75</a> temperature monitoring system.</p>
 </section>
 <section id="no-os-support-for-maxim-microcontrollers">
 <h3>no-OS support for Maxim microcontrollers<a class="headerlink" href="#no-os-support-for-maxim-microcontrollers" title="Link to this heading"></a></h3>
-<div class="line-block">
-<div class="line">The no-os framework supports several Maxim microcontrollers, including the <a class="icon adi reference external" href="https://www.analog.com/MAX32655" target="_blank">MAX32655</a>, and implements the low-level functions for controlling the hardware components of the device: GPIO, UART, NVIC, I2C, and SPI. The <a class="reference internal" href="../../../no-os/build.html"><span class="doc">build</span></a> guide provides the steps required for creating and building an application based on a supported Maxim microcontroller part.</div>
-</div>
+<p>The no-os framework supports several Maxim microcontrollers, including the <a class="icon adi reference external" href="https://www.analog.com/MAX32655" target="_blank">MAX32655</a>, and implements the low-level functions for controlling the hardware components of the device: GPIO, UART, NVIC, I2C, and SPI. The <a class="reference internal" href="../../../no-os/build.html"><span class="doc">build</span></a> guide provides the steps required for creating and building an application based on a supported Maxim microcontroller part.</p>
 </section>
 <section id="ade7913-no-os-driver">
 <h3>ADE7913 no-OS driver<a class="headerlink" href="#ade7913-no-os-driver" title="Link to this heading"></a></h3>
-<div class="line-block">
-<div class="line">The existing no-OS driver for the <a class="icon adi reference external" href="https://www.analog.com/ADE7913" target="_blank">ADE7913</a> ADC implements the functionalities provided by the device through a comprehensive high-level API. All the settings of the <a class="icon adi reference external" href="https://www.analog.com/ADE7913" target="_blank">ADE7913</a> ADC are accessed through separate functions that perform SPI read and write operations on the corresponding device registers. The driver provides the possibility of reading the acquired data at moments in time specified by the application or depending on the state of the Data Ready pin through an interrupt. Using the device requires populating the initialization parameters structure, calling the ade7913_int API and then reading the i_wav, v1_wav, and v2_wav members of the device structure. Depending on the desired settings, these members are updated through an interrupt triggered by the Data Ready pin or each time a long SPI read operation is performed on one of the device’s registers.</div>
-<div class="line"><a href="#id1"><span class="problematic" id="id2">``</span></a>// ADE7913 initialization structure
-struct ade7913_init_param ade7913_ip = { 0 };</div>
+<p>The existing no-OS driver for the <a class="icon adi reference external" href="https://www.analog.com/ADE7913" target="_blank">ADE7913</a> ADC implements the functionalities provided by the device through a comprehensive high-level API. All the settings of the <a class="icon adi reference external" href="https://www.analog.com/ADE7913" target="_blank">ADE7913</a> ADC are accessed through separate functions that perform SPI read and write operations on the corresponding device registers. The driver provides the possibility of reading the acquired data at moments in time specified by the application or depending on the state of the Data Ready pin through an interrupt. Using the device requires populating the initialization parameters structure, calling the ade7913_int API and then reading the i_wav, v1_wav, and v2_wav members of the device structure. Depending on the desired settings, these members are updated through an interrupt triggered by the Data Ready pin or each time a long SPI read operation is performed on one of the device’s registers.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// ADE7913 initialization structure</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">ade7913_init_param</span><span class="w"> </span><span class="n">ade7913_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">};</span>
+
+<span class="c1">// ADE7913 dev SPI init params</span>
+<span class="n">ade7913_ip</span><span class="p">.</span><span class="n">spi_init</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ade7913_spi_ip</span><span class="p">;</span>
+<span class="c1">// ADE7913 dev DATA_RDY init params</span>
+<span class="n">ade7913_ip</span><span class="p">.</span><span class="n">gpio_rdy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ade7913_gpio_rdy_ip</span><span class="p">;</span>
+<span class="c1">// ADE7913 dev RESET init params</span>
+<span class="n">ade7913_ip</span><span class="p">.</span><span class="n">gpio_reset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ade7913_gpio_reset_ip</span><span class="p">;</span>
+<span class="c1">// IRQ deviuce descriptor used to handle interrupt routine for GPIO RDY</span>
+<span class="n">ade7913_ip</span><span class="p">.</span><span class="n">irq_ctrl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ade7913_irq_desc</span><span class="p">;</span>
+
+<span class="c1">// ADE7913 device initialization</span>
+<span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ade7913_init</span><span class="p">(</span><span class="n">device</span><span class="p">,</span><span class="w"> </span><span class="n">ade7913_ip</span><span class="p">);</span>
+
+<span class="c1">// Data updated automatically in the  i_wav, v1_wav, and v2_wav members of the device structure</span>
+</pre></div>
 </div>
-<blockquote>
-<div><p>// ADE7913 dev SPI init params
-ade7913_ip.spi_init = &amp;ade7913_spi_ip;
-// ADE7913 dev DATA_RDY init params
-ade7913_ip.gpio_rdy = &amp;ade7913_gpio_rdy_ip;
-// ADE7913 dev RESET init params
-ade7913_ip.gpio_reset = &amp;ade7913_gpio_reset_ip;
-// IRQ deviuce descriptor used to handle interrupt routine for GPIO RDY
-ade7913_ip.irq_ctrl = ade7913_irq_desc;</p>
-<p>// ADE7913 device initialization
-ret = ade7913_init(device, ade7913_ip);</p>
-<p>// Data updated automatically in the  i_wav, v1_wav, and v2_wav members of the device structure``</p>
-</div></blockquote>
 </section>
 <section id="adt75-no-os-driver">
 <h3>ADT75 no-OS driver<a class="headerlink" href="#adt75-no-os-driver" title="Link to this heading"></a></h3>
@@ -652,20 +655,16 @@ ret = ade7913_init(device, ade7913_ip);</p>
 <span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">adt75_get_single_temp</span><span class="p">(</span><span class="n">adt75_desc</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">val</span><span class="p">);</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">=== Resources ===</div>
-</div>
+<section id="resources">
+<h4>Resources<a class="headerlink" href="#resources" title="Link to this heading"></a></h4>
 <div class="download admonition">
 <p class="admonition-title">Download</p>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad-acevsecrdset-sl" target="_blank">Github resources</a></p></li>
 </ul>
-<div class="line-block">
-<div class="line">*It is recommended to update the firmware to the latest firmware release.</div>
-<div class="line"><br /></div>
+<p>*It is recommended to update the firmware to the latest firmware release.</p>
 </div>
-</div>
+</section>
 </section>
 </section>
 <hr class="docutils" />
@@ -673,61 +672,46 @@ ret = ade7913_init(device, ade7913_ip);</p>
 <h2>Flashing and debugging the firmware for the AD-ACEVSECRDSET-SL using the max32625pico<a class="headerlink" href="#flashing-and-debugging-the-firmware-for-the-ad-acevsecrdset-sl-using-the-max32625pico" title="Link to this heading"></a></h2>
 <section id="what-is-needed">
 <h3>What is needed:<a class="headerlink" href="#what-is-needed" title="Link to this heading"></a></h3>
-<div class="line-block">
-<div class="line">max32625pico</div>
-<div class="line">AD-ACEVSECRDSET-SL.hex</div>
-<div class="line">AD-ACEVSECRDSET-SL board</div>
-<div class="line">usb to micro usb cable</div>
-<div class="line">10 pin Cortex Debug Cable</div>
-<div class="line">3 wire cable with mains plug attached</div>
-<div class="line">Serial terminal</div>
-<div class="line">Obs: The binary can be obtained following the steps presented at <a class="reference internal" href="../../../no-os/build.html"><span class="doc">no-OS build guide</span></a></div>
-</div>
+<p>max32625pico AD-ACEVSECRDSET-SL.hex AD-ACEVSECRDSET-SL board usb to micro usb cable 10 pin Cortex Debug Cable 3 wire cable with mains plug attached Serial terminal</p>
+<p>Obs: The binary can be obtained following the steps presented at <a class="reference internal" href="../../../no-os/build.html"><span class="doc">no-OS build guide</span></a></p>
 </section>
 <section id="step-1-max32625pico-firmware-update">
 <h3>STEP 1 max32625pico firmware update<a class="headerlink" href="#step-1-max32625pico-firmware-update" title="Link to this heading"></a></h3>
-<div class="line-block">
-<div class="line">Download the MAX32655FTHR Firmware image from <a class="icon link reference external" href="https://github.com/MaximIntegrated/max32625pico-firmware-images/" target="_blank">here</a></div>
-<div class="line">Follow the procedure indicated at <a class="icon link reference external" href="https://github.com/MaximIntegrated/max32625pico-firmware-images/#how-to-update-the-firmware" target="_blank">here</a> to load the new firmware.</div>
-</div>
+<p>Download the MAX32655FTHR Firmware image from <a class="icon link reference external" href="https://github.com/MaximIntegrated/max32625pico-firmware-images/" target="_blank">here</a> Follow the procedure indicated at <a class="icon link reference external" href="https://github.com/MaximIntegrated/max32625pico-firmware-images/#how-to-update-the-firmware" target="_blank">here</a> to load the new firmware.</p>
 </section>
 <section id="step-2-connect-the-max32625pico-to-the-board">
 <h3>STEP 2 Connect the max32625pico to the board<a class="headerlink" href="#step-2-connect-the-max32625pico-to-the-board" title="Link to this heading"></a></h3>
-<div class="line-block">
-<div class="line">Connect the Cortex Debug Cable to the <a class="icon adi reference external" href="https://www.analog.com/max32625pico" target="_blank">max32625pico</a> with the connector key directed towards the outside of the board and to the <a class="icon adi reference external" href="https://www.analog.com/AD-ACEVSECRDSET-SL" target="_blank">AD-ACEVSECRDSET-SL</a> board directed downwards.</div>
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-bct2ade9113-sl/ad-acevsecrdset-sl_soft1.jpg"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-bct2ade9113-sl/ad-acevsecrdset-sl_soft1.jpg" style="width: 400px;" /></a></div>
-<div class="line">== Step 3 Connect the board to mains == Connect the NULL, PHASE and Earth as indicated on the enclosure.</div>
-<div class="line">Power up the board from 230V AC through the just attached cable.</div>
-</div>
+<p>Connect the Cortex Debug Cable to the <a class="icon adi reference external" href="https://www.analog.com/max32625pico" target="_blank">max32625pico</a> with the connector key directed towards the outside of the board and to the <a class="icon adi reference external" href="https://www.analog.com/AD-ACEVSECRDSET-SL" target="_blank">AD-ACEVSECRDSET-SL</a> board directed downwards.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-bct2ade9113-sl/ad-acevsecrdset-sl_soft1.jpg"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-bct2ade9113-sl/ad-acevsecrdset-sl_soft1.jpg" style="width: 400px;" /></a></p>
+</section>
+<section id="step-3-connect-the-board-to-mains">
+<h3>Step 3 Connect the board to mains<a class="headerlink" href="#step-3-connect-the-board-to-mains" title="Link to this heading"></a></h3>
+<p>Connect the NULL, PHASE and Earth as indicated on the enclosure. Power up the board from 230V AC through the just attached cable.</p>
 </section>
 <section id="step-4-flashing-the-firmware-to-the-board">
 <h3>Step 4 Flashing the firmware to the board<a class="headerlink" href="#step-4-flashing-the-firmware-to-the-board" title="Link to this heading"></a></h3>
-<div class="line-block">
-<div class="line">If the <a class="icon adi reference external" href="https://www.analog.com/max32625pico" target="_blank">max32625pico</a> is not connected to the PC USB port connect it. The DAPLINK should appear as a storage device on the PC.</div>
-<div class="line">Open the DAPLINK. Two files should already be present as seen in the following image.</div>
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-bct2ade9113-sl/ad-acevsecrdset-sl_soft2.jpg"><img alt="image2" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-bct2ade9113-sl/ad-acevsecrdset-sl_soft2.jpg" style="width: 400px;" /></a></div>
-</div>
-<div class="line-block">
-<div class="line">Drag and drop the AD-ACEVSECRDSET-SL.hex into DAPLINK.</div>
-<div class="line">The firmware will be written on the target MCU.</div>
-</div>
+<p>If the <a class="icon adi reference external" href="https://www.analog.com/max32625pico" target="_blank">max32625pico</a> is not connected to the PC USB port connect it. The DAPLINK should appear as a storage device on the PC. Open the DAPLINK. Two files should already be present as seen in the following image.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-bct2ade9113-sl/ad-acevsecrdset-sl_soft2.jpg"><img alt="image2" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-bct2ade9113-sl/ad-acevsecrdset-sl_soft2.jpg" style="width: 400px;" /></a></p>
+<p>Drag and drop the AD-ACEVSECRDSET-SL.hex into DAPLINK. The firmware will be written on the target MCU.</p>
 </section>
 <section id="step-5-verify-that-the-firmware-was-written-correctly">
 <h3>Step 5 Verify that the firmware was written correctly.<a class="headerlink" href="#step-5-verify-that-the-firmware-was-written-correctly" title="Link to this heading"></a></h3>
-<div class="line-block">
-<div class="line">Open the device manager and go to Ports. Find the COM port allocated to the <a class="icon adi reference external" href="https://www.analog.com/max32625pico" target="_blank">max32625pico</a>. Use a serial terminal (e.g. PuTTY) to verify that the firmware was correctly updated. If using PuTTY under the Terminal menu select the “Implicit CR in every LF”.</div>
-<div class="line">From the Window menu modify the “Lines of scrollback” to a higher value (200000) than the default one. Open PuTTY and under the “Session” menu insert the following data: The COM port indicated in the device manager for the device and the baud rate of 57600.</div>
-<div class="line">Hit the Open button and after the terminal window opens reset the <a class="icon adi reference external" href="https://www.analog.com/AD-ACEVSECRDSET-SL" target="_blank">AD-ACEVSECRDSET-SL</a> board from the reset button.</div>
-<div class="line">The following messages should be displayed in the serial terminal window:</div>
-<div class="line">==== Revision A ==== <a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-bct2ade9113-sl/04_ad_bct2ade9113.png"><img alt="image3" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-bct2ade9113-sl/04_ad_bct2ade9113.png" style="width: 400px;" /></a></div>
-<div class="line">==== Revision D ==== <a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-acevsecrdset-sl/rev_d_debug_1.png"><img alt="image4" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-acevsecrdset-sl/rev_d_debug_1.png" style="width: 400px;" /></a> After the self-test passes the status LED 1 will be on. <a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-bct2ade9113-sl/ad-acevsecrdset-sl_soft3.jpg"><img alt="image5" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-bct2ade9113-sl/ad-acevsecrdset-sl_soft3.jpg" style="width: 200px;" /></a></div>
-</div>
+<p>Open the device manager and go to Ports. Find the COM port allocated to the <a class="icon adi reference external" href="https://www.analog.com/max32625pico" target="_blank">max32625pico</a>. Use a serial terminal (e.g. PuTTY) to verify that the firmware was correctly updated. If using PuTTY under the Terminal menu select the “Implicit CR in every LF”. From the Window menu modify the “Lines of scrollback” to a higher value (200000) than the default one. Open PuTTY and under the “Session” menu insert the following data: The COM port indicated in the device manager for the device and the baud rate of 57600. Hit the Open button and after the terminal window opens reset the <a class="icon adi reference external" href="https://www.analog.com/AD-ACEVSECRDSET-SL" target="_blank">AD-ACEVSECRDSET-SL</a> board from the reset button. The following messages should be displayed in the serial terminal window:</p>
+</section>
+</section>
+<section id="revision-a">
+<h2>Revision A<a class="headerlink" href="#revision-a" title="Link to this heading"></a></h2>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-bct2ade9113-sl/04_ad_bct2ade9113.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad-bct2ade9113-sl/04_ad_bct2ade9113.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-bct2ade9113-sl/04_ad_bct2ade9113.png" style="width: 400px;" />
+</a>
+</section>
+<section id="revision-d">
+<h2>Revision D<a class="headerlink" href="#revision-d" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-acevsecrdset-sl/rev_d_debug_1.png"><img alt="image3" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-acevsecrdset-sl/rev_d_debug_1.png" style="width: 400px;" /></a> After the self-test passes the status LED 1 will be on. <a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-bct2ade9113-sl/ad-acevsecrdset-sl_soft3.jpg"><img alt="image4" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-bct2ade9113-sl/ad-acevsecrdset-sl_soft3.jpg" style="width: 200px;" /></a></p>
 <hr class="docutils" />
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p><strong>If you want to go back to the HARDWARE SETUP, click here:</strong> <a class="reference internal" href="hardware.html"><span class="doc">AD-ACEVSECRDSET-SL Hardware User Guide</span></a></p>
 </div>
-</section>
 </section>
 </section>
 

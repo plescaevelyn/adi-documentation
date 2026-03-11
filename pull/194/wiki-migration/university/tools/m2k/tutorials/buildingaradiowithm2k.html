@@ -670,7 +670,7 @@ Content on this topic
 <ul class="simple">
 <li><p>Install libm2k. Instructions can be found <a class="reference internal" href="../libm2k/libm2k.html"><span class="doc">here</span></a>.</p></li>
 <li><p>Compile the gr-m2k blocks for your PC. Check the steps <a class="reference internal" href="../libm2k/gr-m2k.html"><span class="doc">here</span></a>.</p></li>
-<li><p>Download the ADF4350 driver from <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/drivers/frequency/adf4350" target="_blank">no-OS page</a>.</p></li>
+<li><p>Download the ADF4350 driver from <a class="icon link reference external" href="https://github.com/analogdevicesinc/no-OS/tree/d00cc225a264d03807cafc4bf6a133af69affa36/drivers/frequency/adf4350" target="_blank">no-OS page</a>.</p></li>
 </ul>
 <p>The steps to implement a GRC block:</p>
 <ul class="simple">
@@ -769,23 +769,26 @@ DESTINATION ${GR_INCLUDE_DIR}/m2k)
 <li><p>convert it into a number</p></li>
 <li><p>pass the value to the driver, in order to set the output frequency of ADF4350</p></li>
 </ul>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>pmt::pmt_t key;
-
-if (!is_pair(pdu)) {
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pmt</span><span class="p">::</span><span class="n">pmt_t</span> <span class="n">key</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>if (!is_pair(pdu)) {
     throw std::runtime_error(&quot;Message not a pair!\n&quot;);
 }
-
-key = pmt::car(pdu);
-std::string skey = pmt::symbol_to_string(key);
-
-if (skey == &quot;frequency&quot;) {
-    long long frequency;
-    pmt::pmt_t freq = pmt::cdr(pdu);
-    std::string sfreq = pmt::symbol_to_string(freq);
-    frequency = std::stoll(sfreq);
-    adf4350_out_altvoltage0_frequency(d_adf4350_device, frequency);
-    std::cout &lt;&lt; &quot;ADF4350: PLL 0 frequency = &quot; &lt;&lt; frequency &lt;&lt; &quot;Hz.&quot; &lt;&lt; std::endl;
-}
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">key</span> <span class="o">=</span> <span class="n">pmt</span><span class="p">::</span><span class="n">car</span><span class="p">(</span><span class="n">pdu</span><span class="p">);</span>
+<span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">skey</span> <span class="o">=</span> <span class="n">pmt</span><span class="p">::</span><span class="n">symbol_to_string</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">skey</span> <span class="o">==</span> <span class="s2">&quot;frequency&quot;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">long</span> <span class="n">long</span> <span class="n">frequency</span><span class="p">;</span>
+    <span class="n">pmt</span><span class="p">::</span><span class="n">pmt_t</span> <span class="n">freq</span> <span class="o">=</span> <span class="n">pmt</span><span class="p">::</span><span class="n">cdr</span><span class="p">(</span><span class="n">pdu</span><span class="p">);</span>
+    <span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">sfreq</span> <span class="o">=</span> <span class="n">pmt</span><span class="p">::</span><span class="n">symbol_to_string</span><span class="p">(</span><span class="n">freq</span><span class="p">);</span>
+    <span class="n">frequency</span> <span class="o">=</span> <span class="n">std</span><span class="p">::</span><span class="n">stoll</span><span class="p">(</span><span class="n">sfreq</span><span class="p">);</span>
+    <span class="n">adf4350_out_altvoltage0_frequency</span><span class="p">(</span><span class="n">d_adf4350_device</span><span class="p">,</span> <span class="n">frequency</span><span class="p">);</span>
+    <span class="n">std</span><span class="p">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;ADF4350: PLL 0 frequency = &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">frequency</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;Hz.&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p><strong>Create python bindings</strong></p>
@@ -794,11 +797,13 @@ if (skey == &quot;frequency&quot;) {
 <span class="o">...</span>
 <span class="c1">#include &quot;m2k/adf4350_sink.h&quot;</span>
 <span class="o">%</span><span class="p">}</span>
-
-<span class="o">...</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
 <span class="o">%</span><span class="n">include</span> <span class="s2">&quot;m2k/adf4350_sink.h&quot;</span>
-
-<span class="o">...</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
 <span class="n">GR_SWIG_BLOCK_MAGIC2</span><span class="p">(</span><span class="n">m2k</span><span class="p">,</span> <span class="n">adf4350_sink</span><span class="p">);</span>
 </pre></div>
 </div>
@@ -833,7 +838,7 @@ if (skey == &quot;frequency&quot;) {
 </section>
 <section id="gnuradio-companion-flowgraph">
 <h3>GNURadio-Companion Flowgraph<a class="headerlink" href="#gnuradio-companion-flowgraph" title="Link to this heading"></a></h3>
-<img alt="https://wiki.analog.com/_media/:`githubpage&lt;university/tools/m2k/tutorials/m2k_fm.png" src="https://wiki.analog.com/_media/:`githubpage&lt;university/tools/m2k/tutorials/m2k_fm.png" />
+<img alt="https://wiki.analog.com/_media/university/tools/m2k/tutorials/:`githubpage&lt;university/tools/m2k/tutorials/m2k_fm.png" src="https://wiki.analog.com/_media/university/tools/m2k/tutorials/:`githubpage&lt;university/tools/m2k/tutorials/m2k_fm.png" />
 <p>The file <cite>m2k_fm.zip &lt;https://wiki.analog.com/_media/university/tools/m2k/tutorials/m2k_fm.zip&gt;</cite> contains the gnuradio flowgraph. The gnuradio flowgraph acquires the data from the M2K and sets the ADF4350 PLL frequency. When changing the PLL frequency slider, the gnuradio ADF4350 block that we just written, encodes SPI messages to the PLL in order to change the frequency that is fed into the mixer. The data acquired from the mixer is captured by the M2k using GNURadio. The flow then shifts the frequency by a smaller offset in the “offset” slider. The offset slider allows fine tuning of the signal before it gets demodulated by the WBFM receiver block. Eventually the data is sent to an audio sink which plays back the radio in the speakers.</p>
 <p>This project was presented in GRCon 2019. Slides are available <a class="icon link reference external" href="https://www.gnuradio.org/grcon/grcon19/presentations/Building_a_radio_with_M2K_and_spare_parts/" target="_blank">here</a></p>
 </section>

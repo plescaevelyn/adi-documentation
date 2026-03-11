@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="Raspberry Pi 4; 2G, 4G, or 8G version, OR Raspberry Pi 400 (the keyboard one)." name="description" />
+<meta content="Note: This is a work in progress." name="description" />
 
     <title>Tools for Precision Wideband Mixed Signal System Design &#8212; System Level Documentation  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=8e8a900e" />
@@ -95,9 +95,22 @@
           <ul>
 <li><a class="reference internal" href="#">Tools for Precision Wideband Mixed Signal System Design</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#materials">Materials</a></li>
 <li><a class="reference internal" href="#background">Background</a></li>
 <li><a class="reference internal" href="#slide-deck-and-video">Slide Deck and Video</a></li>
 <li><a class="reference internal" href="#preparation-a-few-resources-for-learning-python">Preparation - a few resources for learning Python</a></li>
+<li><a class="reference internal" href="#software-stack-review">Software Stack Review</a></li>
+<li><a class="reference internal" href="#introducing-an-exciting-new-product-that-we-ll-apply-our-skills-to">Introducing an exciting new product that we’ll apply our skills to</a></li>
+<li><a class="reference internal" href="#hardware-setup">Hardware Setup</a></li>
+<li><a class="reference internal" href="#booting-the-system">Booting the system</a></li>
+<li><a class="reference internal" href="#post-boot-housekeeping">Post-boot housekeeping</a></li>
+<li><a class="reference internal" href="#configuring-the-system-and-rebooting">Configuring the System (and rebooting!)</a></li>
+<li><a class="reference internal" href="#command-line-tools-hello-colorimeter-and-ad4630-24">Command Line Tools (Hello, Colorimeter and AD4630-24!)</a></li>
+<li><a class="reference internal" href="#iio-oscilloscope">IIO Oscilloscope</a></li>
+<li><a class="reference internal" href="#pyadi-iio-and-examples">Pyadi-iio And examples</a></li>
+<li><a class="reference internal" href="#next-steps-other-languages-c-c-matlab-etc">Next Steps: Other languages (C++, C#, MATLAB, etc.)</a></li>
+<li><a class="reference internal" href="#wrapup">Wrapup</a></li>
+<li><a class="reference internal" href="#additional-references">Additional References</a></li>
 </ul>
 </li>
 </ul>
@@ -587,28 +600,20 @@ Content on this topic
             
   <section id="tools-for-precision-wideband-mixed-signal-system-design">
 <h1>Tools for Precision Wideband Mixed Signal System Design<a class="headerlink" href="#tools-for-precision-wideband-mixed-signal-system-design" title="Link to this heading"></a></h1>
-<div class="line-block">
-<div class="line"><strong>Note:</strong> This is a work in progress.</div>
-</div>
+<p><strong>Note:</strong> This is a work in progress.</p>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
-<div class="line-block">
-<div class="line">The goal of this tutorial is to equip the reader with a collection of hardware and software tools for developing precision wideband mixed-signal applications.</div>
-<div class="line">** Content Guide:** This tutorial includes complete written instructions, a video guide, and a slide deck that can be used for delivering as a hands-on workshop.</div>
-<div class="line">What exactly does “Precision Wideband” mean? In the context of this tutorial, the “wideband” part means that <strong>unlike</strong> “low speed” applications, timing, or jitter, of individual samples with respect to previous and future samples <strong>IS</strong> critical. The application involves extracting information from arrays of samples that are correlated with each other in some way. AC performance metrics such as signal to noise ratio and total harmonic distortion extracted from a Fourier transform of the data <strong>will</strong> be considered. Even if the end applicaiton does not involve sinewaves, these metrics are almost always a useful indicator of performance.</div>
-<div class="line">The “precision” part means that DC parameters such as offset, gain error, linearity, and temperature drift are also important.</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line"><strong>In contrast</strong> - sample jitter is important in a “wideband” application. If you are measuring signal to noise ratio, the Signal to Noise ratio (SNR) can be no greater than:</div>
-<div class="line"><span class="math notranslate nohighlight">\(SNR &lt;= -20 \times log(2 \times \pi \times f_{IN} \times t_{j})\)</span></div>
-<div class="line">where:</div>
-<div class="line"><span class="math notranslate nohighlight">\(f_{IN}\)</span> is the analog input frequency in Hz</div>
-<div class="line"><span class="math notranslate nohighlight">\(t_{j}\)</span> is the RMS jitter in seconds RMS</div>
-<div class="line">In this tutorial, we will be generating excitation waveforms, digitizing time-domain signals, performing Fast Fourier Transforms (FFTs), extracting features from the frequency domain, and calculating measurement parameters. We <strong>will</strong> be measuring AC Signal to Noise Ratio (SNR), Total Harmonic Distortion (THD), measuring steps, wiggles, and other situations where precise timing is required.</div>
-<div class="line">Throughout the exercises we’ll be writing simple Python code to capture and analyze data, using the industry standard Industrial I/O (IIO) framework to interact with the ADC, and the popular NumPy and Matplotlib Python libraries. Thus this exercise also serves as a mini-tutorial on Python.</div>
-<div class="line">==== Materials ====</div>
-</div>
+<p>The goal of this tutorial is to equip the reader with a collection of hardware and software tools for developing precision wideband mixed-signal applications.</p>
+<p>** Content Guide:** This tutorial includes complete written instructions, a video guide, and a slide deck that can be used for delivering as a hands-on workshop.</p>
+<p>What exactly does “Precision Wideband” mean? In the context of this tutorial, the “wideband” part means that <strong>unlike</strong> “low speed” applications, timing, or jitter, of individual samples with respect to previous and future samples <strong>IS</strong> critical. The application involves extracting information from arrays of samples that are correlated with each other in some way. AC performance metrics such as signal to noise ratio and total harmonic distortion extracted from a Fourier transform of the data <strong>will</strong> be considered. Even if the end applicaiton does not involve sinewaves, these metrics are almost always a useful indicator of performance.</p>
+<p>The “precision” part means that DC parameters such as offset, gain error, linearity, and temperature drift are also important.</p>
+<p><strong>In contrast</strong> - sample jitter is important in a “wideband” application. If you are measuring signal to noise ratio, the Signal to Noise ratio (SNR) can be no greater than:</p>
+<p><span class="math notranslate nohighlight">\(SNR &lt;= -20 \times log(2 \times \pi \times f_{IN} \times t_{j})\)</span> where: <span class="math notranslate nohighlight">\(f_{IN}\)</span> is the analog input frequency in Hz <span class="math notranslate nohighlight">\(t_{j}\)</span> is the RMS jitter in seconds RMS</p>
+<p>In this tutorial, we will be generating excitation waveforms, digitizing time-domain signals, performing Fast Fourier Transforms (FFTs), extracting features from the frequency domain, and calculating measurement parameters. We <strong>will</strong> be measuring AC Signal to Noise Ratio (SNR), Total Harmonic Distortion (THD), measuring steps, wiggles, and other situations where precise timing is required.</p>
+<p>Throughout the exercises we’ll be writing simple Python code to capture and analyze data, using the industry standard Industrial I/O (IIO) framework to interact with the ADC, and the popular NumPy and Matplotlib Python libraries. Thus this exercise also serves as a mini-tutorial on Python.</p>
+</section>
+<section id="materials">
+<h2>Materials<a class="headerlink" href="#materials" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Raspberry Pi 4; 2G, 4G, or 8G version, OR Raspberry Pi 400 (the keyboard one).</p></li>
 <li><p>5V USB-C wall adapter for Raspberry Pi</p></li>
@@ -629,10 +634,7 @@ Content on this topic
 <li><p><a class="icon adi reference external" href="https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/adalm2000.html" target="_blank">ADALM2000</a></p></li>
 <li><p>Clone or download zip of the Python code for this tutorial from: <a class="icon link reference external" href="https://github.com/cristina-suteu/ftc23-hstpwi/" target="_blank">Python Code for the Hardware and Software Tools for Precision Wideband Instrumentation Workshop</a></p></li>
 </ul>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">This probably isn’t necessary as of Kuiper 2022r2, but just in case you want to update pyadi-iio or have the examples in your home directory, run these commands in a terminal:</div>
-</div>
+<p>This probably isn’t necessary as of Kuiper 2022r2, but just in case you want to update pyadi-iio or have the examples in your home directory, run these commands in a terminal:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">analogdevicesinc</span><span class="o">/</span><span class="n">pyadi</span><span class="o">-</span><span class="n">iio</span><span class="o">.</span><span class="n">git</span>
 <span class="n">cd</span> <span class="n">pyadi</span><span class="o">-</span><span class="n">iio</span>
 <span class="n">sudo</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">.</span>
@@ -641,15 +643,7 @@ Content on this topic
 </section>
 <section id="background">
 <h2>Background<a class="headerlink" href="#background" title="Link to this heading"></a></h2>
-<div class="line-block">
-<div class="line">This tutorial builds on the concepts covered in:</div>
-<div class="line">Introduction to the basic concepts of writing software to talk to external devices:</div>
-<div class="line"><a class="reference internal" href="iio_intro_toolbox.html"><span class="doc">Converter Connectivity Tutorial</span></a></div>
-<div class="line">This tutorial that starts to deal with analyzing time series data:</div>
-<div class="line"><a class="reference internal" href="precision_adc_toolbox.html"><span class="doc">Precision ADC Tutorial</span></a></div>
-<div class="line">And this workshop in which we actually build a simple test instrument:</div>
-<div class="line"><a class="reference internal" href="tools_for_low_speed_mix-sig_systems.html"><span class="doc">Tools for Low Speed Mixed Signal System Design</span></a></div>
-</div>
+<p>This tutorial builds on the concepts covered in: Introduction to the basic concepts of writing software to talk to external devices: <a class="reference internal" href="iio_intro_toolbox.html"><span class="doc">Converter Connectivity Tutorial</span></a> This tutorial that starts to deal with analyzing time series data: <a class="reference internal" href="precision_adc_toolbox.html"><span class="doc">Precision ADC Tutorial</span></a> And this workshop in which we actually build a simple test instrument: <a class="reference internal" href="tools_for_low_speed_mix-sig_systems.html"><span class="doc">Tools for Low Speed Mixed Signal System Design</span></a></p>
 </section>
 <section id="slide-deck-and-video">
 <h2>Slide Deck and Video<a class="headerlink" href="#slide-deck-and-video" title="Link to this heading"></a></h2>
@@ -658,11 +652,7 @@ Content on this topic
 <p class="admonition-title">Download</p>
 <p><a class="icon link reference external" href="https://wiki.analog.com/_media/university/labs/software/tools_for_precision_wideband_mix-sig_systems/tools_for_precision_wideband_instrumentation_workshop.pptx" target="_blank">Tools for Low-Speed Mixed Signal System Design Slide Deck</a></p>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">A complete video run-through is also provided, either as a companion to following the tutorial yourself, or to practice before presenting as a hands-on workshop:</div>
-<div class="line"><br /></div>
-</div>
+<p>A complete video run-through is also provided, either as a companion to following the tutorial yourself, or to practice before presenting as a hands-on workshop:</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Video to come soon, in the meantime please enjoy this primer on precision wideband applications:</p>
@@ -670,36 +660,49 @@ Content on this topic
 </div>
 <p><img alt="youtube&gt;dQw4w9WgXcQ" src="https://wiki.analog.com/_media/youtube&gt;dQw4w9WgXcQ" /></p>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Finish Me</p>
-<div class="line-block">
-<div class="line">(Translate slide deck and video into complete written instructions with photos, diagrams, etc.)</div>
-</div>
+<p>Finish Me (Translate slide deck and video into complete written instructions with photos, diagrams, etc.)</p>
 </div>
 </section>
 <section id="preparation-a-few-resources-for-learning-python">
 <h2>Preparation - a few resources for learning Python<a class="headerlink" href="#preparation-a-few-resources-for-learning-python" title="Link to this heading"></a></h2>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="line-block">
-<div class="line">==== Software Stack Review ====</div>
-<div class="line">==== Introducing an exciting new product that we’ll apply our skills to ====</div>
-<div class="line">==== Hardware Setup ====</div>
-<div class="line">==== Booting the system ====</div>
-<div class="line">==== Post-boot housekeeping ====</div>
-<div class="line">==== Configuring the System (and rebooting!) ====</div>
-<div class="line">==== Command Line Tools (Hello, Colorimeter and AD4630-24!) ====</div>
-<div class="line">==== IIO Oscilloscope ====</div>
-<div class="line">==== Pyadi-iio And examples ====</div>
-<div class="line">==== Next Steps: Other languages (C++, C#, MATLAB, etc.) ====</div>
-<div class="line">==== Wrapup ====</div>
-<div class="line">==== Additional References ====</div>
-</div>
+</section>
+<section id="software-stack-review">
+<h2>Software Stack Review<a class="headerlink" href="#software-stack-review" title="Link to this heading"></a></h2>
+</section>
+<section id="introducing-an-exciting-new-product-that-we-ll-apply-our-skills-to">
+<h2>Introducing an exciting new product that we’ll apply our skills to<a class="headerlink" href="#introducing-an-exciting-new-product-that-we-ll-apply-our-skills-to" title="Link to this heading"></a></h2>
+</section>
+<section id="hardware-setup">
+<h2>Hardware Setup<a class="headerlink" href="#hardware-setup" title="Link to this heading"></a></h2>
+</section>
+<section id="booting-the-system">
+<h2>Booting the system<a class="headerlink" href="#booting-the-system" title="Link to this heading"></a></h2>
+</section>
+<section id="post-boot-housekeeping">
+<h2>Post-boot housekeeping<a class="headerlink" href="#post-boot-housekeeping" title="Link to this heading"></a></h2>
+</section>
+<section id="configuring-the-system-and-rebooting">
+<h2>Configuring the System (and rebooting!)<a class="headerlink" href="#configuring-the-system-and-rebooting" title="Link to this heading"></a></h2>
+</section>
+<section id="command-line-tools-hello-colorimeter-and-ad4630-24">
+<h2>Command Line Tools (Hello, Colorimeter and AD4630-24!)<a class="headerlink" href="#command-line-tools-hello-colorimeter-and-ad4630-24" title="Link to this heading"></a></h2>
+</section>
+<section id="iio-oscilloscope">
+<h2>IIO Oscilloscope<a class="headerlink" href="#iio-oscilloscope" title="Link to this heading"></a></h2>
+</section>
+<section id="pyadi-iio-and-examples">
+<h2>Pyadi-iio And examples<a class="headerlink" href="#pyadi-iio-and-examples" title="Link to this heading"></a></h2>
+</section>
+<section id="next-steps-other-languages-c-c-matlab-etc">
+<h2>Next Steps: Other languages (C++, C#, MATLAB, etc.)<a class="headerlink" href="#next-steps-other-languages-c-c-matlab-etc" title="Link to this heading"></a></h2>
+</section>
+<section id="wrapup">
+<h2>Wrapup<a class="headerlink" href="#wrapup" title="Link to this heading"></a></h2>
+</section>
+<section id="additional-references">
+<h2>Additional References<a class="headerlink" href="#additional-references" title="Link to this heading"></a></h2>
 </section>
 </section>
 

@@ -94,20 +94,34 @@
           <ul>
 <li><a class="reference internal" href="#">LTC2672 - No-OS Driver</a><ul>
 <li><a class="reference internal" href="#supported-devices">Supported Devices</a></li>
-<li><a class="reference internal" href="#evaluation-boards">Evaluation Boards</a></li>
+<li><a class="reference internal" href="#evaluation-boards">Evaluation Boards</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#applications">Applications</a><ul>
 <li><a class="reference internal" href="#adi-no-os">ADI No-OS</a></li>
+<li><a class="reference internal" href="#ltc2672-adi-no-os-driver">LTC2672 ADI No-OS driver</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#driver-source-code">Driver Source Code</a></li>
 <li><a class="reference internal" href="#code-documentation">Code Documentation</a></li>
 <li><a class="reference internal" href="#device-configuration">Device Configuration</a><ul>
 <li><a class="reference internal" href="#driver-initialization">Driver Initialization</a></li>
+<li><a class="reference internal" href="#output-span-configuration">Output Span Configuration</a></li>
 <li><a class="reference internal" href="#monitor-multiplexer-output-configuration">Monitor Multiplexer Output Configuration</a></li>
+<li><a class="reference internal" href="#output-current-configuration">Output Current Configuration</a></li>
 <li><a class="reference internal" href="#power-down-options">Power Down Options</a></li>
+<li><a class="reference internal" href="#fault-register-bits">Fault Register Bits</a><ul>
+<li><a class="reference internal" href="#configuration-command">Configuration Command</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#driver-initialization-example">Driver Initialization Example</a><ul>
 <li><a class="reference internal" href="#example-initialization-using-maxim-sdk-as-platform">Example Initialization Using Maxim SDK as Platform</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#driver-application-example">Driver Application Example</a></li>
 </ul>
 </li>
 </ul>
@@ -608,12 +622,12 @@ Content on this topic
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/DC2903A" target="_blank">DC2903A</a></p></li>
 </ul>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">===== Overview ===== The <a class="icon adi reference external" href="https://www.analog.com/LTC2672" target="_blank">LTC2672</a> is a family of five-channel, 12-/16-bit current source, digital-to-analog converters (DACs) that provide five high compliance, current source outputs with guaranteed 0.6 V dropout at 200 mA. There are eight current ranges that are programmable per channel with full-scale outputs of up to 300 mA.</div>
-</div>
+<section id="overview">
+<h3>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h3>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/LTC2672" target="_blank">LTC2672</a> is a family of five-channel, 12-/16-bit current source, digital-to-analog converters (DACs) that provide five high compliance, current source outputs with guaranteed 0.6 V dropout at 200 mA. There are eight current ranges that are programmable per channel with full-scale outputs of up to 300 mA.</p>
 <p>The channels of <a class="icon adi reference external" href="https://www.analog.com/LTC2672" target="_blank">LTC2672</a> can be paralleled to allow either ultrafine adjustments of large currents or combined outputs of up to 1.5 A. A dedicated supply pin is provided for each output channel. Each channel can be operated from 2.1 V to VCC, and internal switches allow any output to be pulled to the optional negative supply.</p>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/LTC2672" target="_blank">LTC2672</a> includes a precision integrated 1.25 V reference (10 ppm/°C maximum), with the option to use an external reference. The serial peripheral interface (SPI)-compatible, 3‑wire serial interface operates on logic levels as low as 1.71 V and at clock rates as high as 50 MHz.</p>
+</section>
 </section>
 <section id="applications">
 <h2>Applications<a class="headerlink" href="#applications" title="Link to this heading"></a></h2>
@@ -628,10 +642,10 @@ Content on this topic
 <section id="adi-no-os">
 <h3>ADI No-OS<a class="headerlink" href="#adi-no-os" title="Link to this heading"></a></h3>
 <p>The goal of ADI Microcontroller No-OS is to provide reference projects for lower end processors, which can’t run Linux or aren’t running a specific operating system, and to help those customers using microcontrollers with ADI parts. ADI No-OS offers <strong>generic drivers</strong>, which can be used as a base for any microcontroller platform and also <strong>example projects</strong>, which are using these drivers on various microcontroller platforms.</p>
-<div class="line-block">
-<div class="line">For more information about ADI No-OS and supported microcontroller platforms, visit the <a class="reference internal" href="../../no-os.html"><span class="doc">No-OS User Guide</span></a>.</div>
-<div class="line">===== LTC2672 ADI No-OS driver =====</div>
-</div>
+<p>For more information about ADI No-OS and supported microcontroller platforms, visit the <a class="reference internal" href="../../no-os.html"><span class="doc">No-OS User Guide</span></a>.</p>
+</section>
+<section id="ltc2672-adi-no-os-driver">
+<h3>LTC2672 ADI No-OS driver<a class="headerlink" href="#ltc2672-adi-no-os-driver" title="Link to this heading"></a></h3>
 </section>
 </section>
 <section id="driver-source-code">
@@ -717,11 +731,12 @@ Content on this topic
 <h2>Device Configuration<a class="headerlink" href="#device-configuration" title="Link to this heading"></a></h2>
 <section id="driver-initialization">
 <h3>Driver Initialization<a class="headerlink" href="#driver-initialization" title="Link to this heading"></a></h3>
-<div class="line-block">
-<div class="line">To use the device, you need to provide the support for the communication protocol (SPI) as mentioned above.</div>
-<div class="line">The first API function to be called is <strong>ltc2672_init</strong>. Make sure that it returns 0. This indicates a successful driver initialization.</div>
-<div class="line">=== Output Span Configuration === Use either of the following functions to configure the channel output span:</div>
-</div>
+<p>To use the device, you need to provide the support for the communication protocol (SPI) as mentioned above.</p>
+<p>The first API function to be called is <strong>ltc2672_init</strong>. Make sure that it returns 0. This indicates a successful driver initialization.</p>
+</section>
+<section id="output-span-configuration">
+<h3>Output Span Configuration<a class="headerlink" href="#output-span-configuration" title="Link to this heading"></a></h3>
+<p>Use either of the following functions to configure the channel output span:</p>
 <div class="center box docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -743,32 +758,29 @@ Content on this topic
 </section>
 <section id="monitor-multiplexer-output-configuration">
 <h3>Monitor Multiplexer Output Configuration<a class="headerlink" href="#monitor-multiplexer-output-configuration" title="Link to this heading"></a></h3>
-<div class="line-block">
-<div class="line">The <a class="icon adi reference external" href="https://www.analog.com/LTC2672" target="_blank">LTC2672</a> contains a multiplexer pin output, which allows an external controller or analog-to-digital converter (ADC) to monitor certain chip measurements. To enable this functionality, use the <strong>ltc2672_monitor_mux</strong> function and specify the property from the valid list of properties in the header implementation.</div>
-<div class="line"><strong>Current Measurement using Multiplexer Output</strong></div>
-<div class="line">The output current from any one channel can be measured by configuring the multiplexer using the <strong>ltc2672_monitor_mux</strong> function. Once configured, the voltage at the multiplexer output pin can be measured, and the current from the selected channel can be estimated using the equation below:</div>
-</div>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/LTC2672" target="_blank">LTC2672</a> contains a multiplexer pin output, which allows an external controller or analog-to-digital converter (ADC) to monitor certain chip measurements. To enable this functionality, use the <strong>ltc2672_monitor_mux</strong> function and specify the property from the valid list of properties in the header implementation.</p>
+<p><strong>Current Measurement using Multiplexer Output</strong></p>
+<p>The output current from any one channel can be measured by configuring the multiplexer using the <strong>ltc2672_monitor_mux</strong> function. Once configured, the voltage at the multiplexer output pin can be measured, and the current from the selected channel can be estimated using the equation below:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">I_OUTx</span> <span class="o">=</span> <span class="n">I_FS</span><span class="p">(</span><span class="n">mA</span><span class="p">)</span> <span class="o">*</span> <span class="n">V_MUX</span> <span class="o">/</span> <span class="n">V_REF</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line">where:</div>
-<div class="line"><strong>V_REF</strong> is the measurement from the VREF pin (~1.25V).</div>
-<div class="line"><strong>I_FS(mA)</strong> is the output span setting in mA.</div>
-<div class="line">The current isn’t directly measured, but instead estimated from the DAC settings of the specified channel. This means that the measurement using the above equation is only valid when the output is properly terminated (not open/dropping out) and the output span is configured to a valid value (refer to header implementation).</div>
-<div class="line"><strong>Die Temperature Measurement using Multiplexer Output</strong></div>
-<div class="line">Similar with the output current, the die temperature of the <a class="icon adi reference external" href="https://www.analog.com/LTC2672" target="_blank">LTC2672</a> can also be measured through the <strong>ltc2672_monitor_mux</strong> function. The voltage at the multiplexer output pin varies directly with the temperature with a temperature coefficient of -3.7 mV/°C. The die temperature can be estimated using this equation:</div>
-</div>
+<p>where:</p>
+<p><strong>V_REF</strong> is the measurement from the VREF pin (~1.25V).</p>
+<p><strong>I_FS(mA)</strong> is the output span setting in mA.</p>
+<p>The current isn’t directly measured, but instead estimated from the DAC settings of the specified channel. This means that the measurement using the above equation is only valid when the output is properly terminated (not open/dropping out) and the output span is configured to a valid value (refer to header implementation).</p>
+<p><strong>Die Temperature Measurement using Multiplexer Output</strong></p>
+<p>Similar with the output current, the die temperature of the <a class="icon adi reference external" href="https://www.analog.com/LTC2672" target="_blank">LTC2672</a> can also be measured through the <strong>ltc2672_monitor_mux</strong> function. The voltage at the multiplexer output pin varies directly with the temperature with a temperature coefficient of -3.7 mV/°C. The die temperature can be estimated using this equation:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>T = T0 + (V0 − V_MUX) / (3.7 mV/°C).
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line">where:</div>
-<div class="line"><strong>T0 = 25°C</strong> (initial temperature).</div>
-<div class="line"><strong>V0 = 1.4 V</strong> (initial voltage).</div>
-<div class="line">For calibration or more accurate measurements, the actual initial temperature and voltage can be measured and replaced on the equation above.</div>
-<div class="line">=== Output Current Configuration === Once the channel output spans have been set, you may now configure the output current using the following functions:</div>
-</div>
+<p>where:</p>
+<p><strong>T0 = 25°C</strong> (initial temperature).</p>
+<p><strong>V0 = 1.4 V</strong> (initial voltage).</p>
+<p>For calibration or more accurate measurements, the actual initial temperature and voltage can be measured and replaced on the equation above.</p>
+</section>
+<section id="output-current-configuration">
+<h3>Output Current Configuration<a class="headerlink" href="#output-current-configuration" title="Link to this heading"></a></h3>
+<p>Once the channel output spans have been set, you may now configure the output current using the following functions:</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <tbody>
@@ -781,17 +793,12 @@ Content on this topic
 </tbody>
 </table>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>When the output span of a channel/s is configured to connect to the negative supply (V-), the output current is fixed at -80 mA regardless of the current set!</p>
 </div>
-<div class="line-block">
-<div class="line"><strong>Load Termination and Combining Multiple Channels</strong></div>
-<div class="line">Each output channel of the <a class="icon adi reference external" href="https://www.analog.com/LTC2672" target="_blank">LTC2672</a> can output a maximum of 300 mA. In instances where current greater than 300 mA is needed, multiple channels can be tied together to produce the desired level. Channels tied together must operate in the same span category, which can be set using the <strong>ltc2672_set_span_all_channels</strong> function.</div>
-</div>
+<p><strong>Load Termination and Combining Multiple Channels</strong></p>
+<p>Each output channel of the <a class="icon adi reference external" href="https://www.analog.com/LTC2672" target="_blank">LTC2672</a> can output a maximum of 300 mA. In instances where current greater than 300 mA is needed, multiple channels can be tied together to produce the desired level. Channels tied together must operate in the same span category, which can be set using the <strong>ltc2672_set_span_all_channels</strong> function.</p>
 <p>Once the desired channels have been set to have similar output span, the target current can then be set by configuring the same channels via <strong>ltc2672_set_current_channel</strong> function. For example, Channels 0 and 1 can be combined to produce 350 mA of current by configuring one channel to have 300 mA output, while the other channel to have 50 mA (assuming they’re operating in the same span - i.e., 300 mA span).</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -822,13 +829,15 @@ Content on this topic
 </div>
 <div class="center box docutils container">
 <p><strong>ltc2672_setup_toggle</strong></p>
-<div class="line-block">
-<div class="line"><strong>ltc2672_enable_channel</strong></div>
+<p><strong>ltc2672_enable_channel</strong></p>
 </div>
-</div>
-<p>Once set up, perform the toggle by repeatedly using the <strong>ltc2672_global_toggle</strong> function as needed. The output levels can be verified by connecting an ammeter on the output of the desired channel and measuring the current levels during state changes.
-| === Fault Register Bits === The first 8 bits of an SPI transaction response serve as fault indicators. Whenever a fault is detected, the corresponding Fault Register bit is set and is outputted on the next SPI transaction. If an SPI transaction fixes any of the existing faults, the cleared fault register bit is reflected on the next SPI transaction response. The faults that are detected include open circuit detection for any of the output channels, overtemperature detection (&gt; 175°C) with thermal protection, and invalid SPI transaction length (valid lengths are 24, 32, and multiple of 32 bits).
-| == Configuration Command ==</p>
+<p>Once set up, perform the toggle by repeatedly using the <strong>ltc2672_global_toggle</strong> function as needed. The output levels can be verified by connecting an ammeter on the output of the desired channel and measuring the current levels during state changes.</p>
+</section>
+<section id="fault-register-bits">
+<h3>Fault Register Bits<a class="headerlink" href="#fault-register-bits" title="Link to this heading"></a></h3>
+<p>The first 8 bits of an SPI transaction response serve as fault indicators. Whenever a fault is detected, the corresponding Fault Register bit is set and is outputted on the next SPI transaction. If an SPI transaction fixes any of the existing faults, the cleared fault register bit is reflected on the next SPI transaction response. The faults that are detected include open circuit detection for any of the output channels, overtemperature detection (&gt; 175°C) with thermal protection, and invalid SPI transaction length (valid lengths are 24, 32, and multiple of 32 bits).</p>
+<section id="configuration-command">
+<h4>Configuration Command<a class="headerlink" href="#configuration-command" title="Link to this heading"></a></h4>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <tbody>
@@ -838,11 +847,12 @@ Content on this topic
 </tbody>
 </table>
 </div>
-<div class="line-block">
-<div class="line">For the valid corresponding mask or values, refer to the device data sheet.</div>
-<div class="line">==== Driver Initialization Example ====</div>
-</div>
+<p>For the valid corresponding mask or values, refer to the device data sheet.</p>
 </section>
+</section>
+</section>
+<section id="driver-initialization-example">
+<h2>Driver Initialization Example<a class="headerlink" href="#driver-initialization-example" title="Link to this heading"></a></h2>
 <section id="example-initialization-using-maxim-sdk-as-platform">
 <h3>Example Initialization Using Maxim SDK as Platform<a class="headerlink" href="#example-initialization-using-maxim-sdk-as-platform" title="Link to this heading"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">ret</span><span class="p">;</span>
@@ -913,15 +923,14 @@ Content on this topic
  <span class="p">}</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Driver Application Example ====</div>
-</div>
+</section>
+</section>
+<section id="driver-application-example">
+<h2>Driver Application Example<a class="headerlink" href="#driver-application-example" title="Link to this heading"></a></h2>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>You can find application example projects for LTC2672 driver here: <a class="reference internal" href="../../eval/user-guides/dc2903a/no-os-setup.html"><span class="doc">Evaluating the LTC2672</span></a></p>
 </div>
-</section>
 </section>
 </section>
 

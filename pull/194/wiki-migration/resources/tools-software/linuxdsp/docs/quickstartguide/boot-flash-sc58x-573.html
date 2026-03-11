@@ -96,7 +96,10 @@
 <li><a class="reference internal" href="#change-the-libc-implementation">Change the Libc implementation</a></li>
 <li><a class="reference internal" href="#build-the-tiny-image">Build the tiny image</a></li>
 <li><a class="reference internal" href="#build-and-install-the-sdk">Build and install the SDK</a></li>
-<li><a class="reference internal" href="#running-u-boot-on-the-board-for-the-first-time">Running U-Boot on the Board for the first time</a></li>
+<li><a class="reference internal" href="#running-u-boot-on-the-board-for-the-first-time">Running U-Boot on the Board for the first time</a><ul>
+<li><a class="reference internal" href="#flash-u-boot-to-spi-flash">Flash U-Boot to SPI Flash</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#booting-linux-from-spi-flash">Booting Linux from SPI Flash</a></li>
 </ul>
 </li>
@@ -629,8 +632,8 @@ adi-distro-musl-x86_64-adsp-sc5xx-minimal-cortexa5t2hf-neon-adsp-sc584-ezkit-too
 <p>The <code class="docutils literal notranslate"><span class="pre">adi-distro-glibc-glibc-x86_64-adsp-sc5xx-minimal-cortexa5t2hf-neon-adsp-sc584-ezkit-toolchain-3.0.0.sh</span></code> is a self-extracting archive containing the SDK.</p>
 <p>Invoke the self-extracting archive. It will default to installing to /opt/adi-distro-musl/3.0.0 but gives you the option to select your own install folder during the installation. For the minimal image on SC589-EZKIT</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>./adi-distro-musl-x86_64-adsp-sc5xx-minimal-cortexa5t2hf-neon-adsp-sc589-ezkit-toolchain-3.0.0.sh
-Analog<span class="w"> </span>Devices<span class="w"> </span>Inc<span class="w"> </span>Reference<span class="w"> </span>Distro<span class="w"> </span>SDK<span class="w"> </span>installer<span class="w"> </span>version<span class="w"> </span><span class="m">3</span>.0.0
-<span class="o">===============================================================</span>
+**Analog<span class="w"> </span>Devices<span class="w"> </span>Inc<span class="w"> </span>Reference<span class="w"> </span>Distro<span class="w"> </span>SDK<span class="w"> </span>installer<span class="w"> </span>version<span class="w"> </span><span class="m">3</span>.0.0**
+
 Enter<span class="w"> </span>target<span class="w"> </span>directory<span class="w"> </span><span class="k">for</span><span class="w"> </span>SDK<span class="w"> </span><span class="o">(</span>default:<span class="w"> </span>/opt/adi-distro-musl/3.0.0<span class="o">)</span>:
 You<span class="w"> </span>are<span class="w"> </span>about<span class="w"> </span>to<span class="w"> </span>install<span class="w"> </span>the<span class="w"> </span>SDK<span class="w"> </span>to<span class="w"> </span><span class="s2">&quot;/opt/adi-distro-musl/3.0.0&quot;</span>.<span class="w"> </span>Proceed<span class="w"> </span><span class="o">[</span>Y/n<span class="o">]</span>?<span class="w"> </span>y
 Extracting<span class="w"> </span>SDK........................................................................done
@@ -708,7 +711,19 @@ Info<span class="w"> </span>:<span class="w"> </span>adspsc584.dap:<span class="
 <span class="p">:</span> <span class="o">&lt;</span><span class="n">code</span> <span class="n">bash</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<p>$ cd /tftpboot $ /opt/adi-distro-glibc/3.0.0/sysroots/x86_64-adi_glibc_sdk-linux/usr/bin/arm-adi_glibc-linux-gnueabi/arm-adi_glibc-linux-gnueabi-gdb u-boot-spl-sc584-ezkit.elf … (gdb) target extended-remote :3333 Remote debugging using :3333 0x00004884 in ?? () (gdb) load Loading section .text, size 0x9c0c lma 0x20080000 Loading section .rodata, size 0x1198 lma 0x20089c0c Loading section .dtb.init.rodata, size 0x1460 lma 0x2008adb0 Loading section .data, size 0x514 lma 0x2008c210 Loading section .u_boot_list, size 0xa50 lma 0x2008c724 Start address 0x20080000, load size 53608 Transfer rate: 29 KB/sec, 7658 bytes/write. (gdb) c Continuing. ^C Program received signal SIGINT, Interrupt. &lt;/code&gt;</p>
+<p>$ cd /tftpboot $ /opt/adi-distro-glibc/3.0.0/sysroots/x86_64-adi_glibc_sdk-linux/usr/bin/arm-adi_glibc-linux-gnueabi/arm-adi_glibc-linux-gnueabi-gdb u-boot-spl-sc584-ezkit.elf … (gdb) target extended-remote :3333 Remote debugging using :3333 0x00004884 in ?? () (gdb) load Loading section .text, size 0x9c0c lma 0x20080000 Loading section .rodata, size 0x1198 lma 0x20089c0c Loading section .dtb.init.rodata, size 0x1460 lma 0x2008adb0 Loading section .data, size 0x514 lma 0x2008c210 Loading section .u_boot_list, size 0xa50 lma 0x2008c724 Start address 0x20080000, load size 53608 Transfer rate: 29 KB/sec, 7658 bytes/write. (gdb) c Continuing.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+</tbody>
+</table>
+</div>
+<div class="line-block">
+<div class="line">C |</div>
+</div>
+<p>+===+
++—+</p>
+<p>Program received signal SIGINT, Interrupt. &lt;/code&gt;</p>
 <p>You will see a message on Terminal 1 running minicom, informing you that you can now load U-Boot Proper</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;</span><span class="s1">&#39;&#39;</span><span class="o">**</span><span class="n">Terminal1</span><span class="p">:</span> <span class="n">minicom</span><span class="o">**</span><span class="s1">&#39;&#39;</span>
 <span class="p">:</span><span class="o">&lt;</span><span class="n">code</span> <span class="n">bash</span><span class="o">&gt;</span><span class="n">U</span><span class="o">-</span><span class="n">Boot</span> <span class="n">SPL</span> <span class="mf">2020.10</span> <span class="p">(</span><span class="n">Mar</span> <span class="mi">16</span> <span class="mi">2023</span> <span class="o">-</span> <span class="mi">13</span><span class="p">:</span><span class="mi">07</span><span class="p">:</span><span class="mi">24</span> <span class="o">+</span><span class="mi">0000</span><span class="p">)</span>
@@ -748,11 +763,9 @@ Continuing.
 <p>U-Boot 2020.10 (Mar 16 2023 - 13:07:24 +0000)</p>
 <p>CPU: ADSP ADSP-SC584-0.1 (spi flash boot) Detected Revision: 1.1 Model: ADI sc584-ezkit DRAM: 112 MiB WDT: Not found! MMC: Loading Environment from SPIFlash… SF: Detected w25q128 with page size 256 Bytes, erase size 4 KiB, total 16 MiB *** Warning - bad CRC, using default environment</p>
 <p>In: <a class="reference external" href="mailto:serial&#37;&#52;&#48;0x31003000">serial<span>&#64;</span>0x31003000</a> Out: <a class="reference external" href="mailto:serial&#37;&#52;&#48;0x31003000">serial<span>&#64;</span>0x31003000</a> Err: <a class="reference external" href="mailto:serial&#37;&#52;&#48;0x31003000">serial<span>&#64;</span>0x31003000</a> Net: eth0: eth0 Hit any key to stop autoboot: 0 =&gt; &lt;/code&gt;</p>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">== Flash U-Boot to SPI Flash ==</div>
-<div class="line">In the U-Boot console, set the IP address of the Linux PC that hosts the U-Boot loader files (<code class="docutils literal notranslate"><span class="pre">stage1-boot.ldr</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">stage2-boot.ldr</span></code>) on TFTP.</div>
-</div>
+<section id="flash-u-boot-to-spi-flash">
+<h3>Flash U-Boot to SPI Flash<a class="headerlink" href="#flash-u-boot-to-spi-flash" title="Link to this heading"></a></h3>
+<p>In the U-Boot console, set the IP address of the Linux PC that hosts the U-Boot loader files (<code class="docutils literal notranslate"><span class="pre">stage1-boot.ldr</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">stage2-boot.ldr</span></code>) on TFTP.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;</span><span class="s1">&#39;&#39;</span><span class="o">**</span><span class="n">Terminal1</span><span class="p">:</span> <span class="n">minicom</span><span class="o">**</span><span class="s1">&#39;&#39;</span>
 <span class="p">:</span>
 </pre></div>
@@ -817,9 +830,7 @@ OK
 </pre></div>
 </div>
 <p>At this point the U-Boot binary is stored in flash. You can now disconnect the ICE-1000 or ICE-2000 from the development board and make sure to switch the BMODE to position 1. You will only need to reconnect this if your board fails to boot and you need to re-follow these instructions.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
+</section>
 </section>
 <section id="booting-linux-from-spi-flash">
 <h2>Booting Linux from SPI Flash<a class="headerlink" href="#booting-linux-from-spi-flash" title="Link to this heading"></a></h2>
@@ -835,12 +846,12 @@ Using<span class="w"> </span>eth0<span class="w"> </span>device
 TFTP<span class="w"> </span>from<span class="w"> </span>server<span class="w"> </span><span class="m">10</span>.37.33.116<span class="p">;</span><span class="w"> </span>our<span class="w"> </span>IP<span class="w"> </span>address<span class="w"> </span>is<span class="w"> </span><span class="m">10</span>.37.33.113
 Filename<span class="w"> </span><span class="s1">&#39;fitImage&#39;</span>.
 Load<span class="w"> </span>address:<span class="w"> </span>0x89000000
-Loading:<span class="w"> </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
+**Loading:<span class="w"> </span><span class="c1">#################################################################**</span>
+
+<span class="w">         </span>**#################################################################**
+
+<span class="w">         </span>**#################################################################**
+
 <span class="w">         </span><span class="c1">################################</span>
 <span class="w">         </span><span class="m">2</span>.2<span class="w"> </span>MiB/s
 <span class="k">done</span>
@@ -857,16 +868,16 @@ Using<span class="w"> </span>eth0<span class="w"> </span>device
 TFTP<span class="w"> </span>from<span class="w"> </span>server<span class="w"> </span><span class="m">10</span>.37.33.116<span class="p">;</span><span class="w"> </span>our<span class="w"> </span>IP<span class="w"> </span>address<span class="w"> </span>is<span class="w"> </span><span class="m">10</span>.37.33.113
 Filename<span class="w"> </span><span class="s1">&#39;adsp-sc5xx-tiny-adsp-sc584-ezkit.jffs2&#39;</span>.
 Load<span class="w"> </span>address:<span class="w"> </span>0x89000000
-Loading:<span class="w"> </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
+**Loading:<span class="w"> </span><span class="c1">#################################################################**</span>
+
+<span class="w">         </span>**#################################################################**
+
+<span class="w">         </span>**#################################################################**
+
+<span class="w">         </span>**#################################################################**
+
+<span class="w">         </span>**#################################################################**
+
 <span class="w">         </span><span class="c1">##</span>
 <span class="w">         </span><span class="m">2</span>.1<span class="w"> </span>MiB/s
 <span class="k">done</span>
@@ -934,9 +945,6 @@ adsp-sc584-ezkit<span class="w"> </span>login:<span class="w"> </span>root
 Password:<span class="w"> </span>adi
 root@adsp-sc584-ezkit:~#
 </pre></div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
 </div>
 </section>
 </section>

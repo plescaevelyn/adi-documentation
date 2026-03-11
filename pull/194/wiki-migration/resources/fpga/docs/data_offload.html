@@ -4,9 +4,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="Conversion failed for resources/fpga/docs/data_offload" name="description" />
+<meta content="We are in the process of migrating our documentation to GitHubIO. This page is outdated and the new one can be found at https://analogdevicesinc.github.io/hdl/library/data_offload/index.html" name="description" />
 
-    <title>&lt;no title&gt; &#8212; System Level Documentation  documentation</title>
+    <title>Data Offload Engine HDL IP Core &#8212; System Level Documentation  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/app.min.css?v=a525f648" />
     <script async="async" src="../../../../_static/app.umd.js?v=fcf3088a"></script>
@@ -91,7 +91,23 @@
           <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
         </div>
         <nav>
-          <ul class="simple">
+          <ul>
+<li><a class="reference internal" href="#">Data Offload Engine HDL IP Core</a><ul>
+<li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#utilization">Utilization</a></li>
+<li><a class="reference internal" href="#files">Files</a></li>
+<li><a class="reference internal" href="#architecture-and-theory-of-operation">Architecture and Theory of Operation</a></li>
+<li><a class="reference internal" href="#block-diagram">Block Diagram</a><ul>
+<li><a class="reference internal" href="#local-storage">Local Storage</a></li>
+<li><a class="reference internal" href="#external-storage">External Storage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#synthesis-configuration-parameters">Synthesis Configuration Parameters</a></li>
+<li><a class="reference internal" href="#signal-and-interface-pins">Signal and Interface Pins</a></li>
+<li><a class="reference internal" href="#register-map">Register Map</a></li>
+<li><a class="reference internal" href="#linux-driver">Linux Driver</a></li>
+</ul>
+</li>
 </ul>
 
         </nav>
@@ -577,181 +593,588 @@ Content on this topic
 </div>
           <div class="body" role="main">
             
-  <div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Conversion failed for <code class="docutils literal notranslate"><span class="pre">resources/fpga/docs/data_offload</span></code></p>
-<p>Reason: pandoc error: Error at “/tmp/tmp4g4p966a.txt” (line 110, column 1):</p>
+  <section id="data-offload-engine-hdl-ip-core">
+<h1>Data Offload Engine HDL IP Core<a class="headerlink" href="#data-offload-engine-hdl-ip-core" title="Link to this heading"></a></h1>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>We are in the process of migrating our documentation to GitHubIO. This page is outdated and the new one can be found at <a class="icon link reference external" href="https://analogdevicesinc.github.io/hdl/library/data_offload/index.html" target="_blank">https://analogdevicesinc.github.io/hdl/library/data_offload/index.html</a></p>
 </div>
-<p>expecting inline
-not found
-^ 0x0080 ^ 0x0200 ^ FSM_DBG          |||||
-^</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>====== Data Offload Engine HDL IP Core ======
-
-&lt;note important&gt;We are in the process of migrating our documentation to GitHubIO. This page is outdated and the new one can be found at https://analogdevicesinc.github.io/hdl/library/data_offload/index.html&lt;/note&gt;
-
-The data offload engine is, in essence, a clock-domain crossing store-and-forward buffer (or FIFO) with some extra features useful in bursty RF applications. More specifically, it was designed to sit between a DMA and DAC for the TX and ADC and DAC for the RX path of a digital RF chain. This is reflected in the synthesis settings of the device, that also enable or disable certain other settings of features where appropriate. For example in the receive path cyclic operation isn&#39;t supported.
-
-===== Features =====
-
-  * Configurable storage unit with support for Block-RAM and External DRAM (Up to 16 GiB) or external High Bandwidth Memory (HBM)
-  * Configurable interface width and rates
-  * External timing synchronization for precisely timed buffers (For example in combination with the [[resources:fpga:docs:axi_tdd|Timing-Division Duplexing Controller]])
-  * Cyclic and oneshot store and forward operation
-  * Bypass mode to completely bypass all features and act as a pure CDC fifo
-  * Many settings configurable at runtime via MM AXI4-Lite bus
-
-&lt;note&gt;The data offload does NOT support, in its current state, continuous streaming except when in bypass mode (Thus disabling all other functionality).&lt;/note&gt;
-
-===== Utilization =====
-
-Utilization is estimated without a storage unit. The size and complexity of your storage unit depends completely on the kind of storage in use. For Block-RAM the complexity will be dependent on the amount of storage, while with external DRAM a fixed cost can be assumed.
-
-^ Device Family ^ LUTs ^ FFs ^
-| Xilinx Zynq UltraScale+ | 750 | 2000 |
-
-===== Files =====
-
-^ Name ^ Description ^
-| [[https://github.com/analogdevicesinc/hdl/blob/master/library/data_offload/|data_offload HDL]] | Verilog source for the peripheral. |
-| [[https://github.com/analogdevicesinc/linux/blob/master/drivers/misc/adi-axi-data-offload.c|adi-axi-data-offload.c]] | Linux Driver |
-| [[https://github.com/analogdevicesinc/linux/blob/master/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9081-m8-l4-do.dts|xilinx/zynqmp-zcu102-rev10-ad9081-m8-l4-do.dts]] | Example device tree using the data offload |
-
-===== Architecture and Theory of Operation =====
-
-The main role of our data paths, is to stream data from point A to point B in a particular system. There are always a SOURCE and a DESTINATION point, which can be a device (ADC or DAC), a DMA (for system memory) or any other data processing IP.
-
-In the context of Data Offload IP, we don&#39;t need to know who is the source and who is the destination. Both interface is a AXI4 Stream interface, which can be supported in both Xilinx&#39;s an Intel&#39;s architecture, and can be connected to any device core or DMA.
-
-The storage unit is connected to the Data Offload controller via two FIFO interface. This way the same controller can be used for various storage solutions. (BRAM, URAM, external memory etc.)
-
-===== Block Diagram =====
-
-==== Local Storage ====
-
-{{:resources:fpga:docs:data_offload_bd.png|}}
-
-==== External Storage ====
-
-{{:resources:fpga:docs:data_offload_ddr_bd.png|}}
-
-===== Synthesis Configuration Parameters =====
-
-^ Name ^ Description ^ Default ^
-| &#39;&#39;ID&#39;&#39; | Instance identification number. | 0 |
-| &#39;&#39;MEM_TYPE&#39;&#39; | Define the used storage type: 0: BlockRAM; 1: external DDR | 0 |
-| &#39;&#39;MEM_SIZE_LOG2&#39;&#39; | Define the log2 size of the storage element in bytes | 10 |
-| &#39;&#39;TX_OR_RXN_PATH&#39;&#39; | If set TX path enabled, otherwise RX | 1 |
-| &#39;&#39;SRC_DATA_WIDTH&#39;&#39; | The data width of the source interface | 64 |
-| &#39;&#39;DST_DATA_WIDTH&#39;&#39; | The data width of the destination interface | 64 |
-| &#39;&#39;DST_CYCLIC_EN&#39;&#39; | Enables CYCLIC mode for destinations like DAC | 0 |
-| &#39;&#39;AUTO_BRINUP&#39;&#39; | If enabled the IP runs automatically after bootup | 0 |
-| &#39;&#39;SYNC_EXT_ADD_INTERNAL_CDC &#39;&#39; | If enabled the CDC circuitry for the external sync signal is added | 0 |
-| &#39;&#39;HAS_BYPASS &#39;&#39; | If enabled the bypass circuitry is added | 0 |
-
-===== Signal and Interface Pins =====
-
-^ Interface ^ Pin ^ Type ^ Description ^
-| **Control Signals** ||||
-|              | &#39;&#39;s_axi_aclk&#39;&#39;   | &#39;&#39;input&#39;&#39;  | AXI4-Lite clock signal |
-|              | &#39;&#39;s_axi_aresetn&#39;&#39; | &#39;&#39;input&#39;&#39; | Control-Domain Reset Input |
-|              | &#39;&#39;s_axi&#39;&#39;        |            | MM AXI4-Lite control interface |
-|              | &#39;&#39;init_req&#39;&#39;     | &#39;&#39;input&#39;&#39;  | Indicator that the signal source (e.g. DMA) intends to provide new data soon |
-|              | &#39;&#39;init_ack&#39;&#39;     | &#39;&#39;output&#39;&#39; | Init acknowledgement |
-|              | &#39;&#39;sync_ext&#39;&#39;     | &#39;&#39;input&#39;&#39;  | External synchronization signal, with or without internal clock-domain crossing logic. Can be used to couple certain state machine transitions to external processes |
-|              | &#39;&#39;ddr_calib_done&#39;&#39; | &#39;&#39;input&#39;&#39; | Allows the user to read back status information about the DDR calibration status from software |
-| ** Source Domain ** ||||
-|              | &#39;&#39;s_axis_aclk&#39;&#39;  | &#39;&#39;input&#39;&#39;  | Source Domain Clock Signal Input |
-|              | &#39;&#39;s_axis&#39;&#39;       | &#39;&#39;input&#39;&#39;  | AXI4-Stream slave data input |
-| ** Destination Domain ** ||||
-|              | &#39;&#39;m_axis_aclk&#39;&#39;  | &#39;&#39;input&#39;&#39;  | Destination Domain Clock Signal Input |
-|              | &#39;&#39;m_axis&#39;&#39;       | &#39;&#39;output&#39;&#39; | AXI4-Stream master output stream |
-
-
-===== Register Map =====
-
-&lt;hidden&gt;
-
-|&lt; 100% 5% 5% 5% 25% 5% 5% 50% &gt;|
-|Address ||         Bits    | Name             | Type | Default    | Description |
-| DWORD  | BYTE   | :::     | :::              | :::  | :::        | :::         |
-^ 0x0000 ^ 0x0000 ^ VERSION          |||||
-|        |        | [31:16] | MAJOR            |      |            |             |
-| :::    | :::    | [15:8]  | MINOR            |      |            |             |
-| :::    | :::    | [7:0]   | PATCH            |      |            |             |
-^ 0x0001 ^ 0x0004 ^ PERIPHERAL_ID    |||||
-|        |        | [31:0]  | PERIPHERAL_ID    | RO   | 0x00000000 | Optional value provided at synthesis time to distinguish multiple instances |
-^ 0x0002 ^ 0x0008 ^ SCRATCH          |||||
-|        |        | [31:0]  | SCRATCH          | RW   | 0x00000000 | Scratchpad, can be written to and read at will |
-^ 0x0003 ^ 0x000c ^ IDENTIFICATION   |||||
-|        |        | [31:0]  | IDENTIFICATION   | RW   | 0x44414F46 | MAGIC peripheral identifier, can be used to verify that you&#39;re actually talking to a data offload |
-^ 0x0004 ^ 0x0010 ^ SYNTHESIS_CONFIG |||||
-|        |        | [13: 8]   | MEM_SIZE_LOG2| RO   |            | Log2 of memory size in bytes|
-|        |        | [2:2]   | HAS_BYPASS | RO   |            | If not set the bypass logic is not implemented. |
-|        |        | [1:1]   | TX_OR_RXN_PATH   | RO   |            | If this device was configured for the TX path, this bit will be set to 1. Conversely, the bit will be 0 for the RX path. |
-| :::    | :::    | [0:0]   | MEMORY_TYPE      | RO   |            | This bit identifies the type of memory that was chosen during synthesis. A value of 1 identifies external memory, while a value of zero indicates that block ram was used |
-^ 0x0007 ^ 0x001c ^ TRANSFER_LENGTH  |||||
-|        |        | [31:0]  | TRANSFER_LENGTH  | RW   |            | The transfer length register can be used to override the transfer length in RX mode in increments of 64 bytes |
-^ 0x0020 ^ 0x0080 ^ MEM_PHY_STATE    |||||
-|        |        | [5:5]   | UNDERFLOW | RO   |            | Indicates that storage could not handle data rate during play. Available when core is in TX mode. |
-|        |        | [4:4]   | OVERFLOW | RO   |            | Indicates that storage could not handle data rate during capture. Available when core is in RX mode. |
-|        |        | [0:0]   | CALIB_COMPLETE   | RO   |            | Information about the memory phy for setups with external (DDR) storage. Indicates that the memory initialization and calibration have completed |
-^ 0x0021 ^ 0x0084 ^ RESETN_OFFLOAD   |||||
-|        |        | [0:0]   | RESETN           | RW   |            | &quot;Software Reset&quot;: Resets all the internal address registers and state machines |
-^ 0x0022 ^ 0x0088 ^ CONTROL          |||||
-|        |        | [1:1]   | ONESHOT_EN       | RW   |            | Enables oneshot mode. This means that the data offload will only play a received buffer once, and then stop. This mode is useful when you want to use the data offload for its synchronization features, but don&#39;t need the repeating output. |
-| :::    | :::    | [0:0]   | OFFLOAD_BYPASS   | RW   |            | Enables bypass mode. In this mode pretty much *all* functionality of the data offload is bypassed, and the data offload will simply act as an async dual-port FIFO and forward your data stream. |
-^ 0x0040 ^ 0x0100 ^ SYNC_TRIGGER     |||||
-|        |        | [0:0]   | SYNC_TRIGGER     | RW1C |            | Software trigger for software sync mode |
-^ 0x0041 ^ 0x0104 ^ SYNC_CONFIG      |||||
-|        |        | [1:0]   | SYNC_CONFIG      | RW   |            | Synchronization mode: 0: auto, 1: external hardware trigger, 2: software trigger (See SYNC_TRIGGER), 3: RESERVED/FORBIDDEN VALUE.
-^ 0x0080 ^ 0x0200 ^ FSM_DBG          |||||
-|        |        | [11:8]   | FSM_STATE_READ   | RO   |            | The current read / output FSM state. |
-| :::    | :::    | [4:0]   | FSM_STATE_WRITE  | RO   |            | The current write / input FSM state. |
-^ 0x0081 ^ 0x0204 ^ SAMPLE_COUNT_LSB |||||
-
-&lt;/hidden&gt;
-
-|&lt; 100% 10em 10em &gt;|
-^ Access Type ^ Name ^ Description ^
-| RO | Read-only | Reads will return the current register value. Writes have no effect. |
-| RW | Read-write | Reads will return the current register value. Writes will change the current register value. |
-| RW1C | Write-1-to-clear | Reads will return the current register value. Writing the register will clear those bits of the register which were set to 1 in the value written. Bits are set by hardware. |
-| RW1S | Write-1-to-set | Reads will return the current register value. Writing the register will set those bits of the register which were set to 1 in the value written. Bits are cleared by hardware. |
-| V | Volatile | The V suffix indicates that the register is volatile and its content might change without software interaction. The value of registers without the volatile designation will not change without an explicit write done by software. |
-
-===== Linux Driver =====
-
-The linux driver has two responsibilities:
-
-  * Initialize the data offload on startup.
-  * Integrate with cf_axi_dds to allow IIO to utilize the data offload for cyclic operation.
-
-The former of those two is covered by the device tree, which implements five options:
-
-&lt;code&gt;
-     axi_data_offload_tx: axi-data-offload-0@9c440000 {
-             compatible = &quot;adi,axi-data-offload-1.0.a&quot;;
-             reg = &lt;0x9c440000 0x10000&gt;;
-             // adi,bringup;
-             // adi,oneshot;
-             // adi,bypass;
-             // adi,sync-config = &lt;2&gt;;
-             // adi,transfer-length = /bits/ 64 &lt;0x10000&gt;; // 2**16 bytes
-     };
-&lt;/code&gt;
-
-  * &#39;&#39;adi,bringup&#39;&#39; will automatically enable the data offload on startup. Note that this option isn&#39;t always necessary, because the HDL itself may have been synthesized with auto-bringup.
-  * &#39;&#39;adi,oneshot&#39;&#39; configures the default mode of operation for TX data offloads. This will usually be overridden by the IIO buffer integration and thus doesn&#39;t have an effect in most situations.
-  * &#39;&#39;adi,bypass&#39;&#39; enables bypass mode, i.e. disables all functionality and makes the data offload act like a small async fifo.
-  * &#39;&#39;adi,sync-config&#39;&#39;: The sync config determines how the synchronization mechanism should operate. More information about this value can be found in the register map.
-  * &#39;&#39;adi,transfer-length&#39;&#39;: This option is useful for RX instances, where the size of the receive buffer  can be reduced from the default (All available storage).
-
-The latter is addressed by the integration into [[linux.github&gt;master/drivers/iio/frequency/cf_axi_dds.c|cf_axi_dds.c]] and [[linux.github&gt;master/drivers/iio/frequency/cf_axi_dds_buffer_stream.c|cf_axi_dds_buffer_stream.c]], which allow the drivers to control the oneshot functionality of the data offload based on what was requested with the current IIO buffer, assuming bypass was disabled.
-
-{{navigation HDL User Guide#ip_cores|IP cores#hdl|Main page#tips|Using and modifying the HDL design}}
+<p>The data offload engine is, in essence, a clock-domain crossing store-and-forward buffer (or FIFO) with some extra features useful in bursty RF applications. More specifically, it was designed to sit between a DMA and DAC for the TX and ADC and DAC for the RX path of a digital RF chain. This is reflected in the synthesis settings of the device, that also enable or disable certain other settings of features where appropriate. For example in the receive path cyclic operation isn’t supported.</p>
+<section id="features">
+<h2>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Configurable storage unit with support for Block-RAM and External DRAM (Up to 16 GiB) or external High Bandwidth Memory (HBM)</p></li>
+<li><p>Configurable interface width and rates</p></li>
+<li><p>External timing synchronization for precisely timed buffers (For example in combination with the <a class="reference internal" href="axi_tdd.html"><span class="doc">Timing-Division Duplexing Controller</span></a>)</p></li>
+<li><p>Cyclic and oneshot store and forward operation</p></li>
+<li><p>Bypass mode to completely bypass all features and act as a pure CDC fifo</p></li>
+<li><p>Many settings configurable at runtime via MM AXI4-Lite bus</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The data offload does NOT support, in its current state, continuous streaming except when in bypass mode (Thus disabling all other functionality).</p>
+</div>
+</section>
+<section id="utilization">
+<h2>Utilization<a class="headerlink" href="#utilization" title="Link to this heading"></a></h2>
+<p>Utilization is estimated without a storage unit. The size and complexity of your storage unit depends completely on the kind of storage in use. For Block-RAM the complexity will be dependent on the amount of storage, while with external DRAM a fixed cost can be assumed.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Device Family</p></th>
+<th class="head"><p>LUTs</p></th>
+<th class="head"><p>FFs</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Xilinx Zynq UltraScale+</p></td>
+<td><p>750</p></td>
+<td><p>2000</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="files">
+<h2>Files<a class="headerlink" href="#files" title="Link to this heading"></a></h2>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/data_offload" target="_blank">data_offload HDL</a></p></td>
+<td><p>Verilog source for the peripheral.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/misc/adi-axi-data-offload.c" target="_blank">drivers/misc/adi-axi-data-offload.c</a></p></td>
+<td><p>Linux Driver</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9081-m8-l4-do.dts" target="_blank">xilinx/zynqmp-zcu102-rev10-ad9081-m8-l4-do.dts</a></p></td>
+<td><p>Example device tree using the data offload</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="architecture-and-theory-of-operation">
+<h2>Architecture and Theory of Operation<a class="headerlink" href="#architecture-and-theory-of-operation" title="Link to this heading"></a></h2>
+<p>The main role of our data paths, is to stream data from point A to point B in a particular system. There are always a SOURCE and a DESTINATION point, which can be a device (ADC or DAC), a DMA (for system memory) or any other data processing IP.</p>
+<p>In the context of Data Offload IP, we don’t need to know who is the source and who is the destination. Both interface is a AXI4 Stream interface, which can be supported in both Xilinx’s an Intel’s architecture, and can be connected to any device core or DMA.</p>
+<p>The storage unit is connected to the Data Offload controller via two FIFO interface. This way the same controller can be used for various storage solutions. (BRAM, URAM, external memory etc.)</p>
+</section>
+<section id="block-diagram">
+<h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Link to this heading"></a></h2>
+<section id="local-storage">
+<h3>Local Storage<a class="headerlink" href="#local-storage" title="Link to this heading"></a></h3>
+<img alt="https://wiki.analog.com/_media/resources/fpga/docs/data_offload_bd.png" src="https://wiki.analog.com/_media/resources/fpga/docs/data_offload_bd.png" />
+</section>
+<section id="external-storage">
+<h3>External Storage<a class="headerlink" href="#external-storage" title="Link to this heading"></a></h3>
+<img alt="https://wiki.analog.com/_media/resources/fpga/docs/data_offload_ddr_bd.png" src="https://wiki.analog.com/_media/resources/fpga/docs/data_offload_ddr_bd.png" />
+</section>
+</section>
+<section id="synthesis-configuration-parameters">
+<h2>Synthesis Configuration Parameters<a class="headerlink" href="#synthesis-configuration-parameters" title="Link to this heading"></a></h2>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ID</span></code></p></td>
+<td><p>Instance identification number.</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MEM_TYPE</span></code></p></td>
+<td><p>Define the used storage type: 0: BlockRAM; 1: external DDR</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MEM_SIZE_LOG2</span></code></p></td>
+<td><p>Define the log2 size of the storage element in bytes</p></td>
+<td><p>10</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TX_OR_RXN_PATH</span></code></p></td>
+<td><p>If set TX path enabled, otherwise RX</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SRC_DATA_WIDTH</span></code></p></td>
+<td><p>The data width of the source interface</p></td>
+<td><p>64</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DST_DATA_WIDTH</span></code></p></td>
+<td><p>The data width of the destination interface</p></td>
+<td><p>64</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DST_CYCLIC_EN</span></code></p></td>
+<td><p>Enables CYCLIC mode for destinations like DAC</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">AUTO_BRINUP</span></code></p></td>
+<td><p>If enabled the IP runs automatically after bootup</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p>‘’SYNC_EXT_ADD_INTERNAL_CDC ‘’</p></td>
+<td><p>If enabled the CDC circuitry for the external sync signal is added</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘’HAS_BYPASS ‘’</p></td>
+<td><p>If enabled the bypass circuitry is added</p></td>
+<td><p>0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="signal-and-interface-pins">
+<h2>Signal and Interface Pins<a class="headerlink" href="#signal-and-interface-pins" title="Link to this heading"></a></h2>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Interface</p></th>
+<th class="head"><p>Pin</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Control Signals</strong></p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">s_axi_aclk</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input</span></code></p></td>
+<td><p>AXI4-Lite clock signal</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">s_axi_aresetn</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input</span></code></p></td>
+<td><p>Control-Domain Reset Input</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">s_axi</span></code></p></td>
+<td></td>
+<td><p>MM AXI4-Lite control interface</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">init_req</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input</span></code></p></td>
+<td><p>Indicator that the signal source (e.g. DMA) intends to provide new data soon</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">init_ack</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">output</span></code></p></td>
+<td><p>Init acknowledgement</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sync_ext</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input</span></code></p></td>
+<td><p>External synchronization signal, with or without internal clock-domain crossing logic. Can be used to couple certain state machine transitions to external processes</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ddr_calib_done</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input</span></code></p></td>
+<td><p>Allows the user to read back status information about the DDR calibration status from software</p></td>
+</tr>
+<tr class="row-even"><td><p>** Source Domain **</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">s_axis_aclk</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input</span></code></p></td>
+<td><p>Source Domain Clock Signal Input</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">s_axis</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input</span></code></p></td>
+<td><p>AXI4-Stream slave data input</p></td>
+</tr>
+<tr class="row-odd"><td><p>** Destination Domain **</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">m_axis_aclk</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input</span></code></p></td>
+<td><p>Destination Domain Clock Signal Input</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">m_axis</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">output</span></code></p></td>
+<td><p>AXI4-Stream master output stream</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="register-map">
+<h2>Register Map<a class="headerlink" href="#register-map" title="Link to this heading"></a></h2>
+<details><summary>Click to expand<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Address</p></td>
+<td></td>
+<td><p>Bits</p></td>
+<td><p>Name</p></td>
+<td><p>Type</p></td>
+<td><p>Default</p></td>
+<td><p>Description</p></td>
+</tr>
+<tr class="row-even"><td><p>DWORD</p></td>
+<td><p>BYTE</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>0x0000</p></td>
+<td><p>0x0000</p></td>
+<td><p>VERSION</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td></td>
+<td><p>[31:16]</p></td>
+<td><p>MAJOR</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td></td>
+<td><p>[15:8]</p></td>
+<td><p>MINOR</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td></td>
+<td><p>[7:0]</p></td>
+<td><p>PATCH</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>0x0001</p></td>
+<td><p>0x0004</p></td>
+<td><p>PERIPHERAL_ID</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td></td>
+<td><p>[31:0]</p></td>
+<td><p>PERIPHERAL_ID</p></td>
+<td><p>RO</p></td>
+<td><p>0x00000000</p></td>
+<td><p>Optional value provided at synthesis time to distinguish multiple instances</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x0002</p></td>
+<td><p>0x0008</p></td>
+<td><p>SCRATCH</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td></td>
+<td><p>[31:0]</p></td>
+<td><p>SCRATCH</p></td>
+<td><p>RW</p></td>
+<td><p>0x00000000</p></td>
+<td><p>Scratchpad, can be written to and read at will</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x0003</p></td>
+<td><p>0x000c</p></td>
+<td><p>IDENTIFICATION</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td></td>
+<td><p>[31:0]</p></td>
+<td><p>IDENTIFICATION</p></td>
+<td><p>RW</p></td>
+<td><p>0x44414F46</p></td>
+<td><p>MAGIC peripheral identifier, can be used to verify that you’re actually talking to a data offload</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x0004</p></td>
+<td><p>0x0010</p></td>
+<td><p>SYNTHESIS_CONFIG</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td></td>
+<td><p>[13: 8]</p></td>
+<td><p>MEM_SIZE_LOG2</p></td>
+<td><p>RO</p></td>
+<td></td>
+<td><p>Log2 of memory size in bytes</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td></td>
+<td><p>[2:2]</p></td>
+<td><p>HAS_BYPASS</p></td>
+<td><p>RO</p></td>
+<td></td>
+<td><p>If not set the bypass logic is not implemented.</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td></td>
+<td><p>[1:1]</p></td>
+<td><p>TX_OR_RXN_PATH</p></td>
+<td><p>RO</p></td>
+<td></td>
+<td><p>If this device was configured for the TX path, this bit will be set to 1. Conversely, the bit will be 0 for the RX path.</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td></td>
+<td><p>[0:0]</p></td>
+<td><p>MEMORY_TYPE</p></td>
+<td><p>RO</p></td>
+<td></td>
+<td><p>This bit identifies the type of memory that was chosen during synthesis. A value of 1 identifies external memory, while a value of zero indicates that block ram was used</p></td>
+</tr>
+<tr class="row-even"><td><p>0x0007</p></td>
+<td><p>0x001c</p></td>
+<td><p>TRANSFER_LENGTH</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td></td>
+<td><p>[31:0]</p></td>
+<td><p>TRANSFER_LENGTH</p></td>
+<td><p>RW</p></td>
+<td></td>
+<td><p>The transfer length register can be used to override the transfer length in RX mode in increments of 64 bytes</p></td>
+</tr>
+<tr class="row-even"><td><p>0x0020</p></td>
+<td><p>0x0080</p></td>
+<td><p>MEM_PHY_STATE</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td></td>
+<td><p>[5:5]</p></td>
+<td><p>UNDERFLOW</p></td>
+<td><p>RO</p></td>
+<td></td>
+<td><p>Indicates that storage could not handle data rate during play. Available when core is in TX mode.</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td></td>
+<td><p>[4:4]</p></td>
+<td><p>OVERFLOW</p></td>
+<td><p>RO</p></td>
+<td></td>
+<td><p>Indicates that storage could not handle data rate during capture. Available when core is in RX mode.</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td></td>
+<td><p>[0:0]</p></td>
+<td><p>CALIB_COMPLETE</p></td>
+<td><p>RO</p></td>
+<td></td>
+<td><p>Information about the memory phy for setups with external (DDR) storage. Indicates that the memory initialization and calibration have completed</p></td>
+</tr>
+<tr class="row-even"><td><p>0x0021</p></td>
+<td><p>0x0084</p></td>
+<td><p>RESETN_OFFLOAD</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td></td>
+<td><p>[0:0]</p></td>
+<td><p>RESETN</p></td>
+<td><p>RW</p></td>
+<td></td>
+<td><p>“Software Reset”: Resets all the internal address registers and state machines</p></td>
+</tr>
+<tr class="row-even"><td><p>0x0022</p></td>
+<td><p>0x0088</p></td>
+<td><p>CONTROL</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td></td>
+<td><p>[1:1]</p></td>
+<td><p>ONESHOT_EN</p></td>
+<td><p>RW</p></td>
+<td></td>
+<td><p>Enables oneshot mode. This means that the data offload will only play a received buffer once, and then stop. This mode is useful when you want to use the data offload for its synchronization features, but don’t need the repeating output.</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td></td>
+<td><p>[0:0]</p></td>
+<td><p>OFFLOAD_BYPASS</p></td>
+<td><p>RW</p></td>
+<td></td>
+<td><p>Enables bypass mode. In this mode pretty much *all* functionality of the data offload is bypassed, and the data offload will simply act as an async dual-port FIFO and forward your data stream.</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x0040</p></td>
+<td><p>0x0100</p></td>
+<td><p>SYNC_TRIGGER</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td></td>
+<td><p>[0:0]</p></td>
+<td><p>SYNC_TRIGGER</p></td>
+<td><p>RW1C</p></td>
+<td></td>
+<td><p>Software trigger for software sync mode</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x0041</p></td>
+<td><p>0x0104</p></td>
+<td><p>SYNC_CONFIG</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td></td>
+<td><p>[1:0]</p></td>
+<td><p>SYNC_CONFIG</p></td>
+<td><p>RW</p></td>
+<td></td>
+<td><p>Synchronization mode: 0: auto, 1: external hardware trigger, 2: software trigger (See SYNC_TRIGGER), 3: RESERVED/FORBIDDEN VALUE.</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x0080</p></td>
+<td><p>0x0200</p></td>
+<td><p>FSM_DBG</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td></td>
+<td><p>[11:8]</p></td>
+<td><p>FSM_STATE_READ</p></td>
+<td><p>RO</p></td>
+<td></td>
+<td><p>The current read / output FSM state.</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td></td>
+<td><p>[4:0]</p></td>
+<td><p>FSM_STATE_WRITE</p></td>
+<td><p>RO</p></td>
+<td></td>
+<td><p>The current write / input FSM state.</p></td>
+</tr>
+<tr class="row-even"><td><p>0x0081</p></td>
+<td><p>0x0204</p></td>
+<td><p>SAMPLE_COUNT_LSB</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</details><div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Access Type</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>RO</p></td>
+<td><p>Read-only</p></td>
+<td><p>Reads will return the current register value. Writes have no effect.</p></td>
+</tr>
+<tr class="row-odd"><td><p>RW</p></td>
+<td><p>Read-write</p></td>
+<td><p>Reads will return the current register value. Writes will change the current register value.</p></td>
+</tr>
+<tr class="row-even"><td><p>RW1C</p></td>
+<td><p>Write-1-to-clear</p></td>
+<td><p>Reads will return the current register value. Writing the register will clear those bits of the register which were set to 1 in the value written. Bits are set by hardware.</p></td>
+</tr>
+<tr class="row-odd"><td><p>RW1S</p></td>
+<td><p>Write-1-to-set</p></td>
+<td><p>Reads will return the current register value. Writing the register will set those bits of the register which were set to 1 in the value written. Bits are cleared by hardware.</p></td>
+</tr>
+<tr class="row-even"><td><p>V</p></td>
+<td><p>Volatile</p></td>
+<td><p>The V suffix indicates that the register is volatile and its content might change without software interaction. The value of registers without the volatile designation will not change without an explicit write done by software.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="linux-driver">
+<h2>Linux Driver<a class="headerlink" href="#linux-driver" title="Link to this heading"></a></h2>
+<p>The linux driver has two responsibilities:</p>
+<ul class="simple">
+<li><p>Initialize the data offload on startup.</p></li>
+<li><p>Integrate with cf_axi_dds to allow IIO to utilize the data offload for cyclic operation.</p></li>
+</ul>
+<p>The former of those two is covered by the device tree, which implements five options:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">axi_data_offload_tx</span><span class="p">:</span> <span class="n">axi</span><span class="o">-</span><span class="n">data</span><span class="o">-</span><span class="n">offload</span><span class="o">-</span><span class="mi">0</span><span class="o">@</span><span class="mi">9</span><span class="n">c440000</span> <span class="p">{</span>
+    <span class="n">compatible</span> <span class="o">=</span> <span class="s2">&quot;adi,axi-data-offload-1.0.a&quot;</span><span class="p">;</span>
+    <span class="n">reg</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mh">0x9c440000</span> <span class="mh">0x10000</span><span class="o">&gt;</span><span class="p">;</span>
+    <span class="o">//</span> <span class="n">adi</span><span class="p">,</span><span class="n">bringup</span><span class="p">;</span>
+    <span class="o">//</span> <span class="n">adi</span><span class="p">,</span><span class="n">oneshot</span><span class="p">;</span>
+    <span class="o">//</span> <span class="n">adi</span><span class="p">,</span><span class="n">bypass</span><span class="p">;</span>
+    <span class="o">//</span> <span class="n">adi</span><span class="p">,</span><span class="n">sync</span><span class="o">-</span><span class="n">config</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">;</span>
+    <span class="o">//</span> <span class="n">adi</span><span class="p">,</span><span class="n">transfer</span><span class="o">-</span><span class="n">length</span> <span class="o">=</span> <span class="o">/</span><span class="n">bits</span><span class="o">/</span> <span class="mi">64</span> <span class="o">&lt;</span><span class="mh">0x10000</span><span class="o">&gt;</span><span class="p">;</span> <span class="o">//</span> <span class="mi">2</span><span class="o">**</span><span class="mi">16</span> <span class="nb">bytes</span>
+<span class="p">};</span>
 </pre></div>
 </div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">adi,bringup</span></code> will automatically enable the data offload on startup. Note that this option isn’t always necessary, because the HDL itself may have been synthesized with auto-bringup.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">adi,oneshot</span></code> configures the default mode of operation for TX data offloads. This will usually be overridden by the IIO buffer integration and thus doesn’t have an effect in most situations.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">adi,bypass</span></code> enables bypass mode, i.e. disables all functionality and makes the data offload act like a small async fifo.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">adi,sync-config</span></code>: The sync config determines how the synchronization mechanism should operate. More information about this value can be found in the register map.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">adi,transfer-length</span></code>: This option is useful for RX instances, where the size of the receive buffer can be reduced from the default (All available storage).</p></li>
+</ul>
+<p>The latter is addressed by the integration into <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/frequency/cf_axi_dds.c" target="_blank">drivers/iio/frequency/cf_axi_dds.c</a> and <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/frequency/cf_axi_dds_buffer_stream.c" target="_blank">drivers/iio/frequency/cf_axi_dds_buffer_stream.c</a>, which allow the drivers to control the oneshot functionality of the data offload based on what was requested with the current IIO buffer, assuming bypass was disabled.</p>
+<img alt="IP cores#hdl|Main page#tips|Using and modifying the HDL design" src="https://wiki.analog.com/_media/resources/fpga/docs/navigationHDLUserGuide#ip_cores" />
+</section>
+</section>
 
 
           </div>

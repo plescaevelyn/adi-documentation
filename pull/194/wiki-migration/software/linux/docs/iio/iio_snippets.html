@@ -101,7 +101,6 @@
 <li><a class="reference internal" href="#typical-event-attributes">Typical event attributes</a></li>
 <li><a class="reference internal" href="#low-level-register-access-via-debugfs-direct-reg-access">Low level register access via debugfs (direct_reg_access)</a></li>
 <li><a class="reference internal" href="#iio-pointers">IIO pointers</a></li>
-<li><a class="reference internal" href="#need-help">Need help</a></li>
 </ul>
 
         </nav>
@@ -595,22 +594,13 @@ Content on this topic
 <section id="iio-devices-with-trigger-consumer-interface">
 <h1>IIO devices with trigger consumer interface<a class="headerlink" href="#iio-devices-with-trigger-consumer-interface" title="Link to this heading"></a></h1>
 <p>If deviceX supports triggered sampling, it’s a so called trigger consumer and there will be an additional folder /sys/bus/iio/device/iio:deviceX/trigger. In this folder there is a file called current_trigger, allowing controlling and viewing the current trigger source connected to deviceX. Available trigger sources can be identified by reading the name file /sys/bus/iio/devices/triggerY/name. The same trigger source can connect to multiple devices, so a single trigger may initialize data capture or reading from a number of sensors, converters, etc.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
-<p><strong>Trigger Consumers:</strong></p>
-<div class="line-block">
-<div class="line">Currently triggers are only used for the filling of software ring buffers and as such any device supporting INDIO_RING_TRIGGERED has the consumer interface automatically created.</div>
-</div>
+<p><strong>Trigger Consumers:</strong> Currently triggers are only used for the filling of software ring buffers and as such any device supporting INDIO_RING_TRIGGERED has the consumer interface automatically created.</p>
 </div>
 <p><strong>Description:</strong> Read name of triggerY</p>
 <div class="box bggreen docutils container">
-<div class="admonition note">
-<p class="admonition-title">Note</p>
 <p>This specifies any shell prompt running on the target</p>
-</div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">iio</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">triggerY</span><span class="o">/&gt;</span> <span class="o">**</span><span class="n">cat</span> <span class="n">name</span><span class="o">**</span>
 <span class="n">irqtrig56</span>
 </pre></div>
@@ -618,20 +608,14 @@ Content on this topic
 </div>
 <p><strong>Description:</strong> Make irqtrig56 (trigger using system IRQ56, likely a GPIO IRQ), to current trigger of deviceX</p>
 <div class="box bggreen docutils container">
-<div class="admonition note">
-<p class="admonition-title">Note</p>
 <p>This specifies any shell prompt running on the target</p>
-</div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">iio</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">iio</span><span class="p">:</span><span class="n">deviceX</span><span class="o">/</span><span class="n">trigger</span><span class="o">&gt;</span> <span class="o">**</span><span class="n">echo</span> <span class="n">irqtrig56</span> <span class="o">&gt;</span> <span class="n">current_trigger</span><span class="o">**</span>
 </pre></div>
 </div>
 </div>
 <p><strong>Description:</strong> Read current trigger source of deviceX</p>
 <div class="box bggreen docutils container">
-<div class="admonition note">
-<p class="admonition-title">Note</p>
 <p>This specifies any shell prompt running on the target</p>
-</div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">iio</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">iio</span><span class="p">:</span><span class="n">deviceX</span><span class="o">/</span><span class="n">trigger</span><span class="o">&gt;</span> <span class="o">**</span><span class="n">cat</span> <span class="n">current_trigger</span><span class="o">**</span>
 <span class="n">irqtrig56</span>
 </pre></div>
@@ -668,45 +652,18 @@ Content on this topic
 <h1>Buffer management<a class="headerlink" href="#buffer-management" title="Link to this heading"></a></h1>
 <p>The Industrial I/O subsystem provides support for various ring buffer based data acquisition methods. Apart from device specific hardware buffer support, the user can chose between two different software ring buffer implementations. One is the IIO lock free software ring, and the other is based on Linux kfifo. Devices with buffer support feature an additional sub-folder in the /sys/bus/iio/devices/deviceX/ folder hierarchy. Called deviceX:bufferY, where Y defaults to 0, for devices with a single buffer.</p>
 <p>Every buffer implementation features a set of files:</p>
-<div class="line-block">
-<div class="line"><strong>length</strong></div>
-<div class="line">Get/set the number of sample sets that may be held by the buffer.</div>
-</div>
-<div class="line-block">
-<div class="line"><strong>enable</strong></div>
-<div class="line">Enables/disables the buffer. This file should be written last, after length and selection of scan elements.</div>
-</div>
-<div class="line-block">
-<div class="line"><strong>watermark</strong></div>
-<div class="line">A single positive integer specifying the maximum number of scan elements to wait for. Poll will block until the watermark is reached. Blocking read will wait until the minimum between the requested read amount or the low water mark is available. Non-blocking read will retrieve the available samples from the buffer even if there are less samples then watermark level. This allows the application to block on poll with a timeout and read the available samples after the timeout expires and thus have a maximum delay guarantee.</div>
-</div>
-<div class="line-block">
-<div class="line"><strong>data_available</strong></div>
-<div class="line">A read-only value indicating the bytes of data available in the buffer. In the case of an output buffer, this indicates the amount of empty space available to write data to. In the case of an input buffer, this indicates the amount of data available for reading.</div>
-</div>
-<div class="line-block">
-<div class="line"><strong>length_align_bytes</strong></div>
-<div class="line">Using the high-speed interface. DMA buffers may have an alignment requirement for the buffer length. Newer versions of the kernel will report the alignment requirements associated with a device through the `length_align_bytes` property.</div>
-</div>
-<div class="line-block">
-<div class="line"><strong>scan_elements</strong></div>
-<div class="line">The scan_elements directory contains interfaces for elements that will be captured for a single triggered sample set in the buffer.</div>
-</div>
+<p><strong>length</strong> Get/set the number of sample sets that may be held by the buffer.</p>
+<p><strong>enable</strong> Enables/disables the buffer. This file should be written last, after length and selection of scan elements.</p>
+<p><strong>watermark</strong> A single positive integer specifying the maximum number of scan elements to wait for. Poll will block until the watermark is reached. Blocking read will wait until the minimum between the requested read amount or the low water mark is available. Non-blocking read will retrieve the available samples from the buffer even if there are less samples then watermark level. This allows the application to block on poll with a timeout and read the available samples after the timeout expires and thus have a maximum delay guarantee.</p>
+<p><strong>data_available</strong> A read-only value indicating the bytes of data available in the buffer. In the case of an output buffer, this indicates the amount of empty space available to write data to. In the case of an input buffer, this indicates the amount of data available for reading.</p>
+<p><strong>length_align_bytes</strong> Using the high-speed interface. DMA buffers may have an alignment requirement for the buffer length. Newer versions of the kernel will report the alignment requirements associated with a device through the `length_align_bytes` property.</p>
+<p><strong>scan_elements</strong> The scan_elements directory contains interfaces for elements that will be captured for a single triggered sample set in the buffer.</p>
 </section>
 <section id="typical-adc-scan-elements">
 <h1>Typical ADC scan elements<a class="headerlink" href="#typical-adc-scan-elements" title="Link to this heading"></a></h1>
-<div class="line-block">
-<div class="line"><strong>in_voltageX_en / in_voltageX-voltageY_en / timestamp_en:</strong></div>
-<div class="line">Scan element control for triggered data capture. Writing 1 will enable the scan element, writing 0 will disable it</div>
-</div>
-<div class="line-block">
-<div class="line"><strong>in_voltageX_type / in_voltageX-voltageY_type / timestamp_type:</strong></div>
-<div class="line">Description of the scan element data storage within the buffer and therefore in the form in which it is read from user-space. Form is [s|u]bits/storage-bits. s or u specifies if signed (2’s complement) or unsigned. bits is the number of bits of data and storage-bits is the space (after padding) that it occupies in the buffer. Note that some devices will have additional information in the unused bits so to get a clean value, the bits value must be used to mask the buffer output value appropriately. The storage-bits value also specifies the data alignment. So u12/16 will be a unsigned 12 bit integer stored in a 16 bit location aligned to a 16 bit boundary. For other storage combinations this attribute will be extended appropriately.</div>
-</div>
-<div class="line-block">
-<div class="line"><strong>in_voltageX_index / in_voltageX-voltageY_index / timestamp_index:</strong></div>
-<div class="line">A single positive integer specifying the position of this scan element in the buffer. Note these are not dependent on what is enabled and may not be contiguous. Thus for user-space to establish the full layout these must be used in conjunction with all _en attributes to establish which channels are present, and the relevant _type attributes to establish the data storage format.</div>
-</div>
+<p><strong>in_voltageX_en / in_voltageX-voltageY_en / timestamp_en:</strong> Scan element control for triggered data capture. Writing 1 will enable the scan element, writing 0 will disable it</p>
+<p><strong>in_voltageX_type / in_voltageX-voltageY_type / timestamp_type:</strong> Description of the scan element data storage within the buffer and therefore in the form in which it is read from user-space. Form is [s|u]bits/storage-bits. s or u specifies if signed (2’s complement) or unsigned. bits is the number of bits of data and storage-bits is the space (after padding) that it occupies in the buffer. Note that some devices will have additional information in the unused bits so to get a clean value, the bits value must be used to mask the buffer output value appropriately. The storage-bits value also specifies the data alignment. So u12/16 will be a unsigned 12 bit integer stored in a 16 bit location aligned to a 16 bit boundary. For other storage combinations this attribute will be extended appropriately.</p>
+<p><strong>in_voltageX_index / in_voltageX-voltageY_index / timestamp_index:</strong> A single positive integer specifying the position of this scan element in the buffer. Note these are not dependent on what is enabled and may not be contiguous. Thus for user-space to establish the full layout these must be used in conjunction with all _en attributes to establish which channels are present, and the relevant _type attributes to establish the data storage format.</p>
 </section>
 <section id="event-management">
 <h1>Event Management<a class="headerlink" href="#event-management" title="Link to this heading"></a></h1>
@@ -744,50 +701,26 @@ Content on this topic
 </section>
 <section id="typical-event-attributes">
 <h1>Typical event attributes<a class="headerlink" href="#typical-event-attributes" title="Link to this heading"></a></h1>
-<div class="line-block">
-<div class="line"><strong>/sys/bus/iio/devices/iio:deviceX/events</strong></div>
-<div class="line">Configuration of which hardware generated events are passed up to user-space.</div>
-</div>
+<p><strong>/sys/bus/iio/devices/iio:deviceX/events</strong> Configuration of which hardware generated events are passed up to user-space.</p>
 <ul class="simple">
 <li><p><strong>Threshold Events:</strong></p></li>
 </ul>
-<div class="line-block">
-<div class="line"><strong>&lt;type&gt;Z[_name]_thresh[_rising|falling]_en</strong></div>
-<div class="line">Event generated when channel passes a threshold in the specified (_rising|_falling) direction. If the direction is not specified, then either the device will report an event which ever direction a single threshold value is called in (e.g. &lt;type&gt;[Z][_name]_&lt;raw|input&gt;_thresh_value) or &lt;type&gt;[Z][_name]_&lt;raw|input&gt;_thresh_rising_value and &lt;type&gt;[Z][_name]_&lt;raw|input&gt;_thresh_falling_value may take different values, but the device can only enable both thresholds or neither. Note the driver will assume the last p events requested are to be enabled where p is however many it supports (which may vary depending on the exact set requested. So if you want to be sure you have set what you think you have, check the contents of these attributes after everything is configured. Drivers may have to buffer any parameters so that they are consistent when a given event type is enabled a future point (and not those for whatever event was previously enabled).</div>
-</div>
-<div class="line-block">
-<div class="line"><strong>&lt;type&gt;Z[_name]_thresh[_rising|falling]_value</strong></div>
-<div class="line">Specifies the value of threshold that the device is comparing against for the events enabled by &lt;type&gt;Z[_name]_thresh[_rising|falling]_en. If separate attributes exist for the two directions, but direction is not specified for this attribute, then a single threshold value applies to both directions. The raw or input element of the name indicates whether the value is in raw device units or in processed units (as _raw and _input do on sysfs direct channel read attributes).</div>
-</div>
+<p><strong>&lt;type&gt;Z[_name]_thresh[_rising|falling]_en</strong> Event generated when channel passes a threshold in the specified (_rising|_falling) direction. If the direction is not specified, then either the device will report an event which ever direction a single threshold value is called in (e.g. &lt;type&gt;[Z][_name]_&lt;raw|input&gt;_thresh_value) or &lt;type&gt;[Z][_name]_&lt;raw|input&gt;_thresh_rising_value and &lt;type&gt;[Z][_name]_&lt;raw|input&gt;_thresh_falling_value may take different values, but the device can only enable both thresholds or neither. Note the driver will assume the last p events requested are to be enabled where p is however many it supports (which may vary depending on the exact set requested. So if you want to be sure you have set what you think you have, check the contents of these attributes after everything is configured. Drivers may have to buffer any parameters so that they are consistent when a given event type is enabled a future point (and not those for whatever event was previously enabled).</p>
+<p><strong>&lt;type&gt;Z[_name]_thresh[_rising|falling]_value</strong> Specifies the value of threshold that the device is comparing against for the events enabled by &lt;type&gt;Z[_name]_thresh[_rising|falling]_en. If separate attributes exist for the two directions, but direction is not specified for this attribute, then a single threshold value applies to both directions. The raw or input element of the name indicates whether the value is in raw device units or in processed units (as _raw and _input do on sysfs direct channel read attributes).</p>
 <ul class="simple">
 <li><p><strong>Rate of Change Events:</strong></p></li>
 </ul>
-<div class="line-block">
-<div class="line"><strong>&lt;type&gt;[Z][_name]_roc[_rising|falling]_en</strong></div>
-<div class="line">Event generated when channel passes a threshold on the rate of change (1st differential) in the specified (_rising|_falling) direction. If the direction is not specified, then either the device will report an event which ever direction a single threshold value is called in (e.g. &lt;type&gt;[Z][_name]_&lt;raw|input&gt;_roc_value) or &lt;type&gt;[Z][_name]_&lt;raw|input&gt;_roc_rising_value and &lt;type&gt;[Z][_name]_&lt;raw|input&gt;_roc_falling_value may take different values, but the device can only enable both rate of change thresholds or neither. Note the driver will assume the last p events requested are to be enabled where p is however many it supports (which may vary depending on the exact set requested. So if you want to be sure you have set what you think you have, check the contents of these attributes after everything is configured. Drivers may have to buffer any parameters so that they are consistent when a given event type is enabled a future point (and not those for whatever event was previously enabled).</div>
-</div>
-<div class="line-block">
-<div class="line"><strong>&lt;type&gt;[Z][_name]_roc[_rising|falling]_value</strong></div>
-<div class="line">Specifies the value of rate of change threshold that the device is comparing against for the events enabled by &lt;type&gt;[Z][_name]_roc[_rising|falling]_en. If separate attributes exist for the two directions, but direction is not specified for this attribute, then a single threshold value applies to both directions. The raw or input element of the name indicates whether the value is in raw device units or in processed units (as _raw and _input do on sysfs direct channel read attributes).</div>
-</div>
+<p><strong>&lt;type&gt;[Z][_name]_roc[_rising|falling]_en</strong> Event generated when channel passes a threshold on the rate of change (1st differential) in the specified (_rising|_falling) direction. If the direction is not specified, then either the device will report an event which ever direction a single threshold value is called in (e.g. &lt;type&gt;[Z][_name]_&lt;raw|input&gt;_roc_value) or &lt;type&gt;[Z][_name]_&lt;raw|input&gt;_roc_rising_value and &lt;type&gt;[Z][_name]_&lt;raw|input&gt;_roc_falling_value may take different values, but the device can only enable both rate of change thresholds or neither. Note the driver will assume the last p events requested are to be enabled where p is however many it supports (which may vary depending on the exact set requested. So if you want to be sure you have set what you think you have, check the contents of these attributes after everything is configured. Drivers may have to buffer any parameters so that they are consistent when a given event type is enabled a future point (and not those for whatever event was previously enabled).</p>
+<p><strong>&lt;type&gt;[Z][_name]_roc[_rising|falling]_value</strong> Specifies the value of rate of change threshold that the device is comparing against for the events enabled by &lt;type&gt;[Z][_name]_roc[_rising|falling]_en. If separate attributes exist for the two directions, but direction is not specified for this attribute, then a single threshold value applies to both directions. The raw or input element of the name indicates whether the value is in raw device units or in processed units (as _raw and _input do on sysfs direct channel read attributes).</p>
 <ul class="simple">
 <li><p><strong>Magnitude Events:</strong></p></li>
 </ul>
-<div class="line-block">
-<div class="line"><strong>&lt;type&gt;Z[_name]_mag[_rising|falling]_en</strong></div>
-<div class="line">Similar to in_accel_x_thresh[_rising|_falling]_en, but here the magnitude of the channel is compared to the threshold, not its signed value.</div>
-</div>
-<div class="line-block">
-<div class="line"><strong>&lt;type&gt;Z[_name]_mag[_rising|falling]_value</strong></div>
-<div class="line">The value to which the magnitude of the channel is compared. If number or direction is not specified, applies to all channels of this type.</div>
-</div>
+<p><strong>&lt;type&gt;Z[_name]_mag[_rising|falling]_en</strong> Similar to in_accel_x_thresh[_rising|_falling]_en, but here the magnitude of the channel is compared to the threshold, not its signed value.</p>
+<p><strong>&lt;type&gt;Z[_name]_mag[_rising|falling]_value</strong> The value to which the magnitude of the channel is compared. If number or direction is not specified, applies to all channels of this type.</p>
 <ul class="simple">
 <li><p><strong>Temporal Conditions:</strong></p></li>
 </ul>
-<div class="line-block">
-<div class="line"><strong>&lt;type&gt;[Z][_name][_thresh|_roc][_rising|falling]_period</strong></div>
-<div class="line">Period of time (in seconds) for which the condition must be met before an event is generated. If direction is not specified then this period applies to both directions.</div>
-</div>
+<p><strong>&lt;type&gt;[Z][_name][_thresh|_roc][_rising|falling]_period</strong> Period of time (in seconds) for which the condition must be met before an event is generated. If direction is not specified then this period applies to both directions.</p>
 </section>
 <section id="low-level-register-access-via-debugfs-direct-reg-access">
 <h1>Low level register access via debugfs (direct_reg_access)<a class="headerlink" href="#low-level-register-access-via-debugfs-direct-reg-access" title="Link to this heading"></a></h1>
@@ -800,10 +733,7 @@ Content on this topic
 <p>In order to identify if the IIO device in question feature this option you first need to identify the IIO device number.</p>
 <p>Therefore read the name attribute of each IIO device</p>
 <div class="box bggreen docutils container">
-<div class="admonition note">
-<p class="admonition-title">Note</p>
 <p>This specifies any shell prompt running on the target</p>
-</div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@analog</span><span class="p">:</span><span class="o">~</span><span class="c1"># grep &quot;&quot; /sys/bus/iio/devices/iio\:device*/name</span>
 <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">iio</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">iio</span><span class="p">:</span><span class="n">device0</span><span class="o">/</span><span class="n">name</span><span class="p">:</span><span class="n">ad7291</span>
 <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">iio</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">iio</span><span class="p">:</span><span class="n">device1</span><span class="o">/</span><span class="n">name</span><span class="p">:</span><span class="n">ad9361</span><span class="o">-</span><span class="n">phy</span>
@@ -818,10 +748,7 @@ Content on this topic
 </div>
 <p>Change directory to <strong>/sys/kernel/debug</strong>/iio/ iio:deviceX and check if the direct_reg_access file exists.</p>
 <div class="box bggreen docutils container">
-<div class="admonition note">
-<p class="admonition-title">Note</p>
 <p>This specifies any shell prompt running on the target</p>
-</div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@analog</span><span class="p">:</span><span class="o">~</span><span class="c1"># cd /sys/kernel/debug/iio/iio\:device1</span>
 <span class="n">root</span><span class="nd">@analog</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">iio</span><span class="o">/</span><span class="n">iio</span><span class="p">:</span><span class="n">device1</span><span class="c1"># ls direct_reg_access</span>
 <span class="n">direct_reg_access</span>
@@ -830,10 +757,7 @@ Content on this topic
 </div>
 <p><strong>Reading</strong></p>
 <div class="box bggreen docutils container">
-<div class="admonition note">
-<p class="admonition-title">Note</p>
 <p>This specifies any shell prompt running on the target</p>
-</div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@analog</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">iio</span><span class="o">/</span><span class="n">iio</span><span class="p">:</span><span class="n">device1</span><span class="c1"># echo 0x7 &gt; direct_reg_access</span>
 <span class="n">root</span><span class="nd">@analog</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">iio</span><span class="o">/</span><span class="n">iio</span><span class="p">:</span><span class="n">device1</span><span class="c1"># cat direct_reg_access</span>
 <span class="mh">0x40</span>
@@ -843,10 +767,7 @@ Content on this topic
 <p><strong>Writing</strong></p>
 <p>Write ADDRESS VALUE</p>
 <div class="box bggreen docutils container">
-<div class="admonition note">
-<p class="admonition-title">Note</p>
 <p>This specifies any shell prompt running on the target</p>
-</div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@analog</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">iio</span><span class="o">/</span><span class="n">iio</span><span class="p">:</span><span class="n">device1</span><span class="c1"># echo 0x7 0x50  &gt; direct_reg_access</span>
 <span class="n">root</span><span class="nd">@analog</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">iio</span><span class="o">/</span><span class="n">iio</span><span class="p">:</span><span class="n">device1</span><span class="c1"># cat direct_reg_access</span>
 <span class="mh">0x50</span>
@@ -854,20 +775,15 @@ Content on this topic
 </div>
 </div>
 <p><strong>Accessing HDL CORE registers</strong></p>
-<div class="line-block">
-<div class="line">Special ADI device driver convention for devices that have both:</div>
-<div class="line">* a SPI/I2C control interface</div>
-</div>
+<p>Special ADI device driver convention for devices that have both:</p>
 <ul class="simple">
+<li><p>a SPI/I2C control interface</p></li>
 <li><p>and some sort of HDL Core with registers (AXI)</p></li>
 </ul>
 <p>In this case when accessing the HDL Core Registers always set BIT31.</p>
 <p>The register map for typical ADI HDL cores can be found here: <a class="reference internal" href="../../../../resources/fpga/docs/hdl/regmap.html"><span class="doc">Register Map</span></a></p>
 <div class="box bggreen docutils container">
-<div class="admonition note">
-<p class="admonition-title">Note</p>
 <p>This specifies any shell prompt running on the target</p>
-</div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@analog</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">iio</span><span class="o">/</span><span class="n">iio</span><span class="p">:</span><span class="n">device6</span><span class="c1"># echo 0x80000000 &gt; direct_reg_access</span>
 <span class="n">root</span><span class="nd">@analog</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">iio</span><span class="o">/</span><span class="n">iio</span><span class="p">:</span><span class="n">device6</span><span class="c1"># cat direct_reg_access</span>
 <span class="mh">0x80062</span>
@@ -890,9 +806,6 @@ Content on this topic
 <li></li>
 </ul>
 <p><img alt="libiio introduction" src="https://wiki.analog.com/_media/youtube&gt;p_VntEwUe24" /></p>
-</section>
-<section id="need-help">
-<h1>Need help<a class="headerlink" href="#need-help" title="Link to this heading"></a></h1>
 <p><em>Need Help?</em></p>
 <ul class="simple">
 <li><p><a class="icon ez reference external" href="https://ez.analog.com/linux-software-drivers" target="_blank">Analog Devices Linux Device Drivers Help Forum</a></p></li>

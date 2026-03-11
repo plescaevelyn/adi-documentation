@@ -99,7 +99,7 @@
 <li><a class="reference internal" href="#functional-block-diagram">Functional Block Diagram</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#programming-the-ad9832ad9835-1">Programming the AD9832/AD9835</a><ul>
+<li><a class="reference internal" href="#id1">Programming the AD9832/AD9835</a><ul>
 <li><a class="reference internal" href="#example-1-setting-up-the-part-after-power-up">Example 1: Setting Up the Part After Power-Up</a></li>
 <li><a class="reference internal" href="#command-sequence-explained">Command Sequence Explained</a></li>
 <li><a class="reference internal" href="#example-2-changing-the-fselect-bit">Example 2: Changing the FSELECT Bit</a></li>
@@ -609,25 +609,21 @@ Content on this topic
 <p><img alt="an1108-09651-001.png" src="https://wiki.analog.com/_media/resources/app-notes/an1108-09651-001.png" /> <em>Figure 1. AD9832 Functional Block Diagram</em></p>
 </section>
 </section>
-<section id="programming-the-ad9832ad9835-1">
-<span id="id1"></span><h2>Programming the AD9832/AD9835<a class="headerlink" href="#programming-the-ad9832ad9835-1" title="Link to this heading"></a></h2>
+<section id="id1">
+<h2>Programming the AD9832/AD9835<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
 <p>A simple example is best to explain how to program the AD9832 and the AD9835. For further details, refer to the AN-621 Application Note and the <a class="icon adi reference external" href="https://www.analog.com/AD9832" target="_blank">AD9832</a> or the <a class="icon adi reference external" href="https://www.analog.com/AD9835" target="_blank">AD9835</a> data sheet.</p>
 <section id="example-1-setting-up-the-part-after-power-up">
 <h3>Example 1: Setting Up the Part After Power-Up<a class="headerlink" href="#example-1-setting-up-the-part-after-power-up" title="Link to this heading"></a></h3>
 <p>The aim is to generate two output frequencies, loading 3 kHz to the FREQ0 register, and 10 kHz to the FREQ1 register, with a 25 MHz MCLK.</p>
 <p>The dial-up code for this is defined by the equation</p>
-<div class="line-block">
-<div class="line"><span class="math notranslate nohighlight">\(FreqReg=f_{OUT} x 2^28/f_{MCLK}\)</span></div>
-<div class="line">For <em>FREQ0</em> = 3000 Hz</div>
-<div class="line"><span class="math notranslate nohighlight">\(\displaystyle Freq0=300 Hz x 2^\frac{32}{25} MHz\)</span></div>
-</div>
-<div class="line-block">
-<div class="line">= 515,396 decimal = 0x0007DD44</div>
-<div class="line">For <em>FREQ1</em> = 10 KHz</div>
-<div class="line"><span class="math notranslate nohighlight">\(\displaystyle Freq1=10,000 Hz x 2^\frac{32}{25} MHz\)</span></div>
-<div class="line">= 1,717,987 decimal = 0x001A363E</div>
-<div class="line">Note that the <a class="icon link reference external" href="https://tools.analog.com/en/simdds/" target="_blank">ADIsimDDS tool</a> offers a quick and easy method of generating the desired code in hexadecimal, decimal or binary.</div>
-</div>
+<p><span class="math notranslate nohighlight">\(FreqReg=f_{OUT} x 2^28/f_{MCLK}\)</span></p>
+<p>For <em>FREQ0</em> = 3000 Hz</p>
+<p><span class="math notranslate nohighlight">\(\displaystyle Freq0=300 Hz x 2^\frac{32}{25} MHz\)</span></p>
+<p>= 515,396 decimal = 0x0007DD44</p>
+<p>For <em>FREQ1</em> = 10 KHz</p>
+<p><span class="math notranslate nohighlight">\(\displaystyle Freq1=10,000 Hz x 2^\frac{32}{25} MHz\)</span></p>
+<p>= 1,717,987 decimal = 0x001A363E</p>
+<p>Note that the <a class="icon link reference external" href="https://tools.analog.com/en/simdds/" target="_blank">ADIsimDDS tool</a> offers a quick and easy method of generating the desired code in hexadecimal, decimal or binary.</p>
 <p>The required initialization sequence is shown in Table 1.</p>
 <p><strong>Table 1. Initialization Sequence</strong></p>
 <div class="table-wrapper docutils container">
@@ -681,18 +677,13 @@ Content on this topic
 <p>0xD000—Resets AD9832</p>
 <p>RESET Bit D12 is set to 1. This resets the internal registers to 0, which corresponds to an analog output of full scale (see Figure 2). Ch1 is the spurious output set to reset. Ch2 is FSYNC, Ch3 is SDATA, and Ch4 is SCLK. Note that data is valid on the falling edge of SCLK. Ignore the SDATA high after eight SCLK cycles; this is an inherent feature of the particular SPI driver used and does not affect the part.</p>
 <p><img alt="an1108-09651-002.png" src="https://wiki.analog.com/_media/resources/app-notes/an1108-09651-002.png" /> <em>Figure 2. Put AD9832/AD9835 in Reset–0xD000</em></p>
-<div class="line-block">
-<div class="line">0x3044</div>
-</div>
+<p>0x3044</p>
 <ul class="simple">
 <li><p>Eight bits to defer.</p></li>
 <li><p>Frequency Register 0, L LSB data.</p></li>
 <li><p>8-bit data = 0x44.</p></li>
 </ul>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">0x21DD</div>
-</div>
+<p>0x21DD</p>
 <ul class="simple">
 <li><p>Present eight bits plus the deferred eight bits to the select frequency register.</p></li>
 <li><p>Frequency Register 0, H LSB data.</p></li>
@@ -733,10 +724,8 @@ Content on this topic
 <ul class="simple">
 <li><p>For FREQ1 = 40 kHz</p></li>
 </ul>
-<div class="line-block">
-<div class="line"><span class="math notranslate nohighlight">\(\displaystyle FREQ1 = 40,000 Hz x 2^\frac{32}{25} MHz\)</span></div>
-<div class="line">= 6,871,948 decimal = 0x0068DB8C</div>
-</div>
+<p><span class="math notranslate nohighlight">\(\displaystyle FREQ1 = 40,000 Hz x 2^\frac{32}{25} MHz\)</span></p>
+<p>= 6,871,948 decimal = 0x0068DB8C</p>
 <p>Load the following command sequence:</p>
 <ul class="simple">
 <li><p>0x348C—Frequency Register 1, L LSB data.</p></li>

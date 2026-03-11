@@ -95,7 +95,10 @@
 <li><a class="reference internal" href="#">Receiver Front End Overview &amp; Theory Of Operation</a><ul>
 <li><a class="reference internal" href="#rx-input-stage-modes-of-operation">Rx Input Stage &amp; Modes Of Operation</a></li>
 <li><a class="reference internal" href="#downconversion-stage-frequency-plan">Downconversion Stage &amp; Frequency Plan</a></li>
+<li><a class="reference internal" href="#spurious-analysis">Spurious Analysis</a></li>
+<li><a class="reference internal" href="#if-section">IF Section</a></li>
 <li><a class="reference internal" href="#timing-control">Timing &amp; Control</a></li>
+<li><a class="reference internal" href="#receiver-performance-simulations">Receiver Performance Simulations</a></li>
 </ul>
 </li>
 </ul>
@@ -589,9 +592,6 @@ Content on this topic
 <p>The 2-24GHz Receiver block diagram is shown below. The following wiki sections will go into more detail on the theory of operation of the individual, functional blocks of the signal chain.</p>
 <a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/rxblockdiagram.png"><img alt="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/rxblockdiagram.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/rxblockdiagram.png" style="width: 1000px;" />
 </a>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
 <section id="rx-input-stage-modes-of-operation">
 <h2>Rx Input Stage &amp; Modes Of Operation<a class="headerlink" href="#rx-input-stage-modes-of-operation" title="Link to this heading"></a></h2>
 <p>The first stage of the Rx chain is the multi-mode input network (shown below), which can be configured for three different modes for quick performance optimization in a dynamic environment. The desired signal path is selectable via two <a class="icon adi reference external" href="https://www.analog.com/ADRF5020" target="_blank">ADRF5020</a> RF switches, which are capable of sub-100ns switching time and are controllable with GPIOs from the FPGA/ASIC.</p>
@@ -605,6 +605,8 @@ Content on this topic
 </a>
 <p>Following the switchable input network are an <a class="icon adi reference external" href="https://www.analog.com/ADRF5740" target="_blank">ADRF5740</a> digital step attenuator (DSA), LNA, and additional <a class="icon adi reference external" href="https://www.analog.com/ADMV8818" target="_blank">ADMV8818</a> tunable BPF. The <a class="icon adi reference external" href="https://www.analog.com/ADRF5740" target="_blank">ADRF5740</a> is one of two DSAs in the signal chain (with the other in the IF section), both of which serve multiple roles including gain levelling/control and NF/linearity optimization. This second <a class="icon adi reference external" href="https://www.analog.com/ADMV8818" target="_blank">ADMV8818</a> in the signal chain primarily acts as an image &amp; IF rejection filter but can also provide some level of IMD2 mitigation if the LNA input path is used instead of the preselector filter path.</p>
 <p>The image is a frequency band that, when present at the mixer input, will generate signals equal in amplitude to the desired signals at the mixer output. IF signal rejection is required to knock down spectrum at IF frequencies before the mixer to avoid them from leaking directly across the mixer and showing up as un-wanted spurs. A frequency spectrum example of the unwanted image and IF bands is shown below.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/developer-kits/imgfilteringgraphic.png"><img alt="https://wiki.analog.com/_media/resources/eval/developer-kits/imgfilteringgraphic.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/developer-kits/imgfilteringgraphic.png" style="width: 800px;" />
+</a>
 </section>
 <section id="downconversion-stage-frequency-plan">
 <h2>Downconversion Stage &amp; Frequency Plan<a class="headerlink" href="#downconversion-stage-frequency-plan" title="Link to this heading"></a></h2>
@@ -618,12 +620,10 @@ Content on this topic
 <p>The following table summarizes the possible frequency conversion paths:</p>
 <a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/rxfrequencyplan.png"><img alt="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/rxfrequencyplan.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/rxfrequencyplan.png" style="width: 900px;" />
 </a>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="line-block">
-<div class="line">===== Spurious Analysis ===== Keysight SystemVue/Genesys was used to simulate different spurious signal rejection tests, namely IF rejection and image rejection tests. The test setup was similar for both tests - Our desired signal was injected at the input to the reciever chain, along with the undesired IF and image components for their respective tests. There are two paths a signal can take at the input of the receiver, one of which is for low noise performance and the other is for high spurious signal rejection performance. The low noise path utilizes an <a class="icon adi reference external" href="https://www.analog.com/ADL9005" target="_blank">ADL9005</a> amplifier at the input of the chain to optimize noise performance of the front end, whereas the high rejection path implements an <a class="icon adi reference external" href="https://www.analog.com/ADMV8818" target="_blank">ADMV8818</a> bandpass filter to increase attenuation of undesired received signals.</div>
-</div>
+</section>
+<section id="spurious-analysis">
+<h2>Spurious Analysis<a class="headerlink" href="#spurious-analysis" title="Link to this heading"></a></h2>
+<p>Keysight SystemVue/Genesys was used to simulate different spurious signal rejection tests, namely IF rejection and image rejection tests. The test setup was similar for both tests - Our desired signal was injected at the input to the reciever chain, along with the undesired IF and image components for their respective tests. There are two paths a signal can take at the input of the receiver, one of which is for low noise performance and the other is for high spurious signal rejection performance. The low noise path utilizes an <a class="icon adi reference external" href="https://www.analog.com/ADL9005" target="_blank">ADL9005</a> amplifier at the input of the chain to optimize noise performance of the front end, whereas the high rejection path implements an <a class="icon adi reference external" href="https://www.analog.com/ADMV8818" target="_blank">ADMV8818</a> bandpass filter to increase attenuation of undesired received signals.</p>
 <a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/ifrejectionpaths.png"><img alt="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/ifrejectionpaths.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/ifrejectionpaths.png" style="width: 600px;" />
 </a>
 <p>Taking the low noise path, the average IF rejection performance was calculated to be 56.80dBc. The following plot shows the simulated IF rejection performance of the receiver front end in the low noise path:</p>
@@ -636,73 +636,59 @@ Content on this topic
 <a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/ln_imagerejection.png"><img alt="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/ln_imagerejection.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/ln_imagerejection.png" style="width: 900px;" />
 </a>
 <p>Taking the high rejection path, the average image rejection performance improved significantly to 160.7dBc. The following plot shows the simulated image rejection performance of the receiver front end in the high rejection path:</p>
-<div class="line-block">
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/hr_imagerejection.png"><img alt="image2" src="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/hr_imagerejection.png" style="width: 900px;" /></a></div>
-<div class="line">===== IF Section ===== The IF section of the receiver front end, shown below, is the final stage before the ADC, performing additional signal conditioning and filtering. Two high-linearity amplifiers provide additional gain while the <a class="icon adi reference external" href="https://www.analog.com/ADRF5730" target="_blank">ADRF5730</a> DSA assists the DSA in the RF section with gain levelling/control and performance optimization in the IF. Anti-aliasing filtering is implemented by cascaded, COTS HPF and LPFs to provide 1GHz of IF bandwidth centered in the 2nd Nyquist band (4-5GHz) of the <a class="icon adi reference external" href="https://www.analog.com/AD9082" target="_blank">AD9082</a> sampling at 6GSPS.</div>
-</div>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/hr_imagerejection.png"><img alt="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/hr_imagerejection.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/hr_imagerejection.png" style="width: 900px;" />
+</a>
+</section>
+<section id="if-section">
+<h2>IF Section<a class="headerlink" href="#if-section" title="Link to this heading"></a></h2>
+<p>The IF section of the receiver front end, shown below, is the final stage before the ADC, performing additional signal conditioning and filtering. Two high-linearity amplifiers provide additional gain while the <a class="icon adi reference external" href="https://www.analog.com/ADRF5730" target="_blank">ADRF5730</a> DSA assists the DSA in the RF section with gain levelling/control and performance optimization in the IF. Anti-aliasing filtering is implemented by cascaded, COTS HPF and LPFs to provide 1GHz of IF bandwidth centered in the 2nd Nyquist band (4-5GHz) of the <a class="icon adi reference external" href="https://www.analog.com/AD9082" target="_blank">AD9082</a> sampling at 6GSPS.</p>
 <a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/developer-kits/rxifsection.png"><img alt="https://wiki.analog.com/_media/resources/eval/developer-kits/rxifsection.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/developer-kits/rxifsection.png" style="width: 900px;" />
 </a>
 <p>The plot below shows the simulated frequency response of the IF section of the signal chain with the anti-aliasing filtering providing roughly 30-40dB of OOB (out-of-band) rejection around the sampled IF band. In general, anti-aliasing filtering should target 60dBc of OOB rejection, but satisfying this requirement with readily available COTS filters is somewhat impractical. It is recommended to use a custom anti-aliasing filter implementation if greater rejection is required by the end system.</p>
 <a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/developer-kits/if_response.png"><img alt="https://wiki.analog.com/_media/resources/eval/developer-kits/if_response.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/developer-kits/if_response.png" style="width: 800px;" />
 </a>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
 </section>
 <section id="timing-control">
 <h2>Timing &amp; Control<a class="headerlink" href="#timing-control" title="Link to this heading"></a></h2>
 <p>Automatic gain control (AGC), RF path switching, and filter switching/reconfiguration often have critical timing specs that drive component selection, especially in systems that require fast frequency hopping or wideband tuning. The RF switches, DSAs, and tunable filters in the receiver signal chain offer fast switching/settling times, a high degree of configurability, and can be controlled via standard parallel and/or SPI interfaces. The ADMV8818 tunable filters also have the ability to store up to 128 filter states in an internal lookup as well as an internal state machine, allowing faster recall of preset filter configurations. The table below lists the control interfaces and minimum configuration and settling time details at the component level.</p>
-<div class="line-block">
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/timing_control.png"><img alt="image3" src="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/timing_control.png" style="width: 900px;" /></a></div>
-<div class="line">===== Receiver Performance Simulations ===== Keysight Systemvue/Genesys was used for detailed signal chain modelling and cascade analysis. Every component in the signal chain was modelled with frequency-dependent sys-parameter or s-parameter datasets to ensure accurate simulation results. The Genesys signal chain model shown below takes into account the following components:</div>
-</div>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/timing_control.png"><img alt="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/timing_control.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/timing_control.png" style="width: 900px;" />
+</a>
+</section>
+<section id="receiver-performance-simulations">
+<h2>Receiver Performance Simulations<a class="headerlink" href="#receiver-performance-simulations" title="Link to this heading"></a></h2>
+<p>Keysight Systemvue/Genesys was used for detailed signal chain modelling and cascade analysis. Every component in the signal chain was modelled with frequency-dependent sys-parameter or s-parameter datasets to ensure accurate simulation results. The Genesys signal chain model shown below takes into account the following components:</p>
 <ul class="simple">
 <li><p>Manufacturer-provided, frequency-dependent s-parameter or sys-parameter datasets for every active and passive RF component</p></li>
 <li><p>A standalone model of the ADMV8818 tunable filter configured to tune a 1GHz wide passband to the RF center frequency during frequency sweeps</p></li>
 <li><p>Frequency-dependent component interconnect modelling i.e. PCB trace loss approximation for DC-50GHz CPWG traces, 8mil Rogers 4003 PCB stackup</p></li>
 </ul>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/developer-kits/rx_genesys_schematic.png"><img alt="https://wiki.analog.com/_media/resources/eval/developer-kits/rx_genesys_schematic.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/developer-kits/rx_genesys_schematic.png" style="width: 800px;" />
+</a>
 <div class="download admonition">
 <p class="admonition-title">Download</p>
 <p>To request the Keysight Pathwave simulation files that model the performance of these circuits, please send a request <a class="icon link reference external" href="https://support.analog.com/en-US/technical-support/create-case-techsupport/" target="_blank">here</a> and include the following info:</p>
-<div class="line-block">
-<div class="line">* Name</div>
-</div>
 <ul class="simple">
+<li><p>Name</p></li>
 <li><p>Job Title</p></li>
 <li><p>Company Name</p></li>
 <li><p>Company Location</p></li>
 <li><p>Application/Use Case</p></li>
 </ul>
-<div class="line-block">
-<div class="line"><br /></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-<div class="line-block">
-<div class="line">The Genesys workspace already has numerous system analysis and Matlab-based frequency sweeps in place, including the following functionality:</div>
-</div>
+<p>The Genesys workspace already has numerous system analysis and Matlab-based frequency sweeps in place, including the following functionality:</p>
 <ul class="simple">
 <li><p>2-24GHz CW input sweep with Matlab equation-based frequency plan automated to ensure correct signal chain configuration for any given RF input frequency. All LO frequencies, frequency-dependent RF paths, and tunable filter passband automatically tune during sweep</p></li>
 <li><p>Gain levelling implemented using the RF &amp; IF DSAs to normalize cascaded gain to the lowest-gain frequency point for optimal flatness (+/- 2dB). Total attenuation is distributed evenly across the two DSAs.</p></li>
 </ul>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line"><strong>Receiver Performance (Gain, IIP3, IP1dB, NF, SFDR), 2-24GHz, LNA Path, Rough Gain Levelling Implemented</strong></div>
-<div class="line">As described above, the performance shown in the following plot assumes PCB implementation with low loss traces. This plot shows the simulated Gain, IIP3, IP1dB, NF, and SFDR performance across frequency when taking the LNA path at the input of the receiver: <a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/rx_cascade_lna_path_gain_levelling_v2.png"><img alt="image4" src="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/rx_cascade_lna_path_gain_levelling_v2.png" style="width: 800px;" /></a></div>
-</div>
-<div class="line-block">
-<div class="line"><strong>Receiver Performance (Gain, IIP3, IP1dB, NF, SFDR), 2-24GHz, Preselector BPF Path, Rough Gain Levelling Implemented</strong></div>
-<div class="line">The following plot shows the simulated Gain, IIP3, IP1dB, NF, and SFDR performance across frequency when the Bandpass Filter path is taken at the input of the receiver: <a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/rx_cascade_preselector_path_gain_levelling_v2.png"><img alt="image5" src="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/rx_cascade_preselector_path_gain_levelling_v2.png" style="width: 800px;" /></a></div>
-</div>
-<div class="line-block">
-<div class="line"><strong>Receiver Performance vs Input Power Level with Gain Control, 10GHz, LNA Path</strong></div>
-<div class="line">The following plot shows the simulated performance of the receiver, including RF power at the input of the ADC, total noise power, IMD3, and CNDR3, when sweeping RF input power at an RF frequency of 10GHz, with the LNA path selected: <a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/rx_input_blocker_sweep_agc_enabled.png"><img alt="image6" src="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/rx_input_blocker_sweep_agc_enabled.png" style="width: 800px;" /></a></div>
-</div>
+<p><strong>Receiver Performance (Gain, IIP3, IP1dB, NF, SFDR), 2-24GHz, LNA Path, Rough Gain Levelling Implemented</strong></p>
+<p>As described above, the performance shown in the following plot assumes PCB implementation with low loss traces. This plot shows the simulated Gain, IIP3, IP1dB, NF, and SFDR performance across frequency when taking the LNA path at the input of the receiver:</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/rx_cascade_lna_path_gain_levelling_v2.png"><img alt="image2" src="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/rx_cascade_lna_path_gain_levelling_v2.png" style="width: 800px;" /></a></p>
+<p><strong>Receiver Performance (Gain, IIP3, IP1dB, NF, SFDR), 2-24GHz, Preselector BPF Path, Rough Gain Levelling Implemented</strong></p>
+<p>The following plot shows the simulated Gain, IIP3, IP1dB, NF, and SFDR performance across frequency when the Bandpass Filter path is taken at the input of the receiver:</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/rx_cascade_preselector_path_gain_levelling_v2.png"><img alt="image3" src="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/rx_cascade_preselector_path_gain_levelling_v2.png" style="width: 800px;" /></a></p>
+<p><strong>Receiver Performance vs Input Power Level with Gain Control, 10GHz, LNA Path</strong></p>
+<p>The following plot shows the simulated performance of the receiver, including RF power at the input of the ADC, total noise power, IMD3, and CNDR3, when sweeping RF input power at an RF frequency of 10GHz, with the LNA path selected:</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/rx_input_blocker_sweep_agc_enabled.png"><img alt="image4" src="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/rx_input_blocker_sweep_agc_enabled.png" style="width: 800px;" /></a></p>
 </section>
 </section>
 

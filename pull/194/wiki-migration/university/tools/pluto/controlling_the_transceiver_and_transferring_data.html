@@ -586,7 +586,7 @@ Content on this topic
 <h1>Controlling the transceiver and transferring data<a class="headerlink" href="#controlling-the-transceiver-and-transferring-data" title="Link to this heading"></a></h1>
 <p>PlutoSDR runs <a class="icon link reference external" href="https://en.wikipedia.org/wiki/Linux" target="_blank">Linux</a>. The <a class="reference internal" href="device_drivers.html"><span class="doc">device drivers</span></a> allowing you to control the transceiver and capture samples are therefore part of to the Linux Industrial IO (IIO) framework. IIO is a kernel subsystem for analog to digital or digital to analog converters and related hardware. IIO communicates with user space via <a class="icon link reference external" href="https://en.wikipedia.org/wiki/sysfs" target="_blank">sysfs</a> and a character devices. From a plain user interaction point of view this is quite intuitive, since everything is just a file. However when controlling the device from software, this can be quite painful, since you simple want to call a function or method, instead of doing string manipulation and file IO. LibIIO fills this gap, provides all sorts of device abstraction and handles all kind of IIO internals. LibIIO is cross platform and also provides different language bindings, so that you can control IIO devices from C, C++, C# or Python.</p>
 <p>If you’re not familiar with IIO, please start reading here:</p>
-<img alt="youtube&gt;CS9NuRBzN5Y" class="align-right" src="https://wiki.analog.com/_media/youtube&gt;CS9NuRBzN5Y" />
+<img alt="youtube&gt;CS9NuRBzN5Y" class="align-right" src="https://wiki.analog.com/_media/university/tools/pluto/youtube&gt;CS9NuRBzN5Y" />
 <ul class="simple">
 <li><p><a class="reference internal" href="../../../resources/tools-software/linux-software/libiio.html"><span class="doc">libiio - IIO system library</span></a></p></li>
 <li><p><a class="reference internal" href="../../../resources/tools-software/linux-software/libiio_internals.html"><span class="doc">libiio - Internals</span></a></p></li>
@@ -605,34 +605,35 @@ Content on this topic
 <li><p>Set the TX LO frequency (see <a class="reference internal" href="../../../resources/tools-software/linux-drivers/iio-transceiver/ad9361.html"><span class="doc">AD9361 device driver documentation</span></a>)</p></li>
 <li><p>Set RX baseband rate</p></li>
 </ul>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line"><a href="#id1"><span class="problematic" id="id2">``</span></a>#include &lt;iio.h&gt;</div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iio.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">iio_context</span><span class="w"> </span><span class="o">*</span><span class="n">ctx</span><span class="p">;</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">iio_device</span><span class="w"> </span><span class="o">*</span><span class="n">phy</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">ctx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iio_create_context_from_uri</span><span class="p">(</span><span class="s">&quot;ip:192.168.2.1&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">phy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iio_context_find_device</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ad9361-phy&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">iio_channel_attr_write_longlong</span><span class="p">(</span>
+<span class="w">        </span><span class="n">iio_device_find_channel</span><span class="p">(</span><span class="n">phy</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;altvoltage0&quot;</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">),</span>
+<span class="w">        </span><span class="s">&quot;frequency&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="mi">2400000000</span><span class="p">);</span><span class="w"> </span><span class="cm">/* RX LO frequency 2.4GHz */</span>
+
+<span class="w">    </span><span class="n">iio_channel_attr_write_longlong</span><span class="p">(</span>
+<span class="w">        </span><span class="n">iio_device_find_channel</span><span class="p">(</span><span class="n">phy</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;voltage0&quot;</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">),</span>
+<span class="w">        </span><span class="s">&quot;sampling_frequency&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="mi">5000000</span><span class="p">);</span><span class="w"> </span><span class="cm">/* RX baseband rate 5 MSPS */</span>
+
+<span class="w">    </span><span class="n">receive</span><span class="p">(</span><span class="n">ctx</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">iio_context_destroy</span><span class="p">(</span><span class="n">ctx</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
 </div>
-<blockquote>
-<div><p>int main (int argc, char <a href="#id3"><span class="problematic" id="id4">**</span></a>argv)
-{</p>
-<blockquote>
-<div><p>struct iio_context <a href="#id5"><span class="problematic" id="id6">*</span></a>ctx;
-struct iio_device <a href="#id7"><span class="problematic" id="id8">*</span></a>phy;</p>
-<p>ctx = iio_create_context_from_uri(“ip:192.168.2.1”);</p>
-<p>phy = iio_context_find_device(ctx, “ad9361-phy”);</p>
-<dl class="simple">
-<dt>iio_channel_attr_write_longlong(</dt><dd><p>iio_device_find_channel(phy, “altvoltage0”, true),
-“frequency”,
-2400000000); /* RX LO frequency 2.4GHz <a href="#id9"><span class="problematic" id="id10">*</span></a>/</p>
-</dd>
-<dt>iio_channel_attr_write_longlong(</dt><dd><p>iio_device_find_channel(phy, “voltage0”, false),
-“sampling_frequency”,
-5000000); /* RX baseband rate 5 MSPS <a href="#id11"><span class="problematic" id="id12">*</span></a>/</p>
-</dd>
-</dl>
-<p>receive(ctx);</p>
-<p>iio_context_destroy(ctx);</p>
-<p>return 0;</p>
-</div></blockquote>
-<p>}``</p>
-</div></blockquote>
 </section>
 <section id="receiving-data">
 <h2>Receiving data<a class="headerlink" href="#receiving-data" title="Link to this heading"></a></h2>
@@ -644,9 +645,6 @@ struct iio_device <a href="#id7"><span class="problematic" id="id8">*</span></a>
 <li><p>Fill the buffer</p></li>
 <li><p>Process samples</p></li>
 </ul>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">receive</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">iio_context</span><span class="w"> </span><span class="o">*</span><span class="n">ctx</span><span class="p">)</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">iio_device</span><span class="w"> </span><span class="o">*</span><span class="n">dev</span><span class="p">;</span>

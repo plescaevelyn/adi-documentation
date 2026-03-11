@@ -590,7 +590,7 @@ Content on this topic
 <blockquote>
 <div><p><strong>Overview</strong></p>
 <p>This PHY exchange guide captures pertinent information to support migration from the MicroChip KSZ8081MNX/RNB to the Analog Devices ADIN1200 Ethernet PHY. The ADIN1200 supports MII, RMII and RGMII MAC interfaces from the same package version, while the KZS8081MNX version supports a MII MAC interface and the KSZ8081RNB supports RMII. The PHYs have different pinouts, therefore the ADIN1200 is not a drop-in replacement for the Microchip product. This requires edits to the schematic and board layout to achieve this exchange. The following sections detail the modifications at the schematic level required to migrate from KSZ8081 to the ADIN1200 device.</p>
-<p><strong>Hardware Changes By Function</strong></p>
+<p>Hardware Changes By Function</p>
 <p><strong>Power Supplies Overview</strong></p>
 <p>The supply requirements are listed in Table 1. Both devices can operate from a minimum of one 3.3V power supply rail AVDD_3P3 (VDDA_3.3V), where the VDDIO rail is connected to 3.3V. Both devices have an on chip voltage regulator to generate the internal core supply rail and provided to a pin for decoupling purposes.</p>
 <a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/adin1300-and-adin1200/table1.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/adin1300-and-adin1200/table1.png" src="https://wiki.analog.com/_media/resources/eval/user-guides/adin1300-and-adin1200/table1.png" style="width: 600px;" />
@@ -598,11 +598,15 @@ Content on this topic
 <p>The ADIN1200 is robust to power supply sequencing and the power can be applied in any order. The ADIN1200 provides two pins for each supply rail, whereas the Microchip device provides one power supply pin for each rail. The VDDIO supply rail powers the MAC interface and MDIO blocks, this can operate from 1.8V, 2.5V or 3.3V. Decoupling requirements for each device differs as described in Table 2</p>
 <a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/adin1300-and-adin1200/table2.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/adin1300-and-adin1200/table2.png" src="https://wiki.analog.com/_media/resources/eval/user-guides/adin1300-and-adin1200/table2.png" style="width: 600px;" />
 </a>
+<p><strong>RESET Operation</strong></p>
 <p>An active low hardware reset pin, RESET_N (RST#) is provided on Pin 6 of the ADIN1200 and pin 32 of the KSZ8081. The hardware strapping pins are read and updated at the de-assertion of reset for both devices. For the ADIN1200, the RESET_N pin resides in the AVDD_3P3 voltage domain, whereas for the Microchip device, the RST# pin is referenced to VDDIO. In applications where the MAC interface is powered from VDDIO of 1.8V, level shifting of the RESET_N signal applied to the ADIN1200 may be required to ensure the voltage level on the RESET_N pin is in excess of the minimum input high threshold level.</p>
+<p><strong>Clocking</strong></p>
 <p>A 25 MHz crystal or external clock source is used to provide the reference clock for both devices. In RMII mode, the ADIN1200 expects an external 50MHz REF_CLK provided to the XTAL_I/REF_CLK pin. The KSZ8081RNB (RMII mode) can provide a 50 MHz REF_CLK to the MAC device from the 25 MHz source. Alternatively, an external 50 MHz clock can be provided to both the PHY and MAC.</p>
+<p><strong>Bias Resistor</strong></p>
 <p>An external resistor, REXT is required to bias internal reference circuitry for both KSZ8081 and ADIN1200. The ADIN1200 requires a 3.01 kΩ resistor (1% tolerance, 100 ppm/°C temperature coefficient) connected to pin 10. The KSZ8081 uses an 6.49 kΩ on pin 10.</p>
 <a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/adin1300-and-adin1200/table3.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/adin1300-and-adin1200/table3.png" src="https://wiki.analog.com/_media/resources/eval/user-guides/adin1300-and-adin1200/table3.png" style="width: 600px;" />
 </a>
+<p><strong>Media Dependent Interface (MDI)</strong></p>
 </div></blockquote>
 <p>The ADIN1200 has voltage mode line drivers with on-chip terminations so no external termination resistors are required and the center tap of the transformer does not require biasing to supply voltage. Both devices use voltage mode line drive for connection from the MDI_0:1_P/N (RXM/P, TXM/P) pins to the magnetics and RJ-45 line using the same external circuit. The recommended external circuit for the interface to the magnetics and RJ-45 is shown in Figure 1. The KSZ8081 is also a voltage mode PHY. <a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/adin1300-and-adin1200/adin1200_magnetics_cmchoke.png"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/user-guides/adin1300-and-adin1200/adin1200_magnetics_cmchoke.png" style="width: 600px;" /></a> <strong>Figure 1 Isolation using Discrete Magnetics</strong></p>
 </div>
@@ -635,6 +639,7 @@ Content on this topic
 <p>The ADIN1200 supports an RGMII interface mode, while the KSZ8081 does not. The RGMII interface has a low pin count interface support for 10M, 100M and Gigabit operation with a total of 12 pins for data transmission, reception and to signal errors or collisions. It is the most common interface used for Gigabit applications. The ADIN1200 can support 10/100 M speeds over the RGMII interface. Table 6 shows a pin overview of the ADIN1200 RGMII interface.</p>
 <a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/adin1300-and-adin1200/ksz_table6.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/adin1300-and-adin1200/ksz_table6.png" src="https://wiki.analog.com/_media/resources/eval/user-guides/adin1300-and-adin1200/ksz_table6.png" style="width: 600px;" />
 </a>
+<p><strong>Output Clocks</strong></p>
 <p>The ADIN1200 can optionally provide a number of clock signals on the GP_CLK pin. This is configured via MDIO writes and the clocks available are a 125 MHz free running clock, 25 MHz clock and 25MHz/125 MHz recovered clock.</p>
 </div>
 </div>
@@ -642,7 +647,7 @@ Content on this topic
 <div class="group docutils container">
 <div class="half column docutils container">
 <blockquote>
-<div><p><strong>Hardware Configuration</strong></p>
+<div><p>Hardware Configuration</p>
 <p>Both devices have a number of strapping options to enable managed or unmanaged configurations of the PHY function such as PHY address, mode of operation, Auto-Negotiation and MAC Interface. After power on, the strapping pin voltages get sensed and latched upon existing from a reset and the sensed voltages are used to set the personality of the PHY. When configuring any strapping configurations, ensure to review the default state of the MAC side, whether the pins are being driven when coming out of reset or if there are internal pulls. Understanding the behavior on the MAC side is key to ensuring there are no conflicts with the hardware strapping implemented, or to adjust the strapping resistor values if required. The KSZ8081 uses 2-level strapping options throughout, while the ADIN1200 uses a mix of 2-level and 4-level. In general, strapping pins are multi-functional and have different operation after the device is brought out of reset. The ADIN1200 has internal pull downs on many of its strapping pins (not all), therefore it would be possible to minimize external strapping resistors. <a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/adin1300-and-adin1200/strapping.png"><img alt="image4" src="https://wiki.analog.com/_media/resources/eval/user-guides/adin1300-and-adin1200/strapping.png" style="width: 600px;" /></a> Figure 3. ADIN1200 Hardware Strapping, 2 and 4 level strapping resistors</p>
 <p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/adin1300-and-adin1200/ksz_table7.png"><img alt="image5" src="https://wiki.analog.com/_media/resources/eval/user-guides/adin1300-and-adin1200/ksz_table7.png" style="width: 600px;" /></a></p>
 <p>Strapping configurations are very specific to the device, consult the respective datasheets to determine the exact configuration for required use case.</p>
@@ -655,9 +660,12 @@ Content on this topic
 </a>
 <a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/adin1300-and-adin1200/ksz_table9.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/adin1300-and-adin1200/ksz_table9.png" src="https://wiki.analog.com/_media/resources/eval/user-guides/adin1300-and-adin1200/ksz_table9.png" style="width: 600px;" />
 </a>
+<p><strong>Hardware Configuration of Auto-MDIX</strong></p>
 <p>Selection of Auto-MDIX for the ADIN1200 is done using one pin, (MDIX_MODE) with 4-level strapping. In the KSZ8081 Auto-MDI/MDI-X is enabled by default and can be disabled/configured with an MDIO write.</p>
 <p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/adin1300-and-adin1200/ksz_table10.png"><img alt="image6" src="https://wiki.analog.com/_media/resources/eval/user-guides/adin1300-and-adin1200/ksz_table10.png" style="width: 600px;" /></a></p>
+<p><strong>MAC Interface Selection</strong></p>
 <p>The ADIN1200 uses two hardware pins, MACIF_SEL0 and MACIF_SEL1 to provide user ability to select different MAC interfaces. These two pins have internal weak pull downs, therefore the default operation would be RGMII with delays as shown in Table 11. To configure any other MAC interface mode, use 10kΩ pull up or pull down resistors to select accordingly. The KSZ8081 MAC interface selection (RMII/MII) is chosen by selecting the appropriate part version (RNB/MNX).</p>
+<p><strong>Hardware Configuration of PHY Address</strong></p>
 <p>Both devices have a default strapping providing a PHY address of 0x0000. The ADIN1200 provides four PHY address pins, allowing up to 16 unique addresses possible. The PHY address pins are shared with the RXD output pins. The KSZ8081 provides three PHY address pins, capable of 8 unique addresses. Two PHY Address pins are dedicated pins, with the third PHY address shared with an RXD output pin. Both devices use two-level strapping, either pull high or low to configure the PHY address.</p>
 </div>
 </div>
@@ -669,10 +677,10 @@ Content on this topic
 <div class="group docutils container">
 <div class="half column docutils container">
 <blockquote>
-<div><p><strong>Package</strong></p>
+<div><p>Package</p>
 <p>Both the ADIN1200 and the KSZ8081 are available in a 32 lead QFN/LFCSP package of 5 mm x 5mm body size. The devices have different pinouts, therefore the ADIN1200 is not a drop-in replacement for the Microchip product. This requires edits to the schematic and board layout to achieve this exchange.</p>
 <p>The underside of the LFCSP package for the ADIN1200 includes an exposed paddle which should be soldered directly to the board with an array of vias for thermal purposes. There are also two exposed stripes adjacent to the exposed paddle. These do not need to be soldered to the board, they should be treated as a keepout area as they are connected to supply rails in the device, therefore should not be tied to ground and there should be no routing or traces on the PCB layer directly underneath them.</p>
-<p><strong>Other Pinout Considerations</strong></p>
+<p>Other Pinout Considerations</p>
 <p><strong>Integrated MDI Termination</strong></p>
 <p>Both devices include integrated termination resistors on the MDI paths. These are voltage mode PHYs, no external resistors are required for biasing and no supply voltage is required at the center tap of the transformer.</p>
 <p><strong>RGMII</strong></p>
@@ -680,7 +688,7 @@ Content on this topic
 <p>The ADIN1200 also supports RGMII MAC interface mode.</p>
 </div>
 <div class="half column docutils container">
-<p><strong>Software Considerations</strong></p>
+<p>Software Considerations</p>
 <p>Both devices can be hardware strapped to be used in an unmanaged configuration. Alternatively, they can provide SMI/MII access over the MDIO interface. The KSZ8081 supports Clause 22 register access, while the ADIN1200 supports both Clause 22 and Clause 45 access. Registers 0x0 to 0xF are common across all PHYs.</p>
 <p><strong>Linux Driver</strong></p>
 <p>The ADIN1200 has a Linux Driver available in the Linux mainline kernel. The ADIN1200 linux driver detail is captured here: <a class="reference internal" href="../../../tools-software/linux-drivers/net-phy/adin.html"><span class="doc">ADIN1300/ADIN1200 PHY Linux Driver</span></a></p>

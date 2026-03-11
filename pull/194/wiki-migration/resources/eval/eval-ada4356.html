@@ -1031,6 +1031,7 @@ print(my_7291.voltage4())``</p>
 </div>
 <p><em>Note: “X” means “Don’t Care”</em></p>
 <div class="box docutils container">
+<p><strong>EVAL-ADA4356EBZ Current-to-Bits Operation Overview and Evaluation Results</strong></p>
 <p>The EVAL‑ADA4356EBZ provides two methods for generating an input current for the ADA4356:</p>
 <ul class="simple">
 <li><p><strong>On-board Buffered Howland Current Source (BHCS)</strong> driven by an external voltage source.</p></li>
@@ -1073,9 +1074,6 @@ print(my_7291.voltage4())``</p>
 <p><strong>Voltage-to-Current Conversion via BHCS</strong></p>
 </div>
 <p>The Buffered Howland Current Source converts the applied input voltage into a current according to:</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
 <div class="group docutils container">
 <div class="third column docutils container">
 <div class="centeralign docutils container">
@@ -1086,21 +1084,13 @@ print(my_7291.voltage4())``</p>
 <p>Where:</p>
 <blockquote>
 <div><div class="indent docutils container">
-<p>V&lt;sub&gt; IN&lt;/sub&gt; is the voltage applied at connector J1.</p>
-<blockquote>
-<div><div class="line-block">
-<div class="line">R&lt;sub&gt;S &lt;/sub&gt; is the selected BHCS range resistor (R14, R18, or R19).</div>
-<div class="line">The factor of 5 arises from the internal resistor ratios of the BHCS topology.</div>
-</div>
-</div></blockquote>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
+<p>V&lt;sub&gt; IN&lt;/sub&gt; is the voltage applied at connector J1. R&lt;sub&gt;S &lt;/sub&gt; is the selected BHCS range resistor (R14, R18, or R19). The factor of 5 arises from the internal resistor ratios of the BHCS topology.</p>
 </div>
 </div></blockquote>
 </div>
 </div>
 <p>The resulting current is sourced or sunk into the subsequent signal chain.</p>
+<p><strong>Input Current Range Extension via Current Divider (Optional)</strong></p>
 <p>The input current divider that can be enabled to extend the input current range by attenuating the signal current before it reaches the ADA4356’s input; This feature is optional and is controlled by the GSEL2 pin (divider enabled when GSEL2 = 1; disabled when GSEL2 = 0).</p>
 <p>The divider is implemented using the ADG772 (U4) analog switch and series with R22 = 604 Ω. When the divider is enabled, the effective division ratio is primarily determined by the ON resistance of the ADG772 (R<sub>ON</sub>) and R22.</p>
 <p>The ADG772 R<sub>ON</sub> is typically 3.8 Ω, and may vary due to:</p>
@@ -1119,6 +1109,7 @@ print(my_7291.voltage4())``</p>
 <li><p>I<sub>SIG_IN</sub> is the input current presented to the ADA4356.</p></li>
 </ul>
 <p>When the divider is disabled (GSEL2 = 0): I<sub>SIG_IN</sub> = I<sub>BHCS_OUT</sub></p>
+<p><strong>Current-to-Bits: The ADA4356 Internal Signal Chain</strong></p>
 <p>The ADA4356 includes the following internal functional blocks:</p>
 <ul class="simple">
 <li><p>Programmable gain transimpedance amplifier (PGTIA)</p></li>
@@ -1126,6 +1117,7 @@ print(my_7291.voltage4())``</p>
 <li><p>Low-pass filter</p></li>
 <li><p>14-bit, 125 MSPS ADC</p></li>
 </ul>
+<p><strong>Programmable gain transimpedance amplifier (PGTIA)</strong></p>
 <p>The PGTIA converts the input current into a voltage and is internally referenced to V<sub>TIA_REF</sub> = 1.65 V.</p>
 <p>The PGTIA output voltage is: V<sub>TIA_OUT</sub> = V<sub>TIA_REF</sub> − I<sub>SIG_IN</sub> * R</p>
 <p>Where:</p>
@@ -1135,13 +1127,13 @@ print(my_7291.voltage4())``</p>
 <li><p>V<sub>TIA_OUT</sub> is the output voltage of TIA.</p></li>
 </ul>
 <p>For example, if 11kΩ transimpedance gain is selected and I<sub>SIG_IN</sub>=80µA, output of TIA will be the following: V<sub>TIA_OUT</sub> = 1.65V − 80μA * 11kΩ = 0.77V</p>
+<p><strong>Fully Differential Amplifier (FDA)</strong></p>
 <p>The PGTIA output feeds into a Fully Differential Amplifier (FDA), whose inverting input is biased to: V<sub>FDA_REF</sub> = 0.825 V</p>
 <p>The FDA output is given by: V<sub>FDA_OUT</sub> = V<sub>TIA_OUT</sub> − V<sub>FDA_REF</sub></p>
-<div class="line-block">
-<div class="line">Substituting the TIA relationship: V<sub>FDA_OUT</sub> = (V<sub>TIA_REF</sub> − I<sub>SIG_IN</sub> * R) − 0.825V</div>
-<div class="line">With V<sub>TIA_REF</sub> = 1.65 V, this simplifies to: V<sub>FDA_OUT</sub> = 0.825V − (I<sub>SIG_IN</sub> * R)</div>
-</div>
+<p>Substituting the TIA relationship: V<sub>FDA_OUT</sub> = (V<sub>TIA_REF</sub> − I<sub>SIG_IN</sub> * R) − 0.825V</p>
+<p>With V<sub>TIA_REF</sub> = 1.65 V, this simplifies to: V<sub>FDA_OUT</sub> = 0.825V − (I<sub>SIG_IN</sub> * R)</p>
 <p>This indicates that the FDA output voltage decreases linearly with increasing input current. The relationship between FDA input and output voltage can thus be derived as follows. V<sub>FDA_OUT</sub> = V<sub>TIA_OUT</sub> − V<sub>FDA_REF</sub> V<sub>FDA_OUT</sub> = (V<sub>TIA_REF</sub> − I<sub>SIG_IN</sub> * R) − 0.825V V<sub>FDA_OUT</sub> = 0.825V − (I<sub>SIG_IN</sub> * R)</p>
+<p><strong>14-bit, 125Msps ADC Transfer function</strong></p>
 <p>The FDA output drives a 14-bit ADC with an input range of approximately ±1 V (2 V peak-to-peak). The ADC output code can be modeled as: ADC code = 2<sup>14</sup> * V<sub>FDA_OUT</sub> / V<sub>ADC_REF</sub></p>
 <p>With VADC_REF = 2 V_PP, this reduces to: ADC code = 2<sup>13</sup> * V<sub>FDA_OUT</sub></p>
 <p>Substituting the FDA expression derived above: ADC code = 2<sup>13</sup> * [0.825V - (I<sub>SIG_IN</sub> * R)]</p>

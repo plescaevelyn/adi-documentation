@@ -4,9 +4,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="Conversion failed for resources/eval/user-guides/ad-96tof1-ebz/calibration" name="description" />
+<meta content="The AD-96TOF1-EBZ is a pulsed Time-of-Flight (ToF) system. Is consists of a CCD sensor, an illumination source (VCSEL), and an analog front-end (AFE) with a ToF processor. To calculate depth a target scene is illuminated, the returned light is captured by the CCD sensor. The AFE reads the captured data and processes it to depth. In the current setup, there are 3 modes that can be programmed into the AFE to operate the camera at different ranges. Each mode operates on different firmware located in the config/BM_Kit_RevC/ or config/BM_Kit_RevD/ directory of the calibration folder. Depending on the board version, the folder from config/BM_Kit_RevC or BM_Kit_RevD must be renamed to config/BM_Kit before running the calibration software." name="description" />
 
-    <title>&lt;no title&gt; &#8212; System Level Documentation  documentation</title>
+    <title>AD-96TOF1-EBZ Calibration Guide &#8212; System Level Documentation  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/app.min.css?v=a525f648" />
     <script async="async" src="../../../../../_static/app.umd.js?v=fcf3088a"></script>
@@ -91,7 +91,17 @@
           <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
         </div>
         <nav>
-          <ul class="simple">
+          <ul>
+<li><a class="reference internal" href="#">AD-96TOF1-EBZ Calibration Guide</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#calibration-overview">Calibration Overview</a></li>
+<li><a class="reference internal" href="#calibration-pipeline">Calibration Pipeline</a></li>
+<li><a class="reference internal" href="#physical-setup">Physical Setup</a></li>
+<li><a class="reference internal" href="#calibration-configuration">Calibration Configuration</a></li>
+<li><a class="reference internal" href="#eeprom-configuration">EEPROM configuration</a></li>
+<li><a class="reference internal" href="#calibrate-and-store-to-eeprom-example">Calibrate and store to EEPROM Example</a></li>
+</ul>
+</li>
 </ul>
 
         </nav>
@@ -577,136 +587,237 @@ Content on this topic
 </div>
           <div class="body" role="main">
             
-  <div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Conversion failed for <code class="docutils literal notranslate"><span class="pre">resources/eval/user-guides/ad-96tof1-ebz/calibration</span></code></p>
-<p>Reason: pandoc error: Error at “/tmp/tmpkfrzzqeg.txt” (line 68, column 1):</p>
+  <section id="ad-96tof1-ebz-calibration-guide">
+<h1>AD-96TOF1-EBZ Calibration Guide<a class="headerlink" href="#ad-96tof1-ebz-calibration-guide" title="Link to this heading"></a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/AD-96TOF1-EBZ.html" target="_blank">AD-96TOF1-EBZ</a> is a pulsed Time-of-Flight (ToF) system. Is consists of a CCD sensor, an illumination source (VCSEL), and an analog front-end (AFE) with a ToF processor. To calculate depth a target scene is illuminated, the returned light is captured by the CCD sensor. The AFE reads the captured data and processes it to depth. In the current setup, there are 3 modes that can be programmed into the AFE to operate the camera at different ranges. Each mode operates on different firmware located in the config/BM_Kit_RevC/ or config/BM_Kit_RevD/ directory of the calibration folder. Depending on the board version, the folder from config/BM_Kit_RevC or BM_Kit_RevD must be renamed to config/BM_Kit before running the calibration software.</p>
+</section>
+<section id="calibration-overview">
+<h2>Calibration Overview<a class="headerlink" href="#calibration-overview" title="Link to this heading"></a></h2>
+<p>Calibration is required for the AD-96TOF1-EBZ to map the depth output of the system to the real world. The accuracy of depth is dependent on the calibration environment as well as the target environment conditions. Depth calibration is performed by placing a target at the known distance in from of the TOF system. The system runs the specific mode that is being calibrated. During calibration the illumination pulse of the system is delayed relative to the capture time to simulate different distances, this is referred to as a sweep. The captured data is used to generate a gain, offset, and look-up table. Each mode requires its own calibration and parameters.</p>
+</section>
+<section id="calibration-pipeline">
+<h2>Calibration Pipeline<a class="headerlink" href="#calibration-pipeline" title="Link to this heading"></a></h2>
+<p>The following procedure takes place when running a calibration (“params” are configurable in JSON files specified later in this document):</p>
+<ul class="simple">
+<li><p>Firmware specified from the <strong>.json</strong> file is loaded into the system;</p></li>
+<li><p>The system is turned on and allowed to run for a certain warmup period;</p></li>
+<li><p>The sweep starts and a specified number of depth frames are collected for each sweep step;</p></li>
+<li><p>Calibration parameters are calculated and stored into new firmware files;</p></li>
+<li><p>Firmware files are stored to <strong>/”results_path”/”unique_id”/”mode”/latest/lf_files</strong>;</p></li>
+<li><p>The user can run these files directly from Example.py or can load these files into EEPROM and then run from Example.py.</p></li>
+</ul>
+</section>
+<section id="physical-setup">
+<h2>Physical Setup<a class="headerlink" href="#physical-setup" title="Link to this heading"></a></h2>
+<p>To run a linear calibration a target is placed a known distance away from the ToF system. The reflectivity of the target is dependent on the final use case of the system. For the AD-96TOF1-EBZ calibration, a target of 98% reflectivity for 940nm wavelength light is used. It is also important to keep the target parallel to the sensor. Please use <strong>Calibration_Assembly_Doc.pdf</strong> as a reference to any calibration setup. Setting up the correct environment is essential for a valid calibration. One major factor that leads to incorrect calibration is multipath. This occurs when light bounces off multiple surfaces and returns to the sensor. This corrupts the data read from the sensor and therefore shifts the final depth value. While completely removing this effect is difficult, steps can be taken to reduce its error contribution. The preferred method to reduce the effect of multipath is to calibrate the sensor in an open room. The sides of the path in between the system and the target should be empty with the closest object being meters away. The floor or bench which the system and target sit on should be covered in low reflectivity material. As shown in the Calibration_Assembly_Doc.pdf, another method is to cover any surfaces on the sides of the path between the system and the target with low reflectivity material. This method is used when there is no access to open space. If the sides and bench spaces are not covered and are highly reflective, the calibration will likely be inaccurate. While the methods above can be used as general guidelines, the best results are determined by the use case. It is recommended to run calibration in the target environment to achieve better accuracy.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-96tof1-ebz/room_setup1.png"><img alt="Example of room setup" class="align-right" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-96tof1-ebz/room_setup1.png" style="width: 300px;" />
+</a>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-96tof1-ebz/room_setup2.png"><img alt="Example pf closed space setup" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-96tof1-ebz/room_setup2.png" style="width: 300px;" />
+</a>
+</section>
+<section id="calibration-configuration">
+<h2>Calibration Configuration<a class="headerlink" href="#calibration-configuration" title="Link to this heading"></a></h2>
+<p>To run a calibration first it is necessary to enter the correct parameters to a config file provided with each set of firmware files. The config file is in JSON format. Each mode comes with a recommended calibration config file <strong>sweep_config_mode.json</strong> in the firmware directory. The following parameters are typically adjusted:</p>
+<ul class="simple">
+<li><p>verify_sweep: Allows you to check if the calibration was done correctly by redoing the sweep with the calibration parameters;</p></li>
+<li><p>unique_id: Allows the user to specify between cameras or experiments;</p></li>
+<li><p>frame_count: Changes the number of frames collected per sweep step;</p></li>
+<li><p>warmup_time: Specify how long the camera warms up before calibration;</p></li>
+<li><p>target_distance: Specify the distance of the target from the sensor in mm.</p></li>
+</ul>
+<p>The parameters available in the config file are shown below. (Supported parameters are highlighted, the unhighlighted parameters are not to be modified)</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>mode</p></td>
+<td><p>string – (“near”, “mid”, “far”)</p></td>
+<td><p>Specifies which mode is calibrated</p></td>
+</tr>
+<tr class="row-odd"><td><p>calibrate</p></td>
+<td><p>bool</p></td>
+<td><p>Run calibration</p></td>
+</tr>
+<tr class="row-even"><td><p>verify_sweep</p></td>
+<td><p>bool</p></td>
+<td><p>Run calibration verification</p></td>
+</tr>
+<tr class="row-odd"><td><p>calib_type</p></td>
+<td><p>string – (“Sweep”)</p></td>
+<td><p>Calibration Type</p></td>
+</tr>
+<tr class="row-even"><td><p>verification_type</p></td>
+<td><p>string – (“Sweep”)</p></td>
+<td><p>Verification Type</p></td>
+</tr>
+<tr class="row-odd"><td><p>calculate_metrics</p></td>
+<td><p>bool</p></td>
+<td><p>Generate metrics (Only works with verify sweep)</p></td>
+</tr>
+<tr class="row-even"><td><p>firmware_path</p></td>
+<td><p>string – (Path to firmware from</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
 </div>
-<p>expecting inline
-not found
-calibrate_single_mode.py) &lt;/fc&gt; | &lt;fc #6495ed&gt; Firmware path &lt;/fc&gt; |
-^</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>====== AD-96TOF1-EBZ Calibration Guide ======
-
-==== Introduction ====
-The [[adi&gt;en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/AD-96TOF1-EBZ.html|AD-96TOF1-EBZ]] is a pulsed Time-of-Flight (ToF) system. Is consists of a CCD sensor, an illumination source (VCSEL), and an analog front-end (AFE) with a ToF processor. To calculate depth a target scene is illuminated, the returned light is captured by the CCD sensor. The AFE reads the captured data and processes it to depth. In the current setup, there are 3 modes that can be programmed into the AFE to operate the camera at different ranges. Each mode operates on different firmware located in the config/BM_Kit_RevC/ or config/BM_Kit_RevD/ directory of the calibration folder. Depending on the board version, the folder from config/BM_Kit_RevC or BM_Kit_RevD must be renamed to config/BM_Kit before running the calibration software.
-
-==== Calibration Overview ====
-Calibration is required for the AD-96TOF1-EBZ to map the depth output of the system to the real world. The
-accuracy of depth is dependent on the calibration environment as well as the target environment
-conditions.
-Depth calibration is performed by placing a target at the known distance in from of the TOF system. The
-system runs the specific mode that is being calibrated. During calibration the illumination pulse of the
-system is delayed relative to the capture time to simulate different distances, this is referred to as a
-sweep. The captured data is used to generate a gain, offset, and look-up table. Each mode requires its
-own calibration and parameters.
-
-==== Calibration Pipeline ====
-The following procedure takes place when running a calibration (&quot;params&quot; are configurable in JSON files
-specified later in this document):
-  * Firmware specified from the **.json** file is loaded into the system;
-  * The system is turned on and allowed to run for a certain warmup period;
-  * The sweep starts and a specified number of depth frames are collected for each sweep step;
-  * Calibration parameters are calculated and stored into new firmware files;
-  * Firmware files are stored to **/&quot;results_path&quot;/&quot;unique_id&quot;/&quot;mode&quot;/latest/lf_files**;
-  * The user can run these files directly from Example.py or can load these files into EEPROM and then run from Example.py.
-
-==== Physical Setup ====
-To run a linear calibration a target is placed a known distance away from the ToF system. The reflectivity
-of the target is dependent on the final use case of the system. For the AD-96TOF1-EBZ calibration, a
-target of 98% reflectivity for 940nm wavelength light is used. It is also important to keep the target
-parallel to the sensor. Please use **Calibration_Assembly_Doc.pdf** as a reference to any calibration setup.
-Setting up the correct environment is essential for a valid calibration. One major factor that leads to
-incorrect calibration is multipath. This occurs when light bounces off multiple surfaces and returns to
-the sensor. This corrupts the data read from the sensor and therefore shifts the final depth value. While
-completely removing this effect is difficult, steps can be taken to reduce its error contribution.
-The preferred method to reduce the effect of multipath is to calibrate the sensor in an open room. The
-sides of the path in between the system and the target should be empty with the closest object being
-meters away. The floor or bench which the system and target sit on should be covered in low reflectivity material.
-As shown in the Calibration_Assembly_Doc.pdf, another method is to cover any surfaces on the sides of
-the path between the system and the target with low reflectivity material. This method is used when
-there is no access to open space. If the sides and bench spaces are not covered and are highly reflective,
-the calibration will likely be inaccurate.
-While the methods above can be used as general guidelines, the best results are determined by the use
-case. It is recommended to run calibration in the target environment to achieve better accuracy. \\
-
-{{ :resources:eval:user-guides:ad-96tof1-ebz:room_setup1.png?300|Example of room setup}}
-
-{{:resources:eval:user-guides:ad-96tof1-ebz:room_setup2.png?300|Example pf closed space setup }} \\
-
-==== Calibration Configuration ====
-To run a calibration first it is necessary to enter the correct parameters to a config file provided with
-each set of firmware files. The config file is in JSON format. Each mode comes with a recommended
-calibration config file **sweep_config_mode.json** in the firmware directory.
-The following parameters are typically adjusted:
-  * verify_sweep: Allows you to check if the calibration was done correctly by redoing the sweep with the calibration parameters;
-  * unique_id: Allows the user to specify between cameras or experiments;
-  * frame_count: Changes the number of frames collected per sweep step;
-  * warmup_time: Specify how long the camera warms up before calibration;
-  * target_distance: Specify the distance of the target from the sensor in mm.
-The parameters available in the config file are shown below. (Supported parameters are highlighted, the unhighlighted parameters are not to be modified)
-
-^ Parameter      ^ Value                 ^ Description         ^
-| &lt;fc #6495ed&gt; mode &lt;/fc&gt; | &lt;fc #6495ed&gt; string – (&quot;near&quot;, &quot;mid&quot;, &quot;far&quot;)&lt;/fc&gt;  | &lt;fc #6495ed&gt; Specifies which mode is calibrated &lt;/fc&gt; |
-| &lt;fc #6495ed&gt; calibrate &lt;/fc&gt; | &lt;fc #6495ed&gt; bool &lt;/fc&gt; | &lt;fc #6495ed&gt; Run calibration &lt;/fc&gt; |
-| &lt;fc #6495ed&gt; verify_sweep &lt;/fc&gt; | &lt;fc #6495ed&gt; bool &lt;/fc&gt; | &lt;fc #6495ed&gt; Run calibration verification &lt;/fc&gt; |
-| &lt;fc #6495ed&gt; calib_type &lt;/fc&gt; | &lt;fc #6495ed&gt; string – (&quot;Sweep&quot;) &lt;/fc&gt; | &lt;fc #6495ed&gt; Calibration Type &lt;/fc&gt; |
-| &lt;fc #6495ed&gt; verification_type &lt;/fc&gt; | &lt;fc #6495ed&gt; string – (&quot;Sweep&quot;) &lt;/fc&gt; | &lt;fc #6495ed&gt; Verification Type &lt;/fc&gt; |
-| &lt;fc #6495ed&gt; calculate_metrics &lt;/fc&gt; | &lt;fc #6495ed&gt; bool &lt;/fc&gt; | &lt;fc #6495ed&gt; Generate metrics (Only works with verify sweep) &lt;/fc&gt; |
-| &lt;fc #6495ed&gt; firmware_path &lt;/fc&gt; | &lt;fc #6495ed&gt; string – (Path to firmware from
-calibrate_single_mode.py) &lt;/fc&gt; | &lt;fc #6495ed&gt; Firmware path &lt;/fc&gt; |
-| &lt;fc #6495ed&gt; unique_id &lt;/fc&gt; | &lt;fc #6495ed&gt; string – (Numerical Values only) &lt;/fc&gt; | &lt;fc #6495ed&gt; Specify Unique ID &lt;/fc&gt; |
-| repeat_num_filename | string |        |
-| hpt_data_filename | string |        |
-| data_filename | string |        |
-| non_linear_off_lf_file | string  |        |
-| non_linear_off_calib_lf_file | string |        |
-| seq_info_filename | string |        |
-| pulse_count_min | int |        |
-| pulse_count_max | int |        |
-| raw_frame_height | int |        |
-| raw_frame_width | int |        |
-| window_x | int |        |
-| window_y | int |        |
-| frame_height | int |        |
-| frame_width | int |        |
-| &lt;fc #6495ed&gt; frame_count &lt;/fc&gt; | &lt;fc #6495ed&gt; int &lt;/fc&gt; | &lt;fc #6495ed&gt; Specify how many frames are
-captured per simulated distance &lt;/fc&gt; |
-| &lt;fc #6495ed&gt; warmup_time &lt;/fc&gt; | &lt;fc #6495ed&gt; int &lt;/fc&gt;| &lt;fc #6495ed&gt; Specify the warmup time before calibration &lt;/fc&gt; |
-
-==== EEPROM configuration ====
-To store a calibrated files to EEPROM the **eeprom_replace_config.json** in the calibration folder must be modified.
-The JSON parameters are shown below:
-^ Parameter      ^ Value                 ^ Description         ^
-| &lt;fc #6495ed&gt; mode &lt;/fc&gt; | &lt;fc #6495ed&gt; string – (&quot;near&quot;, &quot;mid&quot;, &quot;far&quot;)&lt;/fc&gt;  | &lt;fc #6495ed&gt; Specifies which mode is being stored to eeprom &lt;/fc&gt; |
-| &lt;fc #6495ed&gt; firmware_path &lt;/fc&gt; | &lt;fc #6495ed&gt; string &lt;/fc&gt; | &lt;fc #6495ed&gt; Specifies path to firmware with calibrated parameters &lt;/fc&gt; |
-| &lt;fc #6495ed&gt; cal_map_path &lt;/fc&gt; | &lt;fc #6495ed&gt; string &lt;/fc&gt; | &lt;fc #6495ed&gt; Specifies path to store calibration data which is currently on EEPROM &lt;/fc&gt; |
-
-==== Calibrate and store to EEPROM Example ====
-The following steps run through a **near mode calibration** with the target positioned at 300mm:
-  * Place target 300mm away from the sensor;
-  * Modify the following parameters in the sweep_config_near.json file, located in the firmware path (aditof_sdk/tools/calibration-96tof1/config/BM_Kit/Near):
-    * &quot;unique_id&quot;: &quot;0001&quot;
-    * &quot;target_distance&quot;: 300
-    * &quot;results_path&quot;: &quot;saved_results&quot;
-  * Open terminal and run the following commands:
-    * cd aditof_sdk/tools/calibration-96tof1
-    * sudo python3 calibrate_single_mode.py config/BM_Kit/Near/sweep_config_near.json
-  * The calibrated firmware and data will be stored in saved_results/0001/near
-  * In config/eeprom_replace_config.json modify the following parameters:
-    * &quot;mode&quot;: &quot;near&quot;
-    * &quot;firmware_path&quot;: &quot;saved_results/0001/near/latest/lf_files&quot;
-  * From the previously opened terminal run the following command:
-    * sudo python3 eeprom_replace_cal.py config/eeprom_replace_config.json
-  * Calibrated firmware is now stored in EEPROM.
-
-&lt;WRAP round download 60%&gt;
-{{ :resources:eval:user-guides:ad-96tof1-ebz:calibration_assembly_doc.pdf | Calibration Assembly Document}}
-&lt;/WRAP&gt;
-
-{{navigation AD-96TOF1-EBZ#none#.:|Overview#none#}}
-</pre></div>
+<p>calibrate_single_mode.py) | Firmware path |</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>unique_id</p></td>
+<td><p>string – (Numerical Values only)</p></td>
+<td><p>Specify Unique ID</p></td>
+</tr>
+<tr class="row-even"><td><p>repeat_num_filename</p></td>
+<td><p>string</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>hpt_data_filename</p></td>
+<td><p>string</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>data_filename</p></td>
+<td><p>string</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>non_linear_off_lf_file</p></td>
+<td><p>string</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>non_linear_off_calib_lf_file</p></td>
+<td><p>string</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>seq_info_filename</p></td>
+<td><p>string</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>pulse_count_min</p></td>
+<td><p>int</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>pulse_count_max</p></td>
+<td><p>int</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>raw_frame_height</p></td>
+<td><p>int</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>raw_frame_width</p></td>
+<td><p>int</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>window_x</p></td>
+<td><p>int</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>window_y</p></td>
+<td><p>int</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>frame_height</p></td>
+<td><p>int</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>frame_width</p></td>
+<td><p>int</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>frame_count</p></td>
+<td><p>int</p></td>
+<td><p>Specify how many frames are</p></td>
+</tr>
+</tbody>
+</table>
 </div>
+<p>captured per simulated distance |</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>warmup_time</p></td>
+<td><p>int</p></td>
+<td><p>Specify the warmup time before calibration</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="eeprom-configuration">
+<h2>EEPROM configuration<a class="headerlink" href="#eeprom-configuration" title="Link to this heading"></a></h2>
+<p>To store a calibrated files to EEPROM the <strong>eeprom_replace_config.json</strong> in the calibration folder must be modified. The JSON parameters are shown below:</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>mode</p></td>
+<td><p>string – (“near”, “mid”, “far”)</p></td>
+<td><p>Specifies which mode is being stored to eeprom</p></td>
+</tr>
+<tr class="row-odd"><td><p>firmware_path</p></td>
+<td><p>string</p></td>
+<td><p>Specifies path to firmware with calibrated parameters</p></td>
+</tr>
+<tr class="row-even"><td><p>cal_map_path</p></td>
+<td><p>string</p></td>
+<td><p>Specifies path to store calibration data which is currently on EEPROM</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="calibrate-and-store-to-eeprom-example">
+<h2>Calibrate and store to EEPROM Example<a class="headerlink" href="#calibrate-and-store-to-eeprom-example" title="Link to this heading"></a></h2>
+<p>The following steps run through a <strong>near mode calibration</strong> with the target positioned at 300mm:</p>
+<ul class="simple">
+<li><p>Place target 300mm away from the sensor;</p></li>
+<li><p>Modify the following parameters in the sweep_config_near.json file, located in the firmware path (aditof_sdk/tools/calibration-96tof1/config/BM_Kit/Near):</p>
+<ul>
+<li><p>“unique_id”: “0001”</p></li>
+<li><p>“target_distance”: 300</p></li>
+<li><p>“results_path”: “saved_results”</p></li>
+</ul>
+</li>
+<li><p>Open terminal and run the following commands:</p>
+<ul>
+<li><p>cd aditof_sdk/tools/calibration-96tof1</p></li>
+<li><p>sudo python3 calibrate_single_mode.py config/BM_Kit/Near/sweep_config_near.json</p></li>
+</ul>
+</li>
+<li><p>The calibrated firmware and data will be stored in saved_results/0001/near</p></li>
+<li><p>In config/eeprom_replace_config.json modify the following parameters:</p>
+<ul>
+<li><p>“mode”: “near”</p></li>
+<li><p>“firmware_path”: “saved_results/0001/near/latest/lf_files”</p></li>
+</ul>
+</li>
+<li><p>From the previously opened terminal run the following command:</p>
+<ul>
+<li><p>sudo python3 eeprom_replace_cal.py config/eeprom_replace_config.json</p></li>
+</ul>
+</li>
+<li><p>Calibrated firmware is now stored in EEPROM.</p></li>
+</ul>
+<div class="download admonition">
+<p class="admonition-title">Download</p>
+<p><a class="icon link reference external" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-96tof1-ebz/calibration_assembly_doc.pdf" target="_blank">Calibration Assembly Document</a></p>
+</div>
+<img alt="Overview#none#" src="https://wiki.analog.com/_media/navigationAD-96TOF1-EBZ#none#./" />
+</section>
+</section>
 
 
           </div>

@@ -727,10 +727,7 @@ Content on this topic
 </ul>
 </li>
 </ul>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line"><strong>So here Device Clock == FMC Clock = Lane rate / 40 = 120 MHz would be a perfect match. We choose 120MHz in this configuration.</strong></div>
-</div>
+<p><strong>So here Device Clock == FMC Clock = Lane rate / 40 = 120 MHz would be a perfect match. We choose 120MHz in this configuration.</strong></p>
 <p>Once we have changed the clock chip distribution clock, we must also update the default transceiver profile, which is configured for initial setup. Failure to do so can result in the transceiver device driver asking for a clock tree which is not achievable since the AD9528 clock chip driver dynamically controls the output divider but not the PLL2 VCO and distribution clock.</p>
 <p>The MATLAB Filter Wizard / Profile Generator generates a XML style output file. It’s pretty easy to understand and can be easily matched to the Linux device tree properties. Besides single key value pairs there are also signed filter coefficients which must be converted to an array style. It’s important to know that signed values must be put in braces. Everything that differs in value must be updated.</p>
 <p>Below you cab find a quick and dirty bash script, which allows you to extract the filter arrays:</p>
@@ -774,9 +771,7 @@ Content on this topic
 </tbody>
 </table>
 </div>
-<div class="line-block">
-<div class="line">Instructions to build and deploy your new/modified devicetree can be found here:</div>
-</div>
+<p>Instructions to build and deploy your new/modified devicetree can be found here:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="../../tools-software/linux-build/generic/zynq.html"><span class="doc">Building the Zynq Linux kernel and devicetrees from source</span></a></p></li>
 <li><p><a class="reference internal" href="../../tools-software/linux-build/generic/zynqmp.html"><span class="doc">Building the ZynqMP / MPSoC Linux kernel and devicetrees from source</span></a></p></li>
@@ -931,42 +926,42 @@ Content on this topic
 <li><p>Or using CPLL for both links can help, but only in case both links require the same rate.</p></li>
 <li><p>Sometimes the requested value is just a bit out of the specified range. Hacking the driver to exceed the limits might work, but is <strong>not recommended!</strong></p></li>
 </ul>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">index</span><span class="w"> </span><span class="n">e425c12</span><span class="p">.</span><span class="mf">.81e86</span><span class="n">e9</span><span class="w"> </span><span class="mi">100644</span>
-<span class="o">---</span><span class="w"> </span><span class="n">a</span><span class="o">/</span><span class="n">drivers</span><span class="o">/</span><span class="n">iio</span><span class="o">/</span><span class="n">jesd204</span><span class="o">/</span><span class="n">xilinx_transceiver</span><span class="p">.</span><span class="n">c</span>
-<span class="o">+++</span><span class="w"> </span><span class="n">b</span><span class="o">/</span><span class="n">drivers</span><span class="o">/</span><span class="n">iio</span><span class="o">/</span><span class="n">jesd204</span><span class="o">/</span><span class="n">xilinx_transceiver</span><span class="p">.</span><span class="n">c</span>
-<span class="err">@@</span><span class="w"> </span><span class="mi">-6</span><span class="p">,</span><span class="mi">7</span><span class="w"> </span><span class="o">+</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="w"> </span><span class="err">@@</span>
-<span class="w">  </span><span class="o">*</span><span class="w"> </span><span class="n">Licensed</span><span class="w"> </span><span class="n">under</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">GPL</span><span class="mf">-2.</span>
-<span class="w">  </span><span class="o">*</span>
-<span class="w">  </span><span class="o">*/</span>
-<span class="o">-</span>
-<span class="o">+</span><span class="err">#</span><span class="n">define</span><span class="w"> </span><span class="n">DEBUG</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;linux/device.h&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;linux/fpga/adi-axi-common.h&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;linux/kernel.h&gt;</span>
-<span class="err">@@</span><span class="w"> </span><span class="mi">-408</span><span class="p">,</span><span class="mi">7</span><span class="w"> </span><span class="o">+</span><span class="mi">408</span><span class="p">,</span><span class="mi">7</span><span class="w"> </span><span class="err">@@</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">xilinx_xcvr_calc_qpll_config</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">xilinx_xcvr</span><span class="w"> </span><span class="o">*</span><span class="n">xcvr</span><span class="p">,</span>
-<span class="w">                </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">N_gtx2</span><span class="p">;</span>
-<span class="w">                </span><span class="n">vco0_min</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5930000</span><span class="p">;</span>
-<span class="w">                </span><span class="n">vco0_max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8000000</span><span class="p">;</span>
-<span class="o">-</span><span class="w">               </span><span class="n">vco1_min</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">9800000</span><span class="p">;</span>
-<span class="o">+</span><span class="w">               </span><span class="n">vco1_min</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">9600000</span><span class="p">;</span><span class="w"> </span><span class="cm">/* FIXME: 9800000 */</span>
-<span class="w">                </span><span class="n">vco1_max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">12500000</span><span class="p">;</span>
-<span class="w">                </span><span class="k">break</span><span class="p">;</span>
-<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="no">XILINX_XCVR_TYPE_US_GTH3</span><span class="p">:</span>
-<span class="err">@@</span><span class="w"> </span><span class="mi">-424</span><span class="p">,</span><span class="mi">10</span><span class="w"> </span><span class="o">+</span><span class="mi">424</span><span class="p">,</span><span class="mi">10</span><span class="w"> </span><span class="err">@@</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">xilinx_xcvr_calc_qpll_config</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">xilinx_xcvr</span><span class="w"> </span><span class="o">*</span><span class="n">xcvr</span><span class="p">,</span>
-<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="o">-</span><span class="n">EINVAL</span><span class="p">;</span>
-<span class="w">        </span><span class="p">}</span>
+<div class="highlight-diff notranslate"><div class="highlight"><pre><span></span><span class="gh">index e425c12..81e86e9 100644</span>
+<span class="gd">--- a/drivers/iio/jesd204/xilinx_transceiver.c</span>
+<span class="gi">+++ b/drivers/iio/jesd204/xilinx_transceiver.c</span>
+<span class="gu">@@ -6,7 +6,7 @@</span>
+<span class="w"> </span> * Licensed under the GPL-2.
+<span class="w"> </span> *
+<span class="w"> </span> */
+<span class="gd">-</span>
+<span class="gi">+#define DEBUG</span>
+#include &lt;linux/device.h&gt;
+#include &lt;linux/fpga/adi-axi-common.h&gt;
+#include &lt;linux/kernel.h&gt;
+<span class="gu">@@ -408,7 +408,7 @@ int xilinx_xcvr_calc_qpll_config(struct xilinx_xcvr *xcvr,</span>
+<span class="w"> </span>               N = N_gtx2;
+<span class="w"> </span>               vco0_min = 5930000;
+<span class="w"> </span>               vco0_max = 8000000;
+<span class="gd">-               vco1_min = 9800000;</span>
+<span class="gi">+               vco1_min = 9600000; /* FIXME: 9800000 */</span>
+<span class="w"> </span>               vco1_max = 12500000;
+<span class="w"> </span>               break;
+<span class="w"> </span>       case XILINX_XCVR_TYPE_US_GTH3:
+<span class="gu">@@ -424,10 +424,10 @@ int xilinx_xcvr_calc_qpll_config(struct xilinx_xcvr *xcvr,</span>
+<span class="w"> </span>               return -EINVAL;
+<span class="w"> </span>       }
 
-<span class="o">-</span><span class="w">       </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">AXI_PCORE_VER_MAJOR</span><span class="p">(</span><span class="n">xcvr</span><span class="o">-&gt;</span><span class="n">version</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mh">0x10</span><span class="p">)</span>
-<span class="o">-</span><span class="w">               </span><span class="n">xilinx_xcvr_setup_qpll_vco_range</span><span class="p">(</span><span class="n">xcvr</span><span class="p">,</span>
-<span class="o">-</span><span class="w">                                                </span><span class="o">&amp;</span><span class="n">vco0_min</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">vco0_max</span><span class="p">,</span>
-<span class="o">-</span><span class="w">                                                </span><span class="o">&amp;</span><span class="n">vco1_min</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">vco1_max</span><span class="p">);</span>
-<span class="o">+</span><span class="c1">//     if (AXI_PCORE_VER_MAJOR(xcvr-&gt;version) &gt; 0x10)</span>
-<span class="o">+</span><span class="c1">//             xilinx_xcvr_setup_qpll_vco_range(xcvr,</span>
-<span class="o">+</span><span class="c1">//                                              &amp;vco0_min, &amp;vco0_max,</span>
-<span class="o">+</span><span class="c1">//                                              &amp;vco1_min, &amp;vco1_max);</span>
+<span class="gd">-       if (AXI_PCORE_VER_MAJOR(xcvr-&gt;version) &gt; 0x10)</span>
+<span class="gd">-               xilinx_xcvr_setup_qpll_vco_range(xcvr,</span>
+<span class="gd">-                                                &amp;vco0_min, &amp;vco0_max,</span>
+<span class="gd">-                                                &amp;vco1_min, &amp;vco1_max);</span>
+<span class="gi">+//     if (AXI_PCORE_VER_MAJOR(xcvr-&gt;version) &gt; 0x10)</span>
+<span class="gi">+//             xilinx_xcvr_setup_qpll_vco_range(xcvr,</span>
+<span class="gi">+//                                              &amp;vco0_min, &amp;vco0_max,</span>
+<span class="gi">+//                                              &amp;vco1_min, &amp;vco1_max);</span>
 
-<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"> </span><span class="n">m</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">16</span><span class="p">;</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">&lt;&lt;=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w"> </span>       for (m = 1; m &lt;= 4; m++) {
+<span class="w"> </span>               for (d = 1; d &lt;= 16; d &lt;&lt;= 1) {
 </pre></div>
 </div>
 </section>
@@ -990,12 +985,12 @@ Content on this topic
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">adrv9009</span> <span class="n">spi1</span><span class="mf">.0</span><span class="p">:</span> <span class="n">ERROR</span><span class="p">:</span> <span class="mi">321</span><span class="p">:</span> <span class="n">Tx</span> <span class="n">Profile</span> <span class="n">IQrate</span> <span class="ow">and</span> <span class="nb">filter</span> <span class="n">settings</span> <span class="n">are</span> <span class="ow">not</span> <span class="n">possible</span> <span class="k">with</span> <span class="n">current</span> <span class="n">CLKPLL</span> <span class="n">frequency</span>
 </pre></div>
 </div>
-<p>This error originates here:<a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/adc/talise/talise.c#L2230]" target="_blank">drivers/iio/adc/talise/talise.c</a></p>
+<p>This error originates here:<a class="icon link reference external" href="https://github.com/analogdevicesinc/linux/blob/dce31cdd28bb67462af01cc72d396bf00a7896c5/drivers/iio/adc/talise/talise.c#L2230]" target="_blank">drivers/iio/adc/talise/talise.c</a></p>
 <p>And typically means that either the profile wizard created an invalid profile or that an typo was introduced in the device tree.</p>
 <p>In one particular case the issue was with the <strong>adi,dig-clocks-clk-pll-hs-div</strong> property. A new profile required 2.0 instead of 2.5.</p>
 <p>In the device tree we use the enum values:</p>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/adc/talise/talise_types.h#L28" target="_blank">talise_types.h</a></p></li>
+<li><p><a class="icon link reference external" href="https://github.com/analogdevicesinc/linux/blob/dce31cdd28bb67462af01cc72d396bf00a7896c5/drivers/iio/adc/talise/talise_types.h#L28" target="_blank">talise_types.h</a></p></li>
 </ul>
 <p>So for hs-div=2.0 must use a value of <strong>0</strong> and NOT 2!</p>
 <p><em>adi,dig-clocks-clk-pll-hs-div = &lt;0&gt;;</em></p>

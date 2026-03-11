@@ -93,6 +93,9 @@
         <nav>
           <ul>
 <li><a class="reference internal" href="#">How To Add Packages To Your Own Linux Filesystem</a><ul>
+<li><a class="reference internal" href="#find-the-yocto-project-recipe">Find the Yocto Project recipe</a></li>
+<li><a class="reference internal" href="#add-the-package-to-filesystem">Add the Package to filesystem</a></li>
+<li><a class="reference internal" href="#build-the-target-images">Build the Target Images</a></li>
 <li><a class="reference internal" href="#installing-linux-on-the-hardware">Installing Linux On The Hardware</a></li>
 </ul>
 </li>
@@ -584,15 +587,15 @@ Content on this topic
   <section id="how-to-add-packages-to-your-own-linux-filesystem">
 <h1>How To Add Packages To Your Own Linux Filesystem<a class="headerlink" href="#how-to-add-packages-to-your-own-linux-filesystem" title="Link to this heading"></a></h1>
 <p>This page introduces a simple way to add packages to your own Linux filesystem in Yocto Linux. Take the example that add the package “ethtool” to your own target adsp-custom-ramdisk image.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">===== Find the Yocto Project recipe ===== Users could add their own packages instead of the “ethtool”, the first step is to find out the Yocto Project recipe that includes “ethtool”. The way to find recipes is to go to the <a class="icon link reference external" href="https://layers.openembedded.org/layerindex/branch/master/recipes/" target="_blank">Openembedded Layer Index</a> web site.</div>
-</div>
+<section id="find-the-yocto-project-recipe">
+<h2>Find the Yocto Project recipe<a class="headerlink" href="#find-the-yocto-project-recipe" title="Link to this heading"></a></h2>
+<p>Users could add their own packages instead of the “ethtool”, the first step is to find out the Yocto Project recipe that includes “ethtool”. The way to find recipes is to go to the <a class="icon link reference external" href="https://layers.openembedded.org/layerindex/branch/master/recipes/" target="_blank">Openembedded Layer Index</a> web site.</p>
 <p>Below picture shows how to find the package “gstreamer” in this website.</p>
-<div class="line-block">
-<div class="line"><img alt="image1" src="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/qa/gstreamer.png" /></div>
-<div class="line">===== Add the Package to filesystem ===== <strong>Method 1:</strong> After finding the specific recipe name, users need to add it to the image by adding this line to conf/local.conf which is highly recommended:</div>
-</div>
+<img alt="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/qa/gstreamer.png" src="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/qa/gstreamer.png" />
+</section>
+<section id="add-the-package-to-filesystem">
+<h2>Add the Package to filesystem<a class="headerlink" href="#add-the-package-to-filesystem" title="Link to this heading"></a></h2>
+<p><strong>Method 1:</strong> After finding the specific recipe name, users need to add it to the image by adding this line to conf/local.conf which is highly recommended:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">IMAGE_INSTALL_append</span> <span class="o">=</span> <span class="s2">&quot;ethtool&quot;</span>
 </pre></div>
 </div>
@@ -610,10 +613,10 @@ Content on this topic
 DISTRO_FEATURES = &quot; ram&quot;
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">===== Build the Target Images ===== Run below command to bitbake the ramdisk filesystem, the package ethtool would be deployed into Linux filesystem directly. Refer to the <a class="reference internal" href="../quickstartguide/building.html"><span class="doc">Building The Linux Components</span></a> for more details on how to build the Yocto Linux Images.</div>
-</div>
+</section>
+<section id="build-the-target-images">
+<h2>Build the Target Images<a class="headerlink" href="#build-the-target-images" title="Link to this heading"></a></h2>
+<p>Run below command to bitbake the ramdisk filesystem, the package ethtool would be deployed into Linux filesystem directly. Refer to the <a class="reference internal" href="../quickstartguide/building.html"><span class="doc">Building The Linux Components</span></a> for more details on how to build the Yocto Linux Images.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bitbake</span> <span class="n">adsp</span><span class="o">-</span><span class="n">custom</span><span class="o">-</span><span class="n">ramdisk</span>
 </pre></div>
 </div>
@@ -622,19 +625,14 @@ DISTRO_FEATURES = &quot; ram&quot;
 <span class="p">:</span> <span class="n">Specify</span> <span class="n">the</span> <span class="n">task</span> <span class="n">to</span> <span class="n">execute</span><span class="o">.</span> <span class="n">The</span> <span class="n">exact</span> <span class="n">options</span> <span class="n">available</span> <span class="n">depend</span> <span class="n">on</span> <span class="n">the</span> <span class="n">metadata</span><span class="o">.</span> <span class="n">Some</span> <span class="n">examples</span> <span class="n">might</span> <span class="n">be</span> <span class="s1">&#39;compile&#39;</span> <span class="ow">or</span> <span class="s1">&#39;populate_sysroot&#39;</span> <span class="ow">or</span> <span class="s1">&#39;listtasks&#39;</span> <span class="n">may</span> <span class="n">give</span> <span class="n">a</span> <span class="nb">list</span> <span class="n">of</span> <span class="n">the</span> <span class="n">tasks</span> <span class="n">available</span><span class="o">.</span>
 <span class="p">;</span> <span class="o">-</span><span class="n">C</span> <span class="n">INVALIDATE_STAMP</span>
 <span class="p">:</span> <span class="n">Invalidate</span> <span class="n">the</span> <span class="n">stamp</span> <span class="k">for</span> <span class="n">the</span> <span class="n">specified</span> <span class="n">task</span> <span class="n">such</span> <span class="k">as</span> <span class="s1">&#39;compile&#39;</span> <span class="ow">and</span> <span class="n">then</span> <span class="n">run</span> <span class="n">the</span> <span class="n">default</span> <span class="n">task</span> <span class="k">for</span> <span class="n">the</span> <span class="n">specified</span> <span class="n">target</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">.</span>
-
-<span class="o">|</span>
 </pre></div>
 </div>
+</section>
 <section id="installing-linux-on-the-hardware">
 <h2>Installing Linux On The Hardware<a class="headerlink" href="#installing-linux-on-the-hardware" title="Link to this heading"></a></h2>
 <p>Pease refer this page <a class="reference internal" href="../quickstartguide/installing.html"><span class="doc">Installing Linux On The Hardware</span></a>.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="line-block">
-<div class="line">—- Back To <a class="reference internal" href="start.html"><span class="doc">Linux for SC5xx: Frequently Asked Questions</span></a></div>
-</div>
+<hr class="docutils" />
+<p>Back To <a class="reference internal" href="start.html"><span class="doc">Linux for SC5xx: Frequently Asked Questions</span></a></p>
 </section>
 </section>
 

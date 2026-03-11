@@ -95,9 +95,31 @@
           <ul>
 <li><a class="reference internal" href="#">Tools for Low Speed Mixed Signal System Design</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#materials">Materials</a></li>
 <li><a class="reference internal" href="#background">Background</a></li>
 <li><a class="reference internal" href="#slide-deck-and-video">Slide Deck and Video</a></li>
 <li><a class="reference internal" href="#preparation-a-few-resources-for-learning-python">Preparation - a few resources for learning Python</a></li>
+<li><a class="reference internal" href="#what-does-just-enough-software-look-like">What does “Just Enough Software” look like?</a></li>
+<li><a class="reference internal" href="#software-stack-background">Software Stack Background</a></li>
+<li><a class="reference internal" href="#introducing-an-exciting-new-product-that-we-ll-apply-our-skills-to">Introducing an exciting new product that we’ll apply our skills to</a></li>
+<li><a class="reference internal" href="#component-selection-based-on-software-support-rather-than-pure-analog-performance">Component selection based on software support (rather than pure analog performance)</a></li>
+<li><a class="reference internal" href="#hardware-setup">Hardware Setup</a></li>
+<li><a class="reference internal" href="#booting-the-system">Booting the system</a></li>
+<li><a class="reference internal" href="#post-boot-housekeeping">Post-boot housekeeping</a></li>
+<li><a class="reference internal" href="#configuring-the-system-and-rebooting">Configuring the System (and rebooting!)</a></li>
+<li><a class="reference internal" href="#command-line-tools-hello-ad5592r">Command Line Tools (Hello, AD5592r!)</a></li>
+<li><a class="reference internal" href="#iio-oscilloscope">IIO Oscilloscope</a></li>
+<li><a class="reference internal" href="#device-trees-telling-linux-what-s-connected">Device Trees: Telling Linux what’s connected</a></li>
+<li><a class="reference internal" href="#pyadi-iio-and-examples">Pyadi-iio And examples</a></li>
+<li><a class="reference internal" href="#hands-on-working-through-a-simple-but-complete-case-study"><strong>Hands-On!</strong> Working through a simple, but complete case study</a></li>
+<li><a class="reference internal" href="#next-steps-developing-on-a-remote-host">Next Steps: Developing on a remote host</a></li>
+<li><a class="reference internal" href="#next-steps-other-languages-c-c-matlab-etc">Next Steps: Other languages (C++, C#, MATLAB, etc.)</a></li>
+<li><a class="reference internal" href="#next-steps-no-os-development-on-linux-you-bet">Next Steps: No-OS development on Linux? You bet!</a></li>
+<li><a class="reference internal" href="#next-steps-porting-to-a-fully-embedded-system">Next Steps: Porting to a fully embedded system</a></li>
+<li><a class="reference internal" href="#more-just-enough-software-examples">More “Just Enough Software” examples</a></li>
+<li><a class="reference internal" href="#drawing-parallels-to-other-software-flows">Drawing parallels to other software flows</a></li>
+<li><a class="reference internal" href="#wrapup">Wrapup</a></li>
+<li><a class="reference internal" href="#additional-references">Additional References</a></li>
 </ul>
 </li>
 </ul>
@@ -590,19 +612,15 @@ Content on this topic
 <p><strong>Note:</strong> This is a work in progress.</p>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
-<div class="line-block">
-<div class="line">The goal of this tutorial is to equip the reader with a collection of hardware and software tools for developing low-speed mixed-signal applications.</div>
-<div class="line">** Content Guide:** This tutorial includes complete written instructions, a video guide, and a slide deck that can be used for delivering as a hands-on workshop.</div>
-<div class="line">What exactly does “Low Speed” mean? In the context of this tutorial, it means that timing is not very critical. Signals are either completely static or moving slowly such that it doesn’t matter if the instant that an ADC samples the signal wiggles around a bit relative to the previous sampling. While clock jitter is one source of this uncertainty, software delays (such as the time between a timer interrupt and the assertion of a “convert” edge) will likely be dominant. Important parameters in low-speed applications are offset, gain error, linearity, and temperature drift. “Noise” in a low-speed application is typically synonymous with resolution, and is typically measured by applying a noiseless input signal and taking a histogram of the output readings. AC performance metrics such as signal to noise ratio and total harmonic distortion extracted from a Fourier transform of the data will not be considered.</div>
-<div class="line"><strong>In contrast</strong> - sample jitter is important in a “high speed” application. If you are measuring signal to noise ratio, the Signal to Noise ratio (SNR) can be no greater than:</div>
-<div class="line"><span class="math notranslate nohighlight">\(SNR &lt;= -20 \times log(2 \times \pi \times f_{IN} \times t_{j})\)</span></div>
-<div class="line">where:</div>
-<div class="line"><span class="math notranslate nohighlight">\(f_{IN}\)</span> is the analog input frequency in Hz</div>
-<div class="line"><span class="math notranslate nohighlight">\(t_{j}\)</span> is the RMS jitter in seconds RMS</div>
-<div class="line">So that’s it. In this tutorial, we will set voltages and currents, read voltages and currents, do some basic math, but each reading will be treated independently, no correlation to previous or future readings. We will NOT be measuring AC Signal to Noise Ratio (SNR), Total Harmonic Distortion (THD), nor measuring steps, wiggles, or any other situation where precise timing is required. (Rest assured, there are lots of very interesting applications in this category.)</div>
-<div class="line">Throughout the exercises we’ll be writing simple Python code to capture and analyze data, using the industry standard Industrial I/O (IIO) framework to interact with the ADC, and the popular NumPy and Matplotlib Python libraries. Thus this exercise also serves as a mini-tutorial on Python.</div>
-<div class="line">==== Materials ====</div>
-</div>
+<p>The goal of this tutorial is to equip the reader with a collection of hardware and software tools for developing low-speed mixed-signal applications. ** Content Guide:** This tutorial includes complete written instructions, a video guide, and a slide deck that can be used for delivering as a hands-on workshop.</p>
+<p>What exactly does “Low Speed” mean? In the context of this tutorial, it means that timing is not very critical. Signals are either completely static or moving slowly such that it doesn’t matter if the instant that an ADC samples the signal wiggles around a bit relative to the previous sampling. While clock jitter is one source of this uncertainty, software delays (such as the time between a timer interrupt and the assertion of a “convert” edge) will likely be dominant. Important parameters in low-speed applications are offset, gain error, linearity, and temperature drift. “Noise” in a low-speed application is typically synonymous with resolution, and is typically measured by applying a noiseless input signal and taking a histogram of the output readings. AC performance metrics such as signal to noise ratio and total harmonic distortion extracted from a Fourier transform of the data will not be considered.</p>
+<p><strong>In contrast</strong> - sample jitter is important in a “high speed” application. If you are measuring signal to noise ratio, the Signal to Noise ratio (SNR) can be no greater than:</p>
+<p><span class="math notranslate nohighlight">\(SNR &lt;= -20 \times log(2 \times \pi \times f_{IN} \times t_{j})\)</span> where: <span class="math notranslate nohighlight">\(f_{IN}\)</span> is the analog input frequency in Hz <span class="math notranslate nohighlight">\(t_{j}\)</span> is the RMS jitter in seconds RMS</p>
+<p>So that’s it. In this tutorial, we will set voltages and currents, read voltages and currents, do some basic math, but each reading will be treated independently, no correlation to previous or future readings. We will NOT be measuring AC Signal to Noise Ratio (SNR), Total Harmonic Distortion (THD), nor measuring steps, wiggles, or any other situation where precise timing is required. (Rest assured, there are lots of very interesting applications in this category.)</p>
+<p>Throughout the exercises we’ll be writing simple Python code to capture and analyze data, using the industry standard Industrial I/O (IIO) framework to interact with the ADC, and the popular NumPy and Matplotlib Python libraries. Thus this exercise also serves as a mini-tutorial on Python.</p>
+</section>
+<section id="materials">
+<h2>Materials<a class="headerlink" href="#materials" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Raspberry Pi 4; 2G, 4G, or 8G version. (3B, 3B Plus will work, but you will want the 4 :-) )</p></li>
 <li><p>5V USB-C wall adapter for Raspberry Pi (micro USB for model 3)</p></li>
@@ -641,12 +659,7 @@ Content on this topic
 </section>
 <section id="background">
 <h2>Background<a class="headerlink" href="#background" title="Link to this heading"></a></h2>
-<div class="line-block">
-<div class="line">This tutorial builds on the concepts covered in:</div>
-<div class="line"><a class="reference internal" href="iio_intro_toolbox.html"><span class="doc">Converter Connectivity Tutorial</span></a></div>
-<div class="line">It also serves as a preview to this tutorial that starts to deal with analyzing time series data:</div>
-<div class="line"><a class="reference internal" href="precision_adc_toolbox.html"><span class="doc">Precision ADC Tutorial</span></a></div>
-</div>
+<p>This tutorial builds on the concepts covered in: <a class="reference internal" href="iio_intro_toolbox.html"><span class="doc">Converter Connectivity Tutorial</span></a> It also serves as a preview to this tutorial that starts to deal with analyzing time series data: <a class="reference internal" href="precision_adc_toolbox.html"><span class="doc">Precision ADC Tutorial</span></a></p>
 </section>
 <section id="slide-deck-and-video">
 <h2>Slide Deck and Video<a class="headerlink" href="#slide-deck-and-video" title="Link to this heading"></a></h2>
@@ -663,62 +676,88 @@ Content on this topic
 </div>
 <p><img alt="youtube&gt;tJtzUrt9_1U" src="https://wiki.analog.com/_media/youtube&gt;tJtzUrt9_1U" /></p>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Finish Me</p>
-<div class="line-block">
-<div class="line">(Translate slide deck and video into complete written instructions with photos, diagrams, etc.)</div>
-</div>
+<p>Finish Me (Translate slide deck and video into complete written instructions with photos, diagrams, etc.)</p>
 </div>
 </section>
 <section id="preparation-a-few-resources-for-learning-python">
 <h2>Preparation - a few resources for learning Python<a class="headerlink" href="#preparation-a-few-resources-for-learning-python" title="Link to this heading"></a></h2>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="line-block">
-<div class="line">==== What does “Just Enough Software” look like? ====</div>
-<div class="line">==== Software Stack Background ====</div>
-<div class="line">==== Introducing an exciting new product that we’ll apply our skills to ====</div>
-<div class="line">==== Component selection based on software support (rather than pure analog performance) ====</div>
-<div class="line">==== Hardware Setup ====</div>
-<div class="line">==== Booting the system ====</div>
-<div class="line">==== Post-boot housekeeping ==== The Raspberry Pi-based hardware and Linux setup mirrors that of the ADXL345 used in the <a class="reference internal" href="iio_intro_toolbox.html"><span class="doc">Converter Connectivity Toolbox and Tutorial</span></a>, including bringing up the pyadi-iio example. Follow the instructions for downloading and installing ADI Kuiper Linux, and editing config.txt. The only difference is the interrupt connection and device tree overlay to be added to config.txt. For this exercise, add the following line to config.txt:</div>
-</div>
+</section>
+<section id="what-does-just-enough-software-look-like">
+<h2>What does “Just Enough Software” look like?<a class="headerlink" href="#what-does-just-enough-software-look-like" title="Link to this heading"></a></h2>
+</section>
+<section id="software-stack-background">
+<h2>Software Stack Background<a class="headerlink" href="#software-stack-background" title="Link to this heading"></a></h2>
+</section>
+<section id="introducing-an-exciting-new-product-that-we-ll-apply-our-skills-to">
+<h2>Introducing an exciting new product that we’ll apply our skills to<a class="headerlink" href="#introducing-an-exciting-new-product-that-we-ll-apply-our-skills-to" title="Link to this heading"></a></h2>
+</section>
+<section id="component-selection-based-on-software-support-rather-than-pure-analog-performance">
+<h2>Component selection based on software support (rather than pure analog performance)<a class="headerlink" href="#component-selection-based-on-software-support-rather-than-pure-analog-performance" title="Link to this heading"></a></h2>
+</section>
+<section id="hardware-setup">
+<h2>Hardware Setup<a class="headerlink" href="#hardware-setup" title="Link to this heading"></a></h2>
+</section>
+<section id="booting-the-system">
+<h2>Booting the system<a class="headerlink" href="#booting-the-system" title="Link to this heading"></a></h2>
+</section>
+<section id="post-boot-housekeeping">
+<h2>Post-boot housekeeping<a class="headerlink" href="#post-boot-housekeeping" title="Link to this heading"></a></h2>
+<p>The Raspberry Pi-based hardware and Linux setup mirrors that of the ADXL345 used in the <a class="reference internal" href="iio_intro_toolbox.html"><span class="doc">Converter Connectivity Toolbox and Tutorial</span></a>, including bringing up the pyadi-iio example. Follow the instructions for downloading and installing ADI Kuiper Linux, and editing config.txt. The only difference is the interrupt connection and device tree overlay to be added to config.txt. For this exercise, add the following line to config.txt:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dtoverlay</span><span class="o">=</span><span class="n">rpi</span><span class="o">-</span><span class="n">ad5592r</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Configuring the System (and rebooting!) ====</div>
-<div class="line">==== Command Line Tools (Hello, AD5592r!) ====</div>
-<div class="line">==== IIO Oscilloscope ====</div>
-<div class="line">==== Device Trees: Telling Linux what’s connected ====</div>
-<div class="line">==== Pyadi-iio And examples ====</div>
-<div class="line">==== <strong>Hands-On!</strong> Working through a simple, but complete case study ====</div>
-<div class="line">==== Next Steps: Developing on a remote host ====</div>
-<div class="line">==== Next Steps: Other languages (C++, C#, MATLAB, etc.) ====</div>
-<div class="line">==== Next Steps: No-OS development on Linux? You bet! ==== …but I’m Confused… No-OS means no Operating System, but we’re using Kuiper Linux, and that’s an Operating System. What gives?</div>
-</div>
-<div class="line-block">
-<div class="line">Unlike the IIO drivers used in the previous tutorial , which <strong>require</strong> the Linux kernel and operating system to function, No-OS provides a portable software stack which can run on any platform that supports a C compiler. This could be bare metal microcontrollers, truly running without an operating system, up through full systems like our Kuiper Linux running on a Raspberry Pi. The No-OS repository includes existing support for the Linux OS, Real-Time Operating Systems Chibios, and mbed, Raspberry Pico, as well as hardware support for Maxim/ADI, STM32, Xilinx and Altera.</div>
-<div class="line">But why? Well, bringing up a toolchain for a particular embedded processor has its own set of challenges - particularly if development will begin on a standard development platform, then be ported to a custom board. Runnin no-OS code on Linux provides a way to get started on the embedded code development, before actually embedding.</div>
-<div class="line">A full treatment of this flow is beyond the scope of this tutorial, but will be documented in a future tutorial.</div>
-</div>
+</section>
+<section id="configuring-the-system-and-rebooting">
+<h2>Configuring the System (and rebooting!)<a class="headerlink" href="#configuring-the-system-and-rebooting" title="Link to this heading"></a></h2>
+</section>
+<section id="command-line-tools-hello-ad5592r">
+<h2>Command Line Tools (Hello, AD5592r!)<a class="headerlink" href="#command-line-tools-hello-ad5592r" title="Link to this heading"></a></h2>
+</section>
+<section id="iio-oscilloscope">
+<h2>IIO Oscilloscope<a class="headerlink" href="#iio-oscilloscope" title="Link to this heading"></a></h2>
+</section>
+<section id="device-trees-telling-linux-what-s-connected">
+<h2>Device Trees: Telling Linux what’s connected<a class="headerlink" href="#device-trees-telling-linux-what-s-connected" title="Link to this heading"></a></h2>
+</section>
+<section id="pyadi-iio-and-examples">
+<h2>Pyadi-iio And examples<a class="headerlink" href="#pyadi-iio-and-examples" title="Link to this heading"></a></h2>
+</section>
+<section id="hands-on-working-through-a-simple-but-complete-case-study">
+<h2><strong>Hands-On!</strong> Working through a simple, but complete case study<a class="headerlink" href="#hands-on-working-through-a-simple-but-complete-case-study" title="Link to this heading"></a></h2>
+</section>
+<section id="next-steps-developing-on-a-remote-host">
+<h2>Next Steps: Developing on a remote host<a class="headerlink" href="#next-steps-developing-on-a-remote-host" title="Link to this heading"></a></h2>
+</section>
+<section id="next-steps-other-languages-c-c-matlab-etc">
+<h2>Next Steps: Other languages (C++, C#, MATLAB, etc.)<a class="headerlink" href="#next-steps-other-languages-c-c-matlab-etc" title="Link to this heading"></a></h2>
+</section>
+<section id="next-steps-no-os-development-on-linux-you-bet">
+<h2>Next Steps: No-OS development on Linux? You bet!<a class="headerlink" href="#next-steps-no-os-development-on-linux-you-bet" title="Link to this heading"></a></h2>
+<p>…but I’m Confused… No-OS means no Operating System, but we’re using Kuiper Linux, and that’s an Operating System. What gives?</p>
+<p>Unlike the IIO drivers used in the previous tutorial , which <strong>require</strong> the Linux kernel and operating system to function, No-OS provides a portable software stack which can run on any platform that supports a C compiler. This could be bare metal microcontrollers, truly running without an operating system, up through full systems like our Kuiper Linux running on a Raspberry Pi. The No-OS repository includes existing support for the Linux OS, Real-Time Operating Systems Chibios, and mbed, Raspberry Pico, as well as hardware support for Maxim/ADI, STM32, Xilinx and Altera.</p>
+<p>But why? Well, bringing up a toolchain for a particular embedded processor has its own set of challenges - particularly if development will begin on a standard development platform, then be ported to a custom board. Runnin no-OS code on Linux provides a way to get started on the embedded code development, before actually embedding.</p>
+<p>A full treatment of this flow is beyond the scope of this tutorial, but will be documented in a future tutorial.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Port the Fred in the Shed curve tracer to no-OS on Linux.</p>
 </div>
-<div class="line-block">
-<div class="line">==== Next Steps: Porting to a fully embedded system ====</div>
-<div class="line">==== More “Just Enough Software” examples ====</div>
-<div class="line">==== Drawing parallels to other software flows ====</div>
-<div class="line">==== Wrapup ====</div>
-<div class="line">==== Additional References ====</div>
-</div>
+</section>
+<section id="next-steps-porting-to-a-fully-embedded-system">
+<h2>Next Steps: Porting to a fully embedded system<a class="headerlink" href="#next-steps-porting-to-a-fully-embedded-system" title="Link to this heading"></a></h2>
+</section>
+<section id="more-just-enough-software-examples">
+<h2>More “Just Enough Software” examples<a class="headerlink" href="#more-just-enough-software-examples" title="Link to this heading"></a></h2>
+</section>
+<section id="drawing-parallels-to-other-software-flows">
+<h2>Drawing parallels to other software flows<a class="headerlink" href="#drawing-parallels-to-other-software-flows" title="Link to this heading"></a></h2>
+</section>
+<section id="wrapup">
+<h2>Wrapup<a class="headerlink" href="#wrapup" title="Link to this heading"></a></h2>
+</section>
+<section id="additional-references">
+<h2>Additional References<a class="headerlink" href="#additional-references" title="Link to this heading"></a></h2>
 </section>
 </section>
 

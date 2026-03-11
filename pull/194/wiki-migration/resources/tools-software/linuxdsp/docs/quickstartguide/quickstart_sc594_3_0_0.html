@@ -94,16 +94,23 @@
           <ul>
 <li><a class="reference internal" href="#">Yocto Linux 3.0.0 Quickstart Guide for ADSP-SC594</a><ul>
 <li><a class="reference internal" href="#setting-up-your-host-pc">Setting Up Your Host PC</a><ul>
+<li><a class="reference internal" href="#installing-required-packages">Installing Required Packages</a></li>
 <li><a class="reference internal" href="#configuring-tftp-service">Configuring TFTP Service</a></li>
+<li><a class="reference internal" href="#configure-minicom">Configure Minicom</a></li>
+<li><a class="reference internal" href="#installing-the-sources">Installing the Sources</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#building-the-image">Building the Image</a><ul>
 <li><a class="reference internal" href="#preparing-the-buildtool">Preparing the buildtool</a></li>
+<li><a class="reference internal" href="#building-the-example">Building the example</a></li>
 <li><a class="reference internal" href="#building-the-sdk">Building the SDK</a><ul>
 <li><a class="reference internal" href="#installing-the-sdk">Installing the SDK</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#running-u-boot-on-the-board-for-the-first-time">Running U-Boot on the Board for the first time</a><ul>
 <li><a class="reference internal" href="#flash-u-boot-to-spi-flash">Flash U-Boot to SPI Flash</a></li>
-</ul>
-</li>
 </ul>
 </li>
 <li><a class="reference internal" href="#booting-linux">Booting Linux</a><ul>
@@ -113,6 +120,11 @@
 <li><a class="reference internal" href="#writing-kernel-and-rootfs-image-to-usb-mass-storage">Writing kernel and rootfs image to USB Mass Storage</a></li>
 <li><a class="reference internal" href="#booting-linux-from-the-usb-mass-storage-device">Booting Linux from the USB Mass Storage device</a></li>
 <li><a class="reference internal" href="#booting-rootfs-from-usb-mass-storage">Booting rootfs from USB Mass Storage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#booting-linux-using-tftp">Booting Linux Using TFTP</a><ul>
+<li><a class="reference internal" href="#nfs-boot">NFS Boot</a></li>
+<li><a class="reference internal" href="#booting-into-linux-from-tftp">Booting into Linux from TFTP</a></li>
 </ul>
 </li>
 </ul>
@@ -614,14 +626,14 @@ Content on this topic
 <section id="setting-up-your-host-pc">
 <h2>Setting Up Your Host PC<a class="headerlink" href="#setting-up-your-host-pc" title="Link to this heading"></a></h2>
 <p>The build system is currently supported on host PCs running Ubuntu 20.04 LTS 64-bit.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Installing Required Packages ==== In order to build and deploy Linux to your ADSP-SC594-EZKIT development board you will need to install the following packages on your host PC.</div>
-</div>
+<section id="installing-required-packages">
+<h3>Installing Required Packages<a class="headerlink" href="#installing-required-packages" title="Link to this heading"></a></h3>
+<p>In order to build and deploy Linux to your ADSP-SC594-EZKIT development board you will need to install the following packages on your host PC.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>update
 $<span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>gawk<span class="w"> </span>wget<span class="w"> </span>git-core<span class="w"> </span>diffstat<span class="w"> </span>unzip<span class="w"> </span>texinfo<span class="w"> </span>gcc-multilib<span class="w"> </span>build-essential<span class="w"> </span>chrpath<span class="w"> </span>socat<span class="w"> </span>libsdl1.2-dev<span class="w"> </span>xterm<span class="w"> </span>u-boot-tools<span class="w"> </span>openssl<span class="w"> </span>curl<span class="w"> </span>tftpd-hpa<span class="w"> </span>python<span class="w"> </span>zstd<span class="w"> </span>liblz4-tool
 </pre></div>
 </div>
+</section>
 <section id="configuring-tftp-service">
 <h3>Configuring TFTP Service<a class="headerlink" href="#configuring-tftp-service" title="Link to this heading"></a></h3>
 <p>A TFTP server on the host is used to transfer images to the development board. Install and configure.</p>
@@ -639,10 +651,10 @@ $<span class="w"> </span>sudo<span class="w"> </span>chmod<span class="w"> </spa
 $<span class="w"> </span>sudo<span class="w"> </span>service<span class="w"> </span>tftpd-hpa<span class="w"> </span>restart
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Configure Minicom ==== In order to communicate with the U-Boot bootloader, a UART connection must be made between the host PC and the development board. It is recommended that you use minicom to do this. Minicom must be configured to connect to U-Boot correctly.</div>
-</div>
+</section>
+<section id="configure-minicom">
+<h3>Configure Minicom<a class="headerlink" href="#configure-minicom" title="Link to this heading"></a></h3>
+<p>In order to communicate with the U-Boot bootloader, a UART connection must be made between the host PC and the development board. It is recommended that you use minicom to do this. Minicom must be configured to connect to U-Boot correctly.</p>
 <p>On the host PC open a terminal and execute the following commands:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>minicom
 $<span class="w"> </span>sudo<span class="w"> </span>minicom<span class="w"> </span>-s
@@ -677,10 +689,10 @@ $<span class="w"> </span>sudo<span class="w"> </span>minicom<span class="w"> </s
 <p class="admonition-title">Note</p>
 <p><code class="docutils literal notranslate"><span class="pre">/dev/ttyUSB0</span></code> might not correspond to the serial port of the board on every system. You can determine which <code class="docutils literal notranslate"><span class="pre">/dev</span></code> entry your board uses by running <code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">-l</span> <span class="pre">/dev/ttyUSB*</span></code> twice, once when the serial port of the board is plugged in, and once when it isn’t.</p>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Installing the Sources ==== The example is fully contained in the Analog Devices Yocto Linux github repositories.</div>
-</div>
+</section>
+<section id="installing-the-sources">
+<h3>Installing the Sources<a class="headerlink" href="#installing-the-sources" title="Link to this heading"></a></h3>
+<p>The example is fully contained in the Analog Devices Yocto Linux github repositories.</p>
 <p>To install the sources:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mkdir<span class="w"> </span>~/gxp
 $<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/gxp
@@ -694,13 +706,13 @@ $<span class="w"> </span>./bin/repo<span class="w"> </span>init<span class="w"> 
 $<span class="w"> </span>./bin/repo<span class="w"> </span>sync
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">===== Building the Image =====</div>
-</div>
 </section>
+</section>
+</section>
+<section id="building-the-image">
+<h1>Building the Image<a class="headerlink" href="#building-the-image" title="Link to this heading"></a></h1>
 <section id="preparing-the-buildtool">
-<h3>Preparing the buildtool<a class="headerlink" href="#preparing-the-buildtool" title="Link to this heading"></a></h3>
+<h2>Preparing the buildtool<a class="headerlink" href="#preparing-the-buildtool" title="Link to this heading"></a></h2>
 <p>Yocto requires the environment to be configured before building is possible.  A setup-environment script in the gxp folder contains all the required environment settings for your build target. Source the setup script for your board:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">source</span><span class="w"> </span>setup-environment<span class="w"> </span>-m<span class="w"> </span>adsp-sc594-som-ezkit
 </pre></div>
@@ -710,10 +722,10 @@ $<span class="w"> </span>./bin/repo<span class="w"> </span>sync
 <p class="admonition-title">Important</p>
 <p>Note that the build environment needs to be sourced once only before building.  If later working in a different terminal the setup-environment script should be sourced again.  If sourcing the setup-environment script is done without specifying the machine Yocto will reuse the previous configuration settings and retain any changes made to the files in the conf folder.</p>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Building the example ==== You can build two different versions of the root file system; minimal and full. To build the example images invoke bitbake from within the build directory created previously.</div>
-</div>
+</section>
+<section id="building-the-example">
+<h2>Building the example<a class="headerlink" href="#building-the-example" title="Link to this heading"></a></h2>
+<p>You can build two different versions of the root file system; minimal and full. To build the example images invoke bitbake from within the build directory created previously.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>bitbake<span class="w"> </span>adsp-sc5xx-minimal
 $<span class="w"> </span>bitbake<span class="w"> </span>adsp-sc5xx-full
 </pre></div>
@@ -725,7 +737,7 @@ $<span class="w"> </span>bitbake<span class="w"> </span>adsp-sc5xx-full
 </div>
 </section>
 <section id="building-the-sdk">
-<h3>Building the SDK<a class="headerlink" href="#building-the-sdk" title="Link to this heading"></a></h3>
+<h2>Building the SDK<a class="headerlink" href="#building-the-sdk" title="Link to this heading"></a></h2>
 <p>The SDK will provide you with the cross toolchain needed to develop application for the target board, alongside various miscellaneous tools. Notably, it will provide you with OpenOCD and GDB, which you can use to run and flash U-Boot on the board.</p>
 <p>The SDK can be built for the <code class="docutils literal notranslate"><span class="pre">adsp-sc5xx-minimal</span></code> image or the <code class="docutils literal notranslate"><span class="pre">adsp-sc5xx-full</span> <span class="pre">image</span></code>. To build the SDK for the adsp-sc5xx-minimal image invoke bitbake from within the build directory created previously.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>bitbake<span class="w"> </span>adsp-sc5xx-minimal<span class="w"> </span>-c<span class="w"> </span>populate_sdk
@@ -745,11 +757,11 @@ adi-distro-glibc-glibc-x86_64-adsp-sc5xx-minimal-cortexa5t2hf-neon-adsp-sc594-so
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">adi-distro-glibc-glibc-x86_64-adsp-sc5xx-minimal-cortexa5t2hf-neon-adsp-sc594-som-ezkit-toolchain-3.0.0.sh</span></code> is a self-extracting archive containing the SDK.</p>
 <section id="installing-the-sdk">
-<h4>Installing the SDK<a class="headerlink" href="#installing-the-sdk" title="Link to this heading"></a></h4>
+<h3>Installing the SDK<a class="headerlink" href="#installing-the-sdk" title="Link to this heading"></a></h3>
 <p>Invoke the self-extracting archive. It will default to installing to <code class="docutils literal notranslate"><span class="pre">/opt/adi-distro/3.0.0</span></code> but gives you the option to select your own install folder during the installation. For the minimal image on SC594</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>./adi-distro-glibc-glibc-x86_64-adsp-sc5xx-minimal-cortexa5t2hf-neon-adsp-sc594-som-ezkit-toolchain-3.0.0.sh
-Analog<span class="w"> </span>Devices<span class="w"> </span>Inc<span class="w"> </span>Reference<span class="w"> </span>Distro<span class="w"> </span><span class="o">(</span>glibc<span class="o">)</span><span class="w"> </span>SDK<span class="w"> </span>installer<span class="w"> </span>version<span class="w"> </span><span class="m">3</span>.0.0
-<span class="o">=======================================================================</span>
+**Analog<span class="w"> </span>Devices<span class="w"> </span>Inc<span class="w"> </span>Reference<span class="w"> </span>Distro<span class="w"> </span><span class="o">(</span>glibc<span class="o">)</span><span class="w"> </span>SDK<span class="w"> </span>installer<span class="w"> </span>version<span class="w"> </span><span class="m">3</span>.0.0**
+
 Enter<span class="w"> </span>target<span class="w"> </span>directory<span class="w"> </span><span class="k">for</span><span class="w"> </span>SDK<span class="w"> </span><span class="o">(</span>default:<span class="w"> </span>/opt/adi-distro-glibc/3.0.0<span class="o">)</span>:
 You<span class="w"> </span>are<span class="w"> </span>about<span class="w"> </span>to<span class="w"> </span>install<span class="w"> </span>the<span class="w"> </span>SDK<span class="w"> </span>to<span class="w"> </span><span class="s2">&quot;/opt/adi-distro-glibc/3.0.0&quot;</span>.<span class="w"> </span>Proceed<span class="w"> </span><span class="o">[</span>Y/n<span class="o">]</span>?<span class="w"> </span>y
 Extracting<span class="w"> </span>SDK................................................................................................................done
@@ -763,7 +775,7 @@ Each<span class="w"> </span><span class="nb">time</span><span class="w"> </span>
 </section>
 </section>
 <section id="running-u-boot-on-the-board-for-the-first-time">
-<h3>Running U-Boot on the Board for the first time<a class="headerlink" href="#running-u-boot-on-the-board-for-the-first-time" title="Link to this heading"></a></h3>
+<h2>Running U-Boot on the Board for the first time<a class="headerlink" href="#running-u-boot-on-the-board-for-the-first-time" title="Link to this heading"></a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>It’s always good practice to erase the contents of <code class="docutils literal notranslate"><span class="pre">/tftpboot/</span></code> before running and/or flashing a new build of U-Boot or Linux. You can do so by executing <code class="docutils literal notranslate"><span class="pre">rm</span> <span class="pre">/tftpboot/*</span></code> before proceeding</p>
@@ -827,7 +839,19 @@ Info<span class="w"> </span>:<span class="w"> </span>adspsc59x.dap:<span class="
 <span class="p">:</span> <span class="o">&lt;</span><span class="n">code</span> <span class="n">bash</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<p>$ cd /tftpboot $ /opt/adi-distro-glibc/3.0.0/sysroots/x86_64-adi_glibc_sdk-linux/usr/bin/arm-adi_glibc-linux-gnueabi/arm-adi_glibc-linux-gnueabi-gdb u-boot-spl-sc594-som-ezkit.elf … (gdb) target extended-remote :3333 Remote debugging using :3333 0x00005f96 in ?? () (gdb) load Loading section .text, size 0xef3c lma 0x20080000 Loading section .rodata, size 0x204f lma 0x2008ef3c Loading section .dtb.init.rodata, size 0x1740 lma 0x20090f90 Loading section .data, size 0x548 lma 0x200926d0 Loading section .u_boot_list, size 0xc38 lma 0x20092c18 Start address 0x20080000, load size 79947 Transfer rate: 31 KB/sec, 9993 bytes/write. (gdb) c Continuing. ^C Program received signal SIGINT, Interrupt. &lt;/code&gt;</p>
+<p>$ cd /tftpboot $ /opt/adi-distro-glibc/3.0.0/sysroots/x86_64-adi_glibc_sdk-linux/usr/bin/arm-adi_glibc-linux-gnueabi/arm-adi_glibc-linux-gnueabi-gdb u-boot-spl-sc594-som-ezkit.elf … (gdb) target extended-remote :3333 Remote debugging using :3333 0x00005f96 in ?? () (gdb) load Loading section .text, size 0xef3c lma 0x20080000 Loading section .rodata, size 0x204f lma 0x2008ef3c Loading section .dtb.init.rodata, size 0x1740 lma 0x20090f90 Loading section .data, size 0x548 lma 0x200926d0 Loading section .u_boot_list, size 0xc38 lma 0x20092c18 Start address 0x20080000, load size 79947 Transfer rate: 31 KB/sec, 9993 bytes/write. (gdb) c Continuing.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+</tbody>
+</table>
+</div>
+<div class="line-block">
+<div class="line">C |</div>
+</div>
+<p>+===+
++—+</p>
+<p>Program received signal SIGINT, Interrupt. &lt;/code&gt;</p>
 <p>You will see a message on Terminal 1 running minicom, informing you that you can now load U-Boot Proper</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;</span><span class="s1">&#39;&#39;</span><span class="o">**</span><span class="n">Terminal1</span><span class="p">:</span> <span class="n">minicom</span><span class="o">**</span><span class="s1">&#39;&#39;</span>
 <span class="p">:</span><span class="o">&lt;</span><span class="n">code</span> <span class="n">bash</span><span class="o">&gt;</span><span class="n">U</span><span class="o">-</span><span class="n">Boot</span> <span class="n">SPL</span> <span class="mf">2020.10</span> <span class="p">(</span><span class="n">Mar</span> <span class="mi">16</span> <span class="mi">2023</span> <span class="o">-</span> <span class="mi">13</span><span class="p">:</span><span class="mi">07</span><span class="p">:</span><span class="mi">24</span> <span class="o">+</span><span class="mi">0000</span><span class="p">)</span>
@@ -870,11 +894,8 @@ Continuing.
 <p>CPU: ADSP ADSP-SC594-0.0 (spi slave boot) Detected Revision: 1.1 Model: ADI sc594-som-ezkit DRAM: 992 MiB WDT: Not found! MMC: Loading Environment from SPIFlash… Read ID via 1x SPI: 9d 5a 19 SF: Detected is25lx256 with page size 256 Bytes, erase size 128 KiB, total 32 MiB OK In: <a class="reference external" href="mailto:serial&#37;&#52;&#48;0x31003000">serial<span>&#64;</span>0x31003000</a> Out: <a class="reference external" href="mailto:serial&#37;&#52;&#48;0x31003000">serial<span>&#64;</span>0x31003000</a> Err: <a class="reference external" href="mailto:serial&#37;&#52;&#48;0x31003000">serial<span>&#64;</span>0x31003000</a> Net: eth0: eth0 Error: eth1 address not set.</p>
 <p>Hit any key to stop autoboot: 0 =&gt; &lt;/code&gt;</p>
 <section id="flash-u-boot-to-spi-flash">
-<h4>Flash U-Boot to SPI Flash<a class="headerlink" href="#flash-u-boot-to-spi-flash" title="Link to this heading"></a></h4>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">In the U-Boot console, set the IP address of the Linux PC that hosts the U-Boot loader files (<code class="docutils literal notranslate"><span class="pre">stage1-boot.ldr</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">stage2-boot.ldr</span></code>) on TFTP.</div>
-</div>
+<h3>Flash U-Boot to SPI Flash<a class="headerlink" href="#flash-u-boot-to-spi-flash" title="Link to this heading"></a></h3>
+<p>In the U-Boot console, set the IP address of the Linux PC that hosts the U-Boot loader files (<code class="docutils literal notranslate"><span class="pre">stage1-boot.ldr</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">stage2-boot.ldr</span></code>) on TFTP.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;</span><span class="s1">&#39;&#39;</span><span class="o">**</span><span class="n">Terminal1</span><span class="p">:</span> <span class="n">minicom</span><span class="o">**</span><span class="s1">&#39;&#39;</span>
 <span class="p">:</span>
 </pre></div>
@@ -941,7 +962,6 @@ OK
 <p>At this point the U-Boot binary is stored in flash. You can now disconnect the ICE-1000 or ICE-2000 from the development board and make sure to switch the BMODE to position 1. You will only need to reconnect this if your board fails to boot and you need to re-follow these instructions.</p>
 </section>
 </section>
-</section>
 <section id="booting-linux">
 <h2>Booting Linux<a class="headerlink" href="#booting-linux" title="Link to this heading"></a></h2>
 <section id="booting-the-minimal-image-from-qspi">
@@ -1002,12 +1022,12 @@ Using<span class="w"> </span>eth0<span class="w"> </span>device
 TFTP<span class="w"> </span>from<span class="w"> </span>server<span class="w"> </span><span class="m">10</span>.37.33.116<span class="p">;</span><span class="w"> </span>our<span class="w"> </span>IP<span class="w"> </span>address<span class="w"> </span>is<span class="w"> </span><span class="m">10</span>.37.33.113
 Filename<span class="w"> </span><span class="s1">&#39;fitImage&#39;</span>.
 Load<span class="w"> </span>address:<span class="w"> </span>0x82000000
-Loading:<span class="w"> </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
+**Loading:<span class="w"> </span><span class="c1">#################################################################**</span>
+
+<span class="w">         </span>**#################################################################**
+
+<span class="w">         </span>**#################################################################**
+
 <span class="w">         </span><span class="c1">#################################################################</span>
 
 <span class="w">         </span><span class="m">5</span><span class="w"> </span>MiB/s
@@ -1021,28 +1041,28 @@ Using<span class="w"> </span>eth0<span class="w"> </span>device
 TFTP<span class="w"> </span>from<span class="w"> </span>server<span class="w"> </span><span class="m">10</span>.37.33.116<span class="p">;</span><span class="w"> </span>our<span class="w"> </span>IP<span class="w"> </span>address<span class="w"> </span>is<span class="w"> </span><span class="m">10</span>.37.33.113
 Filename<span class="w"> </span><span class="s1">&#39;adsp-sc5xx-minimal-adsp-sc594-som-ezkit.jffs2&#39;</span>.
 Load<span class="w"> </span>address:<span class="w"> </span>0x82000000
-Loading:<span class="w"> </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
-<span class="w">         </span><span class="c1">#################################################################</span>
+**Loading:<span class="w"> </span><span class="c1">#################################################################**</span>
+
+<span class="w">         </span>**#################################################################**
+
+<span class="w">         </span>**#################################################################**
+
+<span class="w">         </span>**#################################################################**
+
+<span class="w">         </span>**#################################################################**
+
+<span class="w">         </span>**#################################################################**
+
+<span class="w">         </span>**#################################################################**
+
+<span class="w">         </span>**#################################################################**
+
+<span class="w">         </span>**#################################################################**
+
+<span class="w">         </span>**#################################################################**
+
+<span class="w">         </span>**#################################################################**
+
 <span class="w">         </span><span class="c1">#####################################################</span>
 <span class="w">         </span><span class="m">5</span><span class="w"> </span>MiB/s
 <span class="k">done</span>
@@ -1149,17 +1169,17 @@ $<span class="w"> </span>sudo<span class="w"> </span>umount<span class="w"> </sp
 </pre></div>
 </div>
 <p>Now the rootfs is set to your USB stick and amount of space equals of size of partition on USB stick.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Booting Linux Using TFTP ==== In order to boot Linux, the TFTP server should be setup as <a class="reference internal" href="quickstart_sc594.html"><span class="doc">above</span></a> and a copy of the fitImage should be copied into the <strong>/tftpboot</strong> directory.</div>
-</div>
+</section>
+</section>
+<section id="booting-linux-using-tftp">
+<h3>Booting Linux Using TFTP<a class="headerlink" href="#booting-linux-using-tftp" title="Link to this heading"></a></h3>
+<p>In order to boot Linux, the TFTP server should be setup as <a class="reference internal" href="quickstart_sc594.html"><span class="doc">above</span></a> and a copy of the fitImage should be copied into the <strong>/tftpboot</strong> directory.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>cp<span class="w"> </span>tmp/deploy/images/adsp-sc594-som-ezkit/fitImage<span class="w"> </span>/tftpboot/
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">=== NFS Boot === For NFS boot we use the Network File System which is stored in local Ubuntu Host. This is suggested when you do application development. To setup the NFS server:</div>
-</div>
+<section id="nfs-boot">
+<h4>NFS Boot<a class="headerlink" href="#nfs-boot" title="Link to this heading"></a></h4>
+<p>For NFS boot we use the Network File System which is stored in local Ubuntu Host. This is suggested when you do application development. To setup the NFS server:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>nfs-kernel-server
 $<span class="w"> </span>sudo<span class="w"> </span>vi<span class="w"> </span>/etc/exports
 
@@ -1195,10 +1215,10 @@ Sep<span class="w"> </span><span class="m">06</span><span class="w"> </span><spa
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>tar<span class="w"> </span>-xf<span class="w"> </span>tmp/deploy/images/adsp-sc594-som-ezkit/adsp-sc5xx-full-adsp-sc594-som-ezkit.tar.xz<span class="w"> </span>-C<span class="w"> </span>/romfs
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">=== Booting into Linux from TFTP === Next, on the target, from u-boot, run the following command:</div>
-</div>
+</section>
+<section id="booting-into-linux-from-tftp">
+<h4>Booting into Linux from TFTP<a class="headerlink" href="#booting-into-linux-from-tftp" title="Link to this heading"></a></h4>
+<p>Next, on the target, from u-boot, run the following command:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">=</span>&gt;<span class="w"> </span>run<span class="w"> </span>nfsboot
 ......
 ......

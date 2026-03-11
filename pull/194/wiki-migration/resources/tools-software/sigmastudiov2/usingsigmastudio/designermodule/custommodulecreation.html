@@ -93,6 +93,8 @@
         <nav>
           <ul>
 <li><a class="reference internal" href="#">1. DLL based Custom Module Creation</a><ul>
+<li><a class="reference internal" href="#mute-no-slew-module">1.1. Mute (No Slew) Module</a><ul>
+<li><a class="reference internal" href="#configuration-tab">1.1.1 Configuration Tab</a></li>
 <li><a class="reference internal" href="#source-and-libraries-tab">1.1.2 Source and Libraries Tab</a></li>
 <li><a class="reference internal" href="#parameter-definition-tab">1.1.3 Parameter Definition Tab</a></li>
 <li><a class="reference internal" href="#i-o-pins-tab">1.1.4 I/O Pins Tab</a></li>
@@ -103,7 +105,12 @@
 <li><a class="reference internal" href="#settings-tab">1.1.9 Settings Tab</a></li>
 <li><a class="reference internal" href="#configuring-plugin-dll-and-its-generation">1.1.10 Configuring Plugin DLL and its Generation</a></li>
 <li><a class="reference internal" href="#including-generated-dll-to-sigmastudioplus-add-ins">1.1.11 Including generated DLL to SigmaStudioPlus Add-ins</a></li>
-<li><a class="reference internal" href="#source-and-libraries-tab-1">1.2.1 Source and Libraries Tab</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#simple-adder-module">1.2 Simple Adder Module</a><ul>
+<li><a class="reference internal" href="#id1">1.2.1 Source and Libraries Tab</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -594,71 +601,70 @@ Content on this topic
   <p><a class="reference internal" href="../designermodule.html"><span class="doc">Return to previous page</span></a></p>
 <section id="dll-based-custom-module-creation">
 <h1>1. DLL based Custom Module Creation<a class="headerlink" href="#dll-based-custom-module-creation" title="Link to this heading"></a></h1>
-<div class="line-block">
-<div class="line">Algorithm Designer can be launched by selecting <strong>Tools➔ Algorithm Designer</strong> from the menu bar as shown in the below <a class="reference internal" href="#"><span class="doc">figure</span></a>.</div>
-<div class="line"><img alt="image1" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/algodesigner.png" /></div>
-</div>
+<p>Algorithm Designer can be launched by selecting <strong>Tools➔ Algorithm Designer</strong> from the menu bar as shown in the below <a class="reference internal" href="#"><span class="doc">figure</span></a>.</p>
+<p><img alt="image1" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/algodesigner.png" /></p>
 <div class="centeralign docutils container">
 <p><strong>Figure:</strong> Algorithm Designer Launcher</p>
 </div>
-<div class="line-block">
-<div class="line">The upcoming sections demonstrates how a developer can create custom modules using DLB library file and also by providing source code directly in SigmaStudioPlus Algorithm Designer.</div>
-<div class="line">Here, we are creating a <em>Mute (No Slew)</em> module as an example to show DLB method (Both the example project MuteNoSlew and the .dlb file (MuteNoSlew.dlb) generated from CCES are built in Release mode) and <em>Simple Adder</em> module to show source code method.</div>
-<div class="line"><br /></div>
-</div>
+<p>The upcoming sections demonstrates how a developer can create custom modules using DLB library file and also by providing source code directly in SigmaStudioPlus Algorithm Designer.</p>
+<p>Here, we are creating a <em>Mute (No Slew)</em> module as an example to show DLB method (Both the example project MuteNoSlew and the .dlb file (MuteNoSlew.dlb) generated from CCES are built in Release mode) and <em>Simple Adder</em> module to show source code method.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The example projects mentioned, Mute (No Slew) and Simple Adder, follow the same procedures in most steps. Therefore, this page will primarily focus on one example, namely Mute (No Slew), to guide developers in creating a custom module using SigmaStudioPlus Algorithm Designer. Any differences in procedure between the Mute (No Slew) and Simple Adder module creation will be noted separately.</p>
 </div>
-<div class="line-block">
-<div class="line">Once the Algorithm Designer window opens, if the developer requires guidance in creating a custom module, there is an ‘open book’ icon, as shown in the figure below. <img alt="image2" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/algdesigner_help.png" /></div>
-</div>
+<p>Once the Algorithm Designer window opens, if the developer requires guidance in creating a custom module, there is an ‘open book’ icon, as shown in the figure below.</p>
+<p><img alt="image2" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/algdesigner_help.png" /></p>
 <div class="centeralign docutils container">
 <p><strong>Figure:</strong> Algorithm Designer <strong>Help</strong> Link</p>
 </div>
-<p>Clicking on this icon will direct the user to the Algorithm Designer Help Wiki page, where the necessary information and step-by-step guidance are provided.
-| ===== 1.1. Mute (No Slew) Module =====
-| ==== 1.1.1 Configuration Tab ====
-| This section defines the basic configuration of the module to be developed.
-| This tab helps the developer to mention the Name of the module, version, processing type etc.
-| Make sure that the developer provide the same name as mentioned in the ‘.c’ file containing module algorithm/logic.
-| For eg: if the name of API is <strong>BPROCESS_MuteNoSlew</strong> (as per <a class="reference internal" href="../algorithm_designer_coding_conventions.html"><span class="doc">Coding convention for Block Process based modules</span></a>), the name to be mentioned in the Name section of Configuration tab must be <strong>MuteNoSlew</strong> as shown in the below <a class="reference internal" href="#"><span class="doc">figure</span></a>.</p>
+<p>Clicking on this icon will direct the user to the Algorithm Designer Help Wiki page, where the necessary information and step-by-step guidance are provided.</p>
+<section id="mute-no-slew-module">
+<h2>1.1. Mute (No Slew) Module<a class="headerlink" href="#mute-no-slew-module" title="Link to this heading"></a></h2>
+<section id="configuration-tab">
+<h3>1.1.1 Configuration Tab<a class="headerlink" href="#configuration-tab" title="Link to this heading"></a></h3>
+<div class="line-block">
+<div class="line">This section defines the basic configuration of the module to be developed.</div>
+<div class="line">This tab helps the developer to mention the Name of the module, version, processing type etc.</div>
+<div class="line">Make sure that the developer provide the same name as mentioned in the ‘.c’ file containing module algorithm/logic. For eg: if the name of API is <strong>BPROCESS_MuteNoSlew</strong> (as per <a class="reference internal" href="../algorithm_designer_coding_conventions.html"><span class="doc">Coding convention for Block Process based modules</span></a>), the name to be mentioned in the Name section of Configuration tab must be <strong>MuteNoSlew</strong> as shown in the below <a class="reference internal" href="#"><span class="doc">figure</span></a>.</div>
+</div>
 <img alt="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/configuration_1.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/configuration_1.png" />
 <div class="centeralign docutils container">
 <p><strong>Figure:</strong> Algorithm Designer Module Configuration Tab for Mute No Slew module.</p>
 </div>
-<div class="line-block">
-<div class="line">Below are the said configurable parameters:</div>
-<div class="line">^ <strong>Parameters</strong> ^ <strong>Description</strong> ^</div>
-</div>
+<p>Below are the said configurable parameters:</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Parameters</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
 <tbody>
-<tr class="row-odd"><td><p>Name</p></td>
+<tr class="row-even"><td><p>Name</p></td>
 <td><p>Name of the module</p></td>
 </tr>
-<tr class="row-even"><td><p>Version</p></td>
+<tr class="row-odd"><td><p>Version</p></td>
 <td><p>Version number in a.b.c.d format</p></td>
 </tr>
-<tr class="row-odd"><td><p>Processor</p></td>
+<tr class="row-even"><td><p>Processor</p></td>
 <td><p>Target processor (ADSP-SC5xx / ADSP-214xx)</p></td>
 </tr>
-<tr class="row-even"><td><p>Processing Type</p></td>
+<tr class="row-odd"><td><p>Processing Type</p></td>
 <td><p>Block or Sample processing</p></td>
 </tr>
-<tr class="row-odd"><td><p>Configuration Properties (Primary/Secondary)</p></td>
+<tr class="row-even"><td><p>Configuration Properties (Primary/Secondary)</p></td>
 <td><p>Optional properties (like channels, stages etc.) for end user to configure the behavior of the module (like pins, UI replication etc.). Up to two properties can be enabled. Secondary property can only be enabled when primary property is enabled.</p></td>
 </tr>
-<tr class="row-even"><td><p>Enable</p></td>
+<tr class="row-odd"><td><p>Enable</p></td>
 <td><p>Whether property is enabled</p></td>
 </tr>
-<tr class="row-odd"><td><p>Name</p></td>
+<tr class="row-even"><td><p>Name</p></td>
 <td><p>Name of the property (Predefined properties are FS, NumChannels etc)</p></td>
 </tr>
-<tr class="row-even"><td><p>Min</p></td>
+<tr class="row-odd"><td><p>Min</p></td>
 <td><p>Minimum value of the property</p></td>
 </tr>
-<tr class="row-odd"><td><p>Max</p></td>
+<tr class="row-even"><td><p>Max</p></td>
 <td><p>Maximum value of the property</p></td>
 </tr>
 </tbody>
@@ -668,16 +674,15 @@ Content on this topic
 <p class="admonition-title">Note</p>
 <p>The <strong>Advanced Customization</strong> (Custom UI &amp; Custom Code) options are advanced configuration settings and not be used in the regular designer flow. Developers can contact the support team for more information regarding this configuration.</p>
 </div>
-<div class="line-block">
-<div class="line">Click Next button.</div>
-</div>
+<p>Click Next button.</p>
+</section>
 <section id="source-and-libraries-tab">
-<h2>1.1.2 Source and Libraries Tab<a class="headerlink" href="#source-and-libraries-tab" title="Link to this heading"></a></h2>
+<h3>1.1.2 Source and Libraries Tab<a class="headerlink" href="#source-and-libraries-tab" title="Link to this heading"></a></h3>
 <div class="line-block">
 <div class="line">This section is used to define the algorithm source.</div>
 <div class="line">Algorithm source can be in the form of CCES libraries (MuteNoSlew module) and/or C source with headers (SimpleAdder module).</div>
-<div class="line">For MuteNoSlew, we are inserting the CCES library (.dlb file) directly into the Algorithm Designer editor under the “Libraries” tab, as shown in the two figures below. The DLB files to be added can be selected using ‘Browse’ button and added using the ‘+’ button. Use the ‘-’ button to remove the selected file from the list.</div>
 </div>
+<p>For MuteNoSlew, we are inserting the CCES library (.dlb file) directly into the Algorithm Designer editor under the “Libraries” tab, as shown in the two figures below. The DLB files to be added can be selected using ‘Browse’ button and added using the ‘+’ button. Use the ‘-’ button to remove the selected file from the list.</p>
 <p>When a DLB is added as Embedded Library, the contents of the DLB is embedded into the module DLL generated by Algorithm Designer. The DLB is then no longer required to be present while using the module generated by Algorithm Designer in SigmaStudioPlus.</p>
 <p><img alt="image3" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/srclib_embdlib.png" /></p>
 <div class="centeralign docutils container">
@@ -688,55 +693,46 @@ Content on this topic
 <div class="centeralign docutils container">
 <p><strong>Figure:</strong> Algorithm Designer Module Source and Libraries Tab, Libraries window (Referenced DLB) for Mute No Slew module.</p>
 </div>
-<div class="line-block">
-<div class="line">Click Next button.</div>
-</div>
+<p>Click Next button.</p>
 </section>
 <section id="parameter-definition-tab">
-<h2>1.1.3 Parameter Definition Tab<a class="headerlink" href="#parameter-definition-tab" title="Link to this heading"></a></h2>
-<div class="line-block">
-<div class="line">The user can define the module (target) parameters that are required for this particular module.</div>
-<div class="line">Please refer the below <a class="reference internal" href="#"><span class="doc">figure</span></a>.</div>
-</div>
+<h3>1.1.3 Parameter Definition Tab<a class="headerlink" href="#parameter-definition-tab" title="Link to this heading"></a></h3>
+<p>The user can define the module (target) parameters that are required for this particular module. Please refer the below <a class="reference internal" href="#"><span class="doc">figure</span></a>.</p>
 <p><img alt="image5" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/paramdef.png" /></p>
 <div class="centeralign docutils container">
 <p><strong>Figure:</strong> Algorithm Designer Module Parameter Definition Tab for Mute No Slew module.</p>
 </div>
-<div class="line-block">
-<div class="line">Mention the parameter name under Name, the data format of this particular parameter can be selected from drop down option under Format. If the parameter is a buffer check the Buffer option.</div>
-<div class="line">^ <strong>Parameters</strong> ^ <strong>Description</strong> ^</div>
-</div>
+<p>Mention the parameter name under Name, the data format of this particular parameter can be selected from drop down option under Format. If the parameter is a buffer check the Buffer option.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Parameters</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
 <tbody>
-<tr class="row-odd"><td><p>Name</p></td>
+<tr class="row-even"><td><p>Name</p></td>
 <td><p>Parameter name is mentioned here</p></td>
 </tr>
-<tr class="row-even"><td><p>Format</p></td>
+<tr class="row-odd"><td><p>Format</p></td>
 <td><p>Data format of parameter (Float / Integer / Fixed 8.24 / Fixed 5.27 / Fixed 2.30)</p></td>
 </tr>
-<tr class="row-odd"><td><p>Buffer</p></td>
+<tr class="row-even"><td><p>Buffer</p></td>
 <td><p>Enable, when the parameter is a buffer. Disable, when the parameter is a variable.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="line-block">
-<div class="line">Once done, click the + symbol. Repeat the steps for adding next parameter details.</div>
-<div class="line">Click Next button.</div>
-</div>
+<p>Once done, click the + symbol. Repeat the steps for adding next parameter details.</p>
+<p>Click Next button.</p>
 </section>
 <section id="i-o-pins-tab">
-<h2>1.1.4 I/O Pins Tab<a class="headerlink" href="#i-o-pins-tab" title="Link to this heading"></a></h2>
+<h3>1.1.4 I/O Pins Tab<a class="headerlink" href="#i-o-pins-tab" title="Link to this heading"></a></h3>
 <p>This section is to define the number of input and output pins this module has. Please refer the below <a class="reference internal" href="#"><span class="doc">figure</span></a>.</p>
-<div class="line-block">
-<div class="line"><img alt="image6" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/io_init.png" /></div>
-<div class="line">Upon entering the name of the input pin, developer have the option to choose the <em>“direction of data”</em> via this particular pin, the <em>“type of data”</em> its handling, whether the pin has <em>“dynamic”</em> capability, i.e. whether this pin supports pin growth during designing phase etc.</div>
-</div>
-<div class="line-block">
-<div class="line">For our particular example, Mute No Slew, we are configuring this pin to be Dynamic as shown in above <a class="reference internal" href="#"><span class="doc">figure</span></a>. Upon clicking the ‘+’ button, that configuration will be added to list and developer can follow the same procedure for output pin as well.</div>
-<div class="line"><img alt="image7" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/io_final.png" /></div>
-</div>
+<img alt="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/io_init.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/io_init.png" />
+<p>Upon entering the name of the input pin, developer have the option to choose the <em>“direction of data”</em> via this particular pin, the <em>“type of data”</em> its handling, whether the pin has <em>“dynamic”</em> capability, i.e. whether this pin supports pin growth during designing phase etc.</p>
+<p>For our particular example, Mute No Slew, we are configuring this pin to be Dynamic as shown in above <a class="reference internal" href="#"><span class="doc">figure</span></a>. Upon clicking the ‘+’ button, that configuration will be added to list and developer can follow the same procedure for output pin as well.</p>
+<p><img alt="image6" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/io_final.png" /></p>
 <div class="centeralign docutils container">
 <p><strong>Figure:</strong> Algorithm Designer Module I/O Pins Tab for Mute No Slew module</p>
 </div>
@@ -768,40 +764,34 @@ Use PCMx pins if you are handling digital audio streams or interfacing with PCM 
 </tbody>
 </table>
 </div>
-<div class="line-block">
-<div class="line">Use ‘+’ button to add pins. Use ‘-’ button to remove selected pin from the list.</div>
-<div class="line">Click Next button.</div>
-</div>
+<p>Use ‘+’ button to add pins. Use ‘-’ button to remove selected pin from the list.</p>
+<p>Click Next button.</p>
 </section>
 <section id="variables-tab">
-<h2>1.1.5 Variables Tab<a class="headerlink" href="#variables-tab" title="Link to this heading"></a></h2>
+<h3>1.1.5 Variables Tab<a class="headerlink" href="#variables-tab" title="Link to this heading"></a></h3>
 <p>In Variables tab, the variables that will used during run-time to process the module parameters mentioned in Parameter Definition tab of Designer. Please refer the below <a class="reference internal" href="#"><span class="doc">figure</span></a>.</p>
-<p><img alt="image8" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/variablestab.png" /></p>
+<p><img alt="image7" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/variablestab.png" /></p>
 <div class="centeralign docutils container">
 <p><strong>Figure:</strong> Algorithm Designer Module Variables Tab for Mute No Slew module</p>
 </div>
 <p>Mention name of variable under Name, the type of the variable (Boolean, Numeric, Numeric array or List). ‘Boolean’ type can be given to variables, which support either 1 or 0 as its value. ‘Numeric’ type can be given to variables that support integer values. ‘Numeric array’ and ‘List’ type can be given to variables which supports a set of numeric values, especially used when designing filter modules. Click ‘+’ to add the variable details. Repeat the steps for other variables. Since, for this particular example, we are creating a Mute No Slew module, we require only one variable of Boolean type to control the module’s ON/OFF functionality.</p>
-<div class="line-block">
-<div class="line">Click Next button.</div>
-</div>
+<p>Click Next button.</p>
 </section>
 <section id="memory-size-tab">
-<h2>1.1.6 Memory Size Tab<a class="headerlink" href="#memory-size-tab" title="Link to this heading"></a></h2>
+<h3>1.1.6 Memory Size Tab<a class="headerlink" href="#memory-size-tab" title="Link to this heading"></a></h3>
 <p>In Memory Size tab, we can mention the memory allocated for the module. Based on your module’s memory requirement, developer has to allocate memory in this section. Please refer the below <a class="reference internal" href="#"><span class="doc">figure</span></a>.</p>
 <p>The user can assign a static value to the memory size or assign a formula which is a function of one or more runtime variables and size of runtime buffers. ‘FS’, ‘NumChannels’ and ‘BlockSize’ are predefined variables and can be used in the formula to represent the ‘Schematic Sampling Rate’, ‘Growth Count’ and ‘Schematic Block Size’ (for block processing Modules) respectively. Ternary operators can also be used to define the size. For example; “1024 + (NumChannels&gt;256?20:10)”. But, for our particular example Mute No Slew, no memory location needs to be allocated in State memory as we have only one runtime parameter (Enable/Disable option).</p>
 <p>Click Validate All to validate the memory size configured. The validate icon will turn green if the size definition is valid. If invalid, the icon will turn red.</p>
-<p><img alt="image9" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/memtab.png" /></p>
+<p><img alt="image8" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/memtab.png" /></p>
 <div class="centeralign docutils container">
 <p><strong>Figure:</strong> Algorithm Designer Module Memory Size Tab for Mute No Slew module</p>
 </div>
-<div class="line-block">
-<div class="line">Click Next.</div>
-</div>
+<p>Click Next.</p>
 </section>
 <section id="parameter-assignment-tab">
-<h2>1.1.7 Parameter Assignment Tab<a class="headerlink" href="#parameter-assignment-tab" title="Link to this heading"></a></h2>
+<h3>1.1.7 Parameter Assignment Tab<a class="headerlink" href="#parameter-assignment-tab" title="Link to this heading"></a></h3>
 <p>The Parameter Assignment tab is where we can map the run-time variables mentioned previously in <a class="reference internal" href="#"><span class="doc">1.1.5 Variables Tab</span></a> with the parameters of the module mentioned in the <a class="reference internal" href="#"><span class="doc">1.1.3 Parameter Definition Tab</span></a>.</p>
-<p><img alt="image10" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/paramassign.png" /></p>
+<p><img alt="image9" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/paramassign.png" /></p>
 <div class="centeralign docutils container">
 <p><strong>Figure:</strong> Algorithm Designer Module Parameter Assignment Tab for Mute No Slew module</p>
 </div>
@@ -834,33 +824,21 @@ Use PCMx pins if you are handling digital audio streams or interfacing with PCM 
 </tbody>
 </table>
 </div>
-<div class="line-block">
-<div class="line">The Equation field is different for individual parameters and tables.</div>
-<div class="line">• Individual Parameter - The user can either set a static value to the parameter or assign a formula which is a function of one or more runtime variables and size of runtime buffers. To set a formula, the user needs to define one or more runtime variables or runtime buffers. ‘FS’, ‘NumChannels’ and ‘BlockSize’ are predefined variables and can be used in the formula to represent the ‘Schematic Sampling Rate’, ‘Growth Count’ and ‘Schematic Block Size’ (for block processing Modules) respectively. Configuration properties defined in “Configuration” window are also available as variables to be used in the equation. In Legacy SigmaStudio, “NumChannels” is the same as “RepCount”.</div>
-<div class="line">• Tables - The user can set a runtime buffer to the table. Formula or constants are not supported and should not be assigned to Table parameters.</div>
-<div class="line">When it comes to ‘Safeload’ and ‘Safeload Group’, some Algorithms require a set of parameters be updated at once and the update in the parameter memory happens while the Algorithm is not being executed. For example, in a Bi-quad filter, five filter coefficients form the parameter set. To update the parameters of the Bi-quad filter, it is mandatory to satisfy the following conditions:</div>
-<div class="line">• Coefficients are updated while the filter is not being executed.</div>
-<div class="line">• All the five coefficients are updated at once.</div>
-<div class="line">This is to ensure that the filter executes with a set of stable coefficients. If either of the above two conditions are not met, the resultant parameter set used in the Bi-quad filter can be a mix of coefficients from two different parameter sets and this can lead to filter instability. If the ‘Safeload’ checkbox is selected, the Algorithm Designer ensures that the first condition mentioned above is met, i.e. corresponding parameter is updated in the parameter memory while the Algorithm is not being executed.</div>
-<div class="line">“Safeload Group” maps two or more parameters to the same group and ensure that the parameters belonging to the same group are updated at once. Thus, safeload group ensures that the second condition is also met.</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">Validate the configuration by clicking Validate All.</div>
-<div class="line">Click Next.</div>
-</div>
+<p>The Equation field is different for individual parameters and tables. • Individual Parameter - The user can either set a static value to the parameter or assign a formula which is a function of one or more runtime variables and size of runtime buffers. To set a formula, the user needs to define one or more runtime variables or runtime buffers. ‘FS’, ‘NumChannels’ and ‘BlockSize’ are predefined variables and can be used in the formula to represent the ‘Schematic Sampling Rate’, ‘Growth Count’ and ‘Schematic Block Size’ (for block processing Modules) respectively. Configuration properties defined in “Configuration” window are also available as variables to be used in the equation. In Legacy SigmaStudio, “NumChannels” is the same as “RepCount”. • Tables - The user can set a runtime buffer to the table. Formula or constants are not supported and should not be assigned to Table parameters.</p>
+<p>When it comes to ‘Safeload’ and ‘Safeload Group’, some Algorithms require a set of parameters be updated at once and the update in the parameter memory happens while the Algorithm is not being executed. For example, in a Bi-quad filter, five filter coefficients form the parameter set. To update the parameters of the Bi-quad filter, it is mandatory to satisfy the following conditions: • Coefficients are updated while the filter is not being executed. • All the five coefficients are updated at once. This is to ensure that the filter executes with a set of stable coefficients. If either of the above two conditions are not met, the resultant parameter set used in the Bi-quad filter can be a mix of coefficients from two different parameter sets and this can lead to filter instability. If the ‘Safeload’ checkbox is selected, the Algorithm Designer ensures that the first condition mentioned above is met, i.e. corresponding parameter is updated in the parameter memory while the Algorithm is not being executed.</p>
+<p>“Safeload Group” maps two or more parameters to the same group and ensure that the parameters belonging to the same group are updated at once. Thus, safeload group ensures that the second condition is also met.</p>
+<p>Validate the configuration by clicking Validate All.</p>
+<p>Click Next.</p>
 </section>
 <section id="ui-designer-tab">
-<h2>1.1.8 UI Designer Tab<a class="headerlink" href="#ui-designer-tab" title="Link to this heading"></a></h2>
+<h3>1.1.8 UI Designer Tab<a class="headerlink" href="#ui-designer-tab" title="Link to this heading"></a></h3>
 <p>UI Designer is used to design and configure the user interface for the module. The developer has the option to create a graphical representation of their custom module by using different options from Toolbox window. Each button has their on specific properties, which we have the privilege to alter under Properties tab. Please refer the below <a class="reference internal" href="#"><span class="doc">figure</span></a>.</p>
-<p><img alt="image11" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/ui_1.png" /></p>
+<p><img alt="image10" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/ui_1.png" /></p>
 <div class="centeralign docutils container">
 <p><strong>Figure:</strong> Algorithm Designer Module UI Designer Tab, Properties window for Mute No Slew module</p>
 </div>
-<div class="line-block">
-<div class="line">For this particular example, since mute module requires only an Enable/Disable option from UI, a Checkbox and Label was selected from Toolbox menu. Select the checkbox and the properties of that checkbox can be seen on right hand side under Properties window. Adjusting the size of checkbox adjusts the Width, Height etc. fields in Properties window. Once done with properties, there is an Assignments tab next to it where the run-time variables mentioned previously in <a class="reference internal" href="#"><span class="doc">1.1.5 Variables Tab</span></a> section, can be assigned to this checkbox as shown in the below figure.</div>
-<div class="line"><img alt="image12" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/ui_2.png" /></div>
-</div>
+<p>For this particular example, since mute module requires only an Enable/Disable option from UI, a Checkbox and Label was selected from Toolbox menu. Select the checkbox and the properties of that checkbox can be seen on right hand side under Properties window. Adjusting the size of checkbox adjusts the Width, Height etc. fields in Properties window. Once done with properties, there is an Assignments tab next to it where the run-time variables mentioned previously in <a class="reference internal" href="#"><span class="doc">1.1.5 Variables Tab</span></a> section, can be assigned to this checkbox as shown in the below figure.</p>
+<p><img alt="image11" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/ui_2.png" /></p>
 <div class="centeralign docutils container">
 <p><strong>Figure:</strong> Algorithm Designer Module UI Designer Tab, Assignments window for Mute No Slew module</p>
 </div>
@@ -891,18 +869,16 @@ Use PCMx pins if you are handling digital audio streams or interfacing with PCM 
 </tbody>
 </table>
 </div>
-<div class="line-block">
-<div class="line">Click Next.</div>
-</div>
+<p>Click Next.</p>
 </section>
 <section id="settings-tab">
-<h2>1.1.9 Settings Tab<a class="headerlink" href="#settings-tab" title="Link to this heading"></a></h2>
+<h3>1.1.9 Settings Tab<a class="headerlink" href="#settings-tab" title="Link to this heading"></a></h3>
 <p>In Settings tab, miscellaneous settings are assigned to the module.</p>
 <p>Once the module(s) to be used as SigmaStudioPlus plugins are configured using the Algorithm Designer, it can be converted into a DLL for redistribution and reuse.</p>
 <p>Before proceeding, save the designer project as shown in below <a class="reference internal" href="#"><span class="doc">figure</span></a>.</p>
 <img alt="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/settings_1.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/settings_1.png" />
 <p>The developer can mention the name with which it should appear in the SigmaStudioPlus application under ToolBox Caption. Please refer the below <a class="reference internal" href="#"><span class="doc">figure</span></a> to understand the settings mentioned for this example.</p>
-<p><img alt="image13" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/settings_2.png" /></p>
+<p><img alt="image12" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/settings_2.png" /></p>
 <div class="centeralign docutils container">
 <p><strong>Figure:</strong> Algorithm Designer Module Settings Tab for Mute No Slew module</p>
 </div>
@@ -935,47 +911,40 @@ Use PCMx pins if you are handling digital audio streams or interfacing with PCM 
 </tbody>
 </table>
 </div>
-<div class="line-block">
-<div class="line">Click the ‘Build Plugin’ button on bottom right corner of Algorithm Designer window as shown in the figure. The build window will open up and list all the modules in the current Algorithm Designer Project.</div>
-</div>
+<p>Click the ‘Build Plugin’ button on bottom right corner of Algorithm Designer window as shown in the figure. The build window will open up and list all the modules in the current Algorithm Designer Project.</p>
 </section>
 <section id="configuring-plugin-dll-and-its-generation">
-<h2>1.1.10 Configuring Plugin DLL and its Generation<a class="headerlink" href="#configuring-plugin-dll-and-its-generation" title="Link to this heading"></a></h2>
-<div class="line-block">
-<div class="line">As final stage of custom module creation, developer can choose to include one or more modules in the DLL. For each of the module, the user may choose whether to include the Algorithm, Parameter Computation and UI. Whenever UI or Parameter Computation is not selected, the plugin name of the external UI or Parameter computation plugin to be referenced should be mentioned.</div>
-<div class="line"><img alt="image14" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/dll_generation.png" /></div>
-</div>
+<h3>1.1.10 Configuring Plugin DLL and its Generation<a class="headerlink" href="#configuring-plugin-dll-and-its-generation" title="Link to this heading"></a></h3>
+<p>As final stage of custom module creation, developer can choose to include one or more modules in the DLL. For each of the module, the user may choose whether to include the Algorithm, Parameter Computation and UI. Whenever UI or Parameter Computation is not selected, the plugin name of the external UI or Parameter computation plugin to be referenced should be mentioned.</p>
+<p><img alt="image13" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/dll_generation.png" /></p>
 <div class="centeralign docutils container">
 <p><strong>Figure:</strong> Algorithm Designer Module Configure Plugin DLL Tab for Mute No Slew module</p>
 </div>
-<div class="line-block">
-<div class="line">The assembly information of this particular module can be mentioned under Assembly Information. At the bottom right corner of this tab, there is an option to Generate the DLL file for this particular module. Choose the path where the DLL needs to be saved as per the developer’s requirement and click save.</div>
-</div>
+<p>The assembly information of this particular module can be mentioned under Assembly Information. At the bottom right corner of this tab, there is an option to Generate the DLL file for this particular module. Choose the path where the DLL needs to be saved as per the developer’s requirement and click save.</p>
 </section>
 <section id="including-generated-dll-to-sigmastudioplus-add-ins">
-<h2>1.1.11 Including generated DLL to SigmaStudioPlus Add-ins<a class="headerlink" href="#including-generated-dll-to-sigmastudioplus-add-ins" title="Link to this heading"></a></h2>
+<h3>1.1.11 Including generated DLL to SigmaStudioPlus Add-ins<a class="headerlink" href="#including-generated-dll-to-sigmastudioplus-add-ins" title="Link to this heading"></a></h3>
 <p>Open Tools-&gt; Add-ins Browser.</p>
-<p><img alt="image15" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/addinbrowser.png" /></p>
+<p><img alt="image14" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/addinbrowser.png" /></p>
 <div class="centeralign docutils container">
 <p><strong>Figure:</strong> SigmaStudioPlus Add-ins Browser</p>
 </div>
 <p>In Add-ins Browser, click the ‘+’ to add the path of the recently created ‘.dll’ files as shown in below <a class="reference internal" href="#"><span class="doc">figure</span></a>.</p>
-<p><img alt="image16" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/addinbrowser_2.png" /></p>
+<p><img alt="image15" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/addinbrowser_2.png" /></p>
 <div class="centeralign docutils container">
 <p><strong>Figure:</strong> Adding DLL file</p>
 </div>
-<div class="line-block">
-<div class="line">Upon creating a new project, when it comes to adding audio processing modules from Toolbox tree, a separate section called <strong>Custom Modules</strong> can be seen, under which the recently created Mute No Slew module will be present.</div>
-<div class="line"><img alt="image17" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/muteinschema.png" /></div>
-</div>
+<p>Upon creating a new project, when it comes to adding audio processing modules from Toolbox tree, a separate section called <strong>Custom Modules</strong> can be seen, under which the recently created Mute No Slew module will be present.</p>
+<p><img alt="image16" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/muteinschema.png" /></p>
 <div class="centeralign docutils container">
 <p><strong>Figure:</strong> SigmaStudioPlus Schematic Design with Custom created Mute (No Slew) module</p>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">===== 1.2 Simple Adder Module ===== Please refer section <a class="reference internal" href="#"><span class="doc">1.1.1 Configuration Tab</span></a>, the procedure is same.</div>
-<div class="line"><img alt="image18" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/simpleadderconfig.png" /></div>
-</div>
+</section>
+</section>
+<section id="simple-adder-module">
+<h2>1.2 Simple Adder Module<a class="headerlink" href="#simple-adder-module" title="Link to this heading"></a></h2>
+<p>Please refer section <a class="reference internal" href="#"><span class="doc">1.1.1 Configuration Tab</span></a>, the procedure is same.</p>
+<p><img alt="image17" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/simpleadderconfig.png" /></p>
 <div class="centeralign docutils container">
 <p><strong>Figure:</strong> Algorithm Designer Module Configuration Tab for Simple Adder</p>
 </div>
@@ -983,35 +952,21 @@ Use PCMx pins if you are handling digital audio streams or interfacing with PCM 
 <p class="admonition-title">Note</p>
 <p>The <strong>Advanced Customization</strong> (Custom UI &amp; Custom Code) options are advanced configuration settings and not be used in the regular designer flow. Developers can contact the support team for more information regarding this configuration.</p>
 </div>
-</section>
-<section id="source-and-libraries-tab-1">
-<span id="id1"></span><h2>1.2.1 Source and Libraries Tab<a class="headerlink" href="#source-and-libraries-tab-1" title="Link to this heading"></a></h2>
+<section id="id1">
+<h3>1.2.1 Source and Libraries Tab<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
 <p>For SimpleAdder, we are giving the C source code directly in Algorithm Designer’s editor under “Source Code” tab as shown in below <a class="reference internal" href="#"><span class="doc">figure</span></a>.</p>
-<p><img alt="image19" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/simpleaddersource.png" /></p>
+<p><img alt="image18" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/simpleaddersource.png" /></p>
 <div class="centeralign docutils container">
 <p><strong>Figure:</strong> Algorithm Designer Module Source and Libraries Tab, Source Code window for Simple Adder</p>
 </div>
 <p>The ‘Header Files’ tab is used to load the header files included in the source code. Header files to be added can be selected using ‘Browse’ button and added using the ‘+’ button as shown below.</p>
-<p><img alt="image20" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/simpleadderheader.png" /></p>
+<p><img alt="image19" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/usingsigmastudio/designermodule/simpleadderheader.png" /></p>
 <div class="centeralign docutils container">
 <p><strong>Figure:</strong> Algorithm Designer Module Source and Libraries Tab, Header Files window for Simple Adder</p>
 </div>
-<div class="line-block">
-<div class="line">Use the ‘-’ button to remove the selected header file from the list.</div>
-<div class="line">The header file added in this Simple Adder module can be found in <strong>C:\Analog Devices\SigmaStudioPlus-Rel2.x.x\Target\Include</strong> path. The source entered in the editor and header files selected will get saved in the Algorithm Designer project. Source code entered in the Algorithm Designer Module’s source editor is not supported for sample processing schematics.</div>
-</div>
-<div class="line-block">
-<div class="line">Rest of the procedure is same. Hence please refer the following sections to create the module as per your module’s logic and generate DLL:</div>
-<div class="line"><a class="reference internal" href="#"><span class="doc">1.1.3 Parameter Definition Tab</span></a></div>
-<div class="line"><a class="reference internal" href="#"><span class="doc">1.1.4 I/O Pins Tab</span></a></div>
-<div class="line"><a class="reference internal" href="#"><span class="doc">1.1.5 Variables Tab</span></a></div>
-<div class="line"><a class="reference internal" href="#"><span class="doc">1.1.6 Memory Size Tab</span></a></div>
-<div class="line"><a class="reference internal" href="#"><span class="doc">1.1.7 Parameter Assignment Tab</span></a></div>
-<div class="line"><a class="reference internal" href="#"><span class="doc">1.1.8 UI Designer Tab</span></a></div>
-<div class="line"><a class="reference internal" href="#"><span class="doc">1.1.9 Settings Tab</span></a></div>
-<div class="line"><a class="reference internal" href="#"><span class="doc">1.1.10 Configuring Plugin DLL and its Generation</span></a></div>
-<div class="line"><a class="reference internal" href="#"><span class="doc">1.1.11 Including generated DLL to SigmaStudioPlus Add-ins</span></a></div>
-</div>
+<p>Use the ‘-’ button to remove the selected header file from the list. The header file added in this Simple Adder module can be found in <strong>C:\Analog Devices\SigmaStudioPlus-Rel2.x.x\Target\Include</strong> path. The source entered in the editor and header files selected will get saved in the Algorithm Designer project. Source code entered in the Algorithm Designer Module’s source editor is not supported for sample processing schematics.</p>
+<p>Rest of the procedure is same. Hence please refer the following sections to create the module as per your module’s logic and generate DLL: <a class="reference internal" href="#"><span class="doc">1.1.3 Parameter Definition Tab</span></a> <a class="reference internal" href="#"><span class="doc">1.1.4 I/O Pins Tab</span></a> <a class="reference internal" href="#"><span class="doc">1.1.5 Variables Tab</span></a> <a class="reference internal" href="#"><span class="doc">1.1.6 Memory Size Tab</span></a> <a class="reference internal" href="#"><span class="doc">1.1.7 Parameter Assignment Tab</span></a> <a class="reference internal" href="#"><span class="doc">1.1.8 UI Designer Tab</span></a> <a class="reference internal" href="#"><span class="doc">1.1.9 Settings Tab</span></a> <a class="reference internal" href="#"><span class="doc">1.1.10 Configuring Plugin DLL and its Generation</span></a> <a class="reference internal" href="#"><span class="doc">1.1.11 Including generated DLL to SigmaStudioPlus Add-ins</span></a></p>
+</section>
 </section>
 </section>
 

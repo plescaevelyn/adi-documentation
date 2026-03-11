@@ -615,51 +615,51 @@ Content on this topic
 <section id="step-2b-analyze-the-bindings-file">
 <h2>Step 2b - Analyze the Bindings File<a class="headerlink" href="#step-2b-analyze-the-bindings-file" title="Link to this heading"></a></h2>
 <p>In the case of the MAX31855 there is not a fully written Wiki page, but rather a device tree bindings file.  Looking at the <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/Documentation/devicetree/bindings/iio/temperature/maxim%2Cmax31855k.yaml" target="_blank">maxim,max31855k.yaml</a> file, we can see human readable format describing how to utilize the device within a device tree. Device properties are described, indicating options available to the user, as well as an example device tree entry (in most cases).  In the case of our MAX31855 device, there are no additional properties with the exception of providing a maximum clock speed for the SPI bus. The provided example entry is quite simple:</p>
-<div class="highlight-syntaxhighlighter-pre notranslate"><div class="highlight"><pre><span></span>spi {
-    #address-cells = &lt;1&gt;;
-    #size-cells = &lt;0&gt;;
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">spi</span> <span class="p">{</span>
+    <span class="c1">#address-cells = &lt;1&gt;;</span>
+    <span class="c1">#size-cells = &lt;0&gt;;</span>
 
-    temp-sensor@0 {
-        compatible = &quot;maxim,max31855k&quot;;
-        reg = &lt;0&gt;;
-        spi-max-frequency = &lt;4300000&gt;;
-    };
-};
+    <span class="n">temp</span><span class="o">-</span><span class="n">sensor</span><span class="o">@</span><span class="mi">0</span> <span class="p">{</span>
+        <span class="n">compatible</span> <span class="o">=</span> <span class="s2">&quot;maxim,max31855k&quot;</span><span class="p">;</span>
+        <span class="n">reg</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="n">spi</span><span class="o">-</span><span class="nb">max</span><span class="o">-</span><span class="n">frequency</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mi">4300000</span><span class="o">&gt;</span><span class="p">;</span>
+    <span class="p">};</span>
+<span class="p">};</span>
 </pre></div>
 </div>
 </section>
 <section id="step-3-starting-the-overlay">
 <h2>Step 3 - Starting the Overlay<a class="headerlink" href="#step-3-starting-the-overlay" title="Link to this heading"></a></h2>
 <p>The next step is to start the actual overlay file.  We will be performing the work on the actual target RaspberryPI.  Once the RaspberryPI is booted, open your favorite text editor and start a new overlay file by including the necessary header and fragment blocks as a boiler plate:</p>
-<div class="highlight-syntaxhighlighter-pre notranslate"><div class="highlight"><pre><span></span>/dts-v1/;
-/plugin/;
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">dts</span><span class="o">-</span><span class="n">v1</span><span class="o">/</span><span class="p">;</span>
+<span class="o">/</span><span class="n">plugin</span><span class="o">/</span><span class="p">;</span>
 
-/ {
-    fragment@0 {
-    //Fragment 0 work here
-    };
-};
+<span class="o">/</span> <span class="p">{</span>
+    <span class="n">fragment</span><span class="o">@</span><span class="mi">0</span> <span class="p">{</span>
+    <span class="o">//</span><span class="n">Fragment</span> <span class="mi">0</span> <span class="n">work</span> <span class="n">here</span>
+    <span class="p">};</span>
+<span class="p">};</span>
 </pre></div>
 </div>
 </section>
 <section id="step-4-defining-the-target">
 <h2>Step 4 - Defining the Target<a class="headerlink" href="#step-4-defining-the-target" title="Link to this heading"></a></h2>
 <p>Next we’ll need to define the overlay target.  For this hardware setup, the PMOD will be plugged into P1 of a <cite>PMD-RPI-INTZ &lt;:doc:</cite>/wiki-migration/resources/eval/user-guides/circuits-from-the-lab/pmd-rpi-intz`&gt;`_ adapter board, which corresponds to SPI0.  To support SPI0, our target will be defined as follows.</p>
-<div class="highlight-syntaxhighlighter-pre notranslate"><div class="highlight"><pre><span></span>/dts-v1/;
-/plugin/;
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">dts</span><span class="o">-</span><span class="n">v1</span><span class="o">/</span><span class="p">;</span>
+<span class="o">/</span><span class="n">plugin</span><span class="o">/</span><span class="p">;</span>
 
-/ {
-    fragment@0 {
-        target = &lt;&amp;spi0&gt;;
+<span class="o">/</span> <span class="p">{</span>
+    <span class="n">fragment</span><span class="o">@</span><span class="mi">0</span> <span class="p">{</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="o">&lt;&amp;</span><span class="n">spi0</span><span class="o">&gt;</span><span class="p">;</span>
 
-        __overlay__ {
-            #address-cells = &lt;1&gt;;
-            #size-cells = &lt;0&gt;;
-            status = &quot;okay&quot;;
-        };
+        <span class="n">__overlay__</span> <span class="p">{</span>
+            <span class="c1">#address-cells = &lt;1&gt;;</span>
+            <span class="c1">#size-cells = &lt;0&gt;;</span>
+            <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;okay&quot;</span><span class="p">;</span>
+        <span class="p">};</span>
 
-    };
-};
+    <span class="p">};</span>
+<span class="p">};</span>
 </pre></div>
 </div>
 <p>You’ll note the only content so far is setting the status to okay. This essentially ensures the bus is enabled.  Some handwaving can occur with the #address-cells and #size-cells properties, as these are copy and paste from other SPI related devices.  The description of those fields can be found in the <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/Documentation/devicetree/bindings/spi/spi-controller.yaml" target="_blank">SPI bus binding documentation.</a></p>
@@ -667,26 +667,26 @@ Content on this topic
 <section id="step-5-adding-the-device">
 <h2>Step 5 - Adding the Device<a class="headerlink" href="#step-5-adding-the-device" title="Link to this heading"></a></h2>
 <p>With the target defined, the device can be added.  The documentation provided a complete device tree entry for the MAX31855, which can be copied directly into the overlay.</p>
-<div class="highlight-syntaxhighlighter-pre notranslate"><div class="highlight"><pre><span></span>/dts-v1/;
-/plugin/;
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">dts</span><span class="o">-</span><span class="n">v1</span><span class="o">/</span><span class="p">;</span>
+<span class="o">/</span><span class="n">plugin</span><span class="o">/</span><span class="p">;</span>
 
-/ {
-    fragment@0 {
-        target = &lt;&amp;spi0&gt;;
+<span class="o">/</span> <span class="p">{</span>
+    <span class="n">fragment</span><span class="o">@</span><span class="mi">0</span> <span class="p">{</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="o">&lt;&amp;</span><span class="n">spi0</span><span class="o">&gt;</span><span class="p">;</span>
 
-        __overlay__ {
-            #address-cells = &lt;1&gt;;
-            #size-cells = &lt;0&gt;;
-            status = &quot;okay&quot;;
+        <span class="n">__overlay__</span> <span class="p">{</span>
+            <span class="c1">#address-cells = &lt;1&gt;;</span>
+            <span class="c1">#size-cells = &lt;0&gt;;</span>
+            <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;okay&quot;</span><span class="p">;</span>
 
-            temp-sensor@0 {
-                compatible = &quot;maxim,max31855k&quot;;
-                reg = &lt;0&gt;;
-                spi-max-frequency = &lt;4300000&gt;;
-            };
-        };
-    };
-};
+            <span class="n">temp</span><span class="o">-</span><span class="n">sensor</span><span class="o">@</span><span class="mi">0</span> <span class="p">{</span>
+                <span class="n">compatible</span> <span class="o">=</span> <span class="s2">&quot;maxim,max31855k&quot;</span><span class="p">;</span>
+                <span class="n">reg</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">;</span>
+                <span class="n">spi</span><span class="o">-</span><span class="nb">max</span><span class="o">-</span><span class="n">frequency</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mi">4300000</span><span class="o">&gt;</span><span class="p">;</span>
+            <span class="p">};</span>
+        <span class="p">};</span>
+    <span class="p">};</span>
+<span class="p">};</span>
 </pre></div>
 </div>
 <p>Note: In the case of SPI devices the reg property indicates which Chip Select line of the bus to use. In this case, the PMOD is connected to CS0.  For I2C devices, the reg property is the bus address.</p>
@@ -694,52 +694,52 @@ Content on this topic
 <section id="step-6-deconflicting-the-tree">
 <h2>Step 6 - Deconflicting the Tree<a class="headerlink" href="#step-6-deconflicting-the-tree" title="Link to this heading"></a></h2>
 <p>Prior to building the overlay, we need to ensure there is no conflict with existing entries. This takes some knowledge of what is currently running in the hardware system, and when possible it is best to replicate work done on other overlays which may use the same hardware bus.  In the case of the RaspberryPI, we need to ensure the userspace SPI bus access is not available.  To do this the spidev0 device will be set to disabled.    It is not guaranteed that spidev0 was enabled in the baseline device tree, but this is a precautionary measure.</p>
-<div class="highlight-syntaxhighlighter-pre notranslate"><div class="highlight"><pre><span></span>/dts-v1/;
-/plugin/;
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">dts</span><span class="o">-</span><span class="n">v1</span><span class="o">/</span><span class="p">;</span>
+<span class="o">/</span><span class="n">plugin</span><span class="o">/</span><span class="p">;</span>
 
-/ {
-    fragment@0 {
-        target = &lt;&amp;spi0&gt;;
-        __overlay__ {
-            #address-cells = &lt;1&gt;;
-        #size-cells = &lt;0&gt;;
-        status = &quot;okay&quot;;
-            temp-sensor@0 {
-                compatible = &quot;maxim,max31855k&quot;;
-                reg = &lt;0&gt;;
-                spi-max-frequency = &lt;4300000&gt;;
-            };
-        };
-    };
+<span class="o">/</span> <span class="p">{</span>
+    <span class="n">fragment</span><span class="o">@</span><span class="mi">0</span> <span class="p">{</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="o">&lt;&amp;</span><span class="n">spi0</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="n">__overlay__</span> <span class="p">{</span>
+            <span class="c1">#address-cells = &lt;1&gt;;</span>
+        <span class="c1">#size-cells = &lt;0&gt;;</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;okay&quot;</span><span class="p">;</span>
+            <span class="n">temp</span><span class="o">-</span><span class="n">sensor</span><span class="o">@</span><span class="mi">0</span> <span class="p">{</span>
+                <span class="n">compatible</span> <span class="o">=</span> <span class="s2">&quot;maxim,max31855k&quot;</span><span class="p">;</span>
+                <span class="n">reg</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">;</span>
+                <span class="n">spi</span><span class="o">-</span><span class="nb">max</span><span class="o">-</span><span class="n">frequency</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mi">4300000</span><span class="o">&gt;</span><span class="p">;</span>
+            <span class="p">};</span>
+        <span class="p">};</span>
+    <span class="p">};</span>
 
-    fragment@1 {
-       target = &lt;&amp;spidev0&gt;;
-        __overlay__ {
-            status = &quot;disabled&quot;;
-        };
-    };
-};
+    <span class="n">fragment</span><span class="o">@</span><span class="mi">1</span> <span class="p">{</span>
+       <span class="n">target</span> <span class="o">=</span> <span class="o">&lt;&amp;</span><span class="n">spidev0</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="n">__overlay__</span> <span class="p">{</span>
+            <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;disabled&quot;</span><span class="p">;</span>
+        <span class="p">};</span>
+    <span class="p">};</span>
+<span class="p">};</span>
 </pre></div>
 </div>
 </section>
 <section id="step-7-building-the-overlay">
 <h2>Step 7 - Building the Overlay<a class="headerlink" href="#step-7-building-the-overlay" title="Link to this heading"></a></h2>
 <p>The overlay can now be built using the dtc utility. From the command line run <code class="docutils literal notranslate"><span class="pre">dtc</span> <span class="pre">-I</span> <span class="pre">dts</span> <span class="pre">-O</span> <span class="pre">dtb</span> <span class="pre">rpi-max31855.dtso</span> <span class="pre">&gt;</span> <span class="pre">rpi-max31855.dtbo</span></code>.  In my case, the source file was named rpi-max31855.dtso.</p>
-<div class="highlight-syntaxhighlighter-pre notranslate"><div class="highlight"><pre><span></span>analog@rpi1:~ $ dtc -I dts -O dtb rpi-max31855.dtso &gt; rpi-max31855.dtbo
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>analog@rpi1:~ $ dtc -I dts -O dtb rpi-max31855.dtso &gt; rpi-max31855.dtbo
 </pre></div>
 </div>
 </section>
 <section id="step-8-deploying-the-overlay">
 <h2>Step 8 - Deploying the Overlay<a class="headerlink" href="#step-8-deploying-the-overlay" title="Link to this heading"></a></h2>
 <p>Copy the output file from the <code class="docutils literal notranslate"><span class="pre">%%dtc</span> <span class="pre">''command,</span> <span class="pre">in</span> <span class="pre">this</span> <span class="pre">case</span> <span class="pre">''rpi-max31855.dtbo''</span> <span class="pre">to</span> <span class="pre">the''</span> <span class="pre">/boot/overlays''</span> <span class="pre">folder. </span> <span class="pre">You</span> <span class="pre">will</span> <span class="pre">need</span> <span class="pre">to</span> <span class="pre">use</span> <span class="pre">''sudo</span> <span class="pre">%%</span></code>to perform this operation.</p>
-<div class="highlight-syntaxhighlighter-pre notranslate"><div class="highlight"><pre><span></span>analog@rpi1:~ $ sudo cp rpi-max31855.dtbo /boot/overlays/
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>analog@rpi1:~ $ sudo cp rpi-max31855.dtbo /boot/overlays/
 </pre></div>
 </div>
 <p>Edit the /boot/config.txt file to include the new overlay.  You will also need to be sudo to perform this action.  Recall, the line is dtoverlay=&lt;overlay&gt;, with the file extension omitted.  Be sure to comment out (#) or delete any other overlays which may conflict on the SPI bus with this part.</p>
-<div class="highlight-syntaxhighlighter-pre notranslate"><div class="highlight"><pre><span></span>#dtoverlay=rpi-ad5592r
-dtoverlay=rpi-max31855
-#dtoverlay=spi0-2cs
-#dtparam=cs_pin=1,irq_gpio=25
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#dtoverlay=rpi-ad5592r</span>
+<span class="n">dtoverlay</span><span class="o">=</span><span class="n">rpi</span><span class="o">-</span><span class="n">max31855</span>
+<span class="c1">#dtoverlay=spi0-2cs</span>
+<span class="c1">#dtparam=cs_pin=1,irq_gpio=25</span>
 </pre></div>
 </div>
 <p>Save the file and reboot the Raspberry PI.</p>

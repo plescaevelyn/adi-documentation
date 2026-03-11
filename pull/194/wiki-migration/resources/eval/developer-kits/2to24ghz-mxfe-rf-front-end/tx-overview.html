@@ -94,6 +94,8 @@
           <ul>
 <li><a class="reference internal" href="#">Transmitter Front End Overview &amp; Theory Of Operation</a><ul>
 <li><a class="reference internal" href="#if-input-stage">IF Input Stage</a></li>
+<li><a class="reference internal" href="#frequency-conversion-stage-frequency-plan">Frequency Conversion Stage &amp; Frequency Plan</a></li>
+<li><a class="reference internal" href="#rf-output-stage">RF Output Stage</a></li>
 <li><a class="reference internal" href="#timing-control">Timing &amp; Control</a></li>
 <li><a class="reference internal" href="#transmitter-performance-simulations">Transmitter Performance Simulations</a></li>
 </ul>
@@ -586,44 +588,38 @@ Content on this topic
   <p><a class="reference internal" href="../2to24ghz-mxfe-rf-front-end.html"><span class="doc">Link to parent page</span></a></p>
 <section id="transmitter-front-end-overview-theory-of-operation">
 <h1>Transmitter Front End Overview &amp; Theory Of Operation<a class="headerlink" href="#transmitter-front-end-overview-theory-of-operation" title="Link to this heading"></a></h1>
-<div class="line-block">
-<div class="line">The 2-24GHz transmitter block diagram is shown below. The following wiki sections will go into more detail on the theory of operation of the individual, functional blocks of the signal chain.</div>
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/txblockdiagram.png"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/txblockdiagram.png" style="width: 990px;" /></a></div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
+<p>The 2-24GHz transmitter block diagram is shown below. The following wiki sections will go into more detail on the theory of operation of the individual, functional blocks of the signal chain.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/txblockdiagram.png"><img alt="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/txblockdiagram.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/txblockdiagram.png" style="width: 990px;" />
+</a>
 <section id="if-input-stage">
 <h2>IF Input Stage<a class="headerlink" href="#if-input-stage" title="Link to this heading"></a></h2>
-<div class="line-block">
-<div class="line">The DAC output first feeds into the IF input section (block diagram below) of the front end with 4.8GHz low-pass filtering to reject the DAC image spurious. The IF input frequency is 4-5GHz and within the 1st Nyquist of the DAC sampling at 12GSPS. After the image LPF comes an ADRF5730 digital step attenuator for fine resolution level control, an LNA, and an additional LPF for additional suppression of DAC output spurious.</div>
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_if_input_section.png"><img alt="image2" src="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_if_input_section.png" style="width: 600px;" /></a></div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">===== Frequency Conversion Stage &amp; Frequency Plan ===== The transmit signal chain uses two separate frequency conversion paths to enable continuous, 2-24GHz frequency coverage. The two signal paths are selectable via <a class="icon adi reference external" href="https://www.analog.com/ADRF5020" target="_blank">ADRF5020</a> RF switches. For the 6.5-24GHz RF output frequency band, the 4-5GHz IF input is fed into an <a class="icon adi reference external" href="https://www.analog.com/HMC8191" target="_blank">HMC8191</a> wideband I/Q mixer with a tunable LO source, upconverting the entire band to the desired RF output frequency.</div>
-</div>
+<p>The DAC output first feeds into the IF input section (block diagram below) of the front end with 4.8GHz low-pass filtering to reject the DAC image spurious. The IF input frequency is 4-5GHz and within the 1st Nyquist of the DAC sampling at 12GSPS. After the image LPF comes an ADRF5730 digital step attenuator for fine resolution level control, an LNA, and an additional LPF for additional suppression of DAC output spurious.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_if_input_section.png"><img alt="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_if_input_section.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_if_input_section.png" style="width: 600px;" />
+</a>
+</section>
+<section id="frequency-conversion-stage-frequency-plan">
+<h2>Frequency Conversion Stage &amp; Frequency Plan<a class="headerlink" href="#frequency-conversion-stage-frequency-plan" title="Link to this heading"></a></h2>
+<p>The transmit signal chain uses two separate frequency conversion paths to enable continuous, 2-24GHz frequency coverage. The two signal paths are selectable via <a class="icon adi reference external" href="https://www.analog.com/ADRF5020" target="_blank">ADRF5020</a> RF switches. For the 6.5-24GHz RF output frequency band, the 4-5GHz IF input is fed into an <a class="icon adi reference external" href="https://www.analog.com/HMC8191" target="_blank">HMC8191</a> wideband I/Q mixer with a tunable LO source, upconverting the entire band to the desired RF output frequency.</p>
 <p>For the 2-7GHz RF output band, a dual-frequency conversion heterodyne signal path is used with the IF input first being upconverted to a high, 11-16GHz IF through the <a class="icon adi reference external" href="https://www.analog.com/HMC8191" target="_blank">HMC8191</a> with tunable LO, and then downconverted to the 2-7GHz RF output through an <a class="icon adi reference external" href="https://www.analog.com/HMC773A" target="_blank">HMC773A</a> mixer with a fixed 18GHz LO. Cascaded low and high-pass filters provide 11-16GHz IF filtering and an <a class="icon adi reference external" href="https://www.analog.com/HMC882A" target="_blank">HMC882A</a> tunable low pass filter mitigates mixer output spurious for the final 2-7GHz RF output band. The figure below shows the frequency conversion section of the signal chain and the frequency operation ranges for each individual path.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/txfreqconversionsection.png"><img alt="image3" src="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/txfreqconversionsection.png" style="width: 600px;" /></a></div>
-<div class="line">The figure below provides an additional frequency plan visualization showing the individual frequency conversion steps for each frequency band.</div>
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/txfreqplan.png"><img alt="image4" src="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/txfreqplan.png" style="width: 500px;" /></a></div>
-<div class="line">The following table summarizes the possible frequency conversion paths:</div>
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_frequency_plan.png"><img alt="image5" src="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_frequency_plan.png" style="width: 900px;" /></a></div>
-<div class="line">===== RF Output Stage ===== The RF output stage, shown in the figure below, is comprised of a wideband <a class="icon adi reference external" href="https://www.analog.com/ADL9006" target="_blank">ADL9006</a> driver amp, an <a class="icon adi reference external" href="https://www.analog.com/ADMV8818" target="_blank">ADMV8818</a> tunable bandpass filter, and finally an <a class="icon adi reference external" href="https://www.analog.com/HMC994APM5E" target="_blank">HMC994APM5E</a> PA. The <a class="icon adi reference external" href="https://www.analog.com/ADMV8818" target="_blank">ADMV8818</a> tunable filter operates across a 2-18GHz frequency range for additional filtering of output spurious, and can be bypassed for operation up to 24GHz.</div>
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_rf_output_section.png"><img alt="image6" src="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_rf_output_section.png" style="width: 600px;" /></a></div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/txfreqconversionsection.png"><img alt="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/txfreqconversionsection.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/txfreqconversionsection.png" style="width: 600px;" />
+</a>
+<p>The figure below provides an additional frequency plan visualization showing the individual frequency conversion steps for each frequency band.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/txfreqplan.png"><img alt="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/txfreqplan.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/txfreqplan.png" style="width: 500px;" />
+</a>
+<p>The following table summarizes the possible frequency conversion paths:</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_frequency_plan.png"><img alt="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_frequency_plan.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_frequency_plan.png" style="width: 900px;" />
+</a>
+</section>
+<section id="rf-output-stage">
+<h2>RF Output Stage<a class="headerlink" href="#rf-output-stage" title="Link to this heading"></a></h2>
+<p>The RF output stage, shown in the figure below, is comprised of a wideband <a class="icon adi reference external" href="https://www.analog.com/ADL9006" target="_blank">ADL9006</a> driver amp, an <a class="icon adi reference external" href="https://www.analog.com/ADMV8818" target="_blank">ADMV8818</a> tunable bandpass filter, and finally an <a class="icon adi reference external" href="https://www.analog.com/HMC994APM5E" target="_blank">HMC994APM5E</a> PA. The <a class="icon adi reference external" href="https://www.analog.com/ADMV8818" target="_blank">ADMV8818</a> tunable filter operates across a 2-18GHz frequency range for additional filtering of output spurious, and can be bypassed for operation up to 24GHz.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_rf_output_section.png"><img alt="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_rf_output_section.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_rf_output_section.png" style="width: 600px;" />
+</a>
 </section>
 <section id="timing-control">
 <h2>Timing &amp; Control<a class="headerlink" href="#timing-control" title="Link to this heading"></a></h2>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_switch_and_atten_ctrl.png"><img alt="image7" src="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_switch_and_atten_ctrl.png" style="width: 800px;" /></a></div>
-</div>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_switch_and_atten_ctrl.png"><img alt="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_switch_and_atten_ctrl.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_switch_and_atten_ctrl.png" style="width: 800px;" />
+</a>
 </section>
 <section id="transmitter-performance-simulations">
 <h2>Transmitter Performance Simulations<a class="headerlink" href="#transmitter-performance-simulations" title="Link to this heading"></a></h2>
@@ -634,48 +630,31 @@ Content on this topic
 <li><p>A standalone model of the HMC882A tunable lowpass filter configured to tune its 3dB corner frequency minimize LO feedthrough and spurious</p></li>
 <li><p>Frequency-dependent component interconnect modelling i.e. PCB trace loss approximation for DC-50GHz CPWG traces, 8mil Rogers 4003 PCB stackup</p></li>
 </ul>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_genesys_simulation.png"><img alt="image8" src="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_genesys_simulation.png" style="width: 900px;" /></a></div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line"><br /></div>
-</div>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_genesys_simulation.png"><img alt="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_genesys_simulation.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_genesys_simulation.png" style="width: 900px;" />
+</a>
 <div class="download admonition">
 <p class="admonition-title">Download</p>
 <p>To request the complete Keysight Genesys/Systemvue simulation workspaces for 2-24Ghz MxFE Front End Rx &amp; Tx signal chains, please send a request to <a class="icon link reference external" href="https://support.analog.com/en-US/technical-support/create-case-techsupport/" target="_blank">here</a> and include the following info:</p>
-<div class="line-block">
-<div class="line">* Name</div>
-</div>
 <ul class="simple">
+<li><p>Name</p></li>
 <li><p>Job Title</p></li>
 <li><p>Company Name &amp; Location</p></li>
 <li><p>Application/Use Case</p></li>
 </ul>
-<div class="line-block">
-<div class="line"><br /></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-<div class="line-block">
-<div class="line">The Genesys workspace already has numerous system analysis and Matlab-based frequency sweeps in place, including the following functionality:</div>
-</div>
+<p>The Genesys workspace already has numerous system analysis and Matlab-based frequency sweeps in place, including the following functionality:</p>
 <ul class="simple">
 <li><p>2-24GHz CW input sweep with Matlab equation-based frequency plan automated to ensure correct signal chain configuration for any given RF output frequency. All LO frequencies, frequency-dependent RF paths, and tunable filter passbands are automatically tune during sweep.</p></li>
 <li><p>Gain levelling implemented using the IF DSAs to normalize cascaded gain to the lowest-gain frequency point for optimal flatness (+/- 2dB).</p></li>
 </ul>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line"><strong>Transmitter Performance (Gain, OIP3, and OP1dB), 2-24GHz, Rough Gain Levelling Implemented</strong></div>
-<div class="line">As described above, the following plot assumes PCB implementation with low loss traces. This plot shows the Gain, OIP3, and OP1dB performance of the transmitter across frequency:</div>
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_rf_performance.png"><img alt="image9" src="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_rf_performance.png" style="width: 950px;" /></a></div>
-<div class="line"><strong>Transmitter Output Spectrum, +12dBm out &#64; 12.5GHz</strong></div>
-<div class="line">The following plot shows the spectral output power components of the transmitter at +12dBm input power and 12.5GHz frequency:</div>
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_output_spectrum_12ghz.png"><img alt="image10" src="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_output_spectrum_12ghz.png" style="width: 950px;" /></a></div>
-</div>
+<p><strong>Transmitter Performance (Gain, OIP3, and OP1dB), 2-24GHz, Rough Gain Levelling Implemented</strong></p>
+<p>As described above, the following plot assumes PCB implementation with low loss traces. This plot shows the Gain, OIP3, and OP1dB performance of the transmitter across frequency:</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_rf_performance.png"><img alt="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_rf_performance.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_rf_performance.png" style="width: 950px;" />
+</a>
+<p><strong>Transmitter Output Spectrum, +12dBm out &#64; 12.5GHz</strong></p>
+<p>The following plot shows the spectral output power components of the transmitter at +12dBm input power and 12.5GHz frequency:</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_output_spectrum_12ghz.png"><img alt="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_output_spectrum_12ghz.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/developer-kits/2to24ghz-mxfe-rf-front-end/tx_output_spectrum_12ghz.png" style="width: 950px;" />
+</a>
 </section>
 </section>
 

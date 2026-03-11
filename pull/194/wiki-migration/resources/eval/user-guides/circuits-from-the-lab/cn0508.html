@@ -99,20 +99,31 @@
 <li><a class="reference internal" href="#equipment-required">Equipment Required</a></li>
 <li><a class="reference internal" href="#block-assignments">Block Assignments</a></li>
 <li><a class="reference internal" href="#running-the-system">Running the System</a></li>
-<li><a class="reference internal" href="#solder-jumper-settings-and-configuration">Solder Jumper Settings and Configuration</a></li>
+<li><a class="reference internal" href="#solder-jumper-settings-and-configuration">Solder Jumper Settings and Configuration</a><ul>
+<li><a class="reference internal" href="#vcc-negative-vcc-supply">-VCC: Negative Vcc Supply</a></li>
+<li><a class="reference internal" href="#cs-adc-adc-chip-select-mapping">CS_ADC: ADC Chip Select Mapping</a></li>
+<li><a class="reference internal" href="#cs-dac-dac-chip-select-mapping">CS_DAC: DAC Chip Select Mapping</a></li>
+<li><a class="reference internal" href="#adc-int-adc-interrupt-mapping">ADC_INT: ADC Interrupt Mapping</a></li>
+<li><a class="reference internal" href="#vctrl-output-voltage-control">VCTRL: Output Voltage Control</a></li>
+<li><a class="reference internal" href="#eeprom-id-eeprom-address-selection">EEPROM_ID: EEPROM Address Selection</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#hardware-setup">Hardware Setup</a><ul>
 <li><a class="reference internal" href="#setting-up-and-connecting-the-raspberry-pi">Setting up and Connecting the Raspberry Pi</a></li>
+<li><a class="reference internal" href="#input-supply">Input Supply</a></li>
+<li><a class="reference internal" href="#output-connections">Output connections</a></li>
+<li><a class="reference internal" href="#connecting-a-fan">Connecting a fan</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#software-setup">Software Setup</a><ul>
 <li><a class="reference internal" href="#loading-cn0508-image-on-sd-card">Loading CN0508 Image on SD Card</a></li>
-<li><a class="reference internal" href="#configuring-the-sd-card">Configuring the SD Card</a><ul>
+<li><a class="reference internal" href="#configuring-the-sd-card">Configuring the SD Card</a></li>
+<li><a class="reference internal" href="#electronic-control-and-diagnostics-via-iio-oscilloscope-plugin">Electronic Control and Diagnostics via IIO Oscilloscope Plugin</a></li>
+<li><a class="reference internal" href="#dac-output">DAC output</a></li>
 <li><a class="reference internal" href="#temperature-monitor">Temperature Monitor</a></li>
 <li><a class="reference internal" href="#dc-supply">DC Supply</a></li>
 <li><a class="reference internal" href="#potentiometers">Potentiometers</a></li>
-<li><a class="reference internal" href="#input-supply">Input Supply</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#id1">Input Supply</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#more-information-and-useful-links">More Information and Useful Links</a></li>
@@ -609,16 +620,11 @@ Content on this topic
 <h1>EVAL-CN0508-RPIZ Overview<a class="headerlink" href="#eval-cn0508-rpiz-overview" title="Link to this heading"></a></h1>
 <p><a class="icon adi reference external" href="https://www.analog.com/CN0508" target="_blank">CN0508</a> provides a single-channel, 75-watt bench power supply featuring an adjustable output voltage of 0V to 27.5V, and constant current limiting of 0A to 3A using the combination of parallel <a class="icon adi reference external" href="https://www.analog.com/LT3081" target="_blank">LT3081</a> linear regulators, a synchronous step-down <a class="icon adi reference external" href="https://www.analog.com/LT8612" target="_blank">LT8612</a>, a <a class="icon adi reference external" href="https://www.analog.com/LT3092" target="_blank">LT3092</a> current source, and a tiny <a class="icon adi reference external" href="https://www.analog.com/LTC1983" target="_blank">LTC1983</a> negative supply.</p>
 <p>The output voltage can be set manually using a potentiometer or digitally via Raspberry Pi with a <a class="icon adi reference external" href="https://www.analog.com/AD5683R" target="_blank">AD5683R</a> digital to analog converter (DAC), through the “analog- AND” function circuit. Moreover, a <a class="icon adi reference external" href="https://www.analog.com/AD7124-4" target="_blank">AD7124-4</a> 24-bit, sigma-delta analog to digital Converter (ADC) provides measurement reading of output voltage and output current as well as other diagnostic parameters.</p>
-<div class="line-block">
-<div class="line">The circuit features low output ripple with low output capacitance, excellent transient response, remains in regulation during short-circuit and stays cool with no bulky heat sinks. It can easily be coupled with an AC/DC converter or it can be powered from a DC source.</div>
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/dsc04840.png"><img alt="Figure 1. EVAL-CN0508-RPIZ Circuit Evaluation Board" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/dsc04840.png" style="width: 500px;" /></a></div>
-</div>
-<div class="center docutils container">
-<p><em>&lt;fc #c0c0c0&gt;Figure 1. EVAL-CN0508-RPIZ Circuit Evaluation Board&lt;/fc&gt;</em></p>
-<div class="line-block">
-<div class="line">—-</div>
-</div>
-</div>
+<p>The circuit features low output ripple with low output capacitance, excellent transient response, remains in regulation during short-circuit and stays cool with no bulky heat sinks. It can easily be coupled with an AC/DC converter or it can be powered from a DC source.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/dsc04840.png"><img alt="Figure 1. EVAL-CN0508-RPIZ Circuit Evaluation Board" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/dsc04840.png" style="width: 500px;" />
+</a>
+<p><em>Figure 1. EVAL-CN0508-RPIZ Circuit Evaluation Board</em></p>
+<hr class="docutils" />
 <section id="features">
 <h2>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
 <ul class="simple">
@@ -632,7 +638,7 @@ Content on this topic
 </section>
 <section id="videos">
 <h2>Videos<a class="headerlink" href="#videos" title="Link to this heading"></a></h2>
-<img alt="youtube&gt;FEnbV\_-a7qc" src="https://wiki.analog.com/_media/youtube&gt;FEnbV_-a7qc" />
+<img alt="youtube&gt;FEnbV\_-a7qc" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/youtube&gt;FEnbV_-a7qc" />
 </section>
 <section id="documents-needed">
 <h2>Documents Needed<a class="headerlink" href="#documents-needed" title="Link to this heading"></a></h2>
@@ -666,31 +672,18 @@ Content on this topic
 </ul>
 </li>
 </ul>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="line-block">
-<div class="line">—-</div>
-</div>
 </section>
+<hr class="docutils" />
 <section id="block-assignments">
 <h2>Block Assignments<a class="headerlink" href="#block-assignments" title="Link to this heading"></a></h2>
-<div class="line-block">
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/top1.png"><img alt="EVAL-CN0508-RPIZ Circuit Evaluation Board Top View" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/top1.png" style="width: 550px;" /></a></div>
-</div>
-<div class="center docutils container">
-<p><em>&lt;fc #c0c0c0&gt;Figure 2. EVAL-CN0508-RPIZ Circuit Evaluation Board Top View&lt;/fc&gt;</em></p>
-</div>
-<div class="line-block">
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/side1.png"><img alt="EVAL-CN0508-RPIZ Circuit Evaluation Board Side View" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/side1.png" style="width: 450px;" /></a></div>
-</div>
-<div class="center docutils container">
-<p><em>&lt;fc #c0c0c0&gt;Figure 3. EVAL-CN0508-RPIZ Circuit Evaluation Board Side View&lt;/fc&gt;</em></p>
-<div class="line-block">
-<div class="line">* Connector <strong>P1</strong> is the screw terminal block for the input supply</div>
-</div>
-</div>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/top1.png"><img alt="EVAL-CN0508-RPIZ Circuit Evaluation Board Top View" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/top1.png" style="width: 550px;" />
+</a>
+<p><em>Figure 2. EVAL-CN0508-RPIZ Circuit Evaluation Board Top View</em></p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/side1.png"><img alt="EVAL-CN0508-RPIZ Circuit Evaluation Board Side View" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/side1.png" style="width: 450px;" />
+</a>
+<p><em>Figure 3. EVAL-CN0508-RPIZ Circuit Evaluation Board Side View</em></p>
 <ul class="simple">
+<li><p>Connector <strong>P1</strong> is the screw terminal block for the input supply</p></li>
 <li><p>Connector <strong>P2</strong> is the 5.5mm x 2.5mm barrel jack connector for input supply</p></li>
 <li><p>Connector <strong>P3</strong> is the 40-pin connector for Raspberry Pi</p></li>
 <li><p>Connector <strong>P7</strong> is the positive output jack of the bench supply</p></li>
@@ -699,19 +692,13 @@ Content on this topic
 <li><p>Potentiometer <strong>R14</strong> is the manual control of the output current limit</p></li>
 <li><p>Header <strong>P12</strong> contains the output signal for the fan control</p></li>
 </ul>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="line-block">
-<div class="line">—-</div>
-</div>
 </section>
+<hr class="docutils" />
 <section id="running-the-system">
 <h2>Running the System<a class="headerlink" href="#running-the-system" title="Link to this heading"></a></h2>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/bd_1.png"><img alt="Figure 4. Test Setup Functional Block Diagram" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/bd_1.png" style="width: 500px;" /></a></p>
-<div class="center docutils container">
-<p><em>&lt;fc #c0c0c0&gt;Figure 4. Test Setup Functional Block Diagram&lt;/fc&gt;</em></p>
-</div>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/bd_1.png"><img alt="Figure 4. Test Setup Functional Block Diagram" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/bd_1.png" style="width: 500px;" />
+</a>
+<p><em>Figure 4. Test Setup Functional Block Diagram</em></p>
 <ul class="simple">
 <li><p>Set solder jumpers for the desired settings.</p></li>
 <li><p>Proceed with the <a class="reference internal" href="#"><span class="doc">hardware setup</span></a>. Ensure the input supply, Raspberry Pi, load, and fan are all properly connected.</p></li>
@@ -725,23 +712,16 @@ Content on this topic
 <li><p>The Raspberry Pi must be powered down properly in order to prevent eventual corruption of the SD card. This can be done by pressing S1 and waiting for the green heartbeat LED to stop blinking. At that point, power is safe to be removed.</p></li>
 <li><p>Alternatively, click the ADI logo, scroll to the bottom, click power off, and wait for the heartbeat LED to stop blinking. Power is safe to be removed.</p></li>
 </ul>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">—-</div>
-</div>
 </section>
+<hr class="docutils" />
 <section id="solder-jumper-settings-and-configuration">
 <h2>Solder Jumper Settings and Configuration<a class="headerlink" href="#solder-jumper-settings-and-configuration" title="Link to this heading"></a></h2>
-<div class="line-block">
-<div class="line">The <a class="icon adi reference external" href="https://www.analog.com/CN0508" target="_blank">CN0508</a> has six jumper headers which configure different settings as shown below. Also, the default shunt positions are highlighted.</div>
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/assembly_top6.png"><img alt="EVAL-CN0508-RPIZ Evaluation Board Solder Jumper Guide" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/assembly_top6.png" style="width: 1000px;" /></a></div>
-</div>
-<div class="center docutils container">
-<p><em>&lt;fc #c0c0c0&gt;Figure 5. EVAL-CN0508-RPIZ Evaluation Board Solder Jumper Guide&lt;/fc&gt;</em></p>
-<div class="line-block">
-<div class="line">===-VCC: Negative Vcc Supply=== VCC selects the negative supply of the LT6015 amplifiers. By default, the shunt is placed connecting pin 1 and 2 to source supply from -5V output of <a class="icon adi reference external" href="https://www.analog.com/LTC1983" target="_blank">LTC1983</a>.</div>
-</div>
-</div>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/CN0508" target="_blank">CN0508</a> has six jumper headers which configure different settings as shown below. Also, the default shunt positions are highlighted.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/assembly_top6.png"><img alt="EVAL-CN0508-RPIZ Evaluation Board Solder Jumper Guide" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/assembly_top6.png" style="width: 1000px;" /></a></p>
+<p><em>Figure 5. EVAL-CN0508-RPIZ Evaluation Board Solder Jumper Guide</em></p>
+<section id="vcc-negative-vcc-supply">
+<h3>-VCC: Negative Vcc Supply<a class="headerlink" href="#vcc-negative-vcc-supply" title="Link to this heading"></a></h3>
+<p>VCC selects the negative supply of the LT6015 amplifiers. By default, the shunt is placed connecting pin 1 and 2 to source supply from -5V output of <a class="icon adi reference external" href="https://www.analog.com/LTC1983" target="_blank">LTC1983</a>.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -763,12 +743,10 @@ Content on this topic
 <li><p>Connecting Pins 1 and 2 connects the LT6015 V- to -5V, allowing operation at ground</p></li>
 <li><p>Connecting Pins 2 and 3 connects the LT6015 V- ground</p></li>
 </ul>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="line-block">
-<div class="line">===CS_ADC: ADC Chip Select Mapping=== CS_ADC selects the mapping of the <a class="icon adi reference external" href="https://www.analog.com/AD7124-4" target="_blank">AD7124-4</a> ADC chip select to RPi. By default, the shunt connects pin 1 and 2 which selects GPIO27.</div>
-</div>
+</section>
+<section id="cs-adc-adc-chip-select-mapping">
+<h3>CS_ADC: ADC Chip Select Mapping<a class="headerlink" href="#cs-adc-adc-chip-select-mapping" title="Link to this heading"></a></h3>
+<p>CS_ADC selects the mapping of the <a class="icon adi reference external" href="https://www.analog.com/AD7124-4" target="_blank">AD7124-4</a> ADC chip select to RPi. By default, the shunt connects pin 1 and 2 which selects GPIO27.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -790,10 +768,10 @@ Content on this topic
 <li><p>Connecting Pins 1 and 2 maps the ADC chip select to GPIO27</p></li>
 <li><p>Connecting Pins 2 and 3 maps the ADC chip select to CS0</p></li>
 </ul>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">===CS_DAC: DAC Chip Select Mapping=== CS_DAC selects the mapping of the <a class="icon adi reference external" href="https://www.analog.com/AD5683R" target="_blank">AD5683R</a> DAC chip select to RPi. By default, the shunt connects pin 1 and 2 which selects GPIO22.</div>
-</div>
+</section>
+<section id="cs-dac-dac-chip-select-mapping">
+<h3>CS_DAC: DAC Chip Select Mapping<a class="headerlink" href="#cs-dac-dac-chip-select-mapping" title="Link to this heading"></a></h3>
+<p>CS_DAC selects the mapping of the <a class="icon adi reference external" href="https://www.analog.com/AD5683R" target="_blank">AD5683R</a> DAC chip select to RPi. By default, the shunt connects pin 1 and 2 which selects GPIO22.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -815,10 +793,10 @@ Content on this topic
 <li><p>Connecting Pins 1 and 2 maps the DAC chip select to GPIO22</p></li>
 <li><p>Connecting Pins 2 and 3 maps the DAC chip select to CS1</p></li>
 </ul>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">===ADC_INT: ADC Interrupt Mapping=== ADC_INT selects the mapping of the <a class="icon adi reference external" href="https://www.analog.com/AD7124-4" target="_blank">AD7124-4</a> interrupt from its DOUT/RDY pin to RPi. By default, the shunt connects pin 1 and 2 which selects GPIO23.</div>
-</div>
+</section>
+<section id="adc-int-adc-interrupt-mapping">
+<h3>ADC_INT: ADC Interrupt Mapping<a class="headerlink" href="#adc-int-adc-interrupt-mapping" title="Link to this heading"></a></h3>
+<p>ADC_INT selects the mapping of the <a class="icon adi reference external" href="https://www.analog.com/AD7124-4" target="_blank">AD7124-4</a> interrupt from its DOUT/RDY pin to RPi. By default, the shunt connects pin 1 and 2 which selects GPIO23.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -840,10 +818,10 @@ Content on this topic
 <li><p>Connecting Pins 1 and 2 maps the ADC interrupt to GPIO23</p></li>
 <li><p>Connecting Pins 2 and 3 maps the ADC interrupt to GPIO25</p></li>
 </ul>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">===VCTRL: Output Voltage Control=== VCTRL enables users to choose how to control the output voltage between electronic and manual mode (chooses the lower setting between the two) versus exclusively manual mode. Output can be controlled electronically through the DAC and manually through the potentiometer knob. By default, the shunt connects pin 1 and 2 which enables both electronic and manual control.</div>
-</div>
+</section>
+<section id="vctrl-output-voltage-control">
+<h3>VCTRL: Output Voltage Control<a class="headerlink" href="#vctrl-output-voltage-control" title="Link to this heading"></a></h3>
+<p>VCTRL enables users to choose how to control the output voltage between electronic and manual mode (chooses the lower setting between the two) versus exclusively manual mode. Output can be controlled electronically through the DAC and manually through the potentiometer knob. By default, the shunt connects pin 1 and 2 which enables both electronic and manual control.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -865,16 +843,14 @@ Content on this topic
 <li><p>Connecting Pins 1 and 2 selects both electronic and knob control mode</p></li>
 <li><p>Connecting Pins 2 and 3 selects purely knob control mode</p></li>
 </ul>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Even if you set the EVAL-CN0508-RPIZ in purely knob control mode, you still need to have the RPi connected to it. The 3.3V from the RPi supplies the ADC and DAC circuitry in the EVAL-CN0508-RPIZ.</p>
-<div class="line-block">
-<div class="line">===EEPROM_ID: EEPROM Address Selection=== EEPROM_ID sets the EEPROM I2C address. It consists of P4, P5, and P6 solder jumpers connected respectively to A2, A1, and A0 address selection pins of U7. The default address configuration is “111”. This EEPROM I2C address is configurable from 001 to 111. It cannot be set to “000” since U4 already uses this address for RPi HAT identification.</div>
 </div>
-</div>
+</section>
+<section id="eeprom-id-eeprom-address-selection">
+<h3>EEPROM_ID: EEPROM Address Selection<a class="headerlink" href="#eeprom-id-eeprom-address-selection" title="Link to this heading"></a></h3>
+<p>EEPROM_ID sets the EEPROM I2C address. It consists of P4, P5, and P6 solder jumpers connected respectively to A2, A1, and A0 address selection pins of U7. The default address configuration is “111”. This EEPROM I2C address is configurable from 001 to 111. It cannot be set to “000” since U4 already uses this address for RPi HAT identification.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -924,71 +900,53 @@ Content on this topic
 </table>
 </div>
 <div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="line-block">
 <div class="line">—-</div>
 </div>
+</section>
 </section>
 <section id="hardware-setup">
 <h2>Hardware Setup<a class="headerlink" href="#hardware-setup" title="Link to this heading"></a></h2>
 <section id="setting-up-and-connecting-the-raspberry-pi">
 <h3>Setting up and Connecting the Raspberry Pi<a class="headerlink" href="#setting-up-and-connecting-the-raspberry-pi" title="Link to this heading"></a></h3>
-<div class="line-block">
-<div class="line">The output display of the system will be through an external monitor with HDMI capability. To do this, connect the mini HDMI to HDMI adapter on the Raspberry Pi Zero W mini HDMI slot. Connect the external monitor through this port. <a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/hdmi_2.png"><img alt="Hardware connection of Raspberry Pi to Monitor Display" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/hdmi_2.png" style="width: 300px;" /></a></div>
-</div>
-<div class="center docutils container">
-<p><em>&lt;fc #c0c0c0&gt;Figure 6. Hardware connection of Raspberry Pi to Monitor Display&lt;/fc&gt;</em></p>
-</div>
-<div class="line-block">
-<div class="line">Connect a micro-USB to USB Type A female adapter on the USB port of the Raspberry Pi Zero W. This shall allow us to connect a mouse/keyboard or even a USB hub to be able to connect both for controlling the Raspberry Pi upon boot up. <a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/micro.png"><img alt="Hardware connection of Input Devices to Raspberry Pi" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/micro.png" style="width: 300px;" /></a></div>
-</div>
-<div class="center docutils container">
-<p><em>&lt;fc #c0c0c0&gt;Figure 7. Hardware connection of Input Devices to Raspberry Pi&lt;/fc&gt;</em></p>
-</div>
-<div class="line-block">
-<div class="line">Raspberry Pi connects to the EVAL-CN0508-RPIZ through P3 which is a 40-pin connector. You may do this directly by connecting the RPi on the bottom side of the connector or through a 40-pin ribbon cable. <a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/rpi3.png"><img alt="Hardware connection of CN0508 Board and Raspberry Pi" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/rpi3.png" style="width: 600px;" /></a></div>
-</div>
-<div class="center docutils container">
-<p><em>&lt;fc #c0c0c0&gt;Figure 8. Hardware connection of EVAL-CN0508-RPIZ and Raspberry Pi Zero W&lt;/fc&gt;</em></p>
-</div>
-<div class="line-block">
-<div class="line">==== Input Supply ==== Power to the EVAL-CN0508-RPIZ can be connected through P1 or P2. P1 is a two-terminal screw terminal while P2 is a 5.5mm x 2.5mm center positive barrel jack. Please choose only one input between the two. The maximum input rating to the circuit is at 40V 3A or 120W. <a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/supply1.png"><img alt="Hardware Connection of Input Power Supply to CN0508 Evaluation Board" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/supply1.png" style="width: 700px;" /></a></div>
-</div>
-<div class="center docutils container">
-<p><em>&lt;fc #c0c0c0&gt;Figure 9. Hardware Connection of Input Power Supply to EVAL-CN0508-RPIZ&lt;/fc&gt;</em></p>
-</div>
-<div class="line-block">
-<div class="line">==== Output connections ==== You can connect a resistive load/test circuit, an electronic load, or multimeter at the output banana jacks P7 and P8. P7 is the positive polarity and P8 is the ground. Also, make sure you are aware of your load’s power consumption to avoid overheating. <a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/out1.png"><img alt="EVAL-CN0508-RPIZ Evaluation Board Output Connections" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/out1.png" style="width: 400px;" /></a></div>
-</div>
-<div class="center docutils container">
-<p><em>&lt;fc #c0c0c0&gt;Figure 10. EVAL-CN0508-RPIZ Evaluation Board Output Connections&lt;/fc&gt;</em></p>
-</div>
-<div class="line-block">
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/load1.png"><img alt="EVAL-CN0508-RPIZ Evaluation Board Connected to a Load" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/load1.png" style="width: 550px;" /></a></div>
-</div>
-<div class="center docutils container">
-<p><em>&lt;fc #c0c0c0&gt;Figure 11. EVAL-CN0508-RPIZ Evaluation Board Connected to a Load&lt;/fc&gt;</em></p>
-</div>
-<div class="line-block">
-<div class="line">==== Connecting a fan ==== Cooling requirements for EVAL-CN0508-RPIZ are low but it still contains a control circuit for a fan. If either of the regulators’ temperature readings hit 60 Celsius and above, the 5V power for the fan on P12 turns on. <a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/fan1.png"><img alt="Hardware Connection of EVAL-CN0508-RPIZ to a Fan" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/fan1.png" style="width: 600px;" /></a></div>
-</div>
-<div class="center docutils container">
-<p><em>&lt;fc #c0c0c0&gt;Figure 12. Hardware Connection of EVAL-CN0508-RPIZ to a Fan&lt;/fc&gt;</em></p>
-</div>
-<div class="line-block">
-<div class="line">—-</div>
-</div>
+<p>The output display of the system will be through an external monitor with HDMI capability. To do this, connect the mini HDMI to HDMI adapter on the Raspberry Pi Zero W mini HDMI slot. Connect the external monitor through this port.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/hdmi_2.png"><img alt="Hardware connection of Raspberry Pi to Monitor Display" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/hdmi_2.png" style="width: 300px;" /></a></p>
+<p><em>Figure 6. Hardware connection of Raspberry Pi to Monitor Display</em></p>
+<p>Connect a micro-USB to USB Type A female adapter on the USB port of the Raspberry Pi Zero W. This shall allow us to connect a mouse/keyboard or even a USB hub to be able to connect both for controlling the Raspberry Pi upon boot up.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/micro.png"><img alt="Hardware connection of Input Devices to Raspberry Pi" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/micro.png" style="width: 300px;" /></a></p>
+<p><em>Figure 7. Hardware connection of Input Devices to Raspberry Pi</em></p>
+<p>Raspberry Pi connects to the EVAL-CN0508-RPIZ through P3 which is a 40-pin connector. You may do this directly by connecting the RPi on the bottom side of the connector or through a 40-pin ribbon cable.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/rpi3.png"><img alt="Hardware connection of CN0508 Board and Raspberry Pi" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/rpi3.png" style="width: 600px;" /></a></p>
+<p><em>Figure 8. Hardware connection of EVAL-CN0508-RPIZ and Raspberry Pi Zero W</em></p>
+</section>
+<section id="input-supply">
+<h3>Input Supply<a class="headerlink" href="#input-supply" title="Link to this heading"></a></h3>
+<p>Power to the EVAL-CN0508-RPIZ can be connected through P1 or P2. P1 is a two-terminal screw terminal while P2 is a 5.5mm x 2.5mm center positive barrel jack. Please choose only one input between the two. The maximum input rating to the circuit is at 40V 3A or 120W.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/supply1.png"><img alt="Hardware Connection of Input Power Supply to CN0508 Evaluation Board" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/supply1.png" style="width: 700px;" /></a></p>
+<p><em>Figure 9. Hardware Connection of Input Power Supply to EVAL-CN0508-RPIZ</em></p>
+</section>
+<section id="output-connections">
+<h3>Output connections<a class="headerlink" href="#output-connections" title="Link to this heading"></a></h3>
+<p>You can connect a resistive load/test circuit, an electronic load, or multimeter at the output banana jacks P7 and P8. P7 is the positive polarity and P8 is the ground. Also, make sure you are aware of your load’s power consumption to avoid overheating.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/out1.png"><img alt="EVAL-CN0508-RPIZ Evaluation Board Output Connections" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/out1.png" style="width: 400px;" /></a></p>
+<p><em>Figure 10. EVAL-CN0508-RPIZ Evaluation Board Output Connections</em></p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/load1.png"><img alt="EVAL-CN0508-RPIZ Evaluation Board Connected to a Load" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/load1.png" style="width: 550px;" />
+</a>
+<p><em>Figure 11. EVAL-CN0508-RPIZ Evaluation Board Connected to a Load</em></p>
+</section>
+<section id="connecting-a-fan">
+<h3>Connecting a fan<a class="headerlink" href="#connecting-a-fan" title="Link to this heading"></a></h3>
+<p>Cooling requirements for EVAL-CN0508-RPIZ are low but it still contains a control circuit for a fan. If either of the regulators’ temperature readings hit 60 Celsius and above, the 5V power for the fan on P12 turns on.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/fan1.png"><img alt="Hardware Connection of EVAL-CN0508-RPIZ to a Fan" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/fan1.png" style="width: 600px;" /></a></p>
+<p><em>Figure 12. Hardware Connection of EVAL-CN0508-RPIZ to a Fan</em></p>
 </section>
 </section>
+<hr class="docutils" />
 <section id="software-setup">
 <h2>Software Setup<a class="headerlink" href="#software-setup" title="Link to this heading"></a></h2>
 <section id="loading-cn0508-image-on-sd-card">
 <h3>Loading CN0508 Image on SD Card<a class="headerlink" href="#loading-cn0508-image-on-sd-card" title="Link to this heading"></a></h3>
-<div class="line-block">
-<div class="line">In order to control the CN0508 from the Raspberry Pi, you will need to install ADI Kuiper Linux on an SD card. Complete instructions, including where to download the SD card image, how to write it to the SD card, and how to configure the system are provided at <a class="reference internal" href="../../../tools-software/linux-software/kuiper-linux.html"><span class="doc">Kuiper Images</span></a>.</div>
-<div class="line">Write the image and follow the system configuration procedure.</div>
-</div>
+<p>In order to control the CN0508 from the Raspberry Pi, you will need to install ADI Kuiper Linux on an SD card. Complete instructions, including where to download the SD card image, how to write it to the SD card, and how to configure the system are provided at <a class="reference internal" href="../../../tools-software/linux-software/kuiper-linux.html"><span class="doc">Kuiper Images</span></a>.</p>
+<p>Write the image and follow the system configuration procedure.</p>
 </section>
 <section id="configuring-the-sd-card">
 <h3>Configuring the SD Card<a class="headerlink" href="#configuring-the-sd-card" title="Link to this heading"></a></h3>
@@ -1001,48 +959,43 @@ Content on this topic
 <span class="n">dtoverlay</span><span class="o">=</span><span class="n">gpio</span><span class="o">-</span><span class="n">shutdown</span><span class="p">,</span><span class="n">gpio_pin</span><span class="o">=</span><span class="mi">17</span><span class="p">,</span><span class="n">active_low</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">gpiopull</span><span class="o">=</span><span class="n">up</span>
 <span class="n">dtparam</span><span class="o">=</span><span class="n">act_led_gpio</span><span class="o">=</span><span class="mi">13</span>
 <span class="n">dtparam</span><span class="o">=</span><span class="n">act_led_trigger</span><span class="o">=</span><span class="n">heartbeat</span>
+
+<span class="o">|</span> <span class="n">The</span> <span class="n">lines</span> <span class="n">below</span> <span class="n">the</span> <span class="s2">&quot;*dtoverlay*&quot;</span> <span class="n">enable</span> <span class="n">additional</span> <span class="n">hardware</span> <span class="n">features</span><span class="p">,</span> <span class="n">including</span> <span class="n">a</span> <span class="n">heartbeat</span> <span class="n">LED</span> <span class="p">(</span><span class="n">DS3</span><span class="p">,</span> <span class="n">green</span><span class="p">)</span> <span class="ow">and</span> <span class="n">a</span> <span class="n">shutdown</span> <span class="n">button</span> <span class="p">(</span><span class="n">S1</span><span class="p">)</span> <span class="n">that</span> <span class="n">allows</span> <span class="n">the</span> <span class="n">Raspberry</span> <span class="n">Pi</span> <span class="n">to</span> <span class="n">be</span> <span class="n">shut</span> <span class="n">down</span> <span class="n">properly</span> <span class="n">before</span> <span class="n">disconnecting</span> <span class="n">power</span><span class="o">.</span>
 </pre></div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">The lines below the “<em>dtoverlay</em>” enable additional hardware features, including a heartbeat LED (DS3, green) and a shutdown button (S1) that allows the Raspberry Pi to be shut down properly before disconnecting power.</div>
-<div class="line"><br /></div>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>Make sure to have the latest version of IIO Oscilloscope. Complete instructions and update scripts are found at <a class="reference internal" href="../../../tools-software/linux-software/iio_oscilloscope.html"><span class="doc">Analog Devices IIO Oscilloscope</span></a>.</p>
 </div>
-<div class="line-block">
-<div class="line">==== Electronic Control and Diagnostics via IIO Oscilloscope Plugin ==== EVAL-CN0508-RPIZ allows electronic control of the output voltage and measurement display of other system diagnostics such as voltage, current, and temperature through the <a class="icon adi reference external" href="https://www.analog.com/AD7124-4" target="_blank">AD7124-4</a> ADC. All of these are incorporated and displayed in the designated plugin for CN0508 in IIO Oscilloscope. <a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/iioscope_508_032021.jpg"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/iioscope_508_032021.jpg" style="width: 500px;" /></a></div>
-<div class="line"><br /></div>
-</div>
-<div class="center docutils container">
-<p><em>&lt;fc #c0c0c0&gt;Figure 13. Graphical User Interface (GUI) window of ADI IIO Oscilloscope&lt;/fc&gt;</em></p>
-</div>
-<div class="line-block">
-<div class="line">=== DAC output === Setting this value from 0 to 65535 will vary the output voltage of the DAC.</div>
-</div>
+</section>
+<section id="electronic-control-and-diagnostics-via-iio-oscilloscope-plugin">
+<h3>Electronic Control and Diagnostics via IIO Oscilloscope Plugin<a class="headerlink" href="#electronic-control-and-diagnostics-via-iio-oscilloscope-plugin" title="Link to this heading"></a></h3>
+<p>EVAL-CN0508-RPIZ allows electronic control of the output voltage and measurement display of other system diagnostics such as voltage, current, and temperature through the <a class="icon adi reference external" href="https://www.analog.com/AD7124-4" target="_blank">AD7124-4</a> ADC. All of these are incorporated and displayed in the designated plugin for CN0508 in IIO Oscilloscope.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/iioscope_508_032021.jpg"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0508/iioscope_508_032021.jpg" style="width: 500px;" /></a></p>
+<p><em>Figure 13. Graphical User Interface (GUI) window of ADI IIO Oscilloscope</em></p>
+</section>
+<section id="dac-output">
+<h3>DAC output<a class="headerlink" href="#dac-output" title="Link to this heading"></a></h3>
+<p>Setting this value from 0 to 65535 will vary the output voltage of the DAC.</p>
+</section>
 <section id="temperature-monitor">
-<h4>Temperature Monitor<a class="headerlink" href="#temperature-monitor" title="Link to this heading"></a></h4>
+<h3>Temperature Monitor<a class="headerlink" href="#temperature-monitor" title="Link to this heading"></a></h3>
 <p>This shows the temperature readings of the two <a class="icon adi reference external" href="https://www.analog.com/LT3081" target="_blank">LT3081</a>. While power dissipation is kept low in the <a class="icon adi reference external" href="https://www.analog.com/LT3081" target="_blank">LT3081</a> devices, operating at high currents with restricted airflow can result in an over-temperature condition.</p>
 </section>
 <section id="dc-supply">
-<h4>DC Supply<a class="headerlink" href="#dc-supply" title="Link to this heading"></a></h4>
+<h3>DC Supply<a class="headerlink" href="#dc-supply" title="Link to this heading"></a></h3>
 <p>This presents the output voltage and output current of the EVAL-CN0508-RPIZ. The output voltage is set to the lower of the output voltages between the DAC and potentiometer.</p>
 </section>
 <section id="potentiometers">
-<h4>Potentiometers<a class="headerlink" href="#potentiometers" title="Link to this heading"></a></h4>
+<h3>Potentiometers<a class="headerlink" href="#potentiometers" title="Link to this heading"></a></h3>
 <p>This shows the position of the voltage and current limit potentiometers. An indicator flag is raised if the output current reaches 95% of the current limit setpoint or if the measured output voltage falls more than 0.5V below the lower of (DAC setpoint, potentiometer setpoint).</p>
 </section>
-<section id="input-supply">
-<h4>Input Supply<a class="headerlink" href="#input-supply" title="Link to this heading"></a></h4>
-<div class="line-block">
-<div class="line">This displays the input voltage on P1 or P2 connectors.</div>
-<div class="line">—-</div>
-</div>
+<section id="id1">
+<h3>Input Supply<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<p>This displays the input voltage on P1 or P2 connectors.</p>
 </section>
 </section>
-</section>
+<hr class="docutils" />
 <section id="more-information-and-useful-links">
 <h2>More Information and Useful Links<a class="headerlink" href="#more-information-and-useful-links" title="Link to this heading"></a></h2>
 <ul class="simple">

@@ -4,9 +4,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="Figure: SigmaStudioPlus UI where DXE is selected" name="description" />
+<meta content="Click here to return back" name="description" />
 
-    <title>Schematic Memory Map (SMAP) &#8212; System Level Documentation  documentation</title>
+    <title>GMAP and SMAP &#8212; System Level Documentation  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../../../../../_static/app.min.css?v=a525f648" />
     <script async="async" src="../../../../../../_static/app.umd.js?v=fcf3088a"></script>
@@ -92,7 +92,14 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">Schematic Memory Map (SMAP)</a></li>
+<li><a class="reference internal" href="#">GMAP and SMAP</a><ul>
+<li><a class="reference internal" href="#application-dxe">Application DXE</a></li>
+<li><a class="reference internal" href="#global-memory-map-gmap">Global Memory Map (GMAP)</a></li>
+<li><a class="reference internal" href="#schematic-memory-map-smap">Schematic Memory Map (SMAP)</a></li>
+<li><a class="reference internal" href="#memory-block-customization-in-case-of-insufficient-l1-blocks">Memory Block Customization in Case of Insufficient L1 Blocks</a></li>
+<li><a class="reference internal" href="#memory-block-customization-without-l3-memory">Memory Block Customization without L3 Memory</a></li>
+</ul>
+</li>
 </ul>
 
         </nav>
@@ -578,33 +585,78 @@ Content on this topic
 </div>
           <div class="body" role="main">
             
-  <div class="line-block">
-<div class="line"><a class="reference internal" href="../targetapplication.html"><span class="doc">Click here to return back</span></a></div>
-<div class="line">=======System Integration======= The SigmaStudio+ application integrated with Target application using separate application space allocated for the SigmaStudio+ application. The target application is responsible to allocate required memory which are left free by the target application. The memory block allocated from target application is called GMAP and SigmaStduio+ schematic uses the target allocated memory space to allocate memory for code, parameter and state data for running SigmaStudio+ application over target platform.</div>
-<div class="line">======GMAP and SMAP====== The <strong>Global Memory map</strong> (GMAP) contains information about the available physical memory for the schematic, specifically the unused memory on a per-block basis after consumption by the Target application. The SigmaStudio+ schematic application reads the GMAP information when the corresponding Target application “.dxe” file for the SHARC core is selected.</div>
-<div class="line">SMAP stands for <strong>Schematic Memory MAP</strong>. This information is communicated to the target library by the SigmaStudio+ host. SMAP includes details on various framework parameters such as sampling rate, block size, SPORT configuration, memory-mapped information code, parameters, and state data. It also contains memory information for the SigmaStudio+ schematic (SSn) instances.</div>
-<div class="line">Before delving into GMAP and SMAP, it is essential to understand some basic files related to them.</div>
-<div class="line">The <strong>adi_ss_gmap.asm</strong> file, included in the target application, defines the <strong>GMAP structure</strong> used to assign the start address and length of each memory block. There are seven memory blocks defined to allocate memory from the target application. The linker file <strong>adi_ss_app.ldf</strong> is used along with the applications .ldf file to reserve memory sections for GMAP. The GMAP linker file includes comments indicating which memory block will be used for schematic application data.</div>
-</div>
-<div class="line-block">
-<div class="line">The <strong>adi_ss_smap.h</strong> file, included in the target application, defines the <strong>SMAP structure</strong> used to assign the start address and length of each memory buffer reserved for code, parameters, and state data. These SMAP buffers are called <strong>SS buffers</strong>, and the utilization of each memory buffer in the SigmaStudio+ schematic will be printed in the <strong>Output Window</strong>.</div>
-<div class="line">=====Application DXE===== The GMAP information is available in the SHARC core Application DXE. You can load the Application DXE into the schematic using the ‘Select Application DXE’ button for the selected core in the corresponding SHARC core settings tab, as shown below. <a class="reference internal" href="#"><span class="doc">Figure</span></a>.</div>
-<div class="line"><img alt="image1" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/targetintegration/targetapplication/dxe.png" /></div>
-</div>
+  <p><a class="reference internal" href="../targetapplication.html"><span class="doc">Click here to return back</span></a></p>
+<p>=======System Integration======= The SigmaStudio+ application integrated with Target application using separate application space allocated for the SigmaStudio+ application. The target application is responsible to allocate required memory which are left free by the target application. The memory block allocated from target application is called GMAP and SigmaStduio+ schematic uses the target allocated memory space to allocate memory for code, parameter and state data for running SigmaStudio+ application over target platform.</p>
+<section id="gmap-and-smap">
+<h1>GMAP and SMAP<a class="headerlink" href="#gmap-and-smap" title="Link to this heading"></a></h1>
+<p>The <strong>Global Memory map</strong> (GMAP) contains information about the available physical memory for the schematic, specifically the unused memory on a per-block basis after consumption by the Target application. The SigmaStudio+ schematic application reads the GMAP information when the corresponding Target application “.dxe” file for the SHARC core is selected.</p>
+<p>SMAP stands for <strong>Schematic Memory MAP</strong>. This information is communicated to the target library by the SigmaStudio+ host. SMAP includes details on various framework parameters such as sampling rate, block size, SPORT configuration, memory-mapped information code, parameters, and state data. It also contains memory information for the SigmaStudio+ schematic (SSn) instances.</p>
+<p>Before delving into GMAP and SMAP, it is essential to understand some basic files related to them.</p>
+<p>The <strong>adi_ss_gmap.asm</strong> file, included in the target application, defines the <strong>GMAP structure</strong> used to assign the start address and length of each memory block. There are seven memory blocks defined to allocate memory from the target application. The linker file <strong>adi_ss_app.ldf</strong> is used along with the applications .ldf file to reserve memory sections for GMAP. The GMAP linker file includes comments indicating which memory block will be used for schematic application data.</p>
+<p>The <strong>adi_ss_smap.h</strong> file, included in the target application, defines the <strong>SMAP structure</strong> used to assign the start address and length of each memory buffer reserved for code, parameters, and state data. These SMAP buffers are called <strong>SS buffers</strong>, and the utilization of each memory buffer in the SigmaStudio+ schematic will be printed in the <strong>Output Window</strong>.</p>
+<section id="application-dxe">
+<h2>Application DXE<a class="headerlink" href="#application-dxe" title="Link to this heading"></a></h2>
+<p>The GMAP information is available in the SHARC core Application DXE. You can load the Application DXE into the schematic using the ‘Select Application DXE’ button for the selected core in the corresponding SHARC core settings tab, as shown below. <a class="reference internal" href="#"><span class="doc">Figure</span></a>.</p>
+<p><img alt="image1" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/targetintegration/targetapplication/dxe.png" /></p>
 <div class="centeralign docutils container">
 <p><strong>Figure:</strong> SigmaStudioPlus UI where DXE is selected</p>
 </div>
-<div class="line-block">
-<div class="line">=====Global Memory Map (GMAP)=====</div>
-<div class="line">This structure contains information about the available physical memory in each of the SHARC memory blocks. This information is read by the SigmaStudioPlus host using application DXE. The <a class="reference internal" href="#"><span class="doc">Figure</span></a> below shows the arrangement of information within the GMAP structure.</div>
-</div>
+</section>
+<section id="global-memory-map-gmap">
+<h2>Global Memory Map (GMAP)<a class="headerlink" href="#global-memory-map-gmap" title="Link to this heading"></a></h2>
+<p>This structure contains information about the available physical memory in each of the SHARC memory blocks. This information is read by the SigmaStudioPlus host using application DXE. The <a class="reference internal" href="#"><span class="doc">Figure</span></a> below shows the arrangement of information within the GMAP structure.</p>
 <p><img alt="image2" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/targetintegration/targetapplication/gmap_structure_format.png" /></p>
 <div class="centeralign docutils container">
 <p><strong>Figure:</strong> GMAP structure format</p>
 </div>
-<div class="line-block">
-<div class="line">The table below lists the blocks made available to the host by the target through GMAP. ^ <strong>Sl No</strong> ^ <strong>Physical Block</strong> ^ <strong>Description</strong> ^ <strong>Used for</strong> ^ | 1 | Block 0 | L1 block0 | Allocation of SigmaStudioPlus schematic code | | 2 | Block 1 | L1 block1 | Allocation of SigmaStudioPlus schematic 32-bit data (State) | | 3 | Block 2 | L1 block2 | Allocation of SigmaStudioPlus schematic parameters (Coeff) | | 4 | Block 3 | L1 block3 | Allocation of SigmaStudioPlus schematic 48-bit data (data-48) and 32-bit data (State B) | | 5 | Block L3 code | L3 SW code memory block | Allocation of SigmaStudioPlus schematic code (Code-B) | | 6 | Block L3 data | L3 data memory block | Allocation of SigmaStudioPlus schematic 32-bit data (State C) | | 7 | Block L2 data | L2 cached memory block | For SSn-target library and for inter core communication in dual core mode |</div>
-<div class="line"><br /></div>
+<p>The table below lists the blocks made available to the host by the target through GMAP.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Sl No</strong></p></th>
+<th class="head"><p><strong>Physical Block</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+<th class="head"><p><strong>Used for</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>Block 0</p></td>
+<td><p>L1 block0</p></td>
+<td><p>Allocation of SigmaStudioPlus schematic code</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>Block 1</p></td>
+<td><p>L1 block1</p></td>
+<td><p>Allocation of SigmaStudioPlus schematic 32-bit data (State)</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>Block 2</p></td>
+<td><p>L1 block2</p></td>
+<td><p>Allocation of SigmaStudioPlus schematic parameters (Coeff)</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>Block 3</p></td>
+<td><p>L1 block3</p></td>
+<td><p>Allocation of SigmaStudioPlus schematic 48-bit data (data-48) and 32-bit data (State B)</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>Block L3 code</p></td>
+<td><p>L3 SW code memory block</p></td>
+<td><p>Allocation of SigmaStudioPlus schematic code (Code-B)</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>Block L3 data</p></td>
+<td><p>L3 data memory block</p></td>
+<td><p>Allocation of SigmaStudioPlus schematic 32-bit data (State C)</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>Block L2 data</p></td>
+<td><p>L2 cached memory block</p></td>
+<td><p>For SSn-target library and for inter core communication in dual core mode</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="centeralign docutils container">
 <p><strong>Table:</strong> GMAP blocks</p>
@@ -663,10 +715,7 @@ Content on this topic
 <span class="p">.</span><span class="n">_GMAP</span><span class="p">.</span><span class="n">end</span><span class="o">:</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">The GMAP structure values are updated with memory blocks allocated in the <strong>adi_ss_app.ldf</strong> file for each target application. The LDF file is available in the respective target application’s source folder. For example, the <strong>adi_ss_app.ldf</strong> file for the ADSP-2156x target can be found in <strong>C:\Analog Devices\SigmaStudioPlus-Relx.x.x\Target\Examples\Demo\ADSP-2156x\Source</strong> folder.</div>
-</div>
+<p>The GMAP structure values are updated with memory blocks allocated in the <strong>adi_ss_app.ldf</strong> file for each target application. The LDF file is available in the respective target application’s source folder. For example, the <strong>adi_ss_app.ldf</strong> file for the ADSP-2156x target can be found in <strong>C:\Analog Devices\SigmaStudioPlus-Relx.x.x\Target\Examples\Demo\ADSP-2156x\Source</strong> folder.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/*</span>
 <span class="cm">** SigmaStudioPlus for Griffin application linker description file for GMAP</span>
 <span class="cm">*/</span>
@@ -777,56 +826,59 @@ Content on this topic
 </pre></div>
 </div>
 <p>The start addresses and sizes of the GMAP memory blocks are allocated by the target application. The details of the GMAP blocks can be found in the generated linker map file <strong>(SS_App_Core1.map.xml)</strong> located in the corresponding build output folder <strong>(Release/Debug)</strong>.</p>
-<div class="line-block">
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/targetintegration/targetapplication/gmap_block_allocation_in_map_file.png"><img alt="image3" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/targetintegration/targetapplication/gmap_block_allocation_in_map_file.png" style="width: 300px;" /></a></div>
-</div>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/targetintegration/targetapplication/gmap_block_allocation_in_map_file.png"><img alt="image3" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/targetintegration/targetapplication/gmap_block_allocation_in_map_file.png" style="width: 300px;" /></a></p>
 <div class="centeralign docutils container">
 <p><strong>Figure:</strong> GMAP block allocation in Map file</p>
 </div>
+</section>
 <section id="schematic-memory-map-smap">
-<h1>Schematic Memory Map (SMAP)<a class="headerlink" href="#schematic-memory-map-smap" title="Link to this heading"></a></h1>
-<div class="line-block">
-<div class="line">The SMAP information is communicated to the target library by the SigmaStudio+ host when the schematic link compile download is completed. The SMAP information is sent as a separate packet to the target application to initialize the SigmaStudio+ application instance with the SMAP data. The packet information can be viewed in the capture window. SMAP contains details on various framework parameters such as sampling rate, block size, SPORT configuration, etc. It also includes memory information for the SSn instances. The SMAP data can be mapped to the <strong>SMAP structure (SS_SMAP)</strong> defined in <strong>adi_ss_smap.h</strong>. The SMAP structure is detailed below.</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">/*</span> <span class="pre">SMAP</span> <span class="pre">structure</span> <span class="pre">*/</span>
-<span class="pre">struct</span> <span class="pre">SS_SMAP</span>
-<span class="pre">{</span>
-&#160;&#160;&#160; <span class="pre">SS_SMAP_FW_INFO</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">oFwInfo;</span>
-&#160;&#160;&#160; <span class="pre">uint32_t</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">nNumSSn;</span>
-&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">ADI_SS_FW_PROCESS_MODE</span>&#160; <span class="pre">eProcessMode;</span>
-&#160;&#160;&#160; <span class="pre">SS_SMAP_SSN_INFO</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">oSSnInfo[ADI_SS_FW_MAX_PROC_BLOCKS];</span>
-<span class="pre">};</span></code></div>
-<div class="line">The structure elements are described below:</div>
-<div class="line">^ <strong>Element</strong> ^ <strong>Description</strong> ^</div>
+<h2>Schematic Memory Map (SMAP)<a class="headerlink" href="#schematic-memory-map-smap" title="Link to this heading"></a></h2>
+<p>The SMAP information is communicated to the target library by the SigmaStudio+ host when the schematic link compile download is completed. The SMAP information is sent as a separate packet to the target application to initialize the SigmaStudio+ application instance with the SMAP data. The packet information can be viewed in the capture window. SMAP contains details on various framework parameters such as sampling rate, block size, SPORT configuration, etc. It also includes memory information for the SSn instances. The SMAP data can be mapped to the <strong>SMAP structure (SS_SMAP)</strong> defined in <strong>adi_ss_smap.h</strong>. The SMAP structure is detailed below.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/*</span> <span class="n">SMAP</span> <span class="n">structure</span> <span class="o">*/</span>
+<span class="n">struct</span> <span class="n">SS_SMAP</span>
+<span class="p">{</span>
+    <span class="n">SS_SMAP_FW_INFO</span>         <span class="n">oFwInfo</span><span class="p">;</span>
+    <span class="n">uint32_t</span>                <span class="n">nNumSSn</span><span class="p">;</span>
+        <span class="n">ADI_SS_FW_PROCESS_MODE</span>  <span class="n">eProcessMode</span><span class="p">;</span>
+    <span class="n">SS_SMAP_SSN_INFO</span>        <span class="n">oSSnInfo</span><span class="p">[</span><span class="n">ADI_SS_FW_MAX_PROC_BLOCKS</span><span class="p">];</span>
+<span class="p">};</span>
+</pre></div>
 </div>
+<p>The structure elements are described below:</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Element</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
 <tbody>
-<tr class="row-odd"><td><p>oFwInfo</p></td>
+<tr class="row-even"><td><p>oFwInfo</p></td>
 <td><p>Instance of framework structure</p></td>
 </tr>
-<tr class="row-even"><td><p>nNumSSn</p></td>
+<tr class="row-odd"><td><p>nNumSSn</p></td>
 <td><p>Number of SSn instance</p></td>
 </tr>
-<tr class="row-odd"><td><p>eProcessMode</p></td>
+<tr class="row-even"><td><p>eProcessMode</p></td>
 <td><p>SSn processing mode</p></td>
 </tr>
-<tr class="row-even"><td><p>oSSnInfo</p></td>
+<tr class="row-odd"><td><p>oSSnInfo</p></td>
 <td><p>Array of SSn info structure type</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="line-block">
-<div class="line">ADI_SS_FW_PROCESS_MODE is an enumeration defined in <em>adi_ss_smap.h</em> file.</div>
-<div class="line">Following are the different processing modes for the different process blocks.</div>
-<div class="line">^ <strong>Enumerator</strong> ^</div>
-</div>
+<p>ADI_SS_FW_PROCESS_MODE is an enumeration defined in <em>adi_ss_smap.h</em> file. Following are the different processing modes for the different process blocks.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <tbody>
 </tbody>
 </table>
 </div>
+<div class="line-block">
+<div class="line"><strong>Enumerator</strong>                 |</div>
+</div>
+<p>+================================+</p>
 <div class="line-block">
 <div class="line">ADI_SS_FW_PROCESSMODE_SINGLE   |</div>
 </div>
@@ -875,15 +927,89 @@ Content on this topic
 <div class="line-block">
 <div class="line"><br /></div>
 <div class="line">The SMAP buffer information for the target framework can be found in SigmaStudioPlus schematic <strong>compiler output</strong> window.</div>
-<div class="line"><img alt="image4" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/targetintegration/targetapplication/smap_block_allocations_in_schematic_compilation.png" /></div>
 </div>
+<p><img alt="image4" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/targetintegration/targetapplication/smap_block_allocations_in_schematic_compilation.png" /></p>
 <div class="centeralign docutils container">
-<p><a href="#id1"><span class="problematic" id="id2">**</span></a>Figure: **SMAP block allocations in schematic compilation</p>
+<p><strong>Figure:</strong>SMAP block allocations in schematic compilation</p>
 </div>
-<div class="line-block">
-<div class="line">The SMAP buffer information and corresponding GMAP blocks are shown in below table.</div>
-<div class="line">^ <strong>GMAP Blocks</strong> ^ <strong>SMAP Buffers</strong> ^ <strong>SMAP Memory Section Names</strong> ^ <strong>Purpose</strong> ^ | Block0_L1_space | SS Buffer 1 | Code | SigmaStudio+ schematic instance code memory | | Block1_L1_space | FW Buffer 0 | NA | SigmaStudio+ framework buffers for I/O Data | |     | SS Buffer 4 | StateA | SigmaStudio+ schematic instance Data32 memory | | Block2_L1_space | SS Buffer 5 | Param | SigmaStudio+ schematic instance parameter memory | | Block3_L1_space | SS Buffer 6 | NA | SigmaStudio+ schematic instance extended precision state memory | |     | SS Buffer 8 | StateB | SigmaStudio+ schematic instance Data32 B memory | | Block_L3_code_space | SS Buffer 7 | CodeB | SigmaStudio+ schematic instance code B memory | | Block_L3_data_space | SS Buffer 9 | StateC | SigmaStudio+ schematic instance Data32 C memory | |     | SS Buffer 5 | ParamB | SigmaStudio+ schematic instance parameter B memory | | Block_L2_data_space | SS Buffer 0 | NA | SigmaStudio+ schematic instance handle | |     | SS Buffer 2 | NA | Memory for Block communication processing | |     | SS Buffer 3 | NA | Memory for Param safe load communication processing | |     | SS Buffer 10 | NA | Memory for inter core communication |</div>
-<div class="line"><br /></div>
+<p>The SMAP buffer information and corresponding GMAP blocks are shown in below table.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>GMAP Blocks</strong></p></th>
+<th class="head"><p><strong>SMAP Buffers</strong></p></th>
+<th class="head"><p><strong>SMAP Memory Section Names</strong></p></th>
+<th class="head"><p><strong>Purpose</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Block0_L1_space</p></td>
+<td><p>SS Buffer 1</p></td>
+<td><p>Code</p></td>
+<td><p>SigmaStudio+ schematic instance code memory</p></td>
+</tr>
+<tr class="row-odd"><td><p>Block1_L1_space</p></td>
+<td><p>FW Buffer 0</p></td>
+<td><p>NA</p></td>
+<td><p>SigmaStudio+ framework buffers for I/O Data</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>SS Buffer 4</p></td>
+<td><p>StateA</p></td>
+<td><p>SigmaStudio+ schematic instance Data32 memory</p></td>
+</tr>
+<tr class="row-odd"><td><p>Block2_L1_space</p></td>
+<td><p>SS Buffer 5</p></td>
+<td><p>Param</p></td>
+<td><p>SigmaStudio+ schematic instance parameter memory</p></td>
+</tr>
+<tr class="row-even"><td><p>Block3_L1_space</p></td>
+<td><p>SS Buffer 6</p></td>
+<td><p>NA</p></td>
+<td><p>SigmaStudio+ schematic instance extended precision state memory</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>SS Buffer 8</p></td>
+<td><p>StateB</p></td>
+<td><p>SigmaStudio+ schematic instance Data32 B memory</p></td>
+</tr>
+<tr class="row-even"><td><p>Block_L3_code_space</p></td>
+<td><p>SS Buffer 7</p></td>
+<td><p>CodeB</p></td>
+<td><p>SigmaStudio+ schematic instance code B memory</p></td>
+</tr>
+<tr class="row-odd"><td><p>Block_L3_data_space</p></td>
+<td><p>SS Buffer 9</p></td>
+<td><p>StateC</p></td>
+<td><p>SigmaStudio+ schematic instance Data32 C memory</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>SS Buffer 5</p></td>
+<td><p>ParamB</p></td>
+<td><p>SigmaStudio+ schematic instance parameter B memory</p></td>
+</tr>
+<tr class="row-odd"><td><p>Block_L2_data_space</p></td>
+<td><p>SS Buffer 0</p></td>
+<td><p>NA</p></td>
+<td><p>SigmaStudio+ schematic instance handle</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>SS Buffer 2</p></td>
+<td><p>NA</p></td>
+<td><p>Memory for Block communication processing</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>SS Buffer 3</p></td>
+<td><p>NA</p></td>
+<td><p>Memory for Param safe load communication processing</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>SS Buffer 10</p></td>
+<td><p>NA</p></td>
+<td><p>Memory for inter core communication</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="centeralign docutils container">
 <p><strong>Table:</strong> SMAP buffer allocation in GMAP blocks</p>
@@ -901,22 +1027,23 @@ Content on this topic
 <span class="p">}</span><span class="n">SS_SMAP_FW_INFO</span><span class="p">;</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">Framework info structure within SMAP. The structure elements are described below.</div>
-<div class="line">^ <strong>Element</strong> ^ <strong>Description</strong> ^</div>
-</div>
+<p>Framework info structure within SMAP. The structure elements are described below.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Element</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
 <tbody>
-<tr class="row-odd"><td><p>oFwHostConfig</p></td>
+<tr class="row-even"><td><p>oFwHostConfig</p></td>
 <td><p>Structure instance for host configurable framework parameters</p></td>
 </tr>
-<tr class="row-even"><td><p>nNumFwBuffers</p></td>
+<tr class="row-odd"><td><p>nNumFwBuffers</p></td>
 <td><p>Part of memory required for the framework is provided by the host.
 This field indicates the number of buffers required for the framework</p></td>
 </tr>
-<tr class="row-odd"><td><p>oFwBuff</p></td>
+<tr class="row-even"><td><p>oFwBuff</p></td>
 <td><p>Array of mem blocks for the framework buffers</p></td>
 </tr>
 </tbody>
@@ -950,67 +1077,67 @@ This field indicates the number of buffers required for the framework</p></td>
 <span class="p">}</span><span class="n">ADI_SS_FW_HOST_CONFIG</span><span class="p">;</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">The framework parameters in this structure may be configured by the host.</div>
-<div class="line">The structure elements are described below:</div>
-<div class="line">^ <strong>Element</strong> ^ <strong>Description</strong> ^</div>
-</div>
+<p>The framework parameters in this structure may be configured by the host. The structure elements are described below:</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Element</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
 <tbody>
-<tr class="row-odd"><td><p>nBlockSize</p></td>
+<tr class="row-even"><td><p>nBlockSize</p></td>
 <td><p>Schematic processing block size</p></td>
 </tr>
-<tr class="row-even"><td><p>nInInterfaceBuffSz</p></td>
+<tr class="row-odd"><td><p>nInInterfaceBuffSz</p></td>
 <td><p>Total input interface buffer size reserved by host for all pins. This has to be a multiple of nBlockSize. This field will be used for input buff size validation</p></td>
 </tr>
-<tr class="row-odd"><td><p>nNumInInterfaceBuff</p></td>
+<tr class="row-even"><td><p>nNumInInterfaceBuff</p></td>
 <td><p>Number of input interface buffers of size nBlockSize for the i/o data buffering by the framework</p></td>
 </tr>
-<tr class="row-even"><td><p>nOutInterfaceBuffSz</p></td>
+<tr class="row-odd"><td><p>nOutInterfaceBuffSz</p></td>
 <td><p>Total output interface buffer size reserved by host for all pins. This has to be a multiple of nBlockSize. This field will be used for output buff size validation</p></td>
 </tr>
-<tr class="row-odd"><td><p>nNumOutInterfaceBuff</p></td>
+<tr class="row-even"><td><p>nNumOutInterfaceBuff</p></td>
 <td><p>Number of output interface buffers of size nBlockSize for the i/o data buffering by the framework</p></td>
 </tr>
-<tr class="row-even"><td><p>nOutputPreroll</p></td>
+<tr class="row-odd"><td><p>nOutputPreroll</p></td>
 <td><p>Output preroll as a multiple of nBlockSize</p></td>
 </tr>
-<tr class="row-odd"><td><p>nInSamplingRate</p></td>
+<tr class="row-even"><td><p>nInSamplingRate</p></td>
 <td><p>Input sampling rate</p></td>
 </tr>
-<tr class="row-even"><td><p>nOutSamplingRate</p></td>
+<tr class="row-odd"><td><p>nOutSamplingRate</p></td>
 <td><p>Output sampling rate</p></td>
 </tr>
-<tr class="row-odd"><td><p>eAudioMode</p></td>
+<tr class="row-even"><td><p>eAudioMode</p></td>
 <td><p>Audio mode. (ADI_SS_FW_ADCOEXIST (Analog digital coexistence mode) or ADI_SS_FW_ADCOEXIST_DIGICLOCK (Analog digital coexistence digital clock mode))</p></td>
 </tr>
-<tr class="row-even"><td><p>eFwMultiCoreMode</p></td>
+<tr class="row-odd"><td><p>eFwMultiCoreMode</p></td>
 <td><p>Parameter for different types of signal flows designed in host for multicore mode</p></td>
 </tr>
-<tr class="row-odd"><td><p>nPeripheralIOBuffSz</p></td>
+<tr class="row-even"><td><p>nPeripheralIOBuffSz</p></td>
 <td><p>Total Peripheral i/o buffer size for all pins including input and output. This field is currently not used</p></td>
 </tr>
-<tr class="row-even"><td><p>nNumPeripheralIOBuff</p></td>
+<tr class="row-odd"><td><p>nNumPeripheralIOBuff</p></td>
 <td><p>Number of peripheral i/o buffers. This field is currently not used</p></td>
 </tr>
-<tr class="row-odd"><td><p>nNumSources</p></td>
+<tr class="row-even"><td><p>nNumSources</p></td>
 <td><p>Number of Data sources</p></td>
 </tr>
-<tr class="row-even"><td><p>eSourcePeriType</p></td>
+<tr class="row-odd"><td><p>eSourcePeriType</p></td>
 <td><p>Source peripheral type enumeration for each of the sources</p></td>
 </tr>
-<tr class="row-odd"><td><p>oSourcePeriConfig</p></td>
+<tr class="row-even"><td><p>oSourcePeriConfig</p></td>
 <td><p>SPORT configuration for each of the sources received from the host</p></td>
 </tr>
-<tr class="row-even"><td><p>nNumSinks</p></td>
+<tr class="row-odd"><td><p>nNumSinks</p></td>
 <td><p>Number of Data sinks</p></td>
 </tr>
-<tr class="row-odd"><td><p>eSinkPeriType</p></td>
+<tr class="row-even"><td><p>eSinkPeriType</p></td>
 <td><p>Sink peripheral type enumeration for each of the sinks</p></td>
 </tr>
-<tr class="row-even"><td><p>eSinkPeriConfig</p></td>
+<tr class="row-odd"><td><p>eSinkPeriConfig</p></td>
 <td><p>SPORT configuration for each of the sinks received from the host</p></td>
 </tr>
 </tbody>
@@ -1019,15 +1146,19 @@ This field indicates the number of buffers required for the framework</p></td>
 <div class="line-block">
 <div class="line"><br /></div>
 <div class="line">ADI_SS_FW_AUDIOMODE is an enumeration for audio mode defined in <em>adi_ss_smap.h</em> file.</div>
-<div class="line">^ <strong>Enumerator</strong> ^^</div>
 </div>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Enumerator</strong></p></th>
+<th class="head"></th>
+</tr>
+</thead>
 <tbody>
-<tr class="row-odd"><td><p>ADI_SS_FW_ADCOEXIST</p></td>
+<tr class="row-even"><td><p>ADI_SS_FW_ADCOEXIST</p></td>
 <td><p>Analog digital coexistence mode</p></td>
 </tr>
-<tr class="row-even"><td><p>ADI_SS_FW_ADCOEXIST_DIGICLOCK</p></td>
+<tr class="row-odd"><td><p>ADI_SS_FW_ADCOEXIST_DIGICLOCK</p></td>
 <td><p>Analog digital coexistence digital clock mode</p></td>
 </tr>
 </tbody>
@@ -1036,7 +1167,6 @@ This field indicates the number of buffers required for the framework</p></td>
 <div class="line-block">
 <div class="line"><br /></div>
 <div class="line">ADI_SS_FW_MULTICORE_MODE is an enumeration for different types of signal flows designed in Host for multicore mode. It is defined in <em>adi_ss_smap.h</em> file.</div>
-<div class="line">^ <strong>Enumerator</strong> ^</div>
 </div>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -1044,6 +1174,10 @@ This field indicates the number of buffers required for the framework</p></td>
 </tbody>
 </table>
 </div>
+<div class="line-block">
+<div class="line"><strong>Enumerator</strong>                      |</div>
+</div>
+<p>+=====================================+</p>
 <div class="line-block">
 <div class="line">ADI_SS_FW_MULTICOREMODE_INDEPENDENT |</div>
 </div>
@@ -1065,21 +1199,25 @@ This field indicates the number of buffers required for the framework</p></td>
 <div class="line-block">
 <div class="line"><br /></div>
 <div class="line">ADI_SS_FW_DATA_PERI_TYPE is an enumeration for data peripheral type defined in <em>adi_ss_smap.h</em> file.</div>
-<div class="line">^ <strong>Enumerator</strong> ^^</div>
 </div>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Enumerator</strong></p></th>
+<th class="head"></th>
+</tr>
+</thead>
 <tbody>
-<tr class="row-odd"><td><p>ADI_SS_PERI_TYPE_SPORT_PCM</p></td>
+<tr class="row-even"><td><p>ADI_SS_PERI_TYPE_SPORT_PCM</p></td>
 <td><p>Pin configured to use SPORT for I/O operation. PCM type of data is Tx/Rx by SPORT</p></td>
 </tr>
-<tr class="row-even"><td><p>ADI_SS_PERI_TYPE_SPORT_PCMX</p></td>
+<tr class="row-odd"><td><p>ADI_SS_PERI_TYPE_SPORT_PCMX</p></td>
 <td><p>Pin configured to use SPORT for I/O operation. PCMx type of data is Tx/Rx by SPORT</p></td>
 </tr>
-<tr class="row-odd"><td><p>ADI_SS_PERI_TYPE_SM</p></td>
+<tr class="row-even"><td><p>ADI_SS_PERI_TYPE_SM</p></td>
 <td><p>Pin configured to use Shared Memory for I/O operation</p></td>
 </tr>
-<tr class="row-even"><td><p>ADI_SS_PERI_TYPE_LP</p></td>
+<tr class="row-odd"><td><p>ADI_SS_PERI_TYPE_LP</p></td>
 <td><p>Pin configured to use Link Port for I/O operation</p></td>
 </tr>
 </tbody>
@@ -1101,11 +1239,7 @@ This field indicates the number of buffers required for the framework</p></td>
 <span class="p">}</span><span class="n">ADI_SS_FW_HOST_CONFIG</span><span class="p">;</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">The framework parameters in this structure may be configured by the host.</div>
-<div class="line">The structure elements are described below:</div>
-</div>
+<p>The framework parameters in this structure may be configured by the host. The structure elements are described below:</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -1153,30 +1287,31 @@ This field indicates the number of buffers required for the framework</p></td>
 }ADI_SS_FW_SPORT_CONFIG;
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">The structure elements are described below:</div>
-<div class="line">^ <strong>Element</strong> ^ <strong>Description</strong> ^</div>
-</div>
+<p>The structure elements are described below:</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Element</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
 <tbody>
-<tr class="row-odd"><td><p>eSportNum</p></td>
+<tr class="row-even"><td><p>eSportNum</p></td>
 <td><p>Enumeration for SPORT number for a source or a sink</p></td>
 </tr>
-<tr class="row-even"><td><p>eSportHalf</p></td>
+<tr class="row-odd"><td><p>eSportHalf</p></td>
 <td><p>Enumeration for SPORT half for a source or a sink</p></td>
 </tr>
-<tr class="row-odd"><td><p>eSportClkPol</p></td>
+<tr class="row-even"><td><p>eSportClkPol</p></td>
 <td><p>Enumeration for SPORT clock polarity. Rising/Falling</p></td>
 </tr>
-<tr class="row-even"><td><p>eSportFSPol</p></td>
+<tr class="row-odd"><td><p>eSportFSPol</p></td>
 <td><p>Enumeration for SPORT frame sync polarity. Rising/Falling</p></td>
 </tr>
-<tr class="row-odd"><td><p>eSportMode</p></td>
+<tr class="row-even"><td><p>eSportMode</p></td>
 <td><p>Enumeration for SPORT operation mode indicating I2S/TDM4/TDM8/TDM16</p></td>
 </tr>
-<tr class="row-even"><td><p>nSportWordLen</p></td>
+<tr class="row-odd"><td><p>nSportWordLen</p></td>
 <td><p>SPORT data word length</p></td>
 </tr>
 </tbody>
@@ -1194,22 +1329,22 @@ This field indicates the number of buffers required for the framework</p></td>
 <span class="p">}</span><span class="n">SS_SMAP_SSN_INFO</span><span class="p">;</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">SSn info structure which provides SSn specific details including memory details for the target library.</div>
-<div class="line">The structure elements are described below:</div>
-<div class="line">^ <strong>Element</strong> ^ <strong>Description</strong> ^</div>
-</div>
+<p>SSn info structure which provides SSn specific details including memory details for the target library. The structure elements are described below:</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Element</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
 <tbody>
-<tr class="row-odd"><td><p>oHostInfo</p></td>
+<tr class="row-even"><td><p>oHostInfo</p></td>
 <td><p>SSn information which has to be communicated to target framework from host</p></td>
 </tr>
-<tr class="row-even"><td><p>nNumSSnBuffers</p></td>
+<tr class="row-odd"><td><p>nNumSSnBuffers</p></td>
 <td><p>Number of buffers required for SSn target library</p></td>
 </tr>
-<tr class="row-odd"><td><p>oSSnBuff</p></td>
+<tr class="row-even"><td><p>oSSnBuff</p></td>
 <td><p>Array of mem blocks for the SSn buffers</p></td>
 </tr>
 </tbody>
@@ -1228,25 +1363,25 @@ This field indicates the number of buffers required for the framework</p></td>
 <span class="p">}</span><span class="n">SMAP_HOST2TGT_INFO</span><span class="p">;</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">This structure provides SSn information which has to be communicated to target framework.</div>
-<div class="line">The structure elements are described below:</div>
-<div class="line">^ <strong>Element</strong> ^ <strong>Description</strong> ^</div>
-</div>
+<p>This structure provides SSn information which has to be communicated to target framework. The structure elements are described below:</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Element</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
 <tbody>
-<tr class="row-odd"><td><p>nInPhyChannels</p></td>
+<tr class="row-even"><td><p>nInPhyChannels</p></td>
 <td><p>Number of physical input channels configured from the IC control form of the SigmaStudio+ GUI. This field is used for total input channel count validation from within the framework</p></td>
 </tr>
-<tr class="row-even"><td><p>nOutPhyChannels</p></td>
+<tr class="row-odd"><td><p>nOutPhyChannels</p></td>
 <td><p>Number of physical output channels configured from the IC control form of the SigmaStudio+ GUI. This field is used for total output channel count validation from within the framework</p></td>
 </tr>
-<tr class="row-odd"><td><p>aInChMap</p></td>
+<tr class="row-even"><td><p>aInChMap</p></td>
 <td><p>Array indicating the indices of the input channels used within the SSn. Rest must be -1</p></td>
 </tr>
-<tr class="row-even"><td><p>aOutChMap</p></td>
+<tr class="row-odd"><td><p>aOutChMap</p></td>
 <td><p>Array indicating the indices of the output channels used within the SSn. Rest must be -1</p></td>
 </tr>
 </tbody>
@@ -1255,85 +1390,79 @@ This field indicates the number of buffers required for the framework</p></td>
 <div class="line-block">
 <div class="line"><br /></div>
 <div class="line">=====Memory Allocations=====</div>
-<div class="line">For target processors without an L3 memory section, the L3 data and code sections must be mapped from the L2 section. For example, in the ADSP-21569 target app.ldf, the memory start address for the L2 code section is 0x200C0000 and the end address is 0x200D7FFF (96 kB), while for the L2 data section, the start address is 0x200D8000 and the end address is 0x200F9FFF (160 kB). Therefore, users must set the memory ranges for the mem_L2_bw memory section in the app.ldf file accordingly. If L3 memory is present, the start address for the mem_L2_bw section is 0x20000000 and the end address is 0x200F9FFF. If L3 memory is not present, the end address of the mem_L2_bw section must be set to 0x200BFFFF.</div>
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/targetintegration/targetapplication/memalloc1.png"><img alt="image5" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/targetintegration/targetapplication/memalloc1.png" style="width: 600px;" /></a> <a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/targetintegration/targetapplication/memalloc2.png"><img alt="image6" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/targetintegration/targetapplication/memalloc2.png" style="width: 600px;" /></a></div>
 </div>
+<p>For target processors without an L3 memory section, the L3 data and code sections must be mapped from the L2 section. For example, in the ADSP-21569 target app.ldf, the memory start address for the L2 code section is 0x200C0000 and the end address is 0x200D7FFF (96 kB), while for the L2 data section, the start address is 0x200D8000 and the end address is 0x200F9FFF (160 kB). Therefore, users must set the memory ranges for the mem_L2_bw memory section in the app.ldf file accordingly. If L3 memory is present, the start address for the mem_L2_bw section is 0x20000000 and the end address is 0x200F9FFF. If L3 memory is not present, the end address of the mem_L2_bw section must be set to 0x200BFFFF.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/targetintegration/targetapplication/memalloc1.png"><img alt="image5" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/targetintegration/targetapplication/memalloc1.png" style="width: 600px;" /></a> <a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/targetintegration/targetapplication/memalloc2.png"><img alt="image6" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/targetintegration/targetapplication/memalloc2.png" style="width: 600px;" /></a></p>
 <div class="centeralign docutils container">
 <p><strong>Figure:</strong> Memory Sections</p>
 </div>
-<div class="line-block">
-<div class="line">=====Memory Block Customization in Case of Insufficient L1 Blocks=====</div>
-<div class="line">Any L1 memory blocks can be assigned to code, parameter, and data buffers based on the requirement and availability. The available memory can be found in the generated target application map file, and the required memory can be found in the SigmaStudio+ schematic compilation output window.</div>
-</div>
+</section>
+<section id="memory-block-customization-in-case-of-insufficient-l1-blocks">
+<h2>Memory Block Customization in Case of Insufficient L1 Blocks<a class="headerlink" href="#memory-block-customization-in-case-of-insufficient-l1-blocks" title="Link to this heading"></a></h2>
+<p>Any L1 memory blocks can be assigned to code, parameter, and data buffers based on the requirement and availability. The available memory can be found in the generated target application map file, and the required memory can be found in the SigmaStudio+ schematic compilation output window.</p>
 <p>The best practice for designing a schematic is to know the MIPS and memory requirements of the modules used in the schematic. This way, the memory requirements will be easily known for our design. In some scenarios, the internal framework memory requirements may not be known, leading to memory insufficiency errors. In such cases, the memory requirements can be easily determined by mapping code, parameter, and state memory to the L3 buffer. The code and data buffers can be mapped to L3 memory using the schematic settings section map, as shown in the image.</p>
-<div class="line-block">
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/targetintegration/targetapplication/sectionmap.png"><img alt="image7" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/targetintegration/targetapplication/sectionmap.png" style="width: 1080px;" /></a></div>
-</div>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/targetintegration/targetapplication/sectionmap.png"><img alt="image7" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/targetintegration/targetapplication/sectionmap.png" style="width: 1080px;" /></a></p>
 <div class="centeralign docutils container">
 <p><strong>Figure:</strong> Memory Section Map Code and Data</p>
 </div>
-<div class="line-block">
-<div class="line">The parameter buffer can be mapped to L3 memory using the “adi_ss_app.ldf” file as shown in the image.</div>
-</div>
+<p>The parameter buffer can be mapped to L3 memory using the “adi_ss_app.ldf” file as shown in the image.</p>
 <p><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/targetintegration/targetapplication/sectionmapparam.png"><img alt="image8" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/targetintegration/targetapplication/sectionmapparam.png" style="width: 1080px;" /></a></p>
 <div class="centeralign docutils container">
 <p><strong>Figure:</strong> Memory Section Map Parameter</p>
 </div>
-<div class="line-block">
-<div class="line"><strong>Note:</strong></div>
-<div class="line">1. The L3 section map is recommended only for identifying the memory requirements of the schematic when there is a memory insufficiency error.</div>
-<div class="line">2. The code, parameter, and DataC buffers can be mapped to L2 using the <strong>adi_ss_app.ldf</strong> file.</div>
-<div class="line">3. MIPS consumption will be higher when the schematic code, parameter, and data are mapped to L2 or L3. Therefore, it is recommended to use L1 memory for optimal performance.</div>
-<div class="line">4. If the memory requirements are mostly clear but there is a slight memory insufficiency, we can swap the L1 memory blocks between code, parameter, and data, or free up some data allocation of the target application using the <strong>app.ldf</strong> file.</div>
-<div class="line">=====Memory Block Customization without L3 Memory=====</div>
-<div class="line">Based on the use case, if the target processor does not have L3 memory (SDRAM) or if the user prefers not to include L3 memory, they can modify the LDF file of each SHARC core’s project to map the memory allocation of the target application to L2 memory to support the SigmaStudio+ application.</div>
-<div class="line">Below are the steps to move memory allocations from L3 to L2 memory:</div>
-<div class="line">1. Back up the default “app.ldf” file.</div>
-<div class="line">2. In the System.svc, navigate to the “startup code/LDF” plugin if it is already present; if not, install the “startup code/LDF” add-in from the System Configuration Overview tab. This step is not required if the target processor lacks L3 controller support, such as the ADSP-SC571 or ADSP-21565 etc.</div>
-<div class="line">3. In the “startup code/LDF” under the LDF menu, uncheck the “Use external memory (SDRAM)” option and save the configuration settings to generate the “app.ldf” file without L3 support. Note that this step is not required if the target processor does not have L3 controller support, such as the ADSP-SC571 or ADSP-21565, as these processors already generate an “app.ldf” without L3 support.</div>
-<div class="line"><img alt="image9" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/targetintegration/targetapplication/Systemsvc.png" /></div>
-</div>
+<p><strong>Note:</strong></p>
+<ol class="arabic simple">
+<li><p>The L3 section map is recommended only for identifying the memory requirements of the schematic when there is a memory insufficiency error.</p></li>
+<li><p>The code, parameter, and DataC buffers can be mapped to L2 using the <strong>adi_ss_app.ldf</strong> file.</p></li>
+<li><p>MIPS consumption will be higher when the schematic code, parameter, and data are mapped to L2 or L3. Therefore, it is recommended to use L1 memory for optimal performance.</p></li>
+<li><p>If the memory requirements are mostly clear but there is a slight memory insufficiency, we can swap the L1 memory blocks between code, parameter, and data, or free up some data allocation of the target application using the <strong>app.ldf</strong> file.</p></li>
+</ol>
+</section>
+<section id="memory-block-customization-without-l3-memory">
+<h2>Memory Block Customization without L3 Memory<a class="headerlink" href="#memory-block-customization-without-l3-memory" title="Link to this heading"></a></h2>
+<p>Based on the use case, if the target processor does not have L3 memory (SDRAM) or if the user prefers not to include L3 memory, they can modify the LDF file of each SHARC core’s project to map the memory allocation of the target application to L2 memory to support the SigmaStudio+ application.</p>
+<p>Below are the steps to move memory allocations from L3 to L2 memory:</p>
+<ol class="arabic simple">
+<li><p>Back up the default “app.ldf” file.</p></li>
+<li><p>In the System.svc, navigate to the “startup code/LDF” plugin if it is already present; if not, install the “startup code/LDF” add-in from the System Configuration Overview tab. This step is not required if the target processor lacks L3 controller support, such as the ADSP-SC571 or ADSP-21565 etc.</p></li>
+<li><p>In the “startup code/LDF” under the LDF menu, uncheck the “Use external memory (SDRAM)” option and save the configuration settings to generate the “app.ldf” file without L3 support. Note that this step is not required if the target processor does not have L3 controller support, such as the ADSP-SC571 or ADSP-21565, as these processors already generate an “app.ldf” without L3 support.</p></li>
+</ol>
+<p><img alt="image9" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/targetintegration/targetapplication/Systemsvc.png" /></p>
 <div class="centeralign docutils container">
 <p><strong>Figure:</strong> LDF Settings</p>
 </div>
-<div class="line-block">
-<div class="line">4. Compare the default “app.ldf” file with the newly generated one and copy the required sections into the new “app.ldf” file. For example, include the following sections:</div>
-</div>
+<ol class="arabic simple" start="4">
+<li><p>Compare the default “app.ldf” file with the newly generated one and copy the required sections into the new “app.ldf” file. For example, include the following sections:</p></li>
+</ol>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>INPUT_SECTIONS( $OBJECTS(ss_fw_constdata_fast) )
 INPUT_SECTIONS( $OBJECTS(ss_app_data0_fast) )
 INPUT_SECTIONS( $OBJECTS(ss_app_data_ipc_fast) )
 INPUT_SECTIONS( $OBJECTS(ss_app_data0_fast_uncached) )
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line">For some processors, these sections may already be preserved, so no changes will be necessary. Additionally, ensure the inclusion of the symbol KEEP(_GMAP) and the line #include “adi_ss_app.ldf” if they are not already present in the new “app.ldf” file.</div>
-<div class="line">5. In case of DemoUc application the memory section “ss_app_uc_data” can be moved to L2 general data section.</div>
-<div class="line">6. The SigmaStudio+ L3 code section can be mapped to “mem_L2_bw_SS4G_Code” of L2 and L3 data section can be mapped to “mem_L2_bw_SS4G_Data” of L2. For this memory allocation the L2 memory block need to be adjusted for end address to align with mem_L2_bw_SS4G_Code. For example in if the “mem_L2_bw_SS4G_Code” and “mem_L2_bw_SS4G_Data” defined as below,</div>
-<div class="line"><img alt="image10" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/targetintegration/targetapplication/SHARCCore1app.ldffile.png" /></div>
-</div>
+<p>For some processors, these sections may already be preserved, so no changes will be necessary. Additionally, ensure the inclusion of the symbol KEEP(_GMAP) and the line #include “adi_ss_app.ldf” if they are not already present in the new “app.ldf” file.</p>
+<ol class="arabic simple" start="5">
+<li><p>In case of DemoUc application the memory section “ss_app_uc_data” can be moved to L2 general data section.</p></li>
+<li><p>The SigmaStudio+ L3 code section can be mapped to “mem_L2_bw_SS4G_Code” of L2 and L3 data section can be mapped to “mem_L2_bw_SS4G_Data” of L2. For this memory allocation the L2 memory block need to be adjusted for end address to align with mem_L2_bw_SS4G_Code. For example in if the “mem_L2_bw_SS4G_Code” and “mem_L2_bw_SS4G_Data” defined as below,</p></li>
+</ol>
+<p><img alt="image10" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/targetintegration/targetapplication/SHARCCore1app.ldffile.png" /></p>
 <div class="centeralign docutils container">
 <p><strong>Figure:</strong> SHARC Core1 app.ldf file (L2 Memory Section)</p>
-</div>
-<div class="line-block">
-<div class="line"><img alt="image11" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/targetintegration/targetapplication/5.png" /></div>
+<p><img alt="image11" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/targetintegration/targetapplication/5.png" /></p>
 </div>
 <div class="centeralign docutils container">
 <p><strong>Figure:</strong> SHARC Core2 app.ldf file (L2 Memory Section)</p>
-<div class="line-block">
-<div class="line">By observing the <strong>start</strong> and <strong>end</strong> addresses of the Code and Data sections for the SS schematic, the memory should be re-aligned in other L2 memory sections. For the ADSP-SC573, the memory blocks <strong>mem_L2B7B8_bw</strong> (in SHARC Core1) and <strong>mem_L2B5B6_bw</strong> (in SHARC Core2) need to be re-aligned, as highlighted by “2” in both SHARC Core1 and SHARC Core2’s app.ldf files.</div>
 </div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
+<p>By observing the <strong>start</strong> and <strong>end</strong> addresses of the Code and Data sections for the SS schematic, the memory should be re-aligned in other L2 memory sections. For the ADSP-SC573, the memory blocks <strong>mem_L2B7B8_bw</strong> (in SHARC Core1) and <strong>mem_L2B5B6_bw</strong> (in SHARC Core2) need to be re-aligned, as highlighted by “2” in both SHARC Core1 and SHARC Core2’s app.ldf files.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Proper memory address boundary alignment is crucial for SHARC processors to ensure efficient data access and avoid exceptions. Misaligned memory accesses can cause core exceptions, leading to application failures</p>
 </div>
-<div class="line-block">
-<div class="line">7. If the target processor does not have L3 controller support, then we need to follow only step 6 to make required code and dada memory mapping and boundary adjustment for SigmaStudio+ application.</div>
-<div class="line">8. Once L2 memory blocks aligned for the SigmaStudio+ code and data memory, rebuild the target application project and run the schematic applications.</div>
-</div>
+<ol class="arabic simple" start="7">
+<li><p>If the target processor does not have L3 controller support, then we need to follow only step 6 to make required code and dada memory mapping and boundary adjustment for SigmaStudio+ application.</p></li>
+<li><p>Once L2 memory blocks aligned for the SigmaStudio+ code and data memory, rebuild the target application project and run the schematic applications.</p></li>
+</ol>
+</section>
 </section>
 
 

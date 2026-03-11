@@ -94,14 +94,19 @@
           <ul>
 <li><a class="reference internal" href="#">LTC6953 - No-OS Driver</a><ul>
 <li><a class="reference internal" href="#supported-devices">Supported Devices</a></li>
-<li><a class="reference internal" href="#evaluation-boards">Evaluation Boards</a></li>
+<li><a class="reference internal" href="#evaluation-boards">Evaluation Boards</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#applications">Applications</a><ul>
 <li><a class="reference internal" href="#adi-no-os">ADI No-OS</a></li>
+<li><a class="reference internal" href="#ltc6953-adi-no-os-driver">LTC6953 ADI No-OS Driver</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#driver-source-code">Driver Source Code</a></li>
 <li><a class="reference internal" href="#code-documentation">Code Documentation</a></li>
 <li><a class="reference internal" href="#device-configuration">Device Configuration</a><ul>
+<li><a class="reference internal" href="#driver-initialization">Driver Initialization</a></li>
 <li><a class="reference internal" href="#reset-options">Reset Options</a></li>
 <li><a class="reference internal" href="#power-mode-options">Power Mode Options</a></li>
 <li><a class="reference internal" href="#synchronization-settings">Synchronization Settings</a></li>
@@ -111,7 +116,11 @@
 <li><a class="reference internal" href="#channel-divider">Channel Divider</a></li>
 <li><a class="reference internal" href="#channel-delays">Channel Delays</a></li>
 <li><a class="reference internal" href="#channel-sync-enable">Channel SYNC Enable</a></li>
+<li><a class="reference internal" href="#channel-sysref-mode">Channel SYSREF Mode</a></li>
 <li><a class="reference internal" href="#channel-output-inversion">Channel Output Inversion</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#driver-initialization-example">Driver Initialization Example</a><ul>
 <li><a class="reference internal" href="#example-initialization-using-maxim-sdk-as-platform">Example Initialization Using Maxim SDK as Platform</a></li>
 </ul>
 </li>
@@ -615,11 +624,11 @@ Content on this topic
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/DC2610A" target="_blank">DC2610A</a></p></li>
 </ul>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">===== Overview ===== The <a class="icon adi reference external" href="https://www.analog.com/LTC6953" target="_blank">LTC6953</a> is a high performance, ultralow jitter, JESD204B/C clock distribution IC. The <a class="icon adi reference external" href="https://www.analog.com/LTC6953" target="_blank">LTC6953</a>’s 11 outputs can be configured as up to five JESD204B/C subclass 1 device clock/SYSREF pairs plus one general-purpose output, or simply 11 general-purpose clock outputs for non-JESD204B/C applications. Each output has its own individually programmable frequency divider and output driver. All outputs can also be synchronized and set to precise phase alignment using individual coarse half cycle digital delays and fine analog time delays.</div>
-</div>
+<section id="overview">
+<h3>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h3>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/LTC6953" target="_blank">LTC6953</a> is a high performance, ultralow jitter, JESD204B/C clock distribution IC. The <a class="icon adi reference external" href="https://www.analog.com/LTC6953" target="_blank">LTC6953</a>’s 11 outputs can be configured as up to five JESD204B/C subclass 1 device clock/SYSREF pairs plus one general-purpose output, or simply 11 general-purpose clock outputs for non-JESD204B/C applications. Each output has its own individually programmable frequency divider and output driver. All outputs can also be synchronized and set to precise phase alignment using individual coarse half cycle digital delays and fine analog time delays.</p>
 <p>For applications requiring more than 11 total outputs, multiple LTC6953s can be connected together with <a class="icon adi reference external" href="https://www.analog.com/LTC6952" target="_blank">LTC6952</a>’s and <a class="icon adi reference external" href="https://www.analog.com/LTC6955" target="_blank">LTC6955</a>’s using the EZSync or ParallelSync synchronization protocols.</p>
+</section>
 </section>
 <section id="applications">
 <h2>Applications<a class="headerlink" href="#applications" title="Link to this heading"></a></h2>
@@ -628,19 +637,14 @@ Content on this topic
 <li><p>Wireless Infrastructure</p></li>
 <li><p>Test and Measurement</p></li>
 </ul>
-<div class="center docutils container">
-</div>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/uc-drivers/ltc6953top-web.png"><img alt="image1" src="https://wiki.analog.com/_media/resources/tools-software/uc-drivers/ltc6953top-web.png" style="width: 400px;" /></a></p>
-<div class="center docutils container">
-<p><em>&lt;fc #000000&gt;DC2610A (with LTC6953 on-board chip) &lt;/fc&gt;</em></p>
-</div>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/uc-drivers/ltc6953top-web.png"><img alt="image1" src="https://wiki.analog.com/_media/resources/tools-software/uc-drivers/ltc6953top-web.png" style="width: 400px;" /></a> //DC2610A (with LTC6953 on-board chip) //</p>
 <section id="adi-no-os">
 <h3>ADI No-OS<a class="headerlink" href="#adi-no-os" title="Link to this heading"></a></h3>
 <p>The goal of ADI Microcontroller No-OS is to provide reference projects for lower end processors, which can’t run Linux or aren’t running a specific operating system, and to help those customers using microcontrollers with ADI parts. ADI No-OS offers <strong>generic drivers</strong>, which can be used as a base for any microcontroller platform and also <strong>example projects</strong>, which are using these drivers on various microcontroller platforms.</p>
-<div class="line-block">
-<div class="line">For more information about ADI No-OS and supported microcontroller platforms, visit the <a class="reference internal" href="../../no-os.html"><span class="doc">No-OS User Guide</span></a>.</div>
-<div class="line">===== LTC6953 ADI No-OS Driver =====</div>
-</div>
+<p>For more information about ADI No-OS and supported microcontroller platforms, visit the <a class="reference internal" href="../../no-os.html"><span class="doc">No-OS User Guide</span></a>.</p>
+</section>
+<section id="ltc6953-adi-no-os-driver">
+<h3>LTC6953 ADI No-OS Driver<a class="headerlink" href="#ltc6953-adi-no-os-driver" title="Link to this heading"></a></h3>
 </section>
 </section>
 <section id="driver-source-code">
@@ -669,10 +673,8 @@ Content on this topic
 </ul>
 <p><img alt="Implementation file of ADI util library" src="https://wiki.analog.com/_media/:git-no-OS:`util/no_os_util`.c" /></p>
 </div>
-<div class="line-block">
-<div class="line">To use the LTC6953 No-OS Driver, you need to provide the specific implementation for the communication APIs as well as the specific data types to be used.</div>
-<div class="line">If SPI communication is chosen, these are the three functions to be called by the LTC6953 driver and have to be implemented:</div>
-</div>
+<p>To use the LTC6953 No-OS Driver, you need to provide the specific implementation for the communication APIs as well as the specific data types to be used.</p>
+<p>If SPI communication is chosen, these are the three functions to be called by the LTC6953 driver and have to be implemented:</p>
 <div class="center box docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -737,11 +739,11 @@ Content on this topic
 </section>
 <section id="device-configuration">
 <h2>Device Configuration<a class="headerlink" href="#device-configuration" title="Link to this heading"></a></h2>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">=== Driver Initialization === To use the device, you need to provide the support for the communication protocol (SPI) as mentioned above.</div>
-<div class="line">The first API function to be called is <strong>ltc6953_init</strong>. Make sure that it returns 0, this indicates a successful driver initialization.</div>
-</div>
+<section id="driver-initialization">
+<h3>Driver Initialization<a class="headerlink" href="#driver-initialization" title="Link to this heading"></a></h3>
+<p>To use the device, you need to provide the support for the communication protocol (SPI) as mentioned above.</p>
+<p>The first API function to be called is <strong>ltc6953_init</strong>. Make sure that it returns 0, this indicates a successful driver initialization.</p>
+</section>
 <section id="reset-options">
 <h3>Reset Options<a class="headerlink" href="#reset-options" title="Link to this heading"></a></h3>
 <p>To reset the device, you may use below function:</p>
@@ -847,10 +849,11 @@ Content on this topic
 </section>
 <section id="channel-sync-enable">
 <h3>Channel SYNC Enable<a class="headerlink" href="#channel-sync-enable" title="Link to this heading"></a></h3>
-<div class="line-block">
-<div class="line">Enables SYNC or SYSREF on output channel. Use function <strong>ltc6953_enable_sync</strong>.</div>
-<div class="line">=== Channel SYSREF Mode === Can be configured when output channel’s SRQEN bit is set to 1. Use function <strong>ltc6953_set_mode</strong>.</div>
-</div>
+<p>Enables SYNC or SYSREF on output channel. Use function <strong>ltc6953_enable_sync</strong>.</p>
+</section>
+<section id="channel-sysref-mode">
+<h3>Channel SYSREF Mode<a class="headerlink" href="#channel-sysref-mode" title="Link to this heading"></a></h3>
+<p>Can be configured when output channel’s SRQEN bit is set to 1. Use function <strong>ltc6953_set_mode</strong>.</p>
 <div class="center box docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -880,11 +883,10 @@ Content on this topic
 <section id="channel-output-inversion">
 <h3>Channel Output Inversion<a class="headerlink" href="#channel-output-inversion" title="Link to this heading"></a></h3>
 <p>The OINV bits of the channel can selectively invert the sense of each output to facilitate board routing without having to cross matched-length traces. Use function <strong>ltc6953_invert_output</strong>.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Driver Initialization Example ====</div>
-</div>
 </section>
+</section>
+<section id="driver-initialization-example">
+<h2>Driver Initialization Example<a class="headerlink" href="#driver-initialization-example" title="Link to this heading"></a></h2>
 <section id="example-initialization-using-maxim-sdk-as-platform">
 <h3>Example Initialization Using Maxim SDK as Platform<a class="headerlink" href="#example-initialization-using-maxim-sdk-as-platform" title="Link to this heading"></a></h3>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdint.h&gt;</span>

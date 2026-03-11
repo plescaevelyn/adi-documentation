@@ -94,12 +94,27 @@
           <ul>
 <li><a class="reference internal" href="#">Yocto Linux 2.2.0 Quickstart Guide for ADSP-SC589 (EZKIT &amp; MINI)</a></li>
 <li><a class="reference internal" href="#setting-up-your-host-pc">Setting Up Your Host PC</a><ul>
+<li><a class="reference internal" href="#installing-required-packages">Installing Required Packages</a></li>
+<li><a class="reference internal" href="#installing-crosscore-embedded-studio">Installing CrossCore Embedded Studio</a></li>
+<li><a class="reference internal" href="#configuring-tftp-service">Configuring TFTP Service</a></li>
+<li><a class="reference internal" href="#configure-minicom">Configure Minicom</a></li>
+<li><a class="reference internal" href="#installing-the-sources">Installing the Sources</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#building-the-image">Building the Image</a><ul>
 <li><a class="reference internal" href="#preparing-the-buildtool">Preparing the buildtool</a></li>
+<li><a class="reference internal" href="#building-the-example">Building the example</a></li>
+<li><a class="reference internal" href="#running-u-boot-on-the-board-for-the-first-time">Running U-Boot on the Board for the first time</a><ul>
+<li><a class="reference internal" href="#flash-u-boot-to-spi-flash">Flash U-Boot to SPI Flash</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a class="reference internal" href="#booting-linux">Booting Linux</a><ul>
 <li><a class="reference internal" href="#booting-linux-using-sd-card">Booting Linux Using SD Card</a><ul>
 <li><a class="reference internal" href="#formatting-the-sd-card">Formatting the SD Card</a></li>
+<li><a class="reference internal" href="#writing-the-kernel-and-file-system-to-the-sd-card">Writing the kernel and file system to the SD Card</a></li>
+<li><a class="reference internal" href="#booting-linux-from-the-sd-card">Booting Linux from the SD card</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#booting-linux-from-the-usb-mass-storage">Booting Linux from the USB Mass Storage</a><ul>
@@ -109,6 +124,13 @@
 <li><a class="reference internal" href="#booting-rootfs-from-usb-mass-storage">Booting rootfs from USB Mass Storage</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#booting-linux-using-tftp">Booting Linux Using TFTP</a><ul>
+<li><a class="reference internal" href="#ram-boot">RAM Boot</a></li>
+<li><a class="reference internal" href="#nfs-boot">NFS Boot</a></li>
+<li><a class="reference internal" href="#booting-into-linux-from-tftp">Booting into Linux from TFTP</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#building-the-sdk">Building the SDK</a></li>
 </ul>
 </li>
 </ul>
@@ -610,27 +632,26 @@ Content on this topic
 <section id="setting-up-your-host-pc">
 <h1>Setting Up Your Host PC<a class="headerlink" href="#setting-up-your-host-pc" title="Link to this heading"></a></h1>
 <p>The build system is currently supported on host PCs running Ubuntu 20.04 LTS 64-bit.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Installing Required Packages ==== In order to build and deploy Linux to your ADSP-SC589-EZKIT or ADSP-SC589-MINI development board you will need to install the following packages on your host PC.</div>
-</div>
+<section id="installing-required-packages">
+<h2>Installing Required Packages<a class="headerlink" href="#installing-required-packages" title="Link to this heading"></a></h2>
+<p>In order to build and deploy Linux to your ADSP-SC589-EZKIT or ADSP-SC589-MINI development board you will need to install the following packages on your host PC.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get update
 $ sudo apt-get install -y gawk wget git-core diffstat unzip texinfo gcc-multilib build-essential chrpath socat libsdl1.2-dev xterm u-boot-tools openssl curl tftpd-hpa python
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Installing CrossCore Embedded Studio ==== CrossCore Embedded Studio contains OpenOCD which is used to transfer U-Boot into RAM for the first initial boot of the device. The tools are created for 32-bit architecture and therefore requires a 32-bit libz package to run. Download and install it.</div>
-</div>
+</section>
+<section id="installing-crosscore-embedded-studio">
+<h2>Installing CrossCore Embedded Studio<a class="headerlink" href="#installing-crosscore-embedded-studio" title="Link to this heading"></a></h2>
+<p>CrossCore Embedded Studio contains OpenOCD which is used to transfer U-Boot into RAM for the first initial boot of the device. The tools are created for 32-bit architecture and therefore requires a 32-bit libz package to run. Download and install it.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ wget http://download.analog.com/tools/CrossCoreEmbeddedStudio/Releases/Release_2.10.0/adi-CrossCoreEmbeddedStudio-linux-x86-2.10.0.deb
 $ sudo dpkg -i ./adi-CrossCoreEmbeddedStudio-linux-x86-2.10.0.deb
 $ sudo apt install lib32z1
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Configuring TFTP Service==== A TFTP server on the host is used to transfer images to the development board. Install and configure.</div>
-</div>
+</section>
+<section id="configuring-tftp-service">
+<h2>Configuring TFTP Service<a class="headerlink" href="#configuring-tftp-service" title="Link to this heading"></a></h2>
+<p>A TFTP server on the host is used to transfer images to the development board. Install and configure.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo vi /etc/default/tftpd-hpa
 
 #Replace the existing file with the following
@@ -645,10 +666,10 @@ $ sudo chmod 777 /tftpboot
 $ sudo service tftpd-hpa restart
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Configure Minicom ==== In order to communicate with the U-Boot bootloader, a UART connection must be made between the host PC and the development board. It is recommended that you use minicom to do this. Minicom must be configured to connect to U-Boot correctly.</div>
-</div>
+</section>
+<section id="configure-minicom">
+<h2>Configure Minicom<a class="headerlink" href="#configure-minicom" title="Link to this heading"></a></h2>
+<p>In order to communicate with the U-Boot bootloader, a UART connection must be made between the host PC and the development board. It is recommended that you use minicom to do this. Minicom must be configured to connect to U-Boot correctly.</p>
 <p>On the host PC open a terminal and execute the following commands:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get install -y minicom
 $ sudo minicom -s
@@ -683,10 +704,10 @@ $ sudo minicom -s
 <p class="admonition-title">Note</p>
 <p><code class="docutils literal notranslate"><span class="pre">/dev/ttyUSB0</span></code> might not correspond to the serial port of the board on every system. You can determine which <code class="docutils literal notranslate"><span class="pre">/dev</span></code> entry your board uses by running <code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">-l</span> <span class="pre">/dev/ttyUSB*</span></code> twice, once when the serial port of the board is plugged in, and once when it isn’t.</p>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Installing the Sources ==== The example is fully contained in the Analog Devices Yocto Linux github repositories.</div>
-</div>
+</section>
+<section id="installing-the-sources">
+<h2>Installing the Sources<a class="headerlink" href="#installing-the-sources" title="Link to this heading"></a></h2>
+<p>The example is fully contained in the Analog Devices Yocto Linux github repositories.</p>
 <p>To install the sources:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ mkdir ~/griffin
 $ cd ~/griffin
@@ -700,10 +721,10 @@ $ ./bin/repo init \
 $ ./bin/repo sync
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">===== Building the Image =====</div>
-</div>
+</section>
+</section>
+<section id="building-the-image">
+<h1>Building the Image<a class="headerlink" href="#building-the-image" title="Link to this heading"></a></h1>
 <section id="preparing-the-buildtool">
 <h2>Preparing the buildtool<a class="headerlink" href="#preparing-the-buildtool" title="Link to this heading"></a></h2>
 <p>Yocto requires the environment to be configured before building is possible.  A setup-environment script in the griffin folder contains all the required environment settings for your build target. Source the setup script for your board:</p>
@@ -719,10 +740,10 @@ $ ./bin/repo sync
 <p class="admonition-title">Important</p>
 <p>Note that the build environment needs to be sourced once only before building.  If later working in a different terminal the setup-environment script should be sourced again.  If sourcing the setup-environment script is done without specifying the machine Yocto will reuse the previous configuration settings and retain any changes made to the files in the conf folder.</p>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Building the example ==== You can build three different versions of the root file system; minimal, ramdisk and full. To build the example images invoke bitbake from within the build directory created previously.</div>
-</div>
+</section>
+<section id="building-the-example">
+<h2>Building the example<a class="headerlink" href="#building-the-example" title="Link to this heading"></a></h2>
+<p>You can build three different versions of the root file system; minimal, ramdisk and full. To build the example images invoke bitbake from within the build directory created previously.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ bitbake adsp-sc5xx-minimal
 $ bitbake adsp-sc5xx-ramdisk
 $ bitbake adsp-sc5xx-full
@@ -745,10 +766,9 @@ $ cp tmp/deploy/images/adsp-sc589-mini/u-boot-sc589-mini /tftpboot
 $ cp tmp/deploy/images/adsp-sc589-mini/u-boot-sc589-mini.ldr /tftpboot
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Running U-Boot on the Board for the first time====</div>
-</div>
+</section>
+<section id="running-u-boot-on-the-board-for-the-first-time">
+<h2>Running U-Boot on the Board for the first time<a class="headerlink" href="#running-u-boot-on-the-board-for-the-first-time" title="Link to this heading"></a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>It’s always good practice to erase the contents of <code class="docutils literal notranslate"><span class="pre">/tftpboot/</span></code> before running and/or flashing a new build of U-Boot or Linux. You can do so by executing <code class="docutils literal notranslate"><span class="pre">rm</span> <span class="pre">/tftpboot/*</span></code> before proceeding</p>
@@ -798,12 +818,36 @@ $ cp tmp/deploy/images/adsp-sc589-mini/u-boot-sc589-mini.ldr /tftpboot
 <span class="p">:</span> <span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<p>$ cd /tftpboot $ /opt/analog/cces/2.10.0/ARM/arm-none-eabi/bin/arm-none-eabi-gdb u-boot-sc589-ezkit … (gdb) target extended-remote :3333 Remote debugging using :3333 0x00004884 in ?? () (gdb) load init-sc589-ezkit.elf Loading section .text, size 0xa70 lma 0x20080000 Start address 0x20080028, load size 2672 Transfer rate: 25 KB/sec, 2672 bytes/write. (gdb) c Continuing. ^C Program received signal SIGINT, Interrupt. 0x20080024 in ?? () &lt;/code&gt;</p>
+<p>$ cd /tftpboot $ /opt/analog/cces/2.10.0/ARM/arm-none-eabi/bin/arm-none-eabi-gdb u-boot-sc589-ezkit … (gdb) target extended-remote :3333 Remote debugging using :3333 0x00004884 in ?? () (gdb) load init-sc589-ezkit.elf Loading section .text, size 0xa70 lma 0x20080000 Start address 0x20080028, load size 2672 Transfer rate: 25 KB/sec, 2672 bytes/write. (gdb) c Continuing.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+</tbody>
+</table>
+</div>
+<div class="line-block">
+<div class="line">C |</div>
+</div>
+<p>+===+
++—+</p>
+<p>Program received signal SIGINT, Interrupt. 0x20080024 in ?? () &lt;/code&gt;</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;</span><span class="s1">&#39;&#39;</span><span class="o">**</span><span class="n">Terminal3</span><span class="p">:</span> <span class="n">GDB</span> <span class="p">(</span><span class="n">sc589</span><span class="o">-</span><span class="n">mini</span><span class="p">)</span><span class="o">**</span><span class="s1">&#39;&#39;</span>
 <span class="p">:</span> <span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<p>$ cd /tftpboot $ /opt/analog/cces/2.10.0/ARM/arm-none-eabi/bin/arm-none-eabi-gdb u-boot-sc589-ezkit … (gdb) target remote :3333 Remote debugging using :3333 0x00004884 in ?? () (gdb) load init-sc589-mini.elf Loading section .text, size 0xa70 lma 0x20080000 Start address 0x20080028, load size 2672 Transfer rate: 25 KB/sec, 2672 bytes/write. (gdb) c Continuing. ^C Program received signal SIGINT, Interrupt. 0x20080024 in ?? () &lt;/code&gt;</p>
+<p>$ cd /tftpboot $ /opt/analog/cces/2.10.0/ARM/arm-none-eabi/bin/arm-none-eabi-gdb u-boot-sc589-ezkit … (gdb) target remote :3333 Remote debugging using :3333 0x00004884 in ?? () (gdb) load init-sc589-mini.elf Loading section .text, size 0xa70 lma 0x20080000 Start address 0x20080028, load size 2672 Transfer rate: 25 KB/sec, 2672 bytes/write. (gdb) c Continuing.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+</tbody>
+</table>
+</div>
+<div class="line-block">
+<div class="line">C |</div>
+</div>
+<p>+===+
++—+</p>
+<p>Program received signal SIGINT, Interrupt. 0x20080024 in ?? () &lt;/code&gt;</p>
 <p>Now, load U-Boot into RAM.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;</span><span class="s1">&#39;&#39;</span><span class="o">**</span><span class="n">Terminal3</span><span class="p">:</span> <span class="n">GDB</span> <span class="p">(</span><span class="n">sc589</span><span class="o">-</span><span class="n">ezkit</span><span class="p">)</span><span class="o">**</span><span class="s1">&#39;&#39;</span>
 <span class="p">:</span>
@@ -872,11 +916,9 @@ $ cp tmp/deploy/images/adsp-sc589-mini/u-boot-sc589-mini.ldr /tftpboot
 <p>U-Boot 2020.10 (Aug 23 2022 - 13:09:23 +0000)</p>
 <p>CPU: ADSP ADSP-SC589-0.1 (Detected Rev: 1.1) (spi flash boot) VCO: 450 MHz, Cclk0: 450 MHz, Sclk0: 112.500 MHz, Sclk1: 112.500 MHz, DCLK: 450 MHz OCLK: 150 MHz Model: ADI sc589-mini I2C: ready DRAM: 224 MiB MMC: SC5XX SDH: 0 Loading Environment from SPIFlash… SF: Detected is25lp512 with page size 256 Bytes, erase size 64 KiB, total 64 MiB *** Warning - bad CRC, using default environment</p>
 <p>In: <a class="reference external" href="mailto:serial&#37;&#52;&#48;0x31003000">serial<span>&#64;</span>0x31003000</a> Out: <a class="reference external" href="mailto:serial&#37;&#52;&#48;0x31003000">serial<span>&#64;</span>0x31003000</a> Err: <a class="reference external" href="mailto:serial&#37;&#52;&#48;0x31003000">serial<span>&#64;</span>0x31003000</a> other init Net: dwmac.3100c000 Hit any key to stop autoboot: 0 =&gt; &lt;/code&gt;</p>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">== Flash U-Boot to SPI Flash ==</div>
-<div class="line">In the U-Boot console, set the IP address of the Host Linux PC that hosts the U-Boot loader file (<code class="docutils literal notranslate"><span class="pre">u-boot-sc573-ezkit.ldr</span></code>) on TFTP.</div>
-</div>
+<section id="flash-u-boot-to-spi-flash">
+<h3>Flash U-Boot to SPI Flash<a class="headerlink" href="#flash-u-boot-to-spi-flash" title="Link to this heading"></a></h3>
+<p>In the U-Boot console, set the IP address of the Host Linux PC that hosts the U-Boot loader file (<code class="docutils literal notranslate"><span class="pre">u-boot-sc573-ezkit.ldr</span></code>) on TFTP.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;</span><span class="s1">&#39;&#39;</span><span class="o">**</span><span class="n">Terminal1</span><span class="p">:</span> <span class="n">minicom</span><span class="o">**</span><span class="s1">&#39;&#39;</span>
 <span class="p">:</span>
 </pre></div>
@@ -921,10 +963,10 @@ $ cp tmp/deploy/images/adsp-sc589-mini/u-boot-sc589-mini.ldr /tftpboot
 <span class="n">device</span> <span class="mi">0</span> <span class="n">offset</span> <span class="mh">0x0</span><span class="p">,</span> <span class="n">size</span> <span class="mh">0x70188</span>
 <span class="n">SF</span><span class="p">:</span> <span class="mi">459144</span> <span class="nb">bytes</span> <span class="o">@</span> <span class="mh">0x0</span> <span class="n">Written</span><span class="p">:</span> <span class="n">OK</span>
 <span class="o">=&gt;</span>
-
-<span class="o">|</span> <span class="n">At</span> <span class="n">this</span> <span class="n">point</span> <span class="n">the</span> <span class="n">U</span><span class="o">-</span><span class="n">Boot</span> <span class="n">binary</span> <span class="ow">is</span> <span class="n">stored</span> <span class="ow">in</span> <span class="n">flash</span><span class="o">.</span> <span class="n">You</span> <span class="n">can</span> <span class="n">now</span> <span class="n">disconnect</span> <span class="n">the</span> <span class="n">ICE</span><span class="o">-</span><span class="mi">1000</span> <span class="ow">or</span> <span class="n">ICE</span><span class="o">-</span><span class="mi">2000</span> <span class="kn">from</span><span class="w"> </span><span class="nn">the</span> <span class="n">development</span> <span class="n">board</span> <span class="ow">and</span> <span class="n">make</span> <span class="n">sure</span> <span class="n">to</span> <span class="n">switch</span> <span class="n">the</span> <span class="n">BMODE</span> <span class="n">to</span> <span class="n">position</span> <span class="mf">1.</span> <span class="n">You</span> <span class="n">will</span> <span class="n">only</span> <span class="n">need</span> <span class="n">to</span> <span class="n">reconnect</span> <span class="n">this</span> <span class="k">if</span> <span class="n">your</span> <span class="n">board</span> <span class="n">fails</span> <span class="n">to</span> <span class="n">boot</span> <span class="ow">and</span> <span class="n">you</span> <span class="n">need</span> <span class="n">to</span> <span class="n">re</span><span class="o">-</span><span class="n">follow</span> <span class="n">these</span> <span class="n">instructions</span><span class="o">.</span>
 </pre></div>
 </div>
+<p>At this point the U-Boot binary is stored in flash. You can now disconnect the ICE-1000 or ICE-2000 from the development board and make sure to switch the BMODE to position 1. You will only need to reconnect this if your board fails to boot and you need to re-follow these instructions.</p>
+</section>
 </section>
 </section>
 <section id="booting-linux">
@@ -950,12 +992,10 @@ Command (m for help): w
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo mkfs.ext2 /dev/sdb1
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="line-block">
-<div class="line">=== Writing the kernel and file system to the SD Card === Next, we need to copy the Linux file system and kernel image to the SD Card. We install this on to the SD Card by mounting the file system on to the local Host PC and copying the contents on to the SD Card. To allow the choice of booting using ramboot and sdcard boot we copy the ramboot image to the SD card as well as extract the minimal image to the SD card.</div>
-</div>
+</section>
+<section id="writing-the-kernel-and-file-system-to-the-sd-card">
+<h3>Writing the kernel and file system to the SD Card<a class="headerlink" href="#writing-the-kernel-and-file-system-to-the-sd-card" title="Link to this heading"></a></h3>
+<p>Next, we need to copy the Linux file system and kernel image to the SD Card. We install this on to the SD Card by mounting the file system on to the local Host PC and copying the contents on to the SD Card. To allow the choice of booting using ramboot and sdcard boot we copy the ramboot image to the SD card as well as extract the minimal image to the SD card.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ mkdir ~/mnt
 $ sudo mount -t ext2 /dev/sdb1 ~/mnt
 $ sudo mkdir ~/mnt/boot
@@ -978,19 +1018,16 @@ $ sudo umount ~/mnt
 </pre></div>
 </div>
 <p>The file system and kernel image are now installed on to the SD Card. The SD Card can now be safely removed from the Host PC.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">=== Booting Linux from the SD card === Insert the SD card to target board, and reset the board and enter into U-Boot</div>
-</div>
+</section>
+<section id="booting-linux-from-the-sd-card">
+<h3>Booting Linux from the SD card<a class="headerlink" href="#booting-linux-from-the-sd-card" title="Link to this heading"></a></h3>
+<p>Insert the SD card to target board, and reset the board and enter into U-Boot</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">=&gt;</span> <span class="n">run</span> <span class="n">sdcardboot</span>
 <span class="ow">or</span>
 <span class="o">=&gt;</span> <span class="n">run</span> <span class="n">ramboot_emmc</span>
 </pre></div>
 </div>
 <p>The linux kernel will then boot up using the file system stored in SD card.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
 </section>
 </section>
 <section id="booting-linux-from-the-usb-mass-storage">
@@ -1072,12 +1109,11 @@ $ sudo umount ~/mnt
 </pre></div>
 </div>
 <p>Now the rootfs is set to your USB stick and amount of space equals of size of partition on USB stick.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="line-block">
-<div class="line">==== Booting Linux Using TFTP ==== In order to boot Linux, the TFTP server should be setup as <a class="reference internal" href="quickstart_sc589.html"><span class="doc">above</span></a> and (for both NFS and RAM boot) a copy of the kernel image should be copied into the <strong>/tftpboot</strong> directory.</div>
-</div>
+</section>
+</section>
+<section id="booting-linux-using-tftp">
+<h2>Booting Linux Using TFTP<a class="headerlink" href="#booting-linux-using-tftp" title="Link to this heading"></a></h2>
+<p>In order to boot Linux, the TFTP server should be setup as <a class="reference internal" href="quickstart_sc589.html"><span class="doc">above</span></a> and (for both NFS and RAM boot) a copy of the kernel image should be copied into the <strong>/tftpboot</strong> directory.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cp tmp/deploy/images/adsp-sc589-ezkit/fitImage /tftpboot
 </pre></div>
 </div>
@@ -1085,10 +1121,9 @@ $ sudo umount ~/mnt
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cp tmp/deploy/images/adsp-sc589-mini/fitImage /tftpboot
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">=== RAM Boot === For RAM boot we need to copy the image containing filesystem to the /tftpboot directory.</div>
-</div>
+<section id="ram-boot">
+<h3>RAM Boot<a class="headerlink" href="#ram-boot" title="Link to this heading"></a></h3>
+<p>For RAM boot we need to copy the image containing filesystem to the /tftpboot directory.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cp tmp/deploy/images/adsp-sc589-ezkit/adsp-sc5xx-ramdisk-adsp-sc589-ezkit.cpio.xz.u-boot /tftpboot/ramdisk.cpio.xz.u-boot
 </pre></div>
 </div>
@@ -1096,10 +1131,10 @@ $ sudo umount ~/mnt
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cp tmp/deploy/images/adsp-sc589-mini/adsp-sc5xx-ramdisk-adsp-sc589-mini.cpio.xz.u-boot /tftpboot/ramdisk.cpio.xz.u-boot
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">=== NFS Boot === For NFS boot we use the Network File System which is stored in local Ubuntu Host. This is suggested when you do application development. To setup the NFS server:</div>
-</div>
+</section>
+<section id="nfs-boot">
+<h3>NFS Boot<a class="headerlink" href="#nfs-boot" title="Link to this heading"></a></h3>
+<p>For NFS boot we use the Network File System which is stored in local Ubuntu Host. This is suggested when you do application development. To setup the NFS server:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get install nfs-kernel-server
 $ sudo vi /etc/exports
 
@@ -1131,10 +1166,8 @@ Sep 06 14:38:31 $YOUR_HOSTNAME systemd[1]: Finished NFS server and services.
 </pre></div>
 </div>
 <p>If it’s reported as inactive, wait a few moments and check the status again.</p>
-<div class="line-block">
-<div class="line">The root filesystem should then be copied to /romfs.</div>
-<div class="line">If you are using the ADSP-SC589-EZKIT with the full image (you ran ‘bitbake adsp-sc5xx-full’):</div>
-</div>
+<p>The root filesystem should then be copied to /romfs.</p>
+<p>If you are using the ADSP-SC589-EZKIT with the full image (you ran ‘bitbake adsp-sc5xx-full’):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo tar -xf tmp/deploy/images/adsp-sc589-ezkit/adsp-sc5xx-full-adsp-sc589-ezkit.tar.xz -C /romfs
 </pre></div>
 </div>
@@ -1150,10 +1183,10 @@ Sep 06 14:38:31 $YOUR_HOSTNAME systemd[1]: Finished NFS server and services.
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo tar -xf tmp/deploy/images/adsp-sc589-mini/adsp-sc5xx-minimal-adsp-sc589-mini.tar.xz -C /romfs
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">=== Booting into Linux from TFTP === Next, on the target, from u-boot, run one of the following command:</div>
-</div>
+</section>
+<section id="booting-into-linux-from-tftp">
+<h3>Booting into Linux from TFTP<a class="headerlink" href="#booting-into-linux-from-tftp" title="Link to this heading"></a></h3>
+<p>Next, on the target, from u-boot, run one of the following command:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">=&gt;</span> <span class="n">run</span> <span class="n">ramboot</span>
  <span class="ow">or</span>
 <span class="o">=&gt;</span> <span class="n">run</span> <span class="n">nfsboot</span>
@@ -1191,14 +1224,11 @@ Sep 06 14:38:31 $YOUR_HOSTNAME systemd[1]: Finished NFS server and services.
 </pre></div>
 </div>
 <p>The default username is <strong>root</strong> and the password is <strong>adi</strong>.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Building the SDK ==== To build the SDK follow the instructions here <a class="reference internal" href="building-the-sdk.html"><span class="doc">Building the SDK</span></a>.</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
 </section>
+</section>
+<section id="building-the-sdk">
+<h2>Building the SDK<a class="headerlink" href="#building-the-sdk" title="Link to this heading"></a></h2>
+<p>To build the SDK follow the instructions here <a class="reference internal" href="building-the-sdk.html"><span class="doc">Building the SDK</span></a>.</p>
 </section>
 </section>
 

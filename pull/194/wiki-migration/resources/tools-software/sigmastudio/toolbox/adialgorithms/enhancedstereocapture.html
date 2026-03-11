@@ -4,9 +4,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="Conversion failed for resources/tools-software/sigmastudio/toolbox/adialgorithms/enhancedstereocapture" name="description" />
+<meta content="Click here to return to the ADI Algorithms page" name="description" />
 
-    <title>&lt;no title&gt; &#8212; System Level Documentation  documentation</title>
+    <title>Enhanced Stereo Capture &#8212; System Level Documentation  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../../../../../_static/app.min.css?v=a525f648" />
     <script async="async" src="../../../../../../_static/app.umd.js?v=fcf3088a"></script>
@@ -91,7 +91,17 @@
           <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
         </div>
         <nav>
-          <ul class="simple">
+          <ul>
+<li><a class="reference internal" href="#">Enhanced Stereo Capture</a><ul>
+<li><a class="reference internal" href="#input-pins">Input Pins</a></li>
+<li><a class="reference internal" href="#output-pins">Output Pins</a></li>
+<li><a class="reference internal" href="#gui-controls">GUI Controls</a></li>
+<li><a class="reference internal" href="#dsp-parameter-information">DSP Parameter Information</a></li>
+<li><a class="reference internal" href="#algorithm-description">Algorithm Description</a></li>
+<li><a class="reference internal" href="#example">Example</a></li>
+<li><a class="reference internal" href="#algorithm-details">Algorithm Details</a></li>
+</ul>
+</li>
 </ul>
 
         </nav>
@@ -577,85 +587,166 @@ Content on this topic
 </div>
           <div class="body" role="main">
             
-  <div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Conversion failed for <code class="docutils literal notranslate"><span class="pre">resources/tools-software/sigmastudio/toolbox/adialgorithms/enhancedstereocapture</span></code></p>
-<p>Reason: pandoc error: Error at “/tmp/<a href="#id3"><span class="problematic" id="id4">tmpmgtd6mn_</span></a>.txt” (line 62, column 1):</p>
+  <section id="enhanced-stereo-capture">
+<h1>Enhanced Stereo Capture<a class="headerlink" href="#enhanced-stereo-capture" title="Link to this heading"></a></h1>
+<p><a class="reference internal" href="../adialgorithms.html"><span class="doc">Click here to return to the ADI Algorithms page</span></a></p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>The Enhanced Stereo Capture (ESC) algorithm takes a stereo record-signal and creates a wider stereo image. The ESC is meant as a record algorithm in order to capture an enhanced stereo image from two closely spaced microphones. [For stereo widening on the playback side, check <a class="reference internal" href="phatstereo.html"><span class="doc">Phat-Stereo</span></a>]</p></td>
+<td><p><img alt="ESCpic1.png" src="https://wiki.analog.com/_media/ESCpic1.png" /></p></td>
+</tr>
+</tbody>
+</table>
 </div>
-<p>expecting inline
-not found
-<a href="#id1"><span class="problematic" id="id2">|Cores Supported|ADAU144x \\ ADAU176x \\ ADAU178x|</span></a>
-^</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>======Enhanced Stereo Capture======
-
-[[resources/tools-software/sigmastudio/toolbox/adialgorithms|Click here to return to the ADI Algorithms page]]\\
-\\
-
-^^^
-|The Enhanced Stereo Capture (ESC) algorithm takes a stereo record-signal and creates a wider stereo image. The ESC is meant as a record algorithm in order to capture an enhanced stereo image from two closely spaced microphones. [For stereo widening on the playback side, check [[resources/tools-software/sigmastudio/toolbox/adialgorithms/phatstereo|Phat-Stereo]]]|{{ESCpic1.png}}|
-\\
-
-===Input Pins===
-^Name^Format [int/dec] - [control/audio]^Function Description^
-|Pin 0: Audio In 1|decimal - audio|Left channel audio input (from mic)|
-|Pin 1: Audio In 2|decimal - audio|Right channel audio input (from mic)|
-
-===Output Pins===
-^Name^Format [int/dec] - [control/audio]^Function Description^
-|Pin 0: Audio Out 1|decimal - audio|Stereo enhanced left channel audio output|
-|Pin 1: Audio Out 2|decimal - audio|Stereo enhanced right channel audio output|
-
-===GUI Controls===
-^GUI Control Name^Default Value^Range^Function Description^
-|Stereo Balance Gain|0dB|[-20dB, 20dB]|This gain knob control adjusts how much stereo effect is achieved in the algorithm. Depending on the spacing of the microphones in the record environment, this value should be adjusted to obtain the best stereo perceptual results.|
-
-===DSP Parameter Information===
-^GUI Control Name^Compiler Name^Function Description^
-|Stereo Balance Gain|ESC1Alg1gain|The dB value in the control is converted to a linear gain value and written to the DSP.|
-
-===Algorithm Description===
-The ESC algorithm accepts two input signals obtained from two closely spaced microphones. The algorithm separates these two signals and widens the stereo image. The end perceptual result is a widened stereo image as if the audio had been captured by microphones with greater L/R separation. The algorithm is based on proprietary filtering and a Stereo Balance Gain that adjusts how much stereo effect is archived in the algorithm.
-
-
-
-Depending on the spacing of the microphones in the record environment, a different Stereo Balance Gain should be selected. There are two recommended methods to do this required algorithm tuning.
-
-1) Simulated delay between the microphones to maximize the L/R separation (described below)
-
-2) Listening tests while adjusting the gain knob (shown in the Example section)
-
-
-
-The tuning required for method 1) can be done within SigmaStudio. The following schematic image shows how this is accomplished. The goal is to adjust the Stereo Balance Gain until the greatest visual difference in level is achieved between the left and right output signals.\\
-{{ ESCpic2.png }}\\
-
-
-The Tone block represents the signal being captured by the microphones. The tone frequency should be selected to maximize the L/R separation for a target frequency range. The Linear Gain block only serves to bring down the end level of the signal so that it is viewable on the visual Level Detectors. The Delay block works to simulate the delay difference between the microphones. Thus the left signal passes though with no delay. The right signal however, goes through 4 samples of delay to simulate a spacing difference of ~2.8cm between the left and right microphones. Change this delay value to match the corresponding distance between the microphones based on this formula:\\
-{{ ESCpic3.png }}\\
-
-
-
-Finally, adjust the Stereo Balance Gain to maximize the level difference between L and R on the Level Detectors. This will maximize the separation between the left and right capture signals.
-
-===Example===
-The following schematic image shows the ESC being used to get a wider stereo capture image from an input. The stereo selection Mux allows selection for comparison between the direct input signal, versus the enhanced signal to archive better L/R separation between the mic inputs.\\
-{{ ESCpic4.png }}\\
-
-
-&lt;WRAP round help&gt;Note: In a full system level design the ESC block should be as close to the inputs as possible in the signal chain. This will ensure the optimal captured separation between the microphones and all resulting processing will be done in stereo.&lt;/WRAP&gt;
-
-===Algorithm Details===
-^^^
-|Toolbox Path|ADI Algorithms - Record Algorithms - Enhanced Stereo Capture (ESC)
-|Cores Supported|ADAU144x \\ ADAU176x \\ ADAU178x|
-|&quot;Grow Algorithm&quot; Supported|no|
-|&quot;Add Algorithm&quot; Supported|no|
-|Subroutine/Loop Based|no|
-|Program RAM|21|
-|Data RAM|12|
-|Parameter RAM|7|
-</pre></div>
+<div class="line-block">
+<div class="line"><br /></div>
 </div>
+<section id="input-pins">
+<h2>Input Pins<a class="headerlink" href="#input-pins" title="Link to this heading"></a></h2>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Format [int/dec] - [control/audio]</p></th>
+<th class="head"><p>Function Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Pin 0: Audio In 1</p></td>
+<td><p>decimal - audio</p></td>
+<td><p>Left channel audio input (from mic)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Pin 1: Audio In 2</p></td>
+<td><p>decimal - audio</p></td>
+<td><p>Right channel audio input (from mic)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="output-pins">
+<h2>Output Pins<a class="headerlink" href="#output-pins" title="Link to this heading"></a></h2>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Format [int/dec] - [control/audio]</p></th>
+<th class="head"><p>Function Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Pin 0: Audio Out 1</p></td>
+<td><p>decimal - audio</p></td>
+<td><p>Stereo enhanced left channel audio output</p></td>
+</tr>
+<tr class="row-odd"><td><p>Pin 1: Audio Out 2</p></td>
+<td><p>decimal - audio</p></td>
+<td><p>Stereo enhanced right channel audio output</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="gui-controls">
+<h2>GUI Controls<a class="headerlink" href="#gui-controls" title="Link to this heading"></a></h2>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>GUI Control Name</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Range</p></th>
+<th class="head"><p>Function Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Stereo Balance Gain</p></td>
+<td><p>0dB</p></td>
+<td><p>[-20dB, 20dB]</p></td>
+<td><p>This gain knob control adjusts how much stereo effect is achieved in the algorithm. Depending on the spacing of the microphones in the record environment, this value should be adjusted to obtain the best stereo perceptual results.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="dsp-parameter-information">
+<h2>DSP Parameter Information<a class="headerlink" href="#dsp-parameter-information" title="Link to this heading"></a></h2>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>GUI Control Name</p></th>
+<th class="head"><p>Compiler Name</p></th>
+<th class="head"><p>Function Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Stereo Balance Gain</p></td>
+<td><p>ESC1Alg1gain</p></td>
+<td><p>The dB value in the control is converted to a linear gain value and written to the DSP.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="algorithm-description">
+<h2>Algorithm Description<a class="headerlink" href="#algorithm-description" title="Link to this heading"></a></h2>
+<p>The ESC algorithm accepts two input signals obtained from two closely spaced microphones. The algorithm separates these two signals and widens the stereo image. The end perceptual result is a widened stereo image as if the audio had been captured by microphones with greater L/R separation. The algorithm is based on proprietary filtering and a Stereo Balance Gain that adjusts how much stereo effect is archived in the algorithm.</p>
+<p>Depending on the spacing of the microphones in the record environment, a different Stereo Balance Gain should be selected. There are two recommended methods to do this required algorithm tuning.</p>
+<ol class="arabic simple">
+<li><p>Simulated delay between the microphones to maximize the L/R separation (described below)</p></li>
+<li><p>Listening tests while adjusting the gain knob (shown in the Example section)</p></li>
+</ol>
+<p>The tuning required for method 1) can be done within SigmaStudio. The following schematic image shows how this is accomplished. The goal is to adjust the Stereo Balance Gain until the greatest visual difference in level is achieved between the left and right output signals.</p>
+<p><img alt="ESCpic2.png" src="https://wiki.analog.com/_media/ESCpic2.png" /></p>
+<p>The Tone block represents the signal being captured by the microphones. The tone frequency should be selected to maximize the L/R separation for a target frequency range. The Linear Gain block only serves to bring down the end level of the signal so that it is viewable on the visual Level Detectors. The Delay block works to simulate the delay difference between the microphones. Thus the left signal passes though with no delay. The right signal however, goes through 4 samples of delay to simulate a spacing difference of ~2.8cm between the left and right microphones. Change this delay value to match the corresponding distance between the microphones based on this formula:</p>
+<p><img alt="ESCpic3.png" src="https://wiki.analog.com/_media/ESCpic3.png" /></p>
+<p>Finally, adjust the Stereo Balance Gain to maximize the level difference between L and R on the Level Detectors. This will maximize the separation between the left and right capture signals.</p>
+</section>
+<section id="example">
+<h2>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h2>
+<p>The following schematic image shows the ESC being used to get a wider stereo capture image from an input. The stereo selection Mux allows selection for comparison between the direct input signal, versus the enhanced signal to archive better L/R separation between the mic inputs.</p>
+<p><img alt="ESCpic4.png" src="https://wiki.analog.com/_media/ESCpic4.png" /></p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Note: In a full system level design the ESC block should be as close to the inputs as possible in the signal chain. This will ensure the optimal captured separation between the microphones and all resulting processing will be done in stereo.</p>
+</div>
+</section>
+<section id="algorithm-details">
+<h2>Algorithm Details<a class="headerlink" href="#algorithm-details" title="Link to this heading"></a></h2>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Toolbox Path</p></td>
+<td><p>ADI Algorithms - Record Algorithms - Enhanced Stereo Capture (ESC)</p></td>
+</tr>
+<tr class="row-even"><td><p>Cores Supported</p></td>
+<td><p>ADAU144x
+ADAU176x
+ADAU178x</p></td>
+</tr>
+<tr class="row-odd"><td><p>“Grow Algorithm” Supported</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>“Add Algorithm” Supported</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>Subroutine/Loop Based</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>Program RAM</p></td>
+<td><p>21</p></td>
+</tr>
+<tr class="row-odd"><td><p>Data RAM</p></td>
+<td><p>12</p></td>
+</tr>
+<tr class="row-even"><td><p>Parameter RAM</p></td>
+<td><p>7</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
 
 
           </div>

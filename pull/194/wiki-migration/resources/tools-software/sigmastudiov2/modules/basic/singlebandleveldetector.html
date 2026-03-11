@@ -101,6 +101,7 @@
 <li><a class="reference internal" href="#output">Output</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#dsp-parameters">DSP Parameters</a></li>
 </ul>
 </li>
 </ul>
@@ -591,11 +592,8 @@ Content on this topic
   <p><a class="reference internal" href="../basic.html"><span class="doc">Click here to return to the Basic page</span></a></p>
 <section id="single-band-level-detector">
 <h1>Single Band Level Detector<a class="headerlink" href="#single-band-level-detector" title="Link to this heading"></a></h1>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line"><img alt="singlebandlvldetector.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/singlebandlvldetector.png" /> <img alt="leveldetectordesigner.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/leveldetectordesigner.png" /></div>
-<div class="line"><img alt="leveldetectordesignpopup.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/leveldetectordesignpopup.png" /></div>
-</div>
+<p><img alt="singlebandlvldetector.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/singlebandlvldetector.png" /> <img alt="leveldetectordesigner.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/leveldetectordesigner.png" /></p>
+<img alt="leveldetectordesignpopup.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/modules/basic/leveldetectordesignpopup.png" />
 <section id="variants">
 <h2>Variants<a class="headerlink" href="#variants" title="Link to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="n">Single</span> <span class="n">Band</span> <span class="n">Level</span> <span class="n">Detector</span>
@@ -611,31 +609,16 @@ Content on this topic
 <h2>Description<a class="headerlink" href="#description" title="Link to this heading"></a></h2>
 <p>The Single Band Level Detector blocks calculate the input signal level, reading directly from the hardware in real time, and display the level graphically in meter displays. The Single-Level Detector calculates and displays the rms level of the signal, shown in dB.</p>
 <p>The level detector performs analysis only and does not modify the input signal. The signal at the output pin is identical to the input.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">Single Band Level Detector (Direct Read) module is similar to the Single Level Detector w Numeric Display. However, the calculations are split between the DSP and SigmaStudio. The DSP calculates the level of the signal in dB, as dB = 20*Log(SampleValue), and then SigmaStudio reads back this value and averages according to y = tc*y(n-1) + (1-tc)x</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">The Level Detector Low DSP MIPS block acts as an audio sample readback register. The DSP does not perform any level detector calculations. Instead, SigmaStudio reads back the sample, converts it to dB, and performs averaging. As with the Direct Read algorithm, transient peaks may be missed by this level detector.</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">Level Detector Designer (Pass Through) module algorithm receives a 8.24 number (8 bytes to represent the integer portion of the value, 24 bytes for the decimal portion) during readback and converts it to a decimal value represented in decibels. This is what is seen on the display bar. Because this is a passthrough system, the output is the same signal being sent to the block.</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">Level Detector Designer (RTA to OUTPUT) module algorithm outputs the rms level value through the output pin. This pin is red because no actual audio is being sent out, just the level values for each frequency band. Observe that when you grow this algorithm, each pin corresponds to a frequency band.</div>
-</div>
+<p>Single Band Level Detector (Direct Read) module is similar to the Single Level Detector w Numeric Display. However, the calculations are split between the DSP and SigmaStudio. The DSP calculates the level of the signal in dB, as dB = 20*Log(SampleValue), and then SigmaStudio reads back this value and averages according to y = tc*y(n-1) + (1-tc)x</p>
+<p>The Level Detector Low DSP MIPS block acts as an audio sample readback register. The DSP does not perform any level detector calculations. Instead, SigmaStudio reads back the sample, converts it to dB, and performs averaging. As with the Direct Read algorithm, transient peaks may be missed by this level detector.</p>
+<p>Level Detector Designer (Pass Through) module algorithm receives a 8.24 number (8 bytes to represent the integer portion of the value, 24 bytes for the decimal portion) during readback and converts it to a decimal value represented in decibels. This is what is seen on the display bar. Because this is a passthrough system, the output is the same signal being sent to the block.</p>
+<p>Level Detector Designer (RTA to OUTPUT) module algorithm outputs the rms level value through the output pin. This pin is red because no actual audio is being sent out, just the level values for each frequency band. Observe that when you grow this algorithm, each pin corresponds to a frequency band.</p>
 </section>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
 <p>Use the On / Off button to enable or disable the display. The level detector will not function until the schematic design has been compiled and downloaded to the hardware and a USB communication channel is properly configured.</p>
 <p>The refresh rate of the display is approximately 10 Hz, while the green cross-bar tracks the maximum rms value with a slight delay. Note that the display’s performance is limited by your PC system and USB communication resources. Using multiple level detectors may degrade the responsiveness.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">Level Detector Designer (RTA to OUTPUT) &amp; Level Detector Designer (Pass Through) : Click the Wnd button to bring up the window for entering your design parameters. The default block contains only one color bar, but when you grow your algorithm you can account for multiple frequency bands. To make the most of your level detector, it’s important to understand the parameters in the designer window. The parameters are Filter type, Center Frequency, and Q or Bandwidth depending on filter type. There also is an overall Time Constant and Decay value that can be set in dB/s to control the refresh time.</div>
-</div>
+<p>Level Detector Designer (RTA to OUTPUT) &amp; Level Detector Designer (Pass Through) : Click the Wnd button to bring up the window for entering your design parameters. The default block contains only one color bar, but when you grow your algorithm you can account for multiple frequency bands. To make the most of your level detector, it’s important to understand the parameters in the designer window. The parameters are Filter type, Center Frequency, and Q or Bandwidth depending on filter type. There also is an overall Time Constant and Decay value that can be set in dB/s to control the refresh time.</p>
 </section>
 <section id="targets-supported">
 <h2>Targets Supported<a class="headerlink" href="#targets-supported" title="Link to this heading"></a></h2>
@@ -731,7 +714,6 @@ Content on this topic
 </table>
 </div>
 <div class="line-block">
-<div class="line"><br /></div>
 <div class="line">===== Configurable Parameters =====</div>
 </div>
 <div class="table-wrapper docutils container">
@@ -749,22 +731,22 @@ Content on this topic
 <td><p>20 to 20000</p></td>
 <td><p>Enable or disable the Level Detector</p></td>
 </tr>
-<tr class="row-odd"><td><p>Stage&lt;fc #ff0000&gt;X&lt;/fc&gt;_Corner Frequency</p></td>
+<tr class="row-odd"><td><p>StageX_Corner Frequency</p></td>
 <td><p>100</p></td>
 <td><p>20 to 20000</p></td>
 <td><p>Specify the center / cutoff frequency of the filter (Only applicable for Pass-through &amp; RTA to Output )</p></td>
 </tr>
-<tr class="row-even"><td><p>Stage&lt;fc #ff0000&gt;X&lt;/fc&gt;_QFactor</p></td>
+<tr class="row-even"><td><p>StageX_QFactor</p></td>
 <td><p>0.7</p></td>
 <td><p>0.01 to 15</p></td>
 <td><p>Available with LP and HP filters, Q determines the steepness of the filter skirts and its -3dB points (Only applicable for Pass-through &amp; RTA to Output )</p></td>
 </tr>
-<tr class="row-odd"><td><p>Stage&lt;fc #ff0000&gt;X&lt;/fc&gt;_BandWidth</p></td>
+<tr class="row-odd"><td><p>StageX_BandWidth</p></td>
 <td><p>2</p></td>
 <td><p>0.01 to 15</p></td>
 <td><p>Available with the BP filter, Bandwidth determines the range of frequencies your design will affect (Only applicable for Pass-through &amp; RTA to Output )</p></td>
 </tr>
-<tr class="row-even"><td><p>Stage&lt;fc #ff0000&gt;X&lt;/fc&gt;_Filter Type</p></td>
+<tr class="row-even"><td><p>StageX_Filter Type</p></td>
 <td><p>Band Pass</p></td>
 <td><p>Low Pass, Band Pass, High Pass</p></td>
 <td><p>LP, HP, and BP filters can be set for the individual bands (Only applicable for Pass-through &amp; RTA to Output )</p></td>
@@ -789,12 +771,12 @@ Content on this topic
 </div>
 <p>Note:</p>
 <ul class="simple">
-<li><p>&lt;fc #ff0000&gt;X&lt;/fc&gt; - Stage Index</p></li>
+<li><p>X - Stage Index</p></li>
 </ul>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">===== DSP Parameters =====</div>
-</div>
+</section>
+</section>
+<section id="dsp-parameters">
+<h2>DSP Parameters<a class="headerlink" href="#dsp-parameters" title="Link to this heading"></a></h2>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -851,10 +833,9 @@ Content on this topic
 <div class="line-block">
 <div class="line"><br /></div>
 <div class="line">===== DSP Parameter Computation ===== TimeConstant = Abs(1.0 - 10^(500/(10 * Sampling Rate)))</div>
-<div class="line">Decay = 96/Sampling Rate</div>
-<div class="line">Hold = Sampling Rate * 0.01</div>
 </div>
-</section>
+<p>Decay = 96/Sampling Rate</p>
+<p>Hold = Sampling Rate * 0.01</p>
 </section>
 </section>
 

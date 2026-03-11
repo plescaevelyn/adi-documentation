@@ -93,24 +93,35 @@
         <nav>
           <ul>
 <li><a class="reference internal" href="#">Mobile Storage Interface for MMC/SD</a><ul>
-<li><a class="reference internal" href="#hardware-setup">Hardware Setup</a><ul>
-<li><a class="reference internal" href="#package-configuration">Package Configuration</a><ul>
+<li><a class="reference internal" href="#hardware-setup">Hardware Setup</a></li>
+<li><a class="reference internal" href="#software-configuration">Software Configuration</a><ul>
+<li><a class="reference internal" href="#package-configuration">Package Configuration</a></li>
+<li><a class="reference internal" href="#configure-linux-kernel">Configure Linux Kernel</a><ul>
 <li><a class="reference internal" href="#enable-msi-support">Enable MSI Support</a></li>
 <li><a class="reference internal" href="#file-system-support">File System Support</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#build-and-load-linux-kernel">Build and Load Linux Kernel</a><ul>
-<li><a class="reference internal" href="#formatting-the-sd-card">Formatting the SD Card</a></li>
+<li><a class="reference internal" href="#build-and-load-linux-kernel">Build and Load Linux Kernel</a></li>
+<li><a class="reference internal" href="#usage-of-msi">Usage of MSI</a><ul>
+<li><a class="reference internal" href="#formatting-the-sd-card">Formatting the SD Card</a><ul>
+<li><a class="reference internal" href="#insert-a-pre-formatted-card-with-an-ms-dos-fat-file-system-to-the-sd-card-slot-on-the-adsp-sc5xx">Insert a pre-formatted card with an MS-DOS (FAT) file system to the SD Card slot on the ADSP-SC5xx</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mount-the-ms-dos-file-system-on-the-sd-card">Mount the MS-DOS file system on the SD Card</a></li>
 <li><a class="reference internal" href="#check-that-the-file-system-has-indeed-been-mounted">Check that the file system has indeed been mounted</a></li>
 <li><a class="reference internal" href="#write-something-to-the-sd-card">Write something to the SD Card</a></li>
 <li><a class="reference internal" href="#verify-the-written-content-by-reading-the-log-file-back">Verify the written content by reading the log file back</a></li>
 <li><a class="reference internal" href="#unmount-the-file-system-and-then-extract-the-card-from-the-sd-card-slot">Unmount the file system and then extract the card from the SD card slot</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#test-msi-performance-with-bonnie">Test MSI Performance with Bonnie++</a><ul>
 <li><a class="reference internal" href="#test-case-1-bonnie-on-ext2">1) Test Case 1: Bonnie++ on Ext2</a><ul>
 <li><a class="reference internal" href="#result">Result</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#test-case-2-bonnie-on-fat32">2) Test Case 2: Bonnie++ on FAT32</a></li>
 </ul>
 </li>
 </ul>
@@ -621,10 +632,9 @@ Content on this topic
 <p>The SD/MMC card slot is <strong>J18</strong> on the SC589/SC573 EZKIT board and is <strong>J6</strong> on the SC589 MINI board. This slot accepts full-size SD and MMC cards, or microSD cards with an adapter.</p>
 <a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/mmc/lkad-mobile_storage_interface_for_mmc-hw_setup.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/mmc/lkad-mobile_storage_interface_for_mmc-hw_setup.jpg" src="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/mmc/lkad-mobile_storage_interface_for_mmc-hw_setup.jpg" style="width: 400px;" />
 </a>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">===== Software Configuration =====</div>
-</div>
+</section>
+<section id="software-configuration">
+<h2>Software Configuration<a class="headerlink" href="#software-configuration" title="Link to this heading"></a></h2>
 <section id="package-configuration">
 <h3>Package Configuration<a class="headerlink" href="#package-configuration" title="Link to this heading"></a></h3>
 <p>Add Bonnie++ package in the filesystem. Bonnie++ is a program for testing filesystem throughput, see www.coker.com.au/bonnie++ for details.</p>
@@ -632,10 +642,10 @@ Content on this topic
 <span class="n">IMAGE_INSTALL_append</span> <span class="o">=</span> <span class="s2">&quot; dosfstools e2fsprogs bonnie++&quot;</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Configure Linux Kernel ==== Run “<strong>bitbake linux-adi -c menuconfig</strong>” to configure the linux kernel.</div>
-</div>
+</section>
+<section id="configure-linux-kernel">
+<h3>Configure Linux Kernel<a class="headerlink" href="#configure-linux-kernel" title="Link to this heading"></a></h3>
+<p>Run “<strong>bitbake linux-adi -c menuconfig</strong>” to configure the linux kernel.</p>
 <section id="enable-msi-support">
 <h4>Enable MSI Support<a class="headerlink" href="#enable-msi-support" title="Link to this heading"></a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Device</span> <span class="n">Drivers</span>
@@ -672,10 +682,10 @@ Content on this topic
 <h2>Build and Load Linux Kernel<a class="headerlink" href="#build-and-load-linux-kernel" title="Link to this heading"></a></h2>
 <p>Run “<strong>bitbake linux-adi -C compile</strong>” to compile the linux kernel to generate the zImage and dtb file.</p>
 <p>A kernel image and dtb file can now be built and loaded onto the target board.  See SC5xx ezkit Linux quick start guide for details.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">===== Usage of MSI ===== The most typical use of an SD Card in embedded applications is as a removable storage device (disk) that can be easily taken from the embedded target board. In such contexts, the SD Card installed to the embedded target board is typically already formatted with an MS-DOS file system. The Linux kernel must be specially configured to allow mounting the MS-DOS file system. See part 2 in section 2.1 for details. The mount utility is also needed. Typically,  mount will already be enabled in your busybox configuration.</div>
-</div>
+</section>
+<section id="usage-of-msi">
+<h2>Usage of MSI<a class="headerlink" href="#usage-of-msi" title="Link to this heading"></a></h2>
+<p>The most typical use of an SD Card in embedded applications is as a removable storage device (disk) that can be easily taken from the embedded target board. In such contexts, the SD Card installed to the embedded target board is typically already formatted with an MS-DOS file system. The Linux kernel must be specially configured to allow mounting the MS-DOS file system. See part 2 in section 2.1 for details. The mount utility is also needed. Typically,  mount will already be enabled in your busybox configuration.</p>
 <section id="formatting-the-sd-card">
 <h3>Formatting the SD Card<a class="headerlink" href="#formatting-the-sd-card" title="Link to this heading"></a></h3>
 <p>In order to use an SD Card with Linux we need to prepare it by formatting it in the correct format.</p>
@@ -701,19 +711,19 @@ Command (m for help): w
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># mkfs.ext3 /dev/mmcblk0p1</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">=== Insert a pre-formatted card with an MS-DOS (FAT) file system to the SD Card slot on the ADSP-SC5xx === When you boot the zImage on the ADSP-SC5xx, there should be messages similar to the ones shown below. In the below example, Linux has detected an SD Card with a single partition on it:</div>
-</div>
+<section id="insert-a-pre-formatted-card-with-an-ms-dos-fat-file-system-to-the-sd-card-slot-on-the-adsp-sc5xx">
+<h4>Insert a pre-formatted card with an MS-DOS (FAT) file system to the SD Card slot on the ADSP-SC5xx<a class="headerlink" href="#insert-a-pre-formatted-card-with-an-ms-dos-fat-file-system-to-the-sd-card-slot-on-the-adsp-sc5xx" title="Link to this heading"></a></h4>
+<p>When you boot the zImage on the ADSP-SC5xx, there should be messages similar to the ones shown below. In the below example, Linux has detected an SD Card with a single partition on it:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mmc_host</span> <span class="n">mmc0</span><span class="p">:</span> <span class="n">Bus</span> <span class="n">speed</span> <span class="p">(</span><span class="n">slot</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mi">50000000</span><span class="n">Hz</span> <span class="p">(</span><span class="n">slot</span> <span class="n">req</span> <span class="mi">25000000</span><span class="n">Hz</span><span class="p">,</span> <span class="n">actual</span> <span class="mi">25000000</span><span class="n">HZ</span> <span class="n">div</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">mmc0</span><span class="p">:</span> <span class="n">new</span> <span class="n">SD</span> <span class="n">card</span> <span class="n">at</span> <span class="n">address</span> <span class="n">b368</span>
 <span class="n">mmcblk0</span><span class="p">:</span> <span class="n">mmc0</span><span class="p">:</span><span class="n">b368</span> <span class="n">FFFFF</span> <span class="mf">1.85</span> <span class="n">GiB</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Mount the MS-DOS file system on the SD Card ==== This is done as follows:</div>
-</div>
+</section>
+</section>
+<section id="mount-the-ms-dos-file-system-on-the-sd-card">
+<h3>Mount the MS-DOS file system on the SD Card<a class="headerlink" href="#mount-the-ms-dos-file-system-on-the-sd-card" title="Link to this heading"></a></h3>
+<p>This is done as follows:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># mount -t vfat -o sync /dev/mmcblk0p1 /mnt</span>
 </pre></div>
 </div>
@@ -756,11 +766,10 @@ Command (m for help): w
 <span class="n">mmc0</span><span class="p">:</span> <span class="n">card</span> <span class="n">b368</span> <span class="n">removed</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">===== Test MSI Performance with Bonnie++ =====</div>
-</div>
 </section>
+</section>
+<section id="test-msi-performance-with-bonnie">
+<h2>Test MSI Performance with Bonnie++<a class="headerlink" href="#test-msi-performance-with-bonnie" title="Link to this heading"></a></h2>
 <section id="test-case-1-bonnie-on-ext2">
 <h3>1) Test Case 1: Bonnie++ on Ext2<a class="headerlink" href="#test-case-1-bonnie-on-ext2" title="Link to this heading"></a></h3>
 <p>Input the following command on the target board console</p>
@@ -795,10 +804,11 @@ Command (m for help): w
 <span class="n">adsp</span><span class="o">-</span><span class="n">sc589</span><span class="o">-</span><span class="n">ezkit</span><span class="p">,</span><span class="mi">424</span><span class="n">M</span><span class="p">,</span><span class="mi">7985</span><span class="p">,</span><span class="mi">77</span><span class="p">,</span><span class="mi">8227</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">3920</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">8538</span><span class="p">,</span><span class="mi">90</span><span class="p">,</span><span class="mi">8660</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mf">1220.4</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mi">6513</span><span class="p">,</span><span class="mi">92</span><span class="p">,</span><span class="mi">16713</span><span class="p">,</span><span class="mi">84</span><span class="p">,</span><span class="mi">10240</span><span class="p">,</span><span class="mi">97</span><span class="p">,</span><span class="mi">149</span><span class="p">,</span><span class="mi">98</span><span class="p">,</span><span class="o">+++++</span><span class="p">,</span><span class="o">+++</span><span class="p">,</span><span class="mi">12912</span><span class="p">,</span><span class="mi">98</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== 2) Test Case 2: Bonnie++ on FAT32 ==== Input the following command on the target board console</div>
-</div>
+</section>
+</section>
+<section id="test-case-2-bonnie-on-fat32">
+<h3>2) Test Case 2: Bonnie++ on FAT32<a class="headerlink" href="#test-case-2-bonnie-on-fat32" title="Link to this heading"></a></h3>
+<p>Input the following command on the target board console</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@adsp</span><span class="o">-</span><span class="n">sc589</span><span class="o">-</span><span class="n">ezkit</span><span class="p">:</span><span class="o">~</span><span class="c1"># mkfs.vfat -F 32 /dev/mmcblk0p1</span>
 <span class="n">root</span><span class="nd">@adsp</span><span class="o">-</span><span class="n">sc589</span><span class="o">-</span><span class="n">ezkit</span><span class="p">:</span><span class="o">~</span><span class="c1"># mount /dev/mmcblk0p1 /mnt/</span>
 <span class="n">root</span><span class="nd">@adsp</span><span class="o">-</span><span class="n">sc589</span><span class="o">-</span><span class="n">ezkit</span><span class="p">:</span><span class="o">~</span><span class="c1"># bonnie++ -u root -d /mnt/</span>
@@ -826,11 +836,8 @@ Command (m for help): w
 <span class="n">adsp</span><span class="o">-</span><span class="n">sc589</span><span class="o">-</span><span class="n">ezkit</span><span class="p">,</span><span class="mi">424</span><span class="n">M</span><span class="p">,</span><span class="mi">4405</span><span class="p">,</span><span class="mi">44</span><span class="p">,</span><span class="mi">6886</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">4026</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8360</span><span class="p">,</span><span class="mi">89</span><span class="p">,</span><span class="mi">8658</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mf">803.4</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">99</span><span class="p">,</span><span class="o">+++++</span><span class="p">,</span><span class="o">+++</span><span class="p">,</span><span class="mi">147</span><span class="p">,</span><span class="mi">99</span><span class="p">,</span><span class="mi">17</span><span class="p">,</span><span class="mi">99</span><span class="p">,</span><span class="o">+++++</span><span class="p">,</span><span class="o">+++</span><span class="p">,</span><span class="mi">39</span><span class="p">,</span><span class="mi">98</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">—- <strong>Back to</strong> <a class="reference internal" href="../start.html"><span class="doc">Kernel Features and Device Drivers for ADSP-SC5xx Yocto Linux</span></a></div>
-</div>
-</section>
+<hr class="docutils" />
+<p><strong>Back to</strong> <a class="reference internal" href="../start.html"><span class="doc">Kernel Features and Device Drivers for ADSP-SC5xx Yocto Linux</span></a></p>
 </section>
 </section>
 </section>

@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="The temperature probe uses a Pt100 RTD, which is measured using a resistance measurement channel. A Pt100 has a resistance of 100-138Ω for 0°C to 100 °C temperature range." name="description" />
+<meta content="A typical Control Valve for this process requires two channels, one to sense the position state of the valve using a voltage input channel, and one to control the actuator of the valve using a current output channel" name="description" />
 
     <title>Commissioning made easy with AD74412R/13R &#8212; System Level Documentation  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../../../_static/pygments.css?v=8e8a900e" />
@@ -592,7 +592,6 @@ Content on this topic
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
 <div class="line-block">
-<div class="line"><br /></div>
 <div class="line">During the installation stage of a process or building control system, sensors and actuators need to be connected to their respective control/monitor channels. This can be a complex and error prone exercise. This is especially true when sensors and actuators are located large distances from control modules, or in difficult to access areas.</div>
 <div class="line">The Analog Devices Software Configurable I/O product family has 2 quad-channel Software Configurable I/O parts for building and process control applications, the AD74412R and the AD74413R. Each channel can be configured for voltage output, current output, voltage input, current input, RTD measurement and digital input. This document outlines how the variety of configuration options and on-board diagnostics can be used to confirm the sensors and actuators connected to each channel at the commissioning stage.</div>
 <div class="line">By using the flexibility of the AD74412R/13R, a variety of configuration options and on-board diagnostics can be combined with knowledge of the electrical properties of the components being installed to determine which channel corresponds to each of the components, and then configure the AD74412R/13R to correctly match them, thus dramatically simplifying the installation process.</div>
@@ -601,48 +600,37 @@ Content on this topic
 <section id="case-study-load-identification-in-a-temperate-control-process">
 <h2>Case Study: Load Identification in a Temperate Control Process<a class="headerlink" href="#case-study-load-identification-in-a-temperate-control-process" title="Link to this heading"></a></h2>
 <div class="line-block">
-<div class="line"><br /></div>
 <div class="line">An example scenario of a Temperature Control Process is used to demonstrate load confirmation capability. This is a common process in production lines where precise temperature control of water or other liquid is required. In the example, shown in Figure 1, a water mixing tank has a constant input flow of cold water, along with an adjustable input flow of hot water from a boiler, which is controlled with a ball valve to regulate water temperature. A temperature probe is placed in the tank to monitor the water temperature. An emergency stop button is also placed near the tank to shut off input flow in case of an emergency. All components are connected to the control module for the process, which uses a quad channel Software Configurable IO, AD7441xR.</div>
 </div>
-<img alt="Temp Control Process.png" class="align-center" src="https://wiki.analog.com/_media/TempControlProcess.png" />
+<img alt="Temp Control Process.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-ad7441x0/tools/TempControlProcess.png" />
 <div class="line-block">
-<div class="line"><br /></div>
 <div class="line">Figure 1: Temperature Control Process Diagram</div>
 </div>
 <section id="understanding-the-instrument-characteristics">
 <h3>Understanding the Instrument Characteristics<a class="headerlink" href="#understanding-the-instrument-characteristics" title="Link to this heading"></a></h3>
 <div class="line-block">
-<div class="line"><br /></div>
 <div class="line">To begin, the characteristics of the sensors and actuators required for this process should be determined. Once the characteristics are understood, the instruments can be differentiated.</div>
-<div class="line">* A typical Control Valve for this process requires two channels, one to sense the position state of the valve using a voltage input channel, and one to control the actuator of the valve using a current output channel</div>
 </div>
 <ul class="simple">
+<li><p>A typical Control Valve for this process requires two channels, one to sense the position state of the valve using a voltage input channel, and one to control the actuator of the valve using a current output channel</p></li>
 <li><p>The temperature probe uses a Pt100 RTD, which is measured using a resistance measurement channel. A Pt100 has a resistance of 100-138Ω for 0°C to 100 °C temperature range.</p></li>
 <li><p>The Emergency Stop Button is a generic latching push-to-break button which is monitored with a digital input channel. The emergency stop button will electrically present as an open-circuit or short-circuit, which can be detected with on-board diagnostics of the AD74412R/AD74413R.</p></li>
 </ul>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
 </section>
 <section id="determining-how-the-channels-are-configured">
 <h3>Determining how the Channels are Configured<a class="headerlink" href="#determining-how-the-channels-are-configured" title="Link to this heading"></a></h3>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
 <div class="line-block">
 <div class="line">Now that the characteristics of the sensors &amp; actuators are understood, the next step is to determine which channel is connected to which instrument. This example starts with the Control Valve as it uses 2 channels which have a “cause and effect” relationship that can be used for confirmation. The valve is controlled by a current in 4mA – 20mA range. The position sensor returns a voltage corresponding to the position of the valve.</div>
 <div class="line">A current is sourced (using current output mode) on a single channel while monitoring the voltage (using voltage input mode) on the other 3 channels for a correlating input signal. This is repeated for subsequent channels until a correlating input signal is observed.</div>
 <div class="line">Figure 2 shows the response on all 4 channels when sourcing a current on Channel C. No response is noted on Channels A &amp; B, a voltage response is captured on Channels C &amp; D. The Channel C measurement is the voltage response from the actuator (based on the fixed current applied). A correlating voltage input is also observed on Channel D, confirming Channel C as the actuator control channel and Channel D as the position sensor channel. Confirmation of these channels is achieved in a maximum of 4 attempts.</div>
 </div>
-<img alt="load_confirmation_of_control_valve.png" class="align-center" src="https://wiki.analog.com/_media/load_confirmation_of_control_valve.png" />
+<img alt="load_confirmation_of_control_valve.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-ad7441x0/tools/load_confirmation_of_control_valve.png" />
 <div class="line-block">
-<div class="line"><br /></div>
 <div class="line">Figure 2: Determining channels used for Control Valve</div>
-<div class="line">To confirm which channel is connected to the RTD, the remaining channels (A &amp; B) are configured in resistance measurement mode and results are scanned for the expected resistance value. In this case, a Pt100 is expected to be in the range of 100Ω-138Ω for 0-100 °C water temperature range. Figure 3 shows that Channel B measures a resistance of 127Ω, indicating that the RTD is connected to Channel B.</div>
 </div>
-<img alt="load_confirmation_of_rtd.png" class="align-center" src="https://wiki.analog.com/_media/load_confirmation_of_rtd.png" />
+<p>To confirm which channel is connected to the RTD, the remaining channels (A &amp; B) are configured in resistance measurement mode and results are scanned for the expected resistance value. In this case, a Pt100 is expected to be in the range of 100Ω-138Ω for 0-100 °C water temperature range. Figure 3 shows that Channel B measures a resistance of 127Ω, indicating that the RTD is connected to Channel B.</p>
+<img alt="load_confirmation_of_rtd.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-ad7441x0/tools/load_confirmation_of_rtd.png" />
 <div class="line-block">
-<div class="line"><br /></div>
 <div class="line">Figure 2: Determining channel used for RTD</div>
 </div>
 <p>By a process of elimination, Channel A is identified as the emergency stop button. The on-board diagnostics can be used to confirm this:</p>
@@ -651,11 +639,7 @@ Content on this topic
 <li><p>If the emergency button is not pushed, the switch appears as a short circuit. Configure the channel in voltage output mode and check for short-circuit error alert.</p></li>
 </ul>
 <div class="line-block">
-<div class="line"><br /></div>
 <div class="line">This is an example of confirmation, not determination. Prior knowledge of the sensors/actuators connected to the channels is required in order to infer the relationships between the sensors and the expected electrical indicators. Sensor sensitivity should also be considered when devising a confirmation routine to ensure that large currents are not sourced to sensitive components.</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
 </div>
 </section>
 </section>

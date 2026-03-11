@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="Note: This block differs from the Stopwatch block because it can be reset by an external input signal. The regular Stopwatch can only be reset by writing to its reset parameter coefficient." name="description" />
+<meta content="Click here to return to the Counters page" name="description" />
 
     <title>Stopwatch w/ External Reset &#8212; System Level Documentation  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../../../_static/pygments.css?v=8e8a900e" />
@@ -580,39 +580,28 @@ Content on this topic
             
   <section id="stopwatch-w-external-reset">
 <h1>Stopwatch w/ External Reset<a class="headerlink" href="#stopwatch-w-external-reset" title="Link to this heading"></a></h1>
-<div class="line-block">
-<div class="line"><a class="reference internal" href="../counters.html"><span class="doc">Click here to return to the Counters page</span></a></div>
-<div class="line"><img alt="stopwatchwextpic1.png" src="https://wiki.analog.com/_media/stopwatchwextpic1.png" /> The stopwatch block allows for a stop, start, and reset counting mechanism. When one needs to know how long something takes (i.e. how many samples have passed), you signal the start and stop of an event, and a stopwatch measures the time between the signaling of the start and stop. Stopwatches also allow for the count to be reset to zero to measure additional time intervals.</div>
-</div>
+<p><a class="reference internal" href="../counters.html"><span class="doc">Click here to return to the Counters page</span></a></p>
+<p><img alt="stopwatchwextpic1.png" src="https://wiki.analog.com/_media/stopwatchwextpic1.png" /> The stopwatch block allows for a stop, start, and reset counting mechanism. When one needs to know how long something takes (i.e. how many samples have passed), you signal the start and stop of an event, and a stopwatch measures the time between the signaling of the start and stop. Stopwatches also allow for the count to be reset to zero to measure additional time intervals.</p>
 <p>Note: This block differs from the Stopwatch block because it can be reset by an external input signal. The regular Stopwatch can only be reset by writing to its reset parameter coefficient.</p>
 <p>The stopwatch allows external signals to control the start and stop of the counter. The output of the stopwatch block is the total sample count, in 28.0 data format, for the active period. When active, the output value and count are incremented for every sample period.</p>
-<div class="line-block">
-<div class="line"><strong>Inputs:</strong></div>
-<div class="line"><img alt="stopwatchwextpic2.png" src="https://wiki.analog.com/_media/stopwatchwextpic2.png" /></div>
-</div>
+<p><strong>Inputs:</strong></p>
+<p><img alt="stopwatchwextpic2.png" src="https://wiki.analog.com/_media/stopwatchwextpic2.png" /></p>
 <ul class="simple">
 <li><p>The top input pin is the START pin. While the STOP pin signal is zero (see below), an input value greater than zero triggers the counter to start, a zero value will stop the counter.</p></li>
 <li><p>The middle input pin is the STOP pin. An input value greater than zero will stop the counter (regardless of the value of the start pin).</p></li>
 <li><p>The bottom (orange) pin is the RESET control pin. When the reset signal is one, it will reset the value of the counter and output to zero. If the count is active (e.g. START = 1 and STOP = 0) the count will reset to zero continue to increment from zero. If the count is inactive (e.g. START = 0 or STOP = 1) the reset signal clears the count and the output remains at 0.</p></li>
 </ul>
 <hr class="docutils" />
-<div class="line-block">
-<div class="line">Below are graphs showing values of the START, STOP, RESET, and the resulting output values.</div>
-<div class="line"><img alt="stopwatchwextpic3.png" src="https://wiki.analog.com/_media/stopwatchwextpic3.png" /></div>
-</div>
+<p>Below are graphs showing values of the START, STOP, RESET, and the resulting output values.</p>
+<img alt="stopwatchwextpic3.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/counters/stopwatchwextpic3.png" />
 <hr class="docutils" />
-<div class="line-block">
-<div class="line">To better understand the counter output, imagine that for every sample that passes when the count is active, you are incrementing by 2^-23. This is the smallest amount possible to increment by (since our data is in 5.23 format the LSB is 2^-23). However the format of the count output is in 28.0 thus the maximum value that can be achieved by the count output is 2^28 – 1 = 268435455. If the count reaches this value it will no longer be incremented and will not wrap around, but just maintain this max value. This maximum value in samples can be converted to a meaningful time value in seconds by knowing the sampling frequency of the block.</div>
-<div class="line"><strong>For example &#64; fs = 48000 Hz:</strong></div>
-<div class="line">268435455 samples * 1 s / 48000 samples = 5592.4053 s = 93.02 minutes</div>
-</div>
+<p>To better understand the counter output, imagine that for every sample that passes when the count is active, you are incrementing by 2^-23. This is the smallest amount possible to increment by (since our data is in 5.23 format the LSB is 2^-23). However the format of the count output is in 28.0 thus the maximum value that can be achieved by the count output is 2^28 – 1 = 268435455. If the count reaches this value it will no longer be incremented and will not wrap around, but just maintain this max value. This maximum value in samples can be converted to a meaningful time value in seconds by knowing the sampling frequency of the block.</p>
+<p><strong>For example &#64; fs = 48000 Hz:</strong> 268435455 samples * 1 s / 48000 samples = 5592.4053 s = 93.02 minutes</p>
 <p>In this example, the stopwatch can count up to a maximum of 93.02 minutes.</p>
 <hr class="docutils" />
 <p><strong>Example:</strong></p>
-<div class="line-block">
-<div class="line">The stopwatch can be used in many different situations. Below is a sample schematic showing the basic operation of the Stopwatch w/ External Reset. The DC input blocks along with a mono switch, allow for the start, stop, and reset pins to be toggled from 0 to 1. This controls the beginning, end, and clearing of the count. The main difference between the Stopwatch and Stopwatch w/ external reset is how the clearing of the count output is handled. In this case an external data signal can be used to control the reset function of the count. With the stopwatch a coefficient parameter (controlled by a button in SigmaStudio) allows the count to be cleared.</div>
-<div class="line"><img alt="stopwatchwextpic4.png" src="https://wiki.analog.com/_media/stopwatchwextpic4.png" /></div>
-</div>
+<p>The stopwatch can be used in many different situations. Below is a sample schematic showing the basic operation of the Stopwatch w/ External Reset. The DC input blocks along with a mono switch, allow for the start, stop, and reset pins to be toggled from 0 to 1. This controls the beginning, end, and clearing of the count. The main difference between the Stopwatch and Stopwatch w/ external reset is how the clearing of the count output is handled. In this case an external data signal can be used to control the reset function of the count. With the stopwatch a coefficient parameter (controlled by a button in SigmaStudio) allows the count to be cleared.</p>
+<img alt="stopwatchwextpic4.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/counters/stopwatchwextpic4.png" />
 </section>
 
 

@@ -92,7 +92,12 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">Matlab Connection</a></li>
+<li><a class="reference internal" href="#">Matlab Connection</a><ul>
+<li><a class="reference internal" href="#hardware-and-software-requirement">Hardware and Software Requirement</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#faq">FAQ</a></li>
+</ul>
+</li>
 </ul>
 
         </nav>
@@ -581,203 +586,171 @@ Content on this topic
   <p><a class="reference internal" href="../scripting.html"><span class="doc">Click here to return to ‘SigmaStudio Scripting’ page.</span></a></p>
 <section id="matlab-connection">
 <h1>Matlab Connection<a class="headerlink" href="#matlab-connection" title="Link to this heading"></a></h1>
-<div class="line-block">
-<div class="line">This example script designs an FIR filter with Matlab using following Matlab function:</div>
-<div class="line">h = firpm(N, a*2, b);</div>
-<div class="line">N: the filter order</div>
-<div class="line">Example of a length 31 lowpass filter:</div>
-<div class="line">H = firpm(30, [0 .1 .2 .5]*2, [1 1 0 0]);</div>
-<div class="line">Type help firpm in Matlab command line for more information on this function.</div>
-<div class="line">This scrip can take a Schematic as an input argument along with the FIR address and FirOrder. If the arguments are valid the script will run the filter on SHARC target through SigmaStudio. It is expected that the target is booted with an appropriate script. \</div>
-<div class="line">=====Hardware and Software Requirement===== All infrastructures required to run SigmaStudio.</div>
-<div class="line">Matlab installation with valid license.</div>
-<div class="line">=====Usage===== matlabConnectionTest.exe schematic_name.dspproj fir Address firOrder</div>
-<div class="line">matlabConnectionTest.exe fir1.dspproj 10 30</div>
-<div class="line">=====FAQ===== Q: How do I get the FIR address?</div>
-<div class="line">You may get it from the capture window or use export to get the address.</div>
-<div class="line">Q: How do I build the application?</div>
-<div class="line">Use the code given below to build the application</div>
-<div class="line"><a href="#id1"><span class="problematic" id="id2">``</span></a>// #LANGUAGE# C#
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Analog.SigmaStudioServer;</div>
+<p>This example script designs an FIR filter with Matlab using following Matlab function:</p>
+<p>h = firpm(N, a*2, b);</p>
+<p>N: the filter order</p>
+<p>Example of a length 31 lowpass filter:</p>
+<p>H = firpm(30, [0 .1 .2 .5]*2, [1 1 0 0]);</p>
+<p>Type help firpm in Matlab command line for more information on this function.</p>
+<p>This scrip can take a Schematic as an input argument along with the FIR address and FirOrder. If the arguments are valid the script will run the filter on SHARC target through SigmaStudio. It is expected that the target is booted with an appropriate script. \</p>
+<section id="hardware-and-software-requirement">
+<h2>Hardware and Software Requirement<a class="headerlink" href="#hardware-and-software-requirement" title="Link to this heading"></a></h2>
+<p>All infrastructures required to run SigmaStudio.</p>
+<p>Matlab installation with valid license.</p>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
+<p>matlabConnectionTest.exe schematic_name.dspproj fir Address firOrder</p>
+<p>matlabConnectionTest.exe fir1.dspproj 10 30</p>
+</section>
+<section id="faq">
+<h2>FAQ<a class="headerlink" href="#faq" title="Link to this heading"></a></h2>
+<p>Q: How do I get the FIR address?</p>
+<p>You may get it from the capture window or use export to get the address.</p>
+<p>Q: How do I build the application?</p>
+<p>Use the code given below to build the application</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="c1">// #LANGUAGE# C#</span>
+<span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+<span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="nn">System.Linq</span><span class="p">;</span>
+<span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="nn">System.Text</span><span class="p">;</span>
+<span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="nn">Analog.SigmaStudioServer</span><span class="p">;</span>
+
+<span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">ConsoleApplication1</span>
+<span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="k">class</span><span class="w"> </span><span class="nc">Program</span>
+<span class="w">   </span><span class="p">{</span>
+<span class="w">     </span><span class="k">class</span><span class="w"> </span><span class="nc">mYSsMatlab</span>
+<span class="w">     </span><span class="p">{</span>
+<span class="w">       </span><span class="k">public</span><span class="w"> </span><span class="n">SigmaStudioServer</span><span class="w"> </span><span class="n">sserver</span><span class="p">;</span>
+<span class="w">       </span><span class="k">public</span><span class="w"> </span><span class="n">MLApp</span><span class="p">.</span><span class="n">MLApp</span><span class="w"> </span><span class="n">matlab</span><span class="p">;</span>
+<span class="w">       </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Message</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">s</span><span class="p">)</span>
+<span class="w">       </span><span class="p">{</span>
+<span class="w">         </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+<span class="w">       </span><span class="p">}</span>
+<span class="w">       </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">runFir</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">schematicName</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">AddrFirCoef</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="p">[]</span><span class="w"> </span><span class="n">coef</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">N</span><span class="p">)</span>
+<span class="w">       </span><span class="p">{</span>
+<span class="w">         </span><span class="kt">int</span><span class="w"> </span><span class="n">delayms</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10000</span><span class="p">;</span>
+<span class="w">         </span><span class="kt">bool</span><span class="w"> </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sserver</span><span class="p">.</span><span class="n">SET_LOGGING_MODE</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
+<span class="w">         </span><span class="k">try</span>
+<span class="w">         </span><span class="p">{</span>
+<span class="w">           </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sserver</span><span class="p">.</span><span class="n">SET_LOGGING_MODE</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
+<span class="w">           </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">true</span><span class="p">)</span>
+<span class="w">           </span><span class="p">{</span>
+<span class="w">             </span><span class="n">Message</span><span class="p">(</span><span class="s">&quot;Couldn&#39;t connect to SigmaStudio, please make sure that the SigmaStudio is running&quot;</span><span class="p">);</span>
+<span class="w">             </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span>
+<span class="w">           </span><span class="p">}</span>
+<span class="w">         </span><span class="p">}</span>
+<span class="w">         </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span>
+<span class="w">         </span><span class="p">{</span>
+<span class="w">           </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;Server Connection failed. exception {0}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ex</span><span class="p">.</span><span class="n">Message</span><span class="p">);</span>
+<span class="w">           </span><span class="n">Message</span><span class="p">(</span><span class="s">&quot;Couldn&#39;t connect to SigmaStudio, please make sure that the SigmaStudio is running&quot;</span><span class="p">);</span>
+<span class="w">           </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span>
+<span class="w">         </span><span class="p">}</span>
+<span class="w">         </span><span class="n">sserver</span><span class="p">.</span><span class="n">CLOSE_PROJECT</span><span class="p">();</span>
+<span class="w">         </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sserver</span><span class="p">.</span><span class="n">OPEN_PROJECT</span><span class="p">(</span><span class="n">schematicName</span><span class="p">);</span>
+<span class="w">         </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">false</span><span class="p">)</span>
+<span class="w">         </span><span class="p">{</span>
+<span class="w">           </span><span class="n">Message</span><span class="p">(</span><span class="s">&quot;schematic load failed &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">schematicName</span><span class="p">);</span>
+<span class="w">           </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span>
+<span class="w">         </span><span class="p">}</span>
+<span class="w">         </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sserver</span><span class="p">.</span><span class="n">DELAY_SCRIPT</span><span class="p">(</span><span class="n">delayms</span><span class="p">);</span>
+<span class="w">         </span><span class="n">sserver</span><span class="p">.</span><span class="n">DOWNLOAD</span><span class="p">();</span>
+<span class="w">         </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">false</span><span class="p">)</span>
+<span class="w">         </span><span class="p">{</span>
+<span class="w">           </span><span class="n">Message</span><span class="p">(</span><span class="s">&quot;schematic load failed &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">schematicName</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span>
+<span class="w">         </span><span class="p">}</span>
+<span class="w">         </span><span class="n">sserver</span><span class="p">.</span><span class="n">PARAMETER_WRITE_ARRAY_FLOAT</span><span class="p">(</span><span class="s">&quot;IC 1&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">AddrFirCoef</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="n">coef</span><span class="p">);</span>
+<span class="w">         </span><span class="n">sserver</span><span class="p">.</span><span class="n">DELAY_SCRIPT</span><span class="p">(</span><span class="n">delayms</span><span class="p">);</span>
+<span class="w">         </span><span class="n">Message</span><span class="p">(</span><span class="s">&quot;Test case for : &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;matlabTest&quot;</span><span class="p">);</span>
+<span class="w">         </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span>
+<span class="w">       </span><span class="p">}</span>
+<span class="w">       </span><span class="k">public</span><span class="w"> </span><span class="kt">float</span><span class="p">[]</span><span class="w"> </span><span class="nf">designFir</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">N</span><span class="p">)</span>
+<span class="w">       </span><span class="p">{</span>
+<span class="w">         </span><span class="kt">float</span><span class="p">[]</span><span class="w"> </span><span class="n">h</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">float</span><span class="p">[</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
+<span class="w">         </span><span class="n">System</span><span class="p">.</span><span class="n">Array</span><span class="w"> </span><span class="n">h_r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">double</span><span class="p">[</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
+<span class="w">         </span><span class="n">System</span><span class="p">.</span><span class="n">Array</span><span class="w"> </span><span class="n">h_i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">double</span><span class="p">[</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
+<span class="w">         </span><span class="kt">string</span><span class="w"> </span><span class="n">returnString</span><span class="p">;</span>
+<span class="w">         </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">         </span><span class="cm">/* Example of a length 31 lowpass filter: h=firpm(30,[0 .1 .2 .5]*2,[1 1 0 0]); */</span>
+<span class="w">         </span><span class="n">System</span><span class="p">.</span><span class="n">Array</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">double</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">SetValue</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">SetValue</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">SetValue</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">SetValue</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">);</span>
+<span class="w">         </span><span class="n">System</span><span class="p">.</span><span class="n">Array</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">double</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">SetValue</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">SetValue</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">SetValue</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">SetValue</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">);</span>
+<span class="w">         </span><span class="n">System</span><span class="p">.</span><span class="n">Array</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">double</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span><span class="w"> </span><span class="n">z</span><span class="p">.</span><span class="n">SetValue</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="n">z</span><span class="p">.</span><span class="n">SetValue</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="n">z</span><span class="p">.</span><span class="n">SetValue</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span><span class="w"> </span><span class="n">z</span><span class="p">.</span><span class="n">SetValue</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">);</span>
+
+<span class="w">         </span><span class="n">matlab</span><span class="p">.</span><span class="n">PutFullMatrix</span><span class="p">(</span><span class="s">&quot;a&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;base&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">);</span>
+<span class="w">         </span><span class="n">matlab</span><span class="p">.</span><span class="n">PutFullMatrix</span><span class="p">(</span><span class="s">&quot;b&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;base&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">);</span>
+
+<span class="w">         </span><span class="n">StringBuilder</span><span class="w"> </span><span class="n">matlabCmdFir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">StringBuilder</span><span class="p">();</span>
+
+<span class="w">         </span><span class="n">matlabCmdFir</span><span class="p">.</span><span class="n">AppendFormat</span><span class="p">(</span><span class="s">&quot;h = firpm({0}, a\*2, b)&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="p">);</span>
+<span class="w">         </span><span class="n">returnString</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">matlab</span><span class="p">.</span><span class="n">Execute</span><span class="p">(</span><span class="n">matlabCmdFir</span><span class="p">.</span><span class="n">ToString</span><span class="p">());</span>
+<span class="w">         </span><span class="cm">/* returnString = matlab.Execute(&quot;h = firpm(30, a\*2, b)&quot;); */</span>
+
+<span class="w">         </span><span class="n">matlab</span><span class="p">.</span><span class="n">GetFullMatrix</span><span class="p">(</span><span class="s">&quot;h&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;base&quot;</span><span class="p">,</span><span class="w"> </span><span class="k">ref</span><span class="w"> </span><span class="n">h_r</span><span class="p">,</span><span class="w"> </span><span class="k">ref</span><span class="w"> </span><span class="n">h_i</span><span class="p">);</span>
+
+<span class="w">         </span><span class="k">foreach</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">h_r</span><span class="p">)</span><span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="o">++</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">Convert</span><span class="p">.</span><span class="n">ToDecimal</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+<span class="w">         </span><span class="k">return</span><span class="w"> </span><span class="n">h</span><span class="p">;</span>
+<span class="w">       </span><span class="p">}</span>
+<span class="w">       </span><span class="k">public</span><span class="w"> </span><span class="nf">mYSsMatlab</span><span class="p">()</span>
+<span class="w">       </span><span class="p">{</span>
+<span class="w">         </span><span class="n">matlab</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MLApp</span><span class="p">.</span><span class="n">MLApp</span><span class="p">();</span>
+<span class="w">         </span><span class="n">sserver</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SigmaStudioServer</span><span class="p">();</span>
+<span class="w">       </span><span class="p">}</span>
+<span class="w">     </span><span class="p">}</span>
+<span class="w">     </span><span class="k">class</span><span class="w"> </span><span class="nc">Class1</span>
+<span class="w">     </span><span class="p">{</span>
+<span class="w">       </span><span class="na">[STAThread]</span>
+<span class="w">       </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span>
+<span class="w">       </span><span class="p">{</span>
+<span class="w">         </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">         </span><span class="kt">int</span><span class="w"> </span><span class="n">orderFir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">30</span><span class="p">;</span>
+<span class="w">         </span><span class="kt">int</span><span class="w"> </span><span class="n">addressFir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">30</span><span class="p">;</span>
+<span class="w">         </span><span class="k">if</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">Length</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span>
+<span class="w">         </span><span class="p">{</span>
+<span class="w">           </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot; ERROR in arguments. Usage testMatlab schematic.dspproj firOrder&quot;</span><span class="p">);</span>
+<span class="w">           </span><span class="k">return</span><span class="w"> </span><span class="p">;</span>
+<span class="w">         </span><span class="p">}</span>
+<span class="w">         </span><span class="k">try</span>
+<span class="w">     </span><span class="p">{</span>
+<span class="w">       </span><span class="n">addressFir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Int32</span><span class="p">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+<span class="w">     </span><span class="p">}</span>
+<span class="w">         </span><span class="k">catch</span>
+<span class="w">     </span><span class="p">{</span>
+<span class="w">       </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;ERROR : wrong fir Address {0} Exiting &quot;</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span><span class="w"> </span><span class="k">return</span><span class="p">;</span>
+<span class="w">     </span><span class="p">}</span>
+<span class="w">         </span><span class="k">try</span>
+<span class="w">     </span><span class="p">{</span>
+<span class="w">       </span><span class="n">orderFir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Int32</span><span class="p">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+<span class="w">     </span><span class="p">}</span>
+<span class="w">         </span><span class="k">catch</span>
+<span class="w">     </span><span class="p">{</span>
+<span class="w">       </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;ERROR : wrong filter order {0}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span><span class="w"> </span><span class="n">orderFir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">30</span><span class="p">;</span>
+<span class="w">     </span><span class="p">}</span>
+
+<span class="w">         </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;Testing FIR coef design with matlab and running with SigmaStudio, schematic used = {0} firAddress = {1} fir Order = {2} please wait...&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">orderFir</span><span class="p">,</span><span class="w"> </span><span class="n">addressFir</span><span class="p">);</span>
+
+<span class="w">         </span><span class="n">mYSsMatlab</span><span class="w"> </span><span class="n">ssMatLabTest</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">mYSsMatlab</span><span class="p">();</span>
+
+<span class="w">         </span><span class="cm">/* design FIR using matlab */</span>
+<span class="w">         </span><span class="kt">float</span><span class="p">[]</span><span class="w"> </span><span class="n">h</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ssMatLabTest</span><span class="p">.</span><span class="n">designFir</span><span class="p">(</span><span class="n">orderFir</span><span class="p">);</span>
+
+<span class="w">         </span><span class="cm">/* print the fir coef */</span>
+<span class="w">         </span><span class="n">Console</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="s">&quot;coef [{0}]= &quot;</span><span class="p">,</span><span class="w"> </span><span class="n">h</span><span class="p">.</span><span class="n">Length</span><span class="p">);</span>
+<span class="w">         </span><span class="k">foreach</span><span class="w"> </span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">h</span><span class="p">)</span>
+<span class="w">         </span><span class="p">{</span>
+<span class="w">           </span><span class="n">Console</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="s">&quot; {0}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">);</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">;</span>
+<span class="w">         </span><span class="p">}</span>
+<span class="w">         </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;] &quot;</span><span class="p">);</span>
+
+<span class="w">         </span><span class="cm">/* run FIR on sharc through SigmaStudio */</span>
+<span class="w">         </span><span class="n">ssMatLabTest</span><span class="p">.</span><span class="n">runFir</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">addressFir</span><span class="p">,</span><span class="w"> </span><span class="n">h</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">);</span>
+<span class="w">       </span><span class="p">}</span>
+<span class="w">     </span><span class="p">}</span>
+<span class="w">   </span><span class="p">}</span>
+<span class="w"> </span><span class="p">}</span>
+</pre></div>
 </div>
-<blockquote>
-<div><p>namespace ConsoleApplication1
-{</p>
-<blockquote>
-<div><p>class Program
-{</p>
-<blockquote>
-<div><p>class mYSsMatlab
-{</p>
-<blockquote>
-<div><p>public SigmaStudioServer sserver;
-public MLApp.MLApp matlab;
-public void Message(string s)
-{</p>
-<blockquote>
-<div><p>Console.WriteLine(s);</p>
-</div></blockquote>
-<p>}
-public bool runFir(string schematicName, int AddrFirCoef, float[] coef, int N)
-{</p>
-<blockquote>
-<div><p>int delayms = 10000;
-bool ret = sserver.SET_LOGGING_MODE(true);
-try
-{</p>
-<blockquote>
-<div><p>ret = sserver.SET_LOGGING_MODE(true);
-if (ret != true)
-{</p>
-<blockquote>
-<div><p>Message(“Couldn’t connect to SigmaStudio, please make sure that the SigmaStudio is running”);
-return ret;</p>
-</div></blockquote>
-<p>}</p>
-</div></blockquote>
-<p>}
-catch (Exception ex)
-{</p>
-<blockquote>
-<div><p>Console.WriteLine(“Server Connection failed. exception {0}”, ex.Message);
-Message(“Couldn’t connect to SigmaStudio, please make sure that the SigmaStudio is running”);
-return ret;</p>
-</div></blockquote>
-<p>}
-sserver.CLOSE_PROJECT();
-ret = sserver.OPEN_PROJECT(schematicName);
-if (ret == false)
-{</p>
-<blockquote>
-<div><p>Message(“schematic load failed “ + schematicName);
-return ret;</p>
-</div></blockquote>
-<p>}
-ret = sserver.DELAY_SCRIPT(delayms);
-sserver.DOWNLOAD();
-if (ret == false)
-{</p>
-<blockquote>
-<div><p>Message(“schematic load failed “ + schematicName); return ret;</p>
-</div></blockquote>
-<p>}
-sserver.PARAMETER_WRITE_ARRAY_FLOAT(“IC 1”, AddrFirCoef, N, coef);
-sserver.DELAY_SCRIPT(delayms);
-Message(“Test case for : “ + “matlabTest”);
-return ret;</p>
-</div></blockquote>
-<p>}
-public float[] designFir(int N)
-{</p>
-<blockquote>
-<div><p>float[] h = new float[N+1];
-System.Array h_r = new double[N+1];
-System.Array h_i = new double[N+1];
-string returnString;
-int i = 0;
-/* Example of a length 31 lowpass filter: h=firpm(30,[0 .1 .2 .5]*2,[1 1 0 0]); <a href="#id3"><span class="problematic" id="id4">*</span></a>/
-System.Array a = new double[4]; a.SetValue(0, 0); a.SetValue(0.1, 1); a.SetValue(0.2, 2); a.SetValue(0.5, 3);
-System.Array b = new double[4]; b.SetValue(1, 0); b.SetValue(1, 1); b.SetValue(0, 2); b.SetValue(0, 3);
-System.Array z = new double[4]; z.SetValue(0, 0); z.SetValue(0, 1); z.SetValue(0, 2); z.SetValue(0, 3);</p>
-<p>matlab.PutFullMatrix(“a”, “base”, a, z);
-matlab.PutFullMatrix(“b”, “base”, b, z);</p>
-<p>StringBuilder matlabCmdFir = new StringBuilder();</p>
-<p>matlabCmdFir.AppendFormat(“h = firpm({0}, a*2, b)”, N);
-returnString = matlab.Execute(matlabCmdFir.ToString());
-/* returnString = matlab.Execute(“h = firpm(30, a*2, b)”); <a href="#id5"><span class="problematic" id="id6">*</span></a>/</p>
-<p>matlab.GetFullMatrix(“h”, “base”, ref h_r, ref h_i);</p>
-<p>foreach(double c in h_r)h[i++] = (float)Convert.ToDecimal(c);
-return h;</p>
-</div></blockquote>
-<p>}
-public mYSsMatlab()
-{</p>
-<blockquote>
-<div><p>matlab = new MLApp.MLApp();
-sserver = new SigmaStudioServer();</p>
-</div></blockquote>
-<p>}</p>
-</div></blockquote>
-<p>}
-class Class1
-{</p>
-<blockquote>
-<div><p>[STAThread]
-static void Main(string[] args)
-{</p>
-<blockquote>
-<div><p>int i = 0;
-int orderFir = 30;
-int addressFir = 30;
-if(args.Length != 3)
-{</p>
-<blockquote>
-<div><p>Console.WriteLine(” ERROR in arguments. Usage testMatlab schematic.dspproj firOrder”);
-return ;</p>
-</div></blockquote>
-<p>}
-try</p>
-</div></blockquote>
-</div></blockquote>
-<dl class="simple">
-<dt>{</dt><dd><p>addressFir = Int32.Parse(args[1]);</p>
-</dd>
-</dl>
-<dl class="simple">
-<dt>}</dt><dd><p>catch</p>
-</dd>
-</dl>
-<dl class="simple">
-<dt>{</dt><dd><p>Console.WriteLine(“ERROR : wrong fir Address {0} Exiting “, args[1]); return;</p>
-</dd>
-</dl>
-<dl class="simple">
-<dt>}</dt><dd><p>try</p>
-</dd>
-</dl>
-<dl class="simple">
-<dt>{</dt><dd><p>orderFir = Int32.Parse(args[2]);</p>
-</dd>
-</dl>
-<dl class="simple">
-<dt>}</dt><dd><p>catch</p>
-</dd>
-</dl>
-<dl class="simple">
-<dt>{</dt><dd><p>Console.WriteLine(“ERROR : wrong filter order {0}”, args[1]); orderFir = 30;</p>
-</dd>
-</dl>
-<p>}</p>
-<blockquote>
-<div><blockquote>
-<div><p>Console.WriteLine(“Testing FIR coef design with matlab and running with SigmaStudio, schematic used = {0} firAddress = {1} fir Order = {2} please wait…”, args[0], orderFir, addressFir);</p>
-<p>mYSsMatlab ssMatLabTest = new mYSsMatlab();</p>
-<p>/* design FIR using matlab <a href="#id7"><span class="problematic" id="id8">*</span></a>/
-float[] h = ssMatLabTest.designFir(orderFir);</p>
-<p>/* print the fir coef <a href="#id9"><span class="problematic" id="id10">*</span></a>/
-Console.Write(“coef [{0}]= “, h.Length);
-foreach (double c in h)
-{</p>
-<blockquote>
-<div><p>Console.Write(” {0}”, c); i++;</p>
-</div></blockquote>
-<p>}
-Console.WriteLine(”] “);</p>
-<p>/* run FIR on sharc through SigmaStudio <a href="#id11"><span class="problematic" id="id12">*</span></a>/
-ssMatLabTest.runFir(args[0], addressFir, h, 30);</p>
-</div></blockquote>
-<p>}</p>
-</div></blockquote>
-<p>}</p>
-</div></blockquote>
-<p>}</p>
-</div></blockquote>
-<p>}``</p>
-</div></blockquote>
+</section>
 </section>
 
 

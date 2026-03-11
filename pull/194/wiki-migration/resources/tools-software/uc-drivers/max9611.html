@@ -94,17 +94,27 @@
           <ul>
 <li><a class="reference internal" href="#">MAX9611 - No-OS Driver</a><ul>
 <li><a class="reference internal" href="#supported-devices">Supported Devices</a></li>
-<li><a class="reference internal" href="#evaluation-boards">Evaluation Boards</a></li>
+<li><a class="reference internal" href="#evaluation-boards">Evaluation Boards</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#applications">Applications</a><ul>
 <li><a class="reference internal" href="#adi-no-os">ADI No-OS</a></li>
+<li><a class="reference internal" href="#max9611-adi-no-os-driver">MAX9611 ADI No-OS driver</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#driver-source-code">Driver Source Code</a></li>
 <li><a class="reference internal" href="#code-documentation">Code Documentation</a></li>
 <li><a class="reference internal" href="#device-configuration">Device Configuration</a><ul>
 <li><a class="reference internal" href="#driver-initialization">Driver Initialization</a></li>
+<li><a class="reference internal" href="#device-address-generation">Device Address Generation</a></li>
 <li><a class="reference internal" href="#output-amplifier-comparator-configuration">Output Amplifier / Comparator Configuration</a></li>
+<li><a class="reference internal" href="#configurable-analog-to-digital-converter-adc">Configurable Analog-to-Digital Converter (ADC)</a></li>
 <li><a class="reference internal" href="#watchdog-retry-latch-functionality">Watchdog/Retry/Latch Functionality</a></li>
+<li><a class="reference internal" href="#power-down-options">Power Down Options</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#driver-initialization-example">Driver Initialization Example</a><ul>
 <li><a class="reference internal" href="#example-initialization-using-maxim-sdk-as-platform">Example Initialization Using Maxim SDK as Platform</a></li>
 </ul>
 </li>
@@ -609,14 +619,14 @@ Content on this topic
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/MAX9611PMB1" target="_blank">MAX9611PMB1</a></p></li>
 </ul>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">===== Overview ===== The <a class="icon adi reference external" href="https://www.analog.com/MAX9611" target="_blank">MAX9611</a> / <a class="icon adi reference external" href="https://www.analog.com/MAX9612" target="_blank">MAX9612</a> are high-side current-sense amplifiers with an integrated 12-bit ADC and a gain block that can be configured either as an op amp or comparator, making these devices ideal for a number of industrial and automotive applications.</div>
-</div>
+<section id="overview">
+<h3>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h3>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/MAX9611" target="_blank">MAX9611</a> / <a class="icon adi reference external" href="https://www.analog.com/MAX9612" target="_blank">MAX9612</a> are high-side current-sense amplifiers with an integrated 12-bit ADC and a gain block that can be configured either as an op amp or comparator, making these devices ideal for a number of industrial and automotive applications.</p>
 <p>The high-side, current-sense amplifiers operate over a wide 0 V to 60 V input common-mode voltage range. The programmable full-scale voltage (440 mV, 110 mV, and 55 mV) of these amplifiers offers wide dynamic range, accurate current measurement, and application flexibility in choosing sense resistor values. A choice of either an internal op amp or a comparator is provided to the user.</p>
 <p>The internal amplifier can be used to limit the inrush current or to create a current source in a closed-loop system. The comparator can be used to monitor fault events for fast response.</p>
 <p>An I2C-controlled 12-bit, 500 sps analog-to-digital converter (ADC) can be used to read the voltage across the sense resistor (V<sub>SENSE</sub>), the input common-mode voltage (V<sub>RSCM</sub>), op amp/comparator output (V<sub>OUT</sub>), op amp/ comparator reference voltage (V<sub>SET</sub>), and internal die temperature.</p>
 <p>The I2C bus is compatible with 1.8 V and 3.3 V logic, allowing modern microcontrollers to interface to it. The <a class="icon adi reference external" href="https://www.analog.com/MAX9611" target="_blank">MAX9611</a> features a noninverting input-to-output configuration, while the <a class="icon adi reference external" href="https://www.analog.com/MAX9612" target="_blank">MAX9612</a> features an inverting input-to-output configuration.</p>
+</section>
 </section>
 <section id="applications">
 <h2>Applications<a class="headerlink" href="#applications" title="Link to this heading"></a></h2>
@@ -633,10 +643,10 @@ Content on this topic
 <section id="adi-no-os">
 <h3>ADI No-OS<a class="headerlink" href="#adi-no-os" title="Link to this heading"></a></h3>
 <p>The goal of the ADI Microcontroller No-OS is to provide reference projects for lower end processors, which can’t run Linux or aren’t running a specific operating system, and to help those customers using microcontrollers with ADI parts. ADI No-OS offers <strong>generic drivers</strong>, which can be used as a base for any microcontroller platform and also <strong>example projects</strong>, which are using these drivers on various microcontroller platforms.</p>
-<div class="line-block">
-<div class="line">For more information about ADI No-OS and supported microcontroller platforms, visit the <a class="reference internal" href="../../no-os.html"><span class="doc">No-OS User Guide</span></a>.</div>
-<div class="line">===== MAX9611 ADI No-OS driver =====</div>
-</div>
+<p>For more information about ADI No-OS and supported microcontroller platforms, visit the <a class="reference internal" href="../../no-os.html"><span class="doc">No-OS User Guide</span></a>.</p>
+</section>
+<section id="max9611-adi-no-os-driver">
+<h3>MAX9611 ADI No-OS driver<a class="headerlink" href="#max9611-adi-no-os-driver" title="Link to this heading"></a></h3>
 </section>
 </section>
 <section id="driver-source-code">
@@ -665,10 +675,8 @@ Content on this topic
 </ul>
 <p><img alt="Implementation file of ADI util library" src="https://wiki.analog.com/_media/:git-no-OS:`util/no_os_util`.c" /></p>
 </div>
-<div class="line-block">
-<div class="line">To use the MAX9611 No-OS driver, you need to provide the specific implementation for the communication APIs and the specific types they use.</div>
-<div class="line">If the SPI communication is chosen, there are three functions which are called by the MAX9611 driver and have to be implemented:</div>
-</div>
+<p>To use the MAX9611 No-OS driver, you need to provide the specific implementation for the communication APIs and the specific types they use.</p>
+<p>If the SPI communication is chosen, there are three functions which are called by the MAX9611 driver and have to be implemented:</p>
 <div class="center box docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -728,11 +736,12 @@ Content on this topic
 <h2>Device Configuration<a class="headerlink" href="#device-configuration" title="Link to this heading"></a></h2>
 <section id="driver-initialization">
 <h3>Driver Initialization<a class="headerlink" href="#driver-initialization" title="Link to this heading"></a></h3>
-<div class="line-block">
-<div class="line">To use the device, you need to provide the support for the communication protocol (I2C) as mentioned above.</div>
-<div class="line">The first API function to be called is <strong>max9611_addr_gen</strong> to generate the corresponding device’s slave address. Once a proper address is generated, use the function <strong>max9611_init</strong> to initialize the device and make sure that it returns 0. This indicates a successful driver initialization.</div>
-<div class="line">=== Device Address Generation === The <a class="icon adi reference external" href="https://www.analog.com/MAX9611" target="_blank">MAX9611</a> / <a class="icon adi reference external" href="https://www.analog.com/MAX9612" target="_blank">MAX9612</a> have the provision for multiple I2C slave addresses via the <strong>A0</strong> and <strong>A1</strong> pins. To generate the proper address, supply the voltage level going into pins <strong>A0</strong> and <strong>A1</strong> to the <strong>max9611_addr_gen</strong> function.</div>
-</div>
+<p>To use the device, you need to provide the support for the communication protocol (I2C) as mentioned above.</p>
+<p>The first API function to be called is <strong>max9611_addr_gen</strong> to generate the corresponding device’s slave address. Once a proper address is generated, use the function <strong>max9611_init</strong> to initialize the device and make sure that it returns 0. This indicates a successful driver initialization.</p>
+</section>
+<section id="device-address-generation">
+<h3>Device Address Generation<a class="headerlink" href="#device-address-generation" title="Link to this heading"></a></h3>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/MAX9611" target="_blank">MAX9611</a> / <a class="icon adi reference external" href="https://www.analog.com/MAX9612" target="_blank">MAX9612</a> have the provision for multiple I2C slave addresses via the <strong>A0</strong> and <strong>A1</strong> pins. To generate the proper address, supply the voltage level going into pins <strong>A0</strong> and <strong>A1</strong> to the <strong>max9611_addr_gen</strong> function.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The header file of the <a class="icon adi reference external" href="https://www.analog.com/MAX9611" target="_blank">MAX9611</a> driver provides an enumeration for the valid <strong>A0</strong> and <strong>A1</strong> input voltage level values. There are a total of 16 valid slave address combinations that can be generated depending on the voltage level supplied to the address pin. For reference, refer to Table 2 of the <a class="icon adi reference external" href="https://www.analog.com/MAX9611" target="_blank">MAX9611</a> data sheet.</p>
@@ -740,14 +749,12 @@ Content on this topic
 </section>
 <section id="output-amplifier-comparator-configuration">
 <h3>Output Amplifier / Comparator Configuration<a class="headerlink" href="#output-amplifier-comparator-configuration" title="Link to this heading"></a></h3>
-<div class="line-block">
-<div class="line">The <a class="icon adi reference external" href="https://www.analog.com/MAX9611" target="_blank">MAX9611</a> contains an internally selectable op amp and comparator whose inputs are the current sense amplifier with a 2.5 gain and the <strong>SET</strong> pin. By using the <strong>max9611_set_mode</strong> and <strong>max9611_get_mode</strong> functions, the user would be able to set and obtain the configuration of the <strong>OUT</strong> pin, respectively. The header file contains the enumerations pertaining to the valid operating modes.</div>
-<div class="line">=== Configurable Analog-to-Digital Converter (ADC) === The <a class="icon adi reference external" href="https://www.analog.com/MAX9611" target="_blank">MAX9611</a> contains an internal dual-slope integrating 12-bit ADC with a 2 mS conversion time. This ADC is also compatible with 1.8 V or 3.3 V I2C logic level buses. This ADC contains an internal MUX to allow selection between the following measurements: input sense voltage, input common-mode voltage, SET pin voltage, OUT pin voltage, and die temperature.</div>
-</div>
-<div class="line-block">
-<div class="line">Similarly, the mux configuration can be set or read through the <strong>max9611_set_mux</strong> and <strong>max9611_get_mux</strong> driver functions. The <strong>max9611_set_mux</strong> function also allows a burst read of all viable channels, which might be useful for certain applications. The valid enumerations corresponding to each usable mode can be seen below:</div>
-<div class="line"><br /></div>
-</div>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/MAX9611" target="_blank">MAX9611</a> contains an internally selectable op amp and comparator whose inputs are the current sense amplifier with a 2.5 gain and the <strong>SET</strong> pin. By using the <strong>max9611_set_mode</strong> and <strong>max9611_get_mode</strong> functions, the user would be able to set and obtain the configuration of the <strong>OUT</strong> pin, respectively. The header file contains the enumerations pertaining to the valid operating modes.</p>
+</section>
+<section id="configurable-analog-to-digital-converter-adc">
+<h3>Configurable Analog-to-Digital Converter (ADC)<a class="headerlink" href="#configurable-analog-to-digital-converter-adc" title="Link to this heading"></a></h3>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/MAX9611" target="_blank">MAX9611</a> contains an internal dual-slope integrating 12-bit ADC with a 2 mS conversion time. This ADC is also compatible with 1.8 V or 3.3 V I2C logic level buses. This ADC contains an internal MUX to allow selection between the following measurements: input sense voltage, input common-mode voltage, SET pin voltage, OUT pin voltage, and die temperature.</p>
+<p>Similarly, the mux configuration can be set or read through the <strong>max9611_set_mux</strong> and <strong>max9611_get_mux</strong> driver functions. The <strong>max9611_set_mux</strong> function also allows a burst read of all viable channels, which might be useful for certain applications. The valid enumerations corresponding to each usable mode can be seen below:</p>
 <div class="center box docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -781,16 +788,8 @@ Content on this topic
 </div>
 </div>
 <p>Once the mux configuration has been set, the selected channel measurement can be read using the <strong>max9611_get_raw</strong> function.</p>
-<div class="line-block">
-<div class="line">&lt;note / important&gt; The <strong>max9611_get_raw</strong> function only allows reading of single channel measurements i.e., Current Sense Amplifier (CSA) input only. Setting the device to fast mode via <strong>max9611_set_mux</strong> for a burst read of multiple channels will require a multi-byte register read starting from the CSA MSB register (0x00) up to the Temp LSB register (0x09) using the <strong>max9611_read</strong> function. &lt;/WRAP&gt;</div>
-</div>
-<div class="line-block">
-<div class="line">** Die Temperature Measurement **</div>
-<div class="line">By configuring the internal mux using <strong>max9611_set_mux</strong> function, the die temperature of the <a class="icon adi reference external" href="https://www.analog.com/MAX9611" target="_blank">MAX9611</a> can also be measured. The temperature measurement ranges from -40°C to +125°C with a 0.48°C step size. The temperature measurement is encoded using 9 bits in two’s complement format.</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
+<p>&lt;note / important&gt; The <strong>max9611_get_raw</strong> function only allows reading of single channel measurements i.e., Current Sense Amplifier (CSA) input only. Setting the device to fast mode via <strong>max9611_set_mux</strong> for a burst read of multiple channels will require a multi-byte register read starting from the CSA MSB register (0x00) up to the Temp LSB register (0x09) using the <strong>max9611_read</strong> function. ** Die Temperature Measurement **</p>
+<p>By configuring the internal mux using <strong>max9611_set_mux</strong> function, the die temperature of the <a class="icon adi reference external" href="https://www.analog.com/MAX9611" target="_blank">MAX9611</a> can also be measured. The temperature measurement ranges from -40°C to +125°C with a 0.48°C step size. The temperature measurement is encoded using 9 bits in two’s complement format.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Refer to Table 1 of <a class="icon adi reference external" href="https://www.analog.com/MAX9611" target="_blank">MAX9611</a> data sheet for the converting the LSB read into its corresponding temperature measurement.</p>
@@ -798,10 +797,7 @@ Content on this topic
 </section>
 <section id="watchdog-retry-latch-functionality">
 <h3>Watchdog/Retry/Latch Functionality<a class="headerlink" href="#watchdog-retry-latch-functionality" title="Link to this heading"></a></h3>
-<div class="line-block">
-<div class="line">The <a class="icon adi reference external" href="https://www.analog.com/MAX9611" target="_blank">MAX9611</a>’s internal digital block sports a watchdog function for handling false fault transients, applicable for both op amp and comparator operating modes. Different time delay options for the comparator are configured in CONTROL REGISTER 2 through the corresponding driver functions:</div>
-<div class="line"><br /></div>
-</div>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/MAX9611" target="_blank">MAX9611</a>’s internal digital block sports a watchdog function for handling false fault transients, applicable for both op amp and comparator operating modes. Different time delay options for the comparator are configured in CONTROL REGISTER 2 through the corresponding driver functions:</p>
 <div class="center box docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -821,13 +817,8 @@ Content on this topic
 </tbody>
 </table>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
 </div>
-</div>
-<div class="line-block">
-<div class="line">The valid delay times for the watchdog delay and retry delay times are as follows:</div>
-</div>
+<p>The valid delay times for the watchdog delay and retry delay times are as follows:</p>
 <p>** Watchdog Delay Times **</p>
 <div class="center box docutils container">
 <div class="table-wrapper docutils container">
@@ -860,12 +851,15 @@ Content on this topic
 </div>
 <p>During Normal Operation (MAX9611_NORMAL_MODE), the internal amplifier output depends on its inputs: the CSA output and the <strong>SET</strong> pin voltage level. This internal amplifier can act as a comparator for open-loop configurations.</p>
 <p>For op amp (MAX9611_OPAMP_MODE) or comparator (MAX9611_COMPARATOR_MODE), the comparator output ensures the CSA output stays above the <strong>SET</strong> voltage level for a watchdog delay time, and then latches on to this state. The retry delay time dictates the time taken before the comparator state is reset and the cycle repeats.</p>
-<div class="line-block">
-<div class="line">For more information on this, refer to the <a class="icon adi reference external" href="https://www.analog.com/MAX9611" target="_blank">MAX9611</a> data sheet under the <strong>Watchdog/Latch/Retry Functionality</strong> section and other related sections.</div>
-<div class="line">=== Power Down Options === To save power, one may use the <strong>max9611_shutdown</strong> function resulting in a 5 µA supply current drawn. Alternatively, this function can also be used to bring the component back to its ‘power on’ state.</div>
-<div class="line">==== Driver Initialization Example ====</div>
-</div>
+<p>For more information on this, refer to the <a class="icon adi reference external" href="https://www.analog.com/MAX9611" target="_blank">MAX9611</a> data sheet under the <strong>Watchdog/Latch/Retry Functionality</strong> section and other related sections.</p>
 </section>
+<section id="power-down-options">
+<h3>Power Down Options<a class="headerlink" href="#power-down-options" title="Link to this heading"></a></h3>
+<p>To save power, one may use the <strong>max9611_shutdown</strong> function resulting in a 5 µA supply current drawn. Alternatively, this function can also be used to bring the component back to its ‘power on’ state.</p>
+</section>
+</section>
+<section id="driver-initialization-example">
+<h2>Driver Initialization Example<a class="headerlink" href="#driver-initialization-example" title="Link to this heading"></a></h2>
 <section id="example-initialization-using-maxim-sdk-as-platform">
 <h3>Example Initialization Using Maxim SDK as Platform<a class="headerlink" href="#example-initialization-using-maxim-sdk-as-platform" title="Link to this heading"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">ret</span><span class="p">;</span>
@@ -1008,9 +1002,6 @@ Content on this topic
         <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
 </div>
 </section>
 </section>

@@ -665,7 +665,7 @@ Content on this topic
 <li><p>Use a proper antenna on the Rx side, which is capable of covering the 1090 MHz band, such as an <a class="icon link reference external" href="http://www.dpdproductions.com/page_vhf_air.html#adsmobilehalf" target="_blank">ADS-B Double 1/2 Wave Mobile Antenna</a>; using a poorly tuned or poorly made antenna will result in a lack of range for your air radar.</p></li>
 </ul>
 <p>Besides, if you are in a location with sparse aircraft traffic, it is recommended to run the model for longer time in order to capture some useful data. You can tell whether there is any useful data by looking at the spectrum analyzer. A typical ADS-B spectrum looks like this:</p>
-<img alt="Block diagram" src="https://wiki.analog.com/_media/adsb_spec.png" />
+<img alt="Block diagram" src="https://wiki.analog.com/_media/resources/tools-software/linux-software/libiio/clients/adsb_spec.png" />
 <p>With everything set up properly, in order to run the MATLAB model, simply use the following command:</p>
 <div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">rssi1</span><span class="p">,</span><span class="n">rssi2</span><span class="p">]=</span><span class="n">ad9361_ModeS</span><span class="p">(</span><span class="s">&#39;ip&#39;</span><span class="p">,</span><span class="s">&#39;data source&#39;</span><span class="p">,</span><span class="n">channel</span><span class="p">);</span>
 </pre></div>
@@ -700,7 +700,7 @@ Content on this topic
 <p>The detector and decoding piece comes directly from that model, and we add the Simulink IIO System object to conduct the signal reception and hardware in the loop simulation.</p>
 <p>The original model works with sample time = 1 and frame size = 1. However, the Simulink IIO System object works in a buffer mode - it accumulates a number of samples and then processes them. In order to make the original model works with the System object, we added two blocks between them: unbuffer to make frame size = 1 and rate transition to make sample time = 1. By doing this, we can keep the original model intact.</p>
 <p>The Simulink model <strong>ModeS_Simulink_libiio.slx</strong> is shown in the figure below. We set up the target using <em>iio_sys_obj</em> block, and the received ADS-B signal is post processed by the detector and decoding subsystem.</p>
-<img alt="Block diagram" src="https://wiki.analog.com/_media/adsb_model.png" />
+<img alt="Block diagram" src="https://wiki.analog.com/_media/resources/tools-software/linux-software/libiio/clients/adsb_model.png" />
 <p>Depending on how you set up the TX_LO_FREQ and RX_LO_FREQ, this Simulink model can be run in two modes: using pre-captured data “DataIn” and using live data. Taking the pre-captured data for example, at the end of the simulation, we can see the following results in command window:</p>
 <p><img alt="image2" src="https://wiki.analog.com/_media/fig13.png" /></p>
 <p>Instead of the result table shown in the MATLAB model, the results here are displayed in the text format.</p>

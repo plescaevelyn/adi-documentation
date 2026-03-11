@@ -95,8 +95,22 @@
           <ul>
 <li><a class="reference internal" href="#">AD5781/AD5791 Quick Start Guide</a><ul>
 <li><a class="reference internal" href="#features">Features</a></li>
-<li><a class="reference internal" href="#functional-block-diagram">Functional Block Diagram</a><ul>
+<li><a class="reference internal" href="#functional-block-diagram">Functional Block Diagram</a></li>
+<li><a class="reference internal" href="#pin-configuration">Pin Configuration</a></li>
+<li><a class="reference internal" href="#input-shift-register-contents">Input Shift Register Contents</a><ul>
 <li><a class="reference internal" href="#control-register">Control Register</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#transfer-function">Transfer Function</a></li>
+<li><a class="reference internal" href="#example-1-initializing-and-writing-to-the-dac-register">Example 1: Initializing and Writing to the DAC Register</a><ul>
+<li><a class="reference internal" href="#initializing-the-dac">Initializing the DAC</a></li>
+<li><a class="reference internal" href="#writing-to-the-dac-register">Writing to the DAC Register</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#example-2-clearing-the-dac-to-a-defined-value">Example 2: Clearing the DAC to a Defined Value</a><ul>
+<li><a class="reference internal" href="#writing-to-the-clearcode-register">Writing to the Clearcode Register</a></li>
+<li><a class="reference internal" href="#writing-to-the-software-control-register">Writing to the Software Control Register</a></li>
+<li><a class="reference internal" href="#reading-from-the-clearcode-register">Reading From the Clearcode Register</a></li>
 </ul>
 </li>
 </ul>
@@ -608,84 +622,85 @@ Content on this topic
 </section>
 <section id="functional-block-diagram">
 <h2>Functional Block Diagram<a class="headerlink" href="#functional-block-diagram" title="Link to this heading"></a></h2>
-<div class="line-block">
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/quick-start/ad5781_ad5791_block_diagram.png"><img alt="image1" src="https://wiki.analog.com/_media/resources/quick-start/ad5781_ad5791_block_diagram.png" style="width: 500px;" /></a></div>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/quick-start/ad5781_ad5791_block_diagram.png"><img alt="image1" src="https://wiki.analog.com/_media/resources/quick-start/ad5781_ad5791_block_diagram.png" style="width: 500px;" /></a></p>
+<div class="centeralign docutils container">
+<p>//Figure 1. //</p>
+</div>
+</section>
+<section id="pin-configuration">
+<h2>Pin Configuration<a class="headerlink" href="#pin-configuration" title="Link to this heading"></a></h2>
+<div class="centeralign docutils container">
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/quick-start/ad5781_ad5791_pin_configuration.png"><img alt="image2" src="https://wiki.analog.com/_media/resources/quick-start/ad5781_ad5791_pin_configuration.png" style="width: 300px;" /></a></p>
 </div>
 <div class="centeralign docutils container">
-<p>//Figure 1. *</p>
-</div>
-<p>===== Pin Configuration =====</p>
-<div class="centeralign docutils container">
-<p></p>
-</div>
-<div class="centeralign docutils container">
-<p><a href="#id1"><span class="problematic" id="id2">*</span></a>Figure 2. 20-Lead TSSOP Pin Configuration//</p>
-</div>
-<div class="line-block">
-<div class="line"><strong>Table 1. Function Descriptions for Quick Start</strong></div>
-<div class="line">^ Mnemonic ^ Description ^</div>
+<p><em>Figure 2. 20-Lead TSSOP Pin Configuration **Table 1. Function Descriptions for Quick Start*</em></p>
 </div>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Mnemonic</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
 <tbody>
-<tr class="row-odd"><td><p>INV</p></td>
+<tr class="row-even"><td><p>INV</p></td>
 <td><p>Inverting input connection for external amplifier.</p></td>
 </tr>
-<tr class="row-even"><td><p>V<sub>OUT</sub></p></td>
+<tr class="row-odd"><td><p>V<sub>OUT</sub></p></td>
 <td><p>Analog output voltage.</p></td>
 </tr>
-<tr class="row-odd"><td><p>V<sub>REFPS</sub></p></td>
+<tr class="row-even"><td><p>V<sub>REFPS</sub></p></td>
 <td><p>Positive reference sense voltage input. Connect a voltage in the range of 5 V to V<sub>DD</sub> - 2.5 V.</p></td>
 </tr>
-<tr class="row-even"><td><p>V<sub>REFPF</sub></p></td>
+<tr class="row-odd"><td><p>V<sub>REFPF</sub></p></td>
 <td><p>Positive reference force voltage input. Connect a voltage in the range of 5 V to V<sub>DD</sub> - 2.5 V.</p></td>
 </tr>
-<tr class="row-odd"><td><p>V<sub>DD</sub></p></td>
+<tr class="row-even"><td><p>V<sub>DD</sub></p></td>
 <td><p>Positive analog supply connection. Connect a voltage in the range of 7.5 V to 16.5 V. V<sub>DD</sub> must be decoupled to AGND.</p></td>
 </tr>
-<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(overlineRESET\)</span></p></td>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(overlineRESET\)</span></p></td>
 <td><p>Active low reset. Asserting this pin returns the DAC to its power-on status.</p></td>
 </tr>
-<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(overlineCLR\)</span></p></td>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(overlineCLR\)</span></p></td>
 <td><p>Active low input. Asserting this pin sets the DAC register to a user defined value and updates the DAC output.</p></td>
 </tr>
-<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(overlineLDAC\)</span></p></td>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(overlineLDAC\)</span></p></td>
 <td><p>Active low load DAC logic input. This is used to update the DAC register and, consequently, the analog output.</p></td>
 </tr>
-<tr class="row-odd"><td><p>V<sub>CC</sub></p></td>
+<tr class="row-even"><td><p>V<sub>CC</sub></p></td>
 <td><p>Digital supply. Connect a voltage in the range of 2.7 V to 5.5 V. V<sub>CC</sub> must be decoupled to DGND.</p></td>
 </tr>
-<tr class="row-even"><td><p>IOV<sub>CC</sub></p></td>
+<tr class="row-odd"><td><p>IOV<sub>CC</sub></p></td>
 <td><p>Digital interface supply. Voltage range is from 1.71 V to 5.5 V.</p></td>
 </tr>
-<tr class="row-odd"><td><p>SDO</p></td>
+<tr class="row-even"><td><p>SDO</p></td>
 <td><p>Serial data output.</p></td>
 </tr>
-<tr class="row-even"><td><p>SDIN</p></td>
+<tr class="row-odd"><td><p>SDIN</p></td>
 <td><p>Serial data input.</p></td>
 </tr>
-<tr class="row-odd"><td><p>SCLK</p></td>
+<tr class="row-even"><td><p>SCLK</p></td>
 <td><p>Serial clock input. Data can be transferred at clock rates of up to 35 MHz.</p></td>
 </tr>
-<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(overlineSYNC\)</span></p></td>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(overlineSYNC\)</span></p></td>
 <td><p>Active low digital interface synchronization input. This is the frame synchronization signal for the input data.</p></td>
 </tr>
-<tr class="row-odd"><td><p>DGND</p></td>
+<tr class="row-even"><td><p>DGND</p></td>
 <td><p>Ground reference for digital circuitry.</p></td>
 </tr>
-<tr class="row-even"><td><p>V<sub>REFNF</sub></p></td>
+<tr class="row-odd"><td><p>V<sub>REFNF</sub></p></td>
 <td><p>Negative reference force voltage input. Connect a voltage in the range of V<sub>SS</sub> + 2.5 V to 0 V.</p></td>
 </tr>
-<tr class="row-odd"><td><p>V<sub>REFNS</sub></p></td>
+<tr class="row-even"><td><p>V<sub>REFNS</sub></p></td>
 <td><p>Negative reference sense voltage input. Connect a voltage in the range of V<sub>SS</sub> + 2.5 V to 0 V.</p></td>
 </tr>
-<tr class="row-even"><td><p>V<sub>SS</sub></p></td>
+<tr class="row-odd"><td><p>V<sub>SS</sub></p></td>
 <td><p>Negative analog supply connection. Connect a voltage in the range of -16.5 V to -2.5 V. V<sub>SS</sub> must be decoupled to AGND.</p></td>
 </tr>
-<tr class="row-odd"><td><p>AGND</p></td>
+<tr class="row-even"><td><p>AGND</p></td>
 <td><p>Ground reference for analog circuitry.</p></td>
 </tr>
-<tr class="row-even"><td><p>R<sub>FB</sub></p></td>
+<tr class="row-odd"><td><p>R<sub>FB</sub></p></td>
 <td><p>Feedback connection for external amplifier.</p></td>
 </tr>
 </tbody>
@@ -694,8 +709,8 @@ Content on this topic
 <div class="line-block">
 <div class="line"><br /></div>
 <div class="line">===== Hardware Control Pins Truth Table =====</div>
-<div class="line"><strong>Table 2. Hardware Control Pins Truth Table</strong></div>
 </div>
+<p><strong>Table 2. Hardware Control Pins Truth Table</strong></p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -774,20 +789,17 @@ Content on this topic
 </tbody>
 </table>
 </div>
-<div class="line-block">
-<div class="line"><sup>1</sup> X is don’t care.</div>
-<div class="line"><sup>2</sup> ⇑ is rising edge.</div>
-<div class="line"><sup>3</sup> ⇓ is falling edge.</div>
-<div class="line">===== Input Shift Register Contents =====</div>
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/quick-start/ad5781_91_shift_register_contents.png"><img alt="image2" src="https://wiki.analog.com/_media/resources/quick-start/ad5781_91_shift_register_contents.png" style="width: 700px;" /></a></div>
-</div>
+<p><sup>1</sup> X is don’t care.</p>
+<p><sup>2</sup> ⇑ is rising edge.</p>
+<p><sup>3</sup> ⇓ is falling edge.</p>
+</section>
+<section id="input-shift-register-contents">
+<h2>Input Shift Register Contents<a class="headerlink" href="#input-shift-register-contents" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/quick-start/ad5781_91_shift_register_contents.png"><img alt="image3" src="https://wiki.analog.com/_media/resources/quick-start/ad5781_91_shift_register_contents.png" style="width: 700px;" /></a></p>
 <div class="centeralign docutils container">
 <p>//Figure 3. Input Shift Register Contents //</p>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line"><strong>Table 3. Register Address Definitions</strong></div>
-</div>
+<p><strong>Table 3. Register Address Definitions</strong></p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -856,23 +868,14 @@ Content on this topic
 </tbody>
 </table>
 </div>
-<div class="line-block">
-<div class="line"><sup>1</sup> X = don’t care.</div>
-</div>
+<p><sup>1</sup> X = don’t care.</p>
 <section id="control-register">
 <h3>Control Register<a class="headerlink" href="#control-register" title="Link to this heading"></a></h3>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="line-block">
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/quick-start/ad5781_91_control_register.png"><img alt="image3" src="https://wiki.analog.com/_media/resources/quick-start/ad5781_91_control_register.png" style="width: 700px;" /></a></div>
-</div>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/quick-start/ad5781_91_control_register.png"><img alt="image4" src="https://wiki.analog.com/_media/resources/quick-start/ad5781_91_control_register.png" style="width: 700px;" /></a></p>
 <div class="centeralign docutils container">
 <p>//Figure 4. Control Register //</p>
 </div>
-<div class="line-block">
-<div class="line"><strong>Table 4. Control Register Functions</strong></div>
-</div>
+<p><strong>Table 4. Control Register Functions</strong></p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -1013,16 +1016,11 @@ Content on this topic
 <div class="line"><br /></div>
 <div class="line">====Software Control Register====</div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/quick-start/ad5781_91_software_control_register.png"><img alt="image4" src="https://wiki.analog.com/_media/resources/quick-start/ad5781_91_software_control_register.png" style="width: 700px;" /></a></div>
-</div>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/quick-start/ad5781_91_software_control_register.png"><img alt="image5" src="https://wiki.analog.com/_media/resources/quick-start/ad5781_91_software_control_register.png" style="width: 700px;" /></a></p>
 <div class="centeralign docutils container">
 <p>//Figure 5. Software Control Register //</p>
 </div>
-<div class="line-block">
-<div class="line"><strong>Table 5. Software Control Register Functions</strong></div>
-</div>
+<p><strong>Table 5. Software Control Register Functions</strong></p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -1043,22 +1041,20 @@ Content on this topic
 </tbody>
 </table>
 </div>
-<div class="line-block">
-<div class="line"><sup>1</sup> The LDAC function has no effect when the <span class="math notranslate nohighlight">\(overlineCLR\)</span> pin is low. Refer to Table 2 in the <a class="reference internal" href="#"><span class="doc">Hardware Control Pins Truth Table</span></a> section for additional details.</div>
-<div class="line"><sup>2</sup> The CLR function has no effect when the <span class="math notranslate nohighlight">\(overlineLDAC\)</span> pin is low. Refer to Table 2 in the <a class="reference internal" href="#"><span class="doc">Hardware Control Pins Truth Table</span></a> section for additional details.</div>
+<p><sup>1</sup> The LDAC function has no effect when the <span class="math notranslate nohighlight">\(overlineCLR\)</span> pin is low. Refer to Table 2 in the <a class="reference internal" href="#"><span class="doc">Hardware Control Pins Truth Table</span></a> section for additional details. <sup>2</sup> The CLR function has no effect when the <span class="math notranslate nohighlight">\(overlineLDAC\)</span> pin is low. Refer to Table 2 in the <a class="reference internal" href="#"><span class="doc">Hardware Control Pins Truth Table</span></a> section for additional details.</p>
+</section>
+</section>
+<section id="transfer-function">
+<h2>Transfer Function<a class="headerlink" href="#transfer-function" title="Link to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$V_OUT = (V_REFP - V_REFN) \times D/(2^N-1) + V_REFN$
+</pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">===== Transfer Function =====</div>
-<div class="line"><span class="math notranslate nohighlight">\(V_OUT = (V_REFP - V_REFN) \times D/(2^N-1) + V_REFN\)</span></div>
-<div class="line">where:</div>
-<div class="line"><em>VREFN</em> is the negative voltage applied at the V<sub>REFNx</sub> input pin.</div>
-<div class="line"><em>VREFP</em> is the positive voltage applied at the V<sub>REFPx</sub> input pin.</div>
-<div class="line"><em>D</em> is the 18-bit (<a class="icon adi reference external" href="https://www.analog.com/ad5781" target="_blank">ad5781</a>) or 20-bit (<a class="icon adi reference external" href="https://www.analog.com/ad5791" target="_blank">ad5791</a>) code programmed to the DAC.</div>
-<div class="line"><em>N</em> is the number of bits.</div>
-<div class="line">===== Example 1: Initializing and Writing to the DAC Register =====</div>
-<div class="line">=== Initializing the DAC ===</div>
-</div>
+<p>where: <em>VREFN</em> is the negative voltage applied at the V<sub>REFNx</sub> input pin. <em>VREFP</em> is the positive voltage applied at the V<sub>REFPx</sub> input pin. <em>D</em> is the 18-bit (<a class="icon adi reference external" href="https://www.analog.com/ad5781" target="_blank">ad5781</a>) or 20-bit (<a class="icon adi reference external" href="https://www.analog.com/ad5791" target="_blank">ad5791</a>) code programmed to the DAC. <em>N</em> is the number of bits.</p>
+</section>
+<section id="example-1-initializing-and-writing-to-the-dac-register">
+<h2>Example 1: Initializing and Writing to the DAC Register<a class="headerlink" href="#example-1-initializing-and-writing-to-the-dac-register" title="Link to this heading"></a></h2>
+<section id="initializing-the-dac">
+<h3>Initializing the DAC<a class="headerlink" href="#initializing-the-dac" title="Link to this heading"></a></h3>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>To initialize the part,</p>
@@ -1068,11 +1064,9 @@ Content on this topic
 <li><p>To write in binary coding, select BIN/2sC = 1.</p></li>
 <li><p>Set DACTRI = 0 and OPGND = 0 to place the DAC in normal operating mode and remove the DAC output clamp to ground, respectively.</p></li>
 </ul>
-<div class="line-block">
-<div class="line">Write the following over the serial interface: 0010 0000 0000 0000 0001 0010 (R/ <span class="math notranslate nohighlight">\(overlineW\)</span> bit, three register address bits, 20 data bits).</div>
-<div class="line">See Table 6 and Figure 6.</div>
-<div class="line"><strong>Table 6. Bit Settings to Initialize and Write to the Part</strong></div>
-</div>
+<p>Write the following over the serial interface: 0010 0000 0000 0000 0001 0010 (R/ <span class="math notranslate nohighlight">\(overlineW\)</span> bit, three register address bits, 20 data bits).</p>
+<p>See Table 6 and Figure 6.</p>
+<p><strong>Table 6. Bit Settings to Initialize and Write to the Part</strong></p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -1126,26 +1120,19 @@ Content on this topic
 </tbody>
 </table>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>To write in offset binary coding, set BIN/2sC = 1.</p>
-<div class="line-block">
-<div class="line">The default coding is twos complement. The same 24-bit data impacts the values that the user writes to or reads from the part in a different way depending on the coding selected. The user must verify the coding used by writing to the control register or reading back from it.</div>
+<p>The default coding is twos complement. The same 24-bit data impacts the values that the user writes to or reads from the part in a different way depending on the coding selected. The user must verify the coding used by writing to the control register or reading back from it.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/quick-start/example1_step1_ad5781_91.png"><img alt="image6" src="https://wiki.analog.com/_media/resources/quick-start/example1_step1_ad5781_91.png" style="width: 700px;" /></a></p>
 </div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/quick-start/example1_step1_ad5781_91.png"><img alt="image5" src="https://wiki.analog.com/_media/resources/quick-start/example1_step1_ad5781_91.png" style="width: 700px;" /></a></div>
 </div>
 <div class="centeralign docutils container">
 <p><em>Figure 6. Initializing the Part</em></p>
 </div>
-<div class="line-block">
-<div class="line">=== Writing to the DAC Register ===</div>
-</div>
+</section>
+<section id="writing-to-the-dac-register">
+<h3>Writing to the DAC Register<a class="headerlink" href="#writing-to-the-dac-register" title="Link to this heading"></a></h3>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>To write a midscale code to the DAC register,</p>
@@ -1154,14 +1141,12 @@ Content on this topic
 <li><p>Set C[2:0] = 001 for the correspondent register address.</p></li>
 <li><p>Set D[19:0], the data bits, for a midscale code.</p></li>
 </ul>
-<div class="line-block">
-<div class="line">The 24-bit data to write over the serial interface is as follows:</div>
-<div class="line">18-bit <a class="icon adi reference external" href="https://www.analog.com/ad5781" target="_blank">ad5781</a>: 0001 1000 0000 0000 0000 00XX</div>
-<div class="line">20-bit <a class="icon adi reference external" href="https://www.analog.com/ad5791" target="_blank">ad5791</a>: 0001 1000 0000 0000 0000 0000</div>
-<div class="line">where X = don’t care.</div>
-<div class="line">See Table 7 and Figure 7.</div>
-<div class="line"><strong>Table 7. Bit Settings to Write to DAC Register</strong></div>
-</div>
+<p>The 24-bit data to write over the serial interface is as follows:</p>
+<p>18-bit <a class="icon adi reference external" href="https://www.analog.com/ad5781" target="_blank">ad5781</a>: 0001 1000 0000 0000 0000 00XX</p>
+<p>20-bit <a class="icon adi reference external" href="https://www.analog.com/ad5791" target="_blank">ad5791</a>: 0001 1000 0000 0000 0000 0000</p>
+<p>where X = don’t care.</p>
+<p>See Table 7 and Figure 7.</p>
+<p><strong>Table 7. Bit Settings to Write to DAC Register</strong></p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -1185,82 +1170,60 @@ Content on this topic
 </tbody>
 </table>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/quick-start/example1_step2_ad5781_91.png"><img alt="image6" src="https://wiki.analog.com/_media/resources/quick-start/example1_step2_ad5781_91.png" style="width: 700px;" /></a></div>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/quick-start/example1_step2_ad5781_91.png"><img alt="image7" src="https://wiki.analog.com/_media/resources/quick-start/example1_step2_ad5781_91.png" style="width: 700px;" /></a></p>
 </div>
 <div class="centeralign docutils container">
 <p><em>Figure 7. Writing to the DAC Register</em></p>
 </div>
-<div class="line-block">
-<div class="line">===== Example 2: Clearing the DAC to a Defined Value =====</div>
-<div class="line">=== Writing to the Clearcode Register ===</div>
-</div>
+</section>
+</section>
+<section id="example-2-clearing-the-dac-to-a-defined-value">
+<h2>Example 2: Clearing the DAC to a Defined Value<a class="headerlink" href="#example-2-clearing-the-dac-to-a-defined-value" title="Link to this heading"></a></h2>
+<section id="writing-to-the-clearcode-register">
+<h3>Writing to the Clearcode Register<a class="headerlink" href="#writing-to-the-clearcode-register" title="Link to this heading"></a></h3>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>To define the value at which the DAC output is set when the <span class="math notranslate nohighlight">\(overlineCLR\)</span> pin or CLR bit in the software control register is asserted, write the desired code to the clearcode register.</p>
-<div class="line-block">
-<div class="line">For a full-scale clear code, write the following over the serial interface:</div>
-<div class="line">18-bit <a class="icon adi reference external" href="https://www.analog.com/ad5781" target="_blank">ad5781</a>: 0011 1111 1111 1111 1111 11XX</div>
-<div class="line">20-bit <a class="icon adi reference external" href="https://www.analog.com/ad5791" target="_blank">ad5791</a>: 0011 1111 1111 1111 1111 1111</div>
-<div class="line">where X = don’t care.</div>
-<div class="line">See Figure 8.</div>
-<div class="line"><br /></div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/quick-start/example2_step1_ad5781_91.png"><img alt="image7" src="https://wiki.analog.com/_media/resources/quick-start/example2_step1_ad5781_91.png" style="width: 700px;" /></a></div>
+<p>For a full-scale clear code, write the following over the serial interface:</p>
+<p>18-bit <a class="icon adi reference external" href="https://www.analog.com/ad5781" target="_blank">ad5781</a>: 0011 1111 1111 1111 1111 11XX</p>
+<p>20-bit <a class="icon adi reference external" href="https://www.analog.com/ad5791" target="_blank">ad5791</a>: 0011 1111 1111 1111 1111 1111</p>
+<p>where X = don’t care.</p>
+<p>See Figure 8.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/quick-start/example2_step1_ad5781_91.png"><img alt="image8" src="https://wiki.analog.com/_media/resources/quick-start/example2_step1_ad5781_91.png" style="width: 700px;" /></a></p>
 </div>
 <div class="centeralign docutils container">
 <p><em>Figure 8. Writing Full-Scale Code to the Clearcode Register</em></p>
 </div>
-<div class="line-block">
-<div class="line">=== Writing to the Software Control Register ===</div>
-</div>
+</section>
+<section id="writing-to-the-software-control-register">
+<h3>Writing to the Software Control Register<a class="headerlink" href="#writing-to-the-software-control-register" title="Link to this heading"></a></h3>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>Set the CLR bit to a Logic 1 to set the DAC register to a user defined value and update the DAC output.</p>
-<div class="line-block">
-<div class="line">Write the following over the serial interface: 0100 0000 0000 0000 0000 0010</div>
-<div class="line">The user should see the DAC output value change to full-scale code.</div>
-<div class="line">See Figure 9.</div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/quick-start/example2_step2_ad5781_91.png"><img alt="image8" src="https://wiki.analog.com/_media/resources/quick-start/example2_step2_ad5781_91.png" style="width: 700px;" /></a></div>
+<p>Write the following over the serial interface: 0100 0000 0000 0000 0000 0010</p>
+<p>The user should see the DAC output value change to full-scale code.</p>
+<p>See Figure 9.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/quick-start/example2_step2_ad5781_91.png"><img alt="image9" src="https://wiki.analog.com/_media/resources/quick-start/example2_step2_ad5781_91.png" style="width: 700px;" /></a></p>
 </div>
 <div class="centeralign docutils container">
 <p><em>Figure 9. Clearing the Part to a User Defined Value</em></p>
 </div>
-<div class="line-block">
-<div class="line">=== Reading From the Clearcode Register ===</div>
-</div>
+</section>
+<section id="reading-from-the-clearcode-register">
+<h3>Reading From the Clearcode Register<a class="headerlink" href="#reading-from-the-clearcode-register" title="Link to this heading"></a></h3>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>To confirm the clearcode value written to the part, read the data from the clearcode register (full scale for this example).</p>
-<div class="line-block">
-<div class="line">Write the following over the serial interface:</div>
-<div class="line">1011 XXXX XXXX XXXX XXXX XXXX</div>
-<div class="line">where X = don’t care.</div>
-<div class="line">See Figure 10.</div>
-<div class="line"><br /></div>
-</div>
+<p>Write the following over the serial interface:</p>
+<p>1011 XXXX XXXX XXXX XXXX XXXX</p>
+<p>where X = don’t care.</p>
+<p>See Figure 10.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>Note that this action is a read function. Therefore, set the R/ <span class="math notranslate nohighlight">\(overlineW\)</span> bit = 1.</p>
-<div class="line-block">
-<div class="line">D19 to D0, the data bits, are don’t care bits because the intention is to read from the part, and not to write to the part.</div>
+<p>D19 to D0, the data bits, are don’t care bits because the intention is to read from the part, and not to write to the part.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/quick-start/example2_step3_ad5781_91.png"><img alt="image10" src="https://wiki.analog.com/_media/resources/quick-start/example2_step3_ad5781_91.png" style="width: 700px;" /></a></p>
 </div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/quick-start/example2_step3_ad5781_91.png"><img alt="image9" src="https://wiki.analog.com/_media/resources/quick-start/example2_step3_ad5781_91.png" style="width: 700px;" /></a></div>
 </div>
 <div class="centeralign docutils container">
 <p><em>Figure 10. Reading from the Clearcode Register</em></p>

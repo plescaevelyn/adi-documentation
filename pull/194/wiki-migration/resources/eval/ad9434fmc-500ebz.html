@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="NOTE:" name="description" />
+<meta content="NOTE: Support for the ad9434fmc is not part of 2022_r2 Kuiper Linux release. Last release in which pre-build files can be found is 2021_r2. Check this link to see all Kuiper releases. All the sources remained in main branches, and probably it will be added back in next releases, being supported on Zed Board." name="description" />
 
     <title>EVALUATING THE AD9434 ANALOG-TO-DIGITAL CONVERTER &#8212; System Level Documentation  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
@@ -115,6 +115,7 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#considerations-on-the-use-of-different-clock-configurations">Considerations on the Use of Different Clock Configurations</a><ul>
+<li><a class="reference internal" href="#snr-performance-of-ad9434">SNR Performance of AD9434</a></li>
 <li><a class="reference internal" href="#component-alteration-for-different-clock-configurations">Component Alteration for different Clock Configurations</a></li>
 <li><a class="reference internal" href="#how-to-use-spicontroller-for-ad9517-4-register-setting">How to use SPIController for AD9517-4 Register Setting</a></li>
 </ul>
@@ -609,29 +610,21 @@ Content on this topic
             
   <section id="evaluating-the-ad9434-analog-to-digital-converter">
 <h1>EVALUATING THE AD9434 ANALOG-TO-DIGITAL CONVERTER<a class="headerlink" href="#evaluating-the-ad9434-analog-to-digital-converter" title="Link to this heading"></a></h1>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p><strong>NOTE:</strong></p>
-<div class="line-block">
-<div class="line">Support for the ad9434fmc is not part of 2022_r2 Kuiper Linux release. Last release in which pre-build files can be found is 2021_r2. Check this <a class="reference internal" href="../tools-software/linux-software/adi-kuiper_images/release_notes.html"><span class="doc">link</span></a> to see all Kuiper releases. All the sources remained in main branches, and probably it will be added back in next releases, being supported on Zed Board.</div>
-</div>
+<p><strong>NOTE:</strong> Support for the ad9434fmc is not part of 2022_r2 Kuiper Linux release. Last release in which pre-build files can be found is 2021_r2. Check this <a class="reference internal" href="../tools-software/linux-software/adi-kuiper_images/release_notes.html"><span class="doc">link</span></a> to see all Kuiper releases. All the sources remained in main branches, and probably it will be added back in next releases, being supported on Zed Board.</p>
 </div>
 <section id="preface">
 <h2>Preface<a class="headerlink" href="#preface" title="Link to this heading"></a></h2>
-<div class="line-block">
-<div class="line">This user guide describes the evaluation board,<a class="icon adi reference external" href="https://www.analog.com/AD9434" target="_blank">AD9434-FMC-500EBZ</a>, that is used to evaluate the following Analog Devices, Inc., product: <a class="icon adi reference external" href="https://www.analog.com/AD9434" target="_blank">AD9434</a>. These evaluation board provide all of the support circuitry required to operate these parts in their various modes and configurations. The application software used to interface with the devices is also described.</div>
-<div class="line">The <a class="icon adi reference external" href="https://www.analog.com/AD9434" target="_blank">AD9434</a> data sheet provide additional information and should be consulted when using the evaluation board. All documents and software tools are available at <a class="icon adi reference external" href="https://www.analog.com/sdp" target="_blank">www.analog.com/sdp</a>. For additional information or questions, send an email to <a class="reference external" href="mailto:highspeedproductssupport&#37;&#52;&#48;analog&#46;com">highspeedproductssupport<span>&#64;</span>analog<span>&#46;</span>com</a>.</div>
-</div>
+<p>This user guide describes the evaluation board,<a class="icon adi reference external" href="https://www.analog.com/AD9434" target="_blank">AD9434-FMC-500EBZ</a>, that is used to evaluate the following Analog Devices, Inc., product: <a class="icon adi reference external" href="https://www.analog.com/AD9434" target="_blank">AD9434</a>. These evaluation board provide all of the support circuitry required to operate these parts in their various modes and configurations. The application software used to interface with the devices is also described.</p>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/AD9434" target="_blank">AD9434</a> data sheet provide additional information and should be consulted when using the evaluation board. All documents and software tools are available at <a class="icon adi reference external" href="https://www.analog.com/sdp" target="_blank">www.analog.com/sdp</a>. For additional information or questions, send an email to <a class="reference external" href="mailto:highspeedproductssupport&#37;&#52;&#48;analog&#46;com">highspeedproductssupport<span>&#64;</span>analog<span>&#46;</span>com</a>.</p>
 </section>
 <section id="typical-measurement-setup">
 <h2>Typical Measurement Setup<a class="headerlink" href="#typical-measurement-setup" title="Link to this heading"></a></h2>
 <p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/ad9434_fmc_500ebz_typical_setup.jpg"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/ad9434_fmc_500ebz_typical_setup.jpg" style="width: 600px;" /></a></p>
 <div class="centeralign docutils container">
-<p><em>Figure 1. Evaluation Board Connection—</em><a class="icon adi reference external" href="https://www.analog.com/AD9434" target="_blank">AD9434-FMC-500EBZ</a> <a href="#id1"><span class="problematic" id="id2">*</span></a>(on Left) and</p>
-<p><em>:adi:`EVAL-SDP-CH1Z &lt;sdp&gt;` *SDP-H1 (on Right)</em></p>
+<p><em>Figure 1. Evaluation Board Connection—</em><a class="icon adi reference external" href="https://www.analog.com/AD9434" target="_blank">AD9434-FMC-500EBZ</a><a href="#id1"><span class="problematic" id="id2">*</span></a>(on Left) and</p>
+<p><em>:adi:`EVAL-SDP-CH1Z &lt;sdp&gt;`*SDP-H1 (on Right)</em></p>
 </div>
 </section>
 <section id="features">
@@ -689,9 +682,7 @@ Content on this topic
 </section>
 <section id="getting-started">
 <h2>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading"></a></h2>
-<div class="line-block">
-<div class="line">This section provides quick start procedures for using the <a class="icon adi reference external" href="https://www.analog.com/AD9434" target="_blank">AD9434-FMC-500EBZ</a> board. Both the default and optional settings are described.</div>
-</div>
+<p>This section provides quick start procedures for using the <a class="icon adi reference external" href="https://www.analog.com/AD9434" target="_blank">AD9434-FMC-500EBZ</a> board. Both the default and optional settings are described.</p>
 <section id="configuring-the-board">
 <h3>Configuring the Board<a class="headerlink" href="#configuring-the-board" title="Link to this heading"></a></h3>
 <p>Before using the software for testing, configure the evaluation board as follows:</p>
@@ -804,9 +795,11 @@ Content on this topic
 <div class="centeralign docutils container">
 <p>//Figure 14. Graph Window of VisualAnalog *</p>
 </div>
-<p>* Click the disk icon within the* <strong>Graph</strong> <a href="#id5"><span class="problematic" id="id6">*</span></a>window to save the performance plot data as .csv formatted file. </p>
+<ul class="simple">
+<li><p>Click the disk icon within the <strong>Graph</strong> window to save the performance plot data as .csv formatted file. </p></li>
+</ul>
 <div class="centeralign docutils container">
-<p><a href="#id7"><span class="problematic" id="id8">*</span></a>Figure 15. VisualAnalog Disk Icon //</p>
+<p><em>Figure 15. VisualAnalog Disk Icon</em></p>
 </div>
 </section>
 <section id="testing-additional-ad9434-boards">
@@ -816,19 +809,20 @@ Content on this topic
 </section>
 <section id="considerations-on-the-use-of-different-clock-configurations">
 <h2>Considerations on the Use of Different Clock Configurations<a class="headerlink" href="#considerations-on-the-use-of-different-clock-configurations" title="Link to this heading"></a></h2>
-<div class="line-block">
-<div class="line">This section is created to give highlight on the capability of <a class="icon adi reference external" href="https://www.analog.com/AD9434" target="_blank">AD9434-FMC-500EBZ</a> board to cater different clock circuitries and its performance at maximum sample rate of 500MSPS. The board itself has provisions for external signal generator, oscillator, LVPECL, and LVDS. For oscillator, the board uses CCS575S Crystek SAW clock oscillator. For LVPECL and LVDS, <a class="icon adi reference external" href="https://www.analog.com/AD9517-4" target="_blank">AD9517-4</a> is leveraged as clock buffer using internal VCO with clock distribution mode.</div>
-<div class="line">==== SNR Performance of AD9434 ==== With reference to <a class="icon adi reference external" href="https://www.analog.com/an-501" target="_blank">an-501</a> and <a class="icon adi reference external" href="https://www.analog.com/an-756" target="_blank">an-756</a>, the SNR performance as shown in Figure 17 gives insight on the effect of clock jitter to the AD9434’s signal-to-noise ratio (SNR) performed in evaluation board clock set-up depicted in Figure 16. The external signal generator clock circuitry provides the best performance among other clock configurations, which uses Rhode and Schwarz SMA100B. The CCS575S oscillator ranks second in terms of SNR performance, followed by LVPECL with voltage swing 960mVpp, then LVDS with 3.5mA current set-up. Both LVPECL and LVDS clock configurations were leveraged by <a class="icon adi reference external" href="https://www.analog.com/ad9517-4" target="_blank">ad9517-4</a>. As an implication, the external signal generator has the lowest clock jitter among others.</div>
-</div>
+<p>This section is created to give highlight on the capability of <a class="icon adi reference external" href="https://www.analog.com/AD9434" target="_blank">AD9434-FMC-500EBZ</a> board to cater different clock circuitries and its performance at maximum sample rate of 500MSPS. The board itself has provisions for external signal generator, oscillator, LVPECL, and LVDS. For oscillator, the board uses CCS575S Crystek SAW clock oscillator. For LVPECL and LVDS, <a class="icon adi reference external" href="https://www.analog.com/AD9517-4" target="_blank">AD9517-4</a> is leveraged as clock buffer using internal VCO with clock distribution mode.</p>
+<section id="snr-performance-of-ad9434">
+<h3>SNR Performance of AD9434<a class="headerlink" href="#snr-performance-of-ad9434" title="Link to this heading"></a></h3>
+<p>With reference to <a class="icon adi reference external" href="https://www.analog.com/an-501" target="_blank">an-501</a> and <a class="icon adi reference external" href="https://www.analog.com/an-756" target="_blank">an-756</a>, the SNR performance as shown in Figure 17 gives insight on the effect of clock jitter to the AD9434’s signal-to-noise ratio (SNR) performed in evaluation board clock set-up depicted in Figure 16. The external signal generator clock circuitry provides the best performance among other clock configurations, which uses Rhode and Schwarz SMA100B. The CCS575S oscillator ranks second in terms of SNR performance, followed by LVPECL with voltage swing 960mVpp, then LVDS with 3.5mA current set-up. Both LVPECL and LVDS clock configurations were leveraged by <a class="icon adi reference external" href="https://www.analog.com/ad9517-4" target="_blank">ad9517-4</a>. As an implication, the external signal generator has the lowest clock jitter among others.</p>
 <p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/ad9434_clock_setup.png"><img alt="image15" src="https://wiki.analog.com/_media/resources/eval/ad9434_clock_setup.png" style="width: 800px;" /></a></p>
 <div class="centeralign docutils container">
 <p>//Figure 16. AD9434 Clocking Set-up *</p>
 </div>
 <p></p>
 <div class="centeralign docutils container">
-<p><a href="#id9"><span class="problematic" id="id10">*</span></a>Figure 17. AD9434 SNR Performance using Different Clock Configurations //</p>
+<p><em>Figure 17. AD9434 SNR Performance using Different Clock Configurations</em></p>
 </div>
 <p>As a trade-off in getting the best SNR performance, the material cost and resources are higher for external signal generator clock configuration. However, the user can get a better performance (almost -1 dB less than the external signal generator) with optimized material cost in oscillator clock configuration using CCS575S. For the lowest material cost compared to oscillator, the <a class="icon adi reference external" href="https://www.analog.com/ad9517-4" target="_blank">ad9517-4</a> can offer a good functionality in using either LVPECL or LVDS configurations. In design considerations, the user should get a good balance between ease of resources and ADC performance.</p>
+</section>
 <section id="component-alteration-for-different-clock-configurations">
 <h3>Component Alteration for different Clock Configurations<a class="headerlink" href="#component-alteration-for-different-clock-configurations" title="Link to this heading"></a></h3>
 <p>This section is created to be a guide on how to rework the <a class="icon adi reference external" href="https://www.analog.com/ad9434" target="_blank">AD9434-FMC-500EBZ</a> board to the desired user clock circuitry. Based from <a class="icon link reference external" href="https://wiki.analog.com/_media/resources/eval/ad9434_fmc_500ebz_sch.pdf" target="_blank">AD9434 Schematic</a> as shown in Design and Integration Files, the default clock configuration is the external signal generator. Below is a table on what components are needed to install or uninstall on the evaluation board.</p>
@@ -867,7 +861,7 @@ Content on this topic
 <p>After configuring the SPIController for AD9434 using FIFO Select 1, this section shows how to configure the SPIController by writing and reading values in <a class="icon adi reference external" href="https://www.analog.com/ad9517-4" target="_blank">ad9517-4</a>. Below are the following steps:</p>
 <ul class="simple">
 <li><p>Start another SPIController</p></li>
-<li><p>If a pop-up message saying <strong>“Read Test Failure”</strong>, select <strong>Ignore</strong>. <a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/ad9434_spicontroller_msg_ignore.png"><img alt="image16" src="https://wiki.analog.com/_media/resources/eval/ad9434_spicontroller_msg_ignore.png" style="width: 400px;" /></a></p></li>
+<li><p>If a pop-up message saying <strong>“Read Test Failure”</strong>, select**Ignore**. <a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/ad9434_spicontroller_msg_ignore.png"><img alt="image16" src="https://wiki.analog.com/_media/resources/eval/ad9434_spicontroller_msg_ignore.png" style="width: 400px;" /></a></p></li>
 </ul>
 <div class="centeralign docutils container">
 <p><em>Figure 18. 1st Ignore Test Failure</em></p>
@@ -879,7 +873,7 @@ Content on this topic
 <p><em>Figure 19. Configuration Settings</em></p>
 </div>
 <ul class="simple">
-<li><p>Again, if a message pop up saying <strong>“Read Test Failure”</strong>, select again <strong>Ignore</strong>. <a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/ad9434_spicontroller_msg_ignore.png"><img alt="image18" src="https://wiki.analog.com/_media/resources/eval/ad9434_spicontroller_msg_ignore.png" style="width: 400px;" /></a></p></li>
+<li><p>Again, if a message pop up saying <strong>“Read Test Failure”</strong>, select again**Ignore**. <a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/ad9434_spicontroller_msg_ignore.png"><img alt="image18" src="https://wiki.analog.com/_media/resources/eval/ad9434_spicontroller_msg_ignore.png" style="width: 400px;" /></a></p></li>
 </ul>
 <div class="centeralign docutils container">
 <p><em>Figure 20. 2nd Ignore Test Failure</em></p>
@@ -981,9 +975,6 @@ Content on this topic
 <li><p>Check and probe clock frequency in the ADC. Make sure the correct value is matched to the Clock Frequency Setting in ADC Data Capture Box of VA canvas.</p></li>
 <li><p>For LVPECL and LVDS configurations using <a class="icon adi reference external" href="https://www.analog.com/ad9517-4" target="_blank">ad9517-4</a>, reset the board and redo the SPIcontroller settings for <a class="icon adi reference external" href="https://www.analog.com/ad9517-4" target="_blank">ad9517-4</a>.</p></li>
 </ul>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
 </section>
 </section>
 

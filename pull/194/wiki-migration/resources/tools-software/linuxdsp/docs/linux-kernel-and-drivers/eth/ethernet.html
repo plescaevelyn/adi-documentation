@@ -94,16 +94,23 @@
           <ul>
 <li><a class="reference internal" href="#">Ethernet driver and performance</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
-<li><a class="reference internal" href="#hardware-requirement">Hardware Requirement</a><ul>
-<li><a class="reference internal" href="#package-configuration">Package Configuration</a><ul>
+<li><a class="reference internal" href="#hardware-requirement">Hardware Requirement</a></li>
+<li><a class="reference internal" href="#software-configuration">Software Configuration</a><ul>
+<li><a class="reference internal" href="#package-configuration">Package Configuration</a></li>
+<li><a class="reference internal" href="#kernel-configuration">Kernel Configuration</a><ul>
 <li><a class="reference internal" href="#enable-emac-driver">Enable EMAC driver</a></li>
 <li><a class="reference internal" href="#enable-ethernet-phy-device-driver">Enable Ethernet PHY device driver</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#configure-device-tree">Configure Device Tree</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#performance-benchmark-example">Performance Benchmark Example</a><ul>
 <li><a class="reference internal" href="#netperf-example-usage">Netperf Example Usage</a><ul>
 <li><a class="reference internal" href="#test">Test</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#netperf-gmac-ethernet-result">Netperf GMAC Ethernet Result</a></li>
 </ul>
 </li>
 </ul>
@@ -609,16 +616,13 @@ Content on this topic
 <li><p>1 Ubuntu PC with Gigabit Ethernet port</p></li>
 <li><p>1 Gigabit Ethernet switch</p></li>
 </ul>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>ADSP-SC573 EZ-kit board and ADSP-SC589 EZ-kit board version 2.0 have the TI DP83867 as the Gigabit Ethernet PHY device on the boards, other ADSP-SC5XX EZ-kit boards have the TI DP83865 as the Gigabit Ethernet PHY device on the boards.</p>
-<div class="line-block">
-<div class="line">===== Software Configuration =====</div>
 </div>
-</div>
+</section>
+<section id="software-configuration">
+<h2>Software Configuration<a class="headerlink" href="#software-configuration" title="Link to this heading"></a></h2>
 <section id="package-configuration">
 <h3>Package Configuration<a class="headerlink" href="#package-configuration" title="Link to this heading"></a></h3>
 <p>The netperf test utility is optional. You can build it for both the target board and your host Linux system. Add the netperf package in the filesystem, it’s enabled in adsp-sc5xx-full image by default.</p>
@@ -626,12 +630,9 @@ Content on this topic
 <span class="n">IMAGE_INSTALL_append</span> <span class="o">=</span> <span class="s2">&quot;netperf&quot;</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="line-block">
-<div class="line">==== Kernel Configuration ====</div>
-</div>
+</section>
+<section id="kernel-configuration">
+<h3>Kernel Configuration<a class="headerlink" href="#kernel-configuration" title="Link to this heading"></a></h3>
 <section id="enable-emac-driver">
 <h4>Enable EMAC driver<a class="headerlink" href="#enable-emac-driver" title="Link to this heading"></a></h4>
 <p>The on-chip Ethernet devices on the ADSP-SC5xx serial processors can be enabled in the Linux kernel configuration system using “<strong>bitbake linux-adi -c menuconfig</strong>”.</p>
@@ -664,11 +665,11 @@ Content on this topic
             <span class="o">&lt;*&gt;</span>  <span class="n">National</span> <span class="n">Semiconductor</span> <span class="n">PHYs</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Configure Device Tree ==== <strong>Gigabit Ethernet</strong></div>
-<div class="line">The GMAC device is based on the STM MAC IP.  MAC specific features can be tuned in the device tree Ethernet node. Node properties start with “snps” can be configured according to the requirement of the customer.  See the Documentation/devicetree/bindings/net/stmmac.txt document in the Linux sources for details.</div>
-</div>
+</section>
+</section>
+<section id="configure-device-tree">
+<h3>Configure Device Tree<a class="headerlink" href="#configure-device-tree" title="Link to this heading"></a></h3>
+<p><strong>Gigabit Ethernet</strong> The GMAC device is based on the STM MAC IP.  MAC specific features can be tuned in the device tree Ethernet node. Node properties start with “snps” can be configured according to the requirement of the customer.  See the Documentation/devicetree/bindings/net/stmmac.txt document in the Linux sources for details.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">For</span> <span class="n">ADSP</span><span class="o">-</span><span class="n">SC584</span> <span class="n">EZ</span><span class="o">-</span><span class="n">kit</span> <span class="n">board</span> <span class="p">(</span><span class="n">sc584</span><span class="o">-</span><span class="n">ezkit</span><span class="o">.</span><span class="n">dts</span><span class="p">)</span> <span class="n">using</span> <span class="n">NATIONAL</span> <span class="n">PHY</span><span class="p">,</span>
 <span class="o">&amp;</span><span class="n">emac0</span> <span class="p">{</span>
         <span class="n">enable</span><span class="o">-</span><span class="n">pin</span> <span class="o">=</span> <span class="o">&lt;&amp;</span><span class="n">ssw0</span> <span class="mi">3</span> <span class="n">GPIO_ACTIVE_LOW</span><span class="o">&gt;</span><span class="p">;</span> <span class="o">/*</span> <span class="n">ETH0_EN</span> <span class="o">*/</span>
@@ -707,10 +708,7 @@ Content on this topic
 <span class="p">};</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><strong>100M Ethernet</strong></div>
-<div class="line">The 100M EMAC device is based on the STM MAC IP.  MAC specific features start with “snps” in device node can be configured according to the Documentation/devicetree/bindings/net/stmmac.txt document in the Linux sources.</div>
-</div>
+<p><strong>100M Ethernet</strong> The 100M EMAC device is based on the STM MAC IP.  MAC specific features start with “snps” in device node can be configured according to the Documentation/devicetree/bindings/net/stmmac.txt document in the Linux sources.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&amp;</span><span class="n">emac1</span> <span class="p">{</span>
         <span class="n">enable</span><span class="o">-</span><span class="n">pin</span> <span class="o">=</span> <span class="o">&lt;&amp;</span><span class="n">ssw0</span> <span class="mi">4</span> <span class="n">GPIO_ACTIVE_LOW</span><span class="o">&gt;</span><span class="p">;</span> <span class="o">/*</span> <span class="n">ETH1_EN</span> <span class="o">*/</span>
         <span class="n">phy</span><span class="o">-</span><span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;rmii&quot;</span><span class="p">;</span>
@@ -720,12 +718,11 @@ Content on this topic
 <span class="p">};</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">===== Performance Benchmark Example ===== The Ethernet performance is tested with the netperf utility running on a Linux host on one end, and on the ADSP-SC5xx EZKIT board on the other end.</div>
-</div>
 </section>
 </section>
+<section id="performance-benchmark-example">
+<h2>Performance Benchmark Example<a class="headerlink" href="#performance-benchmark-example" title="Link to this heading"></a></h2>
+<p>The Ethernet performance is tested with the netperf utility running on a Linux host on one end, and on the ADSP-SC5xx EZKIT board on the other end.</p>
 <section id="netperf-example-usage">
 <h3>Netperf Example Usage<a class="headerlink" href="#netperf-example-usage" title="Link to this heading"></a></h3>
 <p>Run below command to test the ethernet performance using netperf.</p>
@@ -736,10 +733,7 @@ netperf -H $server_ip -t TCP_STREAM -l $testlen
 <section id="test">
 <h4>Test<a class="headerlink" href="#test" title="Link to this heading"></a></h4>
 <p><strong>Run below command to make sure the netserver is running in HOST PC:</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ps -ef
-
-
-| grep netserver
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ps -ef | grep netserver
 root     16823     1  0 12:10 ?        00:00:00 /usr/bin/netserver
 test     17056  1732  0 12:11 pts/0    00:00:00 grep --color=auto netserver
 </pre></div>
@@ -764,12 +758,10 @@ test     17056  1732  0 12:11 pts/0    00:00:00 grep --color=auto netserver
  <span class="mi">87380</span>  <span class="mi">16384</span>  <span class="mi">16384</span>    <span class="mf">6.03</span>      <span class="mf">315.89</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="line-block">
-<div class="line">==== Netperf GMAC Ethernet Result ====</div>
-</div>
+</section>
+</section>
+<section id="netperf-gmac-ethernet-result">
+<h3>Netperf GMAC Ethernet Result<a class="headerlink" href="#netperf-gmac-ethernet-result" title="Link to this heading"></a></h3>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <tbody>
@@ -818,11 +810,8 @@ test     17056  1732  0 12:11 pts/0    00:00:00 grep --color=auto netserver
 </div>
 <p><strong>Client</strong> means the netperf tool is running as a test client on the ADSP-SC5xx EZKIT, while Server means it is running as a test server on the ADSP-SC5xx EZKIT.</p>
 <p><strong>No Preemption</strong>, <strong>Voluntary Preemption</strong> and <strong>Preemptible</strong> are 3 different kernel schedule policies. The ARM A5 core runs at 450M clock while the DDR is at 225M clock during the test.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">—- <strong>Back to</strong> <a class="reference internal" href="../start.html"><span class="doc">Kernel Features and Device Drivers for ADSP-SC5xx Yocto Linux</span></a></div>
-</div>
-</section>
+<hr class="docutils" />
+<p><strong>Back to</strong> <a class="reference internal" href="../start.html"><span class="doc">Kernel Features and Device Drivers for ADSP-SC5xx Yocto Linux</span></a></p>
 </section>
 </section>
 </section>

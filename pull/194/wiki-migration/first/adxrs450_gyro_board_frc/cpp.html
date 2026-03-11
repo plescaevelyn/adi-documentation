@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="As a general note, the GetAngle() method will count continuously, meaning when it reaches 360 degrees, it will continue to 361, not zero. This is to make any functionality in your code using the gyro angle easier to implement without having to keep track of where in the 0-360 range your robot is or how many rotations have happened." name="description" />
+<meta content="This guide will walk you through the various features of the WPI Library for the ADXRS450 FRC Gyro Board and how to use it in your robot code. If you’re looking for a guide in another language, click here for Java or here for LabVIEW." name="description" />
 
     <title>Using the ADXRS450 Gyro for FRC in C++ &#8212; System Level Documentation  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
@@ -92,7 +92,14 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">Using the ADXRS450 Gyro for FRC in C++</a></li>
+<li><a class="reference internal" href="#">Using the ADXRS450 Gyro for FRC in C++</a><ul>
+<li><a class="reference internal" href="#instance-definition-and-instantiation">Instance Definition and Instantiation</a></li>
+<li><a class="reference internal" href="#sensor-initialization-calibration-with-calibrate">Sensor Initialization/Calibration with Calibrate()</a></li>
+<li><a class="reference internal" href="#using-getangle-and-getrate">Using GetAngle() and GetRate()</a></li>
+<li><a class="reference internal" href="#re-zeroing-the-sensor-with-reset">Re-Zeroing the Sensor with Reset()</a></li>
+<li><a class="reference internal" href="#drive-straight-example">Drive Straight Example</a></li>
+</ul>
+</li>
 </ul>
 
         </nav>
@@ -580,103 +587,104 @@ Content on this topic
             
   <section id="using-the-adxrs450-gyro-for-frc-in-c">
 <h1>Using the ADXRS450 Gyro for FRC in C++<a class="headerlink" href="#using-the-adxrs450-gyro-for-frc-in-c" title="Link to this heading"></a></h1>
-<div class="line-block">
-<div class="line">This guide will walk you through the various features of the WPI Library for the ADXRS450 FRC Gyro Board and how to use it in your robot code. If you’re looking for a guide in another language, <a class="reference internal" href="java.html"><span class="doc">click here</span></a> for Java or <a class="reference internal" href="labview.html"><span class="doc">here</span></a> for LabVIEW.</div>
-<div class="line">If you need help getting started with the basics of programming your robot in C++, you may want to check out the WPI Screensteps documentation, which can be found <a class="icon link reference external" href="https://wpilib.screenstepslive.com/s/currentCS/m/cpp" target="_blank">here</a>. Another useful resource can be found <a class="icon link reference external" href="https://media.readthedocs.org/pdf/frc-pdr/latest/frc-pdr.pdf" target="_blank">here</a>.</div>
-<div class="line">===== Instance Definition and Instantiation ===== Before you can use the gyro in your code, you must first define an instance. Where exactly it needs to be defined will depend heavily on how your team organizes its robot code, but it needs to be accessible by the Robot class in order to work properly and give you no build errors. If your team is using an Iterative Robot with a RobotMap structure for example, you would put it inside of the RobotMap class. The ADXRS450 has its own dedicated class in the frc namespace and inherits properties from the Gyro class.</div>
-</div>
-<div class="line-block">
-<div class="line">When you instantiate your gyro, you will need to define which SPI port the device will be using. Depending on how you have set up your gyro (<a class="reference internal" href="../adxrs450_gyro_board_frc.html"><span class="doc">see notes on the general FRC Gyro page</span></a>), this will vary, but should usually be set to CS0. Alternatively, you can leave the port out of the instantiation and the robot will default to CS0.</div>
-<div class="line">===== Sensor Initialization/Calibration with Calibrate() ===== Once your gyro is defined and instantiated, you will need to initialize it with a calibration wherever it needs to be in order to execute as soon as the robot is powered on, typically RobotInit(). To do this, you will need to call the Calibrate() method. Calibration is necessary for proper operation and <strong>MUST</strong> be performed before the gyro can be used. For more information, please see the <a class="reference internal" href="../adxrs450_gyro_board_frc.html"><span class="doc">general FRC Gyro page</span></a>.</div>
-<div class="line">===== Using GetAngle() and GetRate() ===== Now that your gyro is calibrated when the robot turns on, you can access data from the robot in your code. You can do this using the GetAngle() method to obtain the robot’s current heading, or more rarely by using the GetRate() method to obtain the current rotation rate being measured should you happen to need it. The most common places to use these functions are inside of the AutonomousPeriodic() and TeleopPeriodic() methods.</div>
-<div class="line"><br /></div>
-</div>
+<p>This guide will walk you through the various features of the WPI Library for the ADXRS450 FRC Gyro Board and how to use it in your robot code. If you’re looking for a guide in another language, <a class="reference internal" href="java.html"><span class="doc">click here</span></a> for Java or <a class="reference internal" href="labview.html"><span class="doc">here</span></a> for LabVIEW.</p>
+<p>If you need help getting started with the basics of programming your robot in C++, you may want to check out the WPI Screensteps documentation, which can be found <a class="icon link reference external" href="https://wpilib.screenstepslive.com/s/currentCS/m/cpp" target="_blank">here</a>. Another useful resource can be found <a class="icon link reference external" href="https://media.readthedocs.org/pdf/frc-pdr/latest/frc-pdr.pdf" target="_blank">here</a>.</p>
+<section id="instance-definition-and-instantiation">
+<h2>Instance Definition and Instantiation<a class="headerlink" href="#instance-definition-and-instantiation" title="Link to this heading"></a></h2>
+<p>Before you can use the gyro in your code, you must first define an instance. Where exactly it needs to be defined will depend heavily on how your team organizes its robot code, but it needs to be accessible by the Robot class in order to work properly and give you no build errors. If your team is using an Iterative Robot with a RobotMap structure for example, you would put it inside of the RobotMap class. The ADXRS450 has its own dedicated class in the frc namespace and inherits properties from the Gyro class.</p>
+<p>When you instantiate your gyro, you will need to define which SPI port the device will be using. Depending on how you have set up your gyro (<a class="reference internal" href="../adxrs450_gyro_board_frc.html"><span class="doc">see notes on the general FRC Gyro page</span></a>), this will vary, but should usually be set to CS0. Alternatively, you can leave the port out of the instantiation and the robot will default to CS0.</p>
+</section>
+<section id="sensor-initialization-calibration-with-calibrate">
+<h2>Sensor Initialization/Calibration with Calibrate()<a class="headerlink" href="#sensor-initialization-calibration-with-calibrate" title="Link to this heading"></a></h2>
+<p>Once your gyro is defined and instantiated, you will need to initialize it with a calibration wherever it needs to be in order to execute as soon as the robot is powered on, typically RobotInit(). To do this, you will need to call the Calibrate() method. Calibration is necessary for proper operation and <strong>MUST</strong> be performed before the gyro can be used. For more information, please see the <a class="reference internal" href="../adxrs450_gyro_board_frc.html"><span class="doc">general FRC Gyro page</span></a>.</p>
+</section>
+<section id="using-getangle-and-getrate">
+<h2>Using GetAngle() and GetRate()<a class="headerlink" href="#using-getangle-and-getrate" title="Link to this heading"></a></h2>
+<p>Now that your gyro is calibrated when the robot turns on, you can access data from the robot in your code. You can do this using the GetAngle() method to obtain the robot’s current heading, or more rarely by using the GetRate() method to obtain the current rotation rate being measured should you happen to need it. The most common places to use these functions are inside of the AutonomousPeriodic() and TeleopPeriodic() methods.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>As a general note, the GetAngle() method will count continuously, meaning when it reaches 360 degrees, it will continue to 361, not zero. This is to make any functionality in your code using the gyro angle easier to implement without having to keep track of where in the 0-360 range your robot is or how many rotations have happened.</p>
 </div>
-<div class="line-block">
-<div class="line">===== Re-Zeroing the Sensor with Reset() ===== Sometimes it may be necessary to reset the gyro’s “zero degrees” position. All gyros will have some amount of drift over time and it’s physically impossible to calibrate out all sources of drift. In this case, you can use Reset() to reset the current gyro heading to 0 degrees. When doing this, your robot should be facing the direction you want zero degrees to be, particularly if you are driving with field-oriented drive using an omnidirectional drive base. Otherwise, your robot may begin to behave incorrectly. For this reason, you should never automate this routine. Note that this <strong>does not</strong> recalibrate the gyro, so you don’t have to be sitting still to perform this method properly.</div>
-<div class="line">===== Drive Straight Example ===== As a simple example, we will be modifying the Drive Straight Gyro Example that comes pre-packaged with the WPI library to use the ADXRS450 instead of an analog gyro. This is what you will see when you open the existing example:</div>
-<div class="line"><a href="#id2"><span class="problematic" id="id3">``</span></a>/<em>—————————————————————————-</em>/
-/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        <em>/
-/</em> Open Source Software - may be modified and shared by FRC teams. The code   <em>/
-/</em> must be accompanied by the FIRST BSD license file in the root directory of <em>/
-/</em> the project.                                                               <em>/
-/</em>—————————————————————————-<a href="#id4"><span class="problematic" id="id5">*</span></a>/</div>
+</section>
+<section id="re-zeroing-the-sensor-with-reset">
+<h2>Re-Zeroing the Sensor with Reset()<a class="headerlink" href="#re-zeroing-the-sensor-with-reset" title="Link to this heading"></a></h2>
+<p>Sometimes it may be necessary to reset the gyro’s “zero degrees” position. All gyros will have some amount of drift over time and it’s physically impossible to calibrate out all sources of drift. In this case, you can use Reset() to reset the current gyro heading to 0 degrees. When doing this, your robot should be facing the direction you want zero degrees to be, particularly if you are driving with field-oriented drive using an omnidirectional drive base. Otherwise, your robot may begin to behave incorrectly. For this reason, you should never automate this routine. Note that this <strong>does not</strong> recalibrate the gyro, so you don’t have to be sitting still to perform this method properly.</p>
+</section>
+<section id="drive-straight-example">
+<h2>Drive Straight Example<a class="headerlink" href="#drive-straight-example" title="Link to this heading"></a></h2>
+<p>As a simple example, we will be modifying the Drive Straight Gyro Example that comes pre-packaged with the WPI library to use the ADXRS450 instead of an analog gyro. This is what you will see when you open the existing example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/*----------------------------------------------------------------------------*/</span>
+<span class="o">/*</span> <span class="n">Copyright</span> <span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="mi">2017</span><span class="o">-</span><span class="mi">2018</span> <span class="n">FIRST</span><span class="o">.</span> <span class="n">All</span> <span class="n">Rights</span> <span class="n">Reserved</span><span class="o">.</span>                        <span class="o">*/</span>
+<span class="o">/*</span> <span class="n">Open</span> <span class="n">Source</span> <span class="n">Software</span> <span class="o">-</span> <span class="n">may</span> <span class="n">be</span> <span class="n">modified</span> <span class="ow">and</span> <span class="n">shared</span> <span class="n">by</span> <span class="n">FRC</span> <span class="n">teams</span><span class="o">.</span> <span class="n">The</span> <span class="n">code</span>   <span class="o">*/</span>
+<span class="o">/*</span> <span class="n">must</span> <span class="n">be</span> <span class="n">accompanied</span> <span class="n">by</span> <span class="n">the</span> <span class="n">FIRST</span> <span class="n">BSD</span> <span class="n">license</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">root</span> <span class="n">directory</span> <span class="n">of</span> <span class="o">*/</span>
+<span class="o">/*</span> <span class="n">the</span> <span class="n">project</span><span class="o">.</span>                                                               <span class="o">*/</span>
+<span class="o">/*----------------------------------------------------------------------------*/</span>
+
+<span class="c1">#include &lt;cmath&gt;</span>
+
+<span class="c1">#include &lt;AnalogGyro.h&gt;</span>
+<span class="c1">#include &lt;Drive/DifferentialDrive.h&gt;</span>
+<span class="c1">#include &lt;IterativeRobot.h&gt;</span>
+<span class="c1">#include &lt;Joystick.h&gt;</span>
+<span class="c1">#include &lt;Spark.h&gt;</span>
+
+<span class="o">/**</span>
+  <span class="o">*</span> <span class="n">This</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">sample</span> <span class="n">program</span> <span class="n">to</span> <span class="n">demonstrate</span> <span class="n">how</span> <span class="n">to</span> <span class="n">use</span> <span class="n">a</span> <span class="n">gyro</span> <span class="n">sensor</span> <span class="n">to</span> <span class="n">make</span> <span class="n">a</span>
+  <span class="o">*</span> <span class="n">robot</span> <span class="n">drive</span> <span class="n">straight</span><span class="o">.</span> <span class="n">This</span> <span class="n">program</span> <span class="n">uses</span> <span class="n">a</span> <span class="n">joystick</span> <span class="n">to</span> <span class="n">drive</span> <span class="n">forwards</span> <span class="ow">and</span>
+  <span class="o">*</span> <span class="n">backwards</span> <span class="k">while</span> <span class="n">the</span> <span class="n">gyro</span> <span class="ow">is</span> <span class="n">used</span> <span class="k">for</span> <span class="n">direction</span> <span class="n">keeping</span><span class="o">.</span>
+ <span class="o">*/</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Robot</span> <span class="p">:</span> <span class="n">public</span> <span class="n">frc</span><span class="p">::</span><span class="n">IterativeRobot</span> <span class="p">{</span>
+<span class="n">public</span><span class="p">:</span>
+    <span class="n">void</span> <span class="n">RobotInit</span><span class="p">()</span> <span class="n">override</span> <span class="p">{</span>
+        <span class="n">m_gyro</span><span class="o">.</span><span class="n">SetSensitivity</span><span class="p">(</span><span class="n">kVoltsPerDegreePerSecond</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="o">/**</span>
+     <span class="o">*</span> <span class="n">The</span> <span class="n">motor</span> <span class="n">speed</span> <span class="ow">is</span> <span class="nb">set</span> <span class="kn">from</span><span class="w"> </span><span class="nn">the</span> <span class="n">joystick</span> <span class="k">while</span> <span class="n">the</span> <span class="n">DifferentialDrive</span>
+     <span class="o">*</span> <span class="n">turning</span> <span class="n">value</span> <span class="ow">is</span> <span class="n">assigned</span> <span class="kn">from</span><span class="w"> </span><span class="nn">the</span> <span class="n">error</span> <span class="n">between</span> <span class="n">the</span> <span class="n">setpoint</span> <span class="ow">and</span> <span class="n">the</span>
+     <span class="o">*</span> <span class="n">gyro</span> <span class="n">angle</span><span class="o">.</span>
+     <span class="o">*/</span>
+    <span class="n">void</span> <span class="n">TeleopPeriodic</span><span class="p">()</span> <span class="n">override</span> <span class="p">{</span>
+        <span class="n">double</span> <span class="n">turningValue</span> <span class="o">=</span> <span class="p">(</span><span class="n">kAngleSetpoint</span> <span class="o">-</span> <span class="n">m_gyro</span><span class="o">.</span><span class="n">GetAngle</span><span class="p">())</span> <span class="o">*</span> <span class="n">kP</span><span class="p">;</span>
+        <span class="o">//</span> <span class="n">Invert</span> <span class="n">the</span> <span class="n">direction</span> <span class="n">of</span> <span class="n">the</span> <span class="n">turn</span> <span class="k">if</span> <span class="n">we</span> <span class="n">are</span> <span class="n">going</span> <span class="n">backwards</span>
+        <span class="n">turningValue</span> <span class="o">=</span> <span class="n">std</span><span class="p">::</span><span class="n">copysign</span><span class="p">(</span><span class="n">turningValue</span><span class="p">,</span> <span class="n">m_joystick</span><span class="o">.</span><span class="n">GetY</span><span class="p">());</span>
+        <span class="n">m_robotDrive</span><span class="o">.</span><span class="n">ArcadeDrive</span><span class="p">(</span><span class="n">m_joystick</span><span class="o">.</span><span class="n">GetY</span><span class="p">(),</span> <span class="n">turningValue</span><span class="p">);</span>
+    <span class="p">}</span>
+
+<span class="n">private</span><span class="p">:</span>
+    <span class="n">static</span> <span class="n">constexpr</span> <span class="n">double</span> <span class="n">kAngleSetpoint</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+    <span class="n">static</span> <span class="n">constexpr</span> <span class="n">double</span> <span class="n">kP</span> <span class="o">=</span> <span class="mf">0.005</span><span class="p">;</span>  <span class="o">//</span> <span class="n">Proportional</span> <span class="n">turning</span> <span class="n">constant</span>
+
+    <span class="o">//</span> <span class="n">Gyro</span> <span class="n">calibration</span> <span class="n">constant</span><span class="p">,</span> <span class="n">may</span> <span class="n">need</span> <span class="n">to</span> <span class="n">be</span> <span class="n">adjusted</span>
+    <span class="o">//</span> <span class="n">Gyro</span> <span class="n">value</span> <span class="n">of</span> <span class="mi">360</span> <span class="ow">is</span> <span class="nb">set</span> <span class="n">to</span> <span class="n">correspond</span> <span class="n">to</span> <span class="n">one</span> <span class="n">full</span> <span class="n">revolution</span>
+    <span class="n">static</span> <span class="n">constexpr</span> <span class="n">double</span> <span class="n">kVoltsPerDegreePerSecond</span> <span class="o">=</span> <span class="mf">0.0128</span><span class="p">;</span>
+
+    <span class="n">static</span> <span class="n">constexpr</span> <span class="nb">int</span> <span class="n">kLeftMotorPort</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">static</span> <span class="n">constexpr</span> <span class="nb">int</span> <span class="n">kRightMotorPort</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">static</span> <span class="n">constexpr</span> <span class="nb">int</span> <span class="n">kGyroPort</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">static</span> <span class="n">constexpr</span> <span class="nb">int</span> <span class="n">kJoystickPort</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="n">frc</span><span class="p">::</span><span class="n">Spark</span> <span class="n">m_left</span><span class="p">{</span><span class="n">kLeftMotorPort</span><span class="p">};</span>
+    <span class="n">frc</span><span class="p">::</span><span class="n">Spark</span> <span class="n">m_right</span><span class="p">{</span><span class="n">kRightMotorPort</span><span class="p">};</span>
+    <span class="n">frc</span><span class="p">::</span><span class="n">DifferentialDrive</span> <span class="n">m_robotDrive</span><span class="p">{</span><span class="n">m_left</span><span class="p">,</span> <span class="n">m_right</span><span class="p">};</span>
+
+    <span class="n">frc</span><span class="p">::</span><span class="n">AnalogGyro</span> <span class="n">m_gyro</span><span class="p">{</span><span class="n">kGyroPort</span><span class="p">};</span>
+    <span class="n">frc</span><span class="p">::</span><span class="n">Joystick</span> <span class="n">m_joystick</span><span class="p">{</span><span class="n">kJoystickPort</span><span class="p">};</span>
+<span class="p">};</span>
+
+<span class="n">START_ROBOT_CLASS</span><span class="p">(</span><span class="n">Robot</span><span class="p">)</span>
+</pre></div>
 </div>
-<blockquote>
-<div><p>#include &lt;cmath&gt;</p>
-<p>#include &lt;AnalogGyro.h&gt;
-#include &lt;Drive/DifferentialDrive.h&gt;
-#include &lt;IterativeRobot.h&gt;
-#include &lt;Joystick.h&gt;
-#include &lt;Spark.h&gt;</p>
-<dl>
-<dt>/**</dt><dd><blockquote>
-<div><ul class="simple">
-<li><p>This is a sample program to demonstrate how to use a gyro sensor to make a</p></li>
-<li><p>robot drive straight. This program uses a joystick to drive forwards and</p></li>
-<li><p>backwards while the gyro is used for direction keeping.</p></li>
-</ul>
-</div></blockquote>
-<p><a href="#id6"><span class="problematic" id="id7">*</span></a>/</p>
-</dd>
-</dl>
-<p>class Robot : public frc::IterativeRobot {
-public:</p>
-<blockquote>
-<div><dl class="simple">
-<dt>void RobotInit() override {</dt><dd><p>m_gyro.SetSensitivity(kVoltsPerDegreePerSecond);</p>
-</dd>
-</dl>
-<p>}</p>
-<dl>
-<dt>/**</dt><dd><ul class="simple">
-<li><p>The motor speed is set from the joystick while the DifferentialDrive</p></li>
-<li><p>turning value is assigned from the error between the setpoint and the</p></li>
-<li><p>gyro angle.</p></li>
-</ul>
-<p><a href="#id8"><span class="problematic" id="id9">*</span></a>/</p>
-</dd>
-<dt>void TeleopPeriodic() override {</dt><dd><p>double turningValue = (kAngleSetpoint - m_gyro.GetAngle()) * kP;
-// Invert the direction of the turn if we are going backwards
-turningValue = std::copysign(turningValue, m_joystick.GetY());
-m_robotDrive.ArcadeDrive(m_joystick.GetY(), turningValue);</p>
-</dd>
-</dl>
-<p>}</p>
-</div></blockquote>
-<dl>
-<dt>private:</dt><dd><p>static constexpr double kAngleSetpoint = 0.0;
-static constexpr double kP = 0.005;  // Proportional turning constant</p>
-<p>// Gyro calibration constant, may need to be adjusted
-// Gyro value of 360 is set to correspond to one full revolution
-static constexpr double kVoltsPerDegreePerSecond = 0.0128;</p>
-<p>static constexpr int kLeftMotorPort = 0;
-static constexpr int kRightMotorPort = 1;
-static constexpr int kGyroPort = 0;
-static constexpr int kJoystickPort = 0;</p>
-<p>frc::Spark m_left{kLeftMotorPort};
-frc::Spark m_right{kRightMotorPort};
-frc::DifferentialDrive m_robotDrive{m_left, m_right};</p>
-<p>frc::AnalogGyro m_gyro{kGyroPort};
-frc::Joystick m_joystick{kJoystickPort};</p>
-</dd>
-</dl>
-<p>};</p>
-<p>START_ROBOT_CLASS(Robot)`` First, we need to tell the program to include the right header file for the ADI gyro. Change AnalogGyro.h to ADXRS450_Gyro.h at the top of the page.</p>
-</div></blockquote>
-<div class="line-block">
-<div class="line"><a href="#id10"><span class="problematic" id="id11">``</span></a>#include &lt;cmath&gt;</div>
+<p>First, we need to tell the program to include the right header file for the ADI gyro. Change AnalogGyro.h to ADXRS450_Gyro.h at the top of the page.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &lt;cmath&gt;</span>
+
+<span class="c1">#include &lt;AnalogGyro.h&gt;</span>
+<span class="c1">#include &lt;Drive/DifferentialDrive.h&gt;</span>
+<span class="c1">#include &lt;IterativeRobot.h&gt;</span>
+<span class="c1">#include &lt;Joystick.h&gt;</span>
+<span class="c1">#include &lt;Spark.h&gt;</span>
+</pre></div>
 </div>
-<blockquote>
-<div><p>#include &lt;AnalogGyro.h&gt;
-#include &lt;Drive/DifferentialDrive.h&gt;
-#include &lt;IterativeRobot.h&gt;
-#include &lt;Joystick.h&gt;
-#include &lt;Spark.h&gt;``</p>
-</div></blockquote>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &lt;cmath&gt;</span>
 
 <span class="c1">#include &lt;ADXRS450_Gyro.h&gt;</span>
@@ -686,31 +694,26 @@ frc::Joystick m_joystick{kJoystickPort};</p>
 <span class="c1">#include &lt;Spark.h&gt;</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line">Now you’ll need to change the method that’s being called within RobotInit(), since SetSensitivity() doesn’t apply to our gyro. You can replace the text “SetSensitivity” with “Calibrate” so that we can perform the required calibration sequence. You should also delete the kVoltsPerDegreePerSecond argument, since Calibrate does not accept any arguments.</div>
-<div class="line"><a href="#id12"><span class="problematic" id="id13">``</span></a>class Robot : public frc::IterativeRobot {
-public:
-    void RobotInit() override {
-        m_gyro.SetSensitivity(kVoltsPerDegreePerSecond);
-    }</div>
+<p>Now you’ll need to change the method that’s being called within RobotInit(), since SetSensitivity() doesn’t apply to our gyro. You can replace the text “SetSensitivity” with “Calibrate” so that we can perform the required calibration sequence. You should also delete the kVoltsPerDegreePerSecond argument, since Calibrate does not accept any arguments.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Robot</span> <span class="p">:</span> <span class="n">public</span> <span class="n">frc</span><span class="p">::</span><span class="n">IterativeRobot</span> <span class="p">{</span>
+<span class="n">public</span><span class="p">:</span>
+    <span class="n">void</span> <span class="n">RobotInit</span><span class="p">()</span> <span class="n">override</span> <span class="p">{</span>
+        <span class="n">m_gyro</span><span class="o">.</span><span class="n">SetSensitivity</span><span class="p">(</span><span class="n">kVoltsPerDegreePerSecond</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="o">/**</span>
+     <span class="o">*</span> <span class="n">The</span> <span class="n">motor</span> <span class="n">speed</span> <span class="ow">is</span> <span class="nb">set</span> <span class="kn">from</span><span class="w"> </span><span class="nn">the</span> <span class="n">joystick</span> <span class="k">while</span> <span class="n">the</span> <span class="n">DifferentialDrive</span>
+     <span class="o">*</span> <span class="n">turning</span> <span class="n">value</span> <span class="ow">is</span> <span class="n">assigned</span> <span class="kn">from</span><span class="w"> </span><span class="nn">the</span> <span class="n">error</span> <span class="n">between</span> <span class="n">the</span> <span class="n">setpoint</span> <span class="ow">and</span> <span class="n">the</span>
+     <span class="o">*</span> <span class="n">gyro</span> <span class="n">angle</span><span class="o">.</span>
+     <span class="o">*/</span>
+    <span class="n">void</span> <span class="n">TeleopPeriodic</span><span class="p">()</span> <span class="n">override</span> <span class="p">{</span>
+        <span class="n">double</span> <span class="n">turningValue</span> <span class="o">=</span> <span class="p">(</span><span class="n">kAngleSetpoint</span> <span class="o">-</span> <span class="n">m_gyro</span><span class="o">.</span><span class="n">GetAngle</span><span class="p">())</span> <span class="o">*</span> <span class="n">kP</span><span class="p">;</span>
+        <span class="o">//</span> <span class="n">Invert</span> <span class="n">the</span> <span class="n">direction</span> <span class="n">of</span> <span class="n">the</span> <span class="n">turn</span> <span class="k">if</span> <span class="n">we</span> <span class="n">are</span> <span class="n">going</span> <span class="n">backwards</span>
+        <span class="n">turningValue</span> <span class="o">=</span> <span class="n">std</span><span class="p">::</span><span class="n">copysign</span><span class="p">(</span><span class="n">turningValue</span><span class="p">,</span> <span class="n">m_joystick</span><span class="o">.</span><span class="n">GetY</span><span class="p">());</span>
+        <span class="n">m_robotDrive</span><span class="o">.</span><span class="n">ArcadeDrive</span><span class="p">(</span><span class="n">m_joystick</span><span class="o">.</span><span class="n">GetY</span><span class="p">(),</span> <span class="n">turningValue</span><span class="p">);</span>
+    <span class="p">}</span>
+</pre></div>
 </div>
-<blockquote>
-<div><dl>
-<dt>/**</dt><dd><ul class="simple">
-<li><p>The motor speed is set from the joystick while the DifferentialDrive</p></li>
-<li><p>turning value is assigned from the error between the setpoint and the</p></li>
-<li><p>gyro angle.</p></li>
-</ul>
-<p><a href="#id14"><span class="problematic" id="id15">*</span></a>/</p>
-</dd>
-<dt>void TeleopPeriodic() override {</dt><dd><p>double turningValue = (kAngleSetpoint - m_gyro.GetAngle()) * kP;
-// Invert the direction of the turn if we are going backwards
-turningValue = std::copysign(turningValue, m_joystick.GetY());
-m_robotDrive.ArcadeDrive(m_joystick.GetY(), turningValue);</p>
-</dd>
-</dl>
-<p>}``</p>
-</div></blockquote>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Robot</span> <span class="p">:</span> <span class="n">public</span> <span class="n">frc</span><span class="p">::</span><span class="n">IterativeRobot</span> <span class="p">{</span>
 <span class="n">public</span><span class="p">:</span>
     <span class="n">void</span> <span class="n">RobotInit</span><span class="p">()</span> <span class="n">override</span> <span class="p">{</span>
@@ -730,29 +733,29 @@ m_robotDrive.ArcadeDrive(m_joystick.GetY(), turningValue);</p>
     <span class="p">}</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line">TeleopPeriodic can be left alone, since GetAngle() is the same for both gyro types. Now we get to the private definitions of the Robot class for this example. First you can delete the definition for kVoltsPerDegreePerSecond, since this variable is no longer needed and we don’t want it consuming memory. You can also delete the two comments above it since they don’t apply to the ADXRS450 gyro. You also need to change the class on your gyro definition from AnalogGyro to ADXRS450_Gyro in the instantiation. You can also delete the argument if your gyro is in the default configuration. Otherwise, change it to the port you will be using. I’ve configured mine by explicitly defining the C0 port below.</div>
-<div class="line"><a href="#id16"><span class="problematic" id="id17">``</span></a>private:
-static constexpr double kAngleSetpoint = 0.0;
-static constexpr double kP = 0.005;  // Proportional turning constant</div>
+<p>TeleopPeriodic can be left alone, since GetAngle() is the same for both gyro types. Now we get to the private definitions of the Robot class for this example. First you can delete the definition for kVoltsPerDegreePerSecond, since this variable is no longer needed and we don’t want it consuming memory. You can also delete the two comments above it since they don’t apply to the ADXRS450 gyro. You also need to change the class on your gyro definition from AnalogGyro to ADXRS450_Gyro in the instantiation. You can also delete the argument if your gyro is in the default configuration. Otherwise, change it to the port you will be using. I’ve configured mine by explicitly defining the C0 port below.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">private</span><span class="p">:</span>
+    <span class="n">static</span> <span class="n">constexpr</span> <span class="n">double</span> <span class="n">kAngleSetpoint</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+    <span class="n">static</span> <span class="n">constexpr</span> <span class="n">double</span> <span class="n">kP</span> <span class="o">=</span> <span class="mf">0.005</span><span class="p">;</span>  <span class="o">//</span> <span class="n">Proportional</span> <span class="n">turning</span> <span class="n">constant</span>
+
+    <span class="o">//</span> <span class="n">Gyro</span> <span class="n">calibration</span> <span class="n">constant</span><span class="p">,</span> <span class="n">may</span> <span class="n">need</span> <span class="n">to</span> <span class="n">be</span> <span class="n">adjusted</span>
+    <span class="o">//</span> <span class="n">Gyro</span> <span class="n">value</span> <span class="n">of</span> <span class="mi">360</span> <span class="ow">is</span> <span class="nb">set</span> <span class="n">to</span> <span class="n">correspond</span> <span class="n">to</span> <span class="n">one</span> <span class="n">full</span> <span class="n">revolution</span>
+    <span class="n">static</span> <span class="n">constexpr</span> <span class="n">double</span> <span class="n">kVoltsPerDegreePerSecond</span> <span class="o">=</span> <span class="mf">0.0128</span><span class="p">;</span>
+
+    <span class="n">static</span> <span class="n">constexpr</span> <span class="nb">int</span> <span class="n">kLeftMotorPort</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">static</span> <span class="n">constexpr</span> <span class="nb">int</span> <span class="n">kRightMotorPort</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">static</span> <span class="n">constexpr</span> <span class="nb">int</span> <span class="n">kGyroPort</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">static</span> <span class="n">constexpr</span> <span class="nb">int</span> <span class="n">kJoystickPort</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="n">frc</span><span class="p">::</span><span class="n">Spark</span> <span class="n">m_left</span><span class="p">{</span><span class="n">kLeftMotorPort</span><span class="p">};</span>
+    <span class="n">frc</span><span class="p">::</span><span class="n">Spark</span> <span class="n">m_right</span><span class="p">{</span><span class="n">kRightMotorPort</span><span class="p">};</span>
+    <span class="n">frc</span><span class="p">::</span><span class="n">DifferentialDrive</span> <span class="n">m_robotDrive</span><span class="p">{</span><span class="n">m_left</span><span class="p">,</span> <span class="n">m_right</span><span class="p">};</span>
+
+    <span class="n">frc</span><span class="p">::</span><span class="n">AnalogGyro</span> <span class="n">m_gyro</span><span class="p">{</span><span class="n">kGyroPort</span><span class="p">};</span>
+    <span class="n">frc</span><span class="p">::</span><span class="n">Joystick</span> <span class="n">m_joystick</span><span class="p">{</span><span class="n">kJoystickPort</span><span class="p">};</span>
+<span class="p">};</span>
+</pre></div>
 </div>
-<blockquote>
-<div><blockquote>
-<div><p>// Gyro calibration constant, may need to be adjusted
-// Gyro value of 360 is set to correspond to one full revolution
-static constexpr double kVoltsPerDegreePerSecond = 0.0128;</p>
-<p>static constexpr int kLeftMotorPort = 0;
-static constexpr int kRightMotorPort = 1;
-static constexpr int kGyroPort = 0;
-static constexpr int kJoystickPort = 0;</p>
-<p>frc::Spark m_left{kLeftMotorPort};
-frc::Spark m_right{kRightMotorPort};
-frc::DifferentialDrive m_robotDrive{m_left, m_right};</p>
-<p>frc::AnalogGyro m_gyro{kGyroPort};
-frc::Joystick m_joystick{kJoystickPort};</p>
-</div></blockquote>
-<p>};``</p>
-</div></blockquote>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">private</span><span class="p">:</span>
     <span class="n">static</span> <span class="n">constexpr</span> <span class="n">double</span> <span class="n">kAngleSetpoint</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
     <span class="n">static</span> <span class="n">constexpr</span> <span class="n">double</span> <span class="n">kP</span> <span class="o">=</span> <span class="mf">0.005</span><span class="p">;</span>  <span class="o">//</span> <span class="n">Proportional</span> <span class="n">turning</span> <span class="n">constant</span>
@@ -771,74 +774,66 @@ frc::Joystick m_joystick{kJoystickPort};</p>
 <span class="p">};</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line">Go ahead and build your code to ensure there are no errors. This is what you should have once you’re done.</div>
-<div class="line"><a href="#id18"><span class="problematic" id="id19">``</span></a>/<em>—————————————————————————-</em>/
-/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        <em>/
-/</em> Open Source Software - may be modified and shared by FRC teams. The code   <em>/
-/</em> must be accompanied by the FIRST BSD license file in the root directory of <em>/
-/</em> the project.                                                               <em>/
-/</em>—————————————————————————-<a href="#id20"><span class="problematic" id="id21">*</span></a>/</div>
+<p>Go ahead and build your code to ensure there are no errors. This is what you should have once you’re done.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/*----------------------------------------------------------------------------*/</span>
+<span class="o">/*</span> <span class="n">Copyright</span> <span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="mi">2017</span><span class="o">-</span><span class="mi">2018</span> <span class="n">FIRST</span><span class="o">.</span> <span class="n">All</span> <span class="n">Rights</span> <span class="n">Reserved</span><span class="o">.</span>                        <span class="o">*/</span>
+<span class="o">/*</span> <span class="n">Open</span> <span class="n">Source</span> <span class="n">Software</span> <span class="o">-</span> <span class="n">may</span> <span class="n">be</span> <span class="n">modified</span> <span class="ow">and</span> <span class="n">shared</span> <span class="n">by</span> <span class="n">FRC</span> <span class="n">teams</span><span class="o">.</span> <span class="n">The</span> <span class="n">code</span>   <span class="o">*/</span>
+<span class="o">/*</span> <span class="n">must</span> <span class="n">be</span> <span class="n">accompanied</span> <span class="n">by</span> <span class="n">the</span> <span class="n">FIRST</span> <span class="n">BSD</span> <span class="n">license</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">root</span> <span class="n">directory</span> <span class="n">of</span> <span class="o">*/</span>
+<span class="o">/*</span> <span class="n">the</span> <span class="n">project</span><span class="o">.</span>                                                               <span class="o">*/</span>
+<span class="o">/*----------------------------------------------------------------------------*/</span>
+
+<span class="c1">#include &lt;cmath&gt;</span>
+
+<span class="c1">#include &lt;ADXRS450_Gyro.h&gt;</span>
+<span class="c1">#include &lt;Drive/DifferentialDrive.h&gt;</span>
+<span class="c1">#include &lt;IterativeRobot.h&gt;</span>
+<span class="c1">#include &lt;Joystick.h&gt;</span>
+<span class="c1">#include &lt;Spark.h&gt;</span>
+
+<span class="o">/**</span>
+  <span class="o">*</span> <span class="n">This</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">sample</span> <span class="n">program</span> <span class="n">to</span> <span class="n">demonstrate</span> <span class="n">how</span> <span class="n">to</span> <span class="n">use</span> <span class="n">a</span> <span class="n">gyro</span> <span class="n">sensor</span> <span class="n">to</span> <span class="n">make</span> <span class="n">a</span>
+  <span class="o">*</span> <span class="n">robot</span> <span class="n">drive</span> <span class="n">straight</span><span class="o">.</span> <span class="n">This</span> <span class="n">program</span> <span class="n">uses</span> <span class="n">a</span> <span class="n">joystick</span> <span class="n">to</span> <span class="n">drive</span> <span class="n">forwards</span> <span class="ow">and</span>
+  <span class="o">*</span> <span class="n">backwards</span> <span class="k">while</span> <span class="n">the</span> <span class="n">gyro</span> <span class="ow">is</span> <span class="n">used</span> <span class="k">for</span> <span class="n">direction</span> <span class="n">keeping</span><span class="o">.</span>
+ <span class="o">*/</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Robot</span> <span class="p">:</span> <span class="n">public</span> <span class="n">frc</span><span class="p">::</span><span class="n">IterativeRobot</span> <span class="p">{</span>
+<span class="n">public</span><span class="p">:</span>
+    <span class="n">void</span> <span class="n">RobotInit</span><span class="p">()</span> <span class="n">override</span> <span class="p">{</span>
+        <span class="n">m_gyro</span><span class="o">.</span><span class="n">Calibrate</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="o">/**</span>
+     <span class="o">*</span> <span class="n">The</span> <span class="n">motor</span> <span class="n">speed</span> <span class="ow">is</span> <span class="nb">set</span> <span class="kn">from</span><span class="w"> </span><span class="nn">the</span> <span class="n">joystick</span> <span class="k">while</span> <span class="n">the</span> <span class="n">DifferentialDrive</span>
+     <span class="o">*</span> <span class="n">turning</span> <span class="n">value</span> <span class="ow">is</span> <span class="n">assigned</span> <span class="kn">from</span><span class="w"> </span><span class="nn">the</span> <span class="n">error</span> <span class="n">between</span> <span class="n">the</span> <span class="n">setpoint</span> <span class="ow">and</span> <span class="n">the</span>
+     <span class="o">*</span> <span class="n">gyro</span> <span class="n">angle</span><span class="o">.</span>
+     <span class="o">*/</span>
+    <span class="n">void</span> <span class="n">TeleopPeriodic</span><span class="p">()</span> <span class="n">override</span> <span class="p">{</span>
+        <span class="n">double</span> <span class="n">turningValue</span> <span class="o">=</span> <span class="p">(</span><span class="n">kAngleSetpoint</span> <span class="o">-</span> <span class="n">m_gyro</span><span class="o">.</span><span class="n">GetAngle</span><span class="p">())</span> <span class="o">*</span> <span class="n">kP</span><span class="p">;</span>
+        <span class="o">//</span> <span class="n">Invert</span> <span class="n">the</span> <span class="n">direction</span> <span class="n">of</span> <span class="n">the</span> <span class="n">turn</span> <span class="k">if</span> <span class="n">we</span> <span class="n">are</span> <span class="n">going</span> <span class="n">backwards</span>
+        <span class="n">turningValue</span> <span class="o">=</span> <span class="n">std</span><span class="p">::</span><span class="n">copysign</span><span class="p">(</span><span class="n">turningValue</span><span class="p">,</span> <span class="n">m_joystick</span><span class="o">.</span><span class="n">GetY</span><span class="p">());</span>
+        <span class="n">m_robotDrive</span><span class="o">.</span><span class="n">ArcadeDrive</span><span class="p">(</span><span class="n">m_joystick</span><span class="o">.</span><span class="n">GetY</span><span class="p">(),</span> <span class="n">turningValue</span><span class="p">);</span>
+    <span class="p">}</span>
+
+<span class="n">private</span><span class="p">:</span>
+    <span class="n">static</span> <span class="n">constexpr</span> <span class="n">double</span> <span class="n">kAngleSetpoint</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+    <span class="n">static</span> <span class="n">constexpr</span> <span class="n">double</span> <span class="n">kP</span> <span class="o">=</span> <span class="mf">0.005</span><span class="p">;</span>  <span class="o">//</span> <span class="n">Proportional</span> <span class="n">turning</span> <span class="n">constant</span>
+
+    <span class="n">static</span> <span class="n">constexpr</span> <span class="nb">int</span> <span class="n">kLeftMotorPort</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">static</span> <span class="n">constexpr</span> <span class="nb">int</span> <span class="n">kRightMotorPort</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">static</span> <span class="n">constexpr</span> <span class="n">SPI</span><span class="p">::</span><span class="n">Port</span> <span class="n">kGyroPort</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">static</span> <span class="n">constexpr</span> <span class="nb">int</span> <span class="n">kJoystickPort</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="n">frc</span><span class="p">::</span><span class="n">Spark</span> <span class="n">m_left</span><span class="p">{</span><span class="n">kLeftMotorPort</span><span class="p">};</span>
+    <span class="n">frc</span><span class="p">::</span><span class="n">Spark</span> <span class="n">m_right</span><span class="p">{</span><span class="n">kRightMotorPort</span><span class="p">};</span>
+    <span class="n">frc</span><span class="p">::</span><span class="n">DifferentialDrive</span> <span class="n">m_robotDrive</span><span class="p">{</span><span class="n">m_left</span><span class="p">,</span> <span class="n">m_right</span><span class="p">};</span>
+
+    <span class="n">frc</span><span class="p">::</span><span class="n">ADXRS450_Gyro</span> <span class="n">m_gyro</span><span class="p">{</span><span class="n">kGyroPort</span><span class="p">};</span>
+    <span class="n">frc</span><span class="p">::</span><span class="n">Joystick</span> <span class="n">m_joystick</span><span class="p">{</span><span class="n">kJoystickPort</span><span class="p">};</span>
+<span class="p">};</span>
+
+<span class="n">START_ROBOT_CLASS</span><span class="p">(</span><span class="n">Robot</span><span class="p">)</span>
+</pre></div>
 </div>
-<blockquote>
-<div><p>#include &lt;cmath&gt;</p>
-<p>#include &lt;ADXRS450_Gyro.h&gt;
-#include &lt;Drive/DifferentialDrive.h&gt;
-#include &lt;IterativeRobot.h&gt;
-#include &lt;Joystick.h&gt;
-#include &lt;Spark.h&gt;</p>
-<dl>
-<dt>/**</dt><dd><blockquote>
-<div><ul class="simple">
-<li><p>This is a sample program to demonstrate how to use a gyro sensor to make a</p></li>
-<li><p>robot drive straight. This program uses a joystick to drive forwards and</p></li>
-<li><p>backwards while the gyro is used for direction keeping.</p></li>
-</ul>
-</div></blockquote>
-<p><a href="#id22"><span class="problematic" id="id23">*</span></a>/</p>
-</dd>
-</dl>
-<p>class Robot : public frc::IterativeRobot {
-public:</p>
-<blockquote>
-<div><dl class="simple">
-<dt>void RobotInit() override {</dt><dd><p>m_gyro.Calibrate();</p>
-</dd>
-</dl>
-<p>}</p>
-<dl>
-<dt>/**</dt><dd><ul class="simple">
-<li><p>The motor speed is set from the joystick while the DifferentialDrive</p></li>
-<li><p>turning value is assigned from the error between the setpoint and the</p></li>
-<li><p>gyro angle.</p></li>
-</ul>
-<p><a href="#id24"><span class="problematic" id="id25">*</span></a>/</p>
-</dd>
-<dt>void TeleopPeriodic() override {</dt><dd><p>double turningValue = (kAngleSetpoint - m_gyro.GetAngle()) * kP;
-// Invert the direction of the turn if we are going backwards
-turningValue = std::copysign(turningValue, m_joystick.GetY());
-m_robotDrive.ArcadeDrive(m_joystick.GetY(), turningValue);</p>
-</dd>
-</dl>
-<p>}</p>
-</div></blockquote>
-<dl>
-<dt>private:</dt><dd><p>static constexpr double kAngleSetpoint = 0.0;
-static constexpr double kP = 0.005;  // Proportional turning constant</p>
-<p>static constexpr int kLeftMotorPort = 0;
-static constexpr int kRightMotorPort = 1;
-static constexpr SPI::Port kGyroPort = 0;
-static constexpr int kJoystickPort = 0;</p>
-<p>frc::Spark m_left{kLeftMotorPort};
-frc::Spark m_right{kRightMotorPort};
-frc::DifferentialDrive m_robotDrive{m_left, m_right};</p>
-<p>frc::ADXRS450_Gyro m_gyro{kGyroPort};
-frc::Joystick m_joystick{kJoystickPort};</p>
-</dd>
-</dl>
-<p>};</p>
-<p>START_ROBOT_CLASS(Robot)``</p>
-</div></blockquote>
+</section>
 </section>
 
 

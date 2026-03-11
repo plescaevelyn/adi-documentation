@@ -718,10 +718,7 @@ Content on this topic
 <section id="eval-hmc7044-modifications">
 <h3>EVAL-HMC7044 modifications<a class="headerlink" href="#eval-hmc7044-modifications" title="Link to this heading"></a></h3>
 <div class="box bggreen docutils container">
-<div class="admonition note">
-<p class="admonition-title">Note</p>
 <p>There is no over-voltage or reverse polarity protection</p>
-</div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Connect</span> <span class="n">a</span> <span class="mi">5</span><span class="n">V</span> <span class="mi">1</span><span class="n">A</span> <span class="n">power</span> <span class="n">supply</span> <span class="n">to</span> <span class="n">TP17</span><span class="p">(</span><span class="n">GND</span><span class="p">)</span> <span class="ow">and</span> <span class="n">TP14</span><span class="p">(</span><span class="n">VCC</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -797,9 +794,7 @@ Content on this topic
 <p>The System Clocking Tree Diagram is located here:</p>
 <p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/adrv9009-zu11eg/adrv9009_rfsom_clocking_tree.png"><img alt="ADRV9009-ZU11EG Clock Tree" src="https://wiki.analog.com/_media/resources/eval/user-guides/adrv9009-zu11eg/adrv9009_rfsom_clocking_tree.png" style="width: 400px;" /></a></p>
 <p>During multi-chip synchronization (MCS), which is a feature of the ADRV9009s, all baseband data from the converters is synchronized across transceiver chips. This requires specific sysrefs to be captured at each of the transceiver simultaneously. This will also create deterministic phase differences between transceivers, when RFPLL sync is enabled, as well. The individual API rights to the transceivers, clock chips, and their sequences are detailed in the rx method of the python class <a class="icon git reference external" href="https://github.com/analogdevicesinc/pyadi-iio/tree/main/adi/adrv9009_zu11eg_multi.py" target="_blank">adi/adrv9009_zu11eg_multi.py</a>.</p>
-<div class="line-block">
-<div class="line">For more information on:</div>
-</div>
+<p>For more information on:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="../../../tools-software/linux-drivers/jesd204/jesd204-fsm-framework.html"><span class="doc">Clock Tree Setup and Synchronization</span></a></p></li>
 <li><p><a class="reference internal" href="../../../tools-software/linux-drivers/jesd204/jesd204-fsm-framework.html"><span class="doc">Synchronizing distributed multi-topology systems</span></a></p></li>
@@ -808,9 +803,7 @@ Content on this topic
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p><strong>It’s important to know, while the devices are not yet fully initialized, they must not be accessed via their regular API, since they are not yet fully initialized.</strong></p>
-<div class="line-block">
-<div class="line">You need to make sure:</div>
-</div>
+<p>You need to make sure:</p>
 <ul class="simple">
 <li><p>OSC doesn’t start automatically remove it from /home/analog/.config/autostart/ADI IIO Oscilloscope.</p></li>
 <li><p>No other script starts automatically which tries to access the adrv9009-phy IIO devices.</p></li>
@@ -824,10 +817,7 @@ Content on this topic
 <li><p><a class="reference internal" href="../../../fpga/peripherals/jesd204/jesd204_tpl_adc.html"><span class="doc">ADC JESD204B/C Transport Peripheral - External synchronization</span></a></p></li>
 <li><p><a class="reference internal" href="../../../fpga/peripherals/jesd204/jesd204_tpl_dac.html"><span class="doc">DAC JESD204B/C Transport Peripheral - External synchronization</span></a></p></li>
 </ul>
-<div class="line-block">
-<div class="line">Once the JESD links are up the SYSREF pulses are no longer required from the JESD link perspective. However later assertions of the SYSREF pulses must respect the timing of the initial pulses in terms of phase and frequency to match the LMCF/LEMC of the link layer. These later SYSREF pulses can be used as references for simultaneous data capture/drive on multiple FPGAs.</div>
-<div class="line">The synchronization mechanism must be orchestrated by software, software must disable the SYSREF generation to FPGAs before arming the external synchronization mechanisms from all the transport layer cores from all FPGAs, it must program all DMA cores to prepare moving data to or from system memory depending on direction, then software must program the clock chips for a single SYSREF pulse that will reach the transport layer cores simultaneously.</div>
-</div>
+<p>Once the JESD links are up the SYSREF pulses are no longer required from the JESD link perspective. However later assertions of the SYSREF pulses must respect the timing of the initial pulses in terms of phase and frequency to match the LMCF/LEMC of the link layer. These later SYSREF pulses can be used as references for simultaneous data capture/drive on multiple FPGAs. The synchronization mechanism must be orchestrated by software, software must disable the SYSREF generation to FPGAs before arming the external synchronization mechanisms from all the transport layer cores from all FPGAs, it must program all DMA cores to prepare moving data to or from system memory depending on direction, then software must program the clock chips for a single SYSREF pulse that will reach the transport layer cores simultaneously.</p>
 </section>
 </section>
 <section id="running-the-software">
@@ -1034,11 +1024,8 @@ Across SoM (AB):     39.479836
 <h4>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h4>
 <p>On the primary setup check the status of the external clockchip. This chip reporting status <code class="docutils literal notranslate"><span class="pre">Unsynchronized</span></code> is expected, since this chip is only frequency locked against a 30.720MHz reference clock.</p>
 <div class="box bggreen docutils container">
-<div class="admonition note">
-<p class="admonition-title">Note</p>
 <p>This specifies any shell prompt running on the target</p>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@analog</span><span class="p">:</span><span class="o">~</span><span class="c1"># **iio_attr -D &lt;fc #ff0000&gt;hmc7044-ext&lt;/fc&gt; status**</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@analog</span><span class="p">:</span><span class="o">~</span><span class="c1"># **iio_attr -D hmc7044-ext status**</span>
 <span class="o">---</span> <span class="n">PLL1</span> <span class="o">---</span>
 <span class="n">Status</span><span class="p">:</span> <span class="n">Locked</span>
 <span class="n">Using</span><span class="p">:</span>  <span class="n">CLKIN1</span> <span class="o">@</span> <span class="mi">30720000</span> <span class="n">Hz</span>
@@ -1055,11 +1042,8 @@ Across SoM (AB):     39.479836
 </div>
 <p>On the primary and secondary setup check the status of all clockchips in the topology.</p>
 <div class="box bggreen docutils container">
-<div class="admonition note">
-<p class="admonition-title">Note</p>
 <p>This specifies any shell prompt running on the target</p>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@analog</span><span class="p">:</span><span class="o">~</span><span class="c1"># **iio_attr -D &lt;fc #ff0000&gt;hmc7044-car&lt;/fc&gt; status**</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@analog</span><span class="p">:</span><span class="o">~</span><span class="c1"># **iio_attr -D hmc7044-car status**</span>
 <span class="o">---</span> <span class="n">PLL1</span> <span class="o">---</span>
 <span class="n">Status</span><span class="p">:</span> <span class="n">Locked</span>
 <span class="n">Using</span><span class="p">:</span>  <span class="n">CLKIN1</span> <span class="o">@</span> <span class="mi">30720000</span> <span class="n">Hz</span>
@@ -1071,7 +1055,7 @@ Across SoM (AB):     39.479836
 <span class="n">SYNC</span> <span class="n">Status</span><span class="p">:</span>    <span class="n">Synchronized</span>
 <span class="n">Lock</span> <span class="n">Status</span><span class="p">:</span>    <span class="n">PLL1</span> <span class="o">&amp;</span> <span class="n">PLL2</span> <span class="n">Locked</span>
 
-<span class="n">root</span><span class="nd">@analog</span><span class="p">:</span><span class="o">~</span><span class="c1"># **iio_attr -D &lt;fc #ff0000&gt;hmc7044&lt;/fc&gt; status**</span>
+<span class="n">root</span><span class="nd">@analog</span><span class="p">:</span><span class="o">~</span><span class="c1"># **iio_attr -D hmc7044 status**</span>
 <span class="o">---</span> <span class="n">PLL1</span> <span class="o">---</span>
 <span class="n">Status</span><span class="p">:</span> <span class="n">Locked</span>
 <span class="n">Using</span><span class="p">:</span>  <span class="n">CLKIN1</span> <span class="o">@</span> <span class="mi">30720000</span> <span class="n">Hz</span>
@@ -1083,7 +1067,7 @@ Across SoM (AB):     39.479836
 <span class="n">SYNC</span> <span class="n">Status</span><span class="p">:</span>    <span class="n">Synchronized</span>
 <span class="n">Lock</span> <span class="n">Status</span><span class="p">:</span>    <span class="n">PLL1</span> <span class="o">&amp;</span> <span class="n">PLL2</span> <span class="n">Locked</span>
 
-<span class="n">root</span><span class="nd">@analog</span><span class="p">:</span><span class="o">~</span><span class="c1"># **iio_attr -D &lt;fc #ff0000&gt;hmc7044-fmc&lt;/fc&gt; status**</span>
+<span class="n">root</span><span class="nd">@analog</span><span class="p">:</span><span class="o">~</span><span class="c1"># **iio_attr -D hmc7044-fmc status**</span>
 <span class="o">---</span> <span class="n">PLL1</span> <span class="o">---</span>
 <span class="n">Status</span><span class="p">:</span> <span class="n">Locked</span>
 <span class="n">Using</span><span class="p">:</span>  <span class="n">CLKIN1</span> <span class="o">@</span> <span class="mi">30720000</span> <span class="n">Hz</span>

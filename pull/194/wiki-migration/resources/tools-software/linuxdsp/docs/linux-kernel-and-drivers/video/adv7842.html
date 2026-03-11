@@ -93,7 +93,14 @@
         <nav>
           <ul>
 <li><a class="reference internal" href="#">Video Decoder EI3 Extender Example</a><ul>
-<li><a class="reference internal" href="#hardware-connection">Hardware Connection</a><ul>
+<li><a class="reference internal" href="#hardware-connection">Hardware Connection</a></li>
+<li><a class="reference internal" href="#software-configuration">Software Configuration</a><ul>
+<li><a class="reference internal" href="#package-configuration">Package Configuration</a></li>
+<li><a class="reference internal" href="#kernel-configuration">Kernel Configuration</a></li>
+<li><a class="reference internal" href="#device-tree">Device Tree</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#adv7842-video-decoder-test">ADV7842 video decoder Test</a><ul>
 <li><a class="reference internal" href="#setup-soft-switch">Setup Soft Switch</a></li>
 <li><a class="reference internal" href="#capture-video-stream">Capture Video Stream</a></li>
 </ul>
@@ -601,22 +608,21 @@ Content on this topic
 <p>For SD video, connect video cables to CVBS, S-Video or Component port.</p>
 <a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/video/decoder.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/video/decoder.jpg" src="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/video/decoder.jpg" style="width: 600px;" />
 </a>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">===== Software Configuration ===== The following configuration should be done on top of the sc589-ezkit/sc573-ezkit default configuration.</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Package Configuration ==== Add the v4l2-video-test package in the filesystem, it’s enabled in adsp-sc5xx-full image by default.</div>
-</div>
+</section>
+<section id="software-configuration">
+<h2>Software Configuration<a class="headerlink" href="#software-configuration" title="Link to this heading"></a></h2>
+<p>The following configuration should be done on top of the sc589-ezkit/sc573-ezkit default configuration.</p>
+<section id="package-configuration">
+<h3>Package Configuration<a class="headerlink" href="#package-configuration" title="Link to this heading"></a></h3>
+<p>Add the v4l2-video-test package in the filesystem, it’s enabled in adsp-sc5xx-full image by default.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vim</span> <span class="n">build</span><span class="o">/</span><span class="n">conf</span><span class="o">/</span><span class="n">local</span><span class="o">.</span><span class="n">conf</span>
 <span class="n">IMAGE_INSTALL_append</span> <span class="o">=</span> <span class="s2">&quot;v4l2-video-test&quot;</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Kernel Configuration ==== Run “<strong>bitbake linux-adi -c menuconfig</strong>” to configure the linux kernel. Due to the conflicts with audio module, users should disable the audio driver before enable video drivers.</div>
-</div>
+</section>
+<section id="kernel-configuration">
+<h3>Kernel Configuration<a class="headerlink" href="#kernel-configuration" title="Link to this heading"></a></h3>
+<p>Run “<strong>bitbake linux-adi -c menuconfig</strong>” to configure the linux kernel. Due to the conflicts with audio module, users should disable the audio driver before enable video drivers.</p>
 <ul class="simple">
 <li><p><strong>Disable audio driver</strong></p></li>
 </ul>
@@ -667,10 +673,10 @@ Content on this topic
         <span class="o">&lt;&gt;</span>   <span class="n">SPI</span> <span class="n">controller</span> <span class="n">v3</span> <span class="k">for</span> <span class="n">ADI</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Device Tree ==== Run “<strong>bitbake linux-adi -c devshell</strong>” to enter into the kernel source code and then change the device tree files.</div>
-</div>
+</section>
+<section id="device-tree">
+<h3>Device Tree<a class="headerlink" href="#device-tree" title="Link to this heading"></a></h3>
+<p>Run “<strong>bitbake linux-adi -c devshell</strong>” to enter into the kernel source code and then change the device tree files.</p>
 <ul class="simple">
 <li><p>** Device node for soft switch on Video Decoder EI3 Extender Board **</p></li>
 </ul>
@@ -697,10 +703,11 @@ adau1979@0x11 {
 </pre></div>
 </div>
 <p>Run “<strong>bitbake linux-adi -C compile</strong>” to compile the linux kernel to generate the zImage and dtb file.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">===== ADV7842 video decoder Test ===== The state of pins from IO expander is “uncertain” after we enable Soft Switch on the ADSP-SC573 EZ-Board, some pins are also the OE pins (active low) of modules, as the PPI signal pins are reused by many modules, you should disable related modules by setting Soft Switch first, otherwise the signals from ppi will be interfered. So extra configuration only for <strong>ADSP-SC573 EZ-Board</strong>:</div>
-</div>
+</section>
+</section>
+<section id="adv7842-video-decoder-test">
+<h2>ADV7842 video decoder Test<a class="headerlink" href="#adv7842-video-decoder-test" title="Link to this heading"></a></h2>
+<p>The state of pins from IO expander is “uncertain” after we enable Soft Switch on the ADSP-SC573 EZ-Board, some pins are also the OE pins (active low) of modules, as the PPI signal pins are reused by many modules, you should disable related modules by setting Soft Switch first, otherwise the signals from ppi will be interfered. So extra configuration only for <strong>ADSP-SC573 EZ-Board</strong>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Only</span> <span class="k">for</span> <span class="n">ADSP</span><span class="o">-</span><span class="n">SC573</span> <span class="n">EZ</span><span class="o">-</span><span class="n">Board</span><span class="p">:</span>
 <span class="c1"># echo 482 &gt; /sys/class/gpio/export</span>
 <span class="c1"># echo high &gt; /sys/class/gpio/gpio482/direction</span>
@@ -735,10 +742,8 @@ adau1979@0x11 {
 <p>And select Interleaved option.</p>
 <a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/video/lkad-linux_video_driver-capture_video_stream.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/video/lkad-linux_video_driver-capture_video_stream.jpg" src="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/video/lkad-linux_video_driver-capture_video_stream.jpg" style="width: 600px;" />
 </a>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">—- <strong>Back to</strong> <a class="reference internal" href="linux_video_driver.html"><span class="doc">Linux Video Driver</span></a></div>
-</div>
+<hr class="docutils" />
+<p><strong>Back to</strong> <a class="reference internal" href="linux_video_driver.html"><span class="doc">Linux Video Driver</span></a></p>
 </section>
 </section>
 </section>

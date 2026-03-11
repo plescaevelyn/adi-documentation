@@ -603,17 +603,11 @@ Content on this topic
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
 <p>You don’t have to be a software engineer in order to leverage device drivers and example code as you are evaluating and prototyping with Analog Devices’ data converters and converter-like products. Selection of an ADC, DAC, or sensor often starts by finding something that meets performance requirements (obviously). This may be followed with some experimentation with the device’s evaluation board and accompanying software, but at some point you need to “take the next step”. This “next step” could be any one of a wide array of things - wiring the eval board to a prototype of a larger system, deeper characterization using your own benchtop test equipment, or any one of a plethora of random requirements. This tutorial will arm you with a number of tools to this end.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p><strong>Update:</strong></p>
-<div class="line-block">
-<div class="line">The first version of this tutorial was published in early 2020, after test driving the setup with a few select field engineers. A lot has happened since then:</div>
-<div class="line">* <a class="reference internal" href="../../../resources/tools-software/linux-software/kuiper-linux.html"><span class="doc">ADI Kuiper Linux</span></a> has matured considerably, with broad support for ADI devices and popular processor and FPGA development platforms.</div>
-</div>
+<p><strong>Update:</strong> The first version of this tutorial was published in early 2020, after test driving the setup with a few select field engineers. A lot has happened since then:</p>
 <ul class="simple">
+<li><p><a class="reference internal" href="../../../resources/tools-software/linux-software/kuiper-linux.html"><span class="doc">ADI Kuiper Linux</span></a> has matured considerably, with broad support for ADI devices and popular processor and FPGA development platforms.</p></li>
 <li><p>The very popular <a class="icon adi reference external" href="https://www.analog.com/eval-adxl355-pmdz" target="_blank">ADXL355 Pmod</a> would have been used initially, but the Linux driver had not been upstreamed yet. It has since been released, and is being added as an option for this tutorial. (The original ADXL345 / Digilent Pmod-ACL is still included.)</p></li>
 <li><p>LibIIO now supports HWMON devices (if these terms aren’t familiar, you’ll learn about them soon), enabling the use of the absolute <strong>best</strong> device to start learning about embedded Linux systems: the LM75 temperature sensor. It is an industry standard with several manufacturers, including the <a class="icon adi reference external" href="https://www.analog.com/LM75" target="_blank">Maxim LM75</a> and ADI’s variant, <a class="icon adi reference external" href="https://www.analog.com/ADT75" target="_blank">ADT75</a></p></li>
 </ul>
@@ -628,10 +622,7 @@ Content on this topic
 <div class="centeralign docutils container">
 <p><strong>Figure 1. Ultra-simple IIO-based system</strong></p>
 </div>
-<div class="line-block">
-<div class="line"><strong>A Note on Security:</strong> The Raspberry Pi is a fantastic tool, but it can represent a network security gap if used improperly. Our Raspberry Pi will start out configured in a fairly open state - a simple root password, SSH login enabled. This isn’t an issue if the Raspberry Pi does not have internet access or is behind a firewall, but if you are going to connect to your network, it’s a good idea to change the password to something secure. Refer to this article on Raspberry Pi Security:</div>
-<div class="line"><a class="icon link reference external" href="https://www.raspberrypi.org/documentation/configuration/security.md" target="_blank">Securing your Raspberry Pi</a></div>
-</div>
+<p><strong>A Note on Security:</strong> The Raspberry Pi is a fantastic tool, but it can represent a network security gap if used improperly. Our Raspberry Pi will start out configured in a fairly open state - a simple root password, SSH login enabled. This isn’t an issue if the Raspberry Pi does not have internet access or is behind a firewall, but if you are going to connect to your network, it’s a good idea to change the password to something secure. Refer to this article on Raspberry Pi Security: <a class="icon link reference external" href="https://www.raspberrypi.org/documentation/configuration/security.md" target="_blank">Securing your Raspberry Pi</a></p>
 <p><strong>A Note on the Tutorial:</strong> This tutorial is hands-on, and attempts to be clear and consistent. But there are often several “right” ways of doing a step - choice of editor to modify files on an SD card, using a Windows, Mac, or Linux machine, etc. When in doubt: <strong>Double-check your wiring</strong>, and just try stuff. Worst case, you’ll need to re-burn your SD card to get back to the starting point.</p>
 </section>
 <section id="representative-systems">
@@ -642,47 +633,29 @@ Content on this topic
 <p><strong>Figure 2. Pluto Simplified Block Diagram</strong></p>
 </div>
 <p>If the Pluto wasn’t scary enough, the <a class="icon adi reference external" href="https://www.analog.com/cn0566" target="_blank">Phased Array (Phaser) Development Platform</a> might be a step in that direction. It incorporates two <a class="icon adi reference external" href="https://www.analog.com/ADAR1000" target="_blank">ADAR1000</a> beamformers, an <a class="icon adi reference external" href="https://www.analog.com/AF4159" target="_blank">ADF4159 Fast Waveform Generating, 13 GHz, Fractional-N Frequency Synthesizer</a> and uses the Pluto as its IF digitizer. It’s also got a <a class="icon adi reference external" href="https://www.analog.com/AD7291" target="_blank">AD7291 8-Channel, I2C, 12-Bit SAR ADC with Temperature Sensor</a> for basic monitoring; a simple device by comparison, but it’s got its own device driver, and is adjacent the more complex devices both physically and in software.</p>
-<div class="line-block">
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0566/2-23-2023_4-37-00_pm.png"><img alt="image3" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0566/2-23-2023_4-37-00_pm.png" style="width: 600px;" /></a></div>
-</div>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0566/2-23-2023_4-37-00_pm.png"><img alt="image3" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0566/2-23-2023_4-37-00_pm.png" style="width: 600px;" /></a></p>
 <div class="centeralign docutils container">
 <p><strong>Figure 3. Phaser System Overview</strong></p>
 </div>
-<div class="line-block">
-<div class="line">But - all of the phaser’s devices work together, and by the time you finish this tutorial you’ll be able to chip away at understanding how the individual devices work, and eventually, how they whole system works.</div>
-</div>
+<p>But - all of the phaser’s devices work together, and by the time you finish this tutorial you’ll be able to chip away at understanding how the individual devices work, and eventually, how they whole system works.</p>
 </section>
 <section id="connecting-the-hardware">
 <h2>Connecting the Hardware<a class="headerlink" href="#connecting-the-hardware" title="Link to this heading"></a></h2>
-<div class="line-block">
-<div class="line">Before we dig too deep into software stuff, let’s prepare the hardware. There are lots of ways to connect boards together, custom adapters, Raspberry Pi prototyping hats, etc. The <a class="icon adi reference external" href="https://www.analog.com/PMD-RPI-INTZ" target="_blank">PMD-RPI-INTZ</a> is an interposer that simplifies connecting I2C and SPI Pmod boards, QuikEval compatible eval boards, and Power System Managemement (PSM) eval boards to a Raspberry Pi. Figure 4 shows the <a class="icon link reference external" href="https://store.digilentinc.com/pmod-acl-3-axis-accelerometer/" target="_blank">ADXL345 Pmod</a> (available directly from Digilent and from various distributors) mounted to the PMD-RPI-INTZ board. Note that the Pmod must be installed on P1, which uses SPI CS0 and has the interrupt pin connected to GPIO 19.</div>
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/adxl354_pmd-rpi-intz.jpg"><img alt="image4" src="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/adxl354_pmd-rpi-intz.jpg" style="width: 400px;" /></a></div>
-</div>
+<p>Before we dig too deep into software stuff, let’s prepare the hardware. There are lots of ways to connect boards together, custom adapters, Raspberry Pi prototyping hats, etc. The <a class="icon adi reference external" href="https://www.analog.com/PMD-RPI-INTZ" target="_blank">PMD-RPI-INTZ</a> is an interposer that simplifies connecting I2C and SPI Pmod boards, QuikEval compatible eval boards, and Power System Managemement (PSM) eval boards to a Raspberry Pi. Figure 4 shows the <a class="icon link reference external" href="https://store.digilentinc.com/pmod-acl-3-axis-accelerometer/" target="_blank">ADXL345 Pmod</a> (available directly from Digilent and from various distributors) mounted to the PMD-RPI-INTZ board. Note that the Pmod must be installed on P1, which uses SPI CS0 and has the interrupt pin connected to GPIO 19.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/adxl354_pmd-rpi-intz.jpg"><img alt="image4" src="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/adxl354_pmd-rpi-intz.jpg" style="width: 400px;" /></a></p>
 <div class="centeralign docutils container">
 <p><strong>Figure 4. ADXL345 Pmod Mounted to PMD-RPI-INTZ Interposer</strong></p>
 </div>
-<div class="line-block">
-<div class="line">Another option that generally applies to eval boards with test points on the digital signals is to use discrete jumper wires. Five inch jumpers from Schmartboard: <a class="icon link reference external" href="https://schmartboard.com/wire-jumpers/female-jumpers/5-inch/" target="_blank">Schmartboard Jumpers</a> are very convenient.</div>
-<div class="line">If you are using Jumpers, use Figure 1 as a visual aid and make the connections shown in Figure 5. The accelerometer board is a Digilent model Pmod:ACL, It is essentially a breakout board for the ADXL345.</div>
-</div>
-<div class="line-block">
-<div class="line">In theory, any Raspberry Pi should work, although it is probably best to use a modern model with a 40-pin expansion header. (The model shown in Figure 1 is a model 3B, version 1.2.)</div>
-<div class="line">Note that there are TWO SPI ports - SPI0 and SPI1. We will be using SPI0 (Pins 8, 19, 21, 23)</div>
-</div>
+<p>Another option that generally applies to eval boards with test points on the digital signals is to use discrete jumper wires. Five inch jumpers from Schmartboard: <a class="icon link reference external" href="https://schmartboard.com/wire-jumpers/female-jumpers/5-inch/" target="_blank">Schmartboard Jumpers</a> are very convenient.</p>
+<p>If you are using Jumpers, use Figure 1 as a visual aid and make the connections shown in Figure 5. The accelerometer board is a Digilent model Pmod:ACL, It is essentially a breakout board for the ADXL345.</p>
+<p>In theory, any Raspberry Pi should work, although it is probably best to use a modern model with a 40-pin expansion header. (The model shown in Figure 1 is a model 3B, version 1.2.) Note that there are TWO SPI ports - SPI0 and SPI1. We will be using SPI0 (Pins 8, 19, 21, 23)</p>
 <p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/rpi_adxl345_connections.png"><img alt="image5" src="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/rpi_adxl345_connections.png" style="width: 400px;" /></a></p>
 <div class="centeralign docutils container">
 <p><strong>Figure 5. RPi-Pmod connections</strong></p>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><strong>To Do:</strong></p>
-<div class="line-block">
-<div class="line">Add detailed pictures of ADXL355 Pmod and options for LM75 and ADT75.</div>
-<div class="line">In the meantime - it’s straightforward:</div>
-</div>
+<p><strong>To Do:</strong> Add detailed pictures of ADXL355 Pmod and options for LM75 and ADT75. In the meantime - it’s straightforward:</p>
 <ul class="simple">
 <li><p>The ADXL355 Pmod plugs into the same P1 location on the PMD-RPI-INTZ</p></li>
 <li><p>The Digilent <a class="icon link reference external" href="https://digilent.com/shop/pmod-tmp3-digital-temperature-sensor/" target="_blank">Pmod TMP3</a> uses the compatible Microchip TCN75A temperature sensor. It’s not the most convenient; it’s not truly Pmod compatible because the header is mounted vertically, the easiest way to connect it to the Pi is with Schmartboard jumpers.</p></li>
@@ -693,10 +666,7 @@ Content on this topic
 </section>
 <section id="burning-sd-cards">
 <h2>Burning SD cards<a class="headerlink" href="#burning-sd-cards" title="Link to this heading"></a></h2>
-<div class="line-block">
-<div class="line">In order to boot the Raspberry Pi, you will need to obtain an SD card “image”, and write (or “burn”) it to a card. We’ll talk about where to get the correct image shortly. This is a fairly common step in bringing up embedded computers - Raspberry Pi, BeagleBone, Zedboard, Arrow SoCkit, or any machine that boots from an SD card. There are lots of ways to burn images, but the most straightforward way is to use the standard Raspberry Pi Imager, available here:</div>
-<div class="line"><a class="icon link reference external" href="https://www.raspberrypi.com/software/" target="_blank">Raspberry Pi OS (including Raspbery Pi Imager</a></div>
-</div>
+<p>In order to boot the Raspberry Pi, you will need to obtain an SD card “image”, and write (or “burn”) it to a card. We’ll talk about where to get the correct image shortly. This is a fairly common step in bringing up embedded computers - Raspberry Pi, BeagleBone, Zedboard, Arrow SoCkit, or any machine that boots from an SD card. There are lots of ways to burn images, but the most straightforward way is to use the standard Raspberry Pi Imager, available here: <a class="icon link reference external" href="https://www.raspberrypi.com/software/" target="_blank">Raspberry Pi OS (including Raspbery Pi Imager</a></p>
 <p>There are instructions for Windows, Mac, and Linux. The imager also works on machines that encrypt data being written to external drives since it’s writing “raw” data. HOWEVER - beware encryption software when editing configuration files! (More on that later…)</p>
 <p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/raspberry_pi_imager.png"><img alt="image6" src="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/raspberry_pi_imager.png" style="width: 400px;" /></a></p>
 <div class="centeralign docutils container">
@@ -730,12 +700,8 @@ Content on this topic
 </ul>
 </li>
 </ul>
-<div class="line-block">
-<div class="line">More information on Raspberry Pi OS can be found at <a class="icon link reference external" href="https://www.raspberrypi.com/software/" target="_blank">Raspberry Pi OS</a>. Raspberry Pi OS includes lots of fun stuff - Minecraft, an office suite, web browser, sound processing labs, other games, etc. We won’t cover any of that, but do explore on your own!</div>
-<div class="line">(More information on the Kuiper Belt can be found at <a class="icon link reference external" href="https://en.wikipedia.org/wiki/Kuiper_belt" target="_blank">Kuiper_belt</a>)</div>
-<div class="line">The SD card image is available here:</div>
-<div class="line"><a class="reference internal" href="../../../resources/tools-software/linux-software/kuiper-linux.html"><span class="doc">Analog Devices Kuiper Linux</span></a></div>
-</div>
+<p>More information on Raspberry Pi OS can be found at <a class="icon link reference external" href="https://www.raspberrypi.com/software/" target="_blank">Raspberry Pi OS</a>. Raspberry Pi OS includes lots of fun stuff - Minecraft, an office suite, web browser, sound processing labs, other games, etc. We won’t cover any of that, but do explore on your own!</p>
+<p>(More information on the Kuiper Belt can be found at <a class="icon link reference external" href="https://en.wikipedia.org/wiki/Kuiper_belt" target="_blank">Kuiper_belt</a>) The SD card image is available here: <a class="reference internal" href="../../../resources/tools-software/linux-software/kuiper-linux.html"><span class="doc">Analog Devices Kuiper Linux</span></a></p>
 <p>Download the compressed zip file, and extract the .img file. (tar.gz files can be extrtracted using 7zip in Windows.) Follow the procedure for burning SD cards above, using a 16GB (or larger), high-quality, Class 10 or faster SD card.</p>
 <p>At this point, you should be able to:</p>
 <ul class="simple">
@@ -764,26 +730,17 @@ Content on this topic
 <div class="centeralign docutils container">
 <p><strong>Figure 9. Partial ADXL345 overlay source (dts)</strong></p>
 </div>
-<div class="line-block">
-<div class="line">The device tree source is then compiled into a “flattened” device tree that the Linux kernel reads directly. While this process is fairly straightforward, it’s beyond the scope of this tutorial. Furthermore, the device tree overlay for this tutorial is already included on the SD card, along with several other overlays for other hardware configurations. (Note that the device tree overlay is specific to a particular device AND how it is connected to the Raspberry Pi. Any changes to the connections - SPI CS line, interrrupt line, etc. will require a corresponding modification to the overlay.)</div>
-<div class="line">For reference, here are the overlay source files for the three devices in this tutorial. These are in the Linux rpi-5.15.y branch, used for Kuiper Linux 2022_r2 release:</div>
-</div>
+<p>The device tree source is then compiled into a “flattened” device tree that the Linux kernel reads directly. While this process is fairly straightforward, it’s beyond the scope of this tutorial. Furthermore, the device tree overlay for this tutorial is already included on the SD card, along with several other overlays for other hardware configurations. (Note that the device tree overlay is specific to a particular device AND how it is connected to the Raspberry Pi. Any changes to the connections - SPI CS line, interrrupt line, etc. will require a corresponding modification to the overlay.) For reference, here are the overlay source files for the three devices in this tutorial. These are in the Linux rpi-5.15.y branch, used for Kuiper Linux 2022_r2 release:</p>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/overlays/rpi-lm75-overlay.dts" target="_blank">LM75 Device Tree Overlay</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/overlays/rpi-adxl345-overlay.dts" target="_blank">ADXL345 Device Tree Overlay</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/overlays/rpi-adxl355-overlay.dts" target="_blank">ADXL355 Device Tree Overlay</a></p></li>
+<li><p><a class="icon link reference external" href="https://github.com/analogdevicesinc/linux/blob/rpi-5.15.y/arch/arm/boot/dts/overlays/rpi-lm75-overlay.dts" target="_blank">LM75 Device Tree Overlay</a></p></li>
+<li><p><a class="icon link reference external" href="https://github.com/analogdevicesinc/linux/blob/rpi-5.15.y/arch/arm/boot/dts/overlays/rpi-adxl345-overlay.dts" target="_blank">ADXL345 Device Tree Overlay</a></p></li>
+<li><p><a class="icon link reference external" href="https://github.com/analogdevicesinc/linux/blob/rpi-5.15.y/arch/arm/boot/dts/overlays/rpi-adxl355-overlay.dts" target="_blank">ADXL355 Device Tree Overlay</a></p></li>
 </ul>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line"><br /></div>
-</div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>For more gory details on device trees, a great resource is <a class="icon link reference external" href="https://elinux.org/images/f/f9/Petazzoni-device-tree-dummies_0.pdf" target="_blank">Device Tree for Dummies</a> by Thomas Petazzoni.</p>
 </div>
-<div class="line-block">
-<div class="line">So keeping with the spirit of doing while we’re learning, let’s configure the overlay for this experiment. The device tree overlay is specified in the config.txt file, which lives in the BOOT partition on the SD card. There are several ways to edit this file - Since the BOOT partition is a FAT filesystem, you can use any text editor on any operating system; Notepad on Windows, Kedit on Linux, etc. Or… if your Raspberry Pi is booted up, you can edit directly on the Pi! Just open a command prompt, and type:</div>
-</div>
+<p>So keeping with the spirit of doing while we’re learning, let’s configure the overlay for this experiment. The device tree overlay is specified in the config.txt file, which lives in the BOOT partition on the SD card. There are several ways to edit this file - Since the BOOT partition is a FAT filesystem, you can use any text editor on any operating system; Notepad on Windows, Kedit on Linux, etc. Or… if your Raspberry Pi is booted up, you can edit directly on the Pi! Just open a command prompt, and type:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$ sudo mousepad /boot/config.txt
 </pre></div>
 </div>
@@ -793,17 +750,15 @@ Content on this topic
 <span class="c1"># dtoverlay=rpi-lm75,addr=0x48</span>
 <span class="n">dtparam</span><span class="o">=</span><span class="n">act_led_trigger</span><span class="o">=</span><span class="n">heartbeat</span>
 <span class="n">dtoverlay</span><span class="o">=</span><span class="n">gpio</span><span class="o">-</span><span class="n">shutdown</span><span class="p">,</span><span class="n">gpio_pin</span><span class="o">=</span><span class="mi">21</span><span class="p">,</span><span class="n">active_low</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">gpiopull</span><span class="o">=</span><span class="n">up</span>
+
+<span class="o">|</span><span class="n">image10</span><span class="o">|</span>
 </pre></div>
-</div>
-<div class="line-block">
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/edit_config.png"><img alt="image10" src="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/edit_config.png" style="width: 400px;" /></a></div>
 </div>
 <div class="centeralign docutils container">
 <p><strong>Figure 10. Editing config.txt directly on Raspberry Pi</strong></p>
 </div>
-<p>Notice the two commented lines beginning with <strong>#</strong>. As you might expect, you should UN-comment the appropriate line for the device you have connected.
-| Notice that there are a couple of additional lines - there are lots of useful optional parameters that can be set in the config.txt file, here we’re setting the onboard LED to the “heartbeat” function, this makes it easy to see if the board is running or shut down, even if you don’t have a display connected. The other line turns GPIO21 into a hardware shutdown function, also very useful if you are operating the board without a display.
-| If you want to make it easy to revert back to some other overlay, comment out the original line with a pound sign / hashtag:</p>
+<p>Notice the two commented lines beginning with <strong>#</strong>. As you might expect, you should UN-comment the appropriate line for the device you have connected. Notice that there are a couple of additional lines - there are lots of useful optional parameters that can be set in the config.txt file, here we’re setting the onboard LED to the “heartbeat” function, this makes it easy to see if the board is running or shut down, even if you don’t have a display connected. The other line turns GPIO21 into a hardware shutdown function, also very useful if you are operating the board without a display.</p>
+<p>If you want to make it easy to revert back to some other overlay, comment out the original line with a pound sign / hashtag:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#dtoverlay=rpi-something-other-than-adxl345</span>
 <span class="n">dtoverlay</span><span class="o">=</span><span class="n">rpi</span><span class="o">-</span><span class="n">adxl345</span>
 </pre></div>
@@ -863,23 +818,13 @@ Content on this topic
 <section id="python">
 <h2>Python<a class="headerlink" href="#python" title="Link to this heading"></a></h2>
 <p>Any language that can call a shared library can communicate with libiio. But Python is attractive for getting started for several reasons:</p>
-<div class="line-block">
-<div class="line">It’s FREE It’s tremendously popular It’s got tons of number crunching libraries It’s got tons of libraries for communicating with hardware (It’s also really really fun!) And - it’s easy to learn. If you’ve never touched Python before, there are lots of free resources, including this 4-hour course on YouTube from freeCodeCamp.org: <img alt="youtube&gt;rfscVS0vtbw" src="https://wiki.analog.com/_media/youtube&gt;rfscVS0vtbw" /></div>
-<div class="line">And this very nice interactive tutorial:</div>
-<div class="line"><a class="icon link reference external" href="https://www.learnpython.org/" target="_blank">Learn Python</a></div>
-<div class="line">in which code snippets run in the browser (no need to intall Python.)</div>
-<div class="line">If you prefer paper, <a class="icon link reference external" href="https://nostarch.com/python-kids-2nd-edition" target="_blank">Python for Kids by Jason R. Briggs</a> is a well written books for kids of all ages. (And <a class="icon link reference external" href="https://nostarch.com/programwithminecraft" target="_blank">Learn to Program with Minecraft: Transform Your World with the Power of Python</a> by Craig Richardson is a pretty nice introduction to the idea of communicating over a network connection; the Minecraft world is a process that communicates over network ports.)</div>
-</div>
-<div class="line-block">
-<div class="line">There are several choices of Python installations, and which one to use is largely a matter of preference. You can install from scratch from <a class="icon link reference external" href="https://www.python.org/" target="_blank">Python.org</a>, or a more full featured distribution such as Anaconda, PyCharm, or VS Code. And <strong>Python is pre-installed on ADI Kuiper Linux</strong>, as is the Thonny IDE. Thonny is basic as far as IDEs go, but it provides breakpoints, variable watches, and is perfectly adequate for simple to intermediate development.</div>
-<div class="line"><br /></div>
-</div>
+<p>It’s FREE It’s tremendously popular It’s got tons of number crunching libraries It’s got tons of libraries for communicating with hardware (It’s also really really fun!) And - it’s easy to learn. If you’ve never touched Python before, there are lots of free resources, including this 4-hour course on YouTube from freeCodeCamp.org:</p>
+<p><img alt="youtube&gt;rfscVS0vtbw" src="https://wiki.analog.com/_media/youtube&gt;rfscVS0vtbw" /></p>
+<p>And this very nice interactive tutorial: <a class="icon link reference external" href="https://www.learnpython.org/" target="_blank">Learn Python</a> in which code snippets run in the browser (no need to intall Python.) If you prefer paper, <a class="icon link reference external" href="https://nostarch.com/python-kids-2nd-edition" target="_blank">Python for Kids by Jason R. Briggs</a> is a well written books for kids of all ages. (And <a class="icon link reference external" href="https://nostarch.com/programwithminecraft" target="_blank">Learn to Program with Minecraft: Transform Your World with the Power of Python</a> by Craig Richardson is a pretty nice introduction to the idea of communicating over a network connection; the Minecraft world is a process that communicates over network ports.)</p>
+<p>There are several choices of Python installations, and which one to use is largely a matter of preference. You can install from scratch from <a class="icon link reference external" href="https://www.python.org/" target="_blank">Python.org</a>, or a more full featured distribution such as Anaconda, PyCharm, or VS Code. And <strong>Python is pre-installed on ADI Kuiper Linux</strong>, as is the Thonny IDE. Thonny is basic as far as IDEs go, but it provides breakpoints, variable watches, and is perfectly adequate for simple to intermediate development.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>On Python Versions - We’re using Python 3 (3.9.2 in Kuiper 2022_r2 to be specific.) So if you’re installing on your remote host, make sure to get a recent version of Python 3.</p>
-<div class="line-block">
-<div class="line">Previous Kuiper Linux releases had multiple Python versions installed, defaulting to Python 2.x. The current Kuiper Linux defaults to Python 3 so this is no longer an issue, but for historical curiosity the procedure for setting the default to Python 3 is to run the following commands:</div>
-</div>
+<p>On Python Versions - We’re using Python 3 (3.9.2 in Kuiper 2022_r2 to be specific.) So if you’re installing on your remote host, make sure to get a recent version of Python 3. Previous Kuiper Linux releases had multiple Python versions installed, defaulting to Python 2.x. The current Kuiper Linux defaults to Python 3 so this is no longer an issue, but for historical curiosity the procedure for setting the default to Python 3 is to run the following commands:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$ sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1
 analog@analog:~$ sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.7 2
 </pre></div>
@@ -901,16 +846,9 @@ analog@analog:~/pyadi-iio $ sudo pip install .
 <p><strong>Figure 14. WiFi logon</strong></p>
 </div>
 <p>Now it’s (almost) trivial to grab data from the ADXL345 used in this tutorial, as well as more complicated hardware. With pyadi-iio installed, you should be able to run the ADXL345 example.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><strong>To Do:</strong></p>
-<div class="line-block">
-<div class="line">Update ADXL345 pyadi-iio example.</div>
-<div class="line">As of Feb. 2024, the ADXL345 example has a hardcoded ip address. Most newer examples allow the context to be passed via command line argument, but in the meantime change line 10 from:</div>
-</div>
+<p><strong>To Do:</strong> Update ADXL345 pyadi-iio example. As of Feb. 2024, the ADXL345 example has a hardcoded ip address. Most newer examples allow the context to be passed via command line argument, but in the meantime change line 10 from:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">myacc</span> <span class="o">=</span> <span class="n">adi</span><span class="o">.</span><span class="n">adxl345</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="s2">&quot;ip:192.168.1.232&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -958,10 +896,8 @@ analog@analog:~/pyadi-iio/examples $ python adxl345_example.py
 </section>
 <section id="going-headless">
 <h2>Going “Headless”<a class="headerlink" href="#going-headless" title="Link to this heading"></a></h2>
-<div class="line-block">
-<div class="line">(Ignore if you’re using a monitor / keyboard / mouse) If it happens that you don’t have a spare monitor / keyboard / mouse, or it’s just inconvenient, you can operate the Raspberry Pi with only a network connection. By default, the ADI Kuiper Linux network hostname is <strong>analog</strong>, and the machine can be accessed as <strong>analog.local</strong>.</div>
-<div class="line">The Raspberry Pi can also be accessed directly by its IP address. If your network has a DHCP server, and you can find the IP address that it assigned to the Raspberry Pi, you’re all set. But a very robust way is to set the Raspberry Pi’s address manually, and do the same to one network adapter on the host. To set the Raspberry Pi’s address, open the boot partition on a host machine (once again… BEWARE ENCRYPTION!), and note that this host machine could be the Raspberry Pi itself, with a montior / keyboard / mouse attached. Open the file “cmdline.txt” and add the following to the end:</div>
-</div>
+<p>(Ignore if you’re using a monitor / keyboard / mouse) If it happens that you don’t have a spare monitor / keyboard / mouse, or it’s just inconvenient, you can operate the Raspberry Pi with only a network connection. By default, the ADI Kuiper Linux network hostname is <strong>analog</strong>, and the machine can be accessed as <strong>analog.local</strong>.</p>
+<p>The Raspberry Pi can also be accessed directly by its IP address. If your network has a DHCP server, and you can find the IP address that it assigned to the Raspberry Pi, you’re all set. But a very robust way is to set the Raspberry Pi’s address manually, and do the same to one network adapter on the host. To set the Raspberry Pi’s address, open the boot partition on a host machine (once again… BEWARE ENCRYPTION!), and note that this host machine could be the Raspberry Pi itself, with a montior / keyboard / mouse attached. Open the file “cmdline.txt” and add the following to the end:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ip</span><span class="o">=</span><span class="mf">192.168.1.232</span><span class="p">::</span><span class="mf">192.168.1.1</span><span class="p">:</span><span class="mf">255.255.255.0</span><span class="p">:</span><span class="n">rpi</span><span class="p">:</span><span class="n">eth0</span><span class="p">:</span><span class="n">off</span>
 </pre></div>
 </div>

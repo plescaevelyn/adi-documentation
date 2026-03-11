@@ -96,10 +96,12 @@
 <li><a class="reference internal" href="#overview">Overview</a></li>
 <li><a class="reference internal" href="#structure">Structure</a></li>
 <li><a class="reference internal" href="#api">API</a><ul>
-<li><a class="reference internal" href="#physical-interface">Physical Interface</a><ul>
+<li><a class="reference internal" href="#physical-interface">Physical Interface</a></li>
+<li><a class="reference internal" href="#logical-interface">Logical Interface</a><ul>
 <li><a class="reference internal" href="#concepts">Concepts</a></li>
 <li><a class="reference internal" href="#message-passing">Message Passing</a></li>
 <li><a class="reference internal" href="#modes">Modes</a></li>
+<li><a class="reference internal" href="#properties">Properties</a></li>
 </ul>
 </li>
 </ul>
@@ -606,8 +608,7 @@ Content on this topic
 <div class="line">Before the API can be documented, it is important to understand precisely what is loaded into memory and how the memory is structured. As stated in the Overview section, any number of PMFs may be loaded concurrently into memory. The client interface accesses instances through a unique identifier called a key.</div>
 <div class="line">Every model instance has at least one mode, but possibly more. A mode is used to encapsulate and describe unique product states of the device. Modes are typically high level (broad), full chip settings rather than the toggling of one particular setting. The client software can query the current mode setting, query other possible modes of operation, and set the desired mode.</div>
 <div class="line">For any given mode, the simulator model receives its behavior through a collection of processing blocks. Each block contains properties which, in turn, have access permissions (read, read/write, or hidden). Only those blocks which have pertinent properties to the software client (that is, read or read/write) are visible. If a block has only hidden properties then that block is hidden, as well. There is also a global block which contains settings for the simulation, such as input frequency or sampling rate.</div>
-<div class="line">See Figure 1 for a graphical representation.</div>
-<div class="line"><img alt="image1" src="https://wiki.analog.com/_media/resources/technical-guides/structure2.png" /></div>
+<div class="line">See Figure 1 for a graphical representation. <img alt="image1" src="https://wiki.analog.com/_media/resources/technical-guides/structure2.png" /></div>
 </div>
 <div class="centeralign docutils container">
 <p><em>Figure 1. ADIsim.dll Structure</em></p>
@@ -615,1275 +616,317 @@ Content on this topic
 </section>
 <section id="api">
 <h2>API<a class="headerlink" href="#api" title="Link to this heading"></a></h2>
-<div class="line-block">
-<div class="line">The API section is broken up into two subsections: DLL Interface and the Process Message Schema. The DLL Interface section documents how to interface physically to the ADIsim.dll. The Process Message Schema section documents how to interface logically to a model instance. The simulator was designed this way to preserve generitivity and provide extensibility.</div>
-</div>
+<p>The API section is broken up into two subsections: DLL Interface and the Process Message Schema. The DLL Interface section documents how to interface physically to the ADIsim.dll. The Process Message Schema section documents how to interface logically to a model instance. The simulator was designed this way to preserve generitivity and provide extensibility.</p>
 <section id="physical-interface">
 <h3>Physical Interface<a class="headerlink" href="#physical-interface" title="Link to this heading"></a></h3>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">ImportPMF</span><span class="p">(</span><span class="kd">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">filename</span><span class="p">);</span>
-
-
-<span class="o">|</span><span class="w"> </span><span class="o">*</span><span class="n">Description</span><span class="p">:</span><span class="o">*</span>
 </pre></div>
 </div>
 <div class="line-block">
-<div class="line"><br /></div>
+<div class="line"><em>Description:</em> Takes the Product Model File (*.pmf) or ADC (*.adc) file addressed by filename to create a model instance into memory.</div>
+<div class="line"><em>Parameter(s):</em> <code class="docutils literal notranslate"><span class="pre">filename</span></code> – string containing the PMF location.</div>
+<div class="line"><em>Returns:</em> <code class="docutils literal notranslate"><span class="pre">key</span></code> – reference to this model instance used in future functions.</div>
 </div>
-<div class="indent docutils container">
-<p>Takes the Product Model File (*.pmf) or ADC (*.adc) file addressed by filename to create a model instance into memory.</p>
-<div class="line-block">
-<div class="line"><em>Parameter(s):</em></div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">filename</span></code> – string containing the PMF location.</p>
-<div class="line-block">
-<div class="line"><em>Returns:</em></div>
-</div>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">Reset</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">key</span><span class="p">);</span>
+</pre></div>
 </div>
 <div class="line-block">
-<div class="line"><br /></div>
+<div class="line"><em>Description:</em> Resets the simulation conditions for this model instance.</div>
+<div class="line"><em>Parameter(s):</em> <code class="docutils literal notranslate"><span class="pre">key</span></code> – instance index for PMF returned from <code class="docutils literal notranslate"><span class="pre">ImportPMF(…).</span></code></div>
+<div class="line"><em>Returns:</em> <code class="docutils literal notranslate"><span class="pre">success</span></code> – execution status of the function call.</div>
 </div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">key</span></code> – reference to this model instance used in future functions.</p>
-<div class="line-block">
-<div class="line"><code class="docutils literal notranslate"><span class="pre">int</span> <span class="pre">Reset(int</span> <span class="pre">key);</span></code> <em>Description:</em></div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p>Resets the simulation conditions for this model instance.</p>
-<div class="line-block">
-<div class="line"><em>Parameter(s):</em></div>
-</div>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">RunSamples</span><span class="p">(</span><span class="kt">double</span><span class="o">*</span><span class="w"> </span><span class="n">in</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="o">*</span><span class="w"> </span><span class="n">out</span><span class="p">,</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">length</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">key</span><span class="p">);</span>
+</pre></div>
 </div>
 <div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">key</span></code> – instance index for PMF returned from <code class="docutils literal notranslate"><span class="pre">ImportPMF(…).</span></code></p>
-<div class="line-block">
-<div class="line"><em>Returns:</em></div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">success</span></code> – execution status of the function call.</p>
-<div class="line-block">
-<div class="line"><code class="docutils literal notranslate"><span class="pre">int</span> <span class="pre">RunSamples(double*</span> <span class="pre">in,</span> <span class="pre">double*</span> <span class="pre">out,</span> <span class="pre">long</span> <span class="pre">length,</span> <span class="pre">int</span> <span class="pre">key);</span></code> <em>Description:</em></div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p>Runs a multistep simulation on an array of input values for this model instance.</p>
-<div class="line-block">
-<div class="line"><em>Parameters:</em></div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">in</span></code> – pointer to the input value array.</p>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p>If the input data type is real, <code class="docutils literal notranslate"><span class="pre">RunSamples(…)</span></code> expects an array of doubles, which captures the following relationship:</p>
-<div class="line-block">
-<div class="line">^ Value ^ Maps To ^</div>
-</div>
+<div class="line"><em>Description:</em> Runs a multistep simulation on an array of input values for this model instance.</div>
+<div class="line"><em>Parameters:</em> <code class="docutils literal notranslate"><span class="pre">in</span></code> – pointer to the input value array.</div>
+<div class="line">If the input data type is real, <code class="docutils literal notranslate"><span class="pre">RunSamples(…)</span></code> expects an array of doubles, which captures the following relationship:</div>
 </div>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Value</p></th>
+<th class="head"><p>Maps To</p></th>
+</tr>
+</thead>
 <tbody>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">in[0]</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">in[0]</span></code></p></td>
 <td><p>real<sub>0</sub></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">in[1]</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">in[1]</span></code></p></td>
 <td><p>real<sub>1</sub></p></td>
 </tr>
-<tr class="row-odd"><td><p>…</p></td>
+<tr class="row-even"><td><p>…</p></td>
 <td><p>…</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">in[length-1]</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">in[length-1]</span></code></p></td>
 <td><p>real:sub:<code class="docutils literal notranslate"><span class="pre">`length-1`</span></code></p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="line-block">
-<div class="line"><br /></div>
+<div class="line">If the input data type is complex, <code class="docutils literal notranslate"><span class="pre">RunSamples(…)</span></code> expects an array of interleaved doubles, which captures the following relationship:</div>
 </div>
 <div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p>If the input data type is complex, <code class="docutils literal notranslate"><span class="pre">RunSamples(…)</span></code> expects an array of interleaved doubles, which captures the following relationship:</p>
-<div class="line-block">
-<div class="line">^ Value ^ Maps To ^</div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">out</span></code> – pointer to the output value array. It must be allocated by the client.</p>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p>If the input data type is real, <code class="docutils literal notranslate"><span class="pre">RunSamples(…)</span></code> expects space for an array of doubles, which captures the following relationship:</p>
-<div class="line-block">
-<div class="line">^ Value ^ Maps To ^</div>
-</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">out</span></code> – pointer to the output value array. It must be allocated by the client.</div>
+<div class="line">If the input data type is real, <code class="docutils literal notranslate"><span class="pre">RunSamples(…)</span></code> expects space for an array of doubles, which captures the following relationship:</div>
 </div>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Value</p></th>
+<th class="head"><p>Maps To</p></th>
+</tr>
+</thead>
 <tbody>
-<tr class="row-odd"><td><p>real<sub>0</sub></p></td>
+<tr class="row-even"><td><p>real<sub>0</sub></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">out[0]</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p>real<sub>1</sub></p></td>
+<tr class="row-odd"><td><p>real<sub>1</sub></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">out[1]</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p>…</p></td>
+<tr class="row-even"><td><p>…</p></td>
 <td><p>…</p></td>
 </tr>
-<tr class="row-even"><td><p>real:sub:<code class="docutils literal notranslate"><span class="pre">`out_length-1`</span></code></p></td>
+<tr class="row-odd"><td><p>real:sub:<code class="docutils literal notranslate"><span class="pre">`out_length-1`</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">out[out_length-1]</span></code></p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p>If the input data type is complex, <code class="docutils literal notranslate"><span class="pre">RunSamples(…)</span></code> expects space for an array of interleaved doubles, which captures the following relationship:</p>
-<div class="line-block">
-<div class="line">^ Value ^ Maps To ^</div>
-</div>
+<div class="line">If the input data type is complex, <code class="docutils literal notranslate"><span class="pre">RunSamples(…)</span></code> expects space for an array of interleaved doubles, which captures the following relationship:</div>
 </div>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Value</p></th>
+<th class="head"><p>Maps To</p></th>
+</tr>
+</thead>
 <tbody>
-<tr class="row-odd"><td><p>real<sub>0</sub></p></td>
+<tr class="row-even"><td><p>real<sub>0</sub></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">out[0]</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p>imag<sub>0</sub></p></td>
+<tr class="row-odd"><td><p>imag<sub>0</sub></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">out[1]</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p>real<sub>1</sub></p></td>
+<tr class="row-even"><td><p>real<sub>1</sub></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">out[2]</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p>imag<sub>1</sub></p></td>
+<tr class="row-odd"><td><p>imag<sub>1</sub></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">out[3]</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p>…</p></td>
+<tr class="row-even"><td><p>…</p></td>
 <td><p>…</p></td>
 </tr>
-<tr class="row-even"><td><p>real:sub:<code class="docutils literal notranslate"><span class="pre">`out_length-1`</span></code></p></td>
+<tr class="row-odd"><td><p>real:sub:<code class="docutils literal notranslate"><span class="pre">`out_length-1`</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">out[2\*out_length-2]</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p>imag:sub:<code class="docutils literal notranslate"><span class="pre">`out_length-1`</span></code></p></td>
+<tr class="row-even"><td><p>imag:sub:<code class="docutils literal notranslate"><span class="pre">`out_length-1`</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">out[2\*out_length-1]</span></code></p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="line-block">
-<div class="line"><br /></div>
+<div class="line">where: <code class="docutils literal notranslate"><span class="pre">out_length</span> <span class="pre">=</span> <span class="pre">ceil(length</span> <span class="pre">*</span> <span class="pre">(fout</span> <span class="pre">/</span> <span class="pre">fs)).</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">fout</span></code> and <code class="docutils literal notranslate"><span class="pre">fs</span></code> are retrieved via <code class="docutils literal notranslate"><span class="pre">ProcessMessage(…)</span></code> and <code class="docutils literal notranslate"><span class="pre">ceil(…)</span></code> returns the next highest inclusive integer.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">length</span></code> – contains the number of simulation iterations to run.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">key</span></code> – instance index for PMF returned from <code class="docutils literal notranslate"><span class="pre">ImportPMF(…).</span></code></div>
+<div class="line"><em>Returns:</em> <code class="docutils literal notranslate"><span class="pre">success</span></code> – execution status of the function call.</div>
+</div>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">RunSample</span><span class="p">(</span><span class="kt">double</span><span class="o">*</span><span class="w"> </span><span class="n">in</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="o">*</span><span class="w"> </span><span class="n">out</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">key</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><em>Description:</em> Functionally equivalent to <code class="docutils literal notranslate"><span class="pre">RunSamples(in,</span> <span class="pre">out,</span> <span class="pre">1,</span> <span class="pre">key);</span></code></p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">GetPortCount</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="n">count</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">port_direction</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">key</span><span class="p">);</span>
+</pre></div>
 </div>
 <div class="line-block">
-<div class="line"><br /></div>
+<div class="line"><em>Description:</em> Gets the number of inputs/outputs for this model instance.</div>
+<div class="line"><em>Parameter(s):</em> <code class="docutils literal notranslate"><span class="pre">port_direction</span></code> – whether a port is an input or an output {0 : Input, 1: Output}.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">key</span></code> – instance index for PMF returned from <code class="docutils literal notranslate"><span class="pre">ImportPMF(…).</span></code></div>
+<div class="line"><em>Returns:</em> <code class="docutils literal notranslate"><span class="pre">count</span></code> – the port count.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">success</span></code> – execution status of the function call.</div>
 </div>
-<div class="indent docutils container">
-<p>where:</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">out_length</span> <span class="pre">=</span> <span class="pre">ceil(length</span> <span class="pre">*</span> <span class="pre">(fout</span> <span class="pre">/</span> <span class="pre">fs)).</span></code></p>
-</div>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">QueryPort</span><span class="p">(</span><span class="kt">double</span><span class="o">*</span><span class="w"> </span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="n">bool</span><span class="o">*</span><span class="w"> </span><span class="n">is_complex</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="n">domain</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="o">**</span><span class="w"> </span><span class="n">unit</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">port_direction</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">port_index</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">key</span><span class="p">);</span>
+</pre></div>
 </div>
 <div class="line-block">
-<div class="line"><br /></div>
+<div class="line"><em>Description:</em> Gets information about the desired port for this model instance.</div>
+<div class="line"><em>Parameter(s):</em> <code class="docutils literal notranslate"><span class="pre">port_direction</span></code> – whether a port is an input or an output {0 : Input, 1: Output}.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">port_index</span></code> – the port index.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">key</span></code> – instance index for PMF returned from <code class="docutils literal notranslate"><span class="pre">ImportPMF(…).</span></code></div>
+<div class="line"><em>Returns:</em> <code class="docutils literal notranslate"><span class="pre">f</span></code> – the port frequency.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_complex</span></code> – the port complexity.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">domain</span></code> – the port domain {0 : Unspecified, 1 : Analog, 2 : Digital}.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">unit</span></code> – the port unit (the string allocation is managed by MOTIF).</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">success</span></code> – execution status of the function call.</div>
 </div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">fout</span></code> and <code class="docutils literal notranslate"><span class="pre">fs</span></code> are retrieved via <code class="docutils literal notranslate"><span class="pre">ProcessMessage(…)</span></code> and <code class="docutils literal notranslate"><span class="pre">ceil(…)</span></code> returns the next highest inclusive integer.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">length</span></code> – contains the number of simulation iterations to run.</p>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">key</span></code> – instance index for PMF returned from <code class="docutils literal notranslate"><span class="pre">ImportPMF(…).</span></code></p>
-<div class="line-block">
-<div class="line"><em>Returns:</em></div>
-</div>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">Destroy</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">key</span><span class="p">);</span>
+</pre></div>
 </div>
 <div class="line-block">
-<div class="line"><br /></div>
+<div class="line"><em>Description:</em> Deallocates model instance from memory.</div>
+<div class="line"><em>Parameter(s):</em> <code class="docutils literal notranslate"><span class="pre">key</span></code> – instance index for PMF returned from <code class="docutils literal notranslate"><span class="pre">ImportPMF(…).</span></code></div>
+<div class="line"><em>Returns:</em> Nothing.</div>
 </div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">success</span></code> – execution status of the function call.</p>
-<div class="line-block">
-<div class="line"><code class="docutils literal notranslate"><span class="pre">int</span> <span class="pre">RunSample(double*</span> <span class="pre">in,</span> <span class="pre">double*</span> <span class="pre">out,</span> <span class="pre">int</span> <span class="pre">key);</span></code> <em>Description:</em></div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p>Functionally equivalent to <code class="docutils literal notranslate"><span class="pre">RunSamples(in,</span> <span class="pre">out,</span> <span class="pre">1,</span> <span class="pre">key);</span></code></p>
-<div class="line-block">
-<div class="line"><code class="docutils literal notranslate"><span class="pre">int</span> <span class="pre">GetPortCount(int*</span> <span class="pre">count,</span> <span class="pre">int</span> <span class="pre">port_direction,</span> <span class="pre">int</span> <span class="pre">key);</span></code> <em>Description:</em></div>
-</div>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">DestroyAll</span><span class="p">();</span>
+</pre></div>
 </div>
 <div class="line-block">
-<div class="line"><br /></div>
+<div class="line"><em>Description:</em> Deallocates all model instances from memory.</div>
+<div class="line"><em>Parameter(s):</em> None.</div>
+<div class="line"><em>Returns:</em> Nothing.</div>
 </div>
-<div class="indent docutils container">
-<p>Gets the number of inputs/outputs for this model instance.</p>
-<div class="line-block">
-<div class="line"><em>Parameter(s):</em></div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">port_direction</span></code> – whether a port is an input or an output {0 : Input, 1: Output}.</p>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">key</span></code> – instance index for PMF returned from <code class="docutils literal notranslate"><span class="pre">ImportPMF(…).</span></code></p>
-<div class="line-block">
-<div class="line"><em>Returns:</em></div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">count</span></code> – the port count.</p>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">success</span></code> – execution status of the function call.</p>
-<div class="line-block">
-<div class="line"><code class="docutils literal notranslate"><span class="pre">int</span> <span class="pre">QueryPort(double*</span> <span class="pre">f,</span> <span class="pre">bool*</span> <span class="pre">is_complex,</span> <span class="pre">int*</span> <span class="pre">domain,</span> <span class="pre">char**</span> <span class="pre">unit,</span> <span class="pre">int</span> <span class="pre">port_direction,</span> <span class="pre">int</span> <span class="pre">port_index,</span> <span class="pre">int</span> <span class="pre">key);</span></code> <em>Description:</em></div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p>Gets information about the desired port for this model instance.</p>
-<div class="line-block">
-<div class="line"><em>Parameter(s):</em></div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">port_direction</span></code> – whether a port is an input or an output {0 : Input, 1: Output}.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">port_index</span></code> – the port index.</p>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">key</span></code> – instance index for PMF returned from <code class="docutils literal notranslate"><span class="pre">ImportPMF(…).</span></code></p>
-<div class="line-block">
-<div class="line"><em>Returns:</em></div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">f</span></code> – the port frequency.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">is_complex</span></code> – the port complexity.</p>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">domain</span></code> – the port domain {0 : Unspecified, 1 : Analog, 2 : Digital}.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">unit</span></code> – the port unit (the string allocation is managed by MOTIF).</p>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">success</span></code> – execution status of the function call.</p>
-<div class="line-block">
-<div class="line"><code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">Destroy(int</span> <span class="pre">key);</span></code> <em>Description:</em></div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p>Deallocates model instance from memory.</p>
-<div class="line-block">
-<div class="line"><em>Parameter(s):</em></div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">key</span></code> – instance index for PMF returned from <code class="docutils literal notranslate"><span class="pre">ImportPMF(…).</span></code></p>
-<div class="line-block">
-<div class="line"><em>Returns:</em></div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p>Nothing.</p>
-<div class="line-block">
-<div class="line"><code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">DestroyAll();</span></code> <em>Description:</em></div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p>Deallocates all model instances from memory.</p>
-<div class="line-block">
-<div class="line"><em>Parameter(s):</em></div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p>None.</p>
-<div class="line-block">
-<div class="line"><em>Returns:</em></div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p>Nothing.</p>
-</div>
-<div class="line-block">
-<div class="line">==== Logical Interface ==== The generative design of the simulator requires a generic interface. Besides the above documented physical interface, there is a logical interface which is consistent across all models. The logical interface is further subdivided into two categories: concepts and message passing.</div>
-</div>
+</section>
+<section id="logical-interface">
+<h3>Logical Interface<a class="headerlink" href="#logical-interface" title="Link to this heading"></a></h3>
+<p>The generative design of the simulator requires a generic interface. Besides the above documented physical interface, there is a logical interface which is consistent across all models. The logical interface is further subdivided into two categories: concepts and message passing.</p>
 <section id="concepts">
 <h4>Concepts<a class="headerlink" href="#concepts" title="Link to this heading"></a></h4>
 <div class="line-block">
-<div class="line">All models support a logical Rate Dependency interface. This means that every model will contain both a <code class="docutils literal notranslate"><span class="pre">fin</span></code> and <code class="docutils literal notranslate"><span class="pre">fout</span></code> property where:</div>
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">fin</span></code> – the rate of the incoming data</p>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">fout</span></code> – the rate of the outgoing data</p>
-</div>
-<div class="line-block">
+<div class="line">All models support a logical Rate Dependency interface. This means that every model will contain both a <code class="docutils literal notranslate"><span class="pre">fin</span></code> and <code class="docutils literal notranslate"><span class="pre">fout</span></code> property where: <code class="docutils literal notranslate"><span class="pre">fin</span></code> – the rate of the incoming data</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">fout</span></code> – the rate of the outgoing data</div>
 <div class="line">By computing the ratio <code class="docutils literal notranslate"><span class="pre">r</span> <span class="pre">=</span> <span class="pre">fout</span> <span class="pre">/</span> <span class="pre">fin</span></code>, the user can determine the model’s total interpolation or decimation. This should be performed every time a logical property is changed to ensure that the external harness knows how to appropriately allocate memory. The exact mechanism for querying <code class="docutils literal notranslate"><span class="pre">fin</span></code> and <code class="docutils literal notranslate"><span class="pre">fout</span></code> is specified in the message passing section below.</div>
-<div class="line">Based on the model’s queried interface, there will be some domain associated with both the input and the output. Domains are restricted to either “analog” or “digital”.</div>
-<div class="line">If a model supports the “analog” domain, whether on the input, output, or both, it will always have a property <code class="docutils literal notranslate"><span class="pre">dt</span></code>.</div>
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">dt</span></code> – the delta time between sampled analog values</p>
-<div class="line-block">
-<div class="line">If a model supports the “digital” domain, whether on the input, output, or both, it will always have a property <code class="docutils literal notranslate"><span class="pre">fclk</span></code>.</div>
-</div>
 </div>
 <div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">fclk</span></code> – the frequency of the digital clock</p>
-<div class="line-block">
-<div class="line">If a model supports both “analog” and “digital” (and ADC or a DAC), it will always have a property <code class="docutils literal notranslate"><span class="pre">OSR</span></code>.</div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">OSR</span></code> – the oversampling ratio from the digital to the analog domain</p>
-<div class="line-block">
-<div class="line">Some models support an additional parameter <code class="docutils literal notranslate"><span class="pre">tessitura</span></code>, which represents the expected mean frequency of the input data. This parameter is only necessary when a model is unable to infer the input frequency from context. The term is borrowed from music theory, where it refers to the center frequency at which a vocalist is most comfortable.</div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">tessitura</span></code> - the expected mean frequency of the input data</p>
-</div>
-<div class="line-block">
+<div class="line">Based on the model’s queried interface, there will be some domain associated with both the input and the output. Domains are restricted to either “analog” or “digital”. If a model supports the “analog” domain, whether on the input, output, or both, it will always have a property <code class="docutils literal notranslate"><span class="pre">dt</span></code>. <code class="docutils literal notranslate"><span class="pre">dt</span></code> – the delta time between sampled analog values</div>
+<div class="line">If a model supports the “digital” domain, whether on the input, output, or both, it will always have a property <code class="docutils literal notranslate"><span class="pre">fclk</span></code>. <code class="docutils literal notranslate"><span class="pre">fclk</span></code> – the frequency of the digital clock</div>
+<div class="line">If a model supports both “analog” and “digital” (and ADC or a DAC), it will always have a property <code class="docutils literal notranslate"><span class="pre">OSR</span></code>. <code class="docutils literal notranslate"><span class="pre">OSR</span></code> – the oversampling ratio from the digital to the analog domain</div>
+<div class="line">Some models support an additional parameter <code class="docutils literal notranslate"><span class="pre">tessitura</span></code>, which represents the expected mean frequency of the input data. This parameter is only necessary when a model is unable to infer the input frequency from context. The term is borrowed from music theory, where it refers to the center frequency at which a vocalist is most comfortable. <code class="docutils literal notranslate"><span class="pre">tessitura</span></code> - the expected mean frequency of the input data</div>
 <div class="line">It is important to check the permission of the above property values for it may be that only one of them is mutable. This is determined when a model is loaded, or when a mode is changed.</div>
-<div class="line">A graphical representation of the logical model interface is shown in Figure 2 below:</div>
-<div class="line"><img alt="image2" src="https://wiki.analog.com/_media/resources/technical-guides/logical_model_concept.png" /></div>
 </div>
+<p>A graphical representation of the logical model interface is shown in Figure 2 below:</p>
+<p><img alt="image2" src="https://wiki.analog.com/_media/resources/technical-guides/logical_model_concept.png" /></p>
 <div class="centeralign docutils container">
 <p><em>Figure 2: Logical Model Interface</em></p>
 </div>
 </section>
 <section id="message-passing">
 <h4>Message Passing<a class="headerlink" href="#message-passing" title="Link to this heading"></a></h4>
-<div class="line-block">
-<div class="line">A physical API command that enables logical message passing is provided through the following method:</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">int</span> <span class="pre">ProcessMessage(const</span> <span class="pre">char*</span> <span class="pre">msg,</span> <span class="pre">char**</span> <span class="pre">response,</span> <span class="pre">int</span> <span class="pre">key);</span></code> <em>Description:</em></div>
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p>Generic interface to inspect/modify model instance properties.</p>
-<div class="line-block">
-<div class="line"><em>Parameter(s):</em></div>
-</div>
+<p>A physical API command that enables logical message passing is provided through the following method:</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">ProcessMessage</span><span class="p">(</span><span class="kd">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">msg</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="o">**</span><span class="w"> </span><span class="n">response</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">key</span><span class="p">);</span>
+</pre></div>
 </div>
 <div class="line-block">
-<div class="line"><br /></div>
+<div class="line"><em>Description:</em> Generic interface to inspect/modify model instance properties.</div>
+<div class="line"><em>Parameter(s):</em> <code class="docutils literal notranslate"><span class="pre">msg</span></code> – message (in XML format) to send to the model instance.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">response</span></code> – Pointer to the internally allocated response message (in XML format).</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">key</span></code> – instance index for PMF returned from <code class="docutils literal notranslate"><span class="pre">ImportPMF(…).</span></code></div>
+<div class="line"><em>Returns:</em> <code class="docutils literal notranslate"><span class="pre">success</span></code> – execution status of the function call.</div>
 </div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">msg</span></code> – message (in XML format) to send to the model instance.</p>
-<div class="line-block">
-<div class="line"><br /></div>
+<p>All sent message content are children of the root element:</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;adisim&gt;</span>[command(s)]<span class="nt">&lt;/adisim&gt;</span>
+</pre></div>
 </div>
+<p>All received message content are children of the root element:</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;responses&gt;</span>[answers(s)]<span class="nt">&lt;/responses&gt;</span>
+</pre></div>
 </div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">response</span></code> – Pointer to the internally allocated response message (in XML format).</p>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">key</span></code> – instance index for PMF returned from <code class="docutils literal notranslate"><span class="pre">ImportPMF(…).</span></code></p>
-<div class="line-block">
-<div class="line"><em>Returns:</em></div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">success</span></code> – execution status of the function call.</p>
-</div>
-<div class="line-block">
-<div class="line">All sent message content are children of the root element:</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">&lt;adisim&gt;[command(s)]&lt;/adisim&gt;</span></code> All received message content are children of the root element:</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">&lt;responses&gt;[answers(s)]&lt;/responses&gt;</span></code> Sent messages are composed of a series of atomic messages called commands. Commands perform a specific task understood by ADIsim.dll. Each sent message solicits a response that is called an answer.</div>
-</div>
+<p>Sent messages are composed of a series of atomic messages called commands. Commands perform a specific task understood by ADIsim.dll. Each sent message solicits a response that is called an answer.</p>
 </section>
 <section id="modes">
 <h4>Modes<a class="headerlink" href="#modes" title="Link to this heading"></a></h4>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;setmode&gt;</span>[mode]<span class="nt">&lt;/setmode&gt;</span>
-
-
-|<span class="w"> </span>*Command<span class="w"> </span>element(s):*
 </pre></div>
 </div>
 <div class="line-block">
-<div class="line"><br /></div>
+<div class="line"><em>Command element(s):</em> <code class="docutils literal notranslate"><span class="pre">[mode]</span></code> – name of the mode you want to switch to.</div>
+<div class="line"><em>Answer:</em> <code class="docutils literal notranslate"><span class="pre">&lt;setmode</span> <span class="pre">s=”Success”</span> <span class="pre">/&gt;</span></code> – if <code class="docutils literal notranslate"><span class="pre">[mode]</span></code> is valid.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">&lt;setmode</span> <span class="pre">s=”Error”&gt;Cannot</span> <span class="pre">find</span> <span class="pre">mode:</span> <span class="pre">[mode]&lt;/setmode&gt;</span></code> – if <code class="docutils literal notranslate"><span class="pre">[mode]</span></code> is invalid.</div>
 </div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">[mode]</span></code> – name of the mode you want to switch to.</p>
-<div class="line-block">
-<div class="line"><em>Answer:</em></div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">&lt;setmode</span> <span class="pre">s=”Success”</span> <span class="pre">/&gt;</span></code> – if <code class="docutils literal notranslate"><span class="pre">[mode]</span></code> is valid.</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;getmode</span><span class="w"> </span><span class="nt">/&gt;</span>
+</pre></div>
 </div>
 <div class="line-block">
-<div class="line"><br /></div>
+<div class="line"><em>Command element(s):</em> None.</div>
+<div class="line"><em>Answer:</em> <code class="docutils literal notranslate"><span class="pre">&lt;getmode</span> <span class="pre">mdn=”[mode</span> <span class="pre">display</span> <span class="pre">name]”</span> <span class="pre">mn=”[mode</span> <span class="pre">name]”/&gt;</span></code></div>
+<div class="line">where: <code class="docutils literal notranslate"><span class="pre">[mode</span> <span class="pre">display</span> <span class="pre">name]</span></code> – display name of the current mode.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">[mode</span> <span class="pre">name]</span></code> – name of the current mode.</div>
 </div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">&lt;setmode</span> <span class="pre">s=”Error”&gt;Cannot</span> <span class="pre">find</span> <span class="pre">mode:</span> <span class="pre">[mode]&lt;/setmode&gt;</span></code> – if <code class="docutils literal notranslate"><span class="pre">[mode]</span></code> is invalid.</p>
-<div class="line-block">
-<div class="line"><code class="docutils literal notranslate"><span class="pre">&lt;getmode</span> <span class="pre">/&gt;</span></code> <em>Command element(s):</em></div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p>None.</p>
-<div class="line-block">
-<div class="line"><em>Answer:</em></div>
-</div>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;querymodes</span><span class="w"> </span><span class="nt">/&gt;</span>
+</pre></div>
 </div>
 <div class="line-block">
-<div class="line"><br /></div>
+<div class="line"><em>Command element(s):</em> None.</div>
+<div class="line"><em>Answer:</em> <code class="docutils literal notranslate"><span class="pre">&lt;querymodes&gt;</span></code> <code class="docutils literal notranslate"><span class="pre">&lt;mode</span> <span class="pre">mdn=”[mode</span> <span class="pre">display</span> <span class="pre">name1]”</span> <span class="pre">mn=”[mode</span> <span class="pre">name1]”/&gt;</span></code> <code class="docutils literal notranslate"><span class="pre">…</span></code> <code class="docutils literal notranslate"><span class="pre">&lt;mode</span> <span class="pre">mdn=”[mode</span> <span class="pre">display</span> <span class="pre">nameN]”</span> <span class="pre">mn=”[mode</span> <span class="pre">nameN]”/&gt;</span></code> <code class="docutils literal notranslate"><span class="pre">&lt;/querymodes&gt;</span></code></div>
+<div class="line">where: <code class="docutils literal notranslate"><span class="pre">[mode</span> <span class="pre">display</span> <span class="pre">name#]</span></code> – display name of this mode.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">[mode</span> <span class="pre">name#]</span></code> – name of this mode.</div>
 </div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">&lt;getmode</span> <span class="pre">mdn=”[mode</span> <span class="pre">display</span> <span class="pre">name]”</span> <span class="pre">mn=”[mode</span> <span class="pre">name]”/&gt;</span></code></p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-<div class="indent docutils container">
-<p>where:</p>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">[mode</span> <span class="pre">display</span> <span class="pre">name]</span></code> – display name of the current mode.</p>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">[mode</span> <span class="pre">name]</span></code> – name of the current mode.</p>
-<div class="line-block">
-<div class="line"><code class="docutils literal notranslate"><span class="pre">&lt;querymodes</span> <span class="pre">/&gt;</span></code> <em>Command element(s):</em></div>
-</div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p>None.</p>
-<div class="line-block">
-<div class="line"><em>Answer:</em></div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">&lt;querymodes&gt;</span></code></p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">&lt;mode</span> <span class="pre">mdn=”[mode</span> <span class="pre">display</span> <span class="pre">name1]”</span> <span class="pre">mn=”[mode</span> <span class="pre">name1]”/&gt;</span></code></p>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">…</span></code></p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">&lt;mode</span> <span class="pre">mdn=”[mode</span> <span class="pre">display</span> <span class="pre">nameN]”</span> <span class="pre">mn=”[mode</span> <span class="pre">nameN]”/&gt;</span></code></p>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">&lt;/querymodes&gt;</span></code></p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-<div class="indent docutils container">
-<p>where:</p>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">[mode</span> <span class="pre">display</span> <span class="pre">name#]</span></code> – display name of this mode.</p>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">[mode</span> <span class="pre">name#]</span></code> – name of this mode.</p>
-</div>
-</div>
-<div class="line-block">
-<div class="line">=== Properties ===</div>
-</div>
+</section>
+<section id="properties">
+<h4>Properties<a class="headerlink" href="#properties" title="Link to this heading"></a></h4>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;setprop</span><span class="w"> </span><span class="na">bn=</span><span class="s">”[block</span><span class="w"> </span><span class="err">name]”</span><span class="w"> </span><span class="na">pn=</span><span class="s">”[property</span><span class="w"> </span><span class="err">name]”</span><span class="nt">&gt;</span>[value]<span class="nt">&lt;/setprop&gt;</span>
-
-
-|<span class="w"> </span>*Command<span class="w"> </span>element(s):*
 </pre></div>
 </div>
 <div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">[block</span> <span class="pre">name]</span></code> – name of the block to be indexed.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">[property</span> <span class="pre">name]</span></code> – name of the property to set.</p>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">[value]</span></code> – value to assign to the property.</p>
-<div class="line-block">
-<div class="line"><em>Answer:</em></div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">&lt;setprop</span> <span class="pre">s=”Success”</span> <span class="pre">/&gt;</span></code> - if <code class="docutils literal notranslate"><span class="pre">[block</span> <span class="pre">name]</span></code> is found, <code class="docutils literal notranslate"><span class="pre">[property</span> <span class="pre">name]</span></code> is found.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">&lt;setprop</span> <span class="pre">s=”Error”&gt;Could</span> <span class="pre">not</span> <span class="pre">find</span> <span class="pre">block:</span> <span class="pre">[block</span> <span class="pre">name]&lt;/setprop&gt;</span></code> - if <code class="docutils literal notranslate"><span class="pre">[block</span> <span class="pre">name]</span></code> is not found.</p>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">&lt;setprop</span> <span class="pre">s=”Error”&gt;Could</span> <span class="pre">not</span> <span class="pre">find</span> <span class="pre">property:</span> <span class="pre">[property</span> <span class="pre">name]&lt;/setprop&gt;</span></code> - if <code class="docutils literal notranslate"><span class="pre">[property</span> <span class="pre">name]</span></code> is not found.</p>
-</div>
-<div class="line-block">
-<div class="line">&lt;wrap&gt;Note: <code class="docutils literal notranslate"><span class="pre">ProcessMessage(…)</span></code> does not perform data validation through <code class="docutils literal notranslate"><span class="pre">&lt;setprop…&gt;</span></code>.&lt;/wrap&gt;</div>
-</div>
-<div class="line-block">
-<div class="line"><code class="docutils literal notranslate"><span class="pre">&lt;getprop</span> <span class="pre">bn=”[block</span> <span class="pre">name]”</span> <span class="pre">pn=”[property</span> <span class="pre">name]”/&gt;</span></code> <em>Command element(s):</em></div>
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">[block</span> <span class="pre">name]</span></code> – name of the block to be indexed.</p>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">[property</span> <span class="pre">name]</span></code> – name of the property to get.</p>
-<div class="line-block">
-<div class="line"><em>Answer:</em></div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">&lt;getprop</span> <span class="pre">pdn=”[property</span> <span class="pre">display</span> <span class="pre">name]”</span> <span class="pre">l=”[limits]”</span> <span class="pre">p=”[permissions]”</span> <span class="pre">t=”[type]”</span> <span class="pre">u=&quot;[unit]&quot;</span> <span class="pre">tt=&quot;[tooltip]&quot;&gt;[value]&lt;/getprop&gt;</span></code></p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-<div class="indent docutils container">
-<p>if <code class="docutils literal notranslate"><span class="pre">[block</span> <span class="pre">name]</span></code> is found and <code class="docutils literal notranslate"><span class="pre">[property</span> <span class="pre">name]</span></code> is found:</p>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">[property</span> <span class="pre">display</span> <span class="pre">name]</span></code> – display name of this property.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">[property</span> <span class="pre">name]</span></code> – name of this property.</p>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">[limits]</span></code> – limits of valid values associated with this property.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><em>{elem0,elem1,…,elemM}</em> – set of valid values.</p>
-</div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><em>[m,n]</em> – closed interval specifying a range of valid values.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-</div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><em>[m,n)</em> – half-open interval specifying a range of valid values.</p>
-</div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">[permissions]</span></code> – permission associated with this property.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><em>rw</em> – read/write.</p>
-</div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><em>r</em> - read only.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-</div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">[type]</span></code> – type associated with this property.</p>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><em>int</em> – integer.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-</div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><em>double</em> – double.</p>
-</div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><em>int*</em> - integer array.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-</div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><em>double*</em> - double array.</p>
-</div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><em>string</em> – string.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-</div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><em>bool</em> – Boolean <em>{false, true}</em>.</p>
-</div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">[unit]</span></code> – unit associated with this property. Will be SI, descriptive (<em>e.g. “Codes”, “dB”, etc.</em>), or possibly blank.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">[tooltip]</span></code> – tooltip associated with this property.</p>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">[value]</span></code> – value of this property.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-</div>
-<div class="indent docutils container">
-<p>else:</p>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">&lt;getprop</span> <span class="pre">s=”Error”&gt;Could</span> <span class="pre">not</span> <span class="pre">find</span> <span class="pre">block:</span> <span class="pre">[block</span> <span class="pre">name]&lt;/getprop&gt;</span></code> - if <code class="docutils literal notranslate"><span class="pre">[block</span> <span class="pre">name]</span></code> is not found.</p>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">&lt;getprop</span> <span class="pre">s=”Error”&gt;Could</span> <span class="pre">not</span> <span class="pre">find</span> <span class="pre">property:</span> <span class="pre">[property</span> <span class="pre">name]&lt;/getprop&gt;</span></code> - if <code class="docutils literal notranslate"><span class="pre">[property</span> <span class="pre">name]</span></code> is not found.</p>
-<div class="line-block">
-<div class="line"><code class="docutils literal notranslate"><span class="pre">&lt;queryprops</span> <span class="pre">/&gt;</span></code> <em>Command element(s):</em></div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p>None.</p>
-<div class="line-block">
-<div class="line"><em>Answer:</em></div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">&lt;queryprops&gt;</span></code></p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">&lt;prop</span> <span class="pre">bdn=”[block</span> <span class="pre">display</span> <span class="pre">name1]”</span> <span class="pre">bn=”[block</span> <span class="pre">name1]”</span> <span class="pre">pdn=”[property</span> <span class="pre">display</span> <span class="pre">name1]”</span> <span class="pre">pn=”[property</span> <span class="pre">name1]”</span> <span class="pre">l=”[limits1]”</span> <span class="pre">p=”[permissions1]”</span> <span class="pre">t=”[type1]”</span> <span class="pre">u=&quot;[unit1]&quot;</span> <span class="pre">tt=&quot;[tooltip1]&quot;&gt;[value1]&lt;/prop&gt;</span></code></p>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">…</span></code></p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">&lt;prop</span> <span class="pre">bdn=”[block</span> <span class="pre">display</span> <span class="pre">nameN]”</span> <span class="pre">bn=”[block</span> <span class="pre">nameN]”</span> <span class="pre">pdn=”[property</span> <span class="pre">display</span> <span class="pre">nameN]”</span> <span class="pre">pn=”[property</span> <span class="pre">nameN]”</span> <span class="pre">l=”[limitsN]”</span> <span class="pre">p=”[permissionsN]”</span> <span class="pre">t=”[typeN]”</span> <span class="pre">u=&quot;[unitN]&quot;</span> <span class="pre">tt=&quot;[tooltipN]&quot;&gt;[valueN]&lt;/prop&gt;</span></code></p>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">&lt;/queryprops&gt;</span></code></p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-<div class="indent docutils container">
-<p>where:</p>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">[block</span> <span class="pre">display</span> <span class="pre">name#]</span></code> – display name of this block.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">[block</span> <span class="pre">name#]</span></code> – name of this block.</p>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">[property</span> <span class="pre">display</span> <span class="pre">name#]</span></code> – display name of this property.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">[property</span> <span class="pre">name#]</span></code> – name of this property.</p>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">[limits#]</span></code> – limits of valid values associated with this property.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><em>{elem0,elem1,…,elemM}</em> – a set of valid values.</p>
-</div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><em>[m,n]</em> – closed interval specifying a range of valid values.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-</div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><em>[m,n)</em> – half-open interval specifying a range of valid values.</p>
-</div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">[permissions#]</span></code> – permission associated with this property.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><em>rw</em> – read/write.</p>
-</div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><em>r</em> - read only.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-</div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">[type#]</span></code> – type associated with this property.</p>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><em>int</em> – integer.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-</div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><em>double</em> – double.</p>
-</div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><em>int*</em> - integer array.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-</div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><em>double*</em> - double array.</p>
-</div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><em>string</em> – string.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-</div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><em>bool</em> – Boolean <em>{false,true}</em>.</p>
-</div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">[unit#]</span></code> – unit associated with this property. Will be SI, descriptive (<em>e.g. “Codes”, “dB”, etc.</em>), or possibly blank.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">[tooltip#]</span></code> – tooltip associated with this property.</p>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">[value#]</span></code> – value of this property.</p>
-</div>
-</div>
-<div class="line-block">
+<div class="line"><em>Command element(s):</em> <code class="docutils literal notranslate"><span class="pre">[block</span> <span class="pre">name]</span></code> – name of the block to be indexed.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">[property</span> <span class="pre">name]</span></code> – name of the property to set.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">[value]</span></code> – value to assign to the property.</div>
+<div class="line"><em>Answer:</em> <code class="docutils literal notranslate"><span class="pre">&lt;setprop</span> <span class="pre">s=”Success”</span> <span class="pre">/&gt;</span></code> - if <code class="docutils literal notranslate"><span class="pre">[block</span> <span class="pre">name]</span></code> is found, <code class="docutils literal notranslate"><span class="pre">[property</span> <span class="pre">name]</span></code> is found.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">&lt;setprop</span> <span class="pre">s=”Error”&gt;Could</span> <span class="pre">not</span> <span class="pre">find</span> <span class="pre">block:</span> <span class="pre">[block</span> <span class="pre">name]&lt;/setprop&gt;</span></code> - if <code class="docutils literal notranslate"><span class="pre">[block</span> <span class="pre">name]</span></code> is not found.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">&lt;setprop</span> <span class="pre">s=”Error”&gt;Could</span> <span class="pre">not</span> <span class="pre">find</span> <span class="pre">property:</span> <span class="pre">[property</span> <span class="pre">name]&lt;/setprop&gt;</span></code> - if <code class="docutils literal notranslate"><span class="pre">[property</span> <span class="pre">name]</span></code> is not found.</div>
+<div class="line">Note: <code class="docutils literal notranslate"><span class="pre">ProcessMessage(…)</span></code> does not perform data validation through <code class="docutils literal notranslate"><span class="pre">&lt;setprop…&gt;</span></code>.</div>
+</div>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;getprop</span><span class="w"> </span><span class="na">bn=</span><span class="s">”[block</span><span class="w"> </span><span class="err">name]”</span><span class="w"> </span><span class="na">pn=</span><span class="s">”[property</span><span class="w"> </span><span class="err">name]”</span><span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><em>Command element(s):</em> <code class="docutils literal notranslate"><span class="pre">[block</span> <span class="pre">name]</span></code> – name of the block to be indexed.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">[property</span> <span class="pre">name]</span></code> – name of the property to get.</div>
+<div class="line"><em>Answer:</em> <code class="docutils literal notranslate"><span class="pre">&lt;getprop</span> <span class="pre">pdn=”[property</span> <span class="pre">display</span> <span class="pre">name]”</span> <span class="pre">l=”[limits]”</span> <span class="pre">p=”[permissions]”</span> <span class="pre">t=”[type]”</span> <span class="pre">u=&quot;[unit]&quot;</span> <span class="pre">tt=&quot;[tooltip]&quot;&gt;[value]&lt;/getprop&gt;</span></code></div>
+<div class="line">if <code class="docutils literal notranslate"><span class="pre">[block</span> <span class="pre">name]</span></code> is found and <code class="docutils literal notranslate"><span class="pre">[property</span> <span class="pre">name]</span></code> is found: <code class="docutils literal notranslate"><span class="pre">[property</span> <span class="pre">display</span> <span class="pre">name]</span></code> – display name of this property.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">[property</span> <span class="pre">name]</span></code> – name of this property.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">[limits]</span></code> – limits of valid values associated with this property. <em>{elem0,elem1,…,elemM}</em> – set of valid values. <em>[m,n]</em> – closed interval specifying a range of valid values. <em>[m,n)</em> – half-open interval specifying a range of valid values.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">[permissions]</span></code> – permission associated with this property. <em>rw</em> – read/write. <em>r</em> - read only.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">[type]</span></code> – type associated with this property. <em>int</em> – integer. <em>double</em> – double. <em>int*</em> - integer array. <em>double*</em> - double array. <em>string</em> – string. <em>bool</em> – Boolean <em>{false, true}</em>.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">[unit]</span></code> – unit associated with this property. Will be SI, descriptive (<em>e.g. “Codes”, “dB”, etc.</em>), or possibly blank.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">[tooltip]</span></code> – tooltip associated with this property.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">[value]</span></code> – value of this property.</div>
+<div class="line">else: <code class="docutils literal notranslate"><span class="pre">&lt;getprop</span> <span class="pre">s=”Error”&gt;Could</span> <span class="pre">not</span> <span class="pre">find</span> <span class="pre">block:</span> <span class="pre">[block</span> <span class="pre">name]&lt;/getprop&gt;</span></code> - if <code class="docutils literal notranslate"><span class="pre">[block</span> <span class="pre">name]</span></code> is not found.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">&lt;getprop</span> <span class="pre">s=”Error”&gt;Could</span> <span class="pre">not</span> <span class="pre">find</span> <span class="pre">property:</span> <span class="pre">[property</span> <span class="pre">name]&lt;/getprop&gt;</span></code> - if <code class="docutils literal notranslate"><span class="pre">[property</span> <span class="pre">name]</span></code> is not found.</div>
+</div>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;queryprops</span><span class="w"> </span><span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><em>Command element(s):</em> None.</div>
+<div class="line"><em>Answer:</em> <code class="docutils literal notranslate"><span class="pre">&lt;queryprops&gt;</span></code> <code class="docutils literal notranslate"><span class="pre">&lt;prop</span> <span class="pre">bdn=”[block</span> <span class="pre">display</span> <span class="pre">name1]”</span> <span class="pre">bn=”[block</span> <span class="pre">name1]”</span> <span class="pre">pdn=”[property</span> <span class="pre">display</span> <span class="pre">name1]”</span> <span class="pre">pn=”[property</span> <span class="pre">name1]”</span> <span class="pre">l=”[limits1]”</span> <span class="pre">p=”[permissions1]”</span> <span class="pre">t=”[type1]”</span> <span class="pre">u=&quot;[unit1]&quot;</span> <span class="pre">tt=&quot;[tooltip1]&quot;&gt;[value1]&lt;/prop&gt;</span></code> <code class="docutils literal notranslate"><span class="pre">…</span></code> <code class="docutils literal notranslate"><span class="pre">&lt;prop</span> <span class="pre">bdn=”[block</span> <span class="pre">display</span> <span class="pre">nameN]”</span> <span class="pre">bn=”[block</span> <span class="pre">nameN]”</span> <span class="pre">pdn=”[property</span> <span class="pre">display</span> <span class="pre">nameN]”</span> <span class="pre">pn=”[property</span> <span class="pre">nameN]”</span> <span class="pre">l=”[limitsN]”</span> <span class="pre">p=”[permissionsN]”</span> <span class="pre">t=”[typeN]”</span> <span class="pre">u=&quot;[unitN]&quot;</span> <span class="pre">tt=&quot;[tooltipN]&quot;&gt;[valueN]&lt;/prop&gt;</span></code> <code class="docutils literal notranslate"><span class="pre">&lt;/queryprops&gt;</span></code></div>
+<div class="line">where: <code class="docutils literal notranslate"><span class="pre">[block</span> <span class="pre">display</span> <span class="pre">name#]</span></code> – display name of this block.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">[block</span> <span class="pre">name#]</span></code> – name of this block.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">[property</span> <span class="pre">display</span> <span class="pre">name#]</span></code> – display name of this property.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">[property</span> <span class="pre">name#]</span></code> – name of this property.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">[limits#]</span></code> – limits of valid values associated with this property. <em>{elem0,elem1,…,elemM}</em> – a set of valid values. <em>[m,n]</em> – closed interval specifying a range of valid values. <em>[m,n)</em> – half-open interval specifying a range of valid values.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">[permissions#]</span></code> – permission associated with this property. <em>rw</em> – read/write. <em>r</em> - read only.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">[type#]</span></code> – type associated with this property. <em>int</em> – integer. <em>double</em> – double. <em>int*</em> - integer array. <em>double*</em> - double array. <em>string</em> – string. <em>bool</em> – Boolean <em>{false,true}</em>.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">[unit#]</span></code> – unit associated with this property. Will be SI, descriptive (<em>e.g. “Codes”, “dB”, etc.</em>), or possibly blank.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">[tooltip#]</span></code> – tooltip associated with this property.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">[value#]</span></code> – value of this property.</div>
 <div class="line">=== Other ===</div>
 </div>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;queryinterface</span><span class="w"> </span><span class="nt">/&gt;</span>
-
-
-|<span class="w"> </span>*Command<span class="w"> </span>element(s):*
 </pre></div>
 </div>
 <div class="line-block">
-<div class="line"><br /></div>
+<div class="line"><em>Command element(s):</em> None.</div>
+<div class="line"><em>Answer:</em> <code class="docutils literal notranslate"><span class="pre">&lt;queryinterface&gt;&lt;in</span> <span class="pre">domain=”[input</span> <span class="pre">domain]”</span> <span class="pre">fin=”[input</span> <span class="pre">frequency]”</span> <span class="pre">is_complex=”[is</span> <span class="pre">input</span> <span class="pre">complex]”</span> <span class="pre">unit=”[input</span> <span class="pre">unit]”/&gt;&lt;out</span> <span class="pre">domain=”[output</span> <span class="pre">domain]”</span> <span class="pre">fout=”[output</span> <span class="pre">frequency]”</span> <span class="pre">is_complex=”[is</span> <span class="pre">output</span> <span class="pre">complex]”</span> <span class="pre">unit=”[output</span> <span class="pre">unit]”/&gt;&lt;/queryinterface&gt;</span></code></div>
+<div class="line">where: <code class="docutils literal notranslate"><span class="pre">[input</span> <span class="pre">(output)</span> <span class="pre">domain]</span></code> – <em>{analog, digital}</em> indicating the analog or digital nature of the input (output).</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">[input</span> <span class="pre">(output)</span> <span class="pre">frequency]</span></code> – indicating the reciprocal of the time step between input (output) data points.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">[is</span> <span class="pre">input</span> <span class="pre">(output)</span> <span class="pre">complex]</span></code> – <em>{false, true}</em> indicating whether input (output) data are complex or real numbers.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">[input</span> <span class="pre">(output)</span> <span class="pre">unit]</span></code> – indicating the units associated with the input (output) data.</div>
 </div>
-<div class="indent docutils container">
-<p>None.</p>
-<div class="line-block">
-<div class="line"><em>Answer:</em></div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">&lt;queryinterface&gt;&lt;in</span> <span class="pre">domain=”[input</span> <span class="pre">domain]”</span> <span class="pre">fin=”[input</span> <span class="pre">frequency]”</span> <span class="pre">is_complex=”[is</span> <span class="pre">input</span> <span class="pre">complex]”</span> <span class="pre">unit=”[input</span> <span class="pre">unit]”/&gt;&lt;out</span> <span class="pre">domain=”[output</span> <span class="pre">domain]”</span> <span class="pre">fout=”[output</span> <span class="pre">frequency]”</span> <span class="pre">is_complex=”[is</span> <span class="pre">output</span> <span class="pre">complex]”</span> <span class="pre">unit=”[output</span> <span class="pre">unit]”/&gt;&lt;/queryinterface&gt;</span></code></p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-<div class="indent docutils container">
-<p>where:</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;queryversion</span><span class="w"> </span><span class="nt">/&gt;</span>
+</pre></div>
 </div>
 <div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">[input</span> <span class="pre">(output)</span> <span class="pre">domain]</span></code> – <em>{analog, digital}</em> indicating the analog or digital nature of the input (output).</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">[input</span> <span class="pre">(output)</span> <span class="pre">frequency]</span></code> – indicating the reciprocal of the time step between input (output) data points.</p>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">[is</span> <span class="pre">input</span> <span class="pre">(output)</span> <span class="pre">complex]</span></code> – <em>{false, true}</em> indicating whether input (output) data are complex or real numbers.</p>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">[input</span> <span class="pre">(output)</span> <span class="pre">unit]</span></code> – indicating the units associated with the input (output) data.</p>
-<div class="line-block">
-<div class="line"><code class="docutils literal notranslate"><span class="pre">&lt;queryversion</span> <span class="pre">/&gt;</span></code> <em>Command element(s):</em></div>
-</div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p>None.</p>
-<div class="line-block">
-<div class="line"><em>Answer:</em></div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">&lt;queryversion</span> <span class="pre">dllversion=”[dll</span> <span class="pre">version]”</span> <span class="pre">pmfversion=”[pmf</span> <span class="pre">version]”/&gt;</span></code></p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</div>
-<div class="indent docutils container">
-<p>where:</p>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">[dll</span> <span class="pre">version]</span></code> – version of the ADIsim.dll.</p>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="indent docutils container">
-<div class="indent docutils container">
-<p><code class="docutils literal notranslate"><span class="pre">[pmf</span> <span class="pre">version]</span></code> – version of the Product Model file (model).</p>
-</div>
+<div class="line"><em>Command element(s):</em> None.</div>
+<div class="line"><em>Answer:</em> <code class="docutils literal notranslate"><span class="pre">&lt;queryversion</span> <span class="pre">dllversion=”[dll</span> <span class="pre">version]”</span> <span class="pre">pmfversion=”[pmf</span> <span class="pre">version]”/&gt;</span></code></div>
+<div class="line">where: <code class="docutils literal notranslate"><span class="pre">[dll</span> <span class="pre">version]</span></code> – version of the ADIsim.dll.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">[pmf</span> <span class="pre">version]</span></code> – version of the Product Model file (model).</div>
 </div>
 </section>
 </section>

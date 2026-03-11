@@ -100,8 +100,8 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#intel">Intel</a><ul>
-<li><a class="reference internal" href="#tcl-file-1">TCL File</a></li>
-<li><a class="reference internal" href="#makefile-1">Makefile</a><ul>
+<li><a class="reference internal" href="#id1">TCL File</a></li>
+<li><a class="reference internal" href="#id2">Makefile</a><ul>
 <li><a class="reference internal" href="#if-this-tutorial-was-not-enough-and-you-need-more-in-depth-information-about-creating-ips-please-visit">If this tutorial was not enough and you need more in depth information about creating IPs, please visit</a></li>
 </ul>
 </li>
@@ -610,22 +610,22 @@ Content on this topic
 <section id="tcl-file">
 <h3>TCL File<a class="headerlink" href="#tcl-file" title="Link to this heading"></a></h3>
 <p>The tcl file should be named &lt;module_name_ip&gt;.tcl (ex: axi_led_control_ip.tcl). Here you should keep the two lines that source our scripts :</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">source</span><span class="w"> </span><span class="p">..</span><span class="o">/</span><span class="n">scripts</span><span class="o">/</span><span class="n">adi_env</span><span class="p">.</span><span class="n">tcl</span>
-<span class="n">source</span><span class="w"> </span><span class="n">$ad_hdl_dir</span><span class="o">/</span><span class="n">library</span><span class="o">/</span><span class="n">scripts</span><span class="o">/</span><span class="n">adi_ip_xilinx</span><span class="p">.</span><span class="n">tcl</span>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>..<span class="o">/</span>scripts<span class="o">/</span>adi_env.tcl
+<span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span><span class="o">/</span>library<span class="o">/</span>scripts<span class="o">/</span>adi_ip_xilinx.tcl
 </pre></div>
 </div>
 <p>Then take a look at the commands</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">adi_ip_create</span><span class="w"> </span><span class="o">&lt;</span><span class="n">module_name</span><span class="o">&gt;</span>
-<span class="n">adi_ip_files</span><span class="w"> </span><span class="o">&lt;</span><span class="n">module_name</span><span class="o">&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">list</span><span class="w"> </span><span class="err">\</span><span class="w"> </span><span class="o">&lt;</span><span class="n">other_components</span><span class="o">&gt;</span><span class="p">]</span>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">adi_ip_create</span><span class="w"> </span><span class="o">&lt;</span>module_name<span class="o">&gt;</span>
+<span class="nv">adi_ip_files</span><span class="w"> </span><span class="o">&lt;</span>module_name<span class="o">&gt;</span><span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="err">\</span><span class="w"> </span><span class="o">&lt;</span>other_components<span class="o">&gt;</span><span class="k">]</span>
 </pre></div>
 </div>
 <p>These commands create the IP and add the dependencies for it. By &lt;other_components&gt; we refer to the modules we were talking about above, that must be included in the tcl file. Also, &lt;other_components&gt; must include the verilog file for the IP itself, named &lt;module_name&gt;.v</p>
 <p>If your new IP uses AXI Lite for register control, then the next command is</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">adi_ip_properties</span><span class="w"> </span><span class="o">&lt;</span><span class="n">module_name</span><span class="o">&gt;</span>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">adi_ip_properties</span><span class="w"> </span><span class="o">&lt;</span>module_name<span class="o">&gt;</span>
 </pre></div>
 </div>
 <p>It is used to initialize properties like memory and so on. If the IP does not use AXI, then you should use</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">adi_ip_properties_lite</span><span class="w"> </span><span class="o">&lt;</span><span class="n">module_name</span><span class="o">&gt;</span>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">adi_ip_properties_lite</span><span class="w"> </span><span class="o">&lt;</span>module_name<span class="o">&gt;</span>
 </pre></div>
 </div>
 <p>At the end of the file don’t forget to save the IP by using this command</p>
@@ -633,20 +633,20 @@ Content on this topic
 </pre></div>
 </div>
 <p>If you need more help, here is an example of an IP called axi_led_control. You can open it side by side with the tcl file from the original axi_fan_control and apply the same logic to make your changes.</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp"># ip</span>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="c"># ip</span>
 
-<span class="n">source</span><span class="w"> </span><span class="p">..</span><span class="o">/</span><span class="n">scripts</span><span class="o">/</span><span class="n">adi_env</span><span class="p">.</span><span class="n">tcl</span>
-<span class="n">source</span><span class="w"> </span><span class="n">$ad_hdl_dir</span><span class="o">/</span><span class="n">library</span><span class="o">/</span><span class="n">scripts</span><span class="o">/</span><span class="n">adi_ip_xilinx</span><span class="p">.</span><span class="n">tcl</span>
+<span class="nb">source</span><span class="w"> </span>..<span class="o">/</span>scripts<span class="o">/</span>adi_env.tcl
+<span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span><span class="o">/</span>library<span class="o">/</span>scripts<span class="o">/</span>adi_ip_xilinx.tcl
 
-<span class="n">adi_ip_create</span><span class="w"> </span><span class="n">axi_led_control</span>
-<span class="n">adi_ip_files</span><span class="w"> </span><span class="n">axi_led_control</span><span class="w"> </span><span class="p">[</span><span class="n">list</span><span class="w"> </span>\
-<span class="w">  </span><span class="s">&quot;$ad_hdl_dir/library/common/up_axi.v&quot;</span><span class="w"> </span>\
-<span class="w">  </span><span class="s">&quot;axi_led_control.v&quot;</span><span class="p">]</span>
+<span class="nv">adi_ip_create</span><span class="w"> </span>axi_led_control
+<span class="nv">adi_ip_files</span><span class="w"> </span>axi_led_control<span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="err">\</span>
+<span class="w">  </span><span class="s2">&quot;$ad_hdl_dir/library/common/up_axi.v&quot;</span><span class="w"> </span><span class="err">\</span>
+<span class="w">  </span><span class="s2">&quot;axi_led_control.v&quot;</span><span class="k">]</span>
 
-<span class="n">adi_ip_properties</span><span class="w"> </span><span class="n">axi_led_control</span>
-<span class="n">set</span><span class="w"> </span><span class="n">cc</span><span class="w"> </span><span class="p">[</span><span class="n">ipx</span><span class="o">::</span><span class="n">current_core</span><span class="p">]</span>
+<span class="nv">adi_ip_properties</span><span class="w"> </span>axi_led_control
+<span class="k">set</span><span class="w"> </span>cc<span class="w"> </span><span class="k">[</span><span class="nv">ipx</span><span class="o">::</span>current_core<span class="k">]</span>
 
-<span class="n">ipx</span><span class="o">::</span><span class="n">save_core</span><span class="w"> </span><span class="n">$cc</span>
+<span class="nv">ipx</span><span class="o">::</span>save_core<span class="w"> </span><span class="nv">$cc</span>
 </pre></div>
 </div>
 </section>
@@ -669,14 +669,14 @@ Content on this topic
 </section>
 <section id="intel">
 <h2>Intel<a class="headerlink" href="#intel" title="Link to this heading"></a></h2>
-<section id="tcl-file-1">
-<span id="id1"></span><h3>TCL File<a class="headerlink" href="#tcl-file-1" title="Link to this heading"></a></h3>
+<section id="id1">
+<h3>TCL File<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
 <p>The tcl file should be named &lt;module_name_hw&gt;.tcl (ex: axi_led_control_intel_hw.tcl) These first 4 lines of code you should keep:</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">package</span><span class="w"> </span><span class="n">require</span><span class="w"> </span><span class="n">qsys</span><span class="w"> </span><span class="mf">14.0</span>
-<span class="n">package</span><span class="w"> </span><span class="n">require</span><span class="w"> </span><span class="n">quartus</span><span class="o">::</span><span class="n">device</span>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">package</span><span class="w"> </span>require<span class="w"> </span>qsys<span class="w"> </span><span class="mf">14.0</span>
+<span class="nb">package</span><span class="w"> </span>require<span class="w"> </span>quartus::device
 
-<span class="n">source</span><span class="w"> </span><span class="p">..</span><span class="o">/</span><span class="n">scripts</span><span class="o">/</span><span class="n">adi_env</span><span class="p">.</span><span class="n">tcl</span>
-<span class="n">source</span><span class="w"> </span><span class="p">..</span><span class="o">/</span><span class="n">scripts</span><span class="o">/</span><span class="n">adi_ip_intel</span><span class="p">.</span><span class="n">tcl</span>
+<span class="nb">source</span><span class="w"> </span>..<span class="o">/</span>scripts<span class="o">/</span>adi_env.tcl
+<span class="nb">source</span><span class="w"> </span>..<span class="o">/</span>scripts<span class="o">/</span>adi_ip_intel.tcl
 </pre></div>
 </div>
 <p>After that, the next line creates the new IP:</p>
@@ -702,29 +702,29 @@ Content on this topic
 <p>The last line is related to the port in the verilog file. In this case, led_on. The other parameters refer to &lt;signal_type&gt; &lt;direction&gt; &lt;width_expression&gt;.</p>
 <p>In Quartus there is no need to save the core or run make afterwards. It is smart enough to search for _hw.tcl in the library directory. Altough, you might need to add the path to the new IP in the IP Catalogue.</p>
 <p>If you want to see the whole file, here is an example named axi_led_control_intel.</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">package</span><span class="w"> </span><span class="n">require</span><span class="w"> </span><span class="n">qsys</span><span class="w"> </span><span class="mf">14.0</span>
-<span class="n">package</span><span class="w"> </span><span class="n">require</span><span class="w"> </span><span class="n">quartus</span><span class="o">::</span><span class="n">device</span>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">package</span><span class="w"> </span>require<span class="w"> </span>qsys<span class="w"> </span><span class="mf">14.0</span>
+<span class="nb">package</span><span class="w"> </span>require<span class="w"> </span>quartus::device
 
-<span class="n">source</span><span class="w"> </span><span class="p">..</span><span class="o">/</span><span class="n">scripts</span><span class="o">/</span><span class="n">adi_env</span><span class="p">.</span><span class="n">tcl</span>
-<span class="n">source</span><span class="w"> </span><span class="p">..</span><span class="o">/</span><span class="n">scripts</span><span class="o">/</span><span class="n">adi_ip_intel</span><span class="p">.</span><span class="n">tcl</span>
+<span class="nb">source</span><span class="w"> </span>..<span class="o">/</span>scripts<span class="o">/</span>adi_env.tcl
+<span class="nb">source</span><span class="w"> </span>..<span class="o">/</span>scripts<span class="o">/</span>adi_ip_intel.tcl
 
-<span class="n">ad_ip_create</span><span class="w"> </span><span class="n">axi_led_control_intel</span><span class="w"> </span><span class="p">{</span><span class="n">AXI</span><span class="w"> </span><span class="n">LED</span><span class="w"> </span><span class="n">CONTROL</span><span class="p">}</span>
+<span class="nv">ad_ip_create</span><span class="w"> </span>axi_led_control_intel<span class="w"> </span><span class="k">{</span><span class="nv">AXI</span><span class="w"> </span>LED<span class="w"> </span>CONTROL<span class="k">}</span>
 
-<span class="n">ad_ip_files</span><span class="w"> </span><span class="n">axi_led_control_intel</span><span class="w"> </span><span class="p">[</span><span class="n">list</span><span class="w"> </span>\
-<span class="w">  </span><span class="n">$ad_hdl_dir</span><span class="o">/</span><span class="n">library</span><span class="o">/</span><span class="n">common</span><span class="o">/</span><span class="n">up_axi</span><span class="p">.</span><span class="n">v</span><span class="w"> </span>\
-<span class="w">  </span><span class="n">axi_led_control_intel</span><span class="p">.</span><span class="n">v</span><span class="p">]</span>
+<span class="nv">ad_ip_files</span><span class="w"> </span>axi_led_control_intel<span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="err">\</span>
+<span class="w">  </span><span class="nv">$ad_hdl_dir</span><span class="o">/</span><span class="nv">library</span><span class="o">/</span>common<span class="o">/</span>up_axi.v<span class="w"> </span><span class="err">\</span>
+<span class="w">  </span><span class="nv">axi_led_control_intel.v</span><span class="k">]</span>
 
-<span class="cp">#axi4 slave</span>
-<span class="n">ad_ip_intf_s_axi</span><span class="w"> </span><span class="n">s_axi_aclk</span><span class="w"> </span><span class="n">s_axi_aresetn</span><span class="w"> </span><span class="mi">10</span>
+<span class="c">#axi4 slave</span>
+<span class="nv">ad_ip_intf_s_axi</span><span class="w"> </span>s_axi_aclk<span class="w"> </span>s_axi_aresetn<span class="w"> </span><span class="mi">10</span>
 
-<span class="cp">#output led</span>
-<span class="n">add_interface</span><span class="w"> </span><span class="n">led_on_if</span><span class="w"> </span><span class="n">conduit</span><span class="w"> </span><span class="n">end</span>
-<span class="n">add_interface_port</span><span class="w"> </span><span class="n">led_on_if</span><span class="w"> </span><span class="n">led_on</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="n">Output</span><span class="w"> </span><span class="mi">1</span>
+<span class="c">#output led</span>
+<span class="nv">add_interface</span><span class="w"> </span>led_on_if<span class="w"> </span>conduit<span class="w"> </span>end
+<span class="nv">add_interface_port</span><span class="w"> </span>led_on_if<span class="w"> </span>led_on<span class="w"> </span>data<span class="w"> </span>Output<span class="w"> </span><span class="mi">1</span>
 </pre></div>
 </div>
 </section>
-<section id="makefile-1">
-<span id="id2"></span><h3>Makefile<a class="headerlink" href="#makefile-1" title="Link to this heading"></a></h3>
+<section id="id2">
+<h3>Makefile<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
 <p>You don’t need to run make for the IP to be visible in the Catalogue. Yet, here is the Makefile for the example mentioned before:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="nl">LIBRARY_NAME</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">axi_led_control_intel</span>
 
@@ -742,7 +742,7 @@ Content on this topic
 <section id="if-this-tutorial-was-not-enough-and-you-need-more-in-depth-information-about-creating-ips-please-visit">
 <h4>If this tutorial was not enough and you need more in depth information about creating IPs, please visit<a class="headerlink" href="#if-this-tutorial-was-not-enough-and-you-need-more-in-depth-information-about-creating-ips-please-visit" title="Link to this heading"></a></h4>
 <p><a class="reference internal" href="add_hdl_ip.html"><span class="doc">add_hdl_ip</span></a></p>
-<img alt="Quick system validation with no-Os#resources/fpga/docs/tips|Main page#resources/fpga/docs/hdl/use_adi_ips|Use ADI IPs" src="https://wiki.analog.com/_media/navigationHDLUserGuide#resources/fpga/quick_validation" />
+<img alt="Quick system validation with no-Os#resources/fpga/docs/tips|Main page#resources/fpga/docs/hdl/use_adi_ips|Use ADI IPs" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/navigationHDLUserGuide#resources/fpga/quick_validation" />
 </section>
 </section>
 </section>

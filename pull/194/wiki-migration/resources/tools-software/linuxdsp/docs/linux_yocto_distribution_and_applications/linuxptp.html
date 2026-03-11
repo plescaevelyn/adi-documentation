@@ -95,14 +95,24 @@
 <li><a class="reference internal" href="#">IEEE 1588 and Linux PTP</a><ul>
 <li><a class="reference internal" href="#ptp-introduction">PTP Introduction</a><ul>
 <li><a class="reference internal" href="#precision-time-protocol-ptp">Precision Time Protocol(PTP)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ptp-software-configuration">PTP Software Configuration</a><ul>
 <li><a class="reference internal" href="#package-configuration">Package configuration</a></li>
-<li><a class="reference internal" href="#preliminary-work">Preliminary work</a><ul>
+<li><a class="reference internal" href="#kernel-configuration">Kernel Configuration</a></li>
+<li><a class="reference internal" href="#device-tree-configuration">Device tree configuration</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#example">Example</a><ul>
+<li><a class="reference internal" href="#preliminary-work">Preliminary work</a></li>
+<li><a class="reference internal" href="#run-example">Run Example</a><ul>
 <li><a class="reference internal" href="#master">1) Master</a></li>
 <li><a class="reference internal" href="#slave">2) Slave</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li><a class="reference internal" href="#more-information">More information</a></li>
 </ul>
 </li>
 </ul>
@@ -598,11 +608,10 @@ Content on this topic
 <h3>Precision Time Protocol(PTP)<a class="headerlink" href="#precision-time-protocol-ptp" title="Link to this heading"></a></h3>
 <p>The Precision Time Protocol (PTP) is a high-precision time synchronization protocol for networked measurement and control systems. It is defined in the IEEE 1588 standard, which is designed for local systems requiring very high accuracies - beyond those attainable using NTP (Network Time Protocol). PTP makes it possible to synchronize distributed clocks with sub-microsecond accuracy via Ethernet networks, with relatively low demands on the local clocks and the network and computing capacity.</p>
 <p>ADSP-SC573, SC584 and SC589 all support PTP. But only EMAC0 (the 10/100/1000 Mbps port) supports PTP, EMAC1 (the 10/100 Mbps port) is not capable of PTP operation.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">===== PTP Software Configuration =====</div>
-</div>
 </section>
+</section>
+<section id="ptp-software-configuration">
+<h2>PTP Software Configuration<a class="headerlink" href="#ptp-software-configuration" title="Link to this heading"></a></h2>
 <section id="package-configuration">
 <h3>Package configuration<a class="headerlink" href="#package-configuration" title="Link to this heading"></a></h3>
 <p>You should also enable the linuxptp test program to assist with testing. Add the linuxptp program in the filesystem images, it’s enabled in adsp-sc5xx-full image by default.</p>
@@ -610,10 +619,10 @@ Content on this topic
 <span class="n">IMAGE_INSTALL_append</span> <span class="o">=</span> <span class="s2">&quot; linuxptp&quot;</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Kernel Configuration ==== The Linux kernel can be configured using the following command:</div>
-</div>
+</section>
+<section id="kernel-configuration">
+<h3>Kernel Configuration<a class="headerlink" href="#kernel-configuration" title="Link to this heading"></a></h3>
+<p>The Linux kernel can be configured using the following command:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ bitbake linux-adi -c menuconfig
 
 General Setup  ---&gt;
@@ -635,21 +644,14 @@ Device Drivers  ---&gt;
             &lt;*&gt;       STMMAC Platform bus support
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Device tree configuration ==== The timestamps that are the basis of PTP can be acquired with greater accuracy when they are captured by the ethernet PHY hardware. The PHY interface can support hardware timestamps, the default phy-mode is RGMII.</div>
-</div>
-<div class="line-block">
-<div class="line">The phy-mode also can be changed to “rmii” in the device tree header in the linux kernel source arch/arm/boot/dts/sc589-ezkit.dts and other board specific sc5xx.dts files.</div>
-</div>
+</section>
+<section id="device-tree-configuration">
+<h3>Device tree configuration<a class="headerlink" href="#device-tree-configuration" title="Link to this heading"></a></h3>
+<p>The timestamps that are the basis of PTP can be acquired with greater accuracy when they are captured by the ethernet PHY hardware. The PHY interface can support hardware timestamps, the default phy-mode is RGMII.</p>
+<p>The phy-mode also can be changed to “rmii” in the device tree header in the linux kernel source arch/arm/boot/dts/sc589-ezkit.dts and other board specific sc5xx.dts files.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>… : ellipsis, means other properties in EMAC0 node stay the same</p>
-<div class="line-block">
-<div class="line">- : minus, means delete this property</div>
-<div class="line">+ : plus, means add this property</div>
-<div class="line"><br /></div>
-</div>
+<p>… : ellipsis, means other properties in EMAC0 node stay the same - : minus, means delete this property + : plus, means add this property</p>
 </div>
 <p>Run “<strong>bitbake linux-adi -c devshell</strong>” to enter into linux kernel source code and then change the dts file.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ vim arch/arm/boot/dts/sc589-ezkit.dts
@@ -662,34 +664,29 @@ Device Drivers  ---&gt;
 </pre></div>
 </div>
 <p>Run “<strong>bitbake linux-adi -C compile</strong>” to generate zImage and dtb files, they are now ready to be loaded onto the target board.</p>
-<div class="line-block">
-<div class="line">As to the linuxptp example needs the ethernet up, so users should use the ramboot rather than nfsboot. Run “<strong>bitbake adsp-sc5xx-ramdisk -C compile</strong>” to generate the file system. See <a class="reference internal" href="../quickstartguide/building.html"><span class="doc">SC5xx ezkit Linux quick start guide</span></a> for details.</div>
-<div class="line">===== Example =====</div>
-</div>
+<p>As to the linuxptp example needs the ethernet up, so users should use the ramboot rather than nfsboot. Run “<strong>bitbake adsp-sc5xx-ramdisk -C compile</strong>” to generate the file system. See <a class="reference internal" href="../quickstartguide/building.html"><span class="doc">SC5xx ezkit Linux quick start guide</span></a> for details.</p>
 </section>
+</section>
+<section id="example">
+<h2>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h2>
 <section id="preliminary-work">
 <h3>Preliminary work<a class="headerlink" href="#preliminary-work" title="Link to this heading"></a></h3>
 <p><strong>1) Hardware Setup</strong></p>
 <p>Two ADSP-SC5xx boards are required. One board act as a master, and the other act as a slave. The two boards are connected by their respective EMAC0 ports using a standard crossover network cable.</p>
-<div class="line-block">
-<div class="line"><strong>2) Master’s MAC address must be different from slave’s</strong></div>
-<div class="line">In order to make the master’s and the slave’s MAC address different, change the slave’s address in U-Boot.</div>
-</div>
+<p><strong>2) Master’s MAC address must be different from slave’s</strong></p>
+<p>In order to make the master’s and the slave’s MAC address different, change the slave’s address in U-Boot.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ set ethaddr 00:20:22:fe:85:29
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><strong>3) Master’s ip address must be different from slave ip</strong></div>
-<div class="line">Reset IP address after linux boot up.</div>
-</div>
+<p><strong>3) Master’s ip address must be different from slave ip</strong></p>
+<p>Reset IP address after linux boot up.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># ifconfig eth0 10.100.4.50 up</span>
 <span class="c1"># ifconfig eth0 10.100.4.51 up</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Run Example ====</div>
-</div>
+</section>
+<section id="run-example">
+<h3>Run Example<a class="headerlink" href="#run-example" title="Link to this heading"></a></h3>
 <section id="master">
 <h4>1) Master<a class="headerlink" href="#master" title="Link to this heading"></a></h4>
 <p>Note:  Master board should be configured first.</p>
@@ -734,21 +731,18 @@ Device Drivers  ---&gt;
 <span class="n">Date</span> <span class="n">on</span> <span class="n">the</span> <span class="n">slave</span> <span class="n">board</span> <span class="ow">is</span> <span class="mf">2007.1.1</span><span class="o">-</span><span class="mi">00</span><span class="p">:</span><span class="mi">02</span><span class="p">:</span><span class="mi">24</span> <span class="n">before</span> <span class="n">synchronization</span><span class="p">,</span> <span class="ow">and</span> <span class="n">changes</span> <span class="n">to</span> <span class="mf">2010.1.1</span><span class="o">-</span><span class="mi">13</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mi">58</span> <span class="n">after</span> <span class="n">a</span> <span class="n">few</span> <span class="n">seconds</span> <span class="n">of</span> <span class="n">synchronization</span> <span class="k">with</span> <span class="n">the</span> <span class="n">master</span><span class="o">.</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">===== More information =====</div>
-</div>
+</section>
+</section>
+</section>
+<section id="more-information">
+<h2>More information<a class="headerlink" href="#more-information" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon link reference external" href="http://linuxptp.sourceforge.net/" target="_blank">Linux PTP project</a></p></li>
 <li><p><a class="icon link reference external" href="http://www.nist.gov/el/isd/ieee/ieee1588.cfm" target="_blank">IEEE1588 standard</a></p></li>
 <li><p><a class="icon link reference external" href="https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/ch-Configuring_PTP_Using_ptp4l.html" target="_blank">PTP User guide</a></p></li>
 </ul>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">—- <strong>Back to</strong> <a class="reference internal" href="start.html"><span class="doc">Yocto Linux Distrubution and Applications</span></a></div>
-</div>
-</section>
-</section>
+<hr class="docutils" />
+<p><strong>Back to</strong> <a class="reference internal" href="start.html"><span class="doc">Yocto Linux Distrubution and Applications</span></a></p>
 </section>
 </section>
 

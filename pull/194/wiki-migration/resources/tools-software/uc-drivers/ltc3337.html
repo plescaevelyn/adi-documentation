@@ -94,15 +94,22 @@
           <ul>
 <li><a class="reference internal" href="#">LTC3337 - No-OS Driver</a><ul>
 <li><a class="reference internal" href="#supported-devices">Supported Devices</a></li>
-<li><a class="reference internal" href="#evaluation-boards">Evaluation Boards</a></li>
+<li><a class="reference internal" href="#evaluation-boards">Evaluation Boards</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#applications">Applications</a><ul>
 <li><a class="reference internal" href="#adi-no-os">ADI No-OS</a></li>
+<li><a class="reference internal" href="#ltc3337-adi-no-os-driver">LTC3337 ADI No-OS driver</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#driver-source-code">Driver Source Code</a></li>
 <li><a class="reference internal" href="#device-configuration">Device Configuration</a><ul>
 <li><a class="reference internal" href="#driver-initialization">Driver Initialization</a></li>
+<li><a class="reference internal" href="#reading-accumulated-charge">Reading Accumulated Charge</a></li>
+<li><a class="reference internal" href="#reading-device-voltage">Reading Device Voltage</a></li>
 <li><a class="reference internal" href="#alarm-configuration">Alarm Configuration</a></li>
+<li><a class="reference internal" href="#prescale-configuration">Prescale Configuration</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#driver-initialization-example">Driver Initialization Example</a><ul>
@@ -609,11 +616,11 @@ Content on this topic
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/DC2973A" target="_blank">DC2973A</a></p></li>
 </ul>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">===== Overview ===== The <a class="icon adi reference external" href="https://www.analog.com/LTC3337" target="_blank">LTC3337</a> is a primary battery state of health (SOH) monitor with a built-in precision coulomb counter. It is designed to be placed in series with a primary battery with minimal associated series voltage drop. The patented infinite dynamic range coulomb counter tallies ALL accumulated battery discharge and stores it in an internal register accessible via an I2C interface. A discharge alarm threshold based on this state of charge (SOC) is programmable. When it is reached, an interrupt is generated at the IRQ pin. Coulomb counter accuracy is constant down to no load.</div>
-</div>
+<section id="overview">
+<h3>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h3>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/LTC3337" target="_blank">LTC3337</a> is a primary battery state of health (SOH) monitor with a built-in precision coulomb counter. It is designed to be placed in series with a primary battery with minimal associated series voltage drop. The patented infinite dynamic range coulomb counter tallies ALL accumulated battery discharge and stores it in an internal register accessible via an I2C interface. A discharge alarm threshold based on this state of charge (SOC) is programmable. When it is reached, an interrupt is generated at the IRQ pin. Coulomb counter accuracy is constant down to no load.</p>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/LTC3337" target="_blank">LTC3337</a> also integrates additional SOH monitoring which measures and reports via I2C: battery voltage, battery impedance, and temperature. To accommodate a wide range of primary battery inputs, the peak input current limit is pin selectable from 5mA to 100mA. Coulombs can be calculated for either the BAT_IN or BAT_OUT pin, determined by the AVCC pin connection. A BAL pin is provided for applications utilizing a stack of two supercapacitors (optional) at the output.</p>
+</section>
 </section>
 <section id="applications">
 <h2>Applications<a class="headerlink" href="#applications" title="Link to this heading"></a></h2>
@@ -628,10 +635,10 @@ Content on this topic
 <section id="adi-no-os">
 <h3>ADI No-OS<a class="headerlink" href="#adi-no-os" title="Link to this heading"></a></h3>
 <p>The goal of ADI Microcontroller No-OS is to provide reference projects for lower end processors, which can’t run Linux or aren’t running a specific operating system, and to help those customers using microcontrollers with ADI parts. ADI No-OS offers <strong>generic drivers</strong>, which can be used as a base for any microcontroller platform and also <strong>example projects</strong>, which are using these drivers on various microcontroller platforms.</p>
-<div class="line-block">
-<div class="line">For more information about ADI No-OS and supported microcontroller platforms, visit the <a class="reference internal" href="../../no-os.html"><span class="doc">No-OS User Guide</span></a>.</div>
-<div class="line">===== LTC3337 ADI No-OS driver =====</div>
-</div>
+<p>For more information about ADI No-OS and supported microcontroller platforms, visit the <a class="reference internal" href="../../no-os.html"><span class="doc">No-OS User Guide</span></a>.</p>
+</section>
+<section id="ltc3337-adi-no-os-driver">
+<h3>LTC3337 ADI No-OS driver<a class="headerlink" href="#ltc3337-adi-no-os-driver" title="Link to this heading"></a></h3>
 </section>
 </section>
 <section id="driver-source-code">
@@ -706,10 +713,8 @@ Content on this topic
 <h2>Device Configuration<a class="headerlink" href="#device-configuration" title="Link to this heading"></a></h2>
 <section id="driver-initialization">
 <h3>Driver Initialization<a class="headerlink" href="#driver-initialization" title="Link to this heading"></a></h3>
-<div class="line-block">
-<div class="line">To use the device, you need to provide the support for the communication protocol (i2c) as mentioned above.</div>
-<div class="line">The first API function to be called is <code class="docutils literal notranslate"><span class="pre">ltc3337_init</span></code>. <code class="docutils literal notranslate"><span class="pre">ltc3337_init</span></code> requires initialization parameters of type <code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">ltc3337_init_param</span></code>, with the following fields. Make sure that <code class="docutils literal notranslate"><span class="pre">ltc3337_init</span></code> returns 0. This indicates a successful driver initialization.</div>
-</div>
+<p>To use the device, you need to provide the support for the communication protocol (i2c) as mentioned above.</p>
+<p>The first API function to be called is <code class="docutils literal notranslate"><span class="pre">ltc3337_init</span></code>. <code class="docutils literal notranslate"><span class="pre">ltc3337_init</span></code> requires initialization parameters of type <code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">ltc3337_init_param</span></code>, with the following fields. Make sure that <code class="docutils literal notranslate"><span class="pre">ltc3337_init</span></code> returns 0. This indicates a successful driver initialization.</p>
 <div class="center box docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -724,14 +729,14 @@ Content on this topic
 </table>
 </div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">=== Reading Accumulated Charge === The accumulated charge of the coulomb counter may be read by the function <code class="docutils literal notranslate"><span class="pre">ltc3337_get_accumulated_charge</span></code>. This function can provide either or both the raw 16-bit accumulated charge register of the ltc3337, or the accumulated charge converted to A-hr and nA-hr components. The A-hr and nA-hr components are automatically scaled based on the prescale set in the device, and the I<sub>PEAK</sub> value read from the hardware configuration.</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">=== Reading Device Voltage === Various voltage levels of the device may be read using the function <code class="docutils literal notranslate"><span class="pre">ltc3337_get_voltage_mv</span></code>, with the voltage value being returned in millivolts. Possible voltage sources are:</div>
-</div>
+</section>
+<section id="reading-accumulated-charge">
+<h3>Reading Accumulated Charge<a class="headerlink" href="#reading-accumulated-charge" title="Link to this heading"></a></h3>
+<p>The accumulated charge of the coulomb counter may be read by the function <code class="docutils literal notranslate"><span class="pre">ltc3337_get_accumulated_charge</span></code>. This function can provide either or both the raw 16-bit accumulated charge register of the ltc3337, or the accumulated charge converted to A-hr and nA-hr components. The A-hr and nA-hr components are automatically scaled based on the prescale set in the device, and the I<sub>PEAK</sub> value read from the hardware configuration.</p>
+</section>
+<section id="reading-device-voltage">
+<h3>Reading Device Voltage<a class="headerlink" href="#reading-device-voltage" title="Link to this heading"></a></h3>
+<p>Various voltage levels of the device may be read using the function <code class="docutils literal notranslate"><span class="pre">ltc3337_get_voltage_mv</span></code>, with the voltage value being returned in millivolts. Possible voltage sources are:</p>
 <div class="center box docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -751,20 +756,15 @@ Content on this topic
 </tbody>
 </table>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
 </div>
 </section>
 <section id="alarm-configuration">
 <h3>Alarm Configuration<a class="headerlink" href="#alarm-configuration" title="Link to this heading"></a></h3>
 <p>The LTC3337 features alarms for high and low temperature thresholds, as well as a coulomb counter threshold alarm. To set the temperature alarms, call <code class="docutils literal notranslate"><span class="pre">ltc3337_set_temperature_alarms_c</span></code>, passing the the high and low temperature thresholds in degrees C. To set the coulomb counter alarm, call <code class="docutils literal notranslate"><span class="pre">ltc3337_set_counter_alarm</span></code> with the <strong>register</strong> value to set the alarm for. To help convert standard units (A-hr) to a register value, <code class="docutils literal notranslate"><span class="pre">ltc3337_calculate_charge_register</span></code> will generate a register value based on A-hr and nA-hr components, using the prescale and I<sub>PEAK</sub> value of the device.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="line-block">
-<div class="line">=== Prescale Configuration === The preferred method of setting the device prescale is through the initialization parameters. However, it is possible to change the prescale after the device has been initialized and running. Use the <code class="docutils literal notranslate"><span class="pre">ltc3337_set_prescaler</span></code> function to adjust the device prescale.</div>
-</div>
+</section>
+<section id="prescale-configuration">
+<h3>Prescale Configuration<a class="headerlink" href="#prescale-configuration" title="Link to this heading"></a></h3>
+<p>The preferred method of setting the device prescale is through the initialization parameters. However, it is possible to change the prescale after the device has been initialized and running. Use the <code class="docutils literal notranslate"><span class="pre">ltc3337_set_prescaler</span></code> function to adjust the device prescale.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Changing the prescaler does not affect the value of the accumulated charge register. If the prescaler is set sometime following the initial runtime setup, after charge has been accumulated, the acccumulated charge register should be set according to the current value shifted by the difference in original and current prescaler. This driver does not automatically perform that action.</p>
@@ -816,9 +816,6 @@ Content on this topic
 
 <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </pre></div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
 </div>
 </section>
 </section>

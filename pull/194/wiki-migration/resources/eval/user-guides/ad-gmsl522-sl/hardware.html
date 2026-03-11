@@ -94,7 +94,14 @@
           <ul>
 <li><a class="reference internal" href="#">AD-GMSL522-SL Hardware Guide</a><ul>
 <li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#carrier-board-feature-list">Carrier Board feature list</a></li>
+<li><a class="reference internal" href="#power">Power</a></li>
 <li><a class="reference internal" href="#inputs">Inputs</a></li>
+<li><a class="reference internal" href="#on-board-serdes">On-board SERDES</a></li>
+<li><a class="reference internal" href="#outputs">Outputs</a></li>
+<li><a class="reference internal" href="#other-interfaces">Other interfaces</a></li>
+<li><a class="reference internal" href="#fan-connector">Fan Connector</a></li>
+<li><a class="reference internal" href="#reset-header">Reset Header</a></li>
 </ul>
 </li>
 </ul>
@@ -588,14 +595,12 @@ Content on this topic
 <h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
 <p>The <strong>AD-GMSL522-SL GMSL Carrier Board</strong> (also referred as Viper board) is a higher resolution NVIDIA Jetson based carrier board for converting RAW camera data from GMSL cameras/Deserializers into display data.</p>
 <p>It is compatible with MAXIM deserializer/serializer EVkits and has 4 GMSL inputs and 2 GMSL outputs.</p>
-<div class="line-block">
-<div class="line">It is a user-friendly GMSL platform for receiving and transmitting data over a GMSL link. The platform enables NPI, demonstrations, customer, and ecosystem development.  This platform has hardware interconnects and software tools that enable customers in their development of GMSL.</div>
-<div class="line"><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-viper-sl/viper_revb.drawio.png"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-viper-sl/viper_revb.drawio.png" style="width: 600px;" /></a></div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">===== Carrier Board feature list =====</div>
-</div>
+<p>It is a user-friendly GMSL platform for receiving and transmitting data over a GMSL link. The platform enables NPI, demonstrations, customer, and ecosystem development.  This platform has hardware interconnects and software tools that enable customers in their development of GMSL.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-viper-sl/viper_revb.drawio.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad-viper-sl/viper_revb.drawio.png" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-viper-sl/viper_revb.drawio.png" style="width: 600px;" />
+</a>
+</section>
+<section id="carrier-board-feature-list">
+<h2>Carrier Board feature list<a class="headerlink" href="#carrier-board-feature-list" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Connection to Jetson Xavier NX</p></li>
 </ul>
@@ -691,11 +696,11 @@ Content on this topic
 </ul>
 </li>
 </ul>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">===== Power =====</div>
-</div>
+</section>
+<section id="power">
+<h2>Power<a class="headerlink" href="#power" title="Link to this heading"></a></h2>
 <div class="indent docutils container">
+<p><strong>Power Input</strong></p>
 <p>The AD-GMSL522-SL has a single 12 V supply input, distributed to the internal power supplies and interface connectors.</p>
 <p>The power adapter to be used with AD-GMSL522-SL needs to have the following specifications:</p>
 <ul class="simple">
@@ -703,9 +708,7 @@ Content on this topic
 <li><p>Mating barrel jack connector dimensions: 2.50 mm ID (0.098”), 5.50 mm OD (0.217”), with positive center pin.</p></li>
 </ul>
 <p>The ADM1177 hot swap controller monitors current and voltage via an on-chip, 12-bit analog-to-digital converter. The ADM1177 charges up the gate of the FET to turn on the load. It continues to charge up the GATE pin until the linear current limit (set to 100 mV/RSENSE) is reached. On this carrier board RSENSE is 0.01Ω which sets the current limit at 10 A. The input voltage and current can be read from this device by accessing it at the 0xB4 I2C address.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
+<p><strong>Power Supplies</strong></p>
 <a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-viper-sl/viper_power_tree.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad-viper-sl/viper_power_tree.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-viper-sl/viper_power_tree.png" style="width: 800px;" />
 </a>
 <p>The main DC-DC power supply is a MAX25206ATPA/VY+ converter. This powers up the Xavier NX module and a few other loads on the carrier board. It is designed for 12 V input and 5V, 5A output. The default configuration is for the fixed output version, with the FB pin connected to BIAS. FSYNC and SPS are user configurable by changing the soldering of P22 P23. The Clock Output SYNCOUT outputs 180 degrees out of phase relative to the internal oscillator. In the design, this output is connected to the synchronization inputs of the other supplies, with the option to disconnect it if needed.</p>
@@ -714,45 +717,30 @@ Content on this topic
 <p>1V0, 1V2 and 1V8 rails are implemented with a LTC3303ARUCM#TRPBF each, the difference is in the feedback resistors used. They are enabled by default by PGOOD_3V3, but if the timing requirements are not met, they can be enabled by the EN_CR_SUPPLIES signal, together with the 3V3 supply. To achieve this R184 should be depopulated and R185 R395 should be populated. These supplies can be synchronized with the main 5 V supply, or have the MODE/SYNC pin conventionally pulled high or low.</p>
 <p>If the power-up sequence was successful and the supplies are in the operating range, DS9 will be ON.</p>
 <p>All the supplies are monitored by the onboard voltage monitor AD7291BCPZ (U40). The voltages are divided at the input because the device has an on-chip 2.5 V reference. The AD7291 provides a 2-wire serial interface compatible with I2C interfaces and has the following I2C address: 0x2FF</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="line-block">
-<div class="line">====Power Sequence====</div>
-</div>
+<p><strong>Power Sequence</strong></p>
 <p>The power-up sequence is similar to the one implemented in the official NVIDIA Jetson Nano carrier board. The circuit will provide at least 430 ms delay between SHUTDOWN_REQ* and POWER_EN.</p>
 <p>U38 and U44 are connected to form a SR latch with NAND gates. POWER_EN has 100k pull-down on module, so initial state is always 0.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">&lt;fc #6495ed&gt;<strong>Jumper on P11 pins 9 and 10 - Auto-power-on enabled</strong>&lt;/fc&gt;</div>
-</div>
+<p><strong>Jumper on P11 pins 9 and 10 - Auto-power-on enabled</strong></p>
 <p>At power-on, both LATCH_SET and LATCH_RESET are pulled-up to VDD_5V_SYS.</p>
 <p>Both C287 and C323 are charging, C323 will charge faster resulting in LATCH_RESET HIGH while LATCH_SET LOW =&gt; so POWER_EN is enabled, and the SOM is powered on. When C297 charges, LATCH_SET will change state to HIGH, but in this case the output of the latch remembers the previous state so POWER_EN also will keep it state.</p>
 <p>If SHUTDOWN_REQ* is pulled low then LATCH_RESET is pulled low so the output will reset and POWER_EN goes low. But since SHUTDOWN_REQ* is not driven during power-up, it will go high again when deasserted but there will be no change on POWER_EN.</p>
 <p>If the board is in the state when POWER_EN is HIGH (SET=1) and the user forces shutdown pulling PWR_BTN* low then Q11 will open and LATCH_RESET will be LOW resulting in POWER_EN LOW.</p>
 <p>The board will remain off until the power cable is plugged back in again (LATCH_SET is always HIGH as long as VDD_5V_SYS is present)</p>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">&lt;fc #6495ed&gt;<strong>Jumper on P11 pins 7 and 8 - Auto-power-on disabled</strong>&lt;/fc&gt;</div>
-</div>
+<p><strong>Jumper on P11 pins 7 and 8 - Auto-power-on disabled</strong></p>
 <p>At power on, both LATCH_SET and LATCH_RESET are pulled-up to VDD_5V_SYS. U26 has Hi-Z output until C323 is charged and LATCH_RESET is HIGH. The time constant for C297 is significantly decreased since now R292 and R389 are in parallel so LATCH_SET will be HIGH after 0.011ms while C323 is charging slower, LATCH_RESET is HIGH After ~10ms. This results in a LOW state for POWER_EN. When PWR_BTN* is pressed, LATCH_SET changes state to 0, resulting in HIGH on POWER_EN</p>
 <p>If SHUTDOWN_REQ* is pulled low, then LATCH_RESET is pulled low so the output of the latch is reset to 0 and POWER_EN goes low.</p>
 <p>But since SHUTDOWN_REQ* is not driven during power-up, it will go high again so LATCH_RESET=1 and output of U26 becomes active. Now it’s possible to power on back the board using the PWR_BTN* signal and not by unplugging the power cable. If pins 1 and 2 of P11 are connected for a short time, at least 50 ms, this will result in LATCH_SET going LOW while LATCH_RESET is HIGH so POWER_EN will go HIGH and the SOM powers on. When releasing the pins 1 and 2 LATCH_SET will be HIGH again, but no change will be seen at the at the output of the latch.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Power over Coax ==== The AD-GMSL522-SL carrier board is designed to send power as well as data over coax cables, enabling to power remote devices such as automotive cameras without the need for extra wiring or power circuitry.</div>
-</div>
+<p><strong>Power over Coax</strong></p>
+<p>The AD-GMSL522-SL carrier board is designed to send power as well as data over coax cables, enabling to power remote devices such as automotive cameras without the need for extra wiring or power circuitry.</p>
 <p>There is a power over coax (PoC) filter for each GMSL input connector that covers the forward and reverse channel frequency bands.</p>
 <p>MAX20087 camera power protector is used to provide protection on the PoC. This is a quad camera protector that delivers 500 mA load current per channel. Each output is individually protected from short and overcurrent conditions.</p>
 <p>By default, the 12 V supply that is supposed to power the remote devices is connected to the outputs of the camera power protector with 0 Ohm resistors R401, R403, R407, R405. This will limit the current per channel to 500 mA, but in case more current is needed and the 12 V supply allows this, R402, R404, R408, R406 can be populated instead of R401, R403, R407, R405 and the devices will be powered directly from the 12 V supply without any current limitation, or protection.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
 </div>
 </section>
 <section id="inputs">
 <h2>Inputs<a class="headerlink" href="#inputs" title="Link to this heading"></a></h2>
 <div class="indent docutils container">
+<p><strong>CSI Inputs-Samtec Connector</strong></p>
 <p>A QTH-030-01-L-D-A high speed connector is present on the bottom of the board. GMSL to CSI deserializer evKits can be connected here. In the default configuration, if an EvKit is mounted on the carrier board, it will not be supplied by the carrier board. R136, R153, R152 can be soldered on the carrier to connect the Evkit to the power supplies of the AD-GMSL522-SL carrier board.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
@@ -760,20 +748,15 @@ Content on this topic
 </div>
 <p>The GPIO signals from this connector are routed to GPIO pins of Xavier NX which are CMOS – 1.8V Type. Please make sure that the GPIO pins of the Evkit are configured to be supplied by the 1V8 VDDIO.</p>
 <p>12 MIPI CSI lanes (CSI0-CSI3) of the XavierNX are routed to this connector, supporting either 4x2, 2x4 CSI-2 DPHY v1.2 configurations.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="line-block">
-<div class="line">====GMSL (Deserializer)====</div>
-</div>
+<p><strong>GMSL (Deserializer)</strong></p>
 <p>J1, J2, J3, J4 Fakra connectors(59S2AQ-40MT5-Z_1) on the right side of the board are connected to the inputs of MAX96724GTN/VY+. This provides reliable platform to evaluate the MAX96724 device using standard FAKRA coaxial cables. This deserializer device support high-bandwidth, gigabit multimedia serial links (GMSL-1 or GMSL-2) and offers spread spectrum and full-duplex control channel features.</p>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">=====On-board SERDES =====</div>
-</div>
+</section>
+<section id="on-board-serdes">
+<h2>On-board SERDES<a class="headerlink" href="#on-board-serdes" title="Link to this heading"></a></h2>
 <div class="indent docutils container">
-<p>&lt;fc #6495ed&gt;<strong>MAX96724GTN/VY+ Quad tunneling GMSL2/1 to CSI-2 deserializer</strong> &lt;/fc&gt;</p>
+<p><strong>Quad Deserializer</strong></p>
+<p><strong>MAX96724GTN/VY+ Quad tunneling GMSL2/1 to CSI-2 deserializer</strong></p>
 <p>Port B D-PHY signals of the MAX96724 are routed to MIPI D-PHY inputs of Xavier.</p>
 <p>Configuration pins are used to set desired working modes during powerup for the deserializer.</p>
 <p>There are two digital I2C configurable potentiometers VR8 and VR1 on the board to set the CFG pin levels. Alternatively, rework the 0 Ω resistors to connect the analog voltage divider and tune the voltage manually. Voltages on CFG pins can be monitored through CFG0 and CFG1 test points (TP27, TP30).</p>
@@ -784,107 +767,96 @@ Content on this topic
 <p class="admonition-title">Tip</p>
 <p>If the state of the configuration pins needs to be changed, please refer to the MAX96724 data sheet to see the recommended resistor values to select each configuration.</p>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">====Single Serializer====</div>
-</div>
-<p>&lt;fc #6495ed&gt;<strong>MAX96717GTJ/VY+ CSI-2 to GMSL2 serializer</strong>&lt;/fc&gt;</p>
+<p><strong>Single Serializer</strong></p>
+<p><strong>MAX96717GTJ/VY+ CSI-2 to GMSL2 serializer</strong></p>
 <p>The AD-GMSL522-SL provides a proven design to evaluate the MAX96717 high-bandwidth GMSL serializer with spread spectrum and full-duplex control channel with the use of a standard FAKRA coaxial cable.</p>
 <p>The CSI interface of the MAX96717 is connected to MAX9674.</p>
 <p>Configuration pins are used to set desired working modes during power-up for the serializer. There are two digital I2C configurable potentiometers VR5 and VR4 on the board to set the CFG pin levels. Alternatively, rework the 0 Ω resistors to connect the analog voltage divider and tune the voltage manually. Voltages on CFG pins can be monitored through CFG0 and CFG1 test points (TP47, TP48).</p>
 <p>The digital potentiometers in the MAX5419 series are controlled through the I2C signals: MAX96717_CFG_SCL, MAX96717_CFG_SDA.</p>
 <p>Address of I2C potentiometers for CFG pins of MAX96724</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>If the state of the configuration pins needs to be changed, please refer to the MAX96717 data sheet to see the recommended resistor values to select each configuration.</p>
-<div class="line-block">
-<div class="line">===== Outputs=====</div>
 </div>
 </div>
-</div>
+</section>
+<section id="outputs">
+<h2>Outputs<a class="headerlink" href="#outputs" title="Link to this heading"></a></h2>
 <div class="indent docutils container">
+<p><strong>HDMI</strong></p>
 <p>HDMI Type A connector (P10) is directly routed to the HDMI V2.0 interface supported by the Xavier NX module.</p>
-<div class="line-block">
-<div class="line"><br /></div>
+<p><strong>GMSL (Serializer)</strong></p>
+<p>J7 is the Fakra connector that is tied to the MAX96717 GMSL output pin. It is labeled on the board silkscreen as “OUT MAX96717”. This connection does not support Power-over-Coax due to the fact that the AD-GMSL522-SL board has its own power supply. This does not mean that a deserializer board with Power-over-Coax enabled cannot be connected to this connection. This output can be used to evaluate deserializer designs or to emulate a camera device via sending a colorbar from the deserializer.</p>
 </div>
-<div class="line-block">
-<div class="line">====GMSL (Serializer) ====</div>
-</div>
-<div class="line-block">
-<div class="line">J7 is the Fakra connector that is tied to the MAX96717 GMSL output pin. It is labeled on the board silkscreen as “OUT MAX96717”. This connection does not support Power-over-Coax due to the fact that the AD-GMSL522-SL board has its own power supply. This does not mean that a deserializer board with Power-over-Coax enabled cannot be connected to this connection. This output can be used to evaluate deserializer designs or to emulate a camera device via sending a colorbar from the deserializer.</div>
-</div>
-</div>
-<div class="line-block">
-<div class="line">===== Other interfaces =====</div>
-</div>
+</section>
+<section id="other-interfaces">
+<h2>Other interfaces<a class="headerlink" href="#other-interfaces" title="Link to this heading"></a></h2>
 <div class="indent docutils container">
+<p><strong>USB</strong></p>
 <p>Jetson Xavier NX supports up to three USB 2.0 ports and a single USB 3.2 port. On AD-GMSL522-SL, the USB interfaces are used as follows:</p>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">====Ethernet==== M1 is a RJ45 Gigabit ethernet connector that has all the necessary magnetics integrated.</div>
-<div class="line">====MicroSD card==== The AD-GMSL522-SL carrier board brings the SDMMC interface from the connector pins for SD card use. P12 is a surface mount, right angle connector, for microSD™ card.</div>
+<p><strong>Ethernet</strong></p>
+<p>M1 is a RJ45 Gigabit ethernet connector that has all the necessary magnetics integrated.</p>
+<p><strong>MicroSD card</strong></p>
+<p>The AD-GMSL522-SL carrier board brings the SDMMC interface from the connector pins for SD card use. P12 is a surface mount, right angle connector, for microSD™ card.</p>
+<p><strong>NVMe</strong></p>
+<p>The AD-GMSL522-SL board includes an M.2 Key M NVMe Expansion slot (P5). The PCIE signals are routed to PCIE0 interface of the Xavier NX Module. This supports up to Gen4 speed.</p>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">====NVMe ==== The AD-GMSL522-SL board includes an M.2 Key M NVMe Expansion slot (P5). The PCIE signals are routed to PCIE0 interface of the Xavier NX Module. This supports up to Gen4 speed.</div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">=====Fan Connector===== The AD-GMSL522-SL carrier board includes a 4-pin Fan header (P26). This connector is compatible with 70797 Auvidea Cooling Kit.</div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">=====Reset Header===== System signals such as POWER_BTN*, FORCE_RECOVERY*, SYS_RESET*, are brought to a standard 0.254 mm pitch header P11.</div>
-<div class="line">| &lt;fc #6495ed&gt;<strong>Reset header signals and functions</strong>&lt;/fc&gt;|||</div>
-</div>
+</section>
+<section id="fan-connector">
+<h2>Fan Connector<a class="headerlink" href="#fan-connector" title="Link to this heading"></a></h2>
+<p>The AD-GMSL522-SL carrier board includes a 4-pin Fan header (P26). This connector is compatible with 70797 Auvidea Cooling Kit.</p>
+</section>
+<section id="reset-header">
+<h2>Reset Header<a class="headerlink" href="#reset-header" title="Link to this heading"></a></h2>
+<p>System signals such as POWER_BTN*, FORCE_RECOVERY*, SYS_RESET*, are brought to a standard 0.254 mm pitch header P11.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><strong>Pin</strong></p></td>
+<tr class="row-odd"><td><p><strong>Reset header signals and functions</strong></p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>Pin</strong></p></td>
 <td><p><strong>Signal</strong></p></td>
 <td><p><strong>Usage/Description</strong></p></td>
 </tr>
-<tr class="row-even"><td><p>1</p></td>
+<tr class="row-odd"><td><p>1</p></td>
 <td><p>PWR_BTN*</p></td>
 <td><p>Connect Pins 1 and 2 to initiate POWER-ON (if AUTO POWER-ON is disabled)</p></td>
 </tr>
-<tr class="row-odd"><td><p>2</p></td>
+<tr class="row-even"><td><p>2</p></td>
 <td><p>GND</p></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>3</p></td>
+<tr class="row-odd"><td><p>3</p></td>
 <td><p>FORCE_RECOVERY*</p></td>
 <td><p>Connect Pins 3 and 4 during POWER-ON for USB FORCE RECOVERY MODE</p></td>
 </tr>
-<tr class="row-odd"><td><p>4</p></td>
+<tr class="row-even"><td><p>4</p></td>
 <td><p>GND</p></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>5</p></td>
+<tr class="row-odd"><td><p>5</p></td>
 <td><p>SYS_RESET*</p></td>
 <td><p>Temporarily connect Pins 5 and 6 to reset the system</p></td>
 </tr>
-<tr class="row-odd"><td><p>6</p></td>
+<tr class="row-even"><td><p>6</p></td>
 <td><p>GND</p></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>7</p></td>
+<tr class="row-odd"><td><p>7</p></td>
 <td><p>AUTO_PWR_ON</p></td>
 <td><p>Jumper on Pins 7 and 8 to disable AUTO POWER-ON</p></td>
 </tr>
-<tr class="row-odd"><td><p>8</p></td>
+<tr class="row-even"><td><p>8</p></td>
 <td><p>LATCH_SET</p></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>9</p></td>
+<tr class="row-odd"><td><p>9</p></td>
 <td><p>Not used</p></td>
 <td><p>Jumper on Pins 9 and 10: AUTO POWER-ON is enabled</p></td>
 </tr>
-<tr class="row-odd"><td><p>10</p></td>
+<tr class="row-even"><td><p>10</p></td>
 <td><p>Not used</p></td>
 <td></td>
 </tr>

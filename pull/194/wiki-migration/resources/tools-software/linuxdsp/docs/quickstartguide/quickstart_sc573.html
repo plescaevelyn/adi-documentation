@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="These pages are not updated anymore. Documentation has been moved to :git-lnxdsp-adi-meta:`wiki`" name="description" />
+<meta content="These pages are not updated anymore. Documentation has been moved to wiki" name="description" />
 
     <title>Yocto Linux 2.1.0 Quickstart Guide for ADSP-SC573 &#8212; System Level Documentation  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../../../_static/pygments.css?v=8e8a900e" />
@@ -94,8 +94,27 @@
           <ul>
 <li><a class="reference internal" href="#">Yocto Linux 2.1.0 Quickstart Guide for ADSP-SC573</a></li>
 <li><a class="reference internal" href="#setting-up-your-host-pc">Setting Up Your Host PC</a><ul>
+<li><a class="reference internal" href="#installing-required-packages">Installing Required Packages</a></li>
+<li><a class="reference internal" href="#installing-crosscore-embedded-studio">Installing CrossCore Embedded Studio</a></li>
+<li><a class="reference internal" href="#configuring-tftp-service">Configuring TFTP Service</a></li>
+<li><a class="reference internal" href="#configure-minicom">Configure Minicom</a></li>
+<li><a class="reference internal" href="#installing-the-sources">Installing the Sources</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#building-the-image">Building the Image</a><ul>
 <li><a class="reference internal" href="#preparing-the-buildtool">Preparing the buildtool</a></li>
-<li><a class="reference internal" href="#running-u-boot-on-the-board-for-the-first-time">Running U-Boot on the Board for the first time</a></li>
+<li><a class="reference internal" href="#building-the-example">Building the example</a></li>
+<li><a class="reference internal" href="#running-u-boot-on-the-board-for-the-first-time">Running U-Boot on the Board for the first time</a><ul>
+<li><a class="reference internal" href="#flash-u-boot-to-spi-flash">Flash U-Boot to SPI Flash</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#booting-linux-using-tftp">Booting Linux Using TFTP</a><ul>
+<li><a class="reference internal" href="#ram-boot">RAM Boot</a></li>
+<li><a class="reference internal" href="#nfs-boot">NFS Boot</a></li>
+<li><a class="reference internal" href="#booting-into-linux-from-tftp">Booting into Linux from TFTP</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#building-the-sdk">Building the SDK</a></li>
 </ul>
 </li>
 </ul>
@@ -585,7 +604,7 @@ Content on this topic
             
   <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>These pages are not updated anymore. Documentation has been moved to :git-lnxdsp-adi-meta:<a href="#id1"><span class="problematic" id="id2">`</span></a>wiki`</p>
+<p>These pages are not updated anymore. Documentation has been moved to <a class="icon git reference external" href="https://github.com/analogdevicesinc/lnxdsp-adi-meta/tree/main/wiki" target="_blank">wiki</a></p>
 </div>
 <section id="yocto-linux-2-1-0-quickstart-guide-for-adsp-sc573">
 <h1>Yocto Linux 2.1.0 Quickstart Guide for ADSP-SC573<a class="headerlink" href="#yocto-linux-2-1-0-quickstart-guide-for-adsp-sc573" title="Link to this heading"></a></h1>
@@ -597,27 +616,26 @@ Content on this topic
 <section id="setting-up-your-host-pc">
 <h1>Setting Up Your Host PC<a class="headerlink" href="#setting-up-your-host-pc" title="Link to this heading"></a></h1>
 <p>The build system is currently supported on host PCs running Ubuntu 20.04 LTS 64-bit.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Installing Required Packages ==== In order to build and deploy Linux to your ADSP-SC573-EZKIT development board you will need to install the following packages on your host PC.</div>
-</div>
+<section id="installing-required-packages">
+<h2>Installing Required Packages<a class="headerlink" href="#installing-required-packages" title="Link to this heading"></a></h2>
+<p>In order to build and deploy Linux to your ADSP-SC573-EZKIT development board you will need to install the following packages on your host PC.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get update
 $ sudo apt-get install -y gawk wget git-core diffstat unzip texinfo gcc-multilib build-essential chrpath socat libsdl1.2-dev xterm u-boot-tools openssl curl tftpd-hpa python
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Installing CrossCore Embedded Studio ==== CrossCore Embedded Studio contains OpenOCD which is used to transfer U-Boot into RAM for the first initial boot of the device. The tools are created for 32-bit architecture and therefore requires a 32-bit libz package to run. Download and install it.</div>
-</div>
+</section>
+<section id="installing-crosscore-embedded-studio">
+<h2>Installing CrossCore Embedded Studio<a class="headerlink" href="#installing-crosscore-embedded-studio" title="Link to this heading"></a></h2>
+<p>CrossCore Embedded Studio contains OpenOCD which is used to transfer U-Boot into RAM for the first initial boot of the device. The tools are created for 32-bit architecture and therefore requires a 32-bit libz package to run. Download and install it.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ wget https://download.analog.com/tools/CrossCoreEmbeddedStudio/Releases/Release_2.10.0/adi-CrossCoreEmbeddedStudio-linux-x86-2.10.0.deb
 $ sudo dpkg -i ./adi-CrossCoreEmbeddedStudio-linux-x86-2.10.0.deb
 $ sudo apt install lib32z1
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Configuring TFTP Service==== A TFTP server on the host is used to transfer images to the development board. Install and configure.</div>
-</div>
+</section>
+<section id="configuring-tftp-service">
+<h2>Configuring TFTP Service<a class="headerlink" href="#configuring-tftp-service" title="Link to this heading"></a></h2>
+<p>A TFTP server on the host is used to transfer images to the development board. Install and configure.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo vi /etc/default/tftpd-hpa
 
 #Replace the existing file with the following
@@ -632,10 +650,10 @@ $ sudo chmod 777 /tftpboot
 $ sudo service tftpd-hpa restart
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Configure Minicom ==== In order to communicate with the U-Boot bootloader, a UART connection must be made between the host PC and the development board. It is recommended that you use minicom to do this. Minicom must be configured to connect to U-Boot correctly.</div>
-</div>
+</section>
+<section id="configure-minicom">
+<h2>Configure Minicom<a class="headerlink" href="#configure-minicom" title="Link to this heading"></a></h2>
+<p>In order to communicate with the U-Boot bootloader, a UART connection must be made between the host PC and the development board. It is recommended that you use minicom to do this. Minicom must be configured to connect to U-Boot correctly.</p>
 <p>On the host PC open a terminal and execute the following commands:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get install -y minicom
 $ sudo minicom -s
@@ -666,14 +684,11 @@ $ sudo minicom -s
  Select Exit
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Installing the Sources ==== The example is fully contained in the Analog Devices Yocto Linux github repositories.</div>
-</div>
-<p>To install the sources:</p>
-<div class="hide docutils container">
-<p>TODO: Make sure its the correct repo, branch, manifest file etc</p>
-</div>
+</section>
+<section id="installing-the-sources">
+<h2>Installing the Sources<a class="headerlink" href="#installing-the-sources" title="Link to this heading"></a></h2>
+<p>The example is fully contained in the Analog Devices Yocto Linux github repositories.</p>
+<p>To install the sources: TODO: Make sure its the correct repo, branch, manifest file etc</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ mkdir ~/lnxdsp
 $ cd ~/lnxdsp
 $ mkdir bin
@@ -686,10 +701,10 @@ $ ./bin/repo init \
 $ ./bin/repo sync
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">===== Building the Image =====</div>
-</div>
+</section>
+</section>
+<section id="building-the-image">
+<h1>Building the Image<a class="headerlink" href="#building-the-image" title="Link to this heading"></a></h1>
 <section id="preparing-the-buildtool">
 <h2>Preparing the buildtool<a class="headerlink" href="#preparing-the-buildtool" title="Link to this heading"></a></h2>
 <p>Yocto requires the environment to be configured before building is possible. A setup-environment script in the <code class="docutils literal notranslate"><span class="pre">lnxdsp</span></code> folder contains all the required environment settings for your build target. Source the setup script for your board:</p>
@@ -701,10 +716,10 @@ $ ./bin/repo sync
 <p class="admonition-title">Important</p>
 <p>Note that the build environment needs to be sourced once only before building. If later working in a different terminal the setup-environment script should be sourced again. If sourcing the setup-environment script is done without specifying the machine Yocto will reuse the previous configuration settings and retain any changes made to the files in the conf folder.</p>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Building the example ==== You can build three different versions of the root filesystem; minimal, ramdisk and full. To build the example images invoke bitbake from within the build directory created previously.</div>
-</div>
+</section>
+<section id="building-the-example">
+<h2>Building the example<a class="headerlink" href="#building-the-example" title="Link to this heading"></a></h2>
+<p>You can build three different versions of the root filesystem; minimal, ramdisk and full. To build the example images invoke bitbake from within the build directory created previously.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ bitbake adsp-sc5xx-minimal
 $ bitbake adsp-sc5xx-ramdisk
 $ bitbake adsp-sc5xx-full
@@ -767,7 +782,19 @@ $ cp tmp/deploy/images/adsp-sc573-ezkit/u-boot-sc573-ezkit.ldr /tftpboot/
 <span class="p">:</span> <span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<p>$ cd /tftpboot $ /opt/analog/cces/2.10.0/ARM/arm-none-eabi/bin/arm-none-eabi-gdb u-boot-sc573-ezkit … (gdb) target extended-remote :3333 Remote debugging using :3333 0x00004884 in ?? () (gdb) load init-sc573-ezkit.elf Loading section .text, size 0x744 lma 0x20080000 Start address 0x20080028, load size 1860 Transfer rate: 22 KB/sec, 1860 bytes/write. (gdb) c Continuing. ^C Program received signal SIGINT, Interrupt. 0x20080024 in ?? () &lt;/code&gt;</p>
+<p>$ cd /tftpboot $ /opt/analog/cces/2.10.0/ARM/arm-none-eabi/bin/arm-none-eabi-gdb u-boot-sc573-ezkit … (gdb) target extended-remote :3333 Remote debugging using :3333 0x00004884 in ?? () (gdb) load init-sc573-ezkit.elf Loading section .text, size 0x744 lma 0x20080000 Start address 0x20080028, load size 1860 Transfer rate: 22 KB/sec, 1860 bytes/write. (gdb) c Continuing.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+</tbody>
+</table>
+</div>
+<div class="line-block">
+<div class="line">C |</div>
+</div>
+<p>+===+
++—+</p>
+<p>Program received signal SIGINT, Interrupt. 0x20080024 in ?? () &lt;/code&gt;</p>
 <p>Now, load U-Boot into RAM.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;</span><span class="s1">&#39;&#39;</span><span class="o">**</span><span class="n">Terminal3</span><span class="p">:</span> <span class="n">GDB</span><span class="o">**</span><span class="s1">&#39;&#39;</span>
 <span class="p">:</span>
@@ -802,11 +829,9 @@ $ cp tmp/deploy/images/adsp-sc573-ezkit/u-boot-sc573-ezkit.ldr /tftpboot/
 </div>
 <p>U-Boot 2020.10 (Aug 23 2022 - 13:09:23 +0000)</p>
 <p>CPU: ADSP ADSP-SC573-0.0 (Detected Rev: 1.1) (spi flash boot) VCO: 450 MHz, Cclk0: 450 MHz, Sclk0: 112.500 MHz, Sclk1: 112.500 MHz, DCLK: 225 MHz OCLK: 150 MHz Model: ADI sc573-ezkit I2C: ready DRAM: 224 MiB MMC: SC5XX SDH: 0 In: <a class="reference external" href="mailto:serial&#37;&#52;&#48;0x31003000">serial<span>&#64;</span>0x31003000</a> Out: <a class="reference external" href="mailto:serial&#37;&#52;&#48;0x31003000">serial<span>&#64;</span>0x31003000</a> Err: <a class="reference external" href="mailto:serial&#37;&#52;&#48;0x31003000">serial<span>&#64;</span>0x31003000</a> SF: Detected w25q128 with page size 256 Bytes, erase size 4 KiB, total 16 MiB other init Net: dwmac.3100c000 Hit any key to stop autoboot: 0 =&gt; &lt;/code&gt;</p>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">== Flash U-Boot to SPI Flash ==</div>
-<div class="line">In the U-Boot console, set the IP address of the Host Linux PC that hosts the U-Boot loader file (<code class="docutils literal notranslate"><span class="pre">u-boot-sc573-ezkit.ldr</span></code>) on TFTP.</div>
-</div>
+<section id="flash-u-boot-to-spi-flash">
+<h3>Flash U-Boot to SPI Flash<a class="headerlink" href="#flash-u-boot-to-spi-flash" title="Link to this heading"></a></h3>
+<p>In the U-Boot console, set the IP address of the Host Linux PC that hosts the U-Boot loader file (<code class="docutils literal notranslate"><span class="pre">u-boot-sc573-ezkit.ldr</span></code>) on TFTP.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;</span><span class="s1">&#39;&#39;</span><span class="o">**</span><span class="n">Terminal1</span><span class="p">:</span> <span class="n">minicom</span><span class="o">**</span><span class="s1">&#39;&#39;</span>
 <span class="p">:</span>
 </pre></div>
@@ -849,24 +874,25 @@ $ cp tmp/deploy/images/adsp-sc573-ezkit/u-boot-sc573-ezkit.ldr /tftpboot/
 <span class="o">=&gt;</span>
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line">At this point the U-Boot binary is stored in flash. You can now disconnect the ICE-1000 or ICE-2000 from the development board and make sure to switch the BMODE to position 1. You will only need to reconnect this if your board fails to boot and you need to re-follow these instructions.</div>
-<div class="line">==== Booting Linux Using TFTP ==== In order to boot Linux, the TFTP server should be setup as <a class="reference internal" href="#"><span class="doc">above</span></a> and (for both NFS and RAM boot) a copy of the kernel image should be copied into the <strong>/tftpboot</strong> directory.</div>
-</div>
+<p>At this point the U-Boot binary is stored in flash. You can now disconnect the ICE-1000 or ICE-2000 from the development board and make sure to switch the BMODE to position 1. You will only need to reconnect this if your board fails to boot and you need to re-follow these instructions.</p>
+</section>
+</section>
+<section id="booting-linux-using-tftp">
+<h2>Booting Linux Using TFTP<a class="headerlink" href="#booting-linux-using-tftp" title="Link to this heading"></a></h2>
+<p>In order to boot Linux, the TFTP server should be setup as <a class="reference internal" href="#"><span class="doc">above</span></a> and (for both NFS and RAM boot) a copy of the kernel image should be copied into the <strong>/tftpboot</strong> directory.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cp tmp/deploy/images/adsp-sc573-ezkit/fitImage /tftpboot
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">=== RAM Boot === For RAM boot a copy of the image containing the filesystem needs copied to the /tftpboot directory.</div>
-</div>
+<section id="ram-boot">
+<h3>RAM Boot<a class="headerlink" href="#ram-boot" title="Link to this heading"></a></h3>
+<p>For RAM boot a copy of the image containing the filesystem needs copied to the /tftpboot directory.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cp tmp/deploy/images/adsp-sc573-ezkit/adsp-sc5xx-ramdisk-adsp-sc573-ezkit.cpio.xz.u-boot /tftpboot/ramdisk.cpio.xz.u-boot
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">=== NFS Boot === For NFS boot we use the Network File System which is stored in local Ubuntu Host. This is suggested when you do application development. To setup the NFS server:</div>
-</div>
+</section>
+<section id="nfs-boot">
+<h3>NFS Boot<a class="headerlink" href="#nfs-boot" title="Link to this heading"></a></h3>
+<p>For NFS boot we use the Network File System which is stored in local Ubuntu Host. This is suggested when you do application development. To setup the NFS server:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get install nfs-kernel-server
 $ sudo vi /etc/exports
 
@@ -898,10 +924,10 @@ Sep 06 14:38:31 $YOUR_HOSTNAME systemd[1]: Finished NFS server and services.
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo tar -xf tmp/deploy/images/adsp-sc573-ezkit/adsp-sc5xx-full-adsp-sc573-ezkit.tar.xz -C /romfs
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">=== Booting into Linux from TFTP === Next, on the target, from u-boot, run one of the following command:</div>
-</div>
+</section>
+<section id="booting-into-linux-from-tftp">
+<h3>Booting into Linux from TFTP<a class="headerlink" href="#booting-into-linux-from-tftp" title="Link to this heading"></a></h3>
+<p>Next, on the target, from u-boot, run one of the following command:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">=&gt;</span> <span class="n">run</span> <span class="n">ramboot</span>
  <span class="ow">or</span>
 <span class="o">=&gt;</span> <span class="n">run</span> <span class="n">nfsboot</span>
@@ -939,10 +965,11 @@ Sep 06 14:38:31 $YOUR_HOSTNAME systemd[1]: Finished NFS server and services.
 </pre></div>
 </div>
 <p>The username is <strong>root</strong> and the password is <strong>adi</strong>.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line">==== Building the SDK ==== To build the SDK follow the instructions here <a class="reference internal" href="building-the-sdk.html"><span class="doc">Building the SDK</span></a>.</div>
-</div>
+</section>
+</section>
+<section id="building-the-sdk">
+<h2>Building the SDK<a class="headerlink" href="#building-the-sdk" title="Link to this heading"></a></h2>
+<p>To build the SDK follow the instructions here <a class="reference internal" href="building-the-sdk.html"><span class="doc">Building the SDK</span></a>.</p>
 </section>
 </section>
 
