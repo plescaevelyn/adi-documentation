@@ -615,9 +615,9 @@ Content on this topic
 <section id="selecting-a-daughter-board-aka-fin">
 <h2>1. Selecting a daughter board (aka “Fin”)<a class="headerlink" href="#selecting-a-daughter-board-aka-fin" title="Link to this heading"></a></h2>
 <p>If either the Audio Project Fin or the Automotive Fin are connected to the SHARC Audio Module, set the corresponding line below to TRUE. Only one Fin can be attached at a time so if both are set to TRUE, the compiler will generate an error.</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//****************************************************************************</span>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//****************</span>
 <span class="c1">// 1. Select which (if any) daughter boards are connected to the SHARC Audio Module</span>
-<span class="c1">//****************************************************************************</span>
+<span class="c1">//****************</span>
 
 <span class="c1">// Select any connected daughter boards</span>
 
@@ -657,9 +657,9 @@ Content on this topic
 <p><code class="docutils literal notranslate"><span class="pre">ADC</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">SHARC</span> <span class="pre">Core</span> <span class="pre">1</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">DACs</span></code></p>
 <p>If this value is set to TRUE, audio will be sent to core 2 after it has been processed by core 1. When the framework is configure for dual-core processing, SHARC Core 1 still manages the flow of audio data to and from the ADCs and DACs.</p>
 <p><code class="docutils literal notranslate"><span class="pre">ADC</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">SHARC</span> <span class="pre">Core</span> <span class="pre">1</span> <span class="pre">[processing]</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">SHARC</span> <span class="pre">Core</span> <span class="pre">2</span> <span class="pre">[processing]</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">SHARC</span> <span class="pre">Core</span> <span class="pre">1</span> <span class="pre">[final</span> <span class="pre">data</span> <span class="pre">transfer]</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">DACs</span></code></p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//****************************************************************************</span>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//****************</span>
 <span class="c1">// 2. Set audio processing parameters</span>
-<span class="c1">//****************************************************************************</span>
+<span class="c1">//****************</span>
 
 <span class="c1">// This should be a base 2 number from 8 to 128</span>
 <span class="cp">#define AUDIO_BLOCK_SIZE                                (32)</span>
@@ -690,9 +690,9 @@ Content on this topic
 </ul>
 <p>The <code class="docutils literal notranslate"><span class="pre">FRAMEWORK_BYPASS_SC589_A2B</span></code> framework directly connects the ADAU1761 audio codec to the AD2425W controller and is used to bypass the ADSP-SC589 processor all together. This configuration allows the SHARC Audio Module to behave as a simple CODEC slave node on an A2B bus where the ADAU1761 codec is directly connected to the AD2425W A2B controller. The flexible signal routing unit (SRU) on the ADSP-SC589 makes this possible as it enables us to dynamically route/re-route the I2S/TDM audio signals on the SHARC audio module.</p>
 <p>If you’d like to use this framework on your own hardware configurations, you can create your own additional pre-processor variables here and select between the target hardware platform by simply setting one of these values to TRUE.</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//****************************************************************************</span>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//****************</span>
 <span class="c1">// 3. Select an audio processing framework to use (only select one)</span>
-<span class="c1">//****************************************************************************</span>
+<span class="c1">//****************</span>
 
 <span class="c1">// Standard audio processing framework (SHARC Audio Module and SHARC Audio Module + Audio Project board)</span>
 <span class="cp">#define FRAMEWORK_8CH_SINGLE_OR_DUAL_CORE_A2B           TRUE</span>
@@ -710,9 +710,9 @@ Content on this topic
 <p>If you’d like the SHARC Audio Module to participate in an A2B bus, either as a master node or a slave node, set the <code class="docutils literal notranslate"><span class="pre">ENABLE_A2B</span></code> variable to <code class="docutils literal notranslate"><span class="pre">TRUE</span></code>. If the SHARC Audio Module will be the A2B bus master (typical), ensure <code class="docutils literal notranslate"><span class="pre">A2B_ROLE_MASTER</span></code> is set to <code class="docutils literal notranslate"><span class="pre">TRUE</span></code>. If the SHARC Audio Module will act as a slave node, set this variable to <code class="docutils literal notranslate"><span class="pre">FALSE</span></code>.</p>
 <p>If the SHARC Audio Module is the A2B bus master, there are a number of fixed network topologies that can be used. These network topologies are essentially A2B initialization sequences that will initialize the various I2C components on the slave nodes on the A2B bus. Only one A2B topology can be selected at a time.</p>
 <p>If you’d like to create your own A2B topologies, see the <a class="reference internal" href="driver-creation-tutorial.html"><span class="doc">tutorial</span></a> on this topic.</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//****************************************************************************</span>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//****************</span>
 <span class="c1">// 4. Select whether or not to enable A2B in the framework</span>
-<span class="c1">//****************************************************************************</span>
+<span class="c1">//****************</span>
 
 <span class="cp">#define ENABLE_A2B                                      FALSE</span>
 
@@ -746,9 +746,9 @@ Content on this topic
 <h2>5. Enabling the Enhanced ADAU1761 Driver<a class="headerlink" href="#enabling-the-enhanced-adau1761-driver" title="Link to this heading"></a></h2>
 <p>The ADAU1761 contains a stereo codec but it also contains a SigmaDSP processor, a light weight DSP engine. The ADSP-SC589 connects to the ADAU1761 via an 8 channel I2S/TDM interface. The first two of the eight TDM channels are used to move raw audio between the stereo ADCs and DACs on the ADAU1761. The remaining 6 channels are normally unused. The “enhanced” driver provides additional pre-processing and post-processing on the SigmaDSP core to using the remaining 6 channels.</p>
 <p>The functionality implemented in the SigmaDSP is described in the comments below.</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//****************************************************************************</span>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//****************</span>
 <span class="c1">// 5. Use enhanced ADAU1761 driver</span>
-<span class="c1">//****************************************************************************</span>
+<span class="c1">//****************</span>
 
 <span class="cp">#define USE_ENHANCED_ADAU1761_DRIVER                    FALSE</span>
 
@@ -779,9 +779,9 @@ Content on this topic
 <h2>6. Faust and MIDI support<a class="headerlink" href="#faust-and-midi-support" title="Link to this heading"></a></h2>
 <p>Faust is an audio synthesis language that can be used to design audio effects and audio synthesizers. The bare metal framework supports Faust. To enable Faust in the bare metal framework, set the <code class="docutils literal notranslate"><span class="pre">FAUST_INSTALLED</span></code> variable to <code class="docutils literal notranslate"><span class="pre">TRUE</span></code>. More information on Faust can be found in the Faust documentation.</p>
 <p>MIDI messages from the UART can be send to either the ARM core or the first SHARC core. This will determine whether the MIDI callback on the ARM core or the SHARC core is called when a new byte arrives. Set either <code class="docutils literal notranslate"><span class="pre">MIDI_UART_MANAGED_BY_ARM_CORE</span></code> or <code class="docutils literal notranslate"><span class="pre">MIDI_UART_MANAGED_BY_SHARC1_CORE</span></code> depending on which core should handle MIDI notes. The Audio Project Fin contains a standard MIDI interface (5 pin DIN).</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//****************************************************************************</span>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//****************</span>
 <span class="c1">// 6. Faust and MIDI configuration</span>
-<span class="c1">//****************************************************************************</span>
+<span class="c1">//****************</span>
 
 <span class="cp">#define FAUST_INSTALLED                                 FALSE</span>
 
@@ -818,9 +818,9 @@ Content on this topic
 <section id="setting-the-clock-frequencies">
 <h2>7. Setting the clock frequencies<a class="headerlink" href="#setting-the-clock-frequencies" title="Link to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">audio_system_config.h</span></code> file can also be used to configure the system clocks. For now, the ADSP-SC589 only supports a 450MHz clock speed but this may change in the future.</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//****************************************************************************</span>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//****************</span>
 <span class="c1">// 7. CPU clock speed</span>
-<span class="c1">//****************************************************************************</span>
+<span class="c1">//****************</span>
 
 <span class="cp">#define CORE_CLOCK_FREQ_HZ    (450000000)</span>
 <span class="cp">#define EXT_OSCILLATOR_FREQ_HZ  (25000000)</span>

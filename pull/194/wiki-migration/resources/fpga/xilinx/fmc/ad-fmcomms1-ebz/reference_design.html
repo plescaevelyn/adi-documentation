@@ -595,8 +595,8 @@ Content on this topic
             
   <section id="ad-fmcomms1-ebz-using-the-reference-design">
 <h1>AD-FMComms1-EBZ : Using the reference design<a class="headerlink" href="#ad-fmcomms1-ebz-using-the-reference-design" title="Link to this heading"></a></h1>
-<div class="admonition important">
-<p class="admonition-title">Important</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
 <p>Analog Devices uses six designations to inform our customers where a
 semiconductor product is in its
 <a class="icon adi reference external" href="https://www.analog.com/en/support/customer-service-resources/sales/product-life-cycle-information.html" target="_blank">life cycle</a>.
@@ -607,8 +607,8 @@ Device life cycles are tracked on their individual product pages on
 before making any design decisions.</p>
 <p>This particular article/document/design has been retired or deprecated,
 which means it is no longer maintained or actively updated, even though the
-devices themselves may be <strong>Recommended for New Designs</strong> or in
-<strong>Production</strong>. This page is here for historical/reference purposes only.</p>
+devices themselves may be Recommended for New Designs or in
+Production. This page is here for historical/reference purposes only.</p>
 </div>
 <p>The reference design is a combination of hardware (the FMComms1 Card + the FPGA base platform), the HDL, and the software that is either running on the Microblaze, or ARM Cores.</p>
 <p>In all the demos that we support, Linux is a large piece.</p>
@@ -625,7 +625,7 @@ devices themselves may be <strong>Recommended for New Designs</strong> or in
 <section id="booting-linux">
 <h2>Booting Linux<a class="headerlink" href="#booting-linux" title="Link to this heading"></a></h2>
 <p>Normally, when the Linux image is booted, it will search both the LPC and HPC FMC slots for 2 cards. (the same reference design supports MIMO, as a single card). You should see something like this in the kernel log message - which indicates that a single card is plugged into the LPC FMC connector.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># **dmesg**</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># dmesg</span>
 <span class="p">[</span><span class="n">snip</span><span class="p">]</span>
 <span class="n">at24</span> <span class="mi">0</span><span class="o">-</span><span class="mi">0051</span><span class="p">:</span> <span class="mi">256</span> <span class="n">byte</span> <span class="mi">24</span><span class="n">c02</span> <span class="n">EEPROM</span><span class="p">,</span> <span class="n">writable</span><span class="p">,</span> <span class="mi">1</span> <span class="nb">bytes</span><span class="o">/</span><span class="n">write</span>
 <span class="n">spi</span><span class="o">-</span><span class="n">xcomm</span><span class="p">:</span> <span class="n">probe</span> <span class="n">of</span> <span class="mi">1</span><span class="o">-</span><span class="mi">0058</span> <span class="n">failed</span> <span class="k">with</span> <span class="n">error</span> <span class="o">-</span><span class="mi">5</span>
@@ -634,24 +634,24 @@ devices themselves may be <strong>Recommended for New Designs</strong> or in
 <span class="n">platform</span> <span class="mi">7</span><span class="n">c820000</span><span class="o">.</span><span class="n">cf</span><span class="o">-</span><span class="n">ad9643</span><span class="o">-</span><span class="n">core</span><span class="o">-</span><span class="n">lpc</span><span class="p">:</span> <span class="n">Driver</span> <span class="n">cf_axi_adc</span> <span class="n">requests</span> <span class="n">probe</span> <span class="n">deferral</span>
 <span class="n">cf_axi_adc</span> <span class="mi">7</span><span class="n">c800000</span><span class="o">.</span><span class="n">cf</span><span class="o">-</span><span class="n">ad9643</span><span class="o">-</span><span class="n">core</span><span class="o">-</span><span class="n">hpc</span><span class="p">:</span> <span class="n">Device</span> <span class="n">Tree</span> <span class="n">Probing</span> <span class="s1">&#39;cf-ad9643-core-hpc&#39;</span>
 <span class="n">platform</span> <span class="mi">7</span><span class="n">c800000</span><span class="o">.</span><span class="n">cf</span><span class="o">-</span><span class="n">ad9643</span><span class="o">-</span><span class="n">core</span><span class="o">-</span><span class="n">hpc</span><span class="p">:</span> <span class="n">Driver</span> <span class="n">cf_axi_adc</span> <span class="n">requests</span> <span class="n">probe</span> <span class="n">deferral</span>
-<span class="o">**</span><span class="n">cf_axi_fft_core</span> <span class="mi">7</span><span class="n">ee00000</span><span class="o">.</span><span class="n">axi</span><span class="o">-</span><span class="n">fft</span><span class="p">:</span> <span class="n">Device</span> <span class="n">Tree</span> <span class="n">Probing</span> <span class="s1">&#39;axi-fft&#39;</span><span class="o">**</span>
-<span class="o">**</span><span class="n">cf_axi_fft_core</span> <span class="mi">7</span><span class="n">ee00000</span><span class="o">.</span><span class="n">axi</span><span class="o">-</span><span class="n">fft</span><span class="p">:</span> <span class="n">ADI</span><span class="o">-</span><span class="n">FFT</span> <span class="p">(</span><span class="mh">0x10061</span><span class="p">)</span> <span class="n">at</span> <span class="mh">0x7EE00000</span> <span class="n">mapped</span> <span class="n">to</span> <span class="mh">0xf0160000</span><span class="p">,</span> <span class="n">DMA</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">DMA</span><span class="o">-</span><span class="mi">0</span> <span class="n">probed</span><span class="o">**</span>
-<span class="o">**</span><span class="n">ad9548</span> <span class="n">spi0</span><span class="mf">.2</span><span class="p">:</span> <span class="n">Rev</span><span class="o">.</span> <span class="mh">0xC6</span> <span class="n">probed</span><span class="o">**</span>
-<span class="o">**</span><span class="n">ad9523</span> <span class="n">spi0</span><span class="mf">.3</span><span class="p">:</span> <span class="n">probed</span> <span class="n">ad9523</span><span class="o">-</span><span class="n">lpc</span><span class="o">**</span>
+<span class="n">cf_axi_fft_core</span> <span class="mi">7</span><span class="n">ee00000</span><span class="o">.</span><span class="n">axi</span><span class="o">-</span><span class="n">fft</span><span class="p">:</span> <span class="n">Device</span> <span class="n">Tree</span> <span class="n">Probing</span> <span class="s1">&#39;axi-fft&#39;</span>
+<span class="n">cf_axi_fft_core</span> <span class="mi">7</span><span class="n">ee00000</span><span class="o">.</span><span class="n">axi</span><span class="o">-</span><span class="n">fft</span><span class="p">:</span> <span class="n">ADI</span><span class="o">-</span><span class="n">FFT</span> <span class="p">(</span><span class="mh">0x10061</span><span class="p">)</span> <span class="n">at</span> <span class="mh">0x7EE00000</span> <span class="n">mapped</span> <span class="n">to</span> <span class="mh">0xf0160000</span><span class="p">,</span> <span class="n">DMA</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">DMA</span><span class="o">-</span><span class="mi">0</span> <span class="n">probed</span>
+<span class="n">ad9548</span> <span class="n">spi0</span><span class="mf">.2</span><span class="p">:</span> <span class="n">Rev</span><span class="o">.</span> <span class="mh">0xC6</span> <span class="n">probed</span>
+<span class="n">ad9523</span> <span class="n">spi0</span><span class="mf">.3</span><span class="p">:</span> <span class="n">probed</span> <span class="n">ad9523</span><span class="o">-</span><span class="n">lpc</span>
 <span class="n">cf_axi_dds</span> <span class="mi">7</span><span class="n">a020000</span><span class="o">.</span><span class="n">cf</span><span class="o">-</span><span class="n">ad9122</span><span class="o">-</span><span class="n">core</span><span class="o">-</span><span class="n">lpc</span><span class="p">:</span> <span class="n">Device</span> <span class="n">Tree</span> <span class="n">Probing</span> <span class="s1">&#39;cf-ad9122-core-lpc&#39;</span>
 <span class="n">platform</span> <span class="mi">7</span><span class="n">a020000</span><span class="o">.</span><span class="n">cf</span><span class="o">-</span><span class="n">ad9122</span><span class="o">-</span><span class="n">core</span><span class="o">-</span><span class="n">lpc</span><span class="p">:</span> <span class="n">Driver</span> <span class="n">cf_axi_dds</span> <span class="n">requests</span> <span class="n">probe</span> <span class="n">deferral</span>
 <span class="n">cf_axi_dds</span> <span class="mi">7</span><span class="n">a000000</span><span class="o">.</span><span class="n">cf</span><span class="o">-</span><span class="n">ad9122</span><span class="o">-</span><span class="n">core</span><span class="o">-</span><span class="n">hpc</span><span class="p">:</span> <span class="n">Device</span> <span class="n">Tree</span> <span class="n">Probing</span> <span class="s1">&#39;cf-ad9122-core-hpc&#39;</span>
 <span class="n">platform</span> <span class="mi">7</span><span class="n">a000000</span><span class="o">.</span><span class="n">cf</span><span class="o">-</span><span class="n">ad9122</span><span class="o">-</span><span class="n">core</span><span class="o">-</span><span class="n">hpc</span><span class="p">:</span> <span class="n">Driver</span> <span class="n">cf_axi_dds</span> <span class="n">requests</span> <span class="n">probe</span> <span class="n">deferral</span>
 <span class="n">TCP</span><span class="p">:</span> <span class="n">cubic</span> <span class="n">registered</span>
 <span class="n">NET</span><span class="p">:</span> <span class="n">Registered</span> <span class="n">protocol</span> <span class="n">family</span> <span class="mi">17</span>
-<span class="o">**</span><span class="n">cf_axi_adc</span> <span class="mi">7</span><span class="n">c820000</span><span class="o">.</span><span class="n">cf</span><span class="o">-</span><span class="n">ad9643</span><span class="o">-</span><span class="n">core</span><span class="o">-</span><span class="n">lpc</span><span class="p">:</span> <span class="n">Device</span> <span class="n">Tree</span> <span class="n">Probing</span> <span class="s1">&#39;cf-ad9643-core-lpc&#39;</span><span class="o">**</span>
-<span class="o">**-------</span><span class="n">ooooooooooo</span><span class="o">|</span><span class="n">oooooooooo</span><span class="o">----</span> <span class="n">DCO</span> <span class="mh">0x91</span><span class="o">**</span>
-<span class="o">**</span><span class="n">cf_axi_adc</span> <span class="mi">7</span><span class="n">c820000</span><span class="o">.</span><span class="n">cf</span><span class="o">-</span><span class="n">ad9643</span><span class="o">-</span><span class="n">core</span><span class="o">-</span><span class="n">lpc</span><span class="p">:</span> <span class="n">ADI</span> <span class="n">AIM</span> <span class="p">(</span><span class="mh">0x10061</span><span class="p">)</span> <span class="n">at</span> <span class="mh">0x7C820000</span> <span class="n">mapped</span> <span class="n">to</span> <span class="mh">0xf0180000</span><span class="p">,</span> <span class="n">DMA</span><span class="o">-</span><span class="mi">0</span> <span class="n">probed</span> <span class="n">ADC</span> <span class="n">AD9643</span> <span class="k">as</span> <span class="n">MASTER</span><span class="o">**</span>
+<span class="n">cf_axi_adc</span> <span class="mi">7</span><span class="n">c820000</span><span class="o">.</span><span class="n">cf</span><span class="o">-</span><span class="n">ad9643</span><span class="o">-</span><span class="n">core</span><span class="o">-</span><span class="n">lpc</span><span class="p">:</span> <span class="n">Device</span> <span class="n">Tree</span> <span class="n">Probing</span> <span class="s1">&#39;cf-ad9643-core-lpc&#39;</span>
+<span class="o">-------</span><span class="n">ooooooooooo</span><span class="o">|</span><span class="n">oooooooooo</span><span class="o">----</span> <span class="n">DCO</span> <span class="mh">0x91</span>
+<span class="n">cf_axi_adc</span> <span class="mi">7</span><span class="n">c820000</span><span class="o">.</span><span class="n">cf</span><span class="o">-</span><span class="n">ad9643</span><span class="o">-</span><span class="n">core</span><span class="o">-</span><span class="n">lpc</span><span class="p">:</span> <span class="n">ADI</span> <span class="n">AIM</span> <span class="p">(</span><span class="mh">0x10061</span><span class="p">)</span> <span class="n">at</span> <span class="mh">0x7C820000</span> <span class="n">mapped</span> <span class="n">to</span> <span class="mh">0xf0180000</span><span class="p">,</span> <span class="n">DMA</span><span class="o">-</span><span class="mi">0</span> <span class="n">probed</span> <span class="n">ADC</span> <span class="n">AD9643</span> <span class="k">as</span> <span class="n">MASTER</span>
 <span class="n">cf_axi_adc</span> <span class="mi">7</span><span class="n">c800000</span><span class="o">.</span><span class="n">cf</span><span class="o">-</span><span class="n">ad9643</span><span class="o">-</span><span class="n">core</span><span class="o">-</span><span class="n">hpc</span><span class="p">:</span> <span class="n">Device</span> <span class="n">Tree</span> <span class="n">Probing</span> <span class="s1">&#39;cf-ad9643-core-hpc&#39;</span>
 <span class="n">platform</span> <span class="mi">7</span><span class="n">c800000</span><span class="o">.</span><span class="n">cf</span><span class="o">-</span><span class="n">ad9643</span><span class="o">-</span><span class="n">core</span><span class="o">-</span><span class="n">hpc</span><span class="p">:</span> <span class="n">Driver</span> <span class="n">cf_axi_adc</span> <span class="n">requests</span> <span class="n">probe</span> <span class="n">deferral</span>
-<span class="o">**</span><span class="n">cf_axi_dds</span> <span class="mi">7</span><span class="n">a020000</span><span class="o">.</span><span class="n">cf</span><span class="o">-</span><span class="n">ad9122</span><span class="o">-</span><span class="n">core</span><span class="o">-</span><span class="n">lpc</span><span class="p">:</span> <span class="n">Device</span> <span class="n">Tree</span> <span class="n">Probing</span> <span class="s1">&#39;cf-ad9122-core-lpc&#39;</span><span class="o">**</span>
-<span class="o">**-</span><span class="n">o</span><span class="o">|</span><span class="n">o</span> <span class="n">DCI</span> <span class="mi">2</span><span class="o">**</span>
-<span class="o">**</span><span class="n">cf_axi_dds</span> <span class="mi">7</span><span class="n">a020000</span><span class="o">.</span><span class="n">cf</span><span class="o">-</span><span class="n">ad9122</span><span class="o">-</span><span class="n">core</span><span class="o">-</span><span class="n">lpc</span><span class="p">:</span> <span class="n">Analog</span> <span class="n">Devices</span> <span class="n">CF_AXI_DDS_DDS</span> <span class="n">MASTER</span> <span class="p">(</span><span class="mh">0x10061</span><span class="p">)</span> <span class="n">at</span> <span class="mh">0x7A020000</span> <span class="n">mapped</span> <span class="n">to</span> <span class="mh">0xf01a0000</span><span class="p">,</span> <span class="n">probed</span> <span class="n">DDS</span> <span class="n">AD9122</span><span class="o">**</span>
+<span class="n">cf_axi_dds</span> <span class="mi">7</span><span class="n">a020000</span><span class="o">.</span><span class="n">cf</span><span class="o">-</span><span class="n">ad9122</span><span class="o">-</span><span class="n">core</span><span class="o">-</span><span class="n">lpc</span><span class="p">:</span> <span class="n">Device</span> <span class="n">Tree</span> <span class="n">Probing</span> <span class="s1">&#39;cf-ad9122-core-lpc&#39;</span>
+<span class="o">-</span><span class="n">o</span><span class="o">|</span><span class="n">o</span> <span class="n">DCI</span> <span class="mi">2</span>
+<span class="n">cf_axi_dds</span> <span class="mi">7</span><span class="n">a020000</span><span class="o">.</span><span class="n">cf</span><span class="o">-</span><span class="n">ad9122</span><span class="o">-</span><span class="n">core</span><span class="o">-</span><span class="n">lpc</span><span class="p">:</span> <span class="n">Analog</span> <span class="n">Devices</span> <span class="n">CF_AXI_DDS_DDS</span> <span class="n">MASTER</span> <span class="p">(</span><span class="mh">0x10061</span><span class="p">)</span> <span class="n">at</span> <span class="mh">0x7A020000</span> <span class="n">mapped</span> <span class="n">to</span> <span class="mh">0xf01a0000</span><span class="p">,</span> <span class="n">probed</span> <span class="n">DDS</span> <span class="n">AD9122</span>
 <span class="n">cf_axi_dds</span> <span class="mi">7</span><span class="n">a000000</span><span class="o">.</span><span class="n">cf</span><span class="o">-</span><span class="n">ad9122</span><span class="o">-</span><span class="n">core</span><span class="o">-</span><span class="n">hpc</span><span class="p">:</span> <span class="n">Device</span> <span class="n">Tree</span> <span class="n">Probing</span> <span class="s1">&#39;cf-ad9122-core-hpc&#39;</span>
 <span class="n">platform</span> <span class="mi">7</span><span class="n">a000000</span><span class="o">.</span><span class="n">cf</span><span class="o">-</span><span class="n">ad9122</span><span class="o">-</span><span class="n">core</span><span class="o">-</span><span class="n">hpc</span><span class="p">:</span> <span class="n">Driver</span> <span class="n">cf_axi_dds</span> <span class="n">requests</span> <span class="n">probe</span> <span class="n">deferral</span>
 <span class="n">cf_axi_adc</span> <span class="mi">7</span><span class="n">c800000</span><span class="o">.</span><span class="n">cf</span><span class="o">-</span><span class="n">ad9643</span><span class="o">-</span><span class="n">core</span><span class="o">-</span><span class="n">hpc</span><span class="p">:</span> <span class="n">Device</span> <span class="n">Tree</span> <span class="n">Probing</span> <span class="s1">&#39;cf-ad9643-core-hpc&#39;</span>
@@ -663,8 +663,8 @@ devices themselves may be <strong>Recommended for New Designs</strong> or in
 </pre></div>
 </div>
 <p>You can also check the status of things with:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># **cd /sys/bus/iio/devices/**</span>
-<span class="c1"># **grep &quot;&quot; iio\:device*/name**</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># cd /sys/bus/iio/devices/</span>
+<span class="c1"># grep &quot;&quot; iio\:device*/name</span>
 <span class="n">iio</span><span class="p">:</span><span class="n">device0</span><span class="o">/</span><span class="n">name</span><span class="p">:</span><span class="n">ad8366</span><span class="o">-</span><span class="n">lpc</span>
 <span class="n">iio</span><span class="p">:</span><span class="n">device1</span><span class="o">/</span><span class="n">name</span><span class="p">:</span><span class="n">ad9523</span><span class="o">-</span><span class="n">lpc</span>
 <span class="n">iio</span><span class="p">:</span><span class="n">device2</span><span class="o">/</span><span class="n">name</span><span class="p">:</span><span class="n">adf4351</span><span class="o">-</span><span class="n">rx</span><span class="o">-</span><span class="n">lpc</span>
@@ -678,8 +678,8 @@ devices themselves may be <strong>Recommended for New Designs</strong> or in
 <section id="running-the-demo">
 <h2>Running the demo<a class="headerlink" href="#running-the-demo" title="Link to this heading"></a></h2>
 <p>It’s a simple matter of configuring the ethernet on the FPGA platform:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># **ifconfig eth0 192.168.1.2 up**</span>
-<span class="c1"># **ifconfig eth0**</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># ifconfig eth0 192.168.1.2 up</span>
+<span class="c1"># ifconfig eth0</span>
 <span class="n">eth0</span>      <span class="n">Link</span> <span class="n">encap</span><span class="p">:</span><span class="n">Ethernet</span>  <span class="n">HWaddr</span> <span class="mi">00</span><span class="p">:</span><span class="mi">0</span><span class="n">A</span><span class="p">:</span><span class="mi">35</span><span class="p">:</span><span class="mi">69</span><span class="p">:</span><span class="mi">1</span><span class="n">C</span><span class="p">:</span><span class="mi">00</span>
           <span class="n">inet</span> <span class="n">addr</span><span class="p">:</span><span class="mf">192.168.1.2</span>  <span class="n">Bcast</span><span class="p">:</span><span class="mf">192.168.1.255</span>  <span class="n">Mask</span><span class="p">:</span><span class="mf">255.255.255.0</span>
           <span class="n">UP</span> <span class="n">BROADCAST</span> <span class="n">RUNNING</span>  <span class="n">MTU</span><span class="p">:</span><span class="mi">1500</span>  <span class="n">Metric</span><span class="p">:</span><span class="mi">1</span>
@@ -696,8 +696,8 @@ devices themselves may be <strong>Recommended for New Designs</strong> or in
 </a>
 <p>From here you can look at things in the time domain, frequency domain, and control the various “knobs” in the platform.</p>
 <p>To find the various “knobs”, they are in the <code class="docutils literal notranslate"><span class="pre">sysfs</span></code> directory.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># **cd /sys/devices/axi.0/40800000.i2c/i2c-0/0-0059/spi_master/spi0/spi0.3/iio:device2**</span>
-<span class="c1"># **ls**</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># cd /sys/devices/axi.0/40800000.i2c/i2c-0/0-0059/spi_master/spi0/spi0.3/iio:device2</span>
+<span class="c1"># ls</span>
 <span class="n">dev</span>
 <span class="n">name</span>
 <span class="n">out_altvoltage0_ZD_OUTPUT_frequency</span>
@@ -745,13 +745,13 @@ devices themselves may be <strong>Recommended for New Designs</strong> or in
 </pre></div>
 </div>
 <p>You can <code class="docutils literal notranslate"><span class="pre">echo</span></code> or <code class="docutils literal notranslate"><span class="pre">cat</span></code> into these files to change the various options.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># **cat out_altvoltage1_DAC_CLK_frequency**</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># cat out_altvoltage1_DAC_CLK_frequency</span>
 <span class="mi">491520000</span>
-<span class="c1"># **echo 500000000 &gt; out_altvoltage1_DAC_CLK_frequency**</span>
-<span class="c1"># **cat out_altvoltage1_DAC_CLK_frequency**</span>
+<span class="c1"># echo 500000000 &gt; out_altvoltage1_DAC_CLK_frequency</span>
+<span class="c1"># cat out_altvoltage1_DAC_CLK_frequency</span>
 <span class="mi">983040000</span>
-<span class="c1"># **echo 400000000 &gt; out_altvoltage1_DAC_CLK_frequency**</span>
-<span class="c1"># **cat out_altvoltage1_DAC_CLK_frequency**</span>
+<span class="c1"># echo 400000000 &gt; out_altvoltage1_DAC_CLK_frequency</span>
+<span class="c1"># cat out_altvoltage1_DAC_CLK_frequency</span>
 <span class="mi">491520000</span>
 </pre></div>
 </div>
@@ -764,7 +764,7 @@ devices themselves may be <strong>Recommended for New Designs</strong> or in
 <h3>Dump FRU Board Information<a class="headerlink" href="#dump-fru-board-information" title="Link to this heading"></a></h3>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># **fru_dump -i /sys/bus/i2c/devices/0-0051/eeprom -b**</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># fru_dump -i /sys/bus/i2c/devices/0-0051/eeprom -b</span>
 <span class="n">read</span> <span class="mi">256</span> <span class="nb">bytes</span> <span class="kn">from</span><span class="w"> </span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">i2c</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="mi">0</span><span class="o">-</span><span class="mi">0051</span><span class="o">/</span><span class="n">eeprom</span>
 <span class="n">Date</span> <span class="n">of</span> <span class="n">Man</span>  <span class="p">:</span> <span class="n">Tue</span> <span class="n">Sep</span> <span class="mi">18</span> <span class="mi">16</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mi">00</span> <span class="mi">2012</span>
 <span class="n">Manufacture</span>  <span class="p">:</span> <span class="n">Analog</span> <span class="n">Devices</span>
@@ -780,7 +780,7 @@ devices themselves may be <strong>Recommended for New Designs</strong> or in
 <h3>Dump FRU Power Information<a class="headerlink" href="#dump-fru-power-information" title="Link to this heading"></a></h3>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># **fru_dump -i /sys/bus/i2c/devices/0-0051/eeprom -p**</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># fru_dump -i /sys/bus/i2c/devices/0-0051/eeprom -p</span>
 <span class="n">read</span> <span class="mi">256</span> <span class="nb">bytes</span> <span class="kn">from</span><span class="w"> </span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">i2c</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="mi">0</span><span class="o">-</span><span class="mi">0051</span><span class="o">/</span><span class="n">eeprom</span>
 <span class="n">DC</span> <span class="n">Load</span>
   <span class="n">Output</span> <span class="n">number</span><span class="p">:</span> <span class="mi">0</span> <span class="p">(</span><span class="n">P1</span> <span class="n">VADJ</span><span class="p">)</span>
@@ -838,7 +838,7 @@ devices themselves may be <strong>Recommended for New Designs</strong> or in
 <h3>Dump FRU Connector Information<a class="headerlink" href="#dump-fru-connector-information" title="Link to this heading"></a></h3>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># **fru_dump -i /sys/bus/i2c/devices/0-0051/eeprom -c**</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># fru_dump -i /sys/bus/i2c/devices/0-0051/eeprom -c</span>
 <span class="n">read</span> <span class="mi">256</span> <span class="nb">bytes</span> <span class="kn">from</span><span class="w"> </span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">i2c</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="mi">0</span><span class="o">-</span><span class="mi">0051</span><span class="o">/</span><span class="n">eeprom</span>
 <span class="n">Single</span> <span class="n">Width</span> <span class="n">Card</span>
 <span class="n">P1</span> <span class="ow">is</span> <span class="n">LPC</span>
@@ -858,7 +858,7 @@ devices themselves may be <strong>Recommended for New Designs</strong> or in
 <h3>Query best match calibration set for a given Frequency<a class="headerlink" href="#query-best-match-calibration-set-for-a-given-frequency" title="Link to this heading"></a></h3>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># **xcomm_cal -f 2400 -s /sys/bus/i2c/devices/0-0055/eeprom**</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># xcomm_cal -f 2400 -s /sys/bus/i2c/devices/0-0055/eeprom</span>
 
 <span class="o">---</span> <span class="n">Best</span> <span class="n">match</span> <span class="n">ENTRY</span> <span class="mi">1</span> <span class="o">---</span>
 <span class="n">Calibration</span> <span class="n">Frequency</span><span class="p">:</span>  <span class="mi">2400</span> <span class="n">MHz</span>

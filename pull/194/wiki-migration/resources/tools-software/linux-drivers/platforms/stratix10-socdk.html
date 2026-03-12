@@ -590,68 +590,68 @@ Content on this topic
 <h1>Stratix 10 SoC Development Kit Linux Quick Start Guide<a class="headerlink" href="#stratix-10-soc-development-kit-linux-quick-start-guide" title="Link to this heading"></a></h1>
 <section id="get-aarch64-none-linux-gnu-and-set-cross-compile-and-arch-variables">
 <h2>Get aarch64-none-linux-gnu and set CROSS_COMPILE and ARCH variables<a class="headerlink" href="#get-aarch64-none-linux-gnu-and-set-cross-compile-and-arch-variables" title="Link to this heading"></a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>analog@debian:~$ **mkdir tools**
-analog@debian:~$ **cd tools**
-analog@debian:~/tools$ **wget https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-a/10.3-2021.07/binrel/gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu.tar.xz**
-analog@debian:~/tools$ **tar xvf gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu.tar.xz**
-analog@debian:~/tools$ **export CROSS_COMPILE=/home/analog/tools/gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu/bin/aarch64-none-linux-gnu-**
-analog@debian:~/tools$ **export ARCH=arm64**
-analog@debian:~/tools$ **cd ~**
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>analog@debian:~$ mkdir tools
+analog@debian:~$ cd tools
+analog@debian:~/tools$ wget https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-a/10.3-2021.07/binrel/gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu.tar.xz
+analog@debian:~/tools$ tar xvf gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu.tar.xz
+analog@debian:~/tools$ export CROSS_COMPILE=/home/analog/tools/gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu/bin/aarch64-none-linux-gnu-
+analog@debian:~/tools$ export ARCH=arm64
+analog@debian:~/tools$ cd ~
 </pre></div>
 </div>
 </section>
 <section id="build-linux-kernel">
 <h2>Build Linux kernel<a class="headerlink" href="#build-linux-kernel" title="Link to this heading"></a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>analog@debian:~$ **git clone :git-linux**:`linux**`
-analog@debian:~$ **cd ./linux**
-analog@debian:~/linux$ **git checkout altera_adxcvr_master**
-analog@debian:~/linux$ **make adi_stratix10_defconfig**
-analog@debian:~/linux$ **make Image**
-analog@debian:~/linux$ **make altera/socfpga_stratix10_socdk_ad9213_dual.dtb**
-analog@debian:~/linux$ **cp arch/arm64/boot/Image /media/analog/BOOT/**
-analog@debian:~/linux$ **cp arch/arm64/boot/dts/altera/socfpga_stratix10_socdk_ad9213_dual.dtb /media/analog/BOOT/socfpga_stratix10_socdk.dtb**
-analog@debian:~/linux$ **cd ~**
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>analog@debian:~$ git clone :git-linux:`linux**`
+analog@debian:~$ cd ./linux
+analog@debian:~/linux$ git checkout altera_adxcvr_master
+analog@debian:~/linux$ make adi_stratix10_defconfig
+analog@debian:~/linux$ make Image
+analog@debian:~/linux$ make altera/socfpga_stratix10_socdk_ad9213_dual.dtb
+analog@debian:~/linux$ cp arch/arm64/boot/Image /media/analog/BOOT/
+analog@debian:~/linux$ cp arch/arm64/boot/dts/altera/socfpga_stratix10_socdk_ad9213_dual.dtb /media/analog/BOOT/socfpga_stratix10_socdk.dtb
+analog@debian:~/linux$ cd ~
 </pre></div>
 </div>
 </section>
 <section id="build-arm-trusted-firmware">
 <h2>Build ARM Trusted Firmware<a class="headerlink" href="#build-arm-trusted-firmware" title="Link to this heading"></a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>analog@debian:~$ **git clone https://github.com/altera-opensource/arm-trusted-firmware**
-analog@debian:~$ **cd ./arm-trusted-firmware**
-analog@debian:~/arm-trusted-firmware$ **git checkout rel_socfpga_v2.6.0_22.07.02_pr**
-analog@debian:~/arm-trusted-firmware$ **make bl31 PLAT=stratix10 DEPRECATED=1**
-analog@debian:~/arm-trusted-firmware$ **cd ~**
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>analog@debian:~$ git clone https://github.com/altera-opensource/arm-trusted-firmware
+analog@debian:~$ cd ./arm-trusted-firmware
+analog@debian:~/arm-trusted-firmware$ git checkout rel_socfpga_v2.6.0_22.07.02_pr
+analog@debian:~/arm-trusted-firmware$ make bl31 PLAT=stratix10 DEPRECATED=1
+analog@debian:~/arm-trusted-firmware$ cd ~
 </pre></div>
 </div>
 </section>
 <section id="build-u-boot-and-copy-u-boot-itb-to-sd-card">
 <h2>Build U-Boot and copy u-boot.itb to SD card<a class="headerlink" href="#build-u-boot-and-copy-u-boot-itb-to-sd-card" title="Link to this heading"></a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>analog@debian:~$ **git clone https://github.com/altera-opensource/u-boot-socfpga**
-analog@debian:~$ **cd ./u-boot-socfpga**
-analog@debian:~/u-boot-socfpga$ **git checkout rel_socfpga_v2022.01_22.11.02_pr**
-analog@debian:~/u-boot-socfpga$ **ln -sf ../arm-trusted-firmware/build/stratix10/release/bl31.bin .**
-analog@debian:~/u-boot-socfpga$ **sed -i &#39;s/earlycon panic=-1/earlycon panic=-1 console=ttyS0,115200 root=\/dev\/mmcblk0p2 rw rootwait/g&#39; configs/socfpga_stratix10_defconfig**
-analog@debian:~/u-boot-socfpga$ **sed -i &#39;/^CONFIG_NAND_BOOT=y/d&#39; configs/socfpga_stratix10_defconfig**
-analog@debian:~/u-boot-socfpga$ **sed -i &#39;/^CONFIG_SPL_NAND_SUPPORT=y/d&#39; configs/socfpga_stratix10_defconfig**
-analog@debian:~/u-boot-socfpga$ **sed -i &#39;/^CONFIG_CMD_UBI=y/d&#39; configs/socfpga_stratix10_defconfig**
-analog@debian:~/u-boot-socfpga$ **echo %%&#39;CONFIG_USE_BOOTCOMMAND=y&#39; &gt;&gt; configs/socfpga_stratix10_defconfig%%**
-analog@debian:~/u-boot-socfpga$ **echo %%&#39;CONFIG_BOOTCOMMAND=&quot;bridge enable 0xf; setenv ethaddr 00:15:17:ab:cd:ef; load mmc 0:1 ${kernel_addr_r} Image; load mmc 0:1 ${fdt_addr_r} socfpga_stratix10_socdk.dtb; booti ${kernel_addr_r} - ${fdt_addr_r}&quot;&#39; &gt;&gt; configs/socfpga_stratix10_defconfig%%**
-analog@debian:~/u-boot-socfpga$ **make socfpga_stratix10_defconfig**
-analog@debian:~/u-boot-socfpga$ **sed -i &#39;/4GB/,/0x80000000&gt;;/creg = &lt;0 0x00000000 0 0x80000000&gt;;&#39; arch/arm/dts/socfpga_stratix10_socdk.dts**
-analog@debian:~/u-boot-socfpga$ **make**
-analog@debian:~/u-boot-socfpga$ **cp u-boot.itb /media/analog/BOOT/**
-analog@debian:~/u-boot-socfpga$ **cd ~**
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>analog@debian:~$ git clone https://github.com/altera-opensource/u-boot-socfpga
+analog@debian:~$ cd ./u-boot-socfpga
+analog@debian:~/u-boot-socfpga$ git checkout rel_socfpga_v2022.01_22.11.02_pr
+analog@debian:~/u-boot-socfpga$ ln -sf ../arm-trusted-firmware/build/stratix10/release/bl31.bin .
+analog@debian:~/u-boot-socfpga$ sed -i &#39;s/earlycon panic=-1/earlycon panic=-1 console=ttyS0,115200 root=\/dev\/mmcblk0p2 rw rootwait/g&#39; configs/socfpga_stratix10_defconfig
+analog@debian:~/u-boot-socfpga$ sed -i &#39;/^CONFIG_NAND_BOOT=y/d&#39; configs/socfpga_stratix10_defconfig
+analog@debian:~/u-boot-socfpga$ sed -i &#39;/^CONFIG_SPL_NAND_SUPPORT=y/d&#39; configs/socfpga_stratix10_defconfig
+analog@debian:~/u-boot-socfpga$ sed -i &#39;/^CONFIG_CMD_UBI=y/d&#39; configs/socfpga_stratix10_defconfig
+analog@debian:~/u-boot-socfpga$ echo %%&#39;CONFIG_USE_BOOTCOMMAND=y&#39; &gt;&gt; configs/socfpga_stratix10_defconfig%%
+analog@debian:~/u-boot-socfpga$ echo %%&#39;CONFIG_BOOTCOMMAND=&quot;bridge enable 0xf; setenv ethaddr 00:15:17:ab:cd:ef; load mmc 0:1 ${kernel_addr_r} Image; load mmc 0:1 ${fdt_addr_r} socfpga_stratix10_socdk.dtb; booti ${kernel_addr_r} - ${fdt_addr_r}&quot;&#39; &gt;&gt; configs/socfpga_stratix10_defconfig%%
+analog@debian:~/u-boot-socfpga$ make socfpga_stratix10_defconfig
+analog@debian:~/u-boot-socfpga$ sed -i &#39;/4GB/,/0x80000000&gt;;/creg = &lt;0 0x00000000 0 0x80000000&gt;;&#39; arch/arm/dts/socfpga_stratix10_socdk.dts
+analog@debian:~/u-boot-socfpga$ make
+analog@debian:~/u-boot-socfpga$ cp u-boot.itb /media/analog/BOOT/
+analog@debian:~/u-boot-socfpga$ cd ~
 </pre></div>
 </div>
 </section>
 <section id="generate-sof-sram-object-file-and-jic-jtag-indirect-configuration-files">
 <h2>Generate .sof (SRAM Object File) and .jic (JTAG Indirect Configuration) files<a class="headerlink" href="#generate-sof-sram-object-file-and-jic-jtag-indirect-configuration-files" title="Link to this heading"></a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>analog@debian:~$ **git clone :git-hdl**:`hdl**`
-analog@debian:~$ **cd hdl/projects/ad9213_dual_ebz/s10soc**
-analog@debian:~/hdl/projects/ad9213_dual_ebz/s10soc$ **make**
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>analog@debian:~$ git clone :git-hdl:`hdl**`
+analog@debian:~$ cd hdl/projects/ad9213_dual_ebz/s10soc
+analog@debian:~/hdl/projects/ad9213_dual_ebz/s10soc$ make
 Building ad9213_dual_ebz_s10soc [/home/analog/hdl/projects/ad9213_dual_ebz/s10soc/ad9213_dual_ebz_s10soc_quartus.log] ... OK
-analog@debian:~/hdl/projects/ad9213_dual_ebz/s10soc$ **quartus_pfg -c ad9213_dual_ebz_s10soc.sof -o hps_path=../../../../u-boot-socfpga/spl/u-boot-spl-dtb.hex ad9213_dual_ebz_s10soc_hps.sof**
-analog@debian:~/hdl/projects/ad9213_dual_ebz/s10soc$ **quartus_pfg -c ad9213_dual_ebz_s10soc_hps.sof ad9213_dual_ebz_s10soc_hps.jic -o device=MT25QU02G -o flash_loader=1SX280HU2F50E1VGAS**
+analog@debian:~/hdl/projects/ad9213_dual_ebz/s10soc$ quartus_pfg -c ad9213_dual_ebz_s10soc.sof -o hps_path=../../../../u-boot-socfpga/spl/u-boot-spl-dtb.hex ad9213_dual_ebz_s10soc_hps.sof
+analog@debian:~/hdl/projects/ad9213_dual_ebz/s10soc$ quartus_pfg -c ad9213_dual_ebz_s10soc_hps.sof ad9213_dual_ebz_s10soc_hps.jic -o device=MT25QU02G -o flash_loader=1SX280HU2F50E1VGAS
 </pre></div>
 </div>
 </section>

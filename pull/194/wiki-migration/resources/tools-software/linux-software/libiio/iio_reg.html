@@ -593,7 +593,7 @@ Content on this topic
 <li><p><a class="reference internal" href="iio_writedev.html"><span class="doc">iio_writedev</span></a> : write an IIO buffer device</p></li>
 <li><p><a class="reference internal" href="#"><span class="doc">iio_reg</span></a> : read or write SPI or I2C registers in an IIO device (useful to debug drivers)</p></li>
 </ul>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>analog@imhotep:~$ **iio_reg** -h
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>analog@imhotep:~$ iio_reg -h
 Usage:
 
 iio_reg &lt;device&gt; &lt;register&gt; [&lt;value&gt;]
@@ -604,7 +604,7 @@ iio_reg &lt;device&gt; &lt;register&gt; [&lt;value&gt;]
 <p>The <code class="docutils literal notranslate"><span class="pre">iio_reg</span></code> application can also connect to a libiio remote device via IP. Prior in running <code class="docutils literal notranslate"><span class="pre">iio_reg</span></code> set the <code class="docutils literal notranslate"><span class="pre">IIOD_REMOTE</span></code> environmental variable.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the host or target</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="o">**</span><span class="n">export</span> <span class="n">IIOD_REMOTE</span><span class="o">=</span><span class="n">IP</span> <span class="n">address</span> <span class="n">of</span> <span class="n">the</span> <span class="n">remote</span> <span class="n">platform</span><span class="o">**</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">export</span> <span class="n">IIOD_REMOTE</span><span class="o">=</span><span class="n">IP</span> <span class="n">address</span> <span class="n">of</span> <span class="n">the</span> <span class="n">remote</span> <span class="n">platform</span>
 </pre></div>
 </div>
 </div>
@@ -612,14 +612,14 @@ iio_reg &lt;device&gt; &lt;register&gt; [&lt;value&gt;]
 <section id="finding">
 <h2>Finding<a class="headerlink" href="#finding" title="Link to this heading"></a></h2>
 <p>An IIO context can have multiple logical devices, and sometimes not all devices will have a specific register interface. To find out which IIO device support register access, try (remember that <code class="docutils literal notranslate"><span class="pre">iio_attr</span></code> supports a <code class="docutils literal notranslate"><span class="pre">-D</span></code> option to look for debug attributes).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># **iio_attr  -u ip:192.168.2.1 -D**</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># iio_attr  -u ip:192.168.2.1 -D</span>
 <span class="n">IIO</span> <span class="n">context</span> <span class="n">has</span> <span class="mi">4</span> <span class="n">devices</span><span class="p">:</span>
     <span class="n">iio</span><span class="p">:</span><span class="n">device0</span><span class="p">,</span> <span class="n">ad9361</span><span class="o">-</span><span class="n">phy</span><span class="p">:</span> <span class="n">found</span> <span class="mi">179</span> <span class="n">debug</span> <span class="n">attributes</span>
     <span class="n">iio</span><span class="p">:</span><span class="n">device1</span><span class="p">,</span> <span class="n">xadc</span><span class="p">:</span> <span class="n">found</span> <span class="mi">0</span> <span class="n">debug</span> <span class="n">attributes</span>
     <span class="n">iio</span><span class="p">:</span><span class="n">device2</span><span class="p">,</span> <span class="n">cf</span><span class="o">-</span><span class="n">ad9361</span><span class="o">-</span><span class="n">dds</span><span class="o">-</span><span class="n">core</span><span class="o">-</span><span class="n">lpc</span><span class="p">:</span> <span class="n">found</span> <span class="mi">1</span> <span class="n">debug</span> <span class="n">attributes</span>
     <span class="n">iio</span><span class="p">:</span><span class="n">device3</span><span class="p">,</span> <span class="n">cf</span><span class="o">-</span><span class="n">ad9361</span><span class="o">-</span><span class="n">lpc</span><span class="p">:</span> <span class="n">found</span> <span class="mi">2</span> <span class="n">debug</span> <span class="n">attributes</span>
 
-<span class="c1"># **iio_attr  -u ip:192.168.2.1 -D . direct_reg_access**</span>
+<span class="c1"># iio_attr  -u ip:192.168.2.1 -D . direct_reg_access</span>
 <span class="n">dev</span> <span class="s1">&#39;ad9361-phy&#39;</span><span class="p">,</span> <span class="n">debug</span> <span class="n">attr</span> <span class="s1">&#39;direct_reg_access&#39;</span><span class="p">,</span> <span class="n">value</span> <span class="p">:</span><span class="s1">&#39;0x0&#39;</span>
 <span class="n">dev</span> <span class="s1">&#39;cf-ad9361-dds-core-lpc&#39;</span><span class="p">,</span> <span class="n">debug</span> <span class="n">attr</span> <span class="s1">&#39;direct_reg_access&#39;</span><span class="p">,</span> <span class="n">value</span> <span class="p">:</span><span class="s1">&#39;0x90162&#39;</span>
 <span class="n">dev</span> <span class="s1">&#39;cf-ad9361-lpc&#39;</span><span class="p">,</span> <span class="n">debug</span> <span class="n">attr</span> <span class="s1">&#39;direct_reg_access&#39;</span><span class="p">,</span> <span class="n">value</span> <span class="p">:</span><span class="s1">&#39;0x0&#39;</span>
