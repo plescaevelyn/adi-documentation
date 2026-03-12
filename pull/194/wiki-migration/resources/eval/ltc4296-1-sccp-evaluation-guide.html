@@ -127,12 +127,15 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#sccp-example-waveforms">SCCP Example Waveforms</a><ul>
+<li><a class="reference internal" href="#i-initialization">(i) Initialization</a><ul>
 <li><a class="reference internal" href="#reset-pulse">Reset Pulse</a></li>
 <li><a class="reference internal" href="#presence-detect-high-time">Presence-Detect High Time</a></li>
 <li><a class="reference internal" href="#presence-detect-low-time">Presence-Detect Low Time</a></li>
 <li><a class="reference internal" href="#recovery-time">Recovery Time</a></li>
 <li><a class="reference internal" href="#pd-reservoir-capacitor-recharge-time">PD Reservoir Capacitor Recharge Time</a></li>
 <li><a class="reference internal" href="#rise-fall-time">Rise/Fall Time</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#id2">Write Time Slot</a></li>
 <li><a class="reference internal" href="#ii-broadcast-address">(ii) Broadcast Address</a></li>
 <li><a class="reference internal" href="#iii-read-scratchpad-command">(iii) Read_Scratchpad Command</a><ul>
@@ -665,7 +668,7 @@ Content on this topic
 </ul>
 <p>At the PSE, the LTC4296-1 is set up for the classification state by the microcontroller. Classification is configured by setting the software PSE ready bit (PxCFG0, Bit6, SW_PSE_READY) and the classification mode bit (PXCFG0, Bit 13, SET_CLASSIFICATION_MODE) before entering the detection state. If the microcontroller determines a valid PD with a compatible class is present, the port can proceed to the power-up state by setting the port software power available bit (Register PxCFG0, Bit 5, SW_POWER_AVAILABLE) and the end classification bit (Register PxCFG0, Bit 14, END_CLASSIFICATION). Further description of port states can be found in the <a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/data-sheets/ltc4296-1.pdf" target="_blank">LTC4296-1 Datasheet</a>.</p>
 <p>On the PD side, the LTC9111 detects the SCCP logic states on the lines through SNS1 and SNS2 and uses external MOSFETs (M13/M14) to pull-down the port voltage during classification in order to transmit a logic low. The use of two external MOSFETs allows successful classification regardless of input connector polarity configuration.</p>
-<img alt="https://wiki.analog.com/_media/resources/eval/spoe_system.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_system.png" />
+<p><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/spoe_system.png" /></p>
 <div class="centeralign docutils container">
 <p>//Figure 1. SPoE System //</p>
 </div>
@@ -708,7 +711,7 @@ Content on this topic
 <h3>Initialization<a class="headerlink" href="#initialization" title="Link to this heading"></a></h3>
 <p>The PSE initiates the SCCP transaction by pulling down on the bus during the reset pulse. After which the PD responds with a pull-down presence pulse. During the reset pulse, the PSE pulls down on the bus voltage below the input logic low voltage, V<sub>TL</sub> (2V PSE, 1V PD), for reset time low time, t<sub>RSTL</sub> (8ms-10.5ms).</p>
 <p>Once the PSE releases the bus, the PD detects the rising edge cross the input logic high voltage V<sub>TH</sub> (3V) and waits the presence-detect high time, t<sub>PDH</sub> (0.7ms-1.3ms), before transmitting a presence pulse. The PSE samples for the PD presence pulse by t<sub>MSP</sub> (1.8ms-2.2ms). The PD holds the presence pulse for the presence-detect low time, t<sub>PDL</sub> (2.8ms-5.2ms).</p>
-<p><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_ideal_initialization5.png" /></p>
+<p><img alt="image2" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_ideal_initialization5.png" /></p>
 <div class="centeralign docutils container">
 <p>//Figure 2. SCCP Initialization //</p>
 </div>
@@ -716,7 +719,7 @@ Content on this topic
 <section id="write-time-slot">
 <h3>Write Time Slot<a class="headerlink" href="#write-time-slot" title="Link to this heading"></a></h3>
 <p>The duration of the write time slot for either a ‘0’ or ‘1’ should last for a maximum of t<sub>WRITESLOT</sub> (2.78ms). When the PSE writes a ‘0’ to the PD, first the PSE pulls down the bus voltage below the V<sub>TL</sub>, then the PSE releases within the write 0 low time, t<sub>W0L</sub> (1.8ms-2.2ms), as seen in Figure 3. In the case where the PSE aims to write a ‘1’, the PSE pulls down on the bus voltage, and then it releases the line within the write 1 low time, t<sub>W1L</sub> (0.09ms-0.61ms), as illustrated in Figure 3. See Figures 26-29 for example waveforms.</p>
-<p><img alt="image2" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_ideal_write_slot4.png" /></p>
+<p><img alt="image3" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_ideal_write_slot4.png" /></p>
 <div class="centeralign docutils container">
 <p>//Figure 3. SCCP Write Time Slot //</p>
 </div>
@@ -724,7 +727,7 @@ Content on this topic
 <section id="read-time-slot">
 <h3>Read Time Slot<a class="headerlink" href="#read-time-slot" title="Link to this heading"></a></h3>
 <p>The PSE initiates the read time slot by pulling low on the bus. Subsequently, the PSE releases the bus within t<sub>W1L</sub>, at which point the PD responds by pulling the bus low for the read 0 low time, t<sub>R0L</sub> (1.75ms-3.25ms), in order to transmit a ‘0’ (Figure 4). Alternatively, if the intention is to transmit a ‘1’, the PD refrains from pulling the bus low after the read 1 low time, t<sub>W1L</sub>. This read time slot is repeated for each PD bit, see Figure 30-34 for example waveforms. The PD sends data LSB first. Each of these read time slots has a maximum duration of t<sub>READSLOT</sub> (3.83ms).</p>
-<p><img alt="image3" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_read_time_slot4.png" /></p>
+<p><img alt="image4" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_read_time_slot4.png" /></p>
 <div class="centeralign docutils container">
 <p>//Figure 4. SCCP Read Time Slot //</p>
 </div>
@@ -769,7 +772,7 @@ Content on this topic
 <ul class="simple">
 <li><p>In the final step, the PSE reads the cyclic redundancy check (CRC) value of the PD. This value is derived from the received scratchpad class info word.</p></li>
 </ul>
-<p><img alt="image4" src="https://wiki.analog.com/_media/resources/eval/spoe_basic_sccp_transaction.png" /></p>
+<img alt="https://wiki.analog.com/_media/resources/eval/spoe_basic_sccp_transaction.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_basic_sccp_transaction.png" />
 <div class="centeralign docutils container">
 <p>//Figure 5. SCCP Transaction //</p>
 </div>
@@ -1486,76 +1489,88 @@ LTC4296_writeRegister(REG_P0CFG0 + 0x10\*port, pncfg0_old | (1&lt;&lt;14));
 <p>Refer to <a class="reference internal" href="user-guides/eval-spoe-kit-az-wiki-user-guide.html"><span class="doc">EVAL-SPoE-KIT-AZ Evaluation Kit User Guide</span></a> for EVAL-kit setup.</p>
 <p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_gui_part_1.png"><img alt="image6" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_gui_part_1.png" style="width: 200px;" /></a></p>
 <div class="centeralign docutils container">
-<p>//Figure 15. SCCP Enable Configurations through evaluation GUI *</p>
+<p>//Figure 15. SCCP Enable Configurations through evaluation GUI //</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_gui_part_2.png"><img alt="image7" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_gui_part_2.png" style="width: 200px;" /></a></p>
 </div>
 <div class="centeralign docutils container">
-<p><em>Figure 16. Successful Port Turn On GUI Port Status</em></p>
+<p>//Figure 16. Successful Port Turn On GUI Port Status //</p>
 </div>
 </section>
 </section>
 <section id="sccp-example-waveforms">
 <h2>SCCP Example Waveforms<a class="headerlink" href="#sccp-example-waveforms" title="Link to this heading"></a></h2>
 <p>Below are detailed descriptions of the SCCP transactions, parts i-vi. With waveforms captured using the setup in Figure 17.</p>
-<p><img alt="image7" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_waveform_key4.png" /></p>
+<p><img alt="image8" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_waveform_key4.png" /></p>
 <div class="centeralign docutils container">
-<p>//Figure 17. Proceeding Waveform Probe Location *</p>
+<p>//Figure 17. Proceeding Waveform Probe Location //</p>
 </div>
-<p>==== (i) Initialization ====</p>
+<section id="i-initialization">
+<h3>(i) Initialization<a class="headerlink" href="#i-initialization" title="Link to this heading"></a></h3>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_initialization_sequence3.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_initialization_sequence3.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_initialization_sequence3.png" style="width: 600px;" />
+</a>
 <div class="centeralign docutils container">
-<p><em>Figure 18. Initialization Sequence</em></p>
+<p>//Figure 18. Initialization Sequence //</p>
 </div>
 <section id="reset-pulse">
-<h3>Reset Pulse<a class="headerlink" href="#reset-pulse" title="Link to this heading"></a></h3>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_reset_pulse3.png"><img alt="image8" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_reset_pulse3.png" style="width: 600px;" /></a></p>
+<h4>Reset Pulse<a class="headerlink" href="#reset-pulse" title="Link to this heading"></a></h4>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_reset_pulse3.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_reset_pulse3.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_reset_pulse3.png" style="width: 600px;" />
+</a>
 <div class="centeralign docutils container">
 <p>//Figure 19. Initialization Sequence Reset Pulse //</p>
 </div>
 </section>
 <section id="presence-detect-high-time">
-<h3>Presence-Detect High Time<a class="headerlink" href="#presence-detect-high-time" title="Link to this heading"></a></h3>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_presence_detect_high3.png"><img alt="image9" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_presence_detect_high3.png" style="width: 600px;" /></a></p>
+<h4>Presence-Detect High Time<a class="headerlink" href="#presence-detect-high-time" title="Link to this heading"></a></h4>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_presence_detect_high3.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_presence_detect_high3.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_presence_detect_high3.png" style="width: 600px;" />
+</a>
 <div class="centeralign docutils container">
 <p>//Figure 20. Initialization Sequence Presence-Detect High Time //</p>
 </div>
 </section>
 <section id="presence-detect-low-time">
-<h3>Presence-Detect Low Time<a class="headerlink" href="#presence-detect-low-time" title="Link to this heading"></a></h3>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_presence_detect_low3.png"><img alt="image10" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_presence_detect_low3.png" style="width: 600px;" /></a></p>
+<h4>Presence-Detect Low Time<a class="headerlink" href="#presence-detect-low-time" title="Link to this heading"></a></h4>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_presence_detect_low3.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_presence_detect_low3.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_presence_detect_low3.png" style="width: 600px;" />
+</a>
 <div class="centeralign docutils container">
 <p>//Figure 21. Initialization Sequence Presence Detect Low Time //</p>
 </div>
 </section>
 <section id="recovery-time">
-<h3>Recovery Time<a class="headerlink" href="#recovery-time" title="Link to this heading"></a></h3>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_recovery_time_initializtion3.png"><img alt="image11" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_recovery_time_initializtion3.png" style="width: 600px;" /></a></p>
+<h4>Recovery Time<a class="headerlink" href="#recovery-time" title="Link to this heading"></a></h4>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_recovery_time_initializtion3.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_recovery_time_initializtion3.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_recovery_time_initializtion3.png" style="width: 600px;" />
+</a>
 <div class="centeralign docutils container">
 <p>//Figure 22. Initialization Sequence Recovery Time //</p>
 </div>
 </section>
 <section id="pd-reservoir-capacitor-recharge-time">
-<h3>PD Reservoir Capacitor Recharge Time<a class="headerlink" href="#pd-reservoir-capacitor-recharge-time" title="Link to this heading"></a></h3>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_chrg_initialization.png"><img alt="image12" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_chrg_initialization.png" style="width: 600px;" /></a></p>
+<h4>PD Reservoir Capacitor Recharge Time<a class="headerlink" href="#pd-reservoir-capacitor-recharge-time" title="Link to this heading"></a></h4>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_chrg_initialization.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_chrg_initialization.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_chrg_initialization.png" style="width: 600px;" />
+</a>
 <div class="centeralign docutils container">
 <p>//Figure 23. Initialization Sequence PD Reservoir Capacitor Recharge Time //</p>
 </div>
 </section>
 <section id="rise-fall-time">
-<h3>Rise/Fall Time<a class="headerlink" href="#rise-fall-time" title="Link to this heading"></a></h3>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_rise_time2.png"><img alt="image13" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_rise_time2.png" style="width: 600px;" /></a></p>
+<h4>Rise/Fall Time<a class="headerlink" href="#rise-fall-time" title="Link to this heading"></a></h4>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_rise_time2.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_rise_time2.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_rise_time2.png" style="width: 600px;" />
+</a>
 <div class="centeralign docutils container">
 <p>//Figure 24. Initialization Sequence Rise Time //</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_fall_time2.png"><img alt="image14" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_fall_time2.png" style="width: 600px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_fall_time2.png"><img alt="image9" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_fall_time2.png" style="width: 600px;" /></a></p>
 </div>
 <div class="centeralign docutils container">
 <p>//Figure 25. Initialization Sequence Fall Time //</p>
 </div>
 </section>
+</section>
 <section id="id2">
 <h3>Write Time Slot<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_write_time_slot_03.png"><img alt="image15" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_write_time_slot_03.png" style="width: 600px;" /></a></p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_write_time_slot_03.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_write_time_slot_03.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_write_time_slot_03.png" style="width: 600px;" />
+</a>
 <div class="centeralign docutils container">
 <p>//Figure 26. PSE Writes 0 Time Slot //</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_writeslot_1_2.png"><img alt="image16" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_writeslot_1_2.png" style="width: 600px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_writeslot_1_2.png"><img alt="image10" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_writeslot_1_2.png" style="width: 600px;" /></a></p>
 </div>
 <div class="centeralign docutils container">
 <p>//Figure 27. PSE Writes 1 Time Slot //</p>
@@ -1563,14 +1578,16 @@ LTC4296_writeRegister(REG_P0CFG0 + 0x10\*port, pncfg0_old | (1&lt;&lt;14));
 </section>
 <section id="ii-broadcast-address">
 <h3>(ii) Broadcast Address<a class="headerlink" href="#ii-broadcast-address" title="Link to this heading"></a></h3>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_broadcast_address3.png"><img alt="image17" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_broadcast_address3.png" style="width: 600px;" /></a></p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_broadcast_address3.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_broadcast_address3.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_broadcast_address3.png" style="width: 600px;" />
+</a>
 <div class="centeralign docutils container">
 <p>//Figure 28. PSE Broadcast (0xCC) //</p>
 </div>
 </section>
 <section id="iii-read-scratchpad-command">
 <h3>(iii) Read_Scratchpad Command<a class="headerlink" href="#iii-read-scratchpad-command" title="Link to this heading"></a></h3>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_read_scratchpad3.png"><img alt="image18" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_read_scratchpad3.png" style="width: 600px;" /></a></p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_read_scratchpad3.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_read_scratchpad3.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_read_scratchpad3.png" style="width: 600px;" />
+</a>
 <div class="centeralign docutils container">
 <p>//Figure 29. PSE Read-Scratchpad Command (0xAA) //</p>
 </div>
@@ -1684,31 +1701,36 @@ LTC4296_writeRegister(REG_P0CFG0 + 0x10\*port, pncfg0_old | (1&lt;&lt;14));
 </section>
 <section id="id3">
 <h3>Read Time Slot<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_read_time_slot_03.png"><img alt="image19" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_read_time_slot_03.png" style="width: 600px;" /></a></p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_read_time_slot_03.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_read_time_slot_03.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_read_time_slot_03.png" style="width: 600px;" />
+</a>
 <div class="centeralign docutils container">
-<p>//Figure 30. PSE Read 0 Time Slot *</p>
+<p>//Figure 30. PSE Read 0 Time Slot //</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_read_time_slot_13.png"><img alt="image11" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_read_time_slot_13.png" style="width: 600px;" /></a></p>
 </div>
 <div class="centeralign docutils container">
-<p><em>Figure 31. PSE Read 1 Time Slot</em></p>
+<p>//Figure 31. PSE Read 1 Time Slot //</p>
 </div>
 </section>
 <section id="iv-read-class-type-info-low-byte">
 <h3>(iv) Read CLASS_TYPE_INFO low byte<a class="headerlink" href="#iv-read-class-type-info-low-byte" title="Link to this heading"></a></h3>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_class_type_info_low_byte_updated.png"><img alt="image20" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_class_type_info_low_byte_updated.png" style="width: 600px;" /></a></p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_class_type_info_low_byte_updated.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_class_type_info_low_byte_updated.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_class_type_info_low_byte_updated.png" style="width: 600px;" />
+</a>
 <div class="centeralign docutils container">
 <p>//Figure 32. Read CLASS_TYPE_INFO low byte //</p>
 </div>
 </section>
 <section id="v-read-class-type-info-high-byte">
 <h3>(v) Read CLASS_TYPE_INFO high byte<a class="headerlink" href="#v-read-class-type-info-high-byte" title="Link to this heading"></a></h3>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_class_type_info_high_byte_updated.png"><img alt="image21" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_class_type_info_high_byte_updated.png" style="width: 600px;" /></a></p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_class_type_info_high_byte_updated.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_class_type_info_high_byte_updated.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_class_type_info_high_byte_updated.png" style="width: 600px;" />
+</a>
 <div class="centeralign docutils container">
 <p>//Figure 33. Read CLASS_TYPE_INFO high byte //</p>
 </div>
 </section>
 <section id="vi-read-crc-byte">
 <h3>(vi) Read CRC byte<a class="headerlink" href="#vi-read-crc-byte" title="Link to this heading"></a></h3>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_pd_crc_updated.png"><img alt="image22" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_pd_crc_updated.png" style="width: 600px;" /></a></p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_pd_crc_updated.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_pd_crc_updated.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_pd_crc_updated.png" style="width: 600px;" />
+</a>
 <div class="centeralign docutils container">
 <p>//Figure 34. PD CRC //</p>
 </div>

@@ -618,7 +618,8 @@ Content on this topic
 <li><p>You (your finger to warm up the LM75, or shake the ADXL3x5)</p></li>
 <li><p>The Earth (to provide a precise, low-noise, -9.8m/s<sup>2</sup> acceleration)</p></li>
 </ul>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/simple_iio_hardware.png"><img alt="image1" src="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/simple_iio_hardware.png" style="width: 400px;" /></a></p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/simple_iio_hardware.png"><img alt="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/simple_iio_hardware.png" class="align-center" src="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/simple_iio_hardware.png" style="width: 400px;" />
+</a>
 <div class="centeralign docutils container">
 <p><strong>Figure 1. Ultra-simple IIO-based system</strong></p>
 </div>
@@ -628,12 +629,12 @@ Content on this topic
 <section id="representative-systems">
 <h2>Representative systems<a class="headerlink" href="#representative-systems" title="Link to this heading"></a></h2>
 <p>We are intentionally starting with an extremely simple example. But once you understand how to communicate with an LM74, ADXL345, or ADXL355, you’re well over the intitial learning curve to understanding much more complicated systems. The <a class="reference internal" href="../../tools/pluto.html"><span class="doc">ADALM-Pluto</span></a> is a great example - it contains an AD9363 RF Agile Transcieiver, Zynq SoC FPGA, Memory, USB interface, and much more. Even the simplified block diagram is pretty daunting:</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/tools/pluto/users/pluto_medium_block_diagram.png"><img alt="image2" src="https://wiki.analog.com/_media/university/tools/pluto/users/pluto_medium_block_diagram.png" style="width: 200px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/tools/pluto/users/pluto_medium_block_diagram.png"><img alt="image1" src="https://wiki.analog.com/_media/university/tools/pluto/users/pluto_medium_block_diagram.png" style="width: 200px;" /></a></p>
 <div class="centeralign docutils container">
 <p><strong>Figure 2. Pluto Simplified Block Diagram</strong></p>
 </div>
 <p>If the Pluto wasn’t scary enough, the <a class="icon adi reference external" href="https://www.analog.com/cn0566" target="_blank">Phased Array (Phaser) Development Platform</a> might be a step in that direction. It incorporates two <a class="icon adi reference external" href="https://www.analog.com/ADAR1000" target="_blank">ADAR1000</a> beamformers, an <a class="icon adi reference external" href="https://www.analog.com/AF4159" target="_blank">ADF4159 Fast Waveform Generating, 13 GHz, Fractional-N Frequency Synthesizer</a> and uses the Pluto as its IF digitizer. It’s also got a <a class="icon adi reference external" href="https://www.analog.com/AD7291" target="_blank">AD7291 8-Channel, I2C, 12-Bit SAR ADC with Temperature Sensor</a> for basic monitoring; a simple device by comparison, but it’s got its own device driver, and is adjacent the more complex devices both physically and in software.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0566/2-23-2023_4-37-00_pm.png"><img alt="image3" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0566/2-23-2023_4-37-00_pm.png" style="width: 600px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0566/2-23-2023_4-37-00_pm.png"><img alt="image2" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0566/2-23-2023_4-37-00_pm.png" style="width: 600px;" /></a></p>
 <div class="centeralign docutils container">
 <p><strong>Figure 3. Phaser System Overview</strong></p>
 </div>
@@ -642,14 +643,14 @@ Content on this topic
 <section id="connecting-the-hardware">
 <h2>Connecting the Hardware<a class="headerlink" href="#connecting-the-hardware" title="Link to this heading"></a></h2>
 <p>Before we dig too deep into software stuff, let’s prepare the hardware. There are lots of ways to connect boards together, custom adapters, Raspberry Pi prototyping hats, etc. The <a class="icon adi reference external" href="https://www.analog.com/PMD-RPI-INTZ" target="_blank">PMD-RPI-INTZ</a> is an interposer that simplifies connecting I2C and SPI Pmod boards, QuikEval compatible eval boards, and Power System Managemement (PSM) eval boards to a Raspberry Pi. Figure 4 shows the <a class="icon link reference external" href="https://store.digilentinc.com/pmod-acl-3-axis-accelerometer/" target="_blank">ADXL345 Pmod</a> (available directly from Digilent and from various distributors) mounted to the PMD-RPI-INTZ board. Note that the Pmod must be installed on P1, which uses SPI CS0 and has the interrupt pin connected to GPIO 19.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/adxl354_pmd-rpi-intz.jpg"><img alt="image4" src="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/adxl354_pmd-rpi-intz.jpg" style="width: 400px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/adxl354_pmd-rpi-intz.jpg"><img alt="image3" src="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/adxl354_pmd-rpi-intz.jpg" style="width: 400px;" /></a></p>
 <div class="centeralign docutils container">
 <p><strong>Figure 4. ADXL345 Pmod Mounted to PMD-RPI-INTZ Interposer</strong></p>
 </div>
 <p>Another option that generally applies to eval boards with test points on the digital signals is to use discrete jumper wires. Five inch jumpers from Schmartboard: <a class="icon link reference external" href="https://schmartboard.com/wire-jumpers/female-jumpers/5-inch/" target="_blank">Schmartboard Jumpers</a> are very convenient.</p>
 <p>If you are using Jumpers, use Figure 1 as a visual aid and make the connections shown in Figure 5. The accelerometer board is a Digilent model Pmod:ACL, It is essentially a breakout board for the ADXL345.</p>
 <p>In theory, any Raspberry Pi should work, although it is probably best to use a modern model with a 40-pin expansion header. (The model shown in Figure 1 is a model 3B, version 1.2.) Note that there are TWO SPI ports - SPI0 and SPI1. We will be using SPI0 (Pins 8, 19, 21, 23)</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/rpi_adxl345_connections.png"><img alt="image5" src="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/rpi_adxl345_connections.png" style="width: 400px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/rpi_adxl345_connections.png"><img alt="image4" src="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/rpi_adxl345_connections.png" style="width: 400px;" /></a></p>
 <div class="centeralign docutils container">
 <p><strong>Figure 5. RPi-Pmod connections</strong></p>
 </div>
@@ -668,12 +669,12 @@ Content on this topic
 <h2>Burning SD cards<a class="headerlink" href="#burning-sd-cards" title="Link to this heading"></a></h2>
 <p>In order to boot the Raspberry Pi, you will need to obtain an SD card “image”, and write (or “burn”) it to a card. We’ll talk about where to get the correct image shortly. This is a fairly common step in bringing up embedded computers - Raspberry Pi, BeagleBone, Zedboard, Arrow SoCkit, or any machine that boots from an SD card. There are lots of ways to burn images, but the most straightforward way is to use the standard Raspberry Pi Imager, available here: <a class="icon link reference external" href="https://www.raspberrypi.com/software/" target="_blank">Raspberry Pi OS (including Raspbery Pi Imager</a></p>
 <p>There are instructions for Windows, Mac, and Linux. The imager also works on machines that encrypt data being written to external drives since it’s writing “raw” data. HOWEVER - beware encryption software when editing configuration files! (More on that later…)</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/raspberry_pi_imager.png"><img alt="image6" src="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/raspberry_pi_imager.png" style="width: 400px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/raspberry_pi_imager.png"><img alt="image5" src="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/raspberry_pi_imager.png" style="width: 400px;" /></a></p>
 <div class="centeralign docutils container">
 <p><strong>Figure 6. Raspberry Pi Imager Screenshot</strong></p>
 </div>
 <p>A new SD card is usually preformatted as a single EXFAT partition, usable by all operating system. But after burning an image to the card, it will show up as several partitions, not all of which are visible to all operating systems. So if you burn a card in Windows, and a popup appears saying “This drive needs to be formatted, would you like to format now?”, the answer is <strong>NO!</strong> Figure 7 shows the SD card partitions before and after burning the image. Attempting to read the partition map in Windows (under Administrative Tools, Disk Management) will show the ext4 partition as “unknown”</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/sd_card_partitions.png"><img alt="image7" src="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/sd_card_partitions.png" style="width: 800px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/sd_card_partitions.png"><img alt="image6" src="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/sd_card_partitions.png" style="width: 800px;" /></a></p>
 <div class="centeralign docutils container">
 <p><strong>Figure 7. SD card partitions before and after “burning”</strong></p>
 </div>
@@ -716,7 +717,7 @@ Content on this topic
 </pre></div>
 </div>
 <p>(Enter the root password, “analog” by default unless you followed the advice above to change it.) You should then see IIO oscilloscope running as shown in Figure 8! Also note that IIO Oscilloscope will run without root privileges, but all devices will be read-only. For example, you won’t be able to change the ADXL3x5’s sampling frequency, or LM75’s over/under temperature thresholds.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/rpi_desktop.png"><img alt="image8" src="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/rpi_desktop.png" style="width: 600px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/rpi_desktop.png"><img alt="image7" src="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/rpi_desktop.png" style="width: 600px;" /></a></p>
 <div class="centeralign docutils container">
 <p><strong>Figure 8. Raspberry Pi w/ ADI Kuiper Linux desktop</strong></p>
 </div>
@@ -726,7 +727,7 @@ Content on this topic
 <h2>Device Tree Overlays<a class="headerlink" href="#device-tree-overlays" title="Link to this heading"></a></h2>
 <p>When we first powered up the Raspberry Pi and ran IIO Oscilloscope it didn’t find anything. While we do have our ADXL3x5/LM75 physically connected to the board, Linux doesn’t know about it yet because UNlike USB, PCI, SCSI, Firewire, HDMI, etc, SPI and I2C devices do not support enumeration. How do we tell the Linux kernel what we’ve connected to the expansion header? The answer is the “Device Tree Overlay”.</p>
 <p>While you won’t have to do anything more than editing a couple of files in this tutorial, it helps to understand a bit about what is going on under the surface. A “Device Tree” contains information about a system’s hardware - what peripherals exist (like displays, memory, USB, Ethernet controllers, GPIO pins, etc.) A “Device Tree Overlay” contains information about additional connected hardware, like our ADXL3x5/LM75. Figure 9 shows a screenshot of the ADXL345’s overlay source. It shows that the ADXL345 is connected to the SPI port, using the first CS signal (CS0), the maximum SPI clock frequency is 1MHz, and the interrupt signal is connected to Pin 19 (as shown in the connection diagram above.)</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/device_tree.png"><img alt="image9" src="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/device_tree.png" style="width: 400px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/device_tree.png"><img alt="image8" src="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/device_tree.png" style="width: 400px;" /></a></p>
 <div class="centeralign docutils container">
 <p><strong>Figure 9. Partial ADXL345 overlay source (dts)</strong></p>
 </div>
@@ -750,10 +751,10 @@ Content on this topic
 <span class="c1"># dtoverlay=rpi-lm75,addr=0x48</span>
 <span class="n">dtparam</span><span class="o">=</span><span class="n">act_led_trigger</span><span class="o">=</span><span class="n">heartbeat</span>
 <span class="n">dtoverlay</span><span class="o">=</span><span class="n">gpio</span><span class="o">-</span><span class="n">shutdown</span><span class="p">,</span><span class="n">gpio_pin</span><span class="o">=</span><span class="mi">21</span><span class="p">,</span><span class="n">active_low</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">gpiopull</span><span class="o">=</span><span class="n">up</span>
-
-<span class="o">|</span><span class="n">image10</span><span class="o">|</span>
 </pre></div>
 </div>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/edit_config.png"><img alt="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/edit_config.png" class="align-center" src="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/edit_config.png" style="width: 400px;" />
+</a>
 <div class="centeralign docutils container">
 <p><strong>Figure 10. Editing config.txt directly on Raspberry Pi</strong></p>
 </div>
@@ -782,7 +783,7 @@ Content on this topic
 <section id="hello-adxl345-adxl355-or-lm75">
 <h2>Hello, ADXL345, ADXL355, or LM75!<a class="headerlink" href="#hello-adxl345-adxl355-or-lm75" title="Link to this heading"></a></h2>
 <p>If all went well, Linux should have booted, found the ADXL3x5 or LM75, and loaded its driver. Run IIO Oscilloscope again. locate the DMM screen, check the ADXL345, select all channels, and click the triangular “play” button. You should see acceleration values displayed as shown in Figure 11.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/iio_scope_adxl345.png"><img alt="image11" src="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/iio_scope_adxl345.png" style="width: 400px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/iio_scope_adxl345.png"><img alt="image9" src="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/iio_scope_adxl345.png" style="width: 400px;" /></a></p>
 <div class="centeralign docutils container">
 <p><strong>Figure 11. IIO Oscilloscope showing ADXL345 channels</strong></p>
 </div>
@@ -797,18 +798,18 @@ Content on this topic
 </div>
 <p>Which means “list all processes from all users, but only display ones that include the text “iiod””. You should see a process running as shown in Figure 12 below. (Note that this is the login screen for an ADALM2000 - it’s all the same.)</p>
 <p>And the red line relates this process back to the handy little diagram from <a class="reference internal" href="../../../resources/tools-software/linux-software/libiio.html"><span class="doc">What is Libiio?</span></a> (We will be recycling that diagram - a lot.)</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/iiod_process_screenshot.png"><img alt="image12" src="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/iiod_process_screenshot.png" style="width: 400px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/iiod_process_screenshot.png"><img alt="image10" src="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/iiod_process_screenshot.png" style="width: 400px;" /></a></p>
 <div class="centeralign docutils container">
 <p><strong>Figure 12. IIOD process</strong></p>
 </div>
 <p>The other piece is libiio on the remote host. LibIIO can be obtained from:</p>
-<p><a class="icon git reference external" href="https://github.com/analogdevicesinc/libiio/tree/main/releases" target="_blank">LibIIO Github Repo</a></p>
+<p><a class="icon link reference external" href="https://github.com/analogdevicesinc/libiio/releases" target="_blank">LibIIO Github Repo</a></p>
 <p>Download and install the appropriate latest version for your remote host (For example, libiio-0.24.gc4498c2-Windows-setup.exe for Windows) Once this is done, open a command prompt, and enter:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iio_info</span> <span class="o">-</span><span class="n">u</span> <span class="n">ip</span><span class="p">:</span><span class="n">analog</span><span class="o">.</span><span class="n">local</span>
 </pre></div>
 </div>
 <p>(Where the IP address may be different, depending on how you’ve connected.) If all goes well, you should see lots of information associated with the ADXL345… that is connected to your Raspberry Pi… but from your Windows / Linux / Mac machine! <em>(How cool is that?)</em></p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/iio_info_local_remote.png"><img alt="image13" src="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/iio_info_local_remote.png" style="width: 400px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/iio_info_local_remote.png"><img alt="image11" src="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/iio_info_local_remote.png" style="width: 400px;" /></a></p>
 <div class="centeralign docutils container">
 <p><strong>Figure 13. iio_info run locally and remotely</strong></p>
 </div>
@@ -819,7 +820,7 @@ Content on this topic
 <h2>Python<a class="headerlink" href="#python" title="Link to this heading"></a></h2>
 <p>Any language that can call a shared library can communicate with libiio. But Python is attractive for getting started for several reasons:</p>
 <p>It’s FREE It’s tremendously popular It’s got tons of number crunching libraries It’s got tons of libraries for communicating with hardware (It’s also really really fun!) And - it’s easy to learn. If you’ve never touched Python before, there are lots of free resources, including this 4-hour course on YouTube from freeCodeCamp.org:</p>
-<p><img alt="youtube&gt;rfscVS0vtbw" src="https://wiki.analog.com/_media/youtube&gt;rfscVS0vtbw" /></p>
+<p><img alt="youtube&gt;rfscVS0vtbw" src="https://wiki.analog.com/_media/university/labs/software/youtube&gt;rfscVS0vtbw" /></p>
 <p>And this very nice interactive tutorial: <a class="icon link reference external" href="https://www.learnpython.org/" target="_blank">Learn Python</a> in which code snippets run in the browser (no need to intall Python.) If you prefer paper, <a class="icon link reference external" href="https://nostarch.com/python-kids-2nd-edition" target="_blank">Python for Kids by Jason R. Briggs</a> is a well written books for kids of all ages. (And <a class="icon link reference external" href="https://nostarch.com/programwithminecraft" target="_blank">Learn to Program with Minecraft: Transform Your World with the Power of Python</a> by Craig Richardson is a pretty nice introduction to the idea of communicating over a network connection; the Minecraft world is a process that communicates over network ports.)</p>
 <p>There are several choices of Python installations, and which one to use is largely a matter of preference. You can install from scratch from <a class="icon link reference external" href="https://www.python.org/" target="_blank">Python.org</a>, or a more full featured distribution such as Anaconda, PyCharm, or VS Code. And <strong>Python is pre-installed on ADI Kuiper Linux</strong>, as is the Thonny IDE. Thonny is basic as far as IDEs go, but it provides breakpoints, variable watches, and is perfectly adequate for simple to intermediate development.</p>
 <div class="admonition tip">
@@ -834,14 +835,14 @@ analog@analog:~$ sudo update-alternatives --install /usr/bin/python python /usr/
 </section>
 <section id="pyadi-iio">
 <h2>PyADI-IIO<a class="headerlink" href="#pyadi-iio" title="Link to this heading"></a></h2>
-<p>PyADI-IIO (pronounced “Py-odi” <a class="footnote-reference brackets" href="#id4" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> is like <a class="icon link reference external" href="https://en.wikipedia.org/wiki/peyote" target="_blank">peyote</a>, but with a Py) is a python abstraction module for ADI hardware with IIO drivers to make them easier to use. Pyadi-iio can be installed through pip, and is pre-installed on ADI Kuiper Linux, but if you’re reading this you’ll probably want to be hacking around a bit so go to :git-pyadi-iio&gt;`__ and follow the “installing from source” instructions. And note that this can be done on your remote Windows :<a href="#id2"><span class="problematic" id="id3">`</span></a>PyADI-IIO Github Repo &lt;Mac / Linux host AND… on the Raspberry Pi itself! Git is already installed on ADI Kuiper Linux, but may need to be installed on a Windows host. (You can also download the repository as a zip, but cloning will make it easier to update.) Let’s install pyadi-iio.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~ $ git clone https://github.com/analogdevicesinc/pyadi-iio.git
+<p>PyADI-IIO (pronounced “Py-odi” <a class="footnote-reference brackets" href="#id2" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> is like <a class="icon link reference external" href="https://en.wikipedia.org/wiki/peyote" target="_blank">peyote</a>, but with a Py) is a python abstraction module for ADI hardware with IIO drivers to make them easier to use. Pyadi-iio can be installed through pip, and is pre-installed on ADI Kuiper Linux, but if you’re reading this you’ll probably want to be hacking around a bit so go to <a class="icon git reference external" href="https://github.com/analogdevicesinc/pyadi-iio/tree/main/pyadi-iio" target="_blank">PyADI-IIO Github Repo</a> and follow the “installing from source” instructions. And note that this can be done on your remote Windows / Mac / Linux host AND… on the Raspberry Pi itself! Git is already installed on ADI Kuiper Linux, but may need to be installed on a Windows host. (You can also download the repository as a zip, but cloning will make it easier to update.) Let’s install pyadi-iio.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~ $ git clone :git-pyadi-iio:`pyadi-iio`
 analog@analog:~ $ cd pyadi-iio
 analog@analog:~/pyadi-iio $ sudo pip install .
 </pre></div>
 </div>
 <p>Note: This requires that your Raspberry Pi be able to access the internet. If you’ve followed the “headless” instructions below, this may not be the case. However - if you have access to a wireless network and your Raspberry Pi has an Ethernet adapter, you can connect in this way. Just click the WiFi icon and log on as you would on any other machine, supplying a password if necessary</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/rpi_wifi_login.png"><img alt="image14" src="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/rpi_wifi_login.png" style="width: 400px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/rpi_wifi_login.png"><img alt="image12" src="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/rpi_wifi_login.png" style="width: 400px;" /></a></p>
 <div class="centeralign docutils container">
 <p><strong>Figure 14. WiFi logon</strong></p>
 </div>
@@ -883,12 +884,12 @@ analog@analog:~/pyadi-iio/examples $ python adxl345_example.py
 </div>
 <section id="tools-for-your-toolbox-ssh-scp-vnc">
 <h3>Tools for your Toolbox: SSH, SCP, VNC<a class="headerlink" href="#tools-for-your-toolbox-ssh-scp-vnc" title="Link to this heading"></a></h3>
-<p>Putty and TeraTerm are popular (and free) SSH clients that let you log into a console on your Raspberry Pi (or other remote client). They are available at <cite>PuTTY Homepage &lt;https://www.putty.org&gt;</cite> and <a class="icon link reference external" href="https://ttssh2.osdn.jp/index.html.en" target="_blank">TeraTerm Homepage</a> , respectively. Try both, which one is better is largely a matter of preference.</p>
+<p>Putty and TeraTerm are popular (and free) SSH clients that let you log into a console on your Raspberry Pi (or other remote client). They are available at <a class="icon link reference external" href="https://www.putty.org/" target="_blank">PuTTY Homepage</a> and <a class="icon link reference external" href="https://ttssh2.osdn.jp/index.html.en" target="_blank">TeraTerm Homepage</a> , respectively. Try both, which one is better is largely a matter of preference.</p>
 <p>On Mac and Linux machines, you can simply log in via ssh from the command line.</p>
 <p>WinSCP is a handy tool that lets you copy files between a Windows machine and your Raspberry Pi, for example, let’s say you collect some data on your Pi using a Python script, and want to get it over to your Windows machine. It is available from <a class="icon link reference external" href="https://winscp.net/eng/index.php" target="_blank">WinSCP Homepage</a>.</p>
 <p>As with SSH, Mac and Linux machines include SCP already.</p>
 <p>VNC is a remote desktop application, and Kuiper Linux runs a VNC server by default. There are several clients available; RealVNC works well and is available at <a class="icon link reference external" href="https://www.realvnc.com/en/connect/download/viewer/" target="_blank">RealVNC Viewer</a> A screenshot of VNC logged into the Raspberry Pi is shown in Figure 15.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/rpi_vnc.png"><img alt="image15" src="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/rpi_vnc.png" style="width: 400px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/rpi_vnc.png"><img alt="image13" src="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/rpi_vnc.png" style="width: 400px;" /></a></p>
 <div class="centeralign docutils container">
 <p><strong>Figure 15. VNC desktop</strong></p>
 </div>
@@ -902,12 +903,12 @@ analog@analog:~/pyadi-iio/examples $ python adxl345_example.py
 </pre></div>
 </div>
 <p>where, the 192.168.1.232 is somewhat arbitrary - just make sure that the first 3 octets (192.168.1) are DIFFERENT from those of any other network adapters on your host machine. The next step is to configure your host’s network adapter. Open your computer’s “Network Connections” control panel note that your host could have lots of adapters. Sometimes it’s obvious - if you’re using a cable connection, it’s obviously NOT your wifi adapter. If you’re using a USB-Ethernet adapter (a super convenient option sometimes), plugging and unplugging the adapter, and seeing which disappears. Open the adapter’s configuration (right-click, “Properties”) and configure the IPV4 properties as shown in Figure 16 below. Make sure the last octet in the IP address is DIFFERENT from that set on the Raspberry Pi.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/static_ip_host.png"><img alt="image16" src="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/static_ip_host.png" style="width: 400px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/static_ip_host.png"><img alt="image14" src="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/static_ip_host.png" style="width: 400px;" /></a></p>
 <div class="centeralign docutils container">
 <p><strong>Figure 16. Setting Up Static IP on Windows Host</strong></p>
 </div>
 <p>Finally… open a command prompt, and ping your Raspberry Pi as shown in Figure 17:</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/ping_rpi.png"><img alt="image17" src="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/ping_rpi.png" style="width: 400px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/ping_rpi.png"><img alt="image15" src="https://wiki.analog.com/_media/university/labs/software/iio_intro_toolbox/ping_rpi.png" style="width: 400px;" /></a></p>
 <div class="centeralign docutils container">
 <p><strong>Figure 17. Pinging the Headless Pi</strong></p>
 </div>
@@ -922,7 +923,7 @@ analog@analog:~/pyadi-iio/examples $ python adxl345_example.py
 <li><p>This is really interesting! I want to know more! (If this is the case, great! A good starting point would be <a class="reference internal" href="../../../resources/tools-software/linux-build/generic/raspberrypi.html"><span class="doc">Building for Raspberry PI</span></a>)</p></li>
 </ul>
 <aside class="footnote-list brackets">
-<aside class="footnote brackets" id="id4" role="doc-footnote">
+<aside class="footnote brackets" id="id2" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
 <p>pei·ow·tee : ‘p’ in pie; ‘a’ in about; ‘y’ yes; ‘o’ in code; ‘t’ in tie; ‘y’ in happy</p>
 </aside>

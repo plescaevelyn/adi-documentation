@@ -593,7 +593,7 @@ Content on this topic
 <li><p>Ensure that the system time is synchronized and that there is an active internet connection to access the necessary sources. Install Git and the build dependencies with the following commands: <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt</span> <span class="pre">update</span>
 <span class="pre">sudo</span> <span class="pre">apt</span> <span class="pre">install</span> <span class="pre">git</span>
 <span class="pre">sudo</span> <span class="pre">apt</span> <span class="pre">install</span> <span class="pre">bc</span> <span class="pre">bison</span> <span class="pre">flex</span> <span class="pre">libssl-dev</span> <span class="pre">make</span></code></p></li>
-<li><p>Clone the ADI Linux kernel repository with the rpi-5.15.y branch using the following command: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">-b</span> <span class="pre">rpi-5.15.y</span> <span class="pre">https://github.com/analogdevicesinc/linux.git</span></code></p></li>
+<li><p>Clone the ADI Linux kernel repository with the rpi-5.15.y branch using the following command: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">-b</span> <span class="pre">rpi-5.15.y</span> <span class="pre">:git-linux:`linux`.git</span></code></p></li>
 <li><p>For the Raspberry Pi 4 with the default 64-bit build configuration, navigate to the linux directory and configure the build with the following commands: <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">linux</span>
 <span class="pre">KERNEL=kernel8</span>
 <span class="pre">make</span> <span class="pre">bcm2711_defconfig</span></code></p></li>
@@ -621,24 +621,17 @@ Content on this topic
 <li><p>Reboot the Raspberry Pi to apply the changes.<code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">reboot</span></code></p></li>
 <li><p>After rebooting, check the connected I2C devices with the following command: <code class="docutils literal notranslate"><span class="pre">i2cdetect</span> <span class="pre">–y</span> <span class="pre">1</span></code>The AD2428 Mini should be detected as an I2C device. In this scenario, 0x6C and 0x6D are the I2C addresses of the connected devices with the Raspberry Pi 4.</p></li>
 </ul>
-<p><img alt="image1" src="https://wiki.analog.com/_media/resources/tools-software/a2bv2/a2braspberrypi/i2c_detect.png" /></p>
+<img alt="https://wiki.analog.com/_media/resources/tools-software/a2bv2/a2braspberrypi/i2c_detect.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/a2bv2/a2braspberrypi/i2c_detect.png" />
 <ul class="simple">
 <li><p>In Terminal 1, run aplay on the corresponding AD242x card, which can be identified by running <em>aplay –l</em> and <em>arecord -l</em>. For example, as shown in image below, the AD2428 Mini should be detected as follows:</p></li>
 </ul>
-<p><img alt="image2" src="https://wiki.analog.com/_media/resources/tools-software/a2bv2/a2braspberrypi/arecord_aplay.png" /></p>
-<blockquote>
-<div><ul class="simple">
-<li><p>PLAYBACK device: Card 1, Device 0</p>
-<ul>
-<li><p>CAPTURE device: Card 1, Device 1</p></li>
-</ul>
-</li>
-</ul>
-</div></blockquote>
-<ul class="simple">
-<li><p>In Terminal 2, run the aplay command on the AD24xx card, specifically Card 0 and Device 0, as shown in below image. This step provides BCLK and FS to the AD2428 Mini node, which is necessary for the discovery process to succeed.</p></li>
-</ul>
-<p><img alt="image3" src="https://wiki.analog.com/_media/resources/tools-software/a2bv2/a2braspberrypi/aplay-d.png" /></p>
+<img alt="https://wiki.analog.com/_media/resources/tools-software/a2bv2/a2braspberrypi/arecord_aplay.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/a2bv2/a2braspberrypi/arecord_aplay.png" />
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="o">*</span> <span class="n">PLAYBACK</span> <span class="n">device</span><span class="p">:</span> <span class="n">Card</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Device</span> <span class="mi">0</span>
+    <span class="o">*</span> <span class="n">CAPTURE</span> <span class="n">device</span><span class="p">:</span> <span class="n">Card</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Device</span> <span class="mi">1</span>
+<span class="o">*</span> <span class="n">In</span> <span class="n">Terminal</span> <span class="mi">2</span><span class="p">,</span> <span class="n">run</span> <span class="n">the</span> <span class="n">aplay</span> <span class="n">command</span> <span class="n">on</span> <span class="n">the</span> <span class="n">AD24xx</span> <span class="n">card</span><span class="p">,</span> <span class="n">specifically</span> <span class="n">Card</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">Device</span> <span class="mi">0</span><span class="p">,</span> <span class="k">as</span> <span class="n">shown</span> <span class="ow">in</span> <span class="n">below</span> <span class="n">image</span><span class="o">.</span> <span class="n">This</span> <span class="n">step</span> <span class="n">provides</span> <span class="n">BCLK</span> <span class="ow">and</span> <span class="n">FS</span> <span class="n">to</span> <span class="n">the</span> <span class="n">AD2428</span> <span class="n">Mini</span> <span class="n">node</span><span class="p">,</span> <span class="n">which</span> <span class="ow">is</span> <span class="n">necessary</span> <span class="k">for</span> <span class="n">the</span> <span class="n">discovery</span> <span class="n">process</span> <span class="n">to</span> <span class="n">succeed</span><span class="o">.</span>
+</pre></div>
+</div>
+<img alt="https://wiki.analog.com/_media/resources/tools-software/a2bv2/a2braspberrypi/aplay-d.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/a2bv2/a2braspberrypi/aplay-d.png" />
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The hw:Card#,Device# values for the command are derived from the aplay -l listing, as shown in above steps image.</p>
@@ -687,7 +680,7 @@ Content on this topic
 <ul class="simple">
 <li><p>Discovery should occur as shown in below image, and downstream audio will be available at Sub node 1’s Headphone OUT.</p></li>
 </ul>
-<p><img alt="image4" src="https://wiki.analog.com/_media/resources/tools-software/a2bv2/a2braspberrypi/ouput_disc.png" /></p>
+<img alt="https://wiki.analog.com/_media/resources/tools-software/a2bv2/a2braspberrypi/ouput_disc.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/a2bv2/a2braspberrypi/ouput_disc.png" />
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This has been tested on a Raspberry Pi 4 with Raspberry Pi OS 64-bit.</p>
@@ -699,7 +692,7 @@ Content on this topic
 <ul class="simple">
 <li><p>To verify Upstream Audio at RPi’s Headphones, provide Audio IN at Sub Node 1. Record on Card 1, Device 1 (ad242x) interface of RPi and play on Card 0, Device 0 (Headphones) as shown in below image.</p></li>
 </ul>
-<p><img alt="image5" src="https://wiki.analog.com/_media/resources/tools-software/a2bv2/a2braspberrypi/audio_check.png" /></p>
+<img alt="https://wiki.analog.com/_media/resources/tools-software/a2bv2/a2braspberrypi/audio_check.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/a2bv2/a2braspberrypi/audio_check.png" />
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>hw:1,1 is derived from ‘arecord -l’ command and hw:0,0 derived from ‘aplay -l’</p>

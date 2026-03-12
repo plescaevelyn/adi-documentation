@@ -623,37 +623,32 @@ Content on this topic
 <h3>Combining LTspice Simulations with ALICE Scope traces<a class="headerlink" href="#combining-ltspice-simulations-with-alice-scope-traces" title="Link to this heading"></a></h3>
 <p>Circuit simulators like LTspice, and others, are useful tools for testing out electronic circuit experiments before actually constructing the circuit. The ADALM1000 and ALICE Desktop is a multi-purpose and incredibly useful set of measurement tools for testing electronic circuits. In this Blog entry we are going to go over a simple example showing how to run a simulation in LTspice, export the simulated voltage waveforms and then load them into ALICE so they can be compared to the measured voltage waveform you get on the actual circuit. By comparing simulated and actual results you can get the most out of this powerful combination of software and hardware.</p>
 <p>The first thing to do is enter the following simple RC circuit, shown in figure 1, into LTspice. The resistor, R1, we are using is 10K ohms and the capacitor, C1, is 0.22 uF. A PULSE source is used to simulate the CHA output of the ADALM1000 and a 2.5 V DC source is used to simulate the fixed 2.5 V rail. We will name the output of the pulse as CHA and the voltage on the capacitor as CHB to match the ADALM1000 connections.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-schematic-1.png"><img alt="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-schematic-1.png" class="align-center" src="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-schematic-1.png" style="width: 600px;" />
-</a>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-schematic-1.png"><img alt="image1" src="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-schematic-1.png" style="width: 600px;" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 1,</p>
 </div>
 <p>The transient simulation will be run from 0 to 20 mSec. Which will be exactly 2 cycles at 100 Hz (10 mSec period).</p>
 <p>We use the .wave directive to output the two node voltages of interest. The sample rate is set to 100KSPS to match the sample rate of the ADALM1000. The data values saved in the wave output will be 16 bit integers scaled from -1 to 1 volt. So the pulse high and low values are set to -0.8 and 0.8. When ALICE imports these integers it offsets and scales the values to 0 to 5 V to fit exactly in the ADALM1000 voltage range. So -0.8 V becomes 0.5 V. 0.0V becomes 2.5 V and +0.8 V becomes 4.5 V.</p>
 <p>After running the simulation the results should look like the following plot.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-2.png"><img alt="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-2.png" class="align-center" src="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-2.png" style="width: 600px;" />
-</a>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-2.png"><img alt="image2" src="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-2.png" style="width: 600px;" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 2, RC simulation plot</p>
 </div>
 <p>There should also be the saved output.wav file that now contains the two simulated waveforms.</p>
 <p>Now we can open ALICE and measure the actual circuit. With a 10 KΩ resistor and 0.22uF capacitor connected to the ADALM1000 as shown in the schematic. We can setup CHA to output the 100 Hz square wave. In CHA, set the Min value to 0.5 and the Max value to 4.5 with the Mode set to SVMI and the shape to Square. For right now we can set CHB mode to Hi-Z.</p>
 <p>With the Horz time scale set to 2 mSec/Div we can run ALICE and see the measure results of the circuit.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-3.png"><img alt="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-3.png" class="align-center" src="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-3.png" style="width: 600px;" />
-</a>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-3.png"><img alt="image3" src="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-3.png" style="width: 600px;" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 3, Measured RC plot</p>
 </div>
 <p>This plot looks a lot like the simulation but just how close are the two? To compare the two we next save snap-shots of the live waveforms and turn them on. The saved reference traces are drawn in a darker color so the plots will look like this.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-4.png"><img alt="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-4.png" class="align-center" src="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-4.png" style="width: 600px;" />
-</a>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-4.png"><img alt="image4" src="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-4.png" style="width: 600px;" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 4,</p>
 </div>
 <p>We can load in the output.wav file from the LTspice simulation and play the data back through the arbitrary waveform generators of the ADALM1000. Under the AWG CH A Shape drop down menu we can click on Read WAV File. It will prompt you for the file to load. Navigate to where output.wav was saved and click on it. The wave file contains two signals so the program puts the first one (the node named CHA) in the AWGAwaveform buffer and the second one (the node named CHB) in the AWGBwaveform buffer. The buffer lengths should be at least 2000 points.</p>
 <p>If we now set the CH B mode to SVMI and temporarily disconnect it from the capacitor and hit Run we should see something like this.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-5.png"><img alt="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-5.png" class="align-center" src="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-5.png" style="width: 600px;" />
-</a>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-5.png"><img alt="image5" src="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-5.png" style="width: 600px;" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 5,</p>
 </div>
@@ -669,8 +664,7 @@ Content on this topic
 <p>For this example we will use this function twice to save the channel A voltage trace data into a file named cha-out.txt and the channel B voltage trace data into a file named chb-out.txt.</p>
 <p>Now we are all set to enter the example circuit in LTspice. We have one PWL source, named CHA-Meas, that will be the input to the RC circuit. We need a second PWL source, named CHB-Meas, that will simply play back the measured CH-B voltage data for comparison to the simulated voltage waveform on node CHB. Note that all you have to do is specify the name of the file to use in each of the PWL sources.</p>
 <p>Now we can run the simulation for 20 mSec and we should get a plot much like we got in ALICE of the actual circuit.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-6.png"><img alt="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-6.png" class="align-center" src="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-6.png" style="width: 700px;" />
-</a>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-6.png"><img alt="image6" src="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-6.png" style="width: 700px;" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 6, Simulation results</p>
 </div>
@@ -679,8 +673,7 @@ Content on this topic
 <section id="curve-fitting">
 <h3>Curve Fitting<a class="headerlink" href="#curve-fitting" title="Link to this heading"></a></h3>
 <p>As an example use case the following simple resistor and diode circuit shown in figure 1 is offered. First construct the simple resistor and diode circuit as shown.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/tools/m1k/alice/poly-fit-0.png"><img alt="https://wiki.analog.com/_media/university/tools/m1k/alice/poly-fit-0.png" class="align-center" src="https://wiki.analog.com/_media/university/tools/m1k/alice/poly-fit-0.png" style="width: 500px;" />
-</a>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/tools/m1k/alice/poly-fit-0.png"><img alt="image7" src="https://wiki.analog.com/_media/university/tools/m1k/alice/poly-fit-0.png" style="width: 500px;" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 1, Diode test circuit</p>
 </div>
@@ -756,26 +749,22 @@ Content on this topic
 </pre></div>
 </div>
 <p>The following screenshots show the results:</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/tools/m1k/alice/diode-exp-time.png"><img alt="https://wiki.analog.com/_media/university/tools/m1k/alice/diode-exp-time.png" class="align-center" src="https://wiki.analog.com/_media/university/tools/m1k/alice/diode-exp-time.png" style="width: 600px;" />
-</a>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/tools/m1k/alice/diode-exp-time.png"><img alt="image8" src="https://wiki.analog.com/_media/university/tools/m1k/alice/diode-exp-time.png" style="width: 600px;" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 2, Time waveforms</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/tools/m1k/alice/diode-exp-x-y.png"><img alt="image9" src="https://wiki.analog.com/_media/university/tools/m1k/alice/diode-exp-x-y.png" style="width: 400px;" /></a></p>
 </div>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/tools/m1k/alice/diode-exp-x-y.png"><img alt="https://wiki.analog.com/_media/university/tools/m1k/alice/diode-exp-x-y.png" class="align-center" src="https://wiki.analog.com/_media/university/tools/m1k/alice/diode-exp-x-y.png" style="width: 400px;" />
-</a>
 <div class="centeralign docutils container">
 <p>Figure 3, V-I X,Y plot</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/tools/m1k/alice/diode-exp-fit.png"><img alt="image10" src="https://wiki.analog.com/_media/university/tools/m1k/alice/diode-exp-fit.png" style="width: 400px;" /></a></p>
 </div>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/tools/m1k/alice/diode-exp-fit.png"><img alt="https://wiki.analog.com/_media/university/tools/m1k/alice/diode-exp-fit.png" class="align-center" src="https://wiki.analog.com/_media/university/tools/m1k/alice/diode-exp-fit.png" style="width: 400px;" />
-</a>
 <div class="centeralign docutils container">
 <p>Figure 4, Curve fit results</p>
 </div>
 <section id="polynomial-fit-example">
 <h4>Polynomial Fit Example<a class="headerlink" href="#polynomial-fit-example" title="Link to this heading"></a></h4>
 <p>The numpy library contains a polynomial fitting function. The following example shows how to use the polyfit and poly1d function in numpy to fit a 5<sup>th</sup> order polynomial to the voltage characteristics of the same diode circuit and plot the polynomial over the plot of the measured data points.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/tools/m1k/alice/poly-fit-1.png"><img alt="https://wiki.analog.com/_media/university/tools/m1k/alice/poly-fit-1.png" class="align-center" src="https://wiki.analog.com/_media/university/tools/m1k/alice/poly-fit-1.png" style="width: 600px;" />
-</a>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/tools/m1k/alice/poly-fit-1.png"><img alt="image11" src="https://wiki.analog.com/_media/university/tools/m1k/alice/poly-fit-1.png" style="width: 600px;" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 5, Plot of Diode Voltage</p>
 </div>
@@ -784,8 +773,7 @@ Content on this topic
 <p>To check the terms of the polynomial, type the following line into the entry space and hit return.</p>
 <p><strong>print Zpoly</strong></p>
 <p>In the ALICE desktop console window you should see something like this.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/tools/m1k/alice/poly-fit-2.png"><img alt="https://wiki.analog.com/_media/university/tools/m1k/alice/poly-fit-2.png" class="align-center" src="https://wiki.analog.com/_media/university/tools/m1k/alice/poly-fit-2.png" style="width: 600px;" />
-</a>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/tools/m1k/alice/poly-fit-2.png"><img alt="image12" src="https://wiki.analog.com/_media/university/tools/m1k/alice/poly-fit-2.png" style="width: 600px;" /></a></p>
 <div class="centeralign docutils container">
 <p>ALICE console showing polynomial terms</p>
 </div>
@@ -794,16 +782,14 @@ Content on this topic
 <p>Again to check the results type the following line into the entry space and hit return.</p>
 <p><strong>print ZBuff</strong></p>
 <p>In the ALICE desktop console window you should now see something like this.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/tools/m1k/alice/poly-fit-3.png"><img alt="https://wiki.analog.com/_media/university/tools/m1k/alice/poly-fit-3.png" class="align-center" src="https://wiki.analog.com/_media/university/tools/m1k/alice/poly-fit-3.png" style="width: 600px;" />
-</a>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/tools/m1k/alice/poly-fit-3.png"><img alt="image13" src="https://wiki.analog.com/_media/university/tools/m1k/alice/poly-fit-3.png" style="width: 600px;" /></a></p>
 <div class="centeralign docutils container">
 <p>ALICE console showing polynomial equation</p>
 </div>
 <p>To plot the polynomial on the screen we will use the Math waveform feature. From the Math menu select Math Axis and set it to V-B to use the same axis as the diode voltage plot. From the Math menu select Enter Formula and enter the following:</p>
 <p><strong>ZBuff(VBuffA[t])-CHBOffset</strong></p>
 <p>This plots the value of the polynomial evaluated at each point in VBuffA as the time index t goes from 0 to 499 ( 5 mSec ). Be sure to note that () are used for ZBuff and not [] because it is a function and not an array like VBuffA. You should now see something like figure 3 on the display. The magenta Math plot is the polynomial.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/tools/m1k/alice/poly-fit-4.png"><img alt="https://wiki.analog.com/_media/university/tools/m1k/alice/poly-fit-4.png" class="align-center" src="https://wiki.analog.com/_media/university/tools/m1k/alice/poly-fit-4.png" style="width: 600px;" />
-</a>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/tools/m1k/alice/poly-fit-4.png"><img alt="image14" src="https://wiki.analog.com/_media/university/tools/m1k/alice/poly-fit-4.png" style="width: 600px;" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 3, Plot of measured data and polynomial</p>
 </div>
@@ -814,8 +800,7 @@ Content on this topic
 <p>Change the resistor in diode test circuit to 470 Ω (could be 2 1 kΩ resistors in parallel). Be sure you have the channel A voltage and current traces selected as well as the channel B voltage trace.</p>
 <p>Hit the run button and wait a few seconds for the trace averaging to smooth out the random noise. Hit the Stop button. We now have captured a set of data points of the diode voltage in the Channel B voltage trace and the diode current in the channel A current trace.</p>
 <p>Using the X-Y plotter you should see something like the following when plotting CB-V (diode voltage) on the X axis and CA-I (diode current) on the Y axis.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-9.png"><img alt="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-9.png" class="align-center" src="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-9.png" style="width: 400px;" />
-</a>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-9.png"><img alt="image15" src="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-9.png" style="width: 400px;" /></a></p>
 <div class="centeralign docutils container">
 <p>figure 4, Diode Voltage va Current Plot</p>
 </div>
@@ -870,8 +855,7 @@ Content on this topic
 <p>The fit command in gnuplot can fit a user-defined function to a set of data points (x,y), using an implementation of the nonlinear least-squares (NLLS) Marquardt-Levenberg algorithm. Any user-defined variable occurring in the function may serve as a fit parameter.</p>
 <p>After each iteration step, detailed information about the current state of the fit is written to the display. The same information about the initial and final states is written to a log file, “fit.log”. This file is always appended to, so as to not lose any previous fit history; it should be deleted or renamed as desired.</p>
 <p>Be sure to include your “guess” values for I<sub>s</sub> and n as well as the gnuplot fit results.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-10.png"><img alt="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-10.png" class="align-center" src="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-10.png" style="width: 500px;" />
-</a>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-10.png"><img alt="image16" src="https://wiki.analog.com/_media/university/courses/alm1k/intro/data-anal-fig-10.png" style="width: 500px;" /></a></p>
 <div class="centeralign docutils container">
 <p>figure 5, gnuplot results for 1N914 diode</p>
 </div>

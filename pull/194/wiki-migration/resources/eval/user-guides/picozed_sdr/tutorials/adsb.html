@@ -742,7 +742,7 @@ Content on this topic
 </a>
 <p>The first step in the decoding is to calculate the noise floor and the correlation to the preamble. Digital filter blocks are used for these calculations. The <em>TimingControl</em> is implemented using <a class="icon link reference external" href="https://www.mathworks.com/products/stateflow/" target="_blank">Stateflow</a>, which is a state machine tool that is used to generate the timing, reset and control signals for the rest of the decoding algorithm. Stateflow is very useful for models where you want to separate the control logic from the data flow. Once the timing and triggers are activated the block named <em>Bit Process</em> takes the input IQ samples and calculates the data bits, and the <em>CRC_Check</em> block computes the checksum. The message parsing takes place in a MATLAB script named <em>DecodeBits.m</em> driven by this Simulink model.</p>
 <p>After you run the model, the figure below from the MATLAB command window shows the two messages that were successfully decoded from the one million sample data set. The hex characters that make up the 88-bit message and 24-bit checksum are displayed, and the results of the decoding process show the aircraft ID, message type, and aircraft velocity, altitude, and position.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/fig8.png"><img alt="Block diagram" src="https://wiki.analog.com/_media/fig8.png" style="width: 700px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/picozed_sdr/tutorials/fig8.png"><img alt="Block diagram" src="https://wiki.analog.com/_media/resources/eval/user-guides/picozed_sdr/tutorials/fig8.png" style="width: 700px;" /></a></p>
 <p>In order to verify the detect and decoding algorithm works properly, double click on the Signal From Workspace block, and use the synthetic data <em>txData</em> we just created as the signal source:</p>
 <img alt="txdata.png" src="https://wiki.analog.com/_media/resources/eval/user-guides/picozed_sdr/tutorials/txdata.png" />
 <p>Click play button to run the model. In the command window, you will see the following results:</p>
@@ -846,7 +846,7 @@ Content on this topic
 </pre></div>
 </div>
 <p>At the end of the simulation, you will get the RSSI values on both channels in your command window, as well as the result tables shown below:</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/table.png"><img alt="image1" src="https://wiki.analog.com/_media/table.png" style="width: 700px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/picozed_sdr/tutorials/table.png"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/user-guides/picozed_sdr/tutorials/table.png" style="width: 700px;" /></a></p>
 <p>This result table shows the information of aircrafts appearing during the simulation. With a proper antenna, this model is able to capture and decode the aircraft signals in an 80 miles range with PicoZed. Since there are two types of Mode S messages (56 usec or 112 usec), some messages contain more information than the other.</p>
 <p>When trying out this model with the real-world ADS-B signals, the signal strength is very important for successful decoding, so make sure to put the antenna in a good line of sight location with the aircraft. The received signal strength can be seen by looking at the RSSI values on both channels. For example, if receiving the signals on channel 2, the RSSI of channel 2 should be significantly higher than that of channel 1. You can tell whether there is any useful data by looking at the spectrum analyzer.</p>
 </section>
@@ -969,7 +969,7 @@ Content on this topic
 </pre></div>
 </div>
 <p>in the MATLAB command window. After the installation process is complete, run <em>ver</em> in the MATLAB command window to list all the installed packages. If the installation was successful, the <em>HDL Coder BSP Tools</em> and <em>HDL Coder BSP: Analog Devices Inc</em> should appear in the list, as shown below:</p>
-<img alt="Block diagram" src="https://wiki.analog.com/_media/resources/eval/user-guides/picozed_sdr/tutorials/install.png" />
+<p><img alt="image2" src="https://wiki.analog.com/_media/resources/eval/user-guides/picozed_sdr/tutorials/install.png" /></p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>To uninstall the Analog Devices BSP, run this in the MATLAB command window:</p>
@@ -1004,7 +1004,7 @@ Content on this topic
 <p>Then, run each task including Step 4.2. In the end of Step 4.2, you will see a software interface model generated. The external mode runs in this model, which will be introduced later.</p>
 <img alt="Block diagram" src="https://wiki.analog.com/_media/resources/eval/user-guides/picozed_sdr/tutorials/step4.2gm.png" />
 <p>In Step 4.3, select <strong>Custom</strong> for Tcl file for synthesis build, and use <em>adi_build.tcl</em> from <em>\ADSB\hdl_prj\vivado_ip_prj\projects\scripts\</em> folder:</p>
-<img alt="Block diagram" src="https://wiki.analog.com/_media/resources/eval/user-guides/picozed_sdr/tutorials/step4.3.png" />
+<p><img alt="image3" src="https://wiki.analog.com/_media/resources/eval/user-guides/picozed_sdr/tutorials/step4.3.png" /></p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p><em>adi_build.tcl</em> is a generic file used to automate the build process for BOOT.BIN. You can use it in other ADI BSP projects.</p>
@@ -1022,7 +1022,7 @@ Content on this topic
 <p><strong>Step 7: Interface the C code with the data from FPGA</strong></p>
 <p>The generated C code contains the implementation of the ADS-B data decoding algorithm, but does not contain the functions needed to configure the radio and acquire the data from the ADS-B IP. The easiest way to achieve these two tasks is to use the libiio support for the AD9361 and create an application which uses the libiio functions to configure the radio and read the data from the ADS-B IP through the DMA and afterwards call the auto-generated ADS-B decoding C code. This application is provided together with the ADS-B model. It is called <em>adsb_decode.c</em> and can be found in the <em>linux_app</em> folder from your ADSB model folder, together with the auto-generated C code provided there for reference. The next step is to copy the auto-generated C code along with adsb_decode.c and the Makefile found in the <em>linux_app</em> folder to your SD card and build the application under Linux by running the <em>make all</em> command in the location where the files were copied. The resulting binary file is called <em>adsb_decode</em> and can be ran to verify the system’s functionality. This file is also provided for reference in the <em>linux_app</em> folder.</p>
 <p>To transfer the files to your Linux system. You can use tools such as <a class="icon link reference external" href="https://winscp.net/eng/docs/guide_install" target="_blank">WinSCP</a>:</p>
-<img alt="Block diagram" src="https://wiki.analog.com/_media/resources/eval/user-guides/picozed_sdr/tutorials/winscp.png" />
+<p><img alt="image4" src="https://wiki.analog.com/_media/resources/eval/user-guides/picozed_sdr/tutorials/winscp.png" /></p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>If you want to run the <em>adsb_decode</em> binary file provided in the <em>linux_app</em> folder you must change the access permission of <em>adsb_decode</em> after you have had it transferred to your Linux system. You can do it by using the <em>chmod</em> command in a terminal:</p>
@@ -1042,7 +1042,7 @@ Content on this topic
 </pre></div>
 </div>
 <p>You will see the following results almost immediately after you execute the command:</p>
-<img alt="Block diagram" src="https://wiki.analog.com/_media/resources/eval/user-guides/picozed_sdr/tutorials/oscverify_results.png" />
+<p><img alt="image5" src="https://wiki.analog.com/_media/resources/eval/user-guides/picozed_sdr/tutorials/oscverify_results.png" /></p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>Use <em>Ctrl + c</em> to end the program.</p>
@@ -1056,7 +1056,7 @@ Content on this topic
 </div>
 <p>Note: lat and lon are latitude and longitude of your current location.</p>
 <p>Wait a few seconds to a few minutes, depending on your local air traffic, and you will observe the decoded ADSB messages in the terminal, such as following:</p>
-<img alt="Block diagram" src="https://wiki.analog.com/_media/resources/eval/user-guides/picozed_sdr/tutorials/result.png" />
+<p><img alt="image6" src="https://wiki.analog.com/_media/resources/eval/user-guides/picozed_sdr/tutorials/result.png" /></p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>For the actual field test, compare the ADS-B information decoded by the system with the data provided by airplane live tracking websites (such as flightradar24.com), and see whether the decoding algorithm displays the correct aircraft ID, altitude, speed, and latitude/longitude coordinates.</p>
@@ -1090,10 +1090,10 @@ Content on this topic
 <h1>Reference<a class="headerlink" href="#reference" title="Link to this heading"></a></h1>
 <p>“<strong>Four Quick Steps to Production: Using Model-Based Design for Software-Defined Radio</strong>” Article Series</p>
 <ul class="simple">
-<li><p>Di Pu, Andrei Cozma, and Tom Hill. “Part 1 - the Analog Devices/Xilinx SDR Rapid Prototyping Platform: Its Capabilities, Benefits, and Tools”. <a class="icon adi reference external" href="https://www.analog.com//library/analogDialogue/archives/49-09/four-step-sdr-01.html" target="_blank">Analog Dialogue, Volume 49, Number 3</a>.</p></li>
+<li><p>Di Pu, Andrei Cozma, and Tom Hill. “Part 1 - the Analog Devices/Xilinx SDR Rapid Prototyping Platform: Its Capabilities, Benefits, and Tools”. <a class="icon adi reference external" href="https://www.analog.com/library/analogDialogue/archives/49-09/four-step-sdr-01.html" target="_blank">Analog Dialogue, Volume 49, Number 3</a>.</p></li>
 <li><p>Mike Donovan, Andrei Cozma, and Di Pu. “Part 2 - Mode-S Detection and Decoding Using MATLAB and Simulink”. <a class="icon adi reference external" href="https://www.analog.com/library/analogDialogue/archives/49-10/four-step-sdr-02.html" target="_blank">Analog Dialogue, Volume 49, Number 4</a>.</p></li>
-<li><p>Di Pu, and Andrei Cozma. “Part 3 - Mode-S Signals Decoding Algorithm Validation using Hardware in the Loop”. <a class="icon adi reference external" href="https://www.analog.com//library/analogDialogue/archives/49-11/four-step-sdr-03.html" target="_blank">Analog Dialogue, Volume 49, Number 4</a>.</p></li>
-<li><p>Mike Donovan, Andrei Cozma, and Di Pu. “Part 4 - Rapid Prototyping using the Zynq SDR Kit and Simulink Code Generation Workflow”. <a class="icon adi reference external" href="https://www.analog.com//library/analogDialogue/archives/49-12/four-step-sdr-04.html" target="_blank">Analog Dialogue, Volume 49, Number 4</a>.</p></li>
+<li><p>Di Pu, and Andrei Cozma. “Part 3 - Mode-S Signals Decoding Algorithm Validation using Hardware in the Loop”. <a class="icon adi reference external" href="https://www.analog.com/library/analogDialogue/archives/49-11/four-step-sdr-03.html" target="_blank">Analog Dialogue, Volume 49, Number 4</a>.</p></li>
+<li><p>Mike Donovan, Andrei Cozma, and Di Pu. “Part 4 - Rapid Prototyping using the Zynq SDR Kit and Simulink Code Generation Workflow”. <a class="icon adi reference external" href="https://www.analog.com/library/analogDialogue/archives/49-12/four-step-sdr-04.html" target="_blank">Analog Dialogue, Volume 49, Number 4</a>.</p></li>
 </ul>
 </section>
 <section id="support">
