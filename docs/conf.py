@@ -35,7 +35,7 @@ interref_repos = [
     'doctools',
     'hdl',
     'pyadi-iio',
-    'adi-kuiper-gen',
+    'kuiper',
     'scopy',
     'linux',
     'no-OS',
