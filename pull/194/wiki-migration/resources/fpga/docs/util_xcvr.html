@@ -621,7 +621,8 @@ Content on this topic
 </section>
 <section id="block-diagram">
 <h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Link to this heading"></a></h2>
-<p>The following diagram shows a GTXE2 Column, which contains four GT Quads. Each quad contains a GTEX2_COMMON and four GTXE2_CHANNEL primitives.</p>
+<p>The following diagram shows a GTXE2 Column, which contains four GT Quads. Each
+quad contains a GTEX2_COMMON and four GTXE2_CHANNEL primitives.</p>
 <img alt="GTXE2 Column" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/gtx_column.png" />
 </section>
 <section id="configuration-parameters">
@@ -880,13 +881,22 @@ Content on this topic
 </div>
 <section id="physical-constraints-considerations">
 <h3>Physical constraints considerations<a class="headerlink" href="#physical-constraints-considerations" title="Link to this heading"></a></h3>
-<p>The util_adxcvr allocates resources/quads (channels and common) sequentially. Meaning, if you have 8 lanes it will insert two quads, 4 channels and a common block for each quad.</p>
-<p>Channels within a quad are tightly coupled to the common block, the placement of the channel resources can be permuted within a quad and is affected by the constraint file with the restriction that rx_&lt;N&gt;_p/n connect to tx_&lt;N&gt;_p/n must connect to the same channel.</p>
-<p>Supposing we have the following pin constraints and connections to the util_adxcvr:</p>
+<p>The util_adxcvr allocates resources/quads (channels and common) sequentially.
+Meaning, if you have 8 lanes it will insert two quads, 4 channels and a common
+block for each quad.</p>
+<p>Channels within a quad are tightly coupled to the common block, the placement of
+the channel resources can be permuted within a quad and is affected by the
+constraint file with the restriction that rx_&lt;N&gt;_p/n connect to tx_&lt;N&gt;_p/n
+must connect to the same channel.</p>
+<p>Supposing we have the following pin constraints and connections to the
+util_adxcvr:</p>
 <p><img alt="image1" src="https://wiki.analog.com/_media/resources/fpga/docs/xcvr_mapping_example.jpg" /></p>
 <p>So in this case we end up with a conflict during implementation: <img alt="image2" src="https://wiki.analog.com/_media/resources/fpga/docs/xcvr_conflict.jpg" /> We have to ensure that in implementation the mapping is correct either by rearranging the Rx connections <img alt="image3" src="https://wiki.analog.com/_media/resources/fpga/docs/xcvr_rx_rearrangement.jpg" /> or by rearranging the Tx connections of the util_adxcvr:</p>
 <p><img alt="image4" src="https://wiki.analog.com/_media/resources/fpga/docs/xcvr_tx_rearrangement.jpg" /></p>
-<p>In such cases, when rearrangement is required due placement constraints, complementary reordering is required either in the converter device (lane crossbars) or inside the FPGA between the physical and link layer, to connect the logical lanes with the same index on both end of the link.</p>
+<p>In such cases, when rearrangement is required due placement constraints,
+complementary reordering is required either in the converter device (lane
+crossbars) or inside the FPGA between the physical and link layer, to connect
+the logical lanes with the same index on both end of the link.</p>
 </section>
 </section>
 <section id="software-guidelines">

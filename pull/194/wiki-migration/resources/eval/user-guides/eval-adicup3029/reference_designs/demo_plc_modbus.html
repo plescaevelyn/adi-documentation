@@ -641,15 +641,28 @@ Content on this topic
 <h1>Distributed Control System (DCS) Demo<a class="headerlink" href="#distributed-control-system-dcs-demo" title="Link to this heading"></a></h1>
 <section id="general-description-overview">
 <h2>General Description/Overview<a class="headerlink" href="#general-description-overview" title="Link to this heading"></a></h2>
-<p>The Distributed Control System reference design is a hardware and software platform for developing HART-enabled analog input and output modules (or nodes). DCS Modules are assembled from several existing reference designs:</p>
+<p>The Distributed Control System reference design is a hardware and software
+platform for developing HART-enabled analog input and output modules (or nodes).
+DCS Modules are assembled from several existing reference designs:</p>
 <ul class="simple">
 <li><p><strong>EVAL-ADICUP3029</strong> is the processor board that implements a MODBUS slave and controls the analog input / output boards.</p></li>
 <li><p><strong>EVAL-CN0416-ARDZ</strong> provides robust RS485 connectivity between one or more nodes and a host computer</p></li>
 <li><p><strong>EVAL-CN0414-ARDZ</strong> provides four group-isolated voltage inputs and four HART enabled current inputs.</p></li>
 <li><p><strong>EVAL-CN0418-ARDZ</strong> provides four group-isolated voltage or HART-enabled current outputs</p></li>
 </ul>
-<p>The reference design provides software connectivity using the MODBUS protocol. Modbus is a ubiquitous, open, industrial communication protocol for which there are numerous open-source and commercial software libraries and utilities. It is a serial master-slave protocol where the master uses a set of standard commands to read and write registers on the slave device, and CRC error detection ensures data integrity. Reading a slave register can give information about the state and inputs of the slave and writing registers can change the state or outputs of the slave. The mapping of Modbus registers to application-specific functions is dependent on the end application, and the DCS reference design provides convenient access to all of the functionality of the analog input and output boards.</p>
-<p>Several options for communicating with the hardware are provided or demonstrated:</p>
+<p>The reference design provides software connectivity using the MODBUS protocol.
+Modbus is a ubiquitous, open, industrial communication protocol for which there
+are numerous open-source and commercial software libraries and utilities. It is
+a serial master-slave protocol where the master uses a set of standard commands
+to read and write registers on the slave device, and CRC error detection ensures
+data integrity. Reading a slave register can give information about the state
+and inputs of the slave and writing registers can change the state or outputs of
+the slave. The mapping of Modbus registers to application-specific functions is
+dependent on the end application, and the DCS reference design provides
+convenient access to all of the functionality of the analog input and output
+boards.</p>
+<p>Several options for communicating with the hardware are provided or
+demonstrated:</p>
 <ul class="simple">
 <li><p>A command-line interface, requiring only a terminal program on the host PC and no additional software, useful for initial board bringup and debug.</p></li>
 <li><p>An open-source Modbus debug tool</p></li>
@@ -695,16 +708,19 @@ Content on this topic
 <h2>Setting up the Hardware<a class="headerlink" href="#setting-up-the-hardware" title="Link to this heading"></a></h2>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>Depending on the PLC/DCS Node configuration the power needs to be provided as follows:</p>
+<p>Depending on the PLC/DCS Node configuration the power needs to be provided as
+follows:</p>
 <ul class="simple">
 <li><p>If the PLC/DCS Node contain at least a CN0418 board, then the power will be provided through any CN0418 board (the jumper for P17 MUST to be placed for each board).</p></li>
-<li><p>If the PLC/DCS Node contain only CN0414 boards, then the power can be provided through any CN0414 board.</p></li>
+<li><p>If the PLC/DCS Node contain only CN0414 boards, then the power can be
+provided through any CN0414 board.</p></li>
 </ul>
 <p>Refer to the <a class="reference internal" href="../hardware/cn0414.html"><span class="doc">CN0414</span></a> and <a class="reference internal" href="../hardware/cn0418.html"><span class="doc">CN0418</span></a> user guides for detailed information on power requirements.</p>
 </div>
 <section id="plc-single-or-multi-node-dcs-system-setup-configuration">
 <h3>PLC / Single or multi-node DCS System Setup Configuration<a class="headerlink" href="#plc-single-or-multi-node-dcs-system-setup-configuration" title="Link to this heading"></a></h3>
-<p>Block diagrams for PLC / single-node DCS and multi-node DCS systems are shown below. These systems differ slightly in their allowable configurations:</p>
+<p>Block diagrams for PLC / single-node DCS and multi-node DCS systems are shown
+below. These systems differ slightly in their allowable configurations:</p>
 <ul class="simple">
 <li><p>A Single-node system can operate with either half-duplex or full-duplex RS-485. Termination must be enabled at both ends of the RS-485 line(s).</p></li>
 <li><p>Modbus address conflict is not a concern in a single-node system (but the address must be known to the host.)</p></li>
@@ -723,9 +739,17 @@ Content on this topic
 </section>
 <section id="rs485-adapter-configuration">
 <h3>RS485 Adapter Configuration<a class="headerlink" href="#rs485-adapter-configuration" title="Link to this heading"></a></h3>
-<p>An ADALM-UARTJTAG board and a spare CN0416 can function as a convenient USB Virtual COM port to RS-485 adapter. Any RS485 adapter should work, if another is available. Isolated / Non-Isolated depends on the application and difference in ground potential between the host and nodes. Full-duplex operation is only supported in the PLC/single-node DCS configuration, as both TX and RX signals are driven continuously. Both single-node and multi-node configurations can use half-duplex.</p>
+<p>An ADALM-UARTJTAG board and a spare CN0416 can function as a convenient USB
+Virtual COM port to RS-485 adapter. Any RS485 adapter should work, if another is
+available. Isolated / Non-Isolated depends on the application and difference in
+ground potential between the host and nodes. Full-duplex operation is only
+supported in the PLC/single-node DCS configuration, as both TX and RX signals
+are driven continuously. Both single-node and multi-node configurations can use
+half-duplex.</p>
 <hr class="docutils" />
-<p>The CP2103 device must be programmed as follows to control the DE signal on the CN0416. Configure Silicon Labs Xpress Configurator as follows to program the device:</p>
+<p>The CP2103 device must be programmed as follows to control the DE signal on the
+CN0416. Configure Silicon Labs Xpress Configurator as follows to program the
+device:</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <tbody>
@@ -802,7 +826,9 @@ Content on this topic
 </section>
 <section id="node-configuration">
 <h2>Node Configuration<a class="headerlink" href="#node-configuration" title="Link to this heading"></a></h2>
-<p>Configuration for each node is similar, noting that each node must be set to a different address (via S1 on the CN0416) and the most distant node must have its termination enabled (via S6 or S7 on CN0416.)</p>
+<p>Configuration for each node is similar, noting that each node must be set to a
+different address (via S1 on the CN0416) and the most distant node must have its
+termination enabled (via S6 or S7 on CN0416.)</p>
 <hr class="docutils" />
 <p>(Full-duplex only valid in a single-node system.)</p>
 <div class="table-wrapper docutils container">
@@ -1134,7 +1160,8 @@ Content on this topic
 </pre></div>
 </div>
 <p>So the equation used to retrieve the update rate is:</p>
-<p>&lt;m 16&gt; Actual update rate = {(Update rate MSW * 65536) + Update rate LSW}/{10000} &lt;/m&gt;</p>
+<p>&lt;m 16&gt; Actual update rate = {(Update rate MSW * 65536) + Update rate
+LSW}/{10000} &lt;/m&gt;</p>
 <p>Or in code form:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Actual</span> <span class="n">update</span> <span class="n">rate</span> <span class="o">=</span> <span class="p">(((</span><span class="n">Update</span> <span class="n">rate</span> <span class="n">MSW</span> <span class="o">&lt;&lt;</span> <span class="mi">16</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFFFF0000</span><span class="p">)</span> <span class="o">|</span> <span class="n">Update</span> <span class="n">rate</span> <span class="n">LSW</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10000</span><span class="p">;</span>
 </pre></div>
@@ -1143,7 +1170,9 @@ Content on this topic
 <p>As stated before, adding an <strong>EVAL-CN0414-ARDZ</strong> adds 57 registers to the device: 50 analog input registers and 7 output holding registers. The analog input registers are: 16 for ADC input values, 4 for ADC input open wire detection flags and 50 for HART receive buffer. The output holding registers are: 1 for ADC output coding, 1 for ADC filter options, 1 for ADC postfilter options, 1 for ADC output data rate options, 1 for ADC open wire detection enable, 1 for HART command zero and 1 for HART channel select. The output holding registers are: 16 for the channel registers, 4 for Open Wire Detection and 30 for the HART input buffer. Adding an <strong>EVAL-CN0418-ARDZ</strong> adds 40 registers: 30 analog input registers and 10 output holding registers. There are 30 HART input registers as analog input registers. The output holding registers are: 4 for channel ranges (one for each channel), 4 for the channels output (one for each channel), 1 for the HART active channel and 1 for the HART command zero.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>Note that being a dynamic system the registers presented below do not have an unique address, but have an address offset that can be used to calculate their address. The function is:</p>
+<p>Note that being a dynamic system the registers presented below do not have an
+unique address, but have an address offset that can be used to calculate
+their address. The function is:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Address</span> <span class="o">=</span> <span class="p">(</span><span class="n">ADC_CS_address</span> <span class="o">&lt;&lt;</span> <span class="mi">12</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">MODBUS_slave_address</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">Address_offset</span><span class="p">;</span>
 </pre></div>
 </div>
@@ -1537,7 +1566,8 @@ the embedded development board.</p>
 </table>
 </div>
 <img alt="CLI main menu" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup3029/reference_designs/cn0435_main_menu_cli.png" />
-<p>The specific commands for each of the types of boards is described in they respective wiki pages:</p>
+<p>The specific commands for each of the types of boards is described in they
+respective wiki pages:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="demo_cn0414.html"><span class="doc">EVAL-CN0414-ARDZ specific commands</span></a></p></li>
 <li><p><a class="reference internal" href="demo_cn0418.html"><span class="doc">EVAL-CN0418-ARDZ specific commands</span></a></p></li>
@@ -1555,7 +1585,7 @@ the embedded development board.</p>
 <td></td>
 </tr>
 <tr class="row-even"><td><p>Reading these registers with 2 <strong>EVAL-CN0414-ARDZ</strong> and 2 <strong>EVAL-CN0418-ARDZ</strong> connected to the system it can be seen that 4 boards are found at address “0000”.</p></td>
-<td><p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup3029/reference_designs/cn0435_qmodmaster_general_reg.png"><img alt="Common registers" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup3029/reference_designs/cn0435_qmodmaster_general_reg.png" style="width: 1500px;" /></a></p></td>
+<td><p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup3029/reference_designs/cn0435_qmodmaster_general_reg.png"><img alt="Common registers" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup3029/reference_designs/cn0435_qmodmaster_general_reg.png" width="1500" /></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>The next address read “0001” indication that the board is a <strong>EVAL-CN0418-ARDZ</strong> and has address 0;</p></td>
 <td></td>
@@ -1594,13 +1624,18 @@ the embedded development board.</p>
 </section>
 <section id="obtaining-the-software">
 <h2>Obtaining the Software<a class="headerlink" href="#obtaining-the-software" title="Link to this heading"></a></h2>
-<p>There are two basic ways to program the ADICUP3029 with the software for the CN0435.</p>
+<p>There are two basic ways to program the ADICUP3029 with the software for the
+CN0435.</p>
 <ul class="simple">
 <li><p>Dragging and Dropping the .Hex to the Daplink drive</p></li>
 <li><p>Building, Compiling, and Debugging using CCES</p></li>
 </ul>
-<p>Using the drag and drop method, the software is going to be a version that Analog Devices creates for testing and evaluation purposes. This is the EASIEST way to get started with the reference design</p>
-<p>Importing the project into CrossCore is going to allow you to change parameters and customize the software to fit your needs, but will be a bit more advanced and will require you to download the CrossCore toolchain.</p>
+<p>Using the drag and drop method, the software is going to be a version that
+Analog Devices creates for testing and evaluation purposes. This is the EASIEST
+way to get started with the reference design</p>
+<p>Importing the project into CrossCore is going to allow you to change parameters
+and customize the software to fit your needs, but will be a bit more advanced
+and will require you to download the CrossCore toolchain.</p>
 <p>The software for the <strong>ADuCM3029_demo_cn0435</strong> can be found here:</p>
 <div class="download admonition">
 <p class="admonition-title">Download</p>
@@ -1627,30 +1662,52 @@ the embedded development board.</p>
 </section>
 <section id="project-structure">
 <h3>Project Structure<a class="headerlink" href="#project-structure" title="Link to this heading"></a></h3>
-<p>The application controls a dynamic system that can be physically different every time it is run. to do this it has two parts:</p>
+<p>The application controls a dynamic system that can be physically different every
+time it is run. to do this it has two parts:</p>
 <ul class="simple">
 <li><p>The system initialization.</p></li>
 <li><p>The system main process.</p></li>
 </ul>
 <img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup3029/reference_designs/cn0435_main_flow.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup3029/reference_designs/cn0435_main_flow.png" />
-<p>After getting parameters of the system supplied by the user in code the program initializes the software modules common to all the boards: I2C, UART, SPI, microcontroller power, software UART and the AD5700 HART modem. If the MODBUS interface is used, the update timer for the input boards is also initialized in this stage as a common module. If, by comparison, the CLI is used, each input board present initializes its own version of the update timer driver.</p>
-<p>After these initializations the system runs a board discovery routine. By using the presence of I2C EEPROM memory and testing the SPI configuration, all boards in the system are discovered and labeled as either CN0414 or CN0418. If the MODBUS interface is used, the system also scans for its MODBUS slave address and maps and initializes MODBUS registers.</p>
-<p>After board discovery, if the CLI is used, no board is set as active and the system manager loads the main menu process. If the MODBUS is used, the system activates the first board it discovers.</p>
+<p>After getting parameters of the system supplied by the user in code the program
+initializes the software modules common to all the boards: I2C, UART, SPI,
+microcontroller power, software UART and the AD5700 HART modem. If the MODBUS
+interface is used, the update timer for the input boards is also initialized in
+this stage as a common module. If, by comparison, the CLI is used, each input
+board present initializes its own version of the update timer driver.</p>
+<p>After these initializations the system runs a board discovery routine. By using
+the presence of I2C EEPROM memory and testing the SPI configuration, all boards
+in the system are discovered and labeled as either CN0414 or CN0418. If the
+MODBUS interface is used, the system also scans for its MODBUS slave address and
+maps and initializes MODBUS registers.</p>
+<p>After board discovery, if the CLI is used, no board is set as active and the
+system manager loads the main menu process. If the MODBUS is used, the system
+activates the first board it discovers.</p>
 <img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup3029/reference_designs/cn0435_initialization.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup3029/reference_designs/cn0435_initialization.png" />
 <section id="cli-process">
 <h4>CLI Process<a class="headerlink" href="#cli-process" title="Link to this heading"></a></h4>
-<p>If the CLI is used, no board is active after the initialization and the system stands by to receive commands. If the user sets one of the boards to be active, the program loads the commands and process specific to that board and starts sunning them until the application is stopped or the “exit” command is called.</p>
+<p>If the CLI is used, no board is active after the initialization and the system
+stands by to receive commands. If the user sets one of the boards to be active,
+the program loads the commands and process specific to that board and starts
+sunning them until the application is stopped or the “exit” command is called.</p>
 <img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup3029/reference_designs/cn0435_cli_process.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup3029/reference_designs/cn0435_cli_process.png" />
 </section>
 <section id="modbus-interface-process">
 <h4>MODBUS Interface Process<a class="headerlink" href="#modbus-interface-process" title="Link to this heading"></a></h4>
-<p>If the MODBUS interface is used the first board discovered is the active board. If it is a CN0414 the program runs its process until all channels are updated. If it is a CN0418 the program runs its process only once. After this the system deactivates the board and activates the next board discovered until all the boards have been active and updated. The system than cycles back from the beginning.</p>
-<p>Meanwhile the system scans the MODBUS channel for commands and if one is found that is addressed to this node it executes it and sends back a response.</p>
+<p>If the MODBUS interface is used the first board discovered is the active board.
+If it is a CN0414 the program runs its process until all channels are updated.
+If it is a CN0418 the program runs its process only once. After this the system
+deactivates the board and activates the next board discovered until all the
+boards have been active and updated. The system than cycles back from the
+beginning.</p>
+<p>Meanwhile the system scans the MODBUS channel for commands and if one is found
+that is addressed to this node it executes it and sends back a response.</p>
 <img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup3029/reference_designs/cn0435_modbus_process.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup3029/reference_designs/cn0435_modbus_process.png" />
 </section>
 <section id="board-specific-processes">
 <h4>Board Specific Processes<a class="headerlink" href="#board-specific-processes" title="Link to this heading"></a></h4>
-<p>The process and commands for each type of boards is described in the appropriate application page:</p>
+<p>The process and commands for each type of boards is described in the appropriate
+application page:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="demo_cn0414.html"><span class="doc">EVAL-CN0414-ARDZ</span></a></p></li>
 <li><p><a class="reference internal" href="demo_cn0418.html"><span class="doc">EVAL-CN0418-ARDZ</span></a></p></li>
@@ -1660,10 +1717,19 @@ the embedded development board.</p>
 </section>
 <section id="example-applications-and-utilities">
 <h2>Example Applications and Utilities<a class="headerlink" href="#example-applications-and-utilities" title="Link to this heading"></a></h2>
-<p>User DCS programs running on the host will be highly application-specific, and written in any number of languages. This section presents several example applications and utilities written in Python that perform basic functions such as reading and writing analog voltages, detecting the configuration of a node, and changing the data rate of an analog input channel.</p>
+<p>User DCS programs running on the host will be highly application-specific, and
+written in any number of languages. This section presents several example
+applications and utilities written in Python that perform basic functions such
+as reading and writing analog voltages, detecting the configuration of a node,
+and changing the data rate of an analog input channel.</p>
 <section id="utility-functions-in-python">
 <h3>Utility functions in Python<a class="headerlink" href="#utility-functions-in-python" title="Link to this heading"></a></h3>
-<p>The following utility functions are demonstrated using the single-node configuration described above. It may be connected to the host either directly via USB (no RS485 interface) or over a USB to RS485 bridge. Minimalmodbus is an open-source (Apache license) Modbus RTU and Modbus ASCII implementation for Python, and is used in these examples. Similar libraries exist for other languages.</p>
+<p>The following utility functions are demonstrated using the single-node
+configuration described above. It may be connected to the host either directly
+via USB (no RS485 interface) or over a USB to RS485 bridge. Minimalmodbus is an
+open-source (Apache license) Modbus RTU and Modbus ASCII implementation for
+Python, and is used in these examples. Similar libraries exist for other
+languages.</p>
 <section id="read-common-analog-input-registers-basic-example">
 <h4>Read common analog input registers basic example<a class="headerlink" href="#read-common-analog-input-registers-basic-example" title="Link to this heading"></a></h4>
 <p>For example, consider an instrument (slave) with Modbus RTU and address number 1 to which we are to communicate via a serial port with the name <code class="docutils literal notranslate"><span class="pre">COM12</span></code>. The instrument stores the actual configuration in registers 0 to 4. To read data from the instrument:</p>
@@ -1708,7 +1774,9 @@ the embedded development board.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="mi">127</span><span class="p">,</span> <span class="mi">65158</span><span class="p">,</span> <span class="mi">127</span><span class="p">,</span> <span class="mi">65514</span><span class="p">,</span> <span class="mi">127</span><span class="p">,</span> <span class="mi">65194</span><span class="p">,</span> <span class="mi">127</span><span class="p">,</span> <span class="mi">64995</span><span class="p">,</span> <span class="mi">127</span><span class="p">,</span> <span class="mi">65285</span><span class="p">,</span> <span class="mi">127</span><span class="p">,</span> <span class="mi">65244</span><span class="p">,</span> <span class="mi">127</span><span class="p">,</span> <span class="mi">65292</span><span class="p">,</span> <span class="mi">127</span><span class="p">,</span> <span class="mi">65278</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>In this example, after we run the above piece of code it results a list of 16 elements in decimal format. First 8 values corespond to voltage channels and last to current channels.</p>
+<p>In this example, after we run the above piece of code it results a list of 16
+elements in decimal format. First 8 values corespond to voltage channels and
+last to current channels.</p>
 </section>
 <section id="read-and-write-one-output-holding-register-for-eval-cn0414-ardz-example">
 <h4>Read and write one output holding register for EVAL-CN0414-ARDZ example<a class="headerlink" href="#read-and-write-one-output-holding-register-for-eval-cn0414-ardz-example" title="Link to this heading"></a></h4>
@@ -1742,7 +1810,10 @@ the embedded development board.</p>
 <span class="mi">1</span>
 </pre></div>
 </div>
-<p>In this example, after we run the above piece of code it results an integer which coresponds to ADC coding format. The default value 0, indicate that the ADC is set to bipolar coding format, while a value of 1 will indicate an unipolar coding format.</p>
+<p>In this example, after we run the above piece of code it results an integer
+which coresponds to ADC coding format. The default value 0, indicate that the
+ADC is set to bipolar coding format, while a value of 1 will indicate an
+unipolar coding format.</p>
 </section>
 <section id="read-and-write-one-output-holding-register-for-eval-cn0418-ardz-example">
 <h4>Read and write one output holding register for EVAL-CN0418-ARDZ example<a class="headerlink" href="#read-and-write-one-output-holding-register-for-eval-cn0418-ardz-example" title="Link to this heading"></a></h4>
@@ -1776,11 +1847,17 @@ the embedded development board.</p>
 <span class="mi">65535</span>
 </pre></div>
 </div>
-<p>In this example, after we run the above piece of code it results an integer which coresponds to DAC channel 1 output code. Depending on channel configuration this output code will corespond to a voltage or a current value. In this example the DAC channel output code is by default 0V because the default channel range is set to 0V to 5V. The 65535 value will corespond in this case to a 5V output.</p>
+<p>In this example, after we run the above piece of code it results an integer
+which coresponds to DAC channel 1 output code. Depending on channel
+configuration this output code will corespond to a voltage or a current value.
+In this example the DAC channel output code is by default 0V because the default
+channel range is set to 0V to 5V. The 65535 value will corespond in this case to
+a 5V output.</p>
 </section>
 <section id="detect-system-configuration-example">
 <h4>Detect system configuration example<a class="headerlink" href="#detect-system-configuration-example" title="Link to this heading"></a></h4>
-<p>Next, if we want to determine the system configuration we can run the following script from the attached archive.</p>
+<p>Next, if we want to determine the system configuration we can run the following
+script from the attached archive.</p>
 <p><a class="icon link reference external" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup3029/reference_designs/detect_configuration.zip" target="_blank">detect_configuration.zip</a></p>
 <p>For a PLC configuration the script output will look similarly like this:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Welcome! Use &#39;CTRL+C&#39; to go back from the current menu or exit!
@@ -1867,9 +1944,15 @@ No boards at MODBUS address: 16 No communication with the instrument (no answer)
 </section>
 <section id="change-or-check-the-system-registers-example">
 <h4>Change or check the system registers example<a class="headerlink" href="#change-or-check-the-system-registers-example" title="Link to this heading"></a></h4>
-<p>Next, if we want to check or change the system registers we can run the following script from the attached archive.</p>
+<p>Next, if we want to check or change the system registers we can run the
+following script from the attached archive.</p>
 <p><a class="icon link reference external" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup3029/reference_designs/read_or_write_registers.zip" target="_blank">read_or_write_registers.zip</a></p>
-<p>Depending on the system configuration, one or more DCS nodes will be detected. After the user selects a valid DCS node, a menu will appear which contain all available system options. Now, depending on the node configuration, not all option will be valid, even if they are shown. For example, if a DCS node doesn’t contain CN0414 analog input board(s), any option which refers to CN0414 will do nothing.</p>
+<p>Depending on the system configuration, one or more DCS nodes will be detected.
+After the user selects a valid DCS node, a menu will appear which contain all
+available system options. Now, depending on the node configuration, not all
+option will be valid, even if they are shown. For example, if a DCS node doesn’t
+contain CN0414 analog input board(s), any option which refers to CN0414 will do
+nothing.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Welcome! Use &#39;CTRL+C&#39; to go back from the current menu or exit!
 
 Available devices:
@@ -1933,10 +2016,12 @@ Enter test option:
 </section>
 <section id="example-applications-in-python">
 <h3>Example Applications in Python<a class="headerlink" href="#example-applications-in-python" title="Link to this heading"></a></h3>
-<p>The following section presents several example top-level DCS applications. Like the utilities, these are based on Minimalmodbus.</p>
+<p>The following section presents several example top-level DCS applications. Like
+the utilities, these are based on Minimalmodbus.</p>
 <section id="simple-dcs-control">
 <h4>Simple DCS control<a class="headerlink" href="#simple-dcs-control" title="Link to this heading"></a></h4>
-<p>This application provides a simple way to control a DCS system and also to detect HART devices by using the HART protocol.</p>
+<p>This application provides a simple way to control a DCS system and also to
+detect HART devices by using the HART protocol.</p>
 <p>The HART protocol is proprietary, customers implementing a full HART stack should refer to <a class="icon link reference external" href="https://fieldcommgroup.org" target="_blank">https://fieldcommgroup.org</a> This reference design provides a basic implementation of “command zero” that can be used to verify connectivity with HART instruments. CN0267 is a Complete 4 mA to 20 mA Loop Powered Field Instrument with HART Interface that can be used to test the DCS HART functionality. This application allows to:</p>
 <ul class="simple">
 <li><p>detect sistem configuration;</p></li>

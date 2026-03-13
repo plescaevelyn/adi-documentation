@@ -585,20 +585,28 @@ Content on this topic
 <h1>High Speed ADC Trigger Capture<a class="headerlink" href="#high-speed-adc-trigger-capture" title="Link to this heading"></a></h1>
 <section id="ads7v2-instructions">
 <h2>ADS7V2 Instructions<a class="headerlink" href="#ads7v2-instructions" title="Link to this heading"></a></h2>
-<p>The following instructions were created using the AD9208 evaluation board. For other high speed ADC evaluation boards that leverage the ADS7V2, the following instructions apply, but some of the GUI features/buttons may be different.</p>
+<p>The following instructions were created using the AD9208 evaluation board. For
+other high speed ADC evaluation boards that leverage the ADS7V2, the following
+instructions apply, but some of the GUI features/buttons may be different.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>There is a caveat with using a trigger to capture in that the program is not set up for subclass 1 operation, so latency is not deterministic. There may be variations in where the capture actually starts.</p>
+<p>There is a caveat with using a trigger to capture in that the program is not
+set up for subclass 1 operation, so latency is not deterministic. There may
+be variations in where the capture actually starts.</p>
 </div>
 <ol class="arabic simple">
-<li><p>Configure the plug-in/hardware for normal data capture. Please consult the evaluation board user guide for this step.</p></li>
-<li><p>Apply a 1.8V input to SMA J5 on the ADS7V2 board. The input should be at the high voltage (1.8V) at this point in time.</p></li>
-<li><p>Enable external trigger mode by writing a 1 to bit[1] of FPGA register 0x0106. To do this with ACE you can use one of the two methodologies outlined here:</p></li>
+<li><p>Configure the plug-in/hardware for normal data capture. Please consult the
+evaluation board user guide for this step.</p></li>
+<li><p>Apply a 1.8V input to SMA J5 on the ADS7V2 board. The input should be at the
+high voltage (1.8V) at this point in time.</p></li>
+<li><p>Enable external trigger mode by writing a 1 to bit[1] of FPGA register
+0x0106. To do this with ACE you can use one of the two methodologies outlined
+here:</p></li>
 </ol>
 <p>Option A: If the plug-in has a button to allow navigation to the FPGA memory map, then click it and modify register 0x0106 bit 1 in the GUI, as shown in the following two screenshots. Then, click <strong>Apply Changes</strong> to write the register in the FPGA.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/ace/trigger/step01_fpgabutton.png"><img alt="step01_fpgabutton.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/ace/trigger/step01_fpgabutton.png" style="width: 800px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/ace/trigger/step01_fpgabutton.png"><img alt="step01_fpgabutton.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/ace/trigger/step01_fpgabutton.png" width="800" />
 </a>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/ace/trigger/step02_enabletrigger.png"><img alt="step02_enabletrigger.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/ace/trigger/step02_enabletrigger.png" style="width: 800px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/ace/trigger/step02_enabletrigger.png"><img alt="step02_enabletrigger.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/ace/trigger/step02_enabletrigger.png" width="800" />
 </a>
 <p>Option B: If the plug-in does not have this button, you’ll need to execute a macro. You can copy the following text into a new text file, and save it with the “acemacro” file extension. Then load this macro file into the <strong>Macro Tools</strong> in ACE and run. Note that if you’re using a different plug-in than AD9208, you’ll need to swap out the chip name with what you’re using in ACE.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span> <span class="n">Analog</span> <span class="n">Devices</span><span class="p">,</span> <span class="n">Inc</span><span class="o">.</span> <span class="n">evaluation</span> <span class="n">macro</span> <span class="n">file</span>
@@ -611,18 +619,20 @@ Content on this topic
 <ol class="arabic simple" start="4">
 <li><p>Go to the Analysis view in ACE and click <strong>Run Once</strong>.</p></li>
 </ol>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/ace/trigger/step03.5_runcapture.png"><img alt="step03.5_runcapture.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/ace/trigger/step03.5_runcapture.png" style="width: 800px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/ace/trigger/step03.5_runcapture.png"><img alt="step03.5_runcapture.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/ace/trigger/step03.5_runcapture.png" width="800" />
 </a>
 <ol class="arabic simple" start="5">
 <li><p>Wait for falling edge (1.8V) output on SMA J6 (or wait long enough to ensure system is ready). At this time, ACE should be waiting for the FPGA to fill. You should see a <strong>Cancel</strong> button and the plot should not be refreshing.</p></li>
 </ol>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/ace/trigger/step04_capture.png"><img alt="step04_capture.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/ace/trigger/step04_capture.png" style="width: 800px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/ace/trigger/step04_capture.png"><img alt="step04_capture.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/ace/trigger/step04_capture.png" width="800" />
 </a>
 <ol class="arabic simple" start="6">
-<li><p>Pulse trigger input or turn off input to 0V. Minimum pulse width of trigger is 640 divided by the serial line rate.</p></li>
+<li><p>Pulse trigger input or turn off input to 0V. Minimum pulse width of trigger
+is 640 divided by the serial line rate.</p></li>
 </ol>
-<p>Once the trigger has been applied, ACE should capture and refresh the data onscreen.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/ace/trigger/step05_applytrigger.png"><img alt="step05_applytrigger.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/ace/trigger/step05_applytrigger.png" style="width: 800px;" />
+<p>Once the trigger has been applied, ACE should capture and refresh the data
+onscreen.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/ace/trigger/step05_applytrigger.png"><img alt="step05_applytrigger.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/ace/trigger/step05_applytrigger.png" width="800" />
 </a>
 </section>
 </section>

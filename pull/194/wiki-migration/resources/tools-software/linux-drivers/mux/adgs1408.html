@@ -614,7 +614,10 @@ Content on this topic
 </section>
 <section id="description">
 <h2>Description<a class="headerlink" href="#description" title="Link to this heading"></a></h2>
-<p>This is a mux controller subsystem driver, with an interface for accessing mux controllers. This is done in such a way that several consumers can independently access the same mux controller if one controller controls several multiplexers, thus allowing sharing.</p>
+<p>This is a mux controller subsystem driver, with an interface for accessing mux
+controllers. This is done in such a way that several consumers can independently
+access the same mux controller if one controller controls several multiplexers,
+thus allowing sharing.</p>
 </section>
 </section>
 <section id="source-code">
@@ -690,7 +693,9 @@ Content on this topic
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>A consumer must also be provided to be able to control the mux. In this example we used a regular IIO ADC driver. Which is interfaced with the IIO mux controller consumer.</p>
+<p>A consumer must also be provided to be able to control the mux. In this example
+we used a regular IIO ADC driver. Which is interfaced with the IIO mux
+controller consumer.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">adc</span><span class="p">:</span> <span class="n">ad7298</span><span class="o">@</span><span class="mi">3</span> <span class="p">{</span>
     <span class="n">compatible</span> <span class="o">=</span> <span class="s2">&quot;ad7298&quot;</span><span class="p">;</span>
     <span class="c1">#io-channel-cells = &lt;1&gt;;</span>
@@ -699,7 +704,8 @@ Content on this topic
 <span class="p">};</span>
 </pre></div>
 </div>
-<p>The mux controller extends the ADC’s IO channel that is selected. In this case the selected channels is represented by :</p>
+<p>The mux controller extends the ADC’s IO channel that is selected. In this case
+the selected channels is represented by :</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">io</span><span class="o">-</span><span class="n">channels</span> <span class="o">=</span> <span class="o">&lt;&amp;</span><span class="n">adc</span> <span class="mi">1</span><span class="o">&gt;</span><span class="p">;</span>
 </pre></div>
 </div>
@@ -708,10 +714,12 @@ Content on this topic
 </section>
 <section id="adding-linux-driver-support">
 <h1>Adding Linux driver support<a class="headerlink" href="#adding-linux-driver-support" title="Link to this heading"></a></h1>
-<p>Configure kernel with “make menuconfig” (alternatively use “make xconfig” or “make qconfig”)</p>
+<p>Configure kernel with “make menuconfig” (alternatively use “make xconfig” or
+“make qconfig”)</p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
-<p>If the multiplexer is used to select a signal that is fed to an IIO device, then you must enable IIO multiplexer driver</p>
+<p>If the multiplexer is used to select a signal that is fed to an IIO device,
+then you must enable IIO multiplexer driver</p>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Linux</span> <span class="n">Kernel</span> <span class="n">Configuration</span>
     <span class="n">Device</span> <span class="n">Drivers</span>  <span class="o">---&gt;</span>
@@ -735,8 +743,17 @@ Content on this topic
 </section>
 <section id="driver-testing">
 <h1>Driver testing<a class="headerlink" href="#driver-testing" title="Link to this heading"></a></h1>
-<p>Since we are using an IIO ADC (AD7298) then our mux will have an IIO device folder in /sys/bus/iio/devices/iio:deviceX with the name adc-mux&#64;3.</p>
-<p>Each and every IIO device, typically a hardware chip, has a device folder under /sys/bus/iio/devices/iio:deviceX. Where X is the IIO index of the device. Under every of these directory folders reside a set of files, depending on the characteristics and features of the hardware device in question. These files are consistently generalized and documented in the IIO ABI documentation. In order to determine which IIO deviceX corresponds to which hardware device, the user can read the name file /sys/bus/iio/devices/iio:deviceX/name. In case the sequence in which the iio device drivers are loaded/registered is constant, the numbering is constant and may be known in advance.</p>
+<p>Since we are using an IIO ADC (AD7298) then our mux will have an IIO device
+folder in /sys/bus/iio/devices/iio:deviceX with the name adc-mux&#64;3.</p>
+<p>Each and every IIO device, typically a hardware chip, has a device folder under
+/sys/bus/iio/devices/iio:deviceX. Where X is the IIO index of the device. Under
+every of these directory folders reside a set of files, depending on the
+characteristics and features of the hardware device in question. These files are
+consistently generalized and documented in the IIO ABI documentation. In order
+to determine which IIO deviceX corresponds to which hardware device, the user
+can read the name file /sys/bus/iio/devices/iio:deviceX/name. In case the
+sequence in which the iio device drivers are loaded/registered is constant, the
+numbering is constant and may be known in advance.</p>
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@raspberrypi</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">iio</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">iio</span><span class="p">:</span><span class="n">device1</span><span class="c1"># ls -l</span>
 <span class="n">total</span> <span class="mi">0</span>
@@ -780,7 +797,8 @@ Content on this topic
 <div class="line"><strong>Description:</strong></div>
 <div class="line">/sys/bus/iio/devices/iio:deviceX/in_voltageY_raw</div>
 </div>
-<p>This will select channel Y of the multiplexer and feed it to the input channel of the ADC that is physically connected to the mux.</p>
+<p>This will select channel Y of the multiplexer and feed it to the input channel
+of the ADC that is physically connected to the mux.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@raspberrypi</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">iio</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">iio</span><span class="p">:</span><span class="n">device1</span><span class="c1"># cat in_voltage0_raw</span>

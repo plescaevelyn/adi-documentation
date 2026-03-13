@@ -658,11 +658,28 @@ Content on this topic
 </section>
 <section id="example-device-initialization">
 <h1>Example device initialization<a class="headerlink" href="#example-device-initialization" title="Link to this heading"></a></h1>
-<p>For compile time configuration, it’s common Linux practice to keep board- and application-specific configuration out of the main driver file, instead putting it into the board support file.</p>
-<p>For devices on custom boards, as typical of embedded and SoC-(system-on-chip) based hardware, Linux uses platform_data to point to board-specific structures describing devices and how they are connected to the SoC. This can include available ports, chip variants, preferred modes, default initialization, additional pin roles, and so on. This shrinks the board-support packages (BSPs) and minimizes board and application specific #ifdefs in drivers.</p>
-<p>Unlike PCI or USB devices, I2C devices are not enumerated at the hardware level. Instead, the software must know which devices are connected on each I2C bus segment, and what address these devices are using. For this reason, the kernel code must instantiate I2C devices explicitly. There are different ways to achieve this, depending on the context and requirements. However the most common method is to declare the I2C devices by bus number.</p>
-<p>This method is appropriate when the I2C bus is a system bus, as in many embedded systems, wherein each I2C bus has a number which is known in advance. It is thus possible to pre-declare the I2C devices that inhabit this bus. This is done with an array of struct i2c_board_info, which is registered by calling i2c_register_board_info().</p>
-<p>So, to enable such a driver one need only edit the board support file by adding an appropriate entry to i2c_board_info.</p>
+<p>For compile time configuration, it’s common Linux practice to keep board- and
+application-specific configuration out of the main driver file, instead putting
+it into the board support file.</p>
+<p>For devices on custom boards, as typical of embedded and SoC-(system-on-chip)
+based hardware, Linux uses platform_data to point to board-specific structures
+describing devices and how they are connected to the SoC. This can include
+available ports, chip variants, preferred modes, default initialization,
+additional pin roles, and so on. This shrinks the board-support packages (BSPs)
+and minimizes board and application specific #ifdefs in drivers.</p>
+<p>Unlike PCI or USB devices, I2C devices are not enumerated at the hardware level.
+Instead, the software must know which devices are connected on each I2C bus
+segment, and what address these devices are using. For this reason, the kernel
+code must instantiate I2C devices explicitly. There are different ways to
+achieve this, depending on the context and requirements. However the most common
+method is to declare the I2C devices by bus number.</p>
+<p>This method is appropriate when the I2C bus is a system bus, as in many embedded
+systems, wherein each I2C bus has a number which is known in advance. It is thus
+possible to pre-declare the I2C devices that inhabit this bus. This is done with
+an array of struct i2c_board_info, which is registered by calling
+i2c_register_board_info().</p>
+<p>So, to enable such a driver one need only edit the board support file by adding
+an appropriate entry to i2c_board_info.</p>
 <p>For more information see: <a href="#id1"><span class="problematic" id="id2">`instantiating-devices.rst &lt;/git.linux.org&gt;documentation/i2c/instantiating-devices.rst&gt;`__</span></a></p>
 <p>The I2C address of the SSM4567 depends on the setting of the ADDR pin.</p>
 <div class="table-wrapper docutils container">
@@ -867,8 +884,10 @@ Content on this topic
 </section>
 <section id="tdm-configuration">
 <h3>TDM configuration<a class="headerlink" href="#tdm-configuration" title="Link to this heading"></a></h3>
-<p>If you want to use the SSM4567 in TDM mode you can configure it using snd_soc_dai_set_tdm_slot() from you ASoC board driver.</p>
-<p>The following restrictions apply to the parameters of snd_soc_dai_set_tdm_slot().</p>
+<p>If you want to use the SSM4567 in TDM mode you can configure it using
+snd_soc_dai_set_tdm_slot() from you ASoC board driver.</p>
+<p>The following restrictions apply to the parameters of
+snd_soc_dai_set_tdm_slot().</p>
 <ul class="simple">
 <li><p><strong>tx_mask</strong> specifies the output channel mapping for the serial port. This must either be 0, or the same as rx_mask.</p></li>
 <li><p><strong>rx_mask</strong> specifies the input channel mapping for the serial port. There must be exactly one bit set in this mask which selects the slot that is used.</p></li>
@@ -910,7 +929,6 @@ Content on this topic
 <span class="w">    </span><span class="p">.</span><span class="n">codec_dai_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ssm4567-hifi&quot;</span><span class="p">,</span>
 <span class="w">    </span><span class="p">.</span><span class="n">dai_fmt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SND_SOC_DAIFMT_DSP_A</span>
 
-
 <span class="w">            </span><span class="n">SND_SOC_DAIFMT_NB_NF</span><span class="w"> </span><span class="o">|</span>
 
 <span class="w">            </span><span class="n">SND_SOC_DAIFMT_CBS_CFS</span><span class="p">,</span>
@@ -933,8 +951,12 @@ Content on this topic
 </section>
 <section id="multi-ssm4567-example-configuration">
 <h3>Multi SSM4567 Example configuration<a class="headerlink" href="#multi-ssm4567-example-configuration" title="Link to this heading"></a></h3>
-<p>This example shows how to setup a ASoC board driver for a system with two SSM4567, one driving the left speaker and the other driving the right speaker. In this example the left SSM4567 is at I2C address 0x34 (ADDR=0) and the right SSM4567 is at I2S address 0x35 (ADDR=1).</p>
-<p>Note support for multiple CODECs on a single DAI link requires Linux v3.17 or higher.</p>
+<p>This example shows how to setup a ASoC board driver for a system with two
+SSM4567, one driving the left speaker and the other driving the right speaker.
+In this example the left SSM4567 is at I2C address 0x34 (ADDR=0) and the right
+SSM4567 is at I2S address 0x35 (ADDR=1).</p>
+<p>Note support for multiple CODECs on a single DAI link requires Linux v3.17 or
+higher.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">ssm4567_link_init</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">snd_soc_pcm_runtime</span><span class="w"> </span><span class="o">*</span><span class="n">rtd</span><span class="p">)</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span>
@@ -996,8 +1018,6 @@ Content on this topic
 <span class="w">    </span><span class="p">.</span><span class="n">num_configs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ARRAY_SIZE</span><span class="p">(</span><span class="n">ssm4567_zed_codec_conf</span><span class="p">),</span>
 
 <span class="w">    </span><span class="p">.</span><span class="n">dai_fmt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SND_SOC_DAIFMT_DSP_A</span>
-
-
 
 <span class="w">        </span><span class="n">SND_SOC_DAIFMT_NB_NF</span><span class="w"> </span><span class="o">|</span>
 

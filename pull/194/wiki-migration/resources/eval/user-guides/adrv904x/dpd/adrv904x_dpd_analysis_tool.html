@@ -597,8 +597,14 @@ Content on this topic
 </section>
 <section id="analyzing-pa-response">
 <h1>Analyzing PA Response<a class="headerlink" href="#analyzing-pa-response" title="Link to this heading"></a></h1>
-<p>Analyzing the PA response on the feedback loop and ensuring that the PA response is reasonable is critical for good DPD performance. In order to capture the transmitted and observed samples on the feedback loop (open loop DPD response), the user can force a unity gain response on the DPD actuator by configuring a Tx/ORx mean power threshold (such as -1dBFS) for DPD updates prior to enabling the DPD tracking calibration.</p>
-<p>The following code snippet shows how to configure the DPD to engage the actuator in bypass mode (output = input)</p>
+<p>Analyzing the PA response on the feedback loop and ensuring that the PA response
+is reasonable is critical for good DPD performance. In order to capture the
+transmitted and observed samples on the feedback loop (open loop DPD response),
+the user can force a unity gain response on the DPD actuator by configuring a
+Tx/ORx mean power threshold (such as -1dBFS) for DPD updates prior to enabling
+the DPD tracking calibration.</p>
+<p>The following code snippet shows how to configure the DPD to engage the actuator
+in bypass mode (output = input)</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">dpdRobustnessConfigSet</span><span class="p">(</span><span class="n">channel</span> <span class="o">=</span> <span class="n">adi_adrvgen6_TxChannels_e</span><span class="o">.</span><span class="n">ADI_ADRVGEN6_TX0</span><span class="p">):</span>
     <span class="n">dpdStabilityConfig</span> <span class="o">=</span> <span class="n">adi_adrvgen6_DfeAppCalDpdStabilityCfg_t</span><span class="p">()</span>
 
@@ -656,37 +662,59 @@ Content on this topic
     <span class="nb">print</span> <span class="s1">&#39;Data Buffer Capture complete!&#39;</span>
 </pre></div>
 </div>
-<p>A batch of 4096 samples of Tu and ORx data is written to a .txt file in tab separated IQ format.</p>
-<p>Once you have the 4096 samples logged, the Tu and ORx data can be loaded to the ADI DPD analysis tool, by specifying corresponding Tu and ORx data files as well as an output directory for data to be saved to. This is shown in the figure below.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_loaddata.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_loaddata.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_loaddata.png" style="width: 1200px;" />
+<p>A batch of 4096 samples of Tu and ORx data is written to a .txt file in tab
+separated IQ format.</p>
+<p>Once you have the 4096 samples logged, the Tu and ORx data can be loaded to the
+ADI DPD analysis tool, by specifying corresponding Tu and ORx data files as well
+as an output directory for data to be saved to. This is shown in the figure
+below.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_loaddata.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_loaddata.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_loaddata.png" width="1200" />
 </a>
-<p>The PA responses (Time domain, Power Spectral Density, CCDF, AM/PM and Gain response) can be plotted in a tabbed window shown below. Plotting a response will automatically select the tab corresponding to the plotted data. The user may also click on a tab to view the specific data plot.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_ampm.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_ampm.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_ampm.png" style="width: 1200px;" />
+<p>The PA responses (Time domain, Power Spectral Density, CCDF, AM/PM and Gain
+response) can be plotted in a tabbed window shown below. Plotting a response
+will automatically select the tab corresponding to the plotted data. The user
+may also click on a tab to view the specific data plot.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_ampm.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_ampm.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_ampm.png" width="1200" />
 </a>
 </section>
 <section id="identifying-an-optimal-dpd-model">
 <h1>Identifying an Optimal DPD Model<a class="headerlink" href="#identifying-an-optimal-dpd-model" title="Link to this heading"></a></h1>
-<p>After validating that the PA response is reasonable as shown in the previous section, the user may proceed to identifying an optimal model for their Power Amplifier based on the open loop PA response seen in the previous section.</p>
+<p>After validating that the PA response is reasonable as shown in the previous
+section, the user may proceed to identifying an optimal model for their Power
+Amplifier based on the open loop PA response seen in the previous section.</p>
 <section id="sweeping-dpd-models">
 <h2>Sweeping DPD Models<a class="headerlink" href="#sweeping-dpd-models" title="Link to this heading"></a></h2>
 <p>ADI provides two methods of model selection: existing model sweep/search or a model pruning optimization. A DPD model library as part of the ADRV904x Software Package is provided in the default model sweep directory shown below. Also, attached <a class="icon link reference external" href="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/dpd_models.zip" target="_blank">here</a></p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_modelsweep.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_modelsweep.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_modelsweep.png" style="width: 1200px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_modelsweep.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_modelsweep.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_modelsweep.png" width="1200" />
 </a>
-<p>The user can then sort the DPD models by pressing the “Sort DPD Models” button. A loading bar will update the progress of the sweep, before outputing a text file with the DPD models, which are sorted by NMSE. The PSD of the model results will be shown in the PSD Model tab of the figure viewer.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_modelsweep_process.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_modelsweep_process.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_modelsweep_process.png" style="width: 1200px;" />
+<p>The user can then sort the DPD models by pressing the “Sort DPD Models” button.
+A loading bar will update the progress of the sweep, before outputing a text
+file with the DPD models, which are sorted by NMSE. The PSD of the model results
+will be shown in the PSD Model tab of the figure viewer.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_modelsweep_process.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_modelsweep_process.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_modelsweep_process.png" width="1200" />
 </a>
 <p>An example of the output file is shown below.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_output_nmse.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_output_nmse.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_output_nmse.png" style="width: 800px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_output_nmse.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_output_nmse.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_output_nmse.png" width="800" />
 </a>
 </section>
 <section id="pruning-dpd-models">
 <h2>Pruning DPD Models<a class="headerlink" href="#pruning-dpd-models" title="Link to this heading"></a></h2>
-<p>Model pruning optimization can be conducted by selecting a model coefficient/feature limit using the “Model Coeff Count” slider. 255 coefficients can be selected for default operation and 510 for partial DPD operation. A selection of 255 coefficients is recommended.</p>
-<p>Other parameters, such as nonlinearity order of the DPD model basis functions can be specified. It is recommended that the user uses the default parameters shown below.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_dpdpruning.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_dpdpruning.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_dpdpruning.png" style="width: 1200px;" />
+<p>Model pruning optimization can be conducted by selecting a model
+coefficient/feature limit using the “Model Coeff Count” slider. 255 coefficients
+can be selected for default operation and 510 for partial DPD operation. A
+selection of 255 coefficients is recommended.</p>
+<p>Other parameters, such as nonlinearity order of the DPD model basis functions
+can be specified. It is recommended that the user uses the default parameters
+shown below.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_dpdpruning.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_dpdpruning.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/adrv904x/dpd/adidpdanalysistool_dpdpruning.png" width="1200" />
 </a>
-<p>Pressing the “Generate DPD Models” button will begin the model optimization, which may take up to 10 minutes to complete. The progress bar will update for each of the eight models created. The PSD of the model results will be shown in the PSD Model tab of the figure viewer. Models are output to the ‘Data Export Folder’ under the subfolder ‘models’.</p>
-<p>Documentation for the GUI and its features can be easily accessed through the help toolbar option.</p>
+<p>Pressing the “Generate DPD Models” button will begin the model optimization,
+which may take up to 10 minutes to complete. The progress bar will update for
+each of the eight models created. The PSD of the model results will be shown in
+the PSD Model tab of the figure viewer. Models are output to the ‘Data Export
+Folder’ under the subfolder ‘models’.</p>
+<p>Documentation for the GUI and its features can be easily accessed through the
+help toolbar option.</p>
 </section>
 </section>
 

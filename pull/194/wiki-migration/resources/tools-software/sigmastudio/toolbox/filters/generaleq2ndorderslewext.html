@@ -582,9 +582,12 @@ Content on this topic
   <section id="general-eq-2nd-order-slew-ext-adau145x">
 <h1>General Eq (2nd order) Slew Ext-(ADAU145x)<a class="headerlink" href="#general-eq-2nd-order-slew-ext-adau145x" title="Link to this heading"></a></h1>
 <p><a class="reference internal" href="../filters.html"><span class="doc">Click here to return to the Filters page</span></a></p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/generaleqslewext1.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/generaleqslewext1.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/generaleqslewext1.png" style="width: 100px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/generaleqslewext1.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/generaleqslewext1.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/generaleqslewext1.png" width="100" />
 </a>
-<p>The General (2nd-Order)Slew Ext block gives access to a wide variety of 2nd-order (biquad)filter algorithms. The Slew time can be input to the module using the external control pin in seconds (0-1) to slew from the initial set of coefficients to the target value when any filter parameter is changed.</p>
+<p>The General (2nd-Order)Slew Ext block gives access to a wide variety of
+2nd-order (biquad)filter algorithms. The Slew time can be input to the module
+using the external control pin in seconds (0-1) to slew from the initial set of
+coefficients to the target value when any filter parameter is changed.</p>
 <ul class="simple">
 <li><p>The available filter types are:</p></li>
 <li><p>Parametric</p></li>
@@ -605,7 +608,7 @@ Content on this topic
 </ul>
 <p>The slewing functionality is added for smooth transition from one set of filter coefficients to another when the filter parameters are changed. The slewing takes place approximately in the slew time set by the user. The slew time can be set by providing the value <span class="math notranslate nohighlight">\(\lambda\)</span> to the control pin. The parameter <span class="math notranslate nohighlight">\(\lambda\)</span> determines the slew rate. Upon growing the number of filter stages, a new control pin is added to the module for <span class="math notranslate nohighlight">\(\lambda\)</span> value for each stage. The slew computation is always performed in single precision.</p>
 <p><strong>To open the filter control window, click on the icon button:</strong> Select the desired filter type from the drop-down combo-box list. The filter controls and the icon button image will change to reflect the selected filter type.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/generaleqslewext2.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/generaleqslewext2.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/generaleqslewext2.png" style="width: 200px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/generaleqslewext2.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/generaleqslewext2.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/generaleqslewext2.png" width="200" />
 </a>
 <hr class="docutils" />
 <p>This block’s algorithms use biquad filter designs (<a class="icon ez reference external" href="https://ez.analog.com/message/16011#16011" target="_blank">Direct Form I</a>) based on Robert Bristow-Johnson’s work in this field.</p>
@@ -616,7 +619,10 @@ Content on this topic
 <li><p><span class="math notranslate nohighlight">\(\displaystyle gainLinear = 10^\frac{gain}{20}\)</span></p></li>
 </ul>
 <img alt="general2ndpic4.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/general2ndpic4.png" />
-<p>Note that the b0 and b2 coefficients for the high pass filter below are inverted from what is stored in RAM. The correct equations for b0, b1, and b2 for a high pass filter are as follows: b0 = -(1 + cos(ω0)) * gainLinear / 2 b1 = -(1 + cos(ω0)) * gainLinear b2 = -(1 + cos(ω0)) * gainLinear / 2</p>
+<p>Note that the b0 and b2 coefficients for the high pass filter below are inverted
+from what is stored in RAM. The correct equations for b0, b1, and b2 for a high
+pass filter are as follows: b0 = -(1 + cos(ω0)) * gainLinear / 2 b1 = -(1 +
+cos(ω0)) * gainLinear b2 = -(1 + cos(ω0)) * gainLinear / 2</p>
 <img alt="general2ndpic5.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/general2ndpic5.png" />
 <p><strong>Note that the minus signs on b0 and b2 values are erroneous for the Butterworth HP and Bessel HP. They should not be included. See</strong> <a class="icon link reference external" href="http://ez.analog.com/message/4769" target="_blank">http://ez.analog.com/message/4769</a></p>
 <img alt="general2ndpic6.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/general2ndpic6.png" />
@@ -624,7 +630,11 @@ Content on this topic
 <p><span class="math notranslate nohighlight">\(\lambda= e^{-1/{timeconstant \times F_s}}\)</span></p>
 <p><span class="math notranslate nohighlight">\(Current Coefficient= Current Coffcicient \times \lambda + Target Coefficient \times (1-\lambda)\)</span></p>
 <p>The above slewing function implements RC slewing. The parameter <span class="math notranslate nohighlight">\(\lambda\)</span> is calculated based on the slewing time constant. The computations for slewing of filter coefficients is done on the DSP.</p>
-<p>For all of the above filters, the coefficients are divided by a0, normalizing them and making a0 = 1 so that only 5 coefficients must be stored. In the actual implementation on the DSP, when the coefficients are stored in parameter RAM, a1 and a2 need to be inverted. This is done automatically, in software, before the parameters are written to memory.</p>
+<p>For all of the above filters, the coefficients are divided by a0, normalizing
+them and making a0 = 1 so that only 5 coefficients must be stored. In the actual
+implementation on the DSP, when the coefficients are stored in parameter RAM, a1
+and a2 need to be inverted. This is done automatically, in software, before the
+parameters are written to memory.</p>
 <p>The Q is shown with the value adjusted (from the classical EE definition) so that a boost of N dB followed by a cut of N dB for identical Q and f0/Fs results in a precisely flat unity gain filter or “wire”. This is equal to A*Q, where A = 10^(dBgain/40).</p>
 <p><em>Note:</em> Some of the General 2nd order filters (those in the Type2 tree) are based on the Direct Form II implementation, which is used in the following HW ADSP-215xx &amp; SC5xx. Please see the image below.</p>
 <img alt="Type2supportfor SHARCModules.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/type2supportfor_sharcmodules.png" />

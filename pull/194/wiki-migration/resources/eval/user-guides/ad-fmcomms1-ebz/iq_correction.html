@@ -595,25 +595,48 @@ Content on this topic
             
   <section id="i-q-correction">
 <h1>I/Q Correction<a class="headerlink" href="#i-q-correction" title="Link to this heading"></a></h1>
-<p>As shown in the previous section, in an FMComms system, the complex modulation/demodulation scheme is used. In theory, the two baseband signals (in-phase and quadrature) should be orthogonal to each other with the same amplitude. However, due to the different channel environments and component properties  <a class="footnote-reference brackets" href="#id5" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> , there is usually offset on the phase and the amplitude, which sets the context of I/Q correction.</p>
+<p>As shown in the previous section, in an FMComms system, the complex
+modulation/demodulation scheme is used. In theory, the two baseband signals
+(in-phase and quadrature) should be orthogonal to each other with the same
+amplitude. However, due to the different channel environments and component
+properties  <a class="footnote-reference brackets" href="#id5" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> , there is usually offset on the phase and the amplitude, which
+sets the context of I/Q correction.</p>
 <section id="why-i-q-correction">
 <h2>Why I/Q Correction<a class="headerlink" href="#why-i-q-correction" title="Link to this heading"></a></h2>
-<p>The I/Q imbalance is commonly seen in any RF front-end that exploits analog quadrature down-mixing. With an imbalanced I/Q, there will be several problems.</p>
-<p>In contrast to an ideal down-converter that performs simple frequency shifting, a down-converter with I/Q imbalance not only down-converts the desired signal, but also introduces its image interference. Such image interference, if left uncorrected, presents an error floor which limits the demodulation performance. Moreover, although the I/Q imbalance introduced by the LO may be assumed constant over the signal bandwidth, the mismatches in the subsequent baseband I/Q amplifiers and filters tend to vary with frequencies. Such frequency dependent I/Q imbalance is particularly severe in a wideband direct-conversion receiver and the corresponding estimation and compensation process becomes more challenging.  <a class="footnote-reference brackets" href="#id6" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p>
-<p>In order to overcome these problems and to realize a successful communication, it is necessary to implement the I/Q correction in the FMComms system.</p>
+<p>The I/Q imbalance is commonly seen in any RF front-end that exploits analog
+quadrature down-mixing. With an imbalanced I/Q, there will be several problems.</p>
+<p>In contrast to an ideal down-converter that performs simple frequency shifting,
+a down-converter with I/Q imbalance not only down-converts the desired signal,
+but also introduces its image interference. Such image interference, if left
+uncorrected, presents an error floor which limits the demodulation performance.
+Moreover, although the I/Q imbalance introduced by the LO may be assumed
+constant over the signal bandwidth, the mismatches in the subsequent baseband
+I/Q amplifiers and filters tend to vary with frequencies. Such frequency
+dependent I/Q imbalance is particularly severe in a wideband direct-conversion
+receiver and the corresponding estimation and compensation process becomes more
+challenging.  <a class="footnote-reference brackets" href="#id6" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p>
+<p>In order to overcome these problems and to realize a successful communication,
+it is necessary to implement the I/Q correction in the FMComms system.</p>
 </section>
 <section id="math-of-i-q-correction">
 <h2>Math of I/Q Correction<a class="headerlink" href="#math-of-i-q-correction" title="Link to this heading"></a></h2>
-<p>We will use the algorithm introduced in S.W. Ellingson’s paper Correcting I-Q Imbalance in Direct Conversion Receivers  <a class="footnote-reference brackets" href="#id7" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a> to conduct the I/Q correction.</p>
-<p>Given a single tone that converts the signal from RF to baseband, ideally, the two baseband signals (in-phase and quadrature) should be orthogonal to each other with the same amplitude. Without loss of generality, we normalize the magnitude and the phase, then the two signals can be expressed as:</p>
+<p>We will use the algorithm introduced in S.W. Ellingson’s paper Correcting I-Q
+Imbalance in Direct Conversion Receivers  <a class="footnote-reference brackets" href="#id7" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a> to conduct the I/Q correction.</p>
+<p>Given a single tone that converts the signal from RF to baseband, ideally, the
+two baseband signals (in-phase and quadrature) should be orthogonal to each
+other with the same amplitude. Without loss of generality, we normalize the
+magnitude and the phase, then the two signals can be expressed as:</p>
 <p><span class="math notranslate nohighlight">\(I(t)=cos(\omega t)\)</span> and</p>
 <p><span class="math notranslate nohighlight">\(Q(t)=sin(\omega t)\)</span> ,</p>
 <p>where <span class="math notranslate nohighlight">\(\omega\)</span> is the baseband frequency of the tone.</p>
-<p>However, due to the different channel environments and component properties, there is usually DC bias, as well as the offset on the phase and the amplitude, which makes the two signals as following:</p>
+<p>However, due to the different channel environments and component properties,
+there is usually DC bias, as well as the offset on the phase and the amplitude,
+which makes the two signals as following:</p>
 <p><span class="math notranslate nohighlight">\(I prime(t)=\alpha cos(\omega t)+beta_I\)</span> and</p>
 <p><span class="math notranslate nohighlight">\(Q prime(t)=sin(\omega t+\psi)+beta_Q\)</span> ,</p>
 <p>where <span class="math notranslate nohighlight">\(beta_I\)</span> and <span class="math notranslate nohighlight">\(beta_Q\)</span> are DC biases on two channels, <span class="math notranslate nohighlight">\(\alpha\)</span> stands for the amplitude offset, and <span class="math notranslate nohighlight">\(\psi\)</span> stands for the phase offset.</p>
-<p>Since the DC biases can be easily found out by calculating the mean value of the signals, the main challenge is to correct the following two signals:</p>
+<p>Since the DC biases can be easily found out by calculating the mean value of the
+signals, the main challenge is to correct the following two signals:</p>
 <p><span class="math notranslate nohighlight">\(I prime prime(t)=\alpha cos(\omega t)\)</span> ,</p>
 <p><span class="math notranslate nohighlight">\(Q prime prime(t)=sin(\omega t + \psi)\)</span> ,</p>
 <p>and recover them back to <span class="math notranslate nohighlight">\(I(t)\)</span> and <span class="math notranslate nohighlight">\(Q(t)\)</span> . Using Trigonometric Identities, these two equations can be rewritten in the matrix format:</p>
@@ -625,31 +648,44 @@ Content on this topic
 <p><span class="math notranslate nohighlight">\([matrix21{I(t)} {Q(t)}] =[matrix22A 0 C D] [matrix21{I prime prime(t)} {Q prime prime(t)}]=[matrix22A 0 C D] [matrix21{I prime(t)-beta_I} {Q prime(t)-beta_Q}]\)</span> ,</p>
 <p>where <span class="math notranslate nohighlight">\(I prime(t)\)</span> and <span class="math notranslate nohighlight">\(Q prime(t)\)</span> are observed signals, and <span class="math notranslate nohighlight">\(A, C, D\)</span> are correction matrix parameters.</p>
 </div>
-<p>Please refer to the S.W. Ellingson’s paper <a class="footnote-reference brackets" href="#id8" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a> for the detailed procedures of finding out the correction matrix parameters.</p>
+<p>Please refer to the S.W. Ellingson’s paper <a class="footnote-reference brackets" href="#id8" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a> for the detailed procedures of
+finding out the correction matrix parameters.</p>
 </section>
 <section id="implementation">
 <h2>Implementation<a class="headerlink" href="#implementation" title="Link to this heading"></a></h2>
-<p>Based on the theory introduced in the previous section, the implementation of I/Q correction is conducted in two steps, namely the correction matrix calculation and the matrix multiplication. Specifically, in the first step, we use some software, such as MATLAB or Simulink, to calculate the parameters of the correction matrix. Then in the second step, we use hardware to implement the matrix multiplication and obtain the corrected I and Q.</p>
+<p>Based on the theory introduced in the previous section, the implementation of
+I/Q correction is conducted in two steps, namely the correction matrix
+calculation and the matrix multiplication. Specifically, in the first step, we
+use some software, such as MATLAB or Simulink, to calculate the parameters of
+the correction matrix. Then in the second step, we use hardware to implement the
+matrix multiplication and obtain the corrected I and Q.</p>
 <section id="simulink-model">
 <h3>Simulink Model<a class="headerlink" href="#simulink-model" title="Link to this heading"></a></h3>
-<p>A Simulink model is created to calculate the parameters of the correction matrix. The top level of the model is shown in the figure below:</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/model_top.jpg"><img alt="Model diagram" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/model_top.jpg" style="width: 600px;" />
+<p>A Simulink model is created to calculate the parameters of the correction
+matrix. The top level of the model is shown in the figure below:</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/model_top.jpg"><img alt="Model diagram" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/model_top.jpg" width="600" />
 </a>
 <p>In this model, the amplitude, phase and DC offset of the I and Q signals are specified by the users. These two signals are <span class="math notranslate nohighlight">\(I prime(t)\)</span> and <span class="math notranslate nohighlight">\(Q prime(t)\)</span> in the previous section, which serve as the input to the IQcorrect subsystem. In real-world application, these two inputs can be captured data from users’ systems. For example, the output data from ADC on the receiver side. The output of the IQcorrect subsystem are the parameters of the correction matrix (A, C, D). The structure of this subsystem is shown below:</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/subsystem.jpg"><img alt="Subsystem diagram" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/subsystem.jpg" style="width: 900px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/subsystem.jpg"><img alt="Subsystem diagram" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/subsystem.jpg" width="900" />
 </a>
-<p>Basically, this subsystem executes Step 2 through Step 7 of the algorithm in S.W. Ellingson’s paper. In order to facilitate the real-world application, this model supports fixed point data type and sample-based processing. It is noted that all the averaging operations are implemented by FIR filter.</p>
+<p>Basically, this subsystem executes Step 2 through Step 7 of the algorithm in
+S.W. Ellingson’s paper. In order to facilitate the real-world application, this
+model supports fixed point data type and sample-based processing. It is noted
+that all the averaging operations are implemented by FIR filter.</p>
 <div class="download admonition">
 <p class="admonition-title">Download</p>
 <p>You can download the Simulink model from below:</p>
 <ul class="simple">
 <li><p><a class="icon link reference external" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/iqcorrection.zip" target="_blank">iqcorrection.zip</a></p></li>
 </ul>
-<p>Pay attention to the output data type of each block. It should be defined according to the range of the data value of your system. Otherwise, you will not get the correct result.</p>
+<p>Pay attention to the output data type of each block. It should be defined
+according to the range of the data value of your system. Otherwise, you will
+not get the correct result.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>In order to run this model, your MATLAB license needs to include the following components:</p>
+<p>In order to run this model, your MATLAB license needs to include the
+following components:</p>
 <ul class="simple">
 <li><p>MATLAB</p></li>
 <li><p>Simulink</p></li>
@@ -657,7 +693,8 @@ Content on this topic
 <li><p>DSP System Toolbox</p></li>
 <li><p>Fixed-Point Designer</p></li>
 </ul>
-<p>If you want to generate HDL code from this model, the following component is also required:</p>
+<p>If you want to generate HDL code from this model, the following component is
+also required:</p>
 <ul class="simple">
 <li><p>HDL Coder</p></li>
 </ul>
@@ -665,21 +702,29 @@ Content on this topic
 </section>
 <section id="hdl">
 <h3>HDL<a class="headerlink" href="#hdl" title="Link to this heading"></a></h3>
-<p>The HDL is implemented for matrix multiplication on FPGA. It takes the correction matrix parameters as input, and multiplies them with the observed I and Q signals to get the corrected signals.</p>
+<p>The HDL is implemented for matrix multiplication on FPGA. It takes the
+correction matrix parameters as input, and multiplies them with the observed I
+and Q signals to get the corrected signals.</p>
 </section>
 </section>
 <section id="results">
 <h2>Results<a class="headerlink" href="#results" title="Link to this heading"></a></h2>
-<p>In this section, the time-domain and scatter plots of I and Q signals from the Simulink model are shown before and after I/Q correction. Comparing the figures, it is easy to find the impact of I/Q correction.</p>
+<p>In this section, the time-domain and scatter plots of I and Q signals from the
+Simulink model are shown before and after I/Q correction. Comparing the figures,
+it is easy to find the impact of I/Q correction.</p>
 <section id="without-i-q-correction">
 <h3>Without I/Q Correction<a class="headerlink" href="#without-i-q-correction" title="Link to this heading"></a></h3>
-<p>Before the I/Q correction, it is obvious that the amplitude of the I and Q signals is very different, and their phase difference is not 90 degrees. The scatter plot shows an ellipse, which also reflects the imbalance of I and Q.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/before.png"><img alt="Block diagram" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/before.png" style="width: 800px;" /></a> <img alt="scatter1.png" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/scatter1.png" /></p>
+<p>Before the I/Q correction, it is obvious that the amplitude of the I and Q
+signals is very different, and their phase difference is not 90 degrees. The
+scatter plot shows an ellipse, which also reflects the imbalance of I and Q.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/before.png"><img alt="Block diagram" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/before.png" width="800" /></a> <img alt="scatter1.png" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/scatter1.png" /></p>
 </section>
 <section id="with-i-q-correction">
 <h3>With I/Q Correction<a class="headerlink" href="#with-i-q-correction" title="Link to this heading"></a></h3>
-<p>After the I/Q correction, the amplitude of the I and Q signals is identical, and they are orthogonal to each other. Therefore, the scatter plot shows a perfect circle centering in the origin.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/after.png"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/after.png" style="width: 800px;" /></a> <img alt="scatter2.png" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/scatter2.png" /></p>
+<p>After the I/Q correction, the amplitude of the I and Q signals is identical, and
+they are orthogonal to each other. Therefore, the scatter plot shows a perfect
+circle centering in the origin.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/after.png"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/after.png" width="800" /></a> <img alt="scatter2.png" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/scatter2.png" /></p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <ul class="simple">
@@ -689,11 +734,16 @@ Content on this topic
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="id5" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
-<p>This imbalance mainly attributes to the mismatched components in the in-phase (I) and the quadrature (Q) branches. Examples include but not limited to an imperfectly balanced local oscillator (LO) and/or baseband low pass filters (LPF) with mismatched frequency responses.</p>
+<p>This imbalance mainly attributes to the mismatched components in the in-phase
+(I) and the quadrature (Q) branches. Examples include but not limited to an
+imperfectly balanced local oscillator (LO) and/or baseband low pass filters
+(LPF) with mismatched frequency responses.</p>
 </aside>
 <aside class="footnote brackets" id="id6" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
-<p>Guanbin Xing, Manyuan Shen, and Hui Liu. Frequency Offset and I/Q Imbalance Compensation for Direct-Conversion Receivers. IEEE TRANSACTIONS ON WIRELESS COMMUNICATIONS, VOL. 4, NO. 2, MARCH 2005.</p>
+<p>Guanbin Xing, Manyuan Shen, and Hui Liu. Frequency Offset and I/Q Imbalance
+Compensation for Direct-Conversion Receivers. IEEE TRANSACTIONS ON WIRELESS
+COMMUNICATIONS, VOL. 4, NO. 2, MARCH 2005.</p>
 </aside>
 <aside class="footnote brackets" id="id7" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">3</a><span class="fn-bracket">]</span></span>

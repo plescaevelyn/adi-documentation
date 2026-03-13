@@ -678,15 +678,33 @@ Content on this topic
 </section>
 <section id="example-device-initialization">
 <h1>Example device initialization<a class="headerlink" href="#example-device-initialization" title="Link to this heading"></a></h1>
-<p>For compile time configuration, it’s common Linux practice to keep board- and application-specific configuration out of the main driver file, instead putting it into the board support file.</p>
-<p>For devices on custom boards, as typical of embedded and SoC-(system-on-chip) based hardware, Linux uses platform_data to point to board-specific structures describing devices and how they are connected to the SoC. This can include available ports, chip variants, preferred modes, default initialization, additional pin roles, and so on. This shrinks the board-support packages (BSPs) and minimizes board and application specific #ifdefs in drivers.</p>
+<p>For compile time configuration, it’s common Linux practice to keep board- and
+application-specific configuration out of the main driver file, instead putting
+it into the board support file.</p>
+<p>For devices on custom boards, as typical of embedded and SoC-(system-on-chip)
+based hardware, Linux uses platform_data to point to board-specific structures
+describing devices and how they are connected to the SoC. This can include
+available ports, chip variants, preferred modes, default initialization,
+additional pin roles, and so on. This shrinks the board-support packages (BSPs)
+and minimizes board and application specific #ifdefs in drivers.</p>
 <section id="i2c">
 <h2>I2C<a class="headerlink" href="#i2c" title="Link to this heading"></a></h2>
-<p>Unlike PCI or USB devices, I2C devices are not enumerated at the hardware level. Instead, the software must know which devices are connected on each I2C bus segment, and what address these devices are using. For this reason, the kernel code must instantiate I2C devices explicitly. There are different ways to achieve this, depending on the context and requirements. However the most common method is to declare the I2C devices by bus number.</p>
-<p>This method is appropriate when the I2C bus is a system bus, as in many embedded systems, wherein each I2C bus has a number which is known in advance. It is thus possible to pre-declare the I2C devices that inhabit this bus. This is done with an array of struct i2c_board_info, which is registered by calling i2c_register_board_info().</p>
-<p>So, to enable such a driver one need only edit the board support file by adding an appropriate entry to i2c_board_info.</p>
+<p>Unlike PCI or USB devices, I2C devices are not enumerated at the hardware level.
+Instead, the software must know which devices are connected on each I2C bus
+segment, and what address these devices are using. For this reason, the kernel
+code must instantiate I2C devices explicitly. There are different ways to
+achieve this, depending on the context and requirements. However the most common
+method is to declare the I2C devices by bus number.</p>
+<p>This method is appropriate when the I2C bus is a system bus, as in many embedded
+systems, wherein each I2C bus has a number which is known in advance. It is thus
+possible to pre-declare the I2C devices that inhabit this bus. This is done with
+an array of struct i2c_board_info, which is registered by calling
+i2c_register_board_info().</p>
+<p>So, to enable such a driver one need only edit the board support file by adding
+an appropriate entry to i2c_board_info.</p>
 <p>For more information see: <a href="#id5"><span class="problematic" id="id6">`instantiating-devices.rst &lt;/git.linux.org&gt;documentation/i2c/instantiating-devices.rst&gt;`__</span></a></p>
-<p>The I2C device id depends on the ADDR0 and ADDR1 pin settings and needs to be set according to your board setup.</p>
+<p>The I2C device id depends on the ADDR0 and ADDR1 pin settings and needs to be
+set according to your board setup.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -897,8 +915,12 @@ Valid values: “Normal operation”, “Enhanced performance”, “Power savin
 <span class="p">};</span>
 </pre></div>
 </div>
-<p>(The input frequency must configured to be between 8000000 and 27000000 Hz (8MHz - 27MHz). The output frequency must be configured to be between 45158000 and 49152000. Configuring the PLL with other input or output frequency will fail.)</p>
-<p>The PLL runs at 1024 times the base sample rate. So for a 48000 Hz based sample rate you’d normally choose 49152000 Hz for the PLL output frequncey and for a 44100 Hz based sample rate 45158400 Hz.</p>
+<p>(The input frequency must configured to be between 8000000 and 27000000 Hz (8MHz
+- 27MHz). The output frequency must be configured to be between 45158000 and
+49152000. Configuring the PLL with other input or output frequency will fail.)</p>
+<p>The PLL runs at 1024 times the base sample rate. So for a 48000 Hz based sample
+rate you’d normally choose 49152000 Hz for the PLL output frequncey and for a
+44100 Hz based sample rate 45158400 Hz.</p>
 </section>
 <section id="dai-configuration">
 <h2>DAI configuration<a class="headerlink" href="#dai-configuration" title="Link to this heading"></a></h2>
@@ -989,14 +1011,17 @@ Valid values: “Normal operation”, “Enhanced performance”, “Power savin
 <section id="dai-sysclk">
 <h3>DAI sysclk<a class="headerlink" href="#dai-sysclk" title="Link to this heading"></a></h3>
 <p>The DAIs can either use the PLL or the MCLK signal as source.</p>
-<p>When using the PLL the DAIs rate should be set to the rate of the PLL. When using MCLK the rate should be set to frequency of the external MCLK signal.</p>
+<p>When using the PLL the DAIs rate should be set to the rate of the PLL. When
+using MCLK the rate should be set to frequency of the external MCLK signal.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">enum</span><span class="w"> </span><span class="n">adau17x1_clk_src</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">ADAU17X1_CLK_SRC_MCLK</span><span class="p">,</span>
 <span class="w">    </span><span class="n">ADAU17X1_CLK_SRC_PLL</span><span class="p">,</span>
 <span class="p">};</span>
 </pre></div>
 </div>
-<p>When using the MCLK as the DAI source it is possible to use an internal prescaler to divide the signals frequency. Valid divider values are 1, 2, 3 and 4.</p>
+<p>When using the MCLK as the DAI source it is possible to use an internal
+prescaler to divide the signals frequency. Valid divider values are 1, 2, 3 and
+4.</p>
 <p>Example clock divider configuration:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">snd_soc_dai_set_clkdiv</span><span class="p">(</span><span class="n">codec_dai</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">);</span>
 </pre></div>
@@ -1058,7 +1083,6 @@ Valid values: “Normal operation”, “Enhanced performance”, “Power savin
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span>
 <span class="p">}</span>
 
-
 <span class="k">static</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">snd_soc_ops</span><span class="w"> </span><span class="n">bfin_eval_adau1x81_ops</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="p">.</span><span class="n">hw_params</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bfin_eval_adau1x81_hw_params</span><span class="p">,</span>
 <span class="p">};</span>
@@ -1082,7 +1106,8 @@ Valid values: “Normal operation”, “Enhanced performance”, “Power savin
 <ul class="simple">
 <li><p>The number of slots can be either 2, 4 or 8.</p></li>
 <li><p>The slot width can be 32, 64, 48, 128 or 256</p></li>
-<li><p>The slot mask must be either 0x03 (slot 0 and 1), 0x0c (slot 2 and 3), 0x30 (slot 4 and 5), 0xc0 (slot 6 and 7)</p></li>
+<li><p>The slot mask must be either 0x03 (slot 0 and 1), 0x0c (slot 2 and 3), 0x30
+(slot 4 and 5), 0xc0 (slot 6 and 7)</p></li>
 </ul>
 <p>Example TDM configuration:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">snd_soc_dai_set_tdm_slot</span><span class="p">(</span><span class="n">codec_dai</span><span class="p">,</span><span class="w"> </span><span class="mh">0x30</span><span class="p">,</span><span class="w"> </span><span class="mh">0x0c</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">64</span><span class="p">);</span>
@@ -1152,8 +1177,11 @@ Valid values: “Normal operation”, “Enhanced performance”, “Power savin
 </section>
 <section id="hardware-configuration">
 <h2>Hardware configuration<a class="headerlink" href="#hardware-configuration" title="Link to this heading"></a></h2>
-<p>Connect the STAMP SPORT 0 port (P6) to the EVAL-ADAU1X81 Control port(J1) and Serial Data Interface(J4) headers.</p>
-<p>Note that the SPORT has separate signals for the capture and playback clocks, while the ADAU1381/ADAU1781 uses the same clock signals for both, so the EVAL-ADAU1X81 clock signal pins need to be connected to two STAMP pins each.</p>
+<p>Connect the STAMP SPORT 0 port (P6) to the EVAL-ADAU1X81 Control port(J1) and
+Serial Data Interface(J4) headers.</p>
+<p>Note that the SPORT has separate signals for the capture and playback clocks,
+while the ADAU1381/ADAU1781 uses the same clock signals for both, so the
+EVAL-ADAU1X81 clock signal pins need to be connected to two STAMP pins each.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>

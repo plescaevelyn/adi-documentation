@@ -614,9 +614,19 @@ Content on this topic
             
   <section id="jesd204-fsm-interface-linux-kernel-framework">
 <h1>JESD204 (FSM) Interface Linux Kernel Framework<a class="headerlink" href="#jesd204-fsm-interface-linux-kernel-framework" title="Link to this heading"></a></h1>
-<p>The JESD204 Linux Kernel Framework is a Finite State Machine (FSM) that is meant to synchronize other Linux device drivers to be able to properly bring-up &amp; manage a single or multiple JESD204 links.</p>
-<p>The JESD204 link bring-up and management is complicated, and it requires that many actors (device drivers), be in sync with each other, in various link bring-up states/stages. Typical components of an JESD204 link are the physical layer (PHY), link layer (LL), transport layer (TPL) and the high speed converter device and clocking layer with all it’s constrains and inter-dependencies. This has to happen not just at boot-time, but also during run-time, in case a link is going to be reconfigured or breaks and has to recover.</p>
-<p>To achieve this, the JESD204 Linux Kernel Framework hooks into all the drivers that participate in the link management (bring-up/bring-down) and each driver provides a set of callbacks for each state that it supports.</p>
+<p>The JESD204 Linux Kernel Framework is a Finite State Machine (FSM) that is meant
+to synchronize other Linux device drivers to be able to properly bring-up &amp;
+manage a single or multiple JESD204 links.</p>
+<p>The JESD204 link bring-up and management is complicated, and it requires that
+many actors (device drivers), be in sync with each other, in various link
+bring-up states/stages. Typical components of an JESD204 link are the physical
+layer (PHY), link layer (LL), transport layer (TPL) and the high speed converter
+device and clocking layer with all it’s constrains and inter-dependencies. This
+has to happen not just at boot-time, but also during run-time, in case a link is
+going to be reconfigured or breaks and has to recover.</p>
+<p>To achieve this, the JESD204 Linux Kernel Framework hooks into all the drivers
+that participate in the link management (bring-up/bring-down) and each driver
+provides a set of callbacks for each state that it supports.</p>
 <p>The relationship between the devices is defined in the device-tree. The relationship is called a <strong>connection</strong> so as not to re-use the term <strong>link</strong>, which can cause confusion with the term <strong>link</strong> from the JESD204 standard. The whole group of devices, is actually a graph (or topology), with a single top-level device.</p>
 </section>
 <section id="device-topology">
@@ -660,7 +670,6 @@ Content on this topic
                          <span class="n">v</span>                             <span class="n">v</span>
 
                           <span class="o">+--------------------------+</span>
-
 
                           <span class="o">|</span> <span class="n">hmc7044</span><span class="o">@</span><span class="mi">0</span>                <span class="o">|</span>
 
@@ -727,7 +736,8 @@ Content on this topic
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Boolean</span> <span class="n">to</span> <span class="k">continue</span> <span class="n">despite</span> <span class="n">errors</span> <span class="p">(</span><span class="n">useful</span> <span class="k">for</span> <span class="n">debugging</span><span class="p">)</span><span class="o">.</span>
 </pre></div>
 </div>
-<p>To illustrate, here’s an example device-tree and below it how the graph representation looks like for an ADRV9009 FMC card on a ZC706.</p>
+<p>To illustrate, here’s an example device-tree and below it how the graph
+representation looks like for an ADRV9009 FMC card on a ZC706.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>// SPDX-License-Identifier: GPL-2.0
 /*
   * Analog Devices ADRV9009 (via jesd204-fsm)
@@ -815,10 +825,18 @@ Content on this topic
 <img alt="adrv9009-fmc-jesd204-fsm-topology.png" class="align-right" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/jesd204/adrv9009-fmc-jesd204-fsm-topology.png" />
 <section id="design-principles">
 <h2>Design Principles<a class="headerlink" href="#design-principles" title="Link to this heading"></a></h2>
-<p>The picture in the diagram makes thinks look really simple, but in reality they aren’t. If any of the devices in that topology/graph has a change of state, or an error occurs, multiple devices must be re-synchronized.</p>
-<p>Also, the device-tree described above, is an actual working device-tree. Some variations may be found in the ADI Linux kernel repository (i.e. some more nodes in-between the nodes described above).</p>
-<p>There may be other frameworks in Linux that describe this topology, but the challenge with JESD204 is that (at this current point in time), there is no clear idea of the minimum amount of states needed to synchronize or re-synchronize in order to recover a JESD204 link if it goes down.</p>
-<p>The end-result is an FSM that tries to make all the devices go through the same states at once.</p>
+<p>The picture in the diagram makes thinks look really simple, but in reality they
+aren’t. If any of the devices in that topology/graph has a change of state, or
+an error occurs, multiple devices must be re-synchronized.</p>
+<p>Also, the device-tree described above, is an actual working device-tree. Some
+variations may be found in the ADI Linux kernel repository (i.e. some more nodes
+in-between the nodes described above).</p>
+<p>There may be other frameworks in Linux that describe this topology, but the
+challenge with JESD204 is that (at this current point in time), there is no
+clear idea of the minimum amount of states needed to synchronize or
+re-synchronize in order to recover a JESD204 link if it goes down.</p>
+<p>The end-result is an FSM that tries to make all the devices go through the same
+states at once.</p>
 <p>Some design principles, defined so far for this framework:</p>
 <ul class="simple">
 <li><p>A group of devices shall be named a topology (or informally graph or tree); while the picture above looks simple, more complicated topologies should be support with this framework</p></li>
@@ -835,7 +853,8 @@ Content on this topic
 <li><p>Each callback (in the driver) must return either JESD204_STATE_CHANGE_DONE (value 1) or JESD204_STATE_CHANGE_DEFER (value 0), or an error if it occurs (any negative value). The decision was made for JESD204_STATE_CHANGE_DONE to be 1, so that when a new driver implements a callback for a framework, “return 0” doesn’t mean “DONE” (i.e. accidental/unwanted state transitions);</p></li>
 <li><p>The JESD204_STATE_CHANGE_DEFER is important if a state should stop (but not rollback) and wait for an external call (a thread/retry mechanism) to restart the FSM and continue from the current state; so when transitioning from state S0 to S9, and S4 calls for a DEFER, the FSM will stop at S4, and an external entity (retry loop, workq,interrupt ,etc) would call the FSM to continue the transition up to S9; the DEFER mechanism/logic allows us to pause a transition of states if any device (in the topology) calls for it (because it isn’t ready yet)</p></li>
 <li><p>For any particular state, the callbacks of the top-level device must be called last; for the other devices it shouldn’t matter; the top-level is typically the ADC/DAC/XCVR, so it is important that this is called last to enable/disable the final bits of a link</p></li>
-<li><p>There can be only a single device that can act as a SYSREF provider in a topology; defining more than one will fail the initialization of the topology</p></li>
+<li><p>There can be only a single device that can act as a SYSREF provider in a
+topology; defining more than one will fail the initialization of the topology</p></li>
 </ul>
 </section>
 <section id="tl-dr-show-me-the-code">
@@ -852,7 +871,8 @@ Content on this topic
 </section>
 <section id="how-does-it-work">
 <h2>How does it work?<a class="headerlink" href="#how-does-it-work" title="Link to this heading"></a></h2>
-<p>A typical driver needs to provide some data to the framework. Example (for ADRV9009):</p>
+<p>A typical driver needs to provide some data to the framework. Example (for
+ADRV9009):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">static</span> <span class="n">const</span> <span class="n">struct</span> <span class="n">jesd204_dev_data</span> <span class="n">jesd204_adrv9009_init</span> <span class="o">=</span> <span class="p">{</span>
     <span class="o">.</span><span class="n">state_ops</span> <span class="o">=</span> <span class="p">{</span>
         <span class="p">[</span><span class="n">JESD204_OP_DEVICE_INIT</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
@@ -924,7 +944,9 @@ Content on this topic
 </div>
 <p>If <strong>jdev</strong> is NULL, that is fine. Typically, a driver may call this FSM for all JESD204 links that are defined in the device-tree. With the sysfs, the jesd204_fsm_start() may be called for a single JESD204 link.</p>
 <p>There’s an equivalent <strong>jesd204_fsm_stop()</strong> that will stop the FSM.</p>
-<p>The proper functioning of the FSM relies on the driver correctly using the framework and that that connections between devices be properly defined in the device-tree.</p>
+<p>The proper functioning of the FSM relies on the driver correctly using the
+framework and that that connections between devices be properly defined in the
+device-tree.</p>
 <section id="the-initialization-data">
 <h3>The initialization data<a class="headerlink" href="#the-initialization-data" title="Link to this heading"></a></h3>
 <p>The initialization data has type:</p>
@@ -1035,23 +1057,76 @@ Content on this topic
 </pre></div>
 </div>
 <p>&lt;/graphviz&gt;</p>
-<p>When an error occurs in any of the states, the states should automatically be rolled back from the state that has errored back to the initial/idle state. Going from S0 to S9 and S3 faults, the transition will be S0, S1, S2, S3, S2, S1, S0 (in perfect symmetry). Rolling back (and re-tries) doesn’t stop even when any of the states errors out; it is of higher priority to reach back to IDLE state, than to stop in the middle when rolling back.</p>
+<p>When an error occurs in any of the states, the states should automatically be
+rolled back from the state that has errored back to the initial/idle state.
+Going from S0 to S9 and S3 faults, the transition will be S0, S1, S2, S3, S2,
+S1, S0 (in perfect symmetry). Rolling back (and re-tries) doesn’t stop even when
+any of the states errors out; it is of higher priority to reach back to IDLE
+state, than to stop in the middle when rolling back.</p>
 </section>
 </section>
 <section id="why-yet-another-kernel-framework">
 <h2>Why yet another kernel framework?<a class="headerlink" href="#why-yet-another-kernel-framework" title="Link to this heading"></a></h2>
-<p>Before the introduction of the JESD204-FSM kernel framework, JESD204 link bring-up and management was subject to some known deficiencies, incurred by the Linux driver model. In order to understand the original challenges, they are in following explained with their new solution.</p>
+<p>Before the introduction of the JESD204-FSM kernel framework, JESD204 link
+bring-up and management was subject to some known deficiencies, incurred by the
+Linux driver model. In order to understand the original challenges, they are in
+following explained with their new solution.</p>
 <section id="link-parameter-propagation">
 <h3>Link Parameter Propagation<a class="headerlink" href="#link-parameter-propagation" title="Link to this heading"></a></h3>
-<p>Bringing up a JESD204 link, involves several HDL cores and device device drivers. Some of the configuration was done in the device tree, some were synthesis parameters, etc. It was necessary to provide similar device tree configuration in multiple places. In the new kernel framework, the TOP device sets the configuration and is then broadcasted to all link components and checked for validity. Each component now understands the big picture and can act accordingly. For example, the CLK and SYSREF provider now knows the LMFC/LMEC frequencies of all links on a topology, so it can compute a suitable SYSREF frequency common to all JESD204 links.</p>
+<p>Bringing up a JESD204 link, involves several HDL cores and device device
+drivers. Some of the configuration was done in the device tree, some were
+synthesis parameters, etc. It was necessary to provide similar device tree
+configuration in multiple places. In the new kernel framework, the TOP device
+sets the configuration and is then broadcasted to all link components and
+checked for validity. Each component now understands the big picture and can act
+accordingly. For example, the CLK and SYSREF provider now knows the LMFC/LMEC
+frequencies of all links on a topology, so it can compute a suitable SYSREF
+frequency common to all JESD204 links.</p>
 </section>
 <section id="lack-of-common-integrated-management-core-framework">
 <h3>Lack of common integrated management core (framework)<a class="headerlink" href="#lack-of-common-integrated-management-core-framework" title="Link to this heading"></a></h3>
-<p>Prior to the new kernel framework, each converter driver required a lot of Linux kernel common clock framework (CCF) clocks connected. There used to be one for the JESD lane clock, the JESD core/link clock (typical lane rate / 40), the converter clock and the SYSREF clock. Each converter driver implemented some math on how to calculate the link and lane clock from its configuration. This caused a lot of duplicated boilerplate code. However more problematic was that the link enable was done using the CCF clk_prepare_enable() API. This was convenient since the CCF ensured that the parent of each clock was enabled prior to its childs. But depending on the JESD204 link direction this was not always the ideal sequence across the entire chain. Error propagation was also suboptimal, since an error code delivered to the driver which controlled the clk_enable could have been originated anywhere in the clock tree, from clock-chip, via the PHY-Layer, LINK-Layer, etc. One other issue was that besides clk_enable and clk_set_rate() there were other things to control, such as SYSREF N-SHOT mode, which wasn’t possible due to the lack of a proper API. Also, the CCF uses reference counting, so disabling a clock doesn’t necessarily disable the clock in case it was enabled twice, possibly from a different device. There were many more things such as controlling a clock from a CCF clock implementation wasn’t possible due to the global CCF lock (spinlock). The new implementation still used CCF clocks in its intended way, but no longer using it for link bring-up and enable which it wasn’t intended for. Last but not least, on 32-bit Linux systems the CCF rate is handled as 32-bit value, which without truncation easily overflowed with the JESD204 lane rate passed in Hz. With the new framework required clocks are automatically computed and checked. The framework implements the sequence, error conditions are detected and handled.</p>
+<p>Prior to the new kernel framework, each converter driver required a lot of Linux
+kernel common clock framework (CCF) clocks connected. There used to be one for
+the JESD lane clock, the JESD core/link clock (typical lane rate / 40), the
+converter clock and the SYSREF clock. Each converter driver implemented some
+math on how to calculate the link and lane clock from its configuration. This
+caused a lot of duplicated boilerplate code. However more problematic was that
+the link enable was done using the CCF clk_prepare_enable() API. This was
+convenient since the CCF ensured that the parent of each clock was enabled prior
+to its childs. But depending on the JESD204 link direction this was not always
+the ideal sequence across the entire chain. Error propagation was also
+suboptimal, since an error code delivered to the driver which controlled the
+clk_enable could have been originated anywhere in the clock tree, from
+clock-chip, via the PHY-Layer, LINK-Layer, etc. One other issue was that besides
+clk_enable and clk_set_rate() there were other things to control, such as SYSREF
+N-SHOT mode, which wasn’t possible due to the lack of a proper API. Also, the
+CCF uses reference counting, so disabling a clock doesn’t necessarily disable
+the clock in case it was enabled twice, possibly from a different device. There
+were many more things such as controlling a clock from a CCF clock
+implementation wasn’t possible due to the global CCF lock (spinlock). The new
+implementation still used CCF clocks in its intended way, but no longer using it
+for link bring-up and enable which it wasn’t intended for. Last but not least,
+on 32-bit Linux systems the CCF rate is handled as 32-bit value, which without
+truncation easily overflowed with the JESD204 lane rate passed in Hz. With the
+new framework required clocks are automatically computed and checked. The
+framework implements the sequence, error conditions are detected and handled.</p>
 </section>
 <section id="bring-up-of-multi-chip-links">
 <h3>Bring-up of multi-chip links<a class="headerlink" href="#bring-up-of-multi-chip-links" title="Link to this heading"></a></h3>
-<p>Converter devices in a multi-chip setup often require additional synchronization steps which must be issued in parallel. So that the same pulse hits all devices at the same time during an initialization sequence. This is rather difficult to achieve in case devices are instantiated/probed sequentially from its bus management core. Prior to the FSM kernel framework, the workaround was done from Linux user space in writing some magic numbers to an SYSFS attribute typically called multichip_sync. Also problematic was the fact that SYSREF requests were only possible from one device, since the request was done via the GPIO API, and the GPIO is a protected resource and can’t be controlled from multiple entities concurrently. In some setups the workaround was to use continuous SYSREF, however this is rather suboptimal since SYSREF can cause clock spurs in the high-speed converter spectrum. With the new kernel framework each device can request a SYSREF pulse asynchronously, but in most situations the framework request SYSREF pulses as part of the required state transitions.</p>
+<p>Converter devices in a multi-chip setup often require additional synchronization
+steps which must be issued in parallel. So that the same pulse hits all devices
+at the same time during an initialization sequence. This is rather difficult to
+achieve in case devices are instantiated/probed sequentially from its bus
+management core. Prior to the FSM kernel framework, the workaround was done from
+Linux user space in writing some magic numbers to an SYSFS attribute typically
+called multichip_sync. Also problematic was the fact that SYSREF requests were
+only possible from one device, since the request was done via the GPIO API, and
+the GPIO is a protected resource and can’t be controlled from multiple entities
+concurrently. In some setups the workaround was to use continuous SYSREF,
+however this is rather suboptimal since SYSREF can cause clock spurs in the
+high-speed converter spectrum. With the new kernel framework each device can
+request a SYSREF pulse asynchronously, but in most situations the framework
+request SYSREF pulses as part of the required state transitions.</p>
 </section>
 </section>
 <section id="multi-chip-multi-link-example">
@@ -1227,19 +1302,28 @@ Content on this topic
 </div>
 <section id="clock-tree-setup-and-synchronization">
 <h3>Clock Tree Setup and Synchronization<a class="headerlink" href="#clock-tree-setup-and-synchronization" title="Link to this heading"></a></h3>
-<p>Multi-chip designs often require modular and complex clocking trees with multiple synchronized clock providers. Besides core and FPGA reference clocks used in such systems, the SYSREF signal acts as the master timing reference and aligns all the internal dividers from device clocks as well as the local multiframe clocks in each JESD204 transmitter and receiver. SYSREF helps to ensure deterministic latency through the system. Therefore designing a clocking tree needs some extra attention.</p>
+<p>Multi-chip designs often require modular and complex clocking trees with
+multiple synchronized clock providers. Besides core and FPGA reference clocks
+used in such systems, the SYSREF signal acts as the master timing reference and
+aligns all the internal dividers from device clocks as well as the local
+multiframe clocks in each JESD204 transmitter and receiver. SYSREF helps to
+ensure deterministic latency through the system. Therefore designing a clocking
+tree needs some extra attention.</p>
 <p>One of the key challenges in JESD204B/C system design is ensuring the synchronization of data converter frame alignment across the system, from the FPGA to ADCs and DACs through a large clock tree that can comprise multiple clock generation and distribution ICs. The HMC7044 which is used in this example is specifically designed to offer features to address this challenge. An external reference-based synchronization feature (SYNC via PLL2 or RF SYNC only in fanout mode) synchronizes multiple devices, that is, it ensures that all clock outputs start with same rising edge. This operation is achieved by rephasing the SYSREF control unit deterministically, and then restarting the output dividers with this new desired phase. A SYSREF/PULSOR request issued at the TOP device in the clocking tree will propagate down in the hierarchy. This feature is extremely important in the JESD204-FSM implementation since there can be only one <strong>SYSREF PROVIDER</strong> per topology.</p>
 <img alt="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/jesd204/zu11eg-fmcomms8-clk-tree.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/jesd204/zu11eg-fmcomms8-clk-tree.png" />
 <section id="possible-expansion">
 <h4>Possible expansion<a class="headerlink" href="#possible-expansion" title="Link to this heading"></a></h4>
-<p>Taking this one step further, by adding another layer in the clock tree this concept can be expanded.</p>
+<p>Taking this one step further, by adding another layer in the clock tree this
+concept can be expanded.</p>
 <img alt="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/jesd204/zu11eg-fmcomms8-clk-tree-ext.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/jesd204/zu11eg-fmcomms8-clk-tree-ext.png" />
 </section>
 </section>
 <section id="synchronizing-distributed-multi-topology-systems">
 <h3>Synchronizing distributed multi-topology systems<a class="headerlink" href="#synchronizing-distributed-multi-topology-systems" title="Link to this heading"></a></h3>
 <p>In the example above let’s assume the left setup (#1) controls the top-level clock-chip (<strong>hmc7044_ext</strong>), which acts as the external <strong>SYSREF PROVIDER</strong>. We call this the <strong>PRIMARY</strong> setup. The right setup (#2) is therefore called <strong>SECONDARY</strong>.</p>
-<p>The devicetrees for both of them can be found below. They include the above example and just add/remove pieces which are required to synchronize such a distributed Multi-Topology system.</p>
+<p>The devicetrees for both of them can be found below. They include the above
+example and just add/remove pieces which are required to synchronize such a
+distributed Multi-Topology system.</p>
 <p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm64/boot/dts/xilinx/zynqmp-adrv9009-zu11eg-revb-adrv2crr-fmc-revb-sync-fmcomms8-jesd204-fsm.dts" target="_blank">Devicetree: zynqmp-adrv9009-zu11eg-revb-adrv2crr-fmc-revb-sync-fmcomms8-jesd204-fsm-multisom-primary.dts</a></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &quot;zynqmp-adrv9009-zu11eg-revb-adrv2crr-fmc-revb-sync-fmcomms8-jesd204-fsm.dts&quot;</span>
 <span class="c1">#include &lt;dt-bindings/iio/frequency/hmc7044.h&gt;</span>
@@ -1322,10 +1406,13 @@ Content on this topic
 </ul>
 <section id="what-is-a-secondary-sysref-provider-an-what-is-it-used-for">
 <h4>What is a secondary sysref-provider? An what is it used for?<a class="headerlink" href="#what-is-a-secondary-sysref-provider-an-what-is-it-used-for" title="Link to this heading"></a></h4>
-<p>A secondary sysref-provider is only used in distributed multi-topology systems. It’s purely used for JESD204 link (re-)establishment and not for other synchronization purposes.</p>
+<p>A secondary sysref-provider is only used in distributed multi-topology systems.
+It’s purely used for JESD204 link (re-)establishment and not for other
+synchronization purposes.</p>
 <p>The secondary sysref-provider, in case it exists, is only called if the jesd204-fsm device uses the <em>jesd204_sysref_async_force()</em> function.</p>
 <p>Right now, this is done only in the driver for the <strong>axi_jesd204_rx</strong> link layer peripheral in case a link error interrupt is issued, or the watchdog detects an issue. The secondary sysref-provider is always assumed to be part of the JESD204 clocking tree. Furthermore, it is assumed that the SYSREF timer and frequency is already synced with the remaining part of the clocking tree.</p>
-<p>In such situations the asynchronous request further down the clocking tree is never going to be an issue for JESD204 link bring-up and maintenance.</p>
+<p>In such situations the asynchronous request further down the clocking tree is
+never going to be an issue for JESD204 link bring-up and maintenance.</p>
 </section>
 <section id="why-not-always-request-sysref-pulses-next-to-the-topology">
 <h4>Why not always request SYSREF pulses next to the topology?<a class="headerlink" href="#why-not-always-request-sysref-pulses-next-to-the-topology" title="Link to this heading"></a></h4>
@@ -1335,7 +1422,12 @@ Content on this topic
 <section id="what-is-an-external-manager">
 <h4>What is an external manager?<a class="headerlink" href="#what-is-an-external-manager" title="Link to this heading"></a></h4>
 <p><strong>Example:</strong> <a class="icon git reference external" href="https://github.com/analogdevicesinc/wiki-scripts/tree/main/iio/iio_jesd204_fsm_sync" target="_blank">iio/iio_jesd204_fsm_sync</a></p>
-<p>This utility resumes a number of iio devices across different IIO context from the jesd204-fsm stop-states. It’s intended to sync multiple FPGA systems across jesd204-fsm topologies. There is always one primary device, the device which controls the sysref-provider and an open list of secondary devices which are synced by the same sysref-provider connected clock source. This utility exercises 5 IIO device attributes exposed by the TOP device.</p>
+<p>This utility resumes a number of iio devices across different IIO context from
+the jesd204-fsm stop-states. It’s intended to sync multiple FPGA systems across
+jesd204-fsm topologies. There is always one primary device, the device which
+controls the sysref-provider and an open list of secondary devices which are
+synced by the same sysref-provider connected clock source. This utility
+exercises 5 IIO device attributes exposed by the TOP device.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>

@@ -611,13 +611,14 @@ Content on this topic
   <section id="transmitter-signal-chain-overview-and-theory-of-operation">
 <h1>Transmitter Signal Chain Overview and Theory of Operation<a class="headerlink" href="#transmitter-signal-chain-overview-and-theory-of-operation" title="Link to this heading"></a></h1>
 <p>Link to higher level page: <a class="reference internal" href="../satcom-ref-design.html"><span class="doc">Satcom Reference Design</span></a></p>
-<p>The overall TX block diagram is shown below. The wiki sections below will walk through the design elements of each sub-circuit.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/developer-kits/space-based-satcom-ref-design/satcom_tx_overall_chain_v3.jpg"><img alt="https://wiki.analog.com/_media/resources/eval/developer-kits/space-based-satcom-ref-design/satcom_tx_overall_chain_v3.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/developer-kits/space-based-satcom-ref-design/satcom_tx_overall_chain_v3.jpg" style="width: 600px;" />
+<p>The overall TX block diagram is shown below. The wiki sections below will walk
+through the design elements of each sub-circuit.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/developer-kits/space-based-satcom-ref-design/satcom_tx_overall_chain_v3.jpg"><img alt="https://wiki.analog.com/_media/resources/eval/developer-kits/space-based-satcom-ref-design/satcom_tx_overall_chain_v3.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/developer-kits/space-based-satcom-ref-design/satcom_tx_overall_chain_v3.jpg" width="600" />
 </a>
 <section id="digital-to-analog-converter-dac-dsp">
 <h2>Digital to Analog Converter (DAC) + DSP<a class="headerlink" href="#digital-to-analog-converter-dac-dsp" title="Link to this heading"></a></h2>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/AD9082" target="_blank">AD9082</a> (“MxFE”) is an ideal digitizer for this wideband RF front end due to its high level of integration, performance, and RF sampling rate. The MxFE’s high instantaneous and analog input bandwidth enable RF sampling up to 8GHz, providing architectural and frequency planning flexibility at the system level. It also has highly configurable, on-chip DSP capabilities (DDC/DUC channelizers, NCOs, and programmable FIR filters) as well as four DAC channels and two ADCs for use in this multi-channel system.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/developer-kits/space-based-satcom-ref-design/satcom_tx_dac.jpg"><img alt="https://wiki.analog.com/_media/resources/eval/developer-kits/space-based-satcom-ref-design/satcom_tx_dac.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/developer-kits/space-based-satcom-ref-design/satcom_tx_dac.jpg" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/developer-kits/space-based-satcom-ref-design/satcom_tx_dac.jpg"><img alt="https://wiki.analog.com/_media/resources/eval/developer-kits/space-based-satcom-ref-design/satcom_tx_dac.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/developer-kits/space-based-satcom-ref-design/satcom_tx_dac.jpg" width="600" />
 </a>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/ADF4371" target="_blank">ADF4371</a> integrated PLL/VCO is an ideal choice for generating the MxFE sample clock. The ADF4371 can generate a clean, low-jitter clock from 62.5MHz up to 32GHz, and its differential outputs are capable of directly driving the MxFE clock pins. The ADF4371 is also used to generate clocking for the LO signal. You can read more about the LO signal path <a class="reference internal" href="lo-overview.html"><span class="doc">here</span></a>.</p>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/LTC6953" target="_blank">LTC6953</a> clock distributor is used to ensure proper clock synchronization between all of the <a class="icon adi reference external" href="https://www.analog.com/ADF4371" target="_blank">ADF4371</a>’s throughout this reference design. An external source generates a clock signal, which is then buffered and replicated before being sent to the FPGA, the <a class="icon adi reference external" href="https://www.analog.com/AD9082" target="_blank">AD9082</a>, and both the <a class="reference internal" href="lo-overview.html"><span class="doc">TX and RX LO signal paths</span></a>.</p>
@@ -641,7 +642,15 @@ Content on this topic
 <hr class="docutils" />
 <section id="timing-and-control">
 <h2>Timing and Control<a class="headerlink" href="#timing-and-control" title="Link to this heading"></a></h2>
-<p>Automatic gain control (AGC), RF path switching, and beam switching/reconfiguration often have critical timing specs that drive component selection, especially in systems that require fast frequency hopping or wideband tuning. The RF switches, DSAs, and tunable beam states in the transmitter signal chain offer fast switching and settling times, a high degree of configurability, and can be controlled via standard parallel and/or SPI interfaces. The tables below list the control interfaces and minimum configuration and settling time details at the component level for each of the sections of this reference design.</p>
+<p>Automatic gain control (AGC), RF path switching, and beam
+switching/reconfiguration often have critical timing specs that drive component
+selection, especially in systems that require fast frequency hopping or wideband
+tuning. The RF switches, DSAs, and tunable beam states in the transmitter signal
+chain offer fast switching and settling times, a high degree of configurability,
+and can be controlled via standard parallel and/or SPI interfaces. The tables
+below list the control interfaces and minimum configuration and settling time
+details at the component level for each of the sections of this reference
+design.</p>
 <section id="tx-beamforming-network">
 <h3>TX Beamforming Network<a class="headerlink" href="#tx-beamforming-network" title="Link to this heading"></a></h3>
 <p>Inside of the <a class="icon adi reference external" href="https://www.analog.com/ADAR3000S" target="_blank">ADAR3000S</a>, there are 16 digital step attenuators and 16 time delay units (TDU) combined into Variable Amplitude and Phase (VAP) blocks. Each digital step attenuator provides up to 31.5dB of attenuation with a resolution of 0.5dB. Each TDU can provide up to 54.5 ps of delay in steps of 0.865 ps. Each of the VAPs can tuned in a minimum of 10ns.</p>
@@ -654,19 +663,27 @@ Content on this topic
 <h2>TX Performance Simulations and Measurements<a class="headerlink" href="#tx-performance-simulations-and-measurements" title="Link to this heading"></a></h2>
 <section id="wideband-signal-conditioning-only">
 <h3>Wideband Signal Conditioning Only<a class="headerlink" href="#wideband-signal-conditioning-only" title="Link to this heading"></a></h3>
-<p>The following simulations were created using Keysight SystemVue/Genesys. All components in the TX signal chain were modeled with frequency-dependent sys-parameter or s-parameter datasets to ensure accurate simulation results. The signal chain below takes into account the following components:</p>
+<p>The following simulations were created using Keysight SystemVue/Genesys. All
+components in the TX signal chain were modeled with frequency-dependent
+sys-parameter or s-parameter datasets to ensure accurate simulation results. The
+signal chain below takes into account the following components:</p>
 <ul class="simple">
 <li><p>Manufacturer-provided, frequency-dependent s-parameter or sys-parameter datasets for every active and passive RF component</p></li>
 <li><p>A standalone model of the <a class="icon adi reference external" href="https://www.analog.com/ADMFM2001" target="_blank">ADMFM2001</a> microwave downconverter containing signal chains each with their own frequency-dependent s-parameter or sys-parameter datasets</p></li>
 <li><p>A standalone model of an <a class="icon adi reference external" href="https://www.analog.com/AD9082" target="_blank">AD9082</a> DAC containing frequency-dependent sys-parameter datasets</p></li>
-<li><p>Frequency-dependent component interconnect modeling i.e. PCB trace loss approximation for DC-50GHz CPWG traces, 30mil Rogers 4350 PCB stackup</p></li>
+<li><p>Frequency-dependent component interconnect modeling i.e. PCB trace loss
+approximation for DC-50GHz CPWG traces, 30mil Rogers 4350 PCB stackup</p></li>
 </ul>
 <img alt="https://wiki.analog.com/_media/resources/eval/developer-kits/space-based-satcom-ref-design/satcom_tx_genesys_simulation_v3.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/developer-kits/space-based-satcom-ref-design/satcom_tx_genesys_simulation_v3.jpg" />
-<p>The Genesys workspace incorporates various system level cascade analyses that takes advantage of MATLAB equation-based frequency planning. Three different analyses are shown below:</p>
+<p>The Genesys workspace incorporates various system level cascade analyses that
+takes advantage of MATLAB equation-based frequency planning. Three different
+analyses are shown below:</p>
 <ul class="simple">
 <li><p>Noise power Spectral Simulation</p></li>
 <li><p>Two-Tone Test Spectral Simulation</p></li>
-<li><p>System Cascade highlighting gain (CGAIN), noise figure (CNF), third order output intercept (EOIP3), output 1dB compression point (EOP1DB), minimum detectable signal (MDS), and carrier to noise distortion ratio (CNDR)</p></li>
+<li><p>System Cascade highlighting gain (CGAIN), noise figure (CNF), third order
+output intercept (EOIP3), output 1dB compression point (EOP1DB), minimum
+detectable signal (MDS), and carrier to noise distortion ratio (CNDR)</p></li>
 </ul>
 <section id="noise-power-spectral-simulation">
 <h4>Noise Power Spectral Simulation<a class="headerlink" href="#noise-power-spectral-simulation" title="Link to this heading"></a></h4>
@@ -676,25 +693,39 @@ Content on this topic
 </section>
 <section id="system-cascade">
 <h4>System Cascade<a class="headerlink" href="#system-cascade" title="Link to this heading"></a></h4>
-<p>As mentioned above, the system cascade simulation measures gain (CGAIN), noise figure (CNF), third order output intercept (EOIP3), output 1dB compression point (EOP1DB), minimum detectable signal (MDS), and carrier to noise distortion ratio (CNDR). The x-axis shows all of the individual components cascaded together and the nodes in between. The variables are shown on two separate y axes for scaling purposes. The markers are placed on “Node 8” which is the end of the signal chain, before the beamforming section.</p>
+<p>As mentioned above, the system cascade simulation measures gain (CGAIN), noise
+figure (CNF), third order output intercept (EOIP3), output 1dB compression point
+(EOP1DB), minimum detectable signal (MDS), and carrier to noise distortion ratio
+(CNDR). The x-axis shows all of the individual components cascaded together and
+the nodes in between. The variables are shown on two separate y axes for scaling
+purposes. The markers are placed on “Node 8” which is the end of the signal
+chain, before the beamforming section.</p>
 <img alt="https://wiki.analog.com/_media/resources/eval/developer-kits/space-based-satcom-ref-design/satcom_tx_system_level_cascade_no_bf_v2.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/developer-kits/space-based-satcom-ref-design/satcom_tx_system_level_cascade_no_bf_v2.jpg" />
 </section>
 </section>
 <section id="beamforming-front-end-only">
 <h3>Beamforming Front End Only<a class="headerlink" href="#beamforming-front-end-only" title="Link to this heading"></a></h3>
-<p>The following simulations were created using Keysight SystemVue/Genesys. All components in the TX signal chain were modeled with frequency-dependent sys-parameter or s-parameter datasets to ensure accurate simulation results. The signal chain below takes into account the following components:</p>
+<p>The following simulations were created using Keysight SystemVue/Genesys. All
+components in the TX signal chain were modeled with frequency-dependent
+sys-parameter or s-parameter datasets to ensure accurate simulation results. The
+signal chain below takes into account the following components:</p>
 <ul class="simple">
 <li><p>Manufacturer-provided, frequency-dependent s-parameter or sys-parameter datasets for every active and passive RF component</p></li>
 <li><p>A standalone model of the <a class="icon adi reference external" href="https://www.analog.com/ADMFM2001" target="_blank">ADMFM2001</a> microwave downconverter containing signal chains each with their own frequency-dependent s-parameter or sys-parameter datasets</p></li>
 <li><p>A standalone model of an <a class="icon adi reference external" href="https://www.analog.com/AD9082" target="_blank">AD9082</a> DAC containing frequency-dependent sys-parameter datasets</p></li>
-<li><p>Frequency-dependent component interconnect modeling i.e. PCB trace loss approximation for DC-50GHz CPWG traces, 30mil Rogers 4350 PCB stackup</p></li>
+<li><p>Frequency-dependent component interconnect modeling i.e. PCB trace loss
+approximation for DC-50GHz CPWG traces, 30mil Rogers 4350 PCB stackup</p></li>
 </ul>
 <img alt="https://wiki.analog.com/_media/resources/eval/developer-kits/space-based-satcom-ref-design/satcom_tx_genesys_schematic_bf_only_v1.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/developer-kits/space-based-satcom-ref-design/satcom_tx_genesys_schematic_bf_only_v1.jpg" />
-<p>The Genesys workspace incorporates various system level cascade analyses that takes advantage of MATLAB equation-based frequency planning. Three different analyses are shown below:</p>
+<p>The Genesys workspace incorporates various system level cascade analyses that
+takes advantage of MATLAB equation-based frequency planning. Three different
+analyses are shown below:</p>
 <ul class="simple">
 <li><p>Noise power Spectral Simulation</p></li>
 <li><p>Two-Tone Test Spectral Simulation</p></li>
-<li><p>System Cascade highlighting gain (CGAIN), noise figure (CNF), third order output intercept (EOIP3), output 1dB compression point (EOP1DB), minimum detectable signal (MDS), and carrier to noise distortion ratio (CNDR)</p></li>
+<li><p>System Cascade highlighting gain (CGAIN), noise figure (CNF), third order
+output intercept (EOIP3), output 1dB compression point (EOP1DB), minimum
+detectable signal (MDS), and carrier to noise distortion ratio (CNDR)</p></li>
 </ul>
 <section id="id1">
 <h4>Noise Power Spectral Simulation<a class="headerlink" href="#id1" title="Link to this heading"></a></h4>
@@ -704,38 +735,58 @@ Content on this topic
 </section>
 <section id="id3">
 <h4>System Cascade<a class="headerlink" href="#id3" title="Link to this heading"></a></h4>
-<p>As mentioned above, the system cascade simulation measures gain (CGAIN), noise figure (CNF), third order output intercept (EOIP3), output 1dB compression point (EOP1DB), minimum detectable signal (MDS), and carrier to noise distortion ratio (CNDR). The x-axis shows all of the individual components cascaded together and the nodes in between. The variables are shown on two separate y axes for scaling purposes. The markers are placed on “Node xx” which is the end of the signal chain, before the beamforming section.</p>
+<p>As mentioned above, the system cascade simulation measures gain (CGAIN), noise
+figure (CNF), third order output intercept (EOIP3), output 1dB compression point
+(EOP1DB), minimum detectable signal (MDS), and carrier to noise distortion ratio
+(CNDR). The x-axis shows all of the individual components cascaded together and
+the nodes in between. The variables are shown on two separate y axes for scaling
+purposes. The markers are placed on “Node xx” which is the end of the signal
+chain, before the beamforming section.</p>
 </section>
 </section>
 <section id="wideband-signal-conditioning-and-beamforming-combined">
 <h3>Wideband Signal Conditioning and Beamforming Combined<a class="headerlink" href="#wideband-signal-conditioning-and-beamforming-combined" title="Link to this heading"></a></h3>
-<p>The following simulations were created using Keysight SystemVue/Genesys. All components in the TX signal chain were modeled with frequency-dependent sys-parameter or s-parameter datasets to ensure accurate simulation results. The signal chain below takes into account the following components:</p>
+<p>The following simulations were created using Keysight SystemVue/Genesys. All
+components in the TX signal chain were modeled with frequency-dependent
+sys-parameter or s-parameter datasets to ensure accurate simulation results. The
+signal chain below takes into account the following components:</p>
 <ul class="simple">
 <li><p>Manufacturer-provided, frequency-dependent s-parameter or sys-parameter datasets for every active and passive RF component</p></li>
 <li><p>A standalone model of the <a class="icon adi reference external" href="https://www.analog.com/ADMFM2001" target="_blank">ADMFM2001</a> microwave downconverter containing signal chains each with their own frequency-dependent s-parameter or sys-parameter datasets</p></li>
 <li><p>A standalone model of an <a class="icon adi reference external" href="https://www.analog.com/AD9082" target="_blank">AD9082</a> DAC containing frequency-dependent sys-parameter datasets</p></li>
-<li><p>Frequency-dependent component interconnect modeling i.e. PCB trace loss approximation for DC-50GHz CPWG traces, 30mil Rogers 4350 PCB stackup</p></li>
+<li><p>Frequency-dependent component interconnect modeling i.e. PCB trace loss
+approximation for DC-50GHz CPWG traces, 30mil Rogers 4350 PCB stackup</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span>
 </pre></div>
 </div>
 <img alt="https://wiki.analog.com/_media/resources/eval/developer-kits/space-based-satcom-ref-design/satcom_tx_genesys_schematic_combined_v1.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/developer-kits/space-based-satcom-ref-design/satcom_tx_genesys_schematic_combined_v1.jpg" />
-<p>The Genesys workspace incorporates various system level cascade analyses that takes advantage of MATLAB equation-based frequency planning. Three different analyses are shown below:</p>
+<p>The Genesys workspace incorporates various system level cascade analyses that
+takes advantage of MATLAB equation-based frequency planning. Three different
+analyses are shown below:</p>
 <ul class="simple">
 <li><p>Noise power Spectral Simulation</p></li>
 <li><p>Two-Tone Test Spectral Simulation</p></li>
-<li><p>System Cascade highlighting gain (CGAIN), noise figure (CNF), third order output intercept (EOIP3), output 1dB compression point (EOP1DB), minimum detectable signal (MDS), and carrier to noise distortion ratio (CNDR)</p></li>
+<li><p>System Cascade highlighting gain (CGAIN), noise figure (CNF), third order
+output intercept (EOIP3), output 1dB compression point (EOP1DB), minimum
+detectable signal (MDS), and carrier to noise distortion ratio (CNDR)</p></li>
 </ul>
 <section id="id4">
 <h4>Noise Power Spectral Simulation<a class="headerlink" href="#id4" title="Link to this heading"></a></h4>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/developer-kits/space-based-satcom-ref-design/satcom_tx_input_signal_combined_v1.jpg"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/developer-kits/space-based-satcom-ref-design/satcom_tx_input_signal_combined_v1.jpg" style="width: 425px;" /></a> <a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/developer-kits/space-based-satcom-ref-design/satcom_tx_output_signal_combined_v1.jpg"><img alt="image2" src="https://wiki.analog.com/_media/resources/eval/developer-kits/space-based-satcom-ref-design/satcom_tx_output_signal_combined_v1.jpg" style="width: 425px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/developer-kits/space-based-satcom-ref-design/satcom_tx_input_signal_combined_v1.jpg"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/developer-kits/space-based-satcom-ref-design/satcom_tx_input_signal_combined_v1.jpg" width="425" /></a> <a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/developer-kits/space-based-satcom-ref-design/satcom_tx_output_signal_combined_v1.jpg"><img alt="image2" src="https://wiki.analog.com/_media/resources/eval/developer-kits/space-based-satcom-ref-design/satcom_tx_output_signal_combined_v1.jpg" width="425" /></a></p>
 </section>
 <section id="id5">
 <h4>Two-Tone Test Spectral Simulation<a class="headerlink" href="#id5" title="Link to this heading"></a></h4>
 </section>
 <section id="id6">
 <h4>System Cascade<a class="headerlink" href="#id6" title="Link to this heading"></a></h4>
-<p>As mentioned above, the system cascade simulation measures gain (CGAIN), noise figure (CNF), third order output intercept (EOIP3), output 1dB compression point (EOP1DB), minimum detectable signal (MDS), and carrier to noise distortion ratio (CNDR). The x-axis shows all of the individual components cascaded together and the nodes in between. The variables are shown on two separate y axes for scaling purposes. The markers are placed on “Node 2” which is the end of the signal chain, before the signal is sent to antenna.</p>
+<p>As mentioned above, the system cascade simulation measures gain (CGAIN), noise
+figure (CNF), third order output intercept (EOIP3), output 1dB compression point
+(EOP1DB), minimum detectable signal (MDS), and carrier to noise distortion ratio
+(CNDR). The x-axis shows all of the individual components cascaded together and
+the nodes in between. The variables are shown on two separate y axes for scaling
+purposes. The markers are placed on “Node 2” which is the end of the signal
+chain, before the signal is sent to antenna.</p>
 <img alt="https://wiki.analog.com/_media/resources/eval/developer-kits/space-based-satcom-ref-design/satcom_tx_system_level_cascade_combined_v1.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/developer-kits/space-based-satcom-ref-design/satcom_tx_system_level_cascade_combined_v1.jpg" />
 <p><a class="reference internal" href="../satcom-ref-design.html"><span class="doc">Home</span></a></p>
 </section>

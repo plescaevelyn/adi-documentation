@@ -677,9 +677,18 @@ Content on this topic
 </section>
 <section id="example-platform-device-initialization">
 <h1>Example platform device initialization<a class="headerlink" href="#example-platform-device-initialization" title="Link to this heading"></a></h1>
-<p>For compile time configuration, it’s common Linux practice to keep board- and application-specific configuration out of the main driver file, instead putting it into the board support file.</p>
-<p>For devices on custom boards, as typical of embedded and SoC-(system-on-chip) based hardware, Linux uses platform_data to point to board-specific structures describing devices and how they are connected to the SoC. This can include available ports, chip variants, preferred modes, default initialization, additional pin roles, and so on. This shrinks the board-support packages (BSPs) and minimizes board and application specific #ifdefs in drivers.</p>
-<p>The reference voltage or external reference clock may vary between boards and models. The platform_data for the device’s “struct device” holds this information.</p>
+<p>For compile time configuration, it’s common Linux practice to keep board- and
+application-specific configuration out of the main driver file, instead putting
+it into the board support file.</p>
+<p>For devices on custom boards, as typical of embedded and SoC-(system-on-chip)
+based hardware, Linux uses platform_data to point to board-specific structures
+describing devices and how they are connected to the SoC. This can include
+available ports, chip variants, preferred modes, default initialization,
+additional pin roles, and so on. This shrinks the board-support packages (BSPs)
+and minimizes board and application specific #ifdefs in drivers.</p>
+<p>The reference voltage or external reference clock may vary between boards and
+models. The platform_data for the device’s “struct device” holds this
+information.</p>
 <p><em>File</em>: drivers/staging/iio/impedance-analyzer/ad5933.h:ad5933_platform_data</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/**</span>
 <span class="cm">  * struct ad5933_platform_data - platform specific data</span>
@@ -701,13 +710,25 @@ Content on this topic
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>In case platform_data is not present or set to NULL, the driver will use the AD5933 internal 16.776MHz reference clock.</p>
+<p>In case platform_data is not present or set to NULL, the driver will use the
+AD5933 internal 16.776MHz reference clock.</p>
 </div>
-<p>Unlike PCI or USB devices, I2C devices are not enumerated at the hardware level. Instead, the software must know which devices are connected on each I2C bus segment, and what address these devices are using. For this reason, the kernel code must instantiate I2C devices explicitly. There are different ways to achieve this, depending on the context and requirements. However the most common method is to declare the I2C devices by bus number.</p>
-<p>This method is appropriate when the I2C bus is a system bus, as in many embedded systems, wherein each I2C bus has a number which is known in advance. It is thus possible to pre-declare the I2C devices that inhabit this bus. This is done with an array of struct i2c_board_info, which is registered by calling i2c_register_board_info().</p>
-<p>So, to enable such a driver one need only edit the board support file by adding an appropriate entry to i2c_board_info.</p>
+<p>Unlike PCI or USB devices, I2C devices are not enumerated at the hardware level.
+Instead, the software must know which devices are connected on each I2C bus
+segment, and what address these devices are using. For this reason, the kernel
+code must instantiate I2C devices explicitly. There are different ways to
+achieve this, depending on the context and requirements. However the most common
+method is to declare the I2C devices by bus number.</p>
+<p>This method is appropriate when the I2C bus is a system bus, as in many embedded
+systems, wherein each I2C bus has a number which is known in advance. It is thus
+possible to pre-declare the I2C devices that inhabit this bus. This is done with
+an array of struct i2c_board_info, which is registered by calling
+i2c_register_board_info().</p>
+<p>So, to enable such a driver one need only edit the board support file by adding
+an appropriate entry to i2c_board_info.</p>
 <p>For more information see: <a href="#id3"><span class="problematic" id="id4">`instantiating-devices.rst &lt;/git.linux.org&gt;documentation/i2c/instantiating-devices.rst&gt;`__</span></a></p>
-<p>Depending on the converter IC used, you may need to set the I2C_BOARD_INFO name accordingly, matching your part name.</p>
+<p>Depending on the converter IC used, you may need to set the I2C_BOARD_INFO name
+accordingly, matching your part name.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -752,7 +773,8 @@ Content on this topic
 </section>
 <section id="adding-linux-driver-support">
 <h1>Adding Linux driver support<a class="headerlink" href="#adding-linux-driver-support" title="Link to this heading"></a></h1>
-<p>Configure kernel with “make menuconfig” (alternatively use “make xconfig” or “make qconfig”)</p>
+<p>Configure kernel with “make menuconfig” (alternatively use “make xconfig” or
+“make qconfig”)</p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <p>The driver depends on CONFIG_I2C</p>
@@ -777,12 +799,20 @@ Content on this topic
 </section>
 <section id="hardware-configuration">
 <h1>Hardware configuration<a class="headerlink" href="#hardware-configuration" title="Link to this heading"></a></h1>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-impedance-analyzer/ad5933_eval_lr.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-impedance-analyzer/ad5933_eval_lr.jpg" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-impedance-analyzer/ad5933_eval_lr.jpg" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-impedance-analyzer/ad5933_eval_lr.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-impedance-analyzer/ad5933_eval_lr.jpg" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-impedance-analyzer/ad5933_eval_lr.jpg" width="600" />
 </a>
 </section>
 <section id="driver-testing">
 <h1>Driver testing<a class="headerlink" href="#driver-testing" title="Link to this heading"></a></h1>
-<p>Each and every IIO device, typically a hardware chip, has a device folder under /sys/bus/iio/devices/iio:deviceX. Where X is the IIO index of the device. Under every of these directory folders reside a set of files, depending on the characteristics and features of the hardware device in question. These files are consistently generalized and documented in the IIO ABI documentation. In order to determine which IIO deviceX corresponds to which hardware device, the user can read the name file /sys/bus/iio/devices/iio:deviceX/name. In case the sequence in which the iio device drivers are loaded/registered is constant, the numbering is constant and may be known in advance.</p>
+<p>Each and every IIO device, typically a hardware chip, has a device folder under
+/sys/bus/iio/devices/iio:deviceX. Where X is the IIO index of the device. Under
+every of these directory folders reside a set of files, depending on the
+characteristics and features of the hardware device in question. These files are
+consistently generalized and documented in the IIO ABI documentation. In order
+to determine which IIO deviceX corresponds to which hardware device, the user
+can read the name file /sys/bus/iio/devices/iio:deviceX/name. In case the
+sequence in which the iio device drivers are loaded/registered is constant, the
+numbering is constant and may be known in advance.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target<a href="#id1"><span class="problematic" id="id2">``</span></a>root:/&gt; <strong>cd /sys/bus/iio/devices/</strong></p>
 <p>root:/sys/bus/iio/devices&gt; ls
@@ -791,16 +821,23 @@ root:/sys/bus/iio/devices&gt; <strong>cd iio:device0</strong></p>
 <p>root:/sys/bus/iio/devices/iio:deviceX&gt; <strong>ls -l</strong>
 drwxr-xr-x    4 root     root             0 Jan  1 21:48 buffer
 -rw-r–r–    1 root     root          4096 Jan  1 21:48 in_voltage0_scale
--r–r–r–    1 root     root          4096 Jan  1 21:48 in_voltage0_scale_available
+-r–r–r–    1 root     root          4096 Jan  1 21:48
+in_voltage0_scale_available
 -r–r–r–    1 root     root          4096 Jan  1 21:48 name
--rw-r–r–    1 root     root          4096 Jan  1 21:48 out_voltage0_freq_increment
--rw-r–r–    1 root     root          4096 Jan  1 21:48 out_voltage0_freq_points
--rw-r–r–    1 root     root          4096 Jan  1 21:48 out_voltage0_freq_start
+-rw-r–r–    1 root     root          4096 Jan  1 21:48
+out_voltage0_freq_increment
+-rw-r–r–    1 root     root          4096 Jan  1 21:48
+out_voltage0_freq_points
+-rw-r–r–    1 root     root          4096 Jan  1 21:48
+out_voltage0_freq_start
 -rw-r–r–    1 root     root          4096 Jan  1 21:48 out_voltage0_scale
--r–r–r–    1 root     root          4096 Jan  1 21:48 out_voltage0_scale_available
--rw-r–r–    1 root     root          4096 Jan  1 21:48 out_voltage0_settling_cycles
+-r–r–r–    1 root     root          4096 Jan  1 21:48
+out_voltage0_scale_available
+-rw-r–r–    1 root     root          4096 Jan  1 21:48
+out_voltage0_settling_cycles
 drwxr-xr-x    2 root     root             0 Jan  1 21:48 power
-lrwxrwxrwx    1 root     root             0 Jan  1 21:48 subsystem -&gt; ../../../o
+lrwxrwxrwx    1 root     root             0 Jan  1 21:48 subsystem -&gt;
+../../../o
 -r–r–r–    1 root     root          4096 Jan  1 21:48 in_temp0_raw
 -rw-r–r–    1 root     root          4096 Jan  1 21:48 uevent``</p>
 </div>
@@ -909,7 +946,8 @@ lrwxrwxrwx    1 root     root             0 Jan  1 21:48 subsystem -&gt; ../../.
 <section id="show-internal-temperature">
 <h2>Show internal temperature<a class="headerlink" href="#show-internal-temperature" title="Link to this heading"></a></h2>
 <p><strong>Description:</strong> /sys/bus/iio/devices/iio:deviceX/in_temp0_input Shows temperature in milli degrees Celsius.</p>
-<p>The on-chip temperature sensor allows an accurate measurement of the ambient device temperature. The measurement range of the sensor is −40°C to +125°C.</p>
+<p>The on-chip temperature sensor allows an accurate measurement of the ambient
+device temperature. The measurement range of the sensor is −40°C to +125°C.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">iio</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">iio</span><span class="p">:</span><span class="n">deviceX</span><span class="o">&gt;</span> <span class="n">cat</span> <span class="n">in_temp0_input</span>
@@ -928,7 +966,13 @@ lrwxrwxrwx    1 root     root             0 Jan  1 21:48 subsystem -&gt; ../../.
 </pre></div>
 </div>
 </div>
-<p>The Industrial I/O subsystem provides support for various ring buffer based data acquisition methods. Apart from device specific hardware buffer support, the user can chose between two different software ring buffer implementations. One is the IIO lock free software ring, and the other is based on Linux kfifo. Devices with buffer support feature an additional sub-folder in the /sys/bus/iio/devices/deviceX/ folder hierarchy. Called deviceX:bufferY, where Y defaults to 0, for devices with a single buffer.</p>
+<p>The Industrial I/O subsystem provides support for various ring buffer based data
+acquisition methods. Apart from device specific hardware buffer support, the
+user can chose between two different software ring buffer implementations. One
+is the IIO lock free software ring, and the other is based on Linux kfifo.
+Devices with buffer support feature an additional sub-folder in the
+/sys/bus/iio/devices/deviceX/ folder hierarchy. Called deviceX:bufferY, where Y
+defaults to 0, for devices with a single buffer.</p>
 <p>Every buffer implementation features a set of files:</p>
 <div class="line-block">
 <div class="line"><strong>length</strong></div>
@@ -990,7 +1034,8 @@ lrwxrwxrwx    1 root     root             0 Jan  1 21:48 subsystem -&gt; ../../.
 <section id="buffer-example">
 <h2>Buffer Example<a class="headerlink" href="#buffer-example" title="Link to this heading"></a></h2>
 <div class="box bggreen docutils container">
-<p>This specifies any shell prompt running on the target - Example command sequence</p>
+<p>This specifies any shell prompt running on the target - Example command
+sequence</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">cd</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">iio</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">iio</span><span class="p">:</span><span class="n">device0</span>
 <span class="o">&gt;</span> <span class="n">echo</span> <span class="mi">10000</span> <span class="o">&gt;</span> <span class="n">out_voltage0_freq_start</span>
 <span class="o">&gt;</span> <span class="n">echo</span> <span class="mi">100</span> <span class="o">&gt;</span> <span class="n">out_voltage0_freq_increment</span>

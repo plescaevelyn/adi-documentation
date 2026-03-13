@@ -636,8 +636,10 @@ Content on this topic
 <p class="admonition-title">Important</p>
 <p>We are in the process of migrating our documentation to GitHubIO. This page is outdated and the new one can be found at <a class="icon link reference external" href="https://analogdevicesinc.github.io/hdl/library/common/ad_dds/index.html" target="_blank">https://analogdevicesinc.github.io/hdl/library/common/ad_dds/index.html</a></p>
 </div>
-<p>The direct digital synthesis (DDS) is used to generate sine-waves on a clock(referenced to sampling clock).</p>
-<p>Typically, in the reference designs each HDL DAC interface IP has a DDS for every channel.</p>
+<p>The direct digital synthesis (DDS) is used to generate sine-waves on a
+clock(referenced to sampling clock).</p>
+<p>Typically, in the reference designs each HDL DAC interface IP has a DDS for
+every channel.</p>
 <img alt="https://wiki.analog.com/_media/resources/fpga/docs/dds_in_dac_core.svg" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/docs/dds_in_dac_core.svg" />
 <p>The resulting sine-wave can be changed at run time by 4 parameters:</p>
 <ul class="simple">
@@ -648,14 +650,21 @@ Content on this topic
 </ul>
 <section id="dds-basics">
 <h2>DDS basics<a class="headerlink" href="#dds-basics" title="Link to this heading"></a></h2>
-<p>A generic DDS consists of a phase accumulator and a phase to amplitude converter.</p>
-<p>The phase accumulator is basically a counter that increments by a frequency word which determines a timely overflow(the actual period of the resulting signal).</p>
+<p>A generic DDS consists of a phase accumulator and a phase to amplitude
+converter.</p>
+<p>The phase accumulator is basically a counter that increments by a frequency word
+which determines a timely overflow(the actual period of the resulting signal).</p>
 <img alt="https://wiki.analog.com/_media/resources/fpga/docs/dds_basic.svg" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/docs/dds_basic.svg" />
-<p>The phase to amplitude convertor is a bit more complex and is the main consumer of FPGA resources out of the DDS modules.</p>
+<p>The phase to amplitude convertor is a bit more complex and is the main consumer
+of FPGA resources out of the DDS modules.</p>
 <p>Currently in the reference designs there are support two types of phase to amplitude converters, polynomial and <a class="icon link reference external" href="https://en.wikibooks.org/wiki/Digital_Circuits/CORDIC" target="_blank">CORDIC</a>. The polynomial type uses more DSPs and way less LUTs and FFs in comparison to the CORDIC. Regarding precision/accuracy CORDIC is better.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>NOTE: The CORDIC implementation is not optimal. The CORDIC phase to amplitude converter outputs a sine and a cosine, which can be used as I and Q. But because the DAC channel reference design requires dual tone + independent I/Q control. only the sine component is used out of a DDS instance, and multiple DDS instances are added for each tone and independent I/Q channels.</p>
+<p>NOTE: The CORDIC implementation is not optimal. The CORDIC phase to amplitude
+converter outputs a sine and a cosine, which can be used as I and Q. But
+because the DAC channel reference design requires dual tone + independent I/Q
+control. only the sine component is used out of a DDS instance, and multiple
+DDS instances are added for each tone and independent I/Q channels.</p>
 </div>
 </section>
 <section id="adi-dds-module">
@@ -764,7 +773,8 @@ Content on this topic
 </section>
 <section id="control">
 <h3>Control<a class="headerlink" href="#control" title="Link to this heading"></a></h3>
-<p>In the reference designs the DDS is controlled through the register map(dac channel section).</p>
+<p>In the reference designs the DDS is controlled through the register map(dac
+channel section).</p>
 </section>
 <section id="base-common-to-all-cores">
 <h3>Base (common to all cores)<a class="headerlink" href="#base-common-to-all-cores" title="Link to this heading"></a></h3>
@@ -11319,7 +11329,8 @@ Valid for 64b66b encoder.</p></td>
 <h2>Config<a class="headerlink" href="#config" title="Link to this heading"></a></h2>
 <section id="dds-scale">
 <h3>DDS_SCALE<a class="headerlink" href="#dds-scale" title="Link to this heading"></a></h3>
-<p>The DDS scale for a tone, contributes to the amplitude of the channel(I or Q - where it applies).</p>
+<p>The DDS scale for a tone, contributes to the amplitude of the channel(I or Q -
+where it applies).</p>
 <p>The format is 1.1.14 fixed point. See below:</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -11338,11 +11349,14 @@ Valid for 64b66b encoder.</p></td>
 </table>
 </div>
 <p>The DDS scale is on 16-bits.</p>
-<p>The channel output is equal to (tone_1_fullscale * scale_1) + (tone_2_fullscale * scale_2).</p>
-<p>The phase to amplitude converter always outputs the full-scale(unity sine) sinewave, independent on the phase and data widths.</p>
+<p>The channel output is equal to (tone_1_fullscale * scale_1) + (tone_2_fullscale
+* scale_2).</p>
+<p>The phase to amplitude converter always outputs the full-scale(unity sine)
+sinewave, independent on the phase and data widths.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>NOTE: if you do use both tones and set both scales to 0x4000, the channel output will over-range.</p>
+<p>NOTE: if you do use both tones and set both scales to 0x4000, the channel
+output will over-range.</p>
 </div>
 <p>16’h4000 * 1 + 16’h4000 * 1 = 16’h8000 = 16’h1000000000000000</p>
 <ul class="simple">
@@ -11353,7 +11367,9 @@ Valid for 64b66b encoder.</p></td>
 </section>
 <section id="phase-dds-init">
 <h3>PHASE - DDS_INIT<a class="headerlink" href="#phase-dds-init" title="Link to this heading"></a></h3>
-<p>All tones/channels start on a sync event(internal or external). The DDS_INIT value will be used by the phase accumulator as a starting point in other words as a phase offset.</p>
+<p>All tones/channels start on a sync event(internal or external). The DDS_INIT
+value will be used by the phase accumulator as a starting point in other words
+as a phase offset.</p>
 <p>The offset can be determined from the phase accumulator capacity 0 to <span class="math notranslate nohighlight">\(2^phaseDW\)</span> represents (0° - 360°).</p>
 <p>e.g. for 90°. init = (90 * <span class="math notranslate nohighlight">\(2^phaseDW\)</span> )/360</p>
 </section>
@@ -11407,12 +11423,31 @@ Valid for 64b66b encoder.</p></td>
 </section>
 <section id="clock-ratio">
 <h3>CLOCK RATIO<a class="headerlink" href="#clock-ratio" title="Link to this heading"></a></h3>
-<p>The clock ratio (number data paths processed in parallel) instantiates more DDS logic, but it it is controlled by the same register map for all CLOCK_RATIO/DATA_PATH parameters.</p>
-<p>Where is the CLOCK_RATIO &gt; 1? This scenario can be found in every high speed DAC design. It is required because the FPGA fabric can’t work at the same speed than that of a high speed converter(typically &gt; 250M).</p>
-<p>Let’s take the daq2(AD9144) as an example, where the clock ratio is 4, this ratio is chosen for the maximum sampling frequency 1GSPS, this results in an internal clock of 250MHz(device clock), which is closer to the upper limit of what some FPGAs can handle. So, in one clock cycle(250M) it needs to generate 4 consecutive samples in order to keep up with the DAC. This is done by 4 DDS modules. The phase accumulator part is all in one place and the phase to amplitude converters have dedicated sub-modules, as described above. When the frequency is changed by software the 4 phases accumulator are align for the new frequency word and/or frequency phase shift. The counter increment value will be multiplied with clock ratio(4), to get a continuity of the 4 consecutive samples generated at t, t+1, t+2, and so on.</p>
+<p>The clock ratio (number data paths processed in parallel) instantiates more DDS
+logic, but it it is controlled by the same register map for all
+CLOCK_RATIO/DATA_PATH parameters.</p>
+<p>Where is the CLOCK_RATIO &gt; 1? This scenario can be found in every high speed DAC
+design. It is required because the FPGA fabric can’t work at the same speed than
+that of a high speed converter(typically &gt; 250M).</p>
+<p>Let’s take the daq2(AD9144) as an example, where the clock ratio is 4, this
+ratio is chosen for the maximum sampling frequency 1GSPS, this results in an
+internal clock of 250MHz(device clock), which is closer to the upper limit of
+what some FPGAs can handle. So, in one clock cycle(250M) it needs to generate 4
+consecutive samples in order to keep up with the DAC. This is done by 4 DDS
+modules. The phase accumulator part is all in one place and the phase to
+amplitude converters have dedicated sub-modules, as described above. When the
+frequency is changed by software the 4 phases accumulator are align for the new
+frequency word and/or frequency phase shift. The counter increment value will be
+multiplied with clock ratio(4), to get a continuity of the 4 consecutive samples
+generated at t, t+1, t+2, and so on.</p>
 <img alt="https://wiki.analog.com/_media/resources/fpga/docs/dds_clk_ratio_4.svg" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/docs/dds_clk_ratio_4.svg" />
-<p>For scenarios where the synchronization signal comes from an external source and it is high for a longer period of time, the phase accumulator stages will be hold in reset, in order to avoid a noise like signal, caused by sending all the summed outputs of each DDS stage.</p>
-<p>There is a minimum synchronization pulse width(delay) of n clock cycles, that is required to synchronize all phase accumulator stages, where n is equal to the CLK_RATIO.</p>
+<p>For scenarios where the synchronization signal comes from an external source and
+it is high for a longer period of time, the phase accumulator stages will be
+hold in reset, in order to avoid a noise like signal, caused by sending all the
+summed outputs of each DDS stage.</p>
+<p>There is a minimum synchronization pulse width(delay) of n clock cycles, that is
+required to synchronize all phase accumulator stages, where n is equal to the
+CLK_RATIO.</p>
 <img alt="https://wiki.analog.com/_media/resources/fpga/docs/fw_sync_basics.svg" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/docs/fw_sync_basics.svg" />
 <img alt="https://wiki.analog.com/_media/resources/fpga/docs/fw_sync_timing.png" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/docs/fw_sync_timing.png" />
 <p>In the above diagram example:</p>
@@ -11424,7 +11459,10 @@ Valid for 64b66b encoder.</p></td>
 <li><p>i3 = i2 + FW</p></li>
 </ul>
 <p>Each “i” is on 16 bits and each “s”(0-3) is on 64 bits. i(t)+ is the value of the previous i(t) plus the increment(FW*CLOCK_RATIO).</p>
-<p>It should be mentioned that after the phase init fall-edge, until the first valid sample, there is a delay caused by the phase to angle converter type and in the case of the CORDIC type, number of rotation stages will also have a direct impact on this clock period delay.</p>
+<p>It should be mentioned that after the phase init fall-edge, until the first
+valid sample, there is a delay caused by the phase to angle converter type and
+in the case of the CORDIC type, number of rotation stages will also have a
+direct impact on this clock period delay.</p>
 </section>
 </section>
 <section id="performance-analysis">

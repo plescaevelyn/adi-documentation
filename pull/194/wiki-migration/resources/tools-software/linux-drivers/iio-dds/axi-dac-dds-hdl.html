@@ -694,8 +694,11 @@ Content on this topic
 <p>This driver is independent from the physical layer. So it’s being used with CMOS or LVDS type interfaces or the <a class="reference internal" href="../../../fpga/peripherals/jesd204.html"><span class="doc">JESD204 Interface Framework</span></a>.</p>
 <p>There are basically two use case scenarios for this driver, in which this driver controls only the HDL/FPGA transport layer capture core. This mode is called <code class="docutils literal notranslate"><span class="pre">standalone</span> <span class="pre">mode</span></code>, and the converter is fully configured and controlled by a separate driver. The Linux common clock framework is utilized so that this driver knows the sampling frequency of the connected converter DAC device. Alternatively this driver can also be used in a <code class="docutils literal notranslate"><span class="pre">linked</span> <span class="pre">mode</span></code>, where the converter device typically a SPI device must instantiate first. If this has happened this AXI-DAC driver will then probe as well. (Deferred probe mechanism) Finally both the HDL core platform device together with the converter SPI device will register a common IIO device, which will then exhibit a common set of attributes and channels. The converter SPI device driver is handled in a separate source file, which can be found in the same directory this driver exists. The device tree phandle “spibus-connected” is used to connect the AXI-DAC driver with the SPI control driver.</p>
 <p>Sometimes there is a common HDL/FPGA transport layer core, which handles both RX/TX or ADC/DMA. This single physical core is then handled by two independent IIO drivers each for one transport data direction. It’s physical address register space is then also split or divided, typically spaced by 0x4000. A good example for this case is the <a class="reference internal" href="../../../fpga/docs/axi_ad9361.html"><span class="doc">AXI_AD9361</span></a> HDL core.</p>
-<p>The HDL/FPGA transport layer capture core driver portion implements a polyphase dual tone DDS core per channel together with an DMA based waveform buffer mechanism. The buffer can be filled by arbitrary data, which is then typically cyclically repeated or used in a streaming fashion.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-dds/axi-dac-dds-overview.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-dds/axi-dac-dds-overview.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-dds/axi-dac-dds-overview.png" style="width: 800px;" />
+<p>The HDL/FPGA transport layer capture core driver portion implements a polyphase
+dual tone DDS core per channel together with an DMA based waveform buffer
+mechanism. The buffer can be filled by arbitrary data, which is then typically
+cyclically repeated or used in a streaming fashion.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-dds/axi-dac-dds-overview.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-dds/axi-dac-dds-overview.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-dds/axi-dac-dds-overview.png" width="800" />
 </a>
 </section>
 </section>
@@ -756,7 +759,8 @@ Content on this topic
 </section>
 <section id="example-platform-device-initialization">
 <h1>Example platform device initialization<a class="headerlink" href="#example-platform-device-initialization" title="Link to this heading"></a></h1>
-<p>The AXI DAC/DDS driver is a platform driver and can only be instantiated via device tree.</p>
+<p>The AXI DAC/DDS driver is a platform driver and can only be instantiated via
+device tree.</p>
 <p>Required devicetree properties:</p>
 <ul class="simple">
 <li><p><strong>compatible</strong>: Should always be one of these:</p>
@@ -846,7 +850,8 @@ Content on this topic
 </section>
 <section id="enabling-linux-driver-support">
 <h1>Enabling Linux driver support<a class="headerlink" href="#enabling-linux-driver-support" title="Link to this heading"></a></h1>
-<p>Configure kernel with “make menuconfig” (alternatively use “make xconfig” or “make qconfig”)</p>
+<p>Configure kernel with “make menuconfig” (alternatively use “make xconfig” or
+“make qconfig”)</p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <p>The AXI ADC HDL driver may depend on CONFIG_SPI</p>
@@ -854,7 +859,8 @@ Content on this topic
 </section>
 <section id="adding-linux-driver-support">
 <h1>Adding Linux driver support<a class="headerlink" href="#adding-linux-driver-support" title="Link to this heading"></a></h1>
-<p>Configure kernel with “make menuconfig” (alternatively use “make xconfig” or “make qconfig”)</p>
+<p>Configure kernel with “make menuconfig” (alternatively use “make xconfig” or
+“make qconfig”)</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Linux</span> <span class="n">Kernel</span> <span class="n">Configuration</span>
     <span class="n">Device</span> <span class="n">Drivers</span>  <span class="o">---&gt;</span>
     <span class="o">&lt;*&gt;</span>     <span class="n">Industrial</span> <span class="n">I</span><span class="o">/</span><span class="n">O</span> <span class="n">support</span> <span class="o">---&gt;</span>
@@ -875,15 +881,26 @@ Content on this topic
 </section>
 <section id="hardware-configuration">
 <h1>Hardware configuration<a class="headerlink" href="#hardware-configuration" title="Link to this heading"></a></h1>
-<p>In case the driver probes successfully and the device gets instantiated. Your systems kernel messages should include a line, which may look like the one shown below.</p>
+<p>In case the driver probes successfully and the device gets instantiated. Your
+systems kernel messages should include a line, which may look like the one shown
+below.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cf_axi_dds</span> <span class="mf">79024000.</span><span class="n">cf</span><span class="o">-</span><span class="n">ad9361</span><span class="o">-</span><span class="n">dds</span><span class="o">-</span><span class="n">core</span><span class="o">-</span><span class="n">lpc</span><span class="p">:</span> <span class="n">Analog</span> <span class="n">Devices</span> <span class="n">CF_AXI_DDS_DDS</span> <span class="n">MASTER</span> <span class="p">(</span><span class="mf">8.00</span><span class="o">.</span><span class="n">b</span><span class="p">)</span> <span class="n">at</span> <span class="mh">0x79024000</span> <span class="n">mapped</span> <span class="n">to</span> <span class="mh">0xf0998000</span><span class="p">,</span> <span class="n">probed</span> <span class="n">DDS</span> <span class="n">AD9361</span>
 </pre></div>
 </div>
 </section>
 <section id="driver-testing">
 <h1>Driver testing<a class="headerlink" href="#driver-testing" title="Link to this heading"></a></h1>
-<p>Each and every IIO device, typically a hardware chip, has a device folder under /sys/bus/iio/devices/iio:deviceX. Where X is the IIO index of the device. Under every of these directory folders reside a set of files, depending on the characteristics and features of the hardware device in question. These files are consistently generalized and documented in the IIO ABI documentation. In order to determine which IIO deviceX corresponds to which hardware device, the user can read the name file /sys/bus/iio/devices/iio:deviceX/name. In case the sequence in which the iio device drivers are loaded/registered is constant, the numbering is constant and may be known in advance.</p>
-<p>Some device attributes control the DDS HDL Core, others features of the DAC and associated clock providers.</p>
+<p>Each and every IIO device, typically a hardware chip, has a device folder under
+/sys/bus/iio/devices/iio:deviceX. Where X is the IIO index of the device. Under
+every of these directory folders reside a set of files, depending on the
+characteristics and features of the hardware device in question. These files are
+consistently generalized and documented in the IIO ABI documentation. In order
+to determine which IIO deviceX corresponds to which hardware device, the user
+can read the name file /sys/bus/iio/devices/iio:deviceX/name. In case the
+sequence in which the iio device drivers are loaded/registered is constant, the
+numbering is constant and may be known in advance.</p>
+<p>Some device attributes control the DDS HDL Core, others features of the DAC and
+associated clock providers.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">analog</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">iio</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">iio</span><span class="p">:</span><span class="n">device2</span><span class="c1"># cd /sys/bus/iio/devices/</span>
@@ -991,15 +1008,18 @@ Content on this topic
 <section id="enable-disable-dds-channel">
 <h2>Enable/Disable DDS Channel<a class="headerlink" href="#enable-disable-dds-channel" title="Link to this heading"></a></h2>
 <p>1 for enable, 0 for disable.</p>
-<p>With the introduction of the big channel MUX (REG_CHAN_CNTRL_7, DAC_DDS_SEL) starting with HDV Version &gt; 7.00, the RAW attribute has some side effects, that need to be understood. In many situations for example when the Buffer mode is used, it’s not desirable to write this attribute.</p>
+<p>With the introduction of the big channel MUX (REG_CHAN_CNTRL_7, DAC_DDS_SEL)
+starting with HDV Version &gt; 7.00, the RAW attribute has some side effects, that
+need to be understood. In many situations for example when the Buffer mode is
+used, it’s not desirable to write this attribute.</p>
 <section id="hdl-version-7-00-a">
 <h3>HDL Version &lt; 7.00.a<a class="headerlink" href="#hdl-version-7-00-a" title="Link to this heading"></a></h3>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-dds/dds_data_sel_v7-.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-dds/dds_data_sel_v7-.png" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-dds/dds_data_sel_v7-.png" style="width: 500px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-dds/dds_data_sel_v7-.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-dds/dds_data_sel_v7-.png" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-dds/dds_data_sel_v7-.png" width="500" />
 </a>
 </section>
 <section id="hdl-version-7-00-a-1">
 <span id="id1"></span><h3>HDL Version &gt; 7.00.a<a class="headerlink" href="#hdl-version-7-00-a-1" title="Link to this heading"></a></h3>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-dds/dds_data_sel_v7+.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-dds/dds_data_sel_v7+.png" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-dds/dds_data_sel_v7+.png" style="width: 500px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-dds/dds_data_sel_v7+.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-dds/dds_data_sel_v7+.png" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-dds/dds_data_sel_v7+.png" width="500" />
 </a>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
@@ -1015,7 +1035,9 @@ Content on this topic
 <p>DDS amplitude: range 0.00 … 1.00 (relative to full scale)</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>When disabling the DAC Buffer/DMA mode and a transition into DDS tone output mode is not desired - Scale of all channels should be set to 0.00. See also device tree attribute: adi,axi-dds-default-scale</p>
+<p>When disabling the DAC Buffer/DMA mode and a transition into DDS tone output
+mode is not desired - Scale of all channels should be set to 0.00. See also
+device tree attribute: adi,axi-dds-default-scale</p>
 </div>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
@@ -1032,8 +1054,10 @@ Content on this topic
 </section>
 <section id="dac-internal-or-external-gain-dc-offset-and-phase-adjustments">
 <h2>DAC internal or external Gain, DC Offset, and Phase adjustments<a class="headerlink" href="#dac-internal-or-external-gain-dc-offset-and-phase-adjustments" title="Link to this heading"></a></h2>
-<p>Depending on the platform. These attributes may control converter internal or external processing blocks.</p>
-<p>The AD9122 features Gain, DC Offset, and Phase adjustment for sideband suppression. These features can be controlled via following attributes:</p>
+<p>Depending on the platform. These attributes may control converter internal or
+external processing blocks.</p>
+<p>The AD9122 features Gain, DC Offset, and Phase adjustment for sideband
+suppression. These features can be controlled via following attributes:</p>
 <ul class="simple">
 <li><p>out_voltage0_calibbias</p></li>
 <li><p>out_voltage0_calibscale</p></li>
@@ -1095,7 +1119,13 @@ Content on this topic
 </pre></div>
 </div>
 </div>
-<p>The Industrial I/O subsystem provides support for various ring buffer based data acquisition methods. Apart from device specific hardware buffer support, the user can chose between two different software ring buffer implementations. One is the IIO lock free software ring, and the other is based on Linux kfifo. Devices with buffer support feature an additional sub-folder in the /sys/bus/iio/devices/deviceX/ folder hierarchy. Called deviceX:bufferY, where Y defaults to 0, for devices with a single buffer.</p>
+<p>The Industrial I/O subsystem provides support for various ring buffer based data
+acquisition methods. Apart from device specific hardware buffer support, the
+user can chose between two different software ring buffer implementations. One
+is the IIO lock free software ring, and the other is based on Linux kfifo.
+Devices with buffer support feature an additional sub-folder in the
+/sys/bus/iio/devices/deviceX/ folder hierarchy. Called deviceX:bufferY, where Y
+defaults to 0, for devices with a single buffer.</p>
 <p>Every buffer implementation features a set of files:</p>
 <div class="line-block">
 <div class="line"><strong>length</strong></div>
@@ -1154,11 +1184,26 @@ Content on this topic
 </section>
 <section id="iio-device-files">
 <h1>IIO device files<a class="headerlink" href="#iio-device-files" title="Link to this heading"></a></h1>
-<p>Each and every IIO device, typically a hardware chip, has a device folder under /sys/bus/iio/devices/iio:deviceX. Where X is the IIO index of the device. Under every of these directory folders reside a set of files, depending on the characteristics and features of the hardware device in question. These files are consistently generalized and documented in the IIO ABI documentation. In order to determine which IIO deviceX corresponds to which hardware device, the user can read the name file /sys/bus/iio/devices/iio:deviceX/name. In case the sequence in which the iio device drivers are loaded/registered is constant, the numbering is constant and may be known in advance.</p>
+<p>Each and every IIO device, typically a hardware chip, has a device folder under
+/sys/bus/iio/devices/iio:deviceX. Where X is the IIO index of the device. Under
+every of these directory folders reside a set of files, depending on the
+characteristics and features of the hardware device in question. These files are
+consistently generalized and documented in the IIO ABI documentation. In order
+to determine which IIO deviceX corresponds to which hardware device, the user
+can read the name file /sys/bus/iio/devices/iio:deviceX/name. In case the
+sequence in which the iio device drivers are loaded/registered is constant, the
+numbering is constant and may be known in advance.</p>
 </section>
 <section id="iio-devices-with-trigger-consumer-interface">
 <h1>IIO devices with trigger consumer interface<a class="headerlink" href="#iio-devices-with-trigger-consumer-interface" title="Link to this heading"></a></h1>
-<p>If deviceX supports triggered sampling, it’s a so called trigger consumer and there will be an additional folder /sys/bus/iio/device/iio:deviceX/trigger. In this folder there is a file called current_trigger, allowing controlling and viewing the current trigger source connected to deviceX. Available trigger sources can be identified by reading the name file /sys/bus/iio/devices/triggerY/name. The same trigger source can connect to multiple devices, so a single trigger may initialize data capture or reading from a number of sensors, converters, etc.</p>
+<p>If deviceX supports triggered sampling, it’s a so called trigger consumer and
+there will be an additional folder /sys/bus/iio/device/iio:deviceX/trigger. In
+this folder there is a file called current_trigger, allowing controlling and
+viewing the current trigger source connected to deviceX. Available trigger
+sources can be identified by reading the name file
+/sys/bus/iio/devices/triggerY/name. The same trigger source can connect to
+multiple devices, so a single trigger may initialize data capture or reading
+from a number of sensors, converters, etc.</p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <p>Trigger Consumers:</p>
@@ -1227,7 +1272,13 @@ Content on this topic
 </section>
 <section id="id2">
 <h1>Buffer management<a class="headerlink" href="#id2" title="Link to this heading"></a></h1>
-<p>The Industrial I/O subsystem provides support for various ring buffer based data acquisition methods. Apart from device specific hardware buffer support, the user can chose between two different software ring buffer implementations. One is the IIO lock free software ring, and the other is based on Linux kfifo. Devices with buffer support feature an additional sub-folder in the /sys/bus/iio/devices/deviceX/ folder hierarchy. Called deviceX:bufferY, where Y defaults to 0, for devices with a single buffer.</p>
+<p>The Industrial I/O subsystem provides support for various ring buffer based data
+acquisition methods. Apart from device specific hardware buffer support, the
+user can chose between two different software ring buffer implementations. One
+is the IIO lock free software ring, and the other is based on Linux kfifo.
+Devices with buffer support feature an additional sub-folder in the
+/sys/bus/iio/devices/deviceX/ folder hierarchy. Called deviceX:bufferY, where Y
+defaults to 0, for devices with a single buffer.</p>
 <p>Every buffer implementation features a set of files:</p>
 <div class="line-block">
 <div class="line"><strong>length</strong></div>
@@ -1271,9 +1322,17 @@ Content on this topic
 </section>
 <section id="event-management">
 <h1>Event Management<a class="headerlink" href="#event-management" title="Link to this heading"></a></h1>
-<p>The Industrial I/O subsystem provides support for passing hardware generated events up to userspace.</p>
-<p>In IIO events are not used for passing normal readings from the sensing devices to userspace, but rather for out of band information. Normal data reaches userspace through a low overhead character device - typically via either software or hardware buffer. The stream format is pseudo fixed, so is described and controlled via sysfs rather than adding headers to the data describing what is in it.</p>
-<p>Pretty much all IIO events correspond to thresholds on some value derived from one or more raw readings from the sensor. They are provided by the underlying hardware.</p>
+<p>The Industrial I/O subsystem provides support for passing hardware generated
+events up to userspace.</p>
+<p>In IIO events are not used for passing normal readings from the sensing devices
+to userspace, but rather for out of band information. Normal data reaches
+userspace through a low overhead character device - typically via either
+software or hardware buffer. The stream format is pseudo fixed, so is described
+and controlled via sysfs rather than adding headers to the data describing what
+is in it.</p>
+<p>Pretty much all IIO events correspond to thresholds on some value derived from
+one or more raw readings from the sensor. They are provided by the underlying
+hardware.</p>
 <p><strong>Examples include:</strong></p>
 <ul class="simple">
 <li><p>Straight crossing a voltage threshold</p></li>
@@ -1287,7 +1346,9 @@ Content on this topic
 <p><strong>The Interface:</strong></p>
 <ul class="simple">
 <li><p>Single user at a time.</p></li>
-<li><p>Simple chrdev per device (aggregation across devices doesn’t really make sense for IIO as you tend to really care which sensor caused the event rather than just that it happened.)</p></li>
+<li><p>Simple chrdev per device (aggregation across devices doesn’t really make
+sense for IIO as you tend to really care which sensor caused the event rather
+than just that it happened.)</p></li>
 </ul>
 <p><strong>The format is:</strong></p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/**</span>
@@ -1352,13 +1413,16 @@ Content on this topic
 </section>
 <section id="low-level-register-access-via-debugfs-direct-reg-access">
 <h1>Low level register access via debugfs (direct_reg_access)<a class="headerlink" href="#low-level-register-access-via-debugfs-direct-reg-access" title="Link to this heading"></a></h1>
-<p>Some IIO drivers feature an optional debug facility, allowing users to read or write registers directly. Special care needs to be taken when using this feature, since you can modify registers on the back of the driver.</p>
+<p>Some IIO drivers feature an optional debug facility, allowing users to read or
+write registers directly. Special care needs to be taken when using this
+feature, since you can modify registers on the back of the driver.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>To simplify direct register access you may want to use the libiio <a class="reference internal" href="../../linux-software/libiio/iio_reg.html"><span class="doc">iio_reg</span></a> command line utility.</p>
 </div>
 <p>Accessing debugfs requires root privileges.</p>
-<p>In order to identify if the IIO device in question feature this option you first need to identify the IIO device number.</p>
+<p>In order to identify if the IIO device in question feature this option you first
+need to identify the IIO device number.</p>
 <p>Therefore read the name attribute of each IIO device</p>
 <div class="box bggreen docutils container">
 <div class="admonition note">
@@ -1465,20 +1529,31 @@ Content on this topic
 <li><p>Reference Clock (REFCLK)</p></li>
 </ul>
 <p>The Data/Interface Clock (DCI) is shared with the DDS HDL Core.</p>
-<p>The default AD9122 driver configuration uses a concept called Direct Clocking. This means an external clock provider must supply DCI and DACCLK. In case the DAC interpolation feature is not used and the DAC operates in Word-Mode then DCI = DACCLK.</p>
+<p>The default AD9122 driver configuration uses a concept called Direct Clocking.
+This means an external clock provider must supply DCI and DACCLK. In case the
+DAC interpolation feature is not used and the DAC operates in Word-Mode then DCI
+= DACCLK.</p>
 <p>When N interpolation is used following equation must be satisfied.</p>
 <p>N = {1, 2, 4, 8}</p>
 <p>DACCLK = N * DCI and DACCLK &lt;= 1230MHz</p>
 <p>The <em>out_altvoltage_interpolation_frequency_available</em> attribute allows you to query the supported interpolation frequencies for a given Interface Clock (<em>out_altvoltage_X_sampling_frequency</em>) by exercising possible settings on the clock provider. In case the clock provider is not capable providing exactly the requested rate, the mode is removed from the list.</p>
 <p><strong>So following example:</strong></p>
-<p>Assuming the clock provider can only provide following rates: 1000MHz / X, X = {1..1023}.</p>
+<p>Assuming the clock provider can only provide following rates: 1000MHz / X, X =
+{1..1023}.</p>
 <p>This results in following rates:</p>
 <p>1000, 500, 333.33, 250, 200, 166.66, 142.85, 125, 111.11, …</p>
 <ul class="simple">
-<li><p>In case the interface clock is set to 125MHz, then 1x, 2x, 4x and 8x interpolation is possible.</p></li>
-<li><p>Assuming the interface clock is set to 166.66MHz, then only 1x, 2x interpolation is possible. 4x interpolation won’t work since 666.66MHz cannot be supplied by the clock provider.</p></li>
+<li><p>In case the interface clock is set to 125MHz, then 1x, 2x, 4x and 8x
+interpolation is possible.</p></li>
+<li><p>Assuming the interface clock is set to 166.66MHz, then only 1x, 2x
+interpolation is possible. 4x interpolation won’t work since 666.66MHz cannot
+be supplied by the clock provider.</p></li>
 </ul>
-<p>The half-band interpolation filters have selectable pass bands that allow the center frequencies to be moved in increments of one-half their input data rate. The premodulation block provides a digital upconversion of the incoming waveform by one-half the incoming data rate, fDATA. This can be used to frequency-shift base- band input data to the center of the interpolation filter pass band.</p>
+<p>The half-band interpolation filters have selectable pass bands that allow the
+center frequencies to be moved in increments of one-half their input data rate.
+The premodulation block provides a digital upconversion of the incoming waveform
+by one-half the incoming data rate, fDATA. This can be used to frequency-shift
+base- band input data to the center of the interpolation filter pass band.</p>
 <p>The available center shift frequencies for a given Interface Clock (<em>out_altvoltage_X_sampling_frequency</em>), can be queried using the <em>out_altvoltage_interpolation_center_shift_frequency_availabl</em>e attribute.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>

@@ -596,11 +596,17 @@ Content on this topic
 <h1>ADALM1000 Python tutorial materials<a class="headerlink" href="#adalm1000-python-tutorial-materials" title="Link to this heading"></a></h1>
 <section id="objective">
 <h2>Objective:<a class="headerlink" href="#objective" title="Link to this heading"></a></h2>
-<p>This tutorial will introduce you to the libpysmu Python interface software layer to control the ADALM1000 active learning hardware module. Python is a general-purpose, object-oriented interpreted language you can use along with the ALM1000 hardware for countless standalone projects.</p>
+<p>This tutorial will introduce you to the libpysmu Python interface software layer
+to control the ADALM1000 active learning hardware module. Python is a
+general-purpose, object-oriented interpreted language you can use along with the
+ALM1000 hardware for countless standalone projects.</p>
 </section>
 <section id="required-files">
 <h2>Required files:<a class="headerlink" href="#required-files" title="Link to this heading"></a></h2>
-<p>These tutorial example programs are written in Python and requires that version 2.7.8 of Python be installed on the user’s computer. The programs only import modules generally included with standard Python installation packages. The following files are required do these tutorials:</p>
+<p>These tutorial example programs are written in Python and requires that version
+2.7.8 of Python be installed on the user’s computer. The programs only import
+modules generally included with standard Python installation packages. The
+following files are required do these tutorials:</p>
 <section id="all-os">
 <h3>All OS:<a class="headerlink" href="#all-os" title="Link to this heading"></a></h3>
 <p><a class="icon link reference external" href="https://github.com/analogdevicesinc/libsmu/releases/latest" target="_blank">Libsmu with Python bindings.</a></p>
@@ -608,8 +614,15 @@ Content on this topic
 </section>
 <section id="common-notes">
 <h2>Common Notes:<a class="headerlink" href="#common-notes" title="Link to this heading"></a></h2>
-<p>As in all the ALM activities we use the following terminology when referring to the connections to the ALM1000 connector and configuring the hardware. The green shaded rectangles indicate connections to the M1000 analog I/O connector. The analog I/O channel pins are referred to as CA and CB. When configured to force voltage / measure current -V is added as in CA-V or when configured to force current / measure voltage -I is added as in CA-I. When a channel is configured in the high impedance mode to only measure voltage -H is added as CA-H.</p>
-<p>Scope traces are similarly referred to by channel and voltage / current. Such as CA-V , CB-V for the voltage waveforms and CA-I , CB-I for the current waveforms.</p>
+<p>As in all the ALM activities we use the following terminology when referring to
+the connections to the ALM1000 connector and configuring the hardware. The green
+shaded rectangles indicate connections to the M1000 analog I/O connector. The
+analog I/O channel pins are referred to as CA and CB. When configured to force
+voltage / measure current -V is added as in CA-V or when configured to force
+current / measure voltage -I is added as in CA-I. When a channel is configured
+in the high impedance mode to only measure voltage -H is added as CA-H.</p>
+<p>Scope traces are similarly referred to by channel and voltage / current. Such as
+CA-V , CB-V for the voltage waveforms and CA-I , CB-I for the current waveforms.</p>
 <p>The digital I/O channel pins are referred to as D0 through D3. These correspond to the pins labeled PIO 0 – PIO 3 on the ALM1000 board silkscreen.</p>
 </section>
 <section id="table-of-contents">
@@ -636,31 +649,61 @@ Content on this topic
 </section>
 <section id="high-level-functions-in-libpysmu">
 <h3>High Level Functions in libpysmu:<a class="headerlink" href="#high-level-functions-in-libpysmu" title="Link to this heading"></a></h3>
-<p>There is are a few pre-defined python functions that interface to the C++ libsmu library. Contained in the pysmu.py file they provide the high level access functions to configure and control the ALM1000 hardware. The pysmu.py file must be imported or cut and pasted into your python program. The following lists the functions currently implemented:</p>
-<p>Smu() Must be run first Returns a list of the devices currently plugged into the computer Example: devx = Smu()</p>
-<p>devx.devices[int] takes a integer for the device, 0 for first device in list, 1 for second etc. returns index to that device</p>
+<p>There is are a few pre-defined python functions that interface to the C++ libsmu
+library. Contained in the pysmu.py file they provide the high level access
+functions to configure and control the ALM1000 hardware. The pysmu.py file must
+be imported or cut and pasted into your python program. The following lists the
+functions currently implemented:</p>
+<p>Smu() Must be run first Returns a list of the devices currently plugged into the
+computer Example: devx = Smu()</p>
+<p>devx.devices[int] takes a integer for the device, 0 for first device in list, 1
+for second etc. returns index to that device</p>
 <p>Example: Both = devx.devices[0]</p>
-<p>devx.channels[string] takes one of the following strings as input ‘A’ , ‘B’ for first device, ‘C’ , ‘D’ for second device etc. returns index to that channel</p>
+<p>devx.channels[string] takes one of the following strings as input ‘A’ , ‘B’ for
+first device, ‘C’ , ‘D’ for second device etc. returns index to that channel</p>
 <p>Examples: CHA = devx.channels[‘A’] CHB = devx.channels[‘B’]</p>
-<p>AllChan = Both.get_samples(n_samples): query device for a list of samples from all channels n_samples parameter is number of samples n_samples is of type int returns list of n samples from all the device’s channels</p>
-<p>AnalogInA = CHA.get_samples(20) get 20 readings and return them to list variable AnalogInA</p>
-<p>CHA.set_mode(mode) or CHB.set_mode(mode): mode can be one of the following strings: ‘V’ or ‘v’ sets channel to source voltage measure current ( SVMI ) ‘I’ or ‘I’ sets channel to source current measure voltage ( SIMV ) ‘D’ or ‘d’ set channel to high impedance mode, measure voltage</p>
-<p>The following functions control the waveform of the analog output channels (could be CHA or CHB).</p>
-<p>CHA.constant(value) value is a floating point number from 0 to 5 representing the DC output voltage for that channel or value is a floating point number from -0.200 to + 0.200 representing the DC output current for that channel</p>
+<p>AllChan = Both.get_samples(n_samples): query device for a list of samples from
+all channels n_samples parameter is number of samples n_samples is of type int
+returns list of n samples from all the device’s channels</p>
+<p>AnalogInA = CHA.get_samples(20) get 20 readings and return them to list variable
+AnalogInA</p>
+<p>CHA.set_mode(mode) or CHB.set_mode(mode): mode can be one of the following
+strings: ‘V’ or ‘v’ sets channel to source voltage measure current ( SVMI ) ‘I’
+or ‘I’ sets channel to source current measure voltage ( SIMV ) ‘D’ or ‘d’ set
+channel to high impedance mode, measure voltage</p>
+<p>The following functions control the waveform of the analog output channels
+(could be CHA or CHB).</p>
+<p>CHA.constant(value) value is a floating point number from 0 to 5 representing
+the DC output voltage for that channel or value is a floating point number from
+-0.200 to + 0.200 representing the DC output current for that channel</p>
 <p>CHA.sine(value1, value2, periodvalue, delayvalue)</p>
 <p>CHA.triangle(value1, value2, periodvalue, delayvalue)</p>
 <p>CHA.sawtooth(value1, value2, periodvalue, delayvalue)</p>
 <p>CHA.square(value1, value2, periodvalue, delayvalue, dutycyclevalue)</p>
 <p>CHA.stairstep(value1, value2, periodvalue, delayvalue)</p>
-<p>To better visualize how to specify a waveform look at figure 1 where: value1 is the first peak value of the waveform, could be the minimum or the maximum peak. value2 is the second peak value of the waveform, could be the minimum or the maximum peak. If for example value1 is less than value 2 the apparent phase of the wave is 180 degrees from a wave where value1 is greater than value2. dutycyclevalue is a fractional number from 0 to 1. dutycyclevalue only applies to the square waveform.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/tools/python-tutorial/python_tutorial0_f1.png"><img alt="image1" src="https://wiki.analog.com/_media/university/tools/python-tutorial/python_tutorial0_f1.png" style="width: 500px;" /></a></p>
+<p>To better visualize how to specify a waveform look at figure 1 where: value1 is
+the first peak value of the waveform, could be the minimum or the maximum peak.
+value2 is the second peak value of the waveform, could be the minimum or the
+maximum peak. If for example value1 is less than value 2 the apparent phase of
+the wave is 180 degrees from a wave where value1 is greater than value2.
+dutycyclevalue is a fractional number from 0 to 1. dutycyclevalue only applies
+to the square waveform.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/tools/python-tutorial/python_tutorial0_f1.png"><img alt="image1" src="https://wiki.analog.com/_media/university/tools/python-tutorial/python_tutorial0_f1.png" width="500" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 1 How to build a waveform.</p>
 </div>
-<p>To calculate the period from frequency ( in Hertz ) use the following formula: periodvalue = SAMPLErate/freqvalue where SAMPLErate is generally fixed at 100,000 SPS</p>
-<p>To calculate the delay from the phase ( in degrees ) use the following formula: delayvalue = periodvalue * phasevalue / 360</p>
-<p>Direct control over ADALM1000 functionality can be accomplished using the implemented control transfers, a synchronous and slow communication endpoint accessible regardless of the configuration of the device.</p>
-<p>Note that the higher level functions libpysmu implements on top of LIBSMU make use of many of the control transfers to configure device state during normal operation. As such, using these low level control transfers while streaming data may not produce the expected results.</p>
+<p>To calculate the period from frequency ( in Hertz ) use the following formula:
+periodvalue = SAMPLErate/freqvalue where SAMPLErate is generally fixed at
+100,000 SPS</p>
+<p>To calculate the delay from the phase ( in degrees ) use the following formula:
+delayvalue = periodvalue * phasevalue / 360</p>
+<p>Direct control over ADALM1000 functionality can be accomplished using the
+implemented control transfers, a synchronous and slow communication endpoint
+accessible regardless of the configuration of the device.</p>
+<p>Note that the higher level functions libpysmu implements on top of LIBSMU make
+use of many of the control transfers to configure device state during normal
+operation. As such, using these low level control transfers while streaming data
+may not produce the expected results.</p>
 <p>The ALM1000 implements many control transfers, including the following:</p>
 <ul class="simple">
 <li><p>0x17 - read a number of bytes from the ADM1177 hot-swap controller</p></li>
@@ -680,12 +723,18 @@ Content on this topic
 <p># set PIO1 low devx.ctrl_transfer(DevID, 0x40, 0x50, 1, 0, 0, 0, 100)</p>
 <p># get state of PIO0 print devx.ctrl_transfer(DevID, 0xc0, 0x91, 0, 0, 0, 1, 100)</p>
 <p># get state of PIO1 print devx.ctrl_transfer(DevID, 0xc0, 0x91, 1, 0, 0, 1, 100)</p>
-<p># set CHA 2.5 V switch to open devx.ctrl_transfer(DevID, 0x40, 0x51, 32, 0, 0, 0, 100)</p>
-<p># set CHA GND switch to open devx.ctrl_transfer(DevID, 0x40, 0x51, 33, 0, 0, 0, 100)</p>
-<p># set CHB 2.5 V switch to open devx.ctrl_transfer(DevID, 0x40, 0x51, 37, 0, 0, 0, 100)</p>
-<p># set CHB GND switch to open devx.ctrl_transfer(DevID, 0x40, 0x51, 38, 0, 0, 0, 100)</p>
-<p># open CHA voltage sense loop devx.ctrl_transfer(DevID, 0x40, 0x51, 34, 0, 0, 0, 100)</p>
-<p># open CHB voltage sense loop devx.ctrl_transfer(DevID, 0x40, 0x51, 39, 0, 0, 0, 100)</p>
+<p># set CHA 2.5 V switch to open devx.ctrl_transfer(DevID, 0x40, 0x51, 32, 0, 0,
+0, 100)</p>
+<p># set CHA GND switch to open devx.ctrl_transfer(DevID, 0x40, 0x51, 33, 0, 0, 0,
+100)</p>
+<p># set CHB 2.5 V switch to open devx.ctrl_transfer(DevID, 0x40, 0x51, 37, 0, 0,
+0, 100)</p>
+<p># set CHB GND switch to open devx.ctrl_transfer(DevID, 0x40, 0x51, 38, 0, 0, 0,
+100)</p>
+<p># open CHA voltage sense loop devx.ctrl_transfer(DevID, 0x40, 0x51, 34, 0, 0, 0,
+100)</p>
+<p># open CHB voltage sense loop devx.ctrl_transfer(DevID, 0x40, 0x51, 39, 0, 0, 0,
+100)</p>
 <p><strong>For Further Reading:</strong></p>
 <p><a class="reference internal" href="../m1k/alice/users-guide.html"><span class="doc">Active Learning Interface (for) Circuits (and) Electronics</span></a> (Python program) <a class="reference internal" href="../m1k/alice/sa-users-guide.html"><span class="doc">ALICE-SA Spectrum Analyzer</span></a> (Python program) <a class="reference internal" href="../m1k/analog-inputs.html"><span class="doc">ADALM1000 Analog Inputs</span></a> <a class="reference internal" href="../m1k/digital-outputs.html"><span class="doc">ADALM1000 Digital Outputs</span></a></p>
 <p><strong>Return to ALM</strong> <a class="reference internal" href="../m1k.html"><span class="doc">Table of Contents</span></a></p>

@@ -658,11 +658,22 @@ Content on this topic
 </tbody>
 </table>
 </div>
-<p>Unlike PCI or USB devices, I2C devices are not enumerated at the hardware level. Instead, the software must know which devices are connected on each I2C bus segment, and what address these devices are using. For this reason, the kernel code must instantiate I2C devices explicitly. There are different ways to achieve this, depending on the context and requirements. However the most common method is to declare the I2C devices by bus number.</p>
-<p>This method is appropriate when the I2C bus is a system bus, as in many embedded systems, wherein each I2C bus has a number which is known in advance. It is thus possible to pre-declare the I2C devices that inhabit this bus. This is done with an array of struct i2c_board_info, which is registered by calling i2c_register_board_info().</p>
-<p>So, to enable such a driver one need only edit the board support file by adding an appropriate entry to i2c_board_info.</p>
+<p>Unlike PCI or USB devices, I2C devices are not enumerated at the hardware level.
+Instead, the software must know which devices are connected on each I2C bus
+segment, and what address these devices are using. For this reason, the kernel
+code must instantiate I2C devices explicitly. There are different ways to
+achieve this, depending on the context and requirements. However the most common
+method is to declare the I2C devices by bus number.</p>
+<p>This method is appropriate when the I2C bus is a system bus, as in many embedded
+systems, wherein each I2C bus has a number which is known in advance. It is thus
+possible to pre-declare the I2C devices that inhabit this bus. This is done with
+an array of struct i2c_board_info, which is registered by calling
+i2c_register_board_info().</p>
+<p>So, to enable such a driver one need only edit the board support file by adding
+an appropriate entry to i2c_board_info.</p>
 <p>For more information see: <a href="#id1"><span class="problematic" id="id2">`instantiating-devices.rst &lt;/git.linux.org&gt;documentation/i2c/instantiating-devices.rst&gt;`__</span></a></p>
-<p>Depending on the converter IC used, you may need to set the I2C_BOARD_INFO name accordingly, matching your part name.</p>
+<p>Depending on the converter IC used, you may need to set the I2C_BOARD_INFO name
+accordingly, matching your part name.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -709,7 +720,8 @@ Content on this topic
 </section>
 <section id="adding-linux-driver-support">
 <h1>Adding Linux driver support<a class="headerlink" href="#adding-linux-driver-support" title="Link to this heading"></a></h1>
-<p>Configure kernel with “make menuconfig” (alternatively use “make xconfig” or “make qconfig”)</p>
+<p>Configure kernel with “make menuconfig” (alternatively use “make xconfig” or
+“make qconfig”)</p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <p>The driver depends on CONFIG_I2C</p>
@@ -735,12 +747,20 @@ Content on this topic
 </section>
 <section id="hardware-configuration">
 <h1>Hardware configuration<a class="headerlink" href="#hardware-configuration" title="Link to this heading"></a></h1>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad7150_eval_lr.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad7150_eval_lr.jpg" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad7150_eval_lr.jpg" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad7150_eval_lr.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad7150_eval_lr.jpg" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad7150_eval_lr.jpg" width="600" />
 </a>
 </section>
 <section id="driver-testing">
 <h1>Driver testing<a class="headerlink" href="#driver-testing" title="Link to this heading"></a></h1>
-<p>Each and every IIO device, typically a hardware chip, has a device folder under /sys/bus/iio/devices/iio:deviceX. Where X is the IIO index of the device. Under every of these directory folders reside a set of files, depending on the characteristics and features of the hardware device in question. These files are consistently generalized and documented in the IIO ABI documentation. In order to determine which IIO deviceX corresponds to which hardware device, the user can read the name file /sys/bus/iio/devices/iio:deviceX/name. In case the sequence in which the iio device drivers are loaded/registered is constant, the numbering is constant and may be known in advance.</p>
+<p>Each and every IIO device, typically a hardware chip, has a device folder under
+/sys/bus/iio/devices/iio:deviceX. Where X is the IIO index of the device. Under
+every of these directory folders reside a set of files, depending on the
+characteristics and features of the hardware device in question. These files are
+consistently generalized and documented in the IIO ABI documentation. In order
+to determine which IIO deviceX corresponds to which hardware device, the user
+can read the name file /sys/bus/iio/devices/iio:deviceX/name. In case the
+sequence in which the iio device drivers are loaded/registered is constant, the
+numbering is constant and may be known in advance.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/&gt;</span> <span class="n">cd</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">iio</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span>
@@ -825,9 +845,17 @@ Content on this topic
 </section>
 <section id="hardware-events">
 <h1>Hardware Events<a class="headerlink" href="#hardware-events" title="Link to this heading"></a></h1>
-<p>The Industrial I/O subsystem provides support for passing hardware generated events up to userspace.</p>
-<p>In IIO events are not used for passing normal readings from the sensing devices to userspace, but rather for out of band information. Normal data reaches userspace through a low overhead character device - typically via either software or hardware buffer. The stream format is pseudo fixed, so is described and controlled via sysfs rather than adding headers to the data describing what is in it.</p>
-<p>Pretty much all IIO events correspond to thresholds on some value derived from one or more raw readings from the sensor. They are provided by the underlying hardware.</p>
+<p>The Industrial I/O subsystem provides support for passing hardware generated
+events up to userspace.</p>
+<p>In IIO events are not used for passing normal readings from the sensing devices
+to userspace, but rather for out of band information. Normal data reaches
+userspace through a low overhead character device - typically via either
+software or hardware buffer. The stream format is pseudo fixed, so is described
+and controlled via sysfs rather than adding headers to the data describing what
+is in it.</p>
+<p>Pretty much all IIO events correspond to thresholds on some value derived from
+one or more raw readings from the sensor. They are provided by the underlying
+hardware.</p>
 <p><strong>Examples include:</strong></p>
 <ul class="simple">
 <li><p>Straight crossing a voltage threshold</p></li>
@@ -841,7 +869,9 @@ Content on this topic
 <p><strong>The Interface:</strong></p>
 <ul class="simple">
 <li><p>Single user at a time.</p></li>
-<li><p>Simple chrdev per device (aggregation across devices doesn’t really make sense for IIO as you tend to really care which sensor caused the event rather than just that it happened.)</p></li>
+<li><p>Simple chrdev per device (aggregation across devices doesn’t really make
+sense for IIO as you tend to really care which sensor caused the event rather
+than just that it happened.)</p></li>
 </ul>
 <p><strong>The format is:</strong></p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/**</span>

@@ -599,7 +599,8 @@ Content on this topic
 <p>This page describes using MATLAB with DPG2 and DPG3 pattern generators. For the ADS7 series of devices, see <a class="icon link reference external" href="https://wiki.analog.com/matlab-ads7" target="_blank">Using MATLAB with ADS7</a> for information and code samples.</p>
 <section id="matlab-r2008b-and-earlier">
 <h2>MATLAB R2008b and Earlier<a class="headerlink" href="#matlab-r2008b-and-earlier" title="Link to this heading"></a></h2>
-<p>To begin, use the MATLAB command actxserver to connect to the DPG Software Suite.</p>
+<p>To begin, use the MATLAB command actxserver to connect to the DPG Software
+Suite.</p>
 <p>For the DPG2, use:</p>
 <div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">h</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">actxserver</span><span class="p">(</span><span class="s">&#39;AnalogDevices.DPG2&#39;</span><span class="p">);</span>
 </pre></div>
@@ -620,12 +621,16 @@ Content on this topic
 <li><p>The “Int” integer format referenced in the <a class="icon link reference external" href="https://wiki.analog.com/programming_reference" target="_blank">programming_reference</a> is the same as the MATLAB data type int32. The “Double” data type is the same as MATLAB’s type double. Most matrices in MATLAB are type double, unless specifically cast to a different data type.</p></li>
 <li><p>When setting the idle pattern, the SetPatternInt2D(int[,] pattern) method will need to be used. Setting the IdlePattern.Pattern property is not supported by MATLAB. The idle pattern will need to be an array (matrix) of type int32 (as opposed to the default of type double). An array x which is of type double can be converted to an integer array by the MATLAB command int32(x).</p></li>
 <li><p>Be aware of any vector length restrictions for the particular pattern generator you are communicating to. For example, the length of a vector on the DPG2 must be divisible by 256.</p></li>
-<li><p>The Interleaved commands take one vector and split it between the two output ports on the pattern generator. For single ports DACs which take interleaved data, you will need to interleave the channels before providing the data to the pattern generator.</p></li>
+<li><p>The Interleaved commands take one vector and split it between the two
+output ports on the pattern generator. For single ports DACs which take
+interleaved data, you will need to interleave the channels before
+providing the data to the pattern generator.</p></li>
 </ul>
 </div>
 <section id="vector-downloading">
 <h3>Vector Downloading<a class="headerlink" href="#vector-downloading" title="Link to this heading"></a></h3>
-<p>Because of the above restrictions with MATLAB, only the following DownloadVector commands are valid:</p>
+<p>Because of the above restrictions with MATLAB, only the following DownloadVector
+commands are valid:</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -650,7 +655,8 @@ Content on this topic
 </section>
 <section id="matlab-r2009a-and-later">
 <h2>MATLAB R2009a and Later<a class="headerlink" href="#matlab-r2009a-and-later" title="Link to this heading"></a></h2>
-<p>In versions of MATLAB starting with R2009a, a direct connection to the DPG libraries is now possible. To begin, follow these steps:</p>
+<p>In versions of MATLAB starting with R2009a, a direct connection to the DPG
+libraries is now possible. To begin, follow these steps:</p>
 <section id="connect-to-the-top-level-dpg-library">
 <h3>Connect to the top-level DPG library<a class="headerlink" href="#connect-to-the-top-level-dpg-library" title="Link to this heading"></a></h3>
 <div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="nb">NET.addAssembly</span><span class="p">(</span><span class="s">&#39;AnalogDevices.DPG.Interfaces&#39;</span><span class="p">);</span>
@@ -675,7 +681,8 @@ Content on this topic
 </section>
 <section id="connect-to-a-specific-device">
 <h3>Connect to a specific device<a class="headerlink" href="#connect-to-a-specific-device" title="Link to this heading"></a></h3>
-<p>Now you can query the interface to see if any hardware of this type (in this case, a DPG2) is actually connected:</p>
+<p>Now you can query the interface to see if any hardware of this type (in this
+case, a DPG2) is actually connected:</p>
 <div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">devices</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">dpg2_interface</span><span class="p">.</span><span class="n">AttachedDevices</span><span class="p">;</span>
 </pre></div>
 </div>
@@ -686,14 +693,18 @@ Content on this topic
 </section>
 <section id="configure-the-pattern-generator">
 <h3>Configure the pattern generator<a class="headerlink" href="#configure-the-pattern-generator" title="Link to this heading"></a></h3>
-<p>The FPGA in the pattern generator can be setup for several different interface standards. Select the appropriate configuration for the evaluation board connected to the pattern generator, and configure the FPGA. In this example, an LVDS interface will be used:</p>
+<p>The FPGA in the pattern generator can be setup for several different interface
+standards. Select the appropriate configuration for the evaluation board
+connected to the pattern generator, and configure the FPGA. In this example, an
+LVDS interface will be used:</p>
 <div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">dpg2</span><span class="p">.</span><span class="n">DownloadConfiguration</span><span class="p">(</span><span class="s">&#39;LVDS (DCO)&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
 <section id="load-a-vector-into-the-pattern-generator">
 <h3>Load a vector into the pattern generator<a class="headerlink" href="#load-a-vector-into-the-pattern-generator" title="Link to this heading"></a></h3>
-<p>The first step in loading a vector into a pattern generator is to convert the MATLAB array into a format recognizable by the DPG software:</p>
+<p>The first step in loading a vector into a pattern generator is to convert the
+MATLAB array into a format recognizable by the DPG software:</p>
 <div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">dpg_array</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">NET.convertArray</span><span class="p">(</span><span class="n">original_array</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;System.Int32&#39;</span><span class="p">);</span>
 </pre></div>
 </div>
@@ -701,7 +712,8 @@ Content on this topic
 <div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">dpg2</span><span class="p">.</span><span class="n">DownloadInterleavedVectorInt1D</span><span class="p">(</span><span class="n">dpg_array</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="nb">true</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>Once the vector is loaded, the Play Mode should be set to Loop, followed by the command to begin vector playback:</p>
+<p>Once the vector is loaded, the Play Mode should be set to Loop, followed by the
+command to begin vector playback:</p>
 <div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">dpg2</span><span class="p">.</span><span class="n">PlayMode</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">AnalogDevices</span><span class="p">.</span><span class="n">DPG</span><span class="p">.</span><span class="n">Interfaces</span><span class="p">.</span><span class="n">HardwareDeviceTypes</span><span class="p">.</span><span class="n">PlayModeE</span><span class="p">.</span><span class="n">Loop</span><span class="p">;</span>
 <span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">dpg2</span><span class="p">.</span><span class="n">StartPlayback</span><span class="p">;</span>
 </pre></div>
@@ -710,8 +722,11 @@ Content on this topic
 <section id="formatting-the-input-data">
 <h3>Formatting the input data<a class="headerlink" href="#formatting-the-input-data" title="Link to this heading"></a></h3>
 <p>How the data is formatted in <em>original_array</em> will vary depending on what DAC the data is being sent to. The data itself is not interpreted by the download functions (bits in = bits out). Therefore, the data format (binary, two’s compliment, etc) must match what the DAC is expecting.</p>
-<p>The DPG has two LVDS buses, which become interleaved into one vector. The data must be inserted into the data array properly for it to be de-interleaved by the DPG.</p>
-<p>For example, on an AD9739 (dual-port, single DAC), the data would look like this:</p>
+<p>The DPG has two LVDS buses, which become interleaved into one vector. The data
+must be inserted into the data array properly for it to be de-interleaved by the
+DPG.</p>
+<p>For example, on an AD9739 (dual-port, single DAC), the data would look like
+this:</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <tbody>

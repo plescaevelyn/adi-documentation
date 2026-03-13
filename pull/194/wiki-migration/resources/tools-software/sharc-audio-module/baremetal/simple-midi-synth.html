@@ -592,13 +592,15 @@ Content on this topic
 <p>Using the <a class="reference internal" href="project-wizard.html"><span class="doc">bare metal project wizard</span></a>:</p>
 <ul class="simple">
 <li><p>Give the project a meaningful name, click Next</p></li>
-<li><p>Choose the Audio Project Fin on the Expansion Fin Selection Page because it is required for part of the tutorial, click Finish</p></li>
+<li><p>Choose the Audio Project Fin on the Expansion Fin Selection Page because it
+is required for part of the tutorial, click Finish</p></li>
 </ul>
 <p><strong>No other options need to be changed.</strong></p>
 </section>
 <section id="tutorial-overview">
 <h2>Tutorial Overview<a class="headerlink" href="#tutorial-overview" title="Link to this heading"></a></h2>
-<p>In this tutorial, we will develop a basic MIDI synthesizer using the SHARC Audio Module and the Audio Project Fin.</p>
+<p>In this tutorial, we will develop a basic MIDI synthesizer using the SHARC Audio
+Module and the Audio Project Fin.</p>
 <p>The synthesizer will support a handful of oscillators (sine, square, triangle, etc.) as well as ADSR (Attack-Decay-Sustain-Release) envelope control. Here’s a nice <a class="icon link reference external" href="https://www.wikiaudio.org/adsr-envelope/" target="_blank">tutorial on ADSR</a>. In this tutorial, we’ll trigger the synthesizer from the MIDI interface.</p>
 </section>
 <section id="ensuring-midi-is-set-up-properly">
@@ -686,7 +688,8 @@ Content on this topic
 <span class="k">extern</span><span class="w"> </span><span class="n">SIMPLE_SYNTH</span><span class="w"> </span><span class="n">synth_voices</span><span class="p">[];</span>
 </pre></div>
 </div>
-<p>Now we’re going to update the MIDI callback which is called each time we have a new byte from the MIDI interface that’s ready to parse.</p>
+<p>Now we’re going to update the MIDI callback which is called each time we have a
+new byte from the MIDI interface that’s ready to parse.</p>
 <p>Replace the contents of <code class="docutils literal notranslate"><span class="pre">midi_rx_callback_sharc1()</span></code> with the code below. This code is implements a very primitive MIDI parser that will look for <em>MIDI note on</em> and <em>MIDI note off</em> events. When a <em>note on</em> event is detected, this code will iterate through our 16 structs (each corresponding to a voice of our synthesizer). As soon as it finds one that is not playing, it will play the MIDI note on this voice via the <code class="docutils literal notranslate"><span class="pre">synth_start_note()</span></code> function. Similarly, when a <em>note off</em> event is detected, the code will iterate through the 16 voices and look for one that has the same note value as the note that should be turned off. Once this is found, the <code class="docutils literal notranslate"><span class="pre">synth_stop_note()</span></code> function is called on this voice.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">midi_rx_callback_sharc1</span><span class="p">(</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 

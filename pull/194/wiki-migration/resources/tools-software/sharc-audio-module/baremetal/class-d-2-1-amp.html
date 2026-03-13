@@ -584,12 +584,28 @@ Content on this topic
             
   <section id="tutorial-building-a-2-1-amplifier-with-the-class-d-module">
 <h1>Tutorial: Building a 2.1 Amplifier with the Class-D Module<a class="headerlink" href="#tutorial-building-a-2-1-amplifier-with-the-class-d-module" title="Link to this heading"></a></h1>
-<p>The Class D Fin contains two stereo class D amplifiers providing four channels of output. In this tutorial, we will use the Class D board to implement a 2.1 or 2.2 audio amplifier. This will include 2 channels of standard audio and one channel for a subwoofer (LFE).</p>
-<p>The SSM3582 has an option to combine a two channels into a single channel with more power. This requires some modifications to the configuration file and the Class D amp board. For this tutorial, we’ll use one of the stereo channels as our sub channel. However, should you need even more power, the option is there to combine two channels. Refer to the SSM3582 datasheet for more information</p>
-<p>We will send the incoming stereo audio from the 1/8” jacks to the first SSM3582 on the Class D board. We’ll pass this audio along unaffected as our stereo channels. We’ll then mix our incoming left and right channels together, run them through a low-pass filter, and send this to the second SSM3582 on the class board. This will be our sub channel.</p>
-<p>Connect a set of standard speakers to the speaker terminals for the first stereo pair on the Class D board, and connect a sub-woofer to either of the speaker terminals for the second stereo pair on the Class D board.</p>
-<p>Connect your Class D amp board via the A2B cable to the SHARC Audio Module. The SLAVE port of the SHARC Audio Module should be connected to the MASTER port of the Class D amp board.</p>
-<p>Configure the baremetal framework to use A2B and select the SAM-&gt;Class D tutorial.</p>
+<p>The Class D Fin contains two stereo class D amplifiers providing four channels
+of output. In this tutorial, we will use the Class D board to implement a 2.1 or
+2.2 audio amplifier. This will include 2 channels of standard audio and one
+channel for a subwoofer (LFE).</p>
+<p>The SSM3582 has an option to combine a two channels into a single channel with
+more power. This requires some modifications to the configuration file and the
+Class D amp board. For this tutorial, we’ll use one of the stereo channels as
+our sub channel. However, should you need even more power, the option is there
+to combine two channels. Refer to the SSM3582 datasheet for more information</p>
+<p>We will send the incoming stereo audio from the 1/8” jacks to the first SSM3582
+on the Class D board. We’ll pass this audio along unaffected as our stereo
+channels. We’ll then mix our incoming left and right channels together, run them
+through a low-pass filter, and send this to the second SSM3582 on the class
+board. This will be our sub channel.</p>
+<p>Connect a set of standard speakers to the speaker terminals for the first stereo
+pair on the Class D board, and connect a sub-woofer to either of the speaker
+terminals for the second stereo pair on the Class D board.</p>
+<p>Connect your Class D amp board via the A2B cable to the SHARC Audio Module. The
+SLAVE port of the SHARC Audio Module should be connected to the MASTER port of
+the Class D amp board.</p>
+<p>Configure the baremetal framework to use A2B and select the SAM-&gt;Class D
+tutorial.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#define ENABLE_A2B                                         TRUE</span>
 
 <span class="cp">#if (ENABLE_A2B)</span>
@@ -598,7 +614,6 @@ Content on this topic
 <span class="cm">  * will play (TRUE = master node, FALSE = slave node)</span>
 <span class="cm"> */</span>
 <span class="w">    </span><span class="cp">#define A2B_ROLE_MASTER                                TRUE</span>
-
 
 <span class="cm">/**</span>
 <span class="cm">  * If this SHARC Audio Module board is a master, select an A2B topology</span>
@@ -622,8 +637,11 @@ Content on this topic
 </div>
 <section id="setting-up-our-biquad-filters">
 <h2>Setting up our Biquad filters<a class="headerlink" href="#setting-up-our-biquad-filters" title="Link to this heading"></a></h2>
-<p>We’ll use a fourth order low-pass IIR filter with a cutoff frequency of 100Hz to remove the higher frequencies from our sub channel. The easiest way to do this is to cascade two 2nd order identical biquad filters.</p>
-<p>First, we’ll to declare two instances of BIQUAD_FILTER and allocate some pm memory for our coefficients at the top of callback_audio_processing.cpp.</p>
+<p>We’ll use a fourth order low-pass IIR filter with a cutoff frequency of 100Hz to
+remove the higher frequencies from our sub channel. The easiest way to do this
+is to cascade two 2nd order identical biquad filters.</p>
+<p>First, we’ll to declare two instances of BIQUAD_FILTER and allocate some pm
+memory for our coefficients at the top of callback_audio_processing.cpp.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">BIQUAD_FILTER</span><span class="w"> </span><span class="n">lpf_stage1</span><span class="p">,</span><span class="w"> </span><span class="n">lpf_stage2</span><span class="p">;</span>
 <span class="kt">float</span><span class="w"> </span><span class="n">pm</span><span class="w"> </span><span class="n">coeffs_stage1</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span><span class="w"> </span><span class="n">coeffs_stage2</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span>
 </pre></div>

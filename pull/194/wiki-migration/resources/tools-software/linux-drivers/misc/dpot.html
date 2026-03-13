@@ -697,7 +697,11 @@ Content on this topic
 </section>
 <section id="description">
 <h2>Description<a class="headerlink" href="#description" title="Link to this heading"></a></h2>
-<p>The ad525x_dpot driver exports a simple sysfs interface. This allows you to work with the immediate resistance settings as well as update the saved startup settings. Access to the factory programmed tolerance is also provided, but interpretation of this settings is required by the end application according to the specific part in use.</p>
+<p>The ad525x_dpot driver exports a simple sysfs interface. This allows you to work
+with the immediate resistance settings as well as update the saved startup
+settings. Access to the factory programmed tolerance is also provided, but
+interpretation of this settings is required by the end application according to
+the specific part in use.</p>
 <section id="files">
 <h3>Files<a class="headerlink" href="#files" title="Link to this heading"></a></h3>
 <p>Each dpot device will have a set of <strong>eeprom</strong>, <strong>rdac</strong>, and <strong>tolerance</strong> files. How many depends on the actual part you have, as will the range of allowed values.</p>
@@ -755,13 +759,30 @@ Content on this topic
 </section>
 <section id="example-platform-device-initialization">
 <h1>Example platform device initialization<a class="headerlink" href="#example-platform-device-initialization" title="Link to this heading"></a></h1>
-<p>For compile time configuration, it’s common Linux practice to keep board- and application-specific configuration out of the main driver file, instead putting it into the board support file.</p>
-<p>For devices on custom boards, as typical of embedded and SoC-(system-on-chip) based hardware, Linux uses platform_data to point to board-specific structures describing devices and how they are connected to the SoC. This can include available ports, chip variants, preferred modes, default initialization, additional pin roles, and so on. This shrinks the board-support packages (BSPs) and minimizes board and application specific #ifdefs in drivers.</p>
+<p>For compile time configuration, it’s common Linux practice to keep board- and
+application-specific configuration out of the main driver file, instead putting
+it into the board support file.</p>
+<p>For devices on custom boards, as typical of embedded and SoC-(system-on-chip)
+based hardware, Linux uses platform_data to point to board-specific structures
+describing devices and how they are connected to the SoC. This can include
+available ports, chip variants, preferred modes, default initialization,
+additional pin roles, and so on. This shrinks the board-support packages (BSPs)
+and minimizes board and application specific #ifdefs in drivers.</p>
 <section id="example-platform-board-file-i2c-interface">
 <h2>Example Platform / Board file (I2C Interface)<a class="headerlink" href="#example-platform-board-file-i2c-interface" title="Link to this heading"></a></h2>
-<p>Unlike PCI or USB devices, I2C devices are not enumerated at the hardware level. Instead, the software must know which devices are connected on each I2C bus segment, and what address these devices are using. For this reason, the kernel code must instantiate I2C devices explicitly. There are different ways to achieve this, depending on the context and requirements. However the most common method is to declare the I2C devices by bus number.</p>
-<p>This method is appropriate when the I2C bus is a system bus, as in many embedded systems, wherein each I2C bus has a number which is known in advance. It is thus possible to pre-declare the I2C devices that inhabit this bus. This is done with an array of struct i2c_board_info, which is registered by calling i2c_register_board_info().</p>
-<p>So, to enable such a driver one need only edit the board support file by adding an appropriate entry to i2c_board_info.</p>
+<p>Unlike PCI or USB devices, I2C devices are not enumerated at the hardware level.
+Instead, the software must know which devices are connected on each I2C bus
+segment, and what address these devices are using. For this reason, the kernel
+code must instantiate I2C devices explicitly. There are different ways to
+achieve this, depending on the context and requirements. However the most common
+method is to declare the I2C devices by bus number.</p>
+<p>This method is appropriate when the I2C bus is a system bus, as in many embedded
+systems, wherein each I2C bus has a number which is known in advance. It is thus
+possible to pre-declare the I2C devices that inhabit this bus. This is done with
+an array of struct i2c_board_info, which is registered by calling
+i2c_register_board_info().</p>
+<p>So, to enable such a driver one need only edit the board support file by adding
+an appropriate entry to i2c_board_info.</p>
 <p>For more information see: <a href="#id2"><span class="problematic" id="id3">`instantiating-devices.rst &lt;/git.linux.org&gt;documentation/i2c/instantiating-devices.rst&gt;`__</span></a></p>
 <div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">i2c_board_info</span><span class="w"> </span><span class="n">__initdata</span><span class="w"> </span><span class="n">bfin_i2c_board_info</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
 <span class="cp">#if defined(CONFIG_AD525X_DPOT) || defined(CONFIG_AD525X_DPOT_MODULE)</span>
@@ -778,8 +799,16 @@ Content on this topic
 </section>
 <section id="example-platform-board-file-spi-interface">
 <h2>Example Platform / Board file (SPI Interface)<a class="headerlink" href="#example-platform-board-file-spi-interface" title="Link to this heading"></a></h2>
-<p>Unlike PCI or USB devices, SPI devices are not enumerated at the hardware level. Instead, the software must know which devices are connected on each SPI bus segment, and what slave selects these devices are using. For this reason, the kernel code must instantiate SPI devices explicitly. The most common method is to declare the SPI devices by bus number.</p>
-<p>This method is appropriate when the SPI bus is a system bus, as in many embedded systems, wherein each SPI bus has a number which is known in advance. It is thus possible to pre-declare the SPI devices that inhabit this bus. This is done with an array of struct spi_board_info, which is registered by calling spi_register_board_info().</p>
+<p>Unlike PCI or USB devices, SPI devices are not enumerated at the hardware level.
+Instead, the software must know which devices are connected on each SPI bus
+segment, and what slave selects these devices are using. For this reason, the
+kernel code must instantiate SPI devices explicitly. The most common method is
+to declare the SPI devices by bus number.</p>
+<p>This method is appropriate when the SPI bus is a system bus, as in many embedded
+systems, wherein each SPI bus has a number which is known in advance. It is thus
+possible to pre-declare the SPI devices that inhabit this bus. This is done with
+an array of struct spi_board_info, which is registered by calling
+spi_register_board_info().</p>
 <p>For more information see: <a href="#id2"><span class="problematic" id="id4">`spi-summary.rst &lt;/git.linux.org&gt;documentation/spi/spi-summary.rst&gt;`__</span></a></p>
 <div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">spi_board_info</span><span class="w"> </span><span class="n">bfin_spi_board_info</span><span class="p">[]</span><span class="w"> </span><span class="n">__initdata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
 <span class="cp">#if defined(CONFIG_AD525X_DPOT) || defined(CONFIG_AD525X_DPOT_MODULE)</span>
@@ -814,7 +843,8 @@ Content on this topic
 </section>
 <section id="adding-linux-driver-support">
 <h1>Adding Linux driver support<a class="headerlink" href="#adding-linux-driver-support" title="Link to this heading"></a></h1>
-<p>Configure kernel with “make menuconfig” (alternatively use “make xconfig” or “make qconfig”)</p>
+<p>Configure kernel with “make menuconfig” (alternatively use “make xconfig” or
+“make qconfig”)</p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <p>The ad525x_dpot driver depends on CONFIG_SPI or CONFIG_I2C</p>
@@ -829,17 +859,19 @@ Content on this topic
 </section>
 <section id="hardware-configuration">
 <h1>Hardware configuration<a class="headerlink" href="#hardware-configuration" title="Link to this heading"></a></h1>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/misc/pmoddpot_lr.png"><img alt="PmodDPOT, ADSP-BF537 EZKIZ" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/misc/pmoddpot_lr.png" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/misc/pmoddpot_lr.png"><img alt="PmodDPOT, ADSP-BF537 EZKIZ" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/misc/pmoddpot_lr.png" width="600" />
 </a>
 </section>
 <section id="driver-testing">
 <h1>Driver testing<a class="headerlink" href="#driver-testing" title="Link to this heading"></a></h1>
-<p>Locate the device in your sysfs tree. This is probably easiest by going into the common i2c directory and locating the device by the i2c slave address.</p>
+<p>Locate the device in your sysfs tree. This is probably easiest by going into the
+common i2c directory and locating the device by the i2c slave address.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># ls /sys/bus/i2c/devices/</span>
 <span class="mi">0</span><span class="o">-</span><span class="mi">0022</span>  <span class="mi">0</span><span class="o">-</span><span class="mi">0027</span>  <span class="mi">0</span><span class="o">-</span><span class="mi">002</span><span class="n">f</span>
 </pre></div>
 </div>
-<p>So assuming the device in question is on the first i2c bus and has the slave address of 0x2f, we descend (unrelated sysfs entries have been trimmed).</p>
+<p>So assuming the device in question is on the first i2c bus and has the slave
+address of 0x2f, we descend (unrelated sysfs entries have been trimmed).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># ls /sys/bus/i2c/devices/0-002f/</span>
 <span class="n">eeprom0</span> <span class="n">rdac0</span> <span class="n">tolerance0</span>
 </pre></div>

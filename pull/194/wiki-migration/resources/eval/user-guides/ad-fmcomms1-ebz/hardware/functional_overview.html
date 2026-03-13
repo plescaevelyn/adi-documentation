@@ -607,8 +607,10 @@ which means it is no longer maintained or actively updated, even though the
 devices themselves may be Recommended for New Designs or in
 Production. This page is here for historical/reference purposes only.</p>
 </div>
-<p>A functional block diagram of the system is given below. The system consists of four functional partitions - transmit path, receive path, clocking and power supply.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/ad-fmcomms1-ebz/cf_xcomm_kc705_bd.jpg"><img alt="Block diagram" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/ad-fmcomms1-ebz/cf_xcomm_kc705_bd.jpg" style="width: 600px;" />
+<p>A functional block diagram of the system is given below. The system consists of
+four functional partitions - transmit path, receive path, clocking and power
+supply.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/ad-fmcomms1-ebz/cf_xcomm_kc705_bd.jpg"><img alt="Block diagram" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/ad-fmcomms1-ebz/cf_xcomm_kc705_bd.jpg" width="600" />
 </a>
 <section id="transmit">
 <h2>Transmit<a class="headerlink" href="#transmit" title="Link to this heading"></a></h2>
@@ -632,7 +634,11 @@ Production. This page is here for historical/reference purposes only.</p>
 </table>
 </div>
 <p>In the transmit direction, the system converts complex I and Q signals to a corresponding RF signal. The <a class="icon adi reference external" href="https://www.analog.com/AD9122" target="_blank">AD9122</a> DAC interpolates the data and applies a frequency translation to the baseband. The complex baseband shifts the fundamental signal away from DC where LO feed-through and images can be easily filtered and otherwise mitigated. This complex analog output from the DAC feeds an <a class="icon adi reference external" href="https://www.analog.com/ADL5375" target="_blank">ADL5375</a> quadrature modulator via an appropriate filter and matching stage where it is translated to the specified RF output frequency. This signal is then passed through an image rejection filter to an <a class="icon adi reference external" href="https://www.analog.com/ADL5602" target="_blank">ADL5602</a> for +20dB gain. The RF output power control is accomplished by adjusting the baseband data, RF outputs up to 4GHz can be synthesized in the transmit direction at power levels up to 7.5dBm.</p>
-<p>The reference design generates the signals for AD9122 either from an internal DDS or external memory (via VDMA). The internal DDS consists of four independent signal generators with programmable phase offset and frequency. These four signal generators are paired to create two tones that are interleaved and driven to the DAC.</p>
+<p>The reference design generates the signals for AD9122 either from an internal
+DDS or external memory (via VDMA). The internal DDS consists of four independent
+signal generators with programmable phase offset and frequency. These four
+signal generators are paired to create two tones that are interleaved and driven
+to the DAC.</p>
 </section>
 <section id="receive">
 <h2>Receive<a class="headerlink" href="#receive" title="Link to this heading"></a></h2>
@@ -656,10 +662,11 @@ Production. This page is here for historical/reference purposes only.</p>
 </table>
 </div>
 <p>In the receive direction, the system converts a RF signal into complex I and Q signals. The RF signal is demodulated by the direct-conversion <a class="icon adi reference external" href="https://www.analog.com/ADL5380" target="_blank">ADL5380</a> Quadrature demodulator to a suitable complex baseband (DC to 400MHz (-3dB point)).</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/hardware/adl5380_lowrange_basebandrespose.png"><img alt="RF = 400 MHz to 3 GHz, Normalized IQ Baseband Frequency Response" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/hardware/adl5380_lowrange_basebandrespose.png" style="width: 400px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/hardware/adl5380_lowrange_basebandrespose.png"><img alt="RF = 400 MHz to 3 GHz, Normalized IQ Baseband Frequency Response" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/hardware/adl5380_lowrange_basebandrespose.png" width="400" />
 </a>
 <p>The resulting I and Q baseband signals are filtered and then passed to the <a class="icon adi reference external" href="https://www.analog.com/AD8366" target="_blank">AD8366</a> DVGA, which provides up between 4.5 dB to 20.25 dB of gain. An anti-alias filter is used to remove harmonics and other out of band signals before the signal is digitized with the <a class="icon adi reference external" href="https://www.analog.com/AD9643" target="_blank">AD9643</a>.</p>
-<p>The reference design transfers the received data to DDR via DMA. An optional off-line FFT core may be used to generate a spectrum plot.</p>
+<p>The reference design transfers the received data to DDR via DMA. An optional
+off-line FFT core may be used to generate a spectrum plot.</p>
 </section>
 <section id="clocking">
 <h2>Clocking<a class="headerlink" href="#clocking" title="Link to this heading"></a></h2>
@@ -694,7 +701,8 @@ Production. This page is here for historical/reference purposes only.</p>
 <p>These clocks can be changed, but the key thing to remember is that the AD9523 drives both the ADC and DAC. The AD9523 has two clock banks (see figure 1 in the datasheet), Bank 0: 0-3 &amp; 10-13, and Bank 1: 4-9. The outputs on the different banks need to be integer mutliples of eachother. The best thing to do if you are interested in the details of this, is to get the <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9523-1" target="_blank">Eval board software</a>, and play with the different settings (you don’t need a demo board connected to run the software).</p>
 <section id="clock-sync">
 <h3>Clock Sync<a class="headerlink" href="#clock-sync" title="Link to this heading"></a></h3>
-<p>It is possible to synchronize multiple boards on the same FPGA platform to the same master clock.</p>
+<p>It is possible to synchronize multiple boards on the same FPGA platform to the
+same master clock.</p>
 </section>
 </section>
 <section id="power">
@@ -723,7 +731,7 @@ Production. This page is here for historical/reference purposes only.</p>
 <h3>Optional add-on boards<a class="headerlink" href="#optional-add-on-boards" title="Link to this heading"></a></h3>
 <p>While the board does have the power (+7dBm) to transmit across the room for learning purposes, if you want to drive things at a higher power level, the transmit path may be followed by an optional off board <a class="icon adi reference external" href="https://www.analog.com/ADL5605" target="_blank">ADL5605</a> 700 MHz to 1000 MHz, 1 W RF Driver Amplifier, or <a class="icon adi reference external" href="https://www.analog.com/ADL5606" target="_blank">ADL5606</a>, 1800 MHz to 2700 MHz, 1 W RF Driver Amplifier amplifier to drive the antenna for ISM based communication standards.</p>
 <p>To increase receive sensitivity, the receive path may be driven by an optional off board <a class="icon adi reference external" href="https://www.analog.com/ADL5523" target="_blank">ADL5523</a>, which is a 400 MHz to 4000 MHz Low Noise GaAs pHEMT Amplifier. This provides high gain and low noise figure for single-down conversion IF sampling receiver architectures as well as direct-down conversion receivers.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/hardware/block_diagram.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/hardware/block_diagram.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/hardware/block_diagram.png" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/hardware/block_diagram.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/hardware/block_diagram.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/hardware/block_diagram.png" width="600" />
 </a>
 </section>
 </section>

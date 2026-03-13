@@ -678,13 +678,28 @@ Content on this topic
 </section>
 <section id="example-device-initialization">
 <h1>Example device initialization<a class="headerlink" href="#example-device-initialization" title="Link to this heading"></a></h1>
-<p>For compile time configuration, it’s common Linux practice to keep board- and application-specific configuration out of the main driver file, instead putting it into the board support file.</p>
-<p>For devices on custom boards, as typical of embedded and SoC-(system-on-chip) based hardware, Linux uses platform_data to point to board-specific structures describing devices and how they are connected to the SoC. This can include available ports, chip variants, preferred modes, default initialization, additional pin roles, and so on. This shrinks the board-support packages (BSPs) and minimizes board and application specific #ifdefs in drivers.</p>
+<p>For compile time configuration, it’s common Linux practice to keep board- and
+application-specific configuration out of the main driver file, instead putting
+it into the board support file.</p>
+<p>For devices on custom boards, as typical of embedded and SoC-(system-on-chip)
+based hardware, Linux uses platform_data to point to board-specific structures
+describing devices and how they are connected to the SoC. This can include
+available ports, chip variants, preferred modes, default initialization,
+additional pin roles, and so on. This shrinks the board-support packages (BSPs)
+and minimizes board and application specific #ifdefs in drivers.</p>
 <section id="spi">
 <h2>SPI<a class="headerlink" href="#spi" title="Link to this heading"></a></h2>
 <p>SPI can be used for the SSM2602 if in SPI mode (MODE pin set to 1).</p>
-<p>Unlike PCI or USB devices, SPI devices are not enumerated at the hardware level. Instead, the software must know which devices are connected on each SPI bus segment, and what slave selects these devices are using. For this reason, the kernel code must instantiate SPI devices explicitly. The most common method is to declare the SPI devices by bus number.</p>
-<p>This method is appropriate when the SPI bus is a system bus, as in many embedded systems, wherein each SPI bus has a number which is known in advance. It is thus possible to pre-declare the SPI devices that inhabit this bus. This is done with an array of struct spi_board_info, which is registered by calling spi_register_board_info().</p>
+<p>Unlike PCI or USB devices, SPI devices are not enumerated at the hardware level.
+Instead, the software must know which devices are connected on each SPI bus
+segment, and what slave selects these devices are using. For this reason, the
+kernel code must instantiate SPI devices explicitly. The most common method is
+to declare the SPI devices by bus number.</p>
+<p>This method is appropriate when the SPI bus is a system bus, as in many embedded
+systems, wherein each SPI bus has a number which is known in advance. It is thus
+possible to pre-declare the SPI devices that inhabit this bus. This is done with
+an array of struct spi_board_info, which is registered by calling
+spi_register_board_info().</p>
 <p>For more information see: <a href="#id11"><span class="problematic" id="id12">`spi-summary.rst &lt;/git.linux.org&gt;documentation/spi/spi-summary.rst&gt;`__</span></a></p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">spi_board_info</span><span class="w"> </span><span class="n">board_spi_board_info</span><span class="p">[]</span><span class="w"> </span><span class="n">__initdata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="p">[</span><span class="o">--</span><span class="n">snip</span><span class="o">--</span><span class="p">]</span>
@@ -715,10 +730,21 @@ Content on this topic
 </section>
 <section id="i2c">
 <h2>I2C<a class="headerlink" href="#i2c" title="Link to this heading"></a></h2>
-<p>I2C can be used for the SSM2602, SSM2603, SSM2604. For the SSM2602 make sure that it is in I2C mode (MODE pin set to 0).</p>
-<p>Unlike PCI or USB devices, I2C devices are not enumerated at the hardware level. Instead, the software must know which devices are connected on each I2C bus segment, and what address these devices are using. For this reason, the kernel code must instantiate I2C devices explicitly. There are different ways to achieve this, depending on the context and requirements. However the most common method is to declare the I2C devices by bus number.</p>
-<p>This method is appropriate when the I2C bus is a system bus, as in many embedded systems, wherein each I2C bus has a number which is known in advance. It is thus possible to pre-declare the I2C devices that inhabit this bus. This is done with an array of struct i2c_board_info, which is registered by calling i2c_register_board_info().</p>
-<p>So, to enable such a driver one need only edit the board support file by adding an appropriate entry to i2c_board_info.</p>
+<p>I2C can be used for the SSM2602, SSM2603, SSM2604. For the SSM2602 make sure
+that it is in I2C mode (MODE pin set to 0).</p>
+<p>Unlike PCI or USB devices, I2C devices are not enumerated at the hardware level.
+Instead, the software must know which devices are connected on each I2C bus
+segment, and what address these devices are using. For this reason, the kernel
+code must instantiate I2C devices explicitly. There are different ways to
+achieve this, depending on the context and requirements. However the most common
+method is to declare the I2C devices by bus number.</p>
+<p>This method is appropriate when the I2C bus is a system bus, as in many embedded
+systems, wherein each I2C bus has a number which is known in advance. It is thus
+possible to pre-declare the I2C devices that inhabit this bus. This is done with
+an array of struct i2c_board_info, which is registered by calling
+i2c_register_board_info().</p>
+<p>So, to enable such a driver one need only edit the board support file by adding
+an appropriate entry to i2c_board_info.</p>
 <p>For more information see: <a href="#id11"><span class="problematic" id="id13">`instantiating-devices.rst &lt;/git.linux.org&gt;documentation/i2c/instantiating-devices.rst&gt;`__</span></a></p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">i2c_board_info</span><span class="w"> </span><span class="n">__initdata</span><span class="w"> </span><span class="n">bfin_i2c_board_info</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
 
@@ -949,8 +975,10 @@ Content on this topic
 </section>
 <section id="supported-sysclk-rates">
 <h3>Supported SYSCLK rates<a class="headerlink" href="#supported-sysclk-rates" title="Link to this heading"></a></h3>
-<p>The codecs system clock can be configured for various input rates. When configuring the codec system clock use SSM2602_SYSCLK for the clock id.</p>
-<p>The following list contains the supported system clock rates and their resulting sample-rates.</p>
+<p>The codecs system clock can be configured for various input rates. When
+configuring the codec system clock use SSM2602_SYSCLK for the clock id.</p>
+<p>The following list contains the supported system clock rates and their resulting
+sample-rates.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -1055,7 +1083,9 @@ Content on this topic
 </section>
 <section id="as-a-module">
 <h2>As a Module<a class="headerlink" href="#as-a-module" title="Link to this heading"></a></h2>
-<p>To add support for the built-in codec SSM2602 of BF52xC to the kernel build system, a few things must be enabled properly for things to work. The configuration is as following:</p>
+<p>To add support for the built-in codec SSM2602 of BF52xC to the kernel build
+system, a few things must be enabled properly for things to work. The
+configuration is as following:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Linux</span> <span class="n">Kernel</span> <span class="n">Configuration</span>
   <span class="n">Device</span> <span class="n">Drivers</span>  <span class="o">---&gt;</span>
       <span class="o">&lt;</span><span class="n">M</span><span class="o">&gt;</span> <span class="n">Sound</span> <span class="n">card</span> <span class="n">support</span> <span class="o">---&gt;</span>
@@ -1072,7 +1102,10 @@ Content on this topic
 </div>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>I2C bus is used to configure the codec. So, if the audio driver is built into kernel, the I2c driver is also built into kernel automatically. But if the audio driver is built as module, then make sure that the I2C driver is loaded before the audio module.</p>
+<p>I2C bus is used to configure the codec. So, if the audio driver is built into
+kernel, the I2c driver is also built into kernel automatically. But if the
+audio driver is built as module, then make sure that the I2C driver is loaded
+before the audio module.</p>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Linux</span> <span class="n">Kernel</span> <span class="n">Configuration</span>
   <span class="n">Device</span> <span class="n">Drivers</span>  <span class="o">---&gt;</span>
@@ -1082,16 +1115,21 @@ Content on this topic
             <span class="o">&lt;*&gt;</span> <span class="n">Blackfin</span> <span class="n">TWI</span> <span class="n">I2C</span> <span class="n">support</span>
 </pre></div>
 </div>
-<p>Doing this will create modules (outside the kernel). The modules will be inserted automatically when it is needed. You can also build sound driver into kernel.</p>
+<p>Doing this will create modules (outside the kernel). The modules will be
+inserted automatically when it is needed. You can also build sound driver into
+kernel.</p>
 </section>
 <section id="testing-the-built-in-kernel-driver">
 <h2>Testing the built in kernel driver<a class="headerlink" href="#testing-the-built-in-kernel-driver" title="Link to this heading"></a></h2>
-<p>If audio is configured as modules, skip this section. If audio is built into kernel and you have booted the kernel, there are a few things to check to ensure audio is working:</p>
+<p>If audio is configured as modules, skip this section. If audio is built into
+kernel and you have booted the kernel, there are a few things to check to ensure
+audio is working:</p>
 <ul>
 <li><p>Check the boot messages to see if you have booted the correct kernel. During kernel boot, it should print out: <a href="#id3"><span class="problematic" id="id4">``</span></a>Advanced Linux Sound Architecture Driver Version 1.0.12rc1 (Thu Jun 22 13:55:50 2006 UTC).
 ASoC version 0.13.1
 dma <a class="reference external" href="rx:3">rx:3</a> tx:4, err irq:15, regs:ffc00800
-ssm2602 Audio Codec 0.1&lt;6&gt;dma_alloc_init: dma_page &#64; 0x03011000 - 512 pages at 0x03e00000
+ssm2602 Audio Codec 0.1&lt;6&gt;dma_alloc_init: dma_page &#64; 0x03011000 - 512 pages
+at 0x03e00000
 asoc: SSM2602 &lt;-&gt; bf5xx-i2s-0 mapping ok
 ALSA device list:</p>
 <blockquote>

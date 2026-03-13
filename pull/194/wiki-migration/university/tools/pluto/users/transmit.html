@@ -592,7 +592,7 @@ Content on this topic
 <section id="transmit-architecture">
 <h2>Transmit Architecture<a class="headerlink" href="#transmit-architecture" title="Link to this heading"></a></h2>
 <p>The AD9363 transmit chain is based on <a class="icon link reference external" href="https://en.wikipedia.org/wiki/Direct-conversion_receiver" target="_blank">Direct Conversion</a> techniques. Although this block diagram is for the <a class="icon adi reference external" href="https://www.analog.com/AD9361" target="_blank">AD9361</a>, it is also appropirate for the <a class="icon adi reference external" href="https://www.analog.com/AD9363" target="_blank">AD9363</a> found inside the ADALM-PLUTO. The differences between the two units are the tuning range and minor missing features (DCXO, external LO are missing, and the RF channel bandwidth is reduced).</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms2-ebz/ad9361.svg"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms2-ebz/ad9361.svg" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms2-ebz/ad9361.svg" style="width: 950px; height: 650px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms2-ebz/ad9361.svg"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms2-ebz/ad9361.svg" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms2-ebz/ad9361.svg" style="height: 650px;" width="950" />
 </a>
 <p>Some things to think about:</p>
 <ul class="simple">
@@ -607,35 +607,58 @@ Content on this topic
 <li><p>Output Power (how far can it transmit)</p></li>
 <li><p>Output fidelity (how accurate is the transmission)</p></li>
 </ul>
-<p>For the ADALM-PLUTO, both the output power and output accuracy are frequency dependent.</p>
+<p>For the ADALM-PLUTO, both the output power and output accuracy are frequency
+dependent.</p>
 <section id="transmit-power">
 <h3>Transmit Power<a class="headerlink" href="#transmit-power" title="Link to this heading"></a></h3>
 <p>Most modern spectrum analyzers allow measurement of power within a frequency range called the channel bandwidth. Such analyzers make many small power measurements <span class="math notranslate nohighlight">\(p_i\)</span> across a frequency range. They average these power measurements to calculate a desired channel power over a desired frequency range using the following equation:</p>
 <p>&lt;m 16&gt;P_CH = {(B_S/B_N)(1/N)sum{i=n_1}{n_2} 10^(p_i/10)}&lt;/m&gt;</p>
 <p>Where <span class="math notranslate nohighlight">\(P_CH\)</span> is the power in the channel, <span class="math notranslate nohighlight">\(B_S\)</span> is the specified bandwidth (also known as the channel bandwidth), <span class="math notranslate nohighlight">\(B_N\)</span> is the equivalent noise bandwidth of the resolution bandwidth (RBW) used, <span class="math notranslate nohighlight">\(N\)</span> is the number of data points in the summation, <span class="math notranslate nohighlight">\(p_i\)</span> is the sample of the power in measurement <span class="math notranslate nohighlight">\(i\)</span> in dB units (if p_i is in dBm, <span class="math notranslate nohighlight">\(P_ch\)</span> is in milliwatts). <span class="math notranslate nohighlight">\(n_1\)</span> and <span class="math notranslate nohighlight">\(n_2\)</span> are the end-points for the index i within the channel bandwidth, thus <span class="math notranslate nohighlight">\(N = (n_2 - n_1) + 1\)</span> . <a class="footnote-reference brackets" href="#id2" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
-<p>For this test an LTE10 signal was transmitted at various LO frequencies, and the power in the 9 MHz channel was measured and recorded:</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/tools/pluto/users/pluto_tx_pow.svg"><img alt="LTE10 Power in channel" class="align-center" src="https://wiki.analog.com/_media/university/tools/pluto/users/pluto_tx_pow.svg" style="width: 600px;" />
+<p>For this test an LTE10 signal was transmitted at various LO frequencies, and the
+power in the 9 MHz channel was measured and recorded:</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/tools/pluto/users/pluto_tx_pow.svg"><img alt="LTE10 Power in channel" class="align-center" src="https://wiki.analog.com/_media/university/tools/pluto/users/pluto_tx_pow.svg" width="600" />
 </a>
-<p>This differs from the a continuous sine wave (CW) at various LOs, were the LO was swept from 70 MHz to 6 GHz. This is not measuring power in the channel, just peak transmit power (the spectrum analyzer was set up to do a peak hold). The two graphs show the difference between the Tx attenuation settings. The default setting of -10dB ensures that the analog output stages are running completely in the linear range, and will not saturate or come close to the 1PdB point. It is also safe at this setting to loop the Tx directly into the Rx with an SMA cable. Do not set the TX attenuation to anything less than -10dB and loop the Tx (output) signal into the Rx (input) connector. However, using the AD9361 or any SDR should be calibrated before attempting any measurement in absolute units. This is necessary since data that is provided from the AD9361 is in reference to the full scale range of the ADC which is dependent on the gain stages of the transceiver. The values produced are therefore best described in dBFS or ADC codes, and not dBm or volts.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/tools/pluto/users/txat0.png"><img alt="CW at 0dB attenuation" class="align-left" src="https://wiki.analog.com/_media/university/tools/pluto/users/txat0.png" style="width: 420px;" />
+<p>This differs from the a continuous sine wave (CW) at various LOs, were the LO
+was swept from 70 MHz to 6 GHz. This is not measuring power in the channel, just
+peak transmit power (the spectrum analyzer was set up to do a peak hold). The
+two graphs show the difference between the Tx attenuation settings. The default
+setting of -10dB ensures that the analog output stages are running completely in
+the linear range, and will not saturate or come close to the 1PdB point. It is
+also safe at this setting to loop the Tx directly into the Rx with an SMA cable.
+Do not set the TX attenuation to anything less than -10dB and loop the Tx
+(output) signal into the Rx (input) connector. However, using the AD9361 or any
+SDR should be calibrated before attempting any measurement in absolute units.
+This is necessary since data that is provided from the AD9361 is in reference to
+the full scale range of the ADC which is dependent on the gain stages of the
+transceiver. The values produced are therefore best described in dBFS or ADC
+codes, and not dBm or volts.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/tools/pluto/users/txat0.png"><img alt="CW at 0dB attenuation" class="align-left" src="https://wiki.analog.com/_media/university/tools/pluto/users/txat0.png" width="420" />
 </a>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/tools/pluto/users/txat-10.png"><img alt="WC at -10dB attenuation" class="align-right" src="https://wiki.analog.com/_media/university/tools/pluto/users/txat-10.png" style="width: 420px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/tools/pluto/users/txat-10.png"><img alt="WC at -10dB attenuation" class="align-right" src="https://wiki.analog.com/_media/university/tools/pluto/users/txat-10.png" width="420" />
 </a>
-<p>The random peaks in the -10 dB attenuation settings are (I think) random noise caused by the Tx calibrations when the LO changes by more than 100 MHz.</p>
+<p>The random peaks in the -10 dB attenuation settings are (I think) random noise
+caused by the Tx calibrations when the LO changes by more than 100 MHz.</p>
 <p>As expected, the wider LTE10 channel measurement has more <em>power</em> in it than a narrow CW signal.</p>
 </section>
 <section id="transmit-fidelity">
 <h3>Transmit Fidelity<a class="headerlink" href="#transmit-fidelity" title="Link to this heading"></a></h3>
 <p>This is a the output of the <a class="icon link reference external" href="http://www.keysight.com/find/89600B" target="_blank">Keysight 89600 VSA software</a>, which is used to measure signal demodulation and complete vector signal analysis. In this case, we generate an LTE 10 (10MHz wide channel), and transmit it out the Tx port of the ADALM-PLUTO, and capture it on the <a class="icon link reference external" href="http://www.keysight.com/find/N9030A" target="_blank">PXA N9030A Signal Analyzer</a>. We can measure the RF offset (frequency error = 50Hz), and how accurate the 64-QAM constellation is created (an EVM of -46dB, or less than 0.5% RMS error) - which is pretty good. We can also see the output power (average peak output for the 10MHz channel is -45dBm/Hz).</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/tools/pluto/users/rev_b_tx_lte10.png"><img alt="https://wiki.analog.com/_media/university/tools/pluto/users/rev_b_tx_lte10.png" src="https://wiki.analog.com/_media/university/tools/pluto/users/rev_b_tx_lte10.png" style="width: 800px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/tools/pluto/users/rev_b_tx_lte10.png"><img alt="https://wiki.analog.com/_media/university/tools/pluto/users/rev_b_tx_lte10.png" src="https://wiki.analog.com/_media/university/tools/pluto/users/rev_b_tx_lte10.png" width="800" />
 </a>
-<p>By changing the LO frequency, output power, output attenuation, these results will change.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/tools/pluto/users/pluto_tx2.svg"><img alt="image1" src="https://wiki.analog.com/_media/university/tools/pluto/users/pluto_tx2.svg" style="width: 800px;" /></a></p>
+<p>By changing the LO frequency, output power, output attenuation, these results
+will change.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/tools/pluto/users/pluto_tx2.svg"><img alt="image1" src="https://wiki.analog.com/_media/university/tools/pluto/users/pluto_tx2.svg" width="800" /></a></p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>This is power out the SMA, not the antenna. Any antenna (including the one provided in the kit) may provide additional filtering (change the shape), as well as gain/attenuation</p>
+<p>This is power out the SMA, not the antenna. Any antenna (including the one
+provided in the kit) may provide additional filtering (change the shape), as
+well as gain/attenuation</p>
 </div>
-<p>This test was done in an open lab setting and as a result we can observe degradation at certain common commercial frequencies like LTE and WiFi. To remove these outliers the tests should be run inside an RF chamber, to make sure there is no external noise, but since we meet datasheet specifications, we are unlikely to.</p>
+<p>This test was done in an open lab setting and as a result we can observe
+degradation at certain common commercial frequencies like LTE and WiFi. To
+remove these outliers the tests should be run inside an RF chamber, to make sure
+there is no external noise, but since we meet datasheet specifications, we are
+unlikely to.</p>
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="id2" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>

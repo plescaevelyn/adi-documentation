@@ -587,7 +587,19 @@ Content on this topic
 <h1>Low Frequency Oscillator Calibration<a class="headerlink" href="#low-frequency-oscillator-calibration" title="Link to this heading"></a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
-<p>The low frequency oscillator is used to control the sleep/wakeup timer. The sleep/wakeup timer controls the measurement frequency i.e. how often the AD5940 wakes up to run a measurement sequence. Refer to the Sleep/Wakeup Timer chapter in the AD5940 datasheet for further details. For applications requiring a highly accurate measurement sample rate, the sleep/wakeup timer needs to be calibrated. The calibration function uses two measurement sequences. The first sequence starts the timeout counter and second sequence stops the timeout counter and generates an interrupt to the MCU to read back the timeout value. The second sequence is then modified to reset the timer so the length of time required for the MCU to read back the timeout value can be measured. It is important that SPI speed is fast, ideally 16MHz. Slower SPI speeds will reduce calibration accuracy. Also using an external 16MHz crystal will increase calibration accuracy.</p>
+<p>The low frequency oscillator is used to control the sleep/wakeup timer. The
+sleep/wakeup timer controls the measurement frequency i.e. how often the AD5940
+wakes up to run a measurement sequence. Refer to the Sleep/Wakeup Timer chapter
+in the AD5940 datasheet for further details. For applications requiring a highly
+accurate measurement sample rate, the sleep/wakeup timer needs to be calibrated.
+The calibration function uses two measurement sequences. The first sequence
+starts the timeout counter and second sequence stops the timeout counter and
+generates an interrupt to the MCU to read back the timeout value. The second
+sequence is then modified to reset the timer so the length of time required for
+the MCU to read back the timeout value can be measured. It is important that SPI
+speed is fast, ideally 16MHz. Slower SPI speeds will reduce calibration
+accuracy. Also using an external 16MHz crystal will increase calibration
+accuracy.</p>
 </section>
 <section id="calibration-steps">
 <h2>Calibration Steps<a class="headerlink" href="#calibration-steps" title="Link to this heading"></a></h2>
@@ -599,7 +611,8 @@ Content on this topic
 <li><p>Configure the sleep/wakeup timer. The wakeup timer order should be configured to end on sequence B.</p></li>
 <li><p>Enable the wakeup timer. Sequence A runs and starts the timeout timer, After CalDuration time has elapsed sequence B is executed which generates an ENDSEQ interrupt. The host reads timer count register and TimerCount is stored. TimerCount value includes the WuptPeriod plus the time taken to read timer count register.</p></li>
 <li><p>Sequence B is reconfigured to reset the time out counter and then generates END_SEQ interrupt. The host reads back the timeout value to calculate the length of time it takes to read the register, TimerCount2. The WuptPeriod is TimerCount – TimerCount2.</p></li>
-<li><p>The frequency of the low frequency oscillator is calculated using the following equation:</p></li>
+<li><p>The frequency of the low frequency oscillator is calculated using the
+following equation:</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Frequency =  (SystemClkFreq ×WuptPeriod) / (TimerCount2-TimerCount)
 where,
@@ -611,14 +624,24 @@ WuptPeriod = Period of the wakeup timer
 </section>
 <section id="using-the-lfosc-function-in-the-sdk">
 <h2>Using the LFOSC Function in the SDK<a class="headerlink" href="#using-the-lfosc-function-in-the-sdk" title="Link to this heading"></a></h2>
-<p>The code to carry out the low frequency oscillator calibration is included in the AD5940 SDK. The function AD5940_LFOSCMeasure() is used. The function takes two input parameters. THe fist parameter is a pointer to the data structure LFOSCMeasure_Type that contains the measurement parameters. The second argument is a pointer to a variable that stores the result of the calibration. This structure contains the following paramteres:</p>
+<p>The code to carry out the low frequency oscillator calibration is included in
+the AD5940 SDK. The function AD5940_LFOSCMeasure() is used. The function takes
+two input parameters. THe fist parameter is a pointer to the data structure
+LFOSCMeasure_Type that contains the measurement parameters. The second argument
+is a pointer to a variable that stores the result of the calibration. This
+structure contains the following paramteres:</p>
 <ul class="simple">
 <li><p>CalSeqAddr - this sets the start address in SRAM for the first sequence used.</p></li>
 <li><p>CalDuration - this parameter sets the length of the calibration routine. 1000ms is advisable</p></li>
-<li><p>SystemClkFreq - this parameter sets the system clock frequency. It should be 16MHz.</p></li>
+<li><p>SystemClkFreq - this parameter sets the system clock frequency. It should be
+16MHz.</p></li>
 </ul>
-<p>The result of the calibration is then used in the calculation for the period of the sleep/wakeup timer. The sleep/wakeup timer configures the sampling frequency of measurements so after this calibration a high level of accuracy is achieved. For highest accuracy it is best to use a precision 16MHz crystal connected to the AD5940.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-ad5940/software_examples/bia_terminal.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-ad5940/software_examples/bia_terminal.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-ad5940/software_examples/bia_terminal.png" style="width: 400px;" />
+<p>The result of the calibration is then used in the calculation for the period of
+the sleep/wakeup timer. The sleep/wakeup timer configures the sampling frequency
+of measurements so after this calibration a high level of accuracy is achieved.
+For highest accuracy it is best to use a precision 16MHz crystal connected to
+the AD5940.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-ad5940/software_examples/bia_terminal.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-ad5940/software_examples/bia_terminal.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-ad5940/software_examples/bia_terminal.png" width="400" />
 </a>
 </section>
 </section>

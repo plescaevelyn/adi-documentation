@@ -600,10 +600,13 @@ Content on this topic
 <h1>ADXL345/6 Android Acceleration Sensor<a class="headerlink" href="#adxl345-6-android-acceleration-sensor" title="Link to this heading"></a></h1>
 <p>Using the ADXL345/6 under Android as Acceleration Sensor</p>
 <img alt="https://wiki.analog.com/_media/software/driver/android/adxl_sensor_list.png" src="https://wiki.analog.com/_media/software/driver/android/adxl_sensor_list.png" />
-<p>The ADXL345/6 can be easily used as Android Acceleration Sensor. A few steps are necessary to add appropriate sensor support.</p>
+<p>The ADXL345/6 can be easily used as Android Acceleration Sensor. A few steps are
+necessary to add appropriate sensor support.</p>
 <section id="add-linux-driver-support">
 <h2>Add Linux Driver Support:<a class="headerlink" href="#add-linux-driver-support" title="Link to this heading"></a></h2>
-<p>Starting with linux-2.6.36 the ADXL34x driver is mainlined. If you are using an pre linux-2.6.36 kernel get the source from our repositories and add them to your kernel tree.</p>
+<p>Starting with linux-2.6.36 the ADXL34x driver is mainlined. If you are using an
+pre linux-2.6.36 kernel get the source from our repositories and add them to
+your kernel tree.</p>
 <p>Example platform data:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;linux/input/adxl34x.h&gt;</span>
 <span class="k">static</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">adxl34x_platform_data</span><span class="w"> </span><span class="n">adxl34x_info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
@@ -646,8 +649,12 @@ Content on this topic
 </section>
 <section id="create-an-android-sensor-library">
 <h2>Create an Android sensor library<a class="headerlink" href="#create-an-android-sensor-library" title="Link to this heading"></a></h2>
-<p>The readme file in libhardware states: The source code for the “board” variant, usually lives under partners/… The source code for “default” and “arch” would usually live under hardware/modules/.</p>
-<p>The sensor file is typically source code for the “board” variant. However for simplicity this example puts it into a common folder structure under libhardware/modules/.</p>
+<p>The readme file in libhardware states: The source code for the “board” variant,
+usually lives under partners/… The source code for “default” and “arch” would
+usually live under hardware/modules/.</p>
+<p>The sensor file is typically source code for the “board” variant. However for
+simplicity this example puts it into a common folder structure under
+libhardware/modules/.</p>
 <ul class="simple">
 <li><p>Create an sensors folder under libhardware/modules</p></li>
 <li><p>Copy files sensors_adxl34x.c and Android.mk to libhardware/modules/sensors</p></li>
@@ -657,7 +664,8 @@ Content on this topic
 <p><a class="icon link reference external" href="https://wiki.analog.com/_media/resources/tools-software/android-drivers/sensor-acceleration/android_hardware.zip" target="_blank">android_hardware.zip</a></p>
 <hr class="docutils" />
 <ul class="simple">
-<li><p>Make sure the makefile in the higher folder hierarchy picks up the one in libhardware/modules/sensors.</p></li>
+<li><p>Make sure the makefile in the higher folder hierarchy picks up the one in
+libhardware/modules/sensors.</p></li>
 <li><p>Add following lines to: libhardware/Android.mk</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>include $(addsuffix /Android.mk, $(addprefix $(LOCAL_PATH)/, \
@@ -665,7 +673,8 @@ Content on this topic
         ))
 </pre></div>
 </div>
-<p>In your platforms init.rc file make sure all ADXL34x drivers sysfs files {disable, rate} are owned by system:system</p>
+<p>In your platforms init.rc file make sure all ADXL34x drivers sysfs files
+{disable, rate} are owned by system:system</p>
 <ul class="simple">
 <li><p>Add following lines to your init.rc script:</p></li>
 </ul>
@@ -675,7 +684,8 @@ Content on this topic
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>In case the ADXL345/6 is not always event0 you can alternatively approach via /sys/bus/i2c/devices/…</p>
+<p>In case the ADXL345/6 is not always event0 you can alternatively approach via
+/sys/bus/i2c/devices/…</p>
 </div>
 <ul class="simple">
 <li><p>Rebuilt your Android tree</p></li>
@@ -694,7 +704,9 @@ Content on this topic
 <h2>Hints<a class="headerlink" href="#hints" title="Link to this heading"></a></h2>
 <section id="sample-rate">
 <h3>Sample Rate<a class="headerlink" href="#sample-rate" title="Link to this heading"></a></h3>
-<p>The ADXL345/6 sample rate is configurable. The maximum sample rate is by default limited to 200Hz, to change this limit modify define ADXL_MAX_SAMPLE_RATE_VAL in the sensor file.</p>
+<p>The ADXL345/6 sample rate is configurable. The maximum sample rate is by default
+limited to 200Hz, to change this limit modify define ADXL_MAX_SAMPLE_RATE_VAL in
+the sensor file.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Very high sample rates &gt; 400Hz can freeze your system!</p>
@@ -730,7 +742,9 @@ Content on this topic
 <h3>Platform data configuration<a class="headerlink" href="#platform-data-configuration" title="Link to this heading"></a></h3>
 <section id="don-t-use-btn-touch">
 <h4>Don’t use BTN_TOUCH<a class="headerlink" href="#don-t-use-btn-touch" title="Link to this heading"></a></h4>
-<p>In case you experience strange input device gui interaction it might be the case that Android EventHub included the ADXL34x as input device. This is typically the case if you put an BTN_TOUCH key into your ADXL34x drivers platform data.</p>
+<p>In case you experience strange input device gui interaction it might be the case
+that Android EventHub included the ADXL34x as input device. This is typically
+the case if you put an BTN_TOUCH key into your ADXL34x drivers platform data.</p>
 <p>Upon start EventHub must emit classes=0x0:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">I</span><span class="o">/</span><span class="n">EventHub</span><span class="p">(</span> <span class="mi">1862</span><span class="p">):</span> <span class="n">New</span> <span class="n">device</span><span class="p">:</span> <span class="n">path</span><span class="o">=/</span><span class="n">dev</span><span class="o">/</span><span class="nb">input</span><span class="o">/</span><span class="n">event0</span> <span class="n">name</span><span class="o">=</span><span class="n">ADXL34x</span>
 <span class="n">accelerometer</span> <span class="nb">id</span><span class="o">=</span><span class="mh">0x10003</span> <span class="p">(</span><span class="n">of</span> <span class="mh">0x4</span><span class="p">)</span> <span class="n">index</span><span class="o">=</span><span class="mi">4</span> <span class="n">fd</span><span class="o">=</span><span class="mi">50</span> <span class="n">classes</span><span class="o">=</span><span class="mh">0x0</span>
@@ -740,7 +754,9 @@ Content on this topic
 </section>
 <section id="auto-sleep">
 <h4>Auto Sleep<a class="headerlink" href="#auto-sleep" title="Link to this heading"></a></h4>
-<p>The default platform configuration sets the driver automatically switch to sleep mode during periods of inactivity. To disable this feature remove ADXL_AUTO_SLEEP from power_mode.</p>
+<p>The default platform configuration sets the driver automatically switch to sleep
+mode during periods of inactivity. To disable this feature remove
+ADXL_AUTO_SLEEP from power_mode.</p>
 <p>Alternatively during runtime:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#echo 0 &gt; /sys/class/input/event0/device/device/autosleep</span>
 </pre></div>
@@ -765,7 +781,6 @@ Content on this topic
 <span class="cp"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
 <span class="cp"># See the License for the specific language governing permissions and</span>
 <span class="cp"># limitations under the License.</span>
-
 
 <span class="nl">LOCAL_PATH</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">$</span><span class="p">(</span><span class="n">call</span><span class="w"> </span><span class="n">my</span><span class="o">-</span><span class="n">dir</span><span class="p">)</span>
 

@@ -710,15 +710,21 @@ Content on this topic
 <span class="p">};</span>
 </pre></div>
 </div>
-<p>If the specific application has wiring that can’t handle the max SPI SCLK rate for the ADC chip, a lower max rate can be specified, otherwise use the max rate from the datasheet (which may be different for some chips).</p>
+<p>If the specific application has wiring that can’t handle the max SPI SCLK rate
+for the ADC chip, a lower max rate can be specified, otherwise use the max rate
+from the datasheet (which may be different for some chips).</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">spi-cpha</span></code> and <code class="docutils literal notranslate"><span class="pre">spi-cpol</span></code> flags also need to be set to ensure the correct settings for the data and clock lines.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">spi</span><span class="o">-</span><span class="nb">max</span><span class="o">-</span><span class="n">frequency</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mi">80000000</span><span class="o">&gt;</span><span class="p">;</span> <span class="o">/*</span> <span class="mf">12.5</span> <span class="n">ns</span> <span class="n">period</span> <span class="o">*/</span>
 <span class="n">spi</span><span class="o">-</span><span class="n">cpha</span><span class="p">;</span>
 <span class="n">spi</span><span class="o">-</span><span class="n">cpol</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>There are multiple ways that the chip can be wired to the SPI bus. The Linux driver supports one wiring configuration when using a typical SPI controller and a different wiring when using the AXI SPI Engine for SPI offloading support to achieve the maximum sample rate.</p>
-<p>Currently, using more than one SDO line of the chip is not supported by the driver.</p>
+<p>There are multiple ways that the chip can be wired to the SPI bus. The Linux
+driver supports one wiring configuration when using a typical SPI controller and
+a different wiring when using the AXI SPI Engine for SPI offloading support to
+achieve the maximum sample rate.</p>
+<p>Currently, using more than one SDO line of the chip is not supported by the
+driver.</p>
 <section id="standard-spi-wiring">
 <h3>Standard SPI wiring<a class="headerlink" href="#standard-spi-wiring" title="Link to this heading"></a></h3>
 <p>In this configuration, the CS line of the SPI controller is connected to <em>both</em> the CS and the CNV pins on the ADC. Therefore, the <code class="docutils literal notranslate"><span class="pre">cnv-gpios</span></code> is omitted.</p>
@@ -745,8 +751,11 @@ Content on this topic
 </section>
 <section id="reference-supplies">
 <h2>Reference supplies<a class="headerlink" href="#reference-supplies" title="Link to this heading"></a></h2>
-<p>There are 2 ways to supply a reference voltage. The default of the evaluation boards is to use a 5V external reference.</p>
-<p>If ref-supply is present, then the external reference voltage is used and the internal buffer is disabled. If refin-supply is present, then the internal buffered reference voltage is used.</p>
+<p>There are 2 ways to supply a reference voltage. The default of the evaluation
+boards is to use a 5V external reference.</p>
+<p>If ref-supply is present, then the external reference voltage is used and the
+internal buffer is disabled. If refin-supply is present, then the internal
+buffered reference voltage is used.</p>
 <section id="external-reference">
 <h3>External reference<a class="headerlink" href="#external-reference" title="Link to this heading"></a></h3>
 <p>When using an external reference, provide the <code class="docutils literal notranslate"><span class="pre">ref-supply</span></code> property and omit the <code class="docutils literal notranslate"><span class="pre">refin-supply</span></code> property.</p>
@@ -769,7 +778,9 @@ Content on this topic
 </section>
 <section id="common-mode-supplies">
 <h2>Common mode supplies<a class="headerlink" href="#common-mode-supplies" title="Link to this heading"></a></h2>
-<p>If any of the inputs are being used as pseudo-differential inputs with the negative input being anything other than the REFGND pin, supplies indicating the voltage need to be provided.</p>
+<p>If any of the inputs are being used as pseudo-differential inputs with the
+negative input being anything other than the REFGND pin, supplies indicating the
+voltage need to be provided.</p>
 <p>For the COM pin, use the <code class="docutils literal notranslate"><span class="pre">com-supply</span></code> property.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/*</span> <span class="n">Not</span> <span class="n">default</span> <span class="n">on</span> <span class="n">FMCZ</span> <span class="nb">eval</span> <span class="n">board</span><span class="p">:</span> <span class="n">requires</span> <span class="n">changing</span> <span class="n">JP6</span> <span class="n">to</span> <span class="n">A</span> <span class="o">*/</span>
 <span class="n">com</span><span class="o">-</span><span class="n">supply</span> <span class="o">=</span> <span class="o">&lt;&amp;</span><span class="n">eval_a8</span><span class="o">&gt;</span><span class="p">;</span>
@@ -826,11 +837,13 @@ Content on this topic
 </section>
 <section id="reset">
 <h2>Reset<a class="headerlink" href="#reset" title="Link to this heading"></a></h2>
-<p>If the RESET pin is wired up, the line will be toggled on driver probe to reset the chip.</p>
+<p>If the RESET pin is wired up, the line will be toggled on driver probe to reset
+the chip.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">reset</span><span class="o">-</span><span class="n">gpios</span> <span class="o">=</span> <span class="o">&lt;&amp;</span><span class="n">gpio0</span> <span class="mi">86</span> <span class="n">GPIO_ACTIVE_LOW</span><span class="o">&gt;</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>If the pin isn’t wired up, omit the property. The driver will still attempt to do a software reset on driver probe instead.</p>
+<p>If the pin isn’t wired up, omit the property. The driver will still attempt to
+do a software reset on driver probe instead.</p>
 </section>
 <section id="additional-properties">
 <h2>Additional properties<a class="headerlink" href="#additional-properties" title="Link to this heading"></a></h2>
@@ -862,7 +875,8 @@ Content on this topic
 </section>
 <section id="sysfs-attributes">
 <h3>Sysfs attributes<a class="headerlink" href="#sysfs-attributes" title="Link to this heading"></a></h3>
-<p>The sysfs attributes are used to get information about the device and also configure the device.</p>
+<p>The sysfs attributes are used to get information about the device and also
+configure the device.</p>
 <section id="informational">
 <h4>Informational<a class="headerlink" href="#informational" title="Link to this heading"></a></h4>
 <p>As seen above, reading the <code class="docutils literal notranslate"><span class="pre">name</span></code> attribute will return the name of the chip.</p>
@@ -898,10 +912,14 @@ Content on this topic
 <span class="p">[</span><span class="mf">0.000000000</span> <span class="mf">0.000030517</span> <span class="mf">1.999969482</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>This shows that the offset can be in the range [-8192, 8192) with a step size of 0.25 raw units. The gain can be in the range [0, 2) with a step size of approx 0.000030517.</p>
+<p>This shows that the offset can be in the range [-8192, 8192) with a step size of
+0.25 raw units. The gain can be in the range [0, 2) with a step size of approx
+0.000030517.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The returned values may change when other attributes change, for example when oversampling is enabled. So it is not safe to assume the available values will always be the same.</p>
+<p>The returned values may change when other attributes change, for example when
+oversampling is enabled. So it is not safe to assume the available values
+will always be the same.</p>
 </div>
 <p>Also see the example in the <a class="icon link reference external" href="https://wiki.analog.com/" target="_blank">#voltage_input_calibration</a> section.</p>
 </section>
@@ -924,7 +942,8 @@ Content on this topic
 <p class="admonition-title">Tip</p>
 <p>General information on these attributes can be found in the <a class="icon link reference external" href="https://www.kernel.org/doc/html/latest/iio/iio_devbuf.html" target="_blank">Linux kernel documentation</a>.</p>
 </div>
-<p>Using the buffer will be slightly different depending on if using a SPI offload or not.</p>
+<p>Using the buffer will be slightly different depending on if using a SPI offload
+or not.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -948,7 +967,8 @@ Content on this topic
 </tbody>
 </table>
 </div>
-<p>Here is an example of how to read a few values at a low sample rate for testing using a Linux host with SPI offload support:</p>
+<p>Here is an example of how to read a few values at a low sample rate for testing
+using a Linux host with SPI offload support:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># set sample rate to 10 kHz</span>
 <span class="n">root</span><span class="nd">@analog</span><span class="p">:</span><span class="o">~</span><span class="c1"># echo 10000 &gt; /sys/bus/iio/devices/iio\:device1/in_voltage0_sampling_frequency</span>
 <span class="c1"># set buffer to receive 8 samples at a time</span>
@@ -1004,7 +1024,8 @@ Content on this topic
 </section>
 <section id="typical-test-application-software">
 <h3>Typical test application software<a class="headerlink" href="#typical-test-application-software" title="Link to this heading"></a></h3>
-<p>ADI provides several open source tools to make it easy to get started with using Linux IIO drivers.</p>
+<p>ADI provides several open source tools to make it easy to get started with using
+Linux IIO drivers.</p>
 <section id="iio-oscilloscope">
 <h4>IIO Oscilloscope<a class="headerlink" href="#iio-oscilloscope" title="Link to this heading"></a></h4>
 <p>This section only describes the bits specific to these chips. For instructions on how to obtain IIO Oscilloscope and it’s basic usage, please see the <a class="reference internal" href="../../linux-software/iio_oscilloscope.html"><span class="doc">iio_oscilloscope</span></a> page.</p>
@@ -1016,17 +1037,23 @@ Content on this topic
 <section id="examples">
 <h4>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h4>
 <p>Here are a couple of examples of how to use these tools together to test an ADC on an evaluation board connected to a development board running Linux. These examples are using the EVAL-AD4696FMCZ evaluation board in conjunction with a ZedBoard. The signal generator is connected to the CH0 and CH1 SMA connectors on the evaluation board. The example devicetree is configured to treat this as a pseudo-differential input on IN0 and IN1. The negative voltage input must match the devicetree, i.e. a constant 2.5 V DC (1/2 of V<sub>REF</sub>).</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/eval-ad4696fmcz-zedboard-m2k.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/eval-ad4696fmcz-zedboard-m2k.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/eval-ad4696fmcz-zedboard-m2k.jpg" style="width: 800px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/eval-ad4696fmcz-zedboard-m2k.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/eval-ad4696fmcz-zedboard-m2k.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/eval-ad4696fmcz-zedboard-m2k.jpg" width="800" />
 </a>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/scopy-2.5v-common-mode.png"><img alt="Scopy set up to generate constant 2.5 V signal for common mode supply" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/scopy-2.5v-common-mode.png" style="width: 800px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/scopy-2.5v-common-mode.png"><img alt="Scopy set up to generate constant 2.5 V signal for common mode supply" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/scopy-2.5v-common-mode.png" width="800" />
 </a>
 <section id="measure-constant-voltage">
 <h5>Measure constant voltage<a class="headerlink" href="#measure-constant-voltage" title="Link to this heading"></a></h5>
-<p>A quick way check if the ADC is working correctly is to generate a constant voltage on the input and measure it using the DMM feature of the IIO Oscilloscope. For example, if you generate a constant 3.5 V DC signal, you should see something like this:</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/scopy-3.5v-const-2.5v-common-mode.png"><img alt="Scopy configured to generate constant 3.5 V signal with 2.5 V common mode signal" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/scopy-3.5v-const-2.5v-common-mode.png" style="width: 800px;" /></a> <a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/osc-dmm-ad4696-voltage0-3.5v.png"><img alt="image1" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/osc-dmm-ad4696-voltage0-3.5v.png" style="width: 600px;" /></a></p>
+<p>A quick way check if the ADC is working correctly is to generate a constant
+voltage on the input and measure it using the DMM feature of the IIO
+Oscilloscope. For example, if you generate a constant 3.5 V DC signal, you
+should see something like this:</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/scopy-3.5v-const-2.5v-common-mode.png"><img alt="Scopy configured to generate constant 3.5 V signal with 2.5 V common mode signal" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/scopy-3.5v-const-2.5v-common-mode.png" width="800" /></a> <a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/osc-dmm-ad4696-voltage0-3.5v.png"><img alt="image1" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/osc-dmm-ad4696-voltage0-3.5v.png" width="600" /></a></p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>The DMM feature of IIO Oscilloscope takes into account the scale and offset attributes to provide the measured value in Volts. The actual raw value without the offset will be 1 V since the ADC is measuring the difference between IN0 and IN1.</p>
+<p>The DMM feature of IIO Oscilloscope takes into account the scale and offset
+attributes to provide the measured value in Volts. The actual raw value
+without the offset will be 1 V since the ADC is measuring the difference
+between IN0 and IN1.</p>
 </div>
 </section>
 <section id="capture-many-samples-for-analysis">
@@ -1037,39 +1064,44 @@ Content on this topic
 <p class="admonition-title">Note</p>
 <p>If you are using a setup without SPI offload support, a trigger source must be set up manually and can’t be controlled via the <em>IIO Oscilloscope</em> app. See <a class="reference internal" href="ad738x.html"><span class="doc">example</span></a>.</p>
 </div>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/osc-debug-ad4696-voltage0-sampling-frequency-1mhz.png"><img alt="Setting sample rate to 1 MHz" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/osc-debug-ad4696-voltage0-sampling-frequency-1mhz.png" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/osc-debug-ad4696-voltage0-sampling-frequency-1mhz.png"><img alt="Setting sample rate to 1 MHz" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/osc-debug-ad4696-voltage0-sampling-frequency-1mhz.png" width="600" />
 </a>
 <p>Then you will need to set up a signal generator to generate an appropriate signal. As previously mentioned, in this example, we are using IN0 and IN1 as a pseduo-differential input where IN1 has a constant 2.5 V as the common mode supply. To make a more interesting signal we are generating a 1 kHz sine wave with 4 V p-p and offset of 2.5 V. The signal needs to be withing the 0 to V<sub>REF</sub> range (5V in this case) and the offset needs to match the common mode voltage supply.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/scopy-wave-4v-p-p-2.5v-common-mode.png"><img alt="Scopy generating 4 V p-p signal with 2.5 V common mode" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/scopy-wave-4v-p-p-2.5v-common-mode.png" style="width: 800px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/scopy-wave-4v-p-p-2.5v-common-mode.png"><img alt="Scopy generating 4 V p-p signal with 2.5 V common mode" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/scopy-wave-4v-p-p-2.5v-common-mode.png" width="800" />
 </a>
 <p>Once the trigger and signal generator are configured correctly, open a new <em>Plot</em> window, enable all channels, enter the number of samples required and perform a capture. Save the data to a <code class="docutils literal notranslate"><span class="pre">.csv</span></code> file if you need to perform additional analysis.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>When using SPI offloading for high-speed data capture, there must always be at least 2 voltage channels enabled, even if you only want to measure one signal. This is due to a technical limitation of how the Advanced Sequencer on the ADC works.</p>
-<p>If only one voltage channel is enabled, the capture will fail to start. And to capture the temperature channel, 2 voltage channels plus the temperature channel have to be enabled.</p>
+<p>When using SPI offloading for high-speed data capture, there must always be
+at least 2 voltage channels enabled, even if you only want to measure one
+signal. This is due to a technical limitation of how the Advanced Sequencer
+on the ADC works.</p>
+<p>If only one voltage channel is enabled, the capture will fail to start. And
+to capture the temperature channel, 2 voltage channels plus the temperature
+channel have to be enabled.</p>
 <p>This restriction does not apply when not using SPI offloading support.</p>
 </div>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/osc-capture-ad4696.png"><img alt="Capturing 4 channels on AD4696" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/osc-capture-ad4696.png" style="width: 800px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/osc-capture-ad4696.png"><img alt="Capturing 4 channels on AD4696" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/osc-capture-ad4696.png" width="800" />
 </a>
 </section>
 <section id="id2">
 <h5>Voltage input calibration<a class="headerlink" href="#id2" title="Link to this heading"></a></h5>
 <p>Using the <em>Plot</em> and <em>Debug</em> features of <em>IIO Oscilloscope</em> can be useful for calibrating voltage inputs.</p>
 <p>First, to calibrate the offset, generate a 0 V signal and use the <em>Plot</em> window to capture some samples.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/osc-plot-calibration-before.png"><img alt="Capturing voltage3 for calibration (plus one extra channel because of minimum of 2 channels need to be enabled)" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/osc-plot-calibration-before.png" style="width: 800px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/osc-plot-calibration-before.png"><img alt="Capturing voltage3 for calibration (plus one extra channel because of minimum of 2 channels need to be enabled)" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/osc-plot-calibration-before.png" width="800" />
 </a>
 <p>As seen in the screenshot, the white line at the bottom is not quite at 0 (the dashed yellow line). We can save the plot as a `.csv` (<em>File &gt; Save as…</em>) and open it in your favorite spreadsheet program to calculate the average of the samples.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/calc-calibbias-before.png"><img alt="Averaging samples" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/calc-calibbias-before.png" style="width: 400px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/calc-calibbias-before.png"><img alt="Averaging samples" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/calc-calibbias-before.png" width="400" />
 </a>
 <p>We need to apply a calibration offset to correct for this error since we should be reading an average of close to 0. So we can enter this number in the <code class="docutils literal notranslate"><span class="pre">calibbias</span></code> attribute to apply the correction.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/osc-debug-voltage3-calibbias.png"><img alt="Entering calibbias attribute value" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/osc-debug-voltage3-calibbias.png" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/osc-debug-voltage3-calibbias.png"><img alt="Entering calibbias attribute value" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/osc-debug-voltage3-calibbias.png" width="600" />
 </a>
 <p>After writing, this value will be rounded to the nearest 0.25 V since that is the step reported by the <code class="docutils literal notranslate"><span class="pre">in_voltage3_calibbias_available</span></code> attribute.</p>
 <p>Now we can perform the measurement and calculate the average again.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/osc-plot-calibration-after.png"><img alt="Capturing voltage3 for calibration verification" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/osc-plot-calibration-after.png" style="width: 800px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/osc-plot-calibration-after.png"><img alt="Capturing voltage3 for calibration verification" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/osc-plot-calibration-after.png" width="800" />
 </a>
 <p>This time, we can see that the white line exactly lines up with 0.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/calc-calbbias-after.png"><img alt="Averaging samples" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/calc-calbbias-after.png" style="width: 400px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/calc-calbbias-after.png"><img alt="Averaging samples" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad4695/calc-calbbias-after.png" width="400" />
 </a>
 <p>And the result of the average is very close to 0 now.</p>
 <p>After calibrating the offset, a similar procedure can be done to calibrate the scale using the <code class="docutils literal notranslate"><span class="pre">in_voltage3_calibgain</span></code> attribute.</p>

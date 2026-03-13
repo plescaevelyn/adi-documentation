@@ -604,17 +604,20 @@ Content on this topic
 <li><p>NTSC (480i60)</p></li>
 <li><p>PAL (576i50)</p></li>
 </ul>
-<p>When using 720p60, connect an HDMI cable from your source (e.g. a video player) to the HDMI A port and ensure the video source’s resolution is set to 720p.</p>
+<p>When using 720p60, connect an HDMI cable from your source (e.g. a video player)
+to the HDMI A port and ensure the video source’s resolution is set to 720p.</p>
 <p>For SD video, connect video cables to CVBS, S-Video or Component port.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/video/decoder.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/video/decoder.jpg" src="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/video/decoder.jpg" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/video/decoder.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/video/decoder.jpg" src="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/video/decoder.jpg" width="600" />
 </a>
 </section>
 <section id="software-configuration">
 <h2>Software Configuration<a class="headerlink" href="#software-configuration" title="Link to this heading"></a></h2>
-<p>The following configuration should be done on top of the sc589-ezkit/sc573-ezkit default configuration.</p>
+<p>The following configuration should be done on top of the sc589-ezkit/sc573-ezkit
+default configuration.</p>
 <section id="package-configuration">
 <h3>Package Configuration<a class="headerlink" href="#package-configuration" title="Link to this heading"></a></h3>
-<p>Add the v4l2-video-test package in the filesystem, it’s enabled in adsp-sc5xx-full image by default.</p>
+<p>Add the v4l2-video-test package in the filesystem, it’s enabled in
+adsp-sc5xx-full image by default.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vim</span> <span class="n">build</span><span class="o">/</span><span class="n">conf</span><span class="o">/</span><span class="n">local</span><span class="o">.</span><span class="n">conf</span>
 <span class="n">IMAGE_INSTALL_append</span> <span class="o">=</span> <span class="s2">&quot;v4l2-video-test&quot;</span>
 </pre></div>
@@ -649,7 +652,8 @@ Content on this topic
 </pre></div>
 </div>
 <ul class="simple">
-<li><p>** Enable V4L2 capture platform driver and ADV7842 video decoder driver **</p></li>
+<li><p>** Enable V4L2 capture platform driver and ADV7842 video decoder driver
+**</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Device</span> <span class="n">Drivers</span>  <span class="o">---&gt;</span>
     <span class="o">&lt;*&gt;</span> <span class="n">Multimedia</span> <span class="n">support</span>  <span class="o">---&gt;</span>
@@ -680,7 +684,9 @@ Content on this topic
 <ul class="simple">
 <li><p>** Device node for soft switch on Video Decoder EI3 Extender Board **</p></li>
 </ul>
-<p>Please add following child node ssw2 to i2c0 master node in the device tree(sc589-ezkit.dts/sc573-ezkit.dts). We need to setup soft switch before we start capture streaming.</p>
+<p>Please add following child node ssw2 to i2c0 master node in the device
+tree(sc589-ezkit.dts/sc573-ezkit.dts). We need to setup soft switch before we
+start capture streaming.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ vim arch/arm/boot/dts/sc589-ezkit.dts
 i2c0: twi@31001400 {
 ...
@@ -728,11 +734,15 @@ adau1979@0x11 {
 </section>
 <section id="capture-video-stream">
 <h3>Capture Video Stream<a class="headerlink" href="#capture-video-stream" title="Link to this heading"></a></h3>
-<p>You can use “v4l2_video_capture” provided by Buildroot to test video capture function for ADV7842, it shows the decoding of HD signal input and YCbCr pixel output in this example:</p>
+<p>You can use “v4l2_video_capture” provided by Buildroot to test video capture
+function for ADV7842, it shows the decoding of HD signal input and YCbCr pixel
+output in this example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># v4l2_video_capture -I 4 -F adv7842.yuv</span>
 </pre></div>
 </div>
-<p>The 720p yuv file can be played by a raw video sequence player, for example pYUV. Or it can be saved as the input of the ADV7511. PYUV must be configured as below:</p>
+<p>The 720p yuv file can be played by a raw video sequence player, for example
+pYUV. Or it can be saved as the input of the ADV7511. PYUV must be configured as
+below:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Resolution</span> <span class="o">-&gt;</span> <span class="n">HD720</span>
 <span class="n">Color</span> <span class="n">space</span> <span class="o">-&gt;</span> <span class="n">YCbCr</span>
 <span class="n">Subsampling</span> <span class="o">-&gt;</span> <span class="mi">4</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mi">2</span>
@@ -740,7 +750,7 @@ adau1979@0x11 {
 </pre></div>
 </div>
 <p>And select Interleaved option.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/video/lkad-linux_video_driver-capture_video_stream.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/video/lkad-linux_video_driver-capture_video_stream.jpg" src="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/video/lkad-linux_video_driver-capture_video_stream.jpg" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/video/lkad-linux_video_driver-capture_video_stream.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/video/lkad-linux_video_driver-capture_video_stream.jpg" src="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/video/lkad-linux_video_driver-capture_video_stream.jpg" width="600" />
 </a>
 <hr class="docutils" />
 <p><strong>Back to</strong> <a class="reference internal" href="linux_video_driver.html"><span class="doc">Linux Video Driver</span></a></p>

@@ -600,33 +600,70 @@ Content on this topic
 </section>
 <section id="background">
 <h2>Background<a class="headerlink" href="#background" title="Link to this heading"></a></h2>
-<p>A Universal Asynchronous Receiver/Transmitter (UART) is a computer hardware device for asynchronous serial communication in which the data format and transmission speeds are configurable. Its purpose is to transmit and receive serial data, using only two wires to communicate between devices (TX and RX). In the past, UARTs were separate integrated circuits, such as the industry standard 16550. However, most modern microcontrollers include one or more UART peripheral devices on-chip, requiring only an external physical interface device, such as a line driver / receiver or USB-UART interface device.</p>
-<p>The UART transmitter converts parallel data from a controlling device like a microcontroller into serial form, transmits it in serial to the UART receiver, which then converts the serial data back into parallel data for the receiving device. Data flows from the TX pin of the UART transmitter to the RX pin of the UART receiver.</p>
+<p>A Universal Asynchronous Receiver/Transmitter (UART) is a computer hardware
+device for asynchronous serial communication in which the data format and
+transmission speeds are configurable. Its purpose is to transmit and receive
+serial data, using only two wires to communicate between devices (TX and RX). In
+the past, UARTs were separate integrated circuits, such as the industry standard
+16550. However, most modern microcontrollers include one or more UART peripheral
+devices on-chip, requiring only an external physical interface device, such as a
+line driver / receiver or USB-UART interface device.</p>
+<p>The UART transmitter converts parallel data from a controlling device like a
+microcontroller into serial form, transmits it in serial to the UART receiver,
+which then converts the serial data back into parallel data for the receiving
+device. Data flows from the TX pin of the UART transmitter to the RX pin of the
+UART receiver.</p>
 <div class="centeralign docutils container">
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/electronics/uart_flow.png"><img alt="image1" src="https://wiki.analog.com/_media/university/courses/electronics/uart_flow.png" style="width: 400px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/electronics/uart_flow.png"><img alt="image1" src="https://wiki.analog.com/_media/university/courses/electronics/uart_flow.png" width="400" /></a></p>
 </div>
 <div class="centeralign docutils container">
 <p>Figure 1. UART data flow between devices</p>
 </div>
-<p>A UART transmits data asynchronously, which means there is no clock signal to synchronize the output of bits from the transmitting UART to the sampling of bits by the receiving UART. The UART transmit contains start and stop bits to frame the data byte being transferred. These bits define the beginning and end of the data byte so the receiving UART knows when to start (and stop) reading the bits.</p>
+<p>A UART transmits data asynchronously, which means there is no clock signal to
+synchronize the output of bits from the transmitting UART to the sampling of
+bits by the receiving UART. The UART transmit contains start and stop bits to
+frame the data byte being transferred. These bits define the beginning and end
+of the data byte so the receiving UART knows when to start (and stop) reading
+the bits.</p>
 <p><img alt="image2" src="https://wiki.analog.com/_media/university/courses/electronics/uart_frame.png" /></p>
 <div class="centeralign docutils container">
 <p>Figure 2. UART data frame</p>
 </div>
-<p>When the UART receiver detects a start bit, it starts to read the incoming bits at a specific frequency, called the baud rate. Baud rate is the rate at which data is transferred, expressed in bits per second (bps). Both UARTs (Rx and Tx) must be configured at almost the same baud rate. This scheme is tolerant of a slight mismatch in baud rate between the transmitting and receiving devices; a typical 8-bit byte can tolerate approximately 10% difference in baud rate between transmitter and receiver before a bit error occurs.</p>
-<p>UART data is organized into bytes. Each byte contains 1 start bit, 5 to 9 data bits (depending on the UART), an optional parity bit, and 1 or 2 stop bits.</p>
+<p>When the UART receiver detects a start bit, it starts to read the incoming bits
+at a specific frequency, called the baud rate. Baud rate is the rate at which
+data is transferred, expressed in bits per second (bps). Both UARTs (Rx and Tx)
+must be configured at almost the same baud rate. This scheme is tolerant of a
+slight mismatch in baud rate between the transmitting and receiving devices; a
+typical 8-bit byte can tolerate approximately 10% difference in baud rate
+between transmitter and receiver before a bit error occurs.</p>
+<p>UART data is organized into bytes. Each byte contains 1 start bit, 5 to 9 data
+bits (depending on the UART), an optional parity bit, and 1 or 2 stop bits.</p>
 <div class="centeralign docutils container">
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/electronics/uart_sequence.png"><img alt="image3" src="https://wiki.analog.com/_media/university/courses/electronics/uart_sequence.png" style="width: 700px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/electronics/uart_sequence.png"><img alt="image3" src="https://wiki.analog.com/_media/university/courses/electronics/uart_sequence.png" width="700" /></a></p>
 </div>
 <div class="centeralign docutils container">
 <p>Figure 3. UART Byte Configuration</p>
 </div>
-<p>The UART data transmission line is normally held at a high voltage level when no transmission is occurring. To start the transfer of data, the the transmission line is pulled from high to low. When the receiving UART detects the high to low voltage transition, it interprets this event as as start bit and begins reading the rest of the bits in the data frame at the selected baud rate.</p>
-<p>A parity bit may be included after the data bits. Parity describes the evenness or oddness of a number.</p>
-<p>Even parity: for a given set of bits, the occurrences of bits whose value is 1 is counted. If that count is odd, the parity bit value is set to 1. If the count of 1s in a given set of bits is already even, the parity bit value is 0.</p>
-<p>Odd parity: for a given set of bits, if the count of bits with a value of 1 is even, the parity bit value is set to 1 . If the count of bits with a value of 1 is odd, the count is already odd so the parity bit value is 0.</p>
-<p>The parity bit is simple error detection scheme, and will detect all single-bit errors. Bits can be changed during transmission by mismatched baud rates, noise picked up on long distance data transfers, etc. Like baud rate, both transmitter and receiver must be set to the same parity configuration.</p>
-<p>To signal the end of the data byte, the sending UART drives the data transmission line from a low voltage to a high voltage for at least two bit periods.</p>
+<p>The UART data transmission line is normally held at a high voltage level when no
+transmission is occurring. To start the transfer of data, the the transmission
+line is pulled from high to low. When the receiving UART detects the high to low
+voltage transition, it interprets this event as as start bit and begins reading
+the rest of the bits in the data frame at the selected baud rate.</p>
+<p>A parity bit may be included after the data bits. Parity describes the evenness
+or oddness of a number.</p>
+<p>Even parity: for a given set of bits, the occurrences of bits whose value is 1
+is counted. If that count is odd, the parity bit value is set to 1. If the count
+of 1s in a given set of bits is already even, the parity bit value is 0.</p>
+<p>Odd parity: for a given set of bits, if the count of bits with a value of 1 is
+even, the parity bit value is set to 1 . If the count of bits with a value of 1
+is odd, the count is already odd so the parity bit value is 0.</p>
+<p>The parity bit is simple error detection scheme, and will detect all single-bit
+errors. Bits can be changed during transmission by mismatched baud rates, noise
+picked up on long distance data transfers, etc. Like baud rate, both transmitter
+and receiver must be set to the same parity configuration.</p>
+<p>To signal the end of the data byte, the sending UART drives the data
+transmission line from a low voltage to a high voltage for at least two bit
+periods.</p>
 </section>
 <section id="hardware-configuration">
 <h2>Hardware Configuration<a class="headerlink" href="#hardware-configuration" title="Link to this heading"></a></h2>
@@ -662,11 +699,15 @@ Content on this topic
 <ul class="simple">
 <li><p>Set S2 to the CENTER position.</p></li>
 </ul>
-<p>(S2 selects which device to connect the ADuCM3029’s UART to - USB-UART interface, Arduino headers, or WiFi module connector.)</p>
+<p>(S2 selects which device to connect the ADuCM3029’s UART to - USB-UART
+interface, Arduino headers, or WiFi module connector.)</p>
 </section>
 <section id="software-configuration">
 <h2>Software Configuration<a class="headerlink" href="#software-configuration" title="Link to this heading"></a></h2>
-<p>There are several options for which software to use for this demonstration; the main requirement is that it implement some sort of command-line interface that echoes characters back as they are typed. The CLI example project for the EVAL-ADICUP3029 can be used:</p>
+<p>There are several options for which software to use for this demonstration; the
+main requirement is that it implement some sort of command-line interface that
+echoes characters back as they are typed. The CLI example project for the
+EVAL-ADICUP3029 can be used:</p>
 <p><a class="icon git reference external" href="https://github.com/analogdevicesinc/EVAL-ADICUP3029/tree/main/projects/ADuCM3029_demo_cli" target="_blank">CLI example for ADICUP3029</a></p>
 </section>
 <section id="scopy-pattern-generator-configuration">
@@ -678,8 +719,12 @@ Content on this topic
 <li><p>Stop bits: 1</p></li>
 <li><p>Parity: none</p></li>
 </ul>
-<p>For transmission, we will use only one digital channel as Tx. Open the Pattern Generator instrument, select DIO0 channel and press “Group with Selected” button. This will display the decoded pattern for our application based on the data that we want to send.</p>
-<p>On the left side of the user interface, a settings menu is available. Configure the UART settings to match the software application that we want to debug.</p>
+<p>For transmission, we will use only one digital channel as Tx. Open the Pattern
+Generator instrument, select DIO0 channel and press “Group with Selected”
+button. This will display the decoded pattern for our application based on the
+data that we want to send.</p>
+<p>On the left side of the user interface, a settings menu is available. Configure
+the UART settings to match the software application that we want to debug.</p>
 <p>An example for the Pattern Generator setup is presented in Figure 5.</p>
 <div class="centeralign docutils container">
 <p><img alt="image5" src="https://wiki.analog.com/_media/university/courses/electronics/pg_uart_setup.png" /></p>
@@ -698,7 +743,8 @@ Content on this topic
 </section>
 <section id="scopy-logic-analyzer-configuration">
 <h2>Scopy Logic Analyzer Configuration<a class="headerlink" href="#scopy-logic-analyzer-configuration" title="Link to this heading"></a></h2>
-<p>Several UART configuration parameters need to be determined in order to properly configure Scopy. For the EVAL-ADICUP3029 project, they are as follows:</p>
+<p>Several UART configuration parameters need to be determined in order to properly
+configure Scopy. For the EVAL-ADICUP3029 project, they are as follows:</p>
 <ul class="simple">
 <li><p>Baud rate: 115200</p></li>
 <li><p>Data bits: 8</p></li>
@@ -712,7 +758,8 @@ Content on this topic
 <div class="centeralign docutils container">
 <p>Figure 6. UART Logic Analyzer User Interface</p>
 </div>
-<p>Open the Logic Analyzer instrument, select DIO0-DIO1 lines and press the “Group with selected” button.</p>
+<p>Open the Logic Analyzer instrument, select DIO0-DIO1 lines and press the “Group
+with selected” button.</p>
 <p>Select the channel group formed and apply the UART decoder. While the group is selected, open settings menu by pressing the <img alt="image7" src="https://wiki.analog.com/_media/university/courses/electronics/grp_set_butt.png" /> button on the top right side of the user interface. A settings panel will appear for the UART decoder, allowing the signal-channel configuration and parameters setup. Apply the parameters listed above to the group.</p>
 <div class="centeralign docutils container">
 </div>
@@ -720,7 +767,9 @@ Content on this topic
 <div class="centeralign docutils container">
 <p>Figure 7. UART Group Settings</p>
 </div>
-<p>The Logic Analyzer must be set up to “catch” the UART byte transfer on the Logic Analyzer plot. Since the UART transfer starts with a start bit, (transmit line is pulled from high to low), we can use this event to trigger the capture.</p>
+<p>The Logic Analyzer must be set up to “catch” the UART byte transfer on the Logic
+Analyzer plot. Since the UART transfer starts with a start bit, (transmit line
+is pulled from high to low), we can use this event to trigger the capture.</p>
 <div class="centeralign docutils container">
 <p><img alt="image9" src="https://wiki.analog.com/_media/university/courses/electronics/uart_trigger_grp.png" /></p>
 </div>
@@ -730,15 +779,20 @@ Content on this topic
 </section>
 <section id="uart-example">
 <h2>UART Example<a class="headerlink" href="#uart-example" title="Link to this heading"></a></h2>
-<p>This example verifies the receive/transmit operations of the software application developed for EVAL-ADICUP3029. The data will be transmitted from the Pattern Generator, and visualized on Logic Analyzer, by connecting ADALM2000 to the UART pins of the EVAL-ADICUP3029 board (see Hardware Configuration step).</p>
-<p>Set the Time Base of the Logic Analyzer instrument to 30us and the Trigger Position at 90us and run a Single sweep.</p>
+<p>This example verifies the receive/transmit operations of the software
+application developed for EVAL-ADICUP3029. The data will be transmitted from the
+Pattern Generator, and visualized on Logic Analyzer, by connecting ADALM2000 to
+the UART pins of the EVAL-ADICUP3029 board (see Hardware Configuration step).</p>
+<p>Set the Time Base of the Logic Analyzer instrument to 30us and the Trigger
+Position at 90us and run a Single sweep.</p>
 <div class="centeralign docutils container">
 <p><img alt="image10" src="https://wiki.analog.com/_media/university/courses/electronics/la_settings_uart.png" /></p>
 </div>
 <div class="centeralign docutils container">
 <p>Figure 9. General Settings</p>
 </div>
-<p>The Logic Analyzer will wait for the falling edge of the Rx signal to be triggered (corresponding to the start bit).</p>
+<p>The Logic Analyzer will wait for the falling edge of the Rx signal to be
+triggered (corresponding to the start bit).</p>
 <p>Run a single sweep on the Pattern Generator to send the first UART byte.</p>
 <p>The result captured by the Logic Analyzer is presented in Figure 10.</p>
 <div class="centeralign docutils container">
@@ -747,17 +801,26 @@ Content on this topic
 <div class="centeralign docutils container">
 <p>Figure 10. UART sequence plot</p>
 </div>
-<p>Analyzing the plot, the byte (ASCII code) corresponding to character “A” is sent from the Pattern Generator and received at the EVAL-ADICUP3029 Rx pin. After the byte is received, on TX pin the byte is sent back and captured by the Logic Analyzer.</p>
-<p>The decoders available in Scopy allow visualization of the data bytes in ASCII format, including the Start Bit (denoted with “S” on the plot) and the Stop bit (denoted with “T” on the plot).</p>
-<p>Now, let’s try sending multiple characters and see what happens with our application.</p>
-<p>In the Pattern Generator instrument, under the “Data to Send” label, set the data bytes to “ADI”.</p>
+<p>Analyzing the plot, the byte (ASCII code) corresponding to character “A” is sent
+from the Pattern Generator and received at the EVAL-ADICUP3029 Rx pin. After the
+byte is received, on TX pin the byte is sent back and captured by the Logic
+Analyzer.</p>
+<p>The decoders available in Scopy allow visualization of the data bytes in ASCII
+format, including the Start Bit (denoted with “S” on the plot) and the Stop bit
+(denoted with “T” on the plot).</p>
+<p>Now, let’s try sending multiple characters and see what happens with our
+application.</p>
+<p>In the Pattern Generator instrument, under the “Data to Send” label, set the
+data bytes to “ADI”.</p>
 <div class="centeralign docutils container">
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/electronics/uart_data_to_send.png"><img alt="image12" src="https://wiki.analog.com/_media/university/courses/electronics/uart_data_to_send.png" style="width: 400px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/electronics/uart_data_to_send.png"><img alt="image12" src="https://wiki.analog.com/_media/university/courses/electronics/uart_data_to_send.png" width="400" /></a></p>
 </div>
 <div class="centeralign docutils container">
 <p>Figure 11. Pattern Generator - Data to send</p>
 </div>
-<p>On the Logic Analyzer, adjust the Time Base and Trigger Position accordingly to be able to see all of the transactions. (i.e. Time Base: 100us and Trigger Position: 300us)</p>
+<p>On the Logic Analyzer, adjust the Time Base and Trigger Position accordingly to
+be able to see all of the transactions. (i.e. Time Base: 100us and Trigger
+Position: 300us)</p>
 <p>Run Single sweep in The Logic Analyzer and then in the Pattern Generator.</p>
 <p>The result captured by the Logic Analyzer is shown in Figure 12.</p>
 <div class="centeralign docutils container">
@@ -766,11 +829,15 @@ Content on this topic
 <div class="centeralign docutils container">
 <p>Figure 11. Pattern Generator - Data to send</p>
 </div>
-<p>The EVAL-ADICUP3029 example program echoes received data bytes as they come in. As expected all the data bytes were received by the EVAL-ADICUP3029 board and sent back on Tx pin.</p>
+<p>The EVAL-ADICUP3029 example program echoes received data bytes as they come in.
+As expected all the data bytes were received by the EVAL-ADICUP3029 board and
+sent back on Tx pin.</p>
 </section>
 <section id="conclusion">
 <h2>Conclusion<a class="headerlink" href="#conclusion" title="Link to this heading"></a></h2>
-<p>In addition to UART, the application includes a set of decoders covering a large number of communication protocols such as I2C, I2S, SPI, JTAG, and others, making ADALM2000 a powerful tool for analyzing and debugging digital signals.</p>
+<p>In addition to UART, the application includes a set of decoders covering a large
+number of communication protocols such as I2C, I2S, SPI, JTAG, and others,
+making ADALM2000 a powerful tool for analyzing and debugging digital signals.</p>
 <section id="further-reading">
 <h3>Further Reading:<a class="headerlink" href="#further-reading" title="Link to this heading"></a></h3>
 <ul class="simple">

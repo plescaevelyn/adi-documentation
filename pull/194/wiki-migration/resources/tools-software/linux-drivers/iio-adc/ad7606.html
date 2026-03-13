@@ -724,7 +724,8 @@ Content on this topic
 </section>
 <section id="adding-linux-driver-support">
 <h1>Adding Linux driver support<a class="headerlink" href="#adding-linux-driver-support" title="Link to this heading"></a></h1>
-<p>Configure kernel with “make menuconfig” (alternatively use “make xconfig” or “make qconfig”)</p>
+<p>Configure kernel with “make menuconfig” (alternatively use “make xconfig” or
+“make qconfig”)</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Linux</span> <span class="n">Kernel</span> <span class="n">Configuration</span>
     <span class="n">Device</span> <span class="n">Drivers</span>  <span class="o">---&gt;</span>
         <span class="o">&lt;*&gt;</span>     <span class="n">Industrial</span> <span class="n">I</span><span class="o">/</span><span class="n">O</span> <span class="n">support</span> <span class="o">---&gt;</span>
@@ -746,11 +747,14 @@ Content on this topic
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Not all properties described in the sections below are applicable to all chips in the family due to different pinouts.</p>
+<p>Not all properties described in the sections below are applicable to all
+chips in the family due to different pinouts.</p>
 </div>
 <section id="communication-bus">
 <h3>Communication bus<a class="headerlink" href="#communication-bus" title="Link to this heading"></a></h3>
-<p>This family of chips has two different ways it can communicate with the MCU, via a SPI bus or via a parallel bus. It is assumed that the PAR/SER SEL pin is hard-wired to select one bus type or the other.</p>
+<p>This family of chips has two different ways it can communicate with the MCU, via
+a SPI bus or via a parallel bus. It is assumed that the PAR/SER SEL pin is
+hard-wired to select one bus type or the other.</p>
 <section id="spi">
 <h4>SPI<a class="headerlink" href="#spi" title="Link to this heading"></a></h4>
 <p>When the SPI bus is used, the ADC chip is described in the devicetree a child node of a SPI controller. Additional SPI peripheral properties like <code class="docutils literal notranslate"><span class="pre">spi-cpol</span></code> are needed to select the correct SPI mode. <code class="docutils literal notranslate"><span class="pre">spi-max-frequency</span></code> is usually the max speed possible on the chip, but may be slower if required for signal integrity due to non-ideal wiring.</p>
@@ -778,7 +782,8 @@ Content on this topic
 <section id="parallel">
 <h4>Parallel<a class="headerlink" href="#parallel" title="Link to this heading"></a></h4>
 <p>When using the parallel bus, the ADC node is a child of a parallel bus controller. In particular, the driver currently only supports the <a class="icon link reference external" href="https://analogdevicesinc.github.io/hdl/library/axi_ad7606x/index.html" target="_blank">AXI AD7606x</a> FPGA IP block for parallel bus. In addition to being the child of the parallel controller, the ADC node also needs a <code class="docutils literal notranslate"><span class="pre">io-backends</span></code> property to link it to the AXI AD7606X IP block.</p>
-<p>In this case the DB0 thru DB15, /CS, /RD and /WR pins are wired to the AXI AD7606X IP block. HBEN and BYTESEL are not currently used.</p>
+<p>In this case the DB0 thru DB15, /CS, /RD and /WR pins are wired to the AXI
+AD7606X IP block. HBEN and BYTESEL are not currently used.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iio_backend</span><span class="p">:</span> <span class="n">axi</span><span class="o">-</span><span class="n">adc</span><span class="o">@</span><span class="mh">0x44a00000</span><span class="p">{</span>
     <span class="n">reg</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mh">0x44a00000</span> <span class="mh">0x10000</span><span class="o">&gt;</span><span class="p">;</span>
     <span class="n">compatible</span> <span class="o">=</span> <span class="s2">&quot;adi,axi-ad7606x&quot;</span><span class="p">;</span>
@@ -852,7 +857,8 @@ Content on this topic
 <section id="status-signals">
 <h3>Status signals<a class="headerlink" href="#status-signals" title="Link to this heading"></a></h3>
 <p>When using the SPI bus, the driver requires that the BUSY pin on the ADC is connected to an interrupt on the MCU (usually a GPIO). In this case, the <code class="docutils literal notranslate"><span class="pre">interrupts</span></code> property is required in the devicetree.</p>
-<p>When using the parallel bus, the BUSY pin is connected to the AXI AD7606X IP block. There are no extra properties needed to describe this case.</p>
+<p>When using the parallel bus, the BUSY pin is connected to the AXI AD7606X IP
+block. There are no extra properties needed to describe this case.</p>
 <p>The FRSTDATA output indicates when the first channel is being read back. If this is wired up, provide the <code class="docutils literal notranslate"><span class="pre">adi,first-data-gpios</span></code> property. As the line is active high, it should be marked <code class="docutils literal notranslate"><span class="pre">GPIO_ACTIVE_HIGH</span></code>.</p>
 </section>
 <section id="power-and-reset">
@@ -864,7 +870,9 @@ Content on this topic
 <h3>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h3>
 <p>Some chips can be used in a software mode where the ADC chip is configured by writing to registers on the chip. In this case, the OSx pins are all hard-wired high and the <code class="docutils literal notranslate"><span class="pre">adi,sw-mode</span></code> property must be used.</p>
 <p>If software mode is not used, the <code class="docutils literal notranslate"><span class="pre">adi,sw-mode</span></code> property is omitted and properties for the configuration pins OSx and RANGE (HW_RNGSEL on AD7616) are required. These are the <code class="docutils literal notranslate"><span class="pre">adi,oversampling-ratio-gpios</span></code> and <code class="docutils literal notranslate"><span class="pre">adi,range-gpios</span></code> properties respectively. All of these should be <code class="docutils literal notranslate"><span class="pre">GPIO_ACTIVE_HIGH</span></code>.</p>
-<p>The driver currently only supports having these pins connected to GPIOs and not hard-wired to a specific configuration. Additional confutation pins on AD7616 (BURST, SEQUEN, CHSEL, CRCEN) are not currently supported.</p>
+<p>The driver currently only supports having these pins connected to GPIOs and not
+hard-wired to a specific configuration. Additional confutation pins on AD7616
+(BURST, SEQUEN, CHSEL, CRCEN) are not currently supported.</p>
 </section>
 <section id="example">
 <h3>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h3>
@@ -888,7 +896,15 @@ Content on this topic
 </section>
 <section id="driver-testing">
 <h1>Driver testing<a class="headerlink" href="#driver-testing" title="Link to this heading"></a></h1>
-<p>Each and every IIO device, typically a hardware chip, has a device folder under /sys/bus/iio/devices/iio:deviceX. Where X is the IIO index of the device. Under every of these directory folders reside a set of files, depending on the characteristics and features of the hardware device in question. These files are consistently generalized and documented in the IIO ABI documentation. In order to determine which IIO deviceX corresponds to which hardware device, the user can read the name file /sys/bus/iio/devices/iio:deviceX/name. In case the sequence in which the iio device drivers are loaded/registered is constant, the numbering is constant and may be known in advance.</p>
+<p>Each and every IIO device, typically a hardware chip, has a device folder under
+/sys/bus/iio/devices/iio:deviceX. Where X is the IIO index of the device. Under
+every of these directory folders reside a set of files, depending on the
+characteristics and features of the hardware device in question. These files are
+consistently generalized and documented in the IIO ABI documentation. In order
+to determine which IIO deviceX corresponds to which hardware device, the user
+can read the name file /sys/bus/iio/devices/iio:deviceX/name. In case the
+sequence in which the iio device drivers are loaded/registered is constant, the
+numbering is constant and may be known in advance.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/&gt;</span> <span class="n">cd</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">iio</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span>
@@ -986,7 +1002,14 @@ Content on this topic
 </section>
 <section id="trigger-management">
 <h2>Trigger management<a class="headerlink" href="#trigger-management" title="Link to this heading"></a></h2>
-<p>If deviceX supports triggered sampling, it’s a so called trigger consumer and there will be an additional folder /sys/bus/iio/device/iio:deviceX/trigger. In this folder there is a file called current_trigger, allowing controlling and viewing the current trigger source connected to deviceX. Available trigger sources can be identified by reading the name file /sys/bus/iio/devices/triggerY/name. The same trigger source can connect to multiple devices, so a single trigger may initialize data capture or reading from a number of sensors, converters, etc.</p>
+<p>If deviceX supports triggered sampling, it’s a so called trigger consumer and
+there will be an additional folder /sys/bus/iio/device/iio:deviceX/trigger. In
+this folder there is a file called current_trigger, allowing controlling and
+viewing the current trigger source connected to deviceX. Available trigger
+sources can be identified by reading the name file
+/sys/bus/iio/devices/triggerY/name. The same trigger source can connect to
+multiple devices, so a single trigger may initialize data capture or reading
+from a number of sensors, converters, etc.</p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <p>Trigger Consumers:</p>
@@ -1064,7 +1087,13 @@ Content on this topic
 </pre></div>
 </div>
 </div>
-<p>The Industrial I/O subsystem provides support for various ring buffer based data acquisition methods. Apart from device specific hardware buffer support, the user can chose between two different software ring buffer implementations. One is the IIO lock free software ring, and the other is based on Linux kfifo. Devices with buffer support feature an additional sub-folder in the /sys/bus/iio/devices/deviceX/ folder hierarchy. Called deviceX:bufferY, where Y defaults to 0, for devices with a single buffer.</p>
+<p>The Industrial I/O subsystem provides support for various ring buffer based data
+acquisition methods. Apart from device specific hardware buffer support, the
+user can chose between two different software ring buffer implementations. One
+is the IIO lock free software ring, and the other is based on Linux kfifo.
+Devices with buffer support feature an additional sub-folder in the
+/sys/bus/iio/devices/deviceX/ folder hierarchy. Called deviceX:bufferY, where Y
+defaults to 0, for devices with a single buffer.</p>
 <p>Every buffer implementation features a set of files:</p>
 <div class="line-block">
 <div class="line"><strong>length</strong></div>

@@ -682,9 +682,18 @@ Content on this topic
 </section>
 <section id="example-platform-device-initialization">
 <h1>Example platform device initialization<a class="headerlink" href="#example-platform-device-initialization" title="Link to this heading"></a></h1>
-<p>For compile time configuration, it’s common Linux practice to keep board- and application-specific configuration out of the main driver file, instead putting it into the board support file.</p>
-<p>For devices on custom boards, as typical of embedded and SoC-(system-on-chip) based hardware, Linux uses platform_data to point to board-specific structures describing devices and how they are connected to the SoC. This can include available ports, chip variants, preferred modes, default initialization, additional pin roles, and so on. This shrinks the board-support packages (BSPs) and minimizes board and application specific #ifdefs in drivers.</p>
-<p>Digital Accelerometer characteristics are application specific and may vary between boards and models. The platform_data for the device’s “struct device” holds this information.</p>
+<p>For compile time configuration, it’s common Linux practice to keep board- and
+application-specific configuration out of the main driver file, instead putting
+it into the board support file.</p>
+<p>For devices on custom boards, as typical of embedded and SoC-(system-on-chip)
+based hardware, Linux uses platform_data to point to board-specific structures
+describing devices and how they are connected to the SoC. This can include
+available ports, chip variants, preferred modes, default initialization,
+additional pin roles, and so on. This shrinks the board-support packages (BSPs)
+and minimizes board and application specific #ifdefs in drivers.</p>
+<p>Digital Accelerometer characteristics are application specific and may vary
+between boards and models. The platform_data for the device’s “struct device”
+holds this information.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">enum</span><span class="w"> </span><span class="n">adxl_odr</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">ADXL_ODR_12_5HZ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">13</span><span class="p">,</span>
 <span class="w">    </span><span class="n">ADXL_ODR_25HZ</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mi">25</span><span class="p">,</span>
@@ -817,10 +826,21 @@ Content on this topic
 <span class="p">};</span>
 </pre></div>
 </div>
-<p>Unlike PCI or USB devices, SPI devices are not enumerated at the hardware level. Instead, the software must know which devices are connected on each SPI bus segment, and what slave selects these devices are using. For this reason, the kernel code must instantiate SPI devices explicitly. The most common method is to declare the SPI devices by bus number.</p>
-<p>This method is appropriate when the SPI bus is a system bus, as in many embedded systems, wherein each SPI bus has a number which is known in advance. It is thus possible to pre-declare the SPI devices that inhabit this bus. This is done with an array of struct spi_board_info, which is registered by calling spi_register_board_info().</p>
+<p>Unlike PCI or USB devices, SPI devices are not enumerated at the hardware level.
+Instead, the software must know which devices are connected on each SPI bus
+segment, and what slave selects these devices are using. For this reason, the
+kernel code must instantiate SPI devices explicitly. The most common method is
+to declare the SPI devices by bus number.</p>
+<p>This method is appropriate when the SPI bus is a system bus, as in many embedded
+systems, wherein each SPI bus has a number which is known in advance. It is thus
+possible to pre-declare the SPI devices that inhabit this bus. This is done with
+an array of struct spi_board_info, which is registered by calling
+spi_register_board_info().</p>
 <p>For more information see: <a href="#id1"><span class="problematic" id="id2">`spi-summary.rst &lt;/git.linux.org&gt;documentation/spi/spi-summary.rst&gt;`__</span></a></p>
-<p>Depending on the DDS IC used, you may need to set the modalias accordingly, matching your part name. It may also required to adjust max_speed_hz. Please consult the datasheet, for maximum spi clock supported by the device in question.</p>
+<p>Depending on the DDS IC used, you may need to set the modalias accordingly,
+matching your part name. It may also required to adjust max_speed_hz. Please
+consult the datasheet, for maximum spi clock supported by the device in
+question.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">spi_board_info</span><span class="w"> </span><span class="n">board_spi_board_info</span><span class="p">[]</span><span class="w"> </span><span class="n">__initdata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
 <span class="cp">#if defined(CONFIG_INPUT_ADXL362) || defined(CONFIG_INPUT_ADXL362_MODULE)</span>
 <span class="w">    </span><span class="p">{</span>
@@ -852,7 +872,8 @@ Content on this topic
 </section>
 <section id="adding-linux-driver-support">
 <h1>Adding Linux driver support<a class="headerlink" href="#adding-linux-driver-support" title="Link to this heading"></a></h1>
-<p>Configure kernel with “make menuconfig” (alternatively use “make xconfig” or “make qconfig”)</p>
+<p>Configure kernel with “make menuconfig” (alternatively use “make xconfig” or
+“make qconfig”)</p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <p>The ADXL34x Driver depends on CONFIG_SPI</p>
@@ -894,7 +915,7 @@ Content on this topic
 </section>
 <section id="hardware-configuration">
 <h1>Hardware configuration<a class="headerlink" href="#hardware-configuration" title="Link to this heading"></a></h1>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/input-misc/eval-adxl362z.jpg"><img alt="eval-adxl362z" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/input-misc/eval-adxl362z.jpg" style="width: 300px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/input-misc/eval-adxl362z.jpg"><img alt="eval-adxl362z" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/input-misc/eval-adxl362z.jpg" width="300" />
 </a>
 </section>
 <section id="driver-testing">
@@ -924,7 +945,8 @@ Content on this topic
 </section>
 <section id="checking-for-proper-installation">
 <h2>Checking for proper installation<a class="headerlink" href="#checking-for-proper-installation" title="Link to this heading"></a></h2>
-<p>After the kernel boot your device folder should include at least one device node for the accelerometer</p>
+<p>After the kernel boot your device folder should include at least one device node
+for the accelerometer</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/&gt;</span> <span class="n">ls</span> <span class="o">-</span><span class="n">al</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="nb">input</span><span class="o">/</span>
 <span class="n">drw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>    <span class="mi">2</span> <span class="n">root</span>     <span class="n">root</span>            <span class="mi">0</span> <span class="n">Jan</span>  <span class="mi">1</span> <span class="mi">00</span><span class="p">:</span><span class="mi">03</span> <span class="o">.</span>
 <span class="n">drwxr</span><span class="o">-</span><span class="n">xr</span><span class="o">-</span><span class="n">x</span>    <span class="mi">5</span> <span class="n">root</span>     <span class="n">root</span>            <span class="mi">0</span> <span class="n">Jan</span>  <span class="mi">1</span> <span class="mi">00</span><span class="p">:</span><span class="mi">03</span> <span class="o">..</span>
@@ -975,7 +997,9 @@ Content on this topic
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>In case you move the accelerometer and don’t receive events, it’s likely that something with your Interrupt is wrong. check irq number in your platform device file</p>
+<p>In case you move the accelerometer and don’t receive events, it’s likely that
+something with your Interrupt is wrong. check irq number in your platform
+device file</p>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>

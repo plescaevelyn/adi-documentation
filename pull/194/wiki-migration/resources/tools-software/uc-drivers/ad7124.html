@@ -592,13 +592,17 @@ Content on this topic
 <h1>AD7124 No-OS Software<a class="headerlink" href="#ad7124-no-os-software" title="Link to this heading"></a></h1>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>You’re looking at a legacy page. The driver API has since changed and does not correspond anymore to the driver for ad7124 available in no-OS repository. However, you may use the code in the following no-OS projects to see examples of ad7124 driver usage:</p>
+<p>You’re looking at a legacy page. The driver API has since changed and does
+not correspond anymore to the driver for ad7124 available in no-OS
+repository. However, you may use the code in the following no-OS projects to
+see examples of ad7124 driver usage:</p>
 <p><a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad7124-4sdz" target="_blank">no-OS/tree/master/projects/ad7124-4sdz</a></p>
 <p><a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad7124-8pmdz" target="_blank">no-OS/tree/master/projects/ad7124-8pmdz</a></p>
 </div>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
-<p>This document describes the No-OS software used to control the AD7124 part and includes an example of how to initialize a AD7124 part.</p>
+<p>This document describes the No-OS software used to control the AD7124 part and
+includes an example of how to initialize a AD7124 part.</p>
 </section>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
@@ -625,9 +629,13 @@ Content on this topic
 <p>The driver contains two parts:</p>
 <ul class="simple">
 <li><p>The driver for the AD7124 part, which may be used, without modifications, with any microcontroller.</p></li>
-<li><p>The Communication Driver, where the specific communication functions for the desired type of processor and communication protocol have to be implemented. This driver implements the communication with the device and hides the actual details of the communication protocol to the ADI driver.</p></li>
+<li><p>The Communication Driver, where the specific communication functions for the
+desired type of processor and communication protocol have to be implemented.
+This driver implements the communication with the device and hides the actual
+details of the communication protocol to the ADI driver.</p></li>
 </ul>
-<p>The Communication Driver has a standard interface, so the AD7124 driver can be used exactly as it is provided.</p>
+<p>The Communication Driver has a standard interface, so the AD7124 driver can be
+used exactly as it is provided.</p>
 <p>There are three functions which are called by the AD7124 driver:</p>
 <ul class="simple">
 <li><p>SPI_Init() – initializes the communication peripheral.</p></li>
@@ -642,7 +650,8 @@ Content on this topic
 <ul class="simple">
 <li><p>AD7124.h - Header file of the driver. Contains the driver function declarations, custom data types to be used by the driver and driver specific constants.</p></li>
 <li><p>AD7124.c - Implementation file of the driver. Contains the implementations of the driver functions.</p></li>
-<li><p>AD7124_regs.h - Register map of the driver. Contains the register map definitions and an array of all device registers to be used with the driver.</p></li>
+<li><p>AD7124_regs.h - Register map of the driver. Contains the register map
+definitions and an array of all device registers to be used with the driver.</p></li>
 </ul>
 <p>The following functions are implemented in this version of AD7124 driver:</p>
 <div class="table-wrapper docutils container">
@@ -708,8 +717,15 @@ Content on this topic
 </section>
 <section id="using-the-api">
 <h2>Using the API<a class="headerlink" href="#using-the-api" title="Link to this heading"></a></h2>
-<p>The driver can only work together with a structure that holds the state of a device, where state means all information about the device including a copy of all register values written to the device at a certain point. This structure will henceforth be referred as an instance of a driver. All driver functions take a handler of a driver instance as the first argument. This allows the driver to be used with multiple devices simultaneously, without the need to replicate the .c and .h files.</p>
-<p>Before using any API call, an instance of the driver must first be created and then initialized using the AD7124_Setup() which has the following parameters:</p>
+<p>The driver can only work together with a structure that holds the state of a
+device, where state means all information about the device including a copy of
+all register values written to the device at a certain point. This structure
+will henceforth be referred as an instance of a driver. All driver functions
+take a handler of a driver instance as the first argument. This allows the
+driver to be used with multiple devices simultaneously, without the need to
+replicate the .c and .h files.</p>
+<p>Before using any API call, an instance of the driver must first be created and
+then initialized using the AD7124_Setup() which has the following parameters:</p>
 <ul class="simple">
 <li><p><strong>device</strong>: the reference of the new driver instance. A new instance can be obtained by simply declaring one: &lt;code c&gt; struct ad7124_device my_ad7124; &lt;/code&gt;</p></li>
 <li><p><strong>slave_select</strong>: the index of the SPI Chip Select. It will be stored into the driver instance to be used with all SPI calls for that particular instance.</p></li>
@@ -728,7 +744,6 @@ Content on this topic
 <span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">timeout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1000</span><span class="p">;</span><span class="w">                               </span><span class="cm">/* Number of tries before a function times out */</span>
 <span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">                                      </span><span class="cm">/* Return value */</span>
 <span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">sample</span><span class="p">;</span><span class="w">                                       </span><span class="cm">/* Stores raw value read from the ADC */</span>
-
 
 <span class="w">    </span><span class="cm">/* Initialize AD7124 device. */</span>
 <span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">AD7124_Setup</span><span class="p">(</span><span class="n">ad7124_handler</span><span class="p">,</span><span class="w"> </span><span class="n">AD7124_SLAVE_ID</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">ad7124_st_reg</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">ad7124_regs</span><span class="p">);</span>

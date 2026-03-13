@@ -583,10 +583,14 @@ Content on this topic
             
   <section id="tutorial-creating-a-new-c-language-micropython-module">
 <h1>Tutorial: Creating a New C-language MicroPython Module<a class="headerlink" href="#tutorial-creating-a-new-c-language-micropython-module" title="Link to this heading"></a></h1>
-<p>Python modules in MicroPython can be either written in Python or C. Modules written in C would have better performance, but worse portability. It is advised only implement highly platform dependent modules or performance critical modules in C.</p>
+<p>Python modules in MicroPython can be either written in Python or C. Modules
+written in C would have better performance, but worse portability. It is advised
+only implement highly platform dependent modules or performance critical modules
+in C.</p>
 <section id="a-module-template">
 <h2>A module template<a class="headerlink" href="#a-module-template" title="Link to this heading"></a></h2>
-<p>Here is a template that can be used as a starting point of writing a new module in C.</p>
+<p>Here is a template that can be used as a starting point of writing a new module
+in C.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include &quot;py/runtime.h</span>
 
 <span class="n">STATIC</span><span class="w"> </span><span class="n">mp_obj_t</span><span class="w"> </span><span class="n">foo_bar</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -609,8 +613,13 @@ Content on this topic
 <span class="p">};</span>
 </pre></div>
 </div>
-<p>In this template, it declares a module called foo and has one member function called bar. With no arguments, when called, it returns True. If arguments need to be added, all arguments need to have type of mp_obj_t, and the MP_DEFINE_CONST_FUN_OBJ_X macro should be changed to reflect the argument number (for example, use MP_DEFINE_CONST_FUN_OBJ_2 if the function has 2 arguments.)</p>
-<p>To link this module into a MicroPython build, one also needs to add the module into the builtin list in mpconfigport.h:</p>
+<p>In this template, it declares a module called foo and has one member function
+called bar. With no arguments, when called, it returns True. If arguments need
+to be added, all arguments need to have type of mp_obj_t, and the
+MP_DEFINE_CONST_FUN_OBJ_X macro should be changed to reflect the argument number
+(for example, use MP_DEFINE_CONST_FUN_OBJ_2 if the function has 2 arguments.)</p>
+<p>To link this module into a MicroPython build, one also needs to add the module
+into the builtin list in mpconfigport.h:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#define MICROPY_PORT_BUILTIN_MODULE_WEAK_LINKS \</span>
 <span class="cp">    { MP_ROM_QSTR(MP_QSTR_foo), MP_ROM_PTR(&amp;mp_module_foo) }, \</span>
 </pre></div>

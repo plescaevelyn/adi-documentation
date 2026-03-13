@@ -589,12 +589,22 @@ Content on this topic
 <section id="modify-application-call-back-functions">
 <h1>Modify Application Call-back Functions<a class="headerlink" href="#modify-application-call-back-functions" title="Link to this heading"></a></h1>
 <p>By this time, we should have completed the porting of A2B Stack as explained in Section “<a class="reference internal" href="../../customa2bapplication.html"><span class="doc">Porting A2B Software Stack to a custom platform</span></a>”. At this stage, the A2B Stack ported on the custom platform should be capable of discovering and configuring a connected A2B network as per the added bus configuration file.</p>
-<p>The A2B Stack offers provision for the application running on the Target software to register callback functions for important network activities. Three important application callback functions are registered with the Stack. These functions can be modified by the user to perform an action specific to the application.</p>
+<p>The A2B Stack offers provision for the application running on the Target
+software to register callback functions for important network activities. Three
+important application callback functions are registered with the Stack. These
+functions can be modified by the user to perform an action specific to the
+application.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>All examples provided in the A2B Software package come with default implementations for these callback functions. Modifications to these functions are required only if the default implementation doesn’t match your targeted system requirement. When requiring additional functionality, it is recommended to add on top of the existing implementation unless rewriting completely.</p>
+<p>All examples provided in the A2B Software package come with default
+implementations for these callback functions. Modifications to these
+functions are required only if the default implementation doesn’t match your
+targeted system requirement. When requiring additional functionality, it is
+recommended to add on top of the existing implementation unless rewriting
+completely.</p>
 </div>
-<p>The three application callback functions are explained in the following sub-sections.</p>
+<p>The three application callback functions are explained in the following
+sub-sections.</p>
 <section id="discovery-completion-callback-function">
 <h2>Discovery completion Callback function<a class="headerlink" href="#discovery-completion-callback-function" title="Link to this heading"></a></h2>
 <p>The discovery completion callback function is invoked by the stack upon completing the discovery and configuration of the whole A2B network. <a class="reference internal" href="../../customa2bapplication.html"><span class="doc">Figure</span></a> shows the application registration of a discovery completion callback function with the stack. The status of the discovery is notified by this function allowing the application to perform any additional tasks based on the notified status.</p>
@@ -604,7 +614,10 @@ Content on this topic
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>a2bapp_onDiscoveryComplete() comes with a default implementation for post-discovery bus drop monitoring and rediscovery upon faults (if it was set in SigmaStudioPlus while exporting the bus configuration file). Modify this function only to override default functionality (if required).</p>
+<p>a2bapp_onDiscoveryComplete() comes with a default implementation for
+post-discovery bus drop monitoring and rediscovery upon faults (if it was set
+in SigmaStudioPlus while exporting the bus configuration file). Modify this
+function only to override default functionality (if required).</p>
 </div>
 <p>The code snippet shows a sample implementation of this callback function.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a2bapp_onDiscoveryComplete</span>
@@ -663,12 +676,18 @@ Content on this topic
 <div class="centeralign docutils container">
 <p><strong>Figure: A2BAPP OnPowerFault Callback Function</strong></p>
 </div>
-<p>The Stack provides a callback function to the application layer upon the occurrence of a fault in the A2B System. The stack performs necessary diagnostics and fault localization (in case of concealed faults) and reports the fault type and location to the application for further handling.</p>
+<p>The Stack provides a callback function to the application layer upon the
+occurrence of a fault in the A2B System. The stack performs necessary
+diagnostics and fault localization (in case of concealed faults) and reports the
+fault type and location to the application for further handling.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The Stack performs all necessary actions to handle the fault as recommended by the A2B Transceiver Programmer’s reference manual and finally invokes the application callback.</p>
+<p>The Stack performs all necessary actions to handle the fault as recommended
+by the A2B Transceiver Programmer’s reference manual and finally invokes the
+application callback.</p>
 </div>
-<p>The function is invoked under the following fault conditions during and post discovery.</p>
+<p>The function is invoked under the following fault conditions during and post
+discovery.</p>
 <ul class="simple">
 <li><p>Critical faults</p>
 <ul>
@@ -686,7 +705,8 @@ Content on this topic
 <li><p>Indeterminate faults</p></li>
 <li><p>Bus/Node drop condition</p></li>
 </ul>
-<p>Code Snippet shows a sample implementation of the a2bapp_onPowerFault callback function.</p>
+<p>Code Snippet shows a sample implementation of the a2bapp_onPowerFault callback
+function.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a2bapp_onPowerFault</span> <span class="p">(</span><span class="n">struct</span> <span class="n">a2b_Msg</span> <span class="o">*</span><span class="n">msg</span><span class="p">,</span> <span class="n">a2b_Handle</span> <span class="n">userData</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="n">A2B_UNUSED</span><span class="p">(</span><span class="n">userData</span><span class="p">);</span>
@@ -746,8 +766,12 @@ Content on this topic
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>The information about the presence of a locally powered slave is made known to the stack through the BDD. In case of critical faults (Cable terminal shorted to GND, Cable terminal shorted to VBat), the stack switches of the bus from the immediate upstream local powered slave onwards.</p>
-<p>Partial bus operation is possible between master and this upstream local powered slave.</p>
+<p>The information about the presence of a locally powered slave is made known to
+the stack through the BDD. In case of critical faults (Cable terminal shorted to
+GND, Cable terminal shorted to VBat), the stack switches of the bus from the
+immediate upstream local powered slave onwards.</p>
+<p>Partial bus operation is possible between master and this upstream local powered
+slave.</p>
 </section>
 <section id="interrupt-callback-function">
 <h2>Interrupt Callback function<a class="headerlink" href="#interrupt-callback-function" title="Link to this heading"></a></h2>
@@ -799,7 +823,9 @@ Content on this topic
 <div class="centeralign docutils container">
 <p><strong>Figure: Node Discovery Callback Function</strong></p>
 </div>
-<p>The below Code Snippet shows a sample implementation of this callback function. The application can decide whether to continue with discovery or not and has more control with this callback function.</p>
+<p>The below Code Snippet shows a sample implementation of this callback function.
+The application can decide whether to continue with discovery or not and has
+more control with this callback function.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">static</span> <span class="n">void</span> <span class="n">a2bapp_onNodeDiscovery</span><span class="p">(</span><span class="n">struct</span> <span class="n">a2b_Msg</span><span class="o">*</span> <span class="n">msg</span><span class="p">,</span> <span class="n">a2b_Handle</span> <span class="n">userData</span><span class="p">)</span>
 <span class="p">{</span>
 <span class="c1">#ifdef A2BAPP_ENABLE_RTMBOOT</span>
@@ -863,7 +889,8 @@ Content on this topic
 </section>
 <section id="i2c-error-callback-function">
 <h2>I2C Error Callback Function<a class="headerlink" href="#i2c-error-callback-function" title="Link to this heading"></a></h2>
-<p>The I2C error callback function is invoked by the Stack upon seeing any I2C errors at the master node or at sub-node peripherals.</p>
+<p>The I2C error callback function is invoked by the Stack upon seeing any I2C
+errors at the master node or at sub-node peripherals.</p>
 <p><img alt="image5" src="https://wiki.analog.com/_media/resources/tools-software/a2bv2/a2bssplusstackuserguide/i2c_error_callback_function.png" /></p>
 <div class="centeralign docutils container">
 <p><strong>Figure: I2C Error Callback Function</strong></p>

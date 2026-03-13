@@ -793,8 +793,9 @@ Content on this topic
             
   <section id="ad9081-ad9082-versal-acap-vck190-quick-start-guide">
 <h1>AD9081/AD9082 Versal ACAP VCK190 Quick Start Guide<a class="headerlink" href="#ad9081-ad9082-versal-acap-vck190-quick-start-guide" title="Link to this heading"></a></h1>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/hwsetup_vck190_ad9081.jpg"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/hwsetup_vck190_ad9081.jpg" style="width: 600px;" /></a> This guide provides some quick instructions (still takes awhile to download, and set things up) on how to setup the <a class="icon adi reference external" href="https://www.analog.com/AD9081-FMCA-EBZ" target="_blank">AD9081-FMCA-EBZ</a>/<a class="icon adi reference external" href="https://www.analog.com/AD9082-FMCA-EBZ" target="_blank">AD9082-FMCA-EBZ</a> on <a class="icon link reference external" href="https://www.xilinx.com/VCK190" target="_blank">VCK190</a> board.</p>
-<p>Instructions on how to build the ZynqMP / MPSoC / Versal ACAP Linux kernel and devicetrees from source can be found here:</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/hwsetup_vck190_ad9081.jpg"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/hwsetup_vck190_ad9081.jpg" width="600" /></a> This guide provides some quick instructions (still takes awhile to download, and set things up) on how to setup the <a class="icon adi reference external" href="https://www.analog.com/AD9081-FMCA-EBZ" target="_blank">AD9081-FMCA-EBZ</a>/<a class="icon adi reference external" href="https://www.analog.com/AD9082-FMCA-EBZ" target="_blank">AD9082-FMCA-EBZ</a> on <a class="icon link reference external" href="https://www.xilinx.com/VCK190" target="_blank">VCK190</a> board.</p>
+<p>Instructions on how to build the ZynqMP / MPSoC / Versal ACAP Linux kernel and
+devicetrees from source can be found here:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="../../ad-fmcomms2-ebz/software/linux/zynqmp.html"><span class="doc">Building the ZynqMP / MPSoC Linux kernel and devicetrees from source</span></a></p></li>
 <li><p><a class="reference internal" href="../../../../tools-software/linux-software/build-the-zynqmp-boot-image.html"><span class="doc">How to build the ZynqMP boot image BOOT.BIN</span></a></p></li>
@@ -830,11 +831,27 @@ Content on this topic
 </div>
 <section id="functional-overview">
 <h2>Functional Overview<a class="headerlink" href="#functional-overview" title="Link to this heading"></a></h2>
-<p>The AD9081-FMCA-EBZ / AD9082-FMCA-EBZ reference design is a processor based (e.g. Microblaze) embedded system. The design consists from a receive and a transmit chain.</p>
-<p>The receive chain transports the captured samples from ADC to the system memory (DDR). Before transferring the data to DDR the samples are stored in a buffer implemented on block rams from the FPGA fabric (util_adc_fifo). The space allocated in the buffer for each channel depends on the number of currently active channels. It goes up to M x 64k samples if a single channel is selected or 64k samples per channel if all channels are selected.</p>
-<p>The transmit chain transports samples from the system memory to the DAC devices. Before streaming out the data to the DAC through the JESD link the samples first are loaded into a buffer (util_dac_fifo) which will cyclically stream the samples at the tx_device_clk data rate. The space allocated in the transmit buffer for each channel depends on the number of currently active channels. It goes up to M x 64k samples if a single channel is selected or 64k samples per channel if all channels are selected.</p>
-<p>All cores from the receive and transmit chains are programmable through an AXI-Lite interface.</p>
-<p>The transmit and receive chains can operate at different data rates having separate rx_device_clk/tx_device_clk and corresponding lane rates but must share the same reference clock.</p>
+<p>The AD9081-FMCA-EBZ / AD9082-FMCA-EBZ reference design is a processor based
+(e.g. Microblaze) embedded system. The design consists from a receive and a
+transmit chain.</p>
+<p>The receive chain transports the captured samples from ADC to the system memory
+(DDR). Before transferring the data to DDR the samples are stored in a buffer
+implemented on block rams from the FPGA fabric (util_adc_fifo). The space
+allocated in the buffer for each channel depends on the number of currently
+active channels. It goes up to M x 64k samples if a single channel is selected
+or 64k samples per channel if all channels are selected.</p>
+<p>The transmit chain transports samples from the system memory to the DAC devices.
+Before streaming out the data to the DAC through the JESD link the samples first
+are loaded into a buffer (util_dac_fifo) which will cyclically stream the
+samples at the tx_device_clk data rate. The space allocated in the transmit
+buffer for each channel depends on the number of currently active channels. It
+goes up to M x 64k samples if a single channel is selected or 64k samples per
+channel if all channels are selected.</p>
+<p>All cores from the receive and transmit chains are programmable through an
+AXI-Lite interface.</p>
+<p>The transmit and receive chains can operate at different data rates having
+separate rx_device_clk/tx_device_clk and corresponding lane rates but must share
+the same reference clock.</p>
 </section>
 <section id="board-setup">
 <h2>Board setup<a class="headerlink" href="#board-setup" title="Link to this heading"></a></h2>
@@ -843,7 +860,8 @@ Content on this topic
 <p>The following rework is required:</p>
 <ul class="simple">
 <li><p>In order to avoid using an external clock source and fully rely on the HMC7044 clock chip,** rotate the C6D/C4D caps in C5D/C3D position** (Please note: In the latest version of the board, this is now the default configuration, so this configuration step might not be needed anymore)</p></li>
-<li><p>If LEDS V1P0_LED and VINT_LED are not on please ** depopulate R22M and populate R2M**</p></li>
+<li><p>If LEDS V1P0_LED and VINT_LED are not on please ** depopulate R22M and
+populate R2M**</p></li>
 </ul>
 </div>
 </section>
@@ -875,7 +893,8 @@ Content on this topic
 </section>
 <section id="block-design">
 <h2>Block design<a class="headerlink" href="#block-design" title="Link to this heading"></a></h2>
-<p>The block design supports parameters and scales based on it as shown on the below two examples.</p>
+<p>The block design supports parameters and scales based on it as shown on the
+below two examples.</p>
 <p>The parameters for Rx or Tx links can be changed from the system_project.tcl :</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="c"># Parameter description:</span>
 <span class="c">#    JESD_MODE : used link layer encoder mode</span>
@@ -978,7 +997,8 @@ Content on this topic
 <section id="example-block-design-for-single-link-m-4-l-8">
 <h3>Example block design for Single Link; M=4; L=8;<a class="headerlink" href="#example-block-design-for-single-link-m-4-l-8" title="Link to this heading"></a></h3>
 <img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_204b_m4l8.svg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_204b_m4l8.svg" />
-<p>The Rx links are set for full bandwidth mode and operate with the following parameters:</p>
+<p>The Rx links are set for full bandwidth mode and operate with the following
+parameters:</p>
 <ul class="simple">
 <li><p>Rx Deframer parameters: L=8, M=4, F=1, S=1, N’=16, N = 16 (Quick Config 0x12)</p></li>
 <li><p>Sample Rate : 1550 MSPS</p></li>
@@ -988,7 +1008,8 @@ Content on this topic
 <li><p>JESD204B Lane Rate – 15.5Gbps</p></li>
 <li><p>QPLL0</p></li>
 </ul>
-<p>The Tx links are set for full bandwidth mode and operate with the following parameters:</p>
+<p>The Tx links are set for full bandwidth mode and operate with the following
+parameters:</p>
 <ul class="simple">
 <li><p>Tx Framer parameters: L=8, M=4, F=1, S=1, N’=16, N = 16 (Quick Config 0x11)</p></li>
 <li><p>Sample Rate : 1550 MSPS</p></li>
@@ -1001,7 +1022,8 @@ Content on this topic
 </section>
 <section id="example-block-design-for-single-link-m-2-l-8-jesd204c">
 <h3>Example block design for Single Link; M=2; L=8; JESD204C<a class="headerlink" href="#example-block-design-for-single-link-m-2-l-8-jesd204c" title="Link to this heading"></a></h3>
-<p>Observation: In 2019_R2 release the Xilinx JESD Physical layer IP Core is used, however in newer versions it is replaced with ADI’s util_adxcvr IP core.</p>
+<p>Observation: In 2019_R2 release the Xilinx JESD Physical layer IP Core is used,
+however in newer versions it is replaced with ADI’s util_adxcvr IP core.</p>
 <img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_204c_m2l8.svg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_204c_m2l8.svg" />
 <div class="admonition important">
 <p class="admonition-title">Important</p>
@@ -1045,7 +1067,8 @@ Content on this topic
 </section>
 <section id="clock-sources">
 <h2>Clock sources<a class="headerlink" href="#clock-sources" title="Link to this heading"></a></h2>
-<p>The clock sources depend on the in use carrier and are depicted on the below diagrams:</p>
+<p>The clock sources depend on the in use carrier and are depicted on the below
+diagrams:</p>
 <section id="id2">
 <h3>ZCU102<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
 <img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_clocking_zcu102.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_clocking_zcu102.png" />
@@ -1059,7 +1082,9 @@ Content on this topic
 <h2>Software considerations<a class="headerlink" href="#software-considerations" title="Link to this heading"></a></h2>
 <section id="adc-crossbar-config">
 <h3>ADC - crossbar config<a class="headerlink" href="#adc-crossbar-config" title="Link to this heading"></a></h3>
-<p>Due physical constraints Rx lanes are reordered as described in the following table. e.g physical lane 2 from ADC connects to logical lane 7 from the FPGA. Therefore the crossbar from the device must be set accordingly.</p>
+<p>Due physical constraints Rx lanes are reordered as described in the following
+table. e.g physical lane 2 from ADC connects to logical lane 7 from the FPGA.
+Therefore the crossbar from the device must be set accordingly.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -1098,7 +1123,9 @@ Content on this topic
 </section>
 <section id="dac-crossbar-config">
 <h3>DAC - crossbar config<a class="headerlink" href="#dac-crossbar-config" title="Link to this heading"></a></h3>
-<p>Due physical constraints Tx lanes are reordered as described in the following table: e.g physical lane 2 from DAC connects to logical lane 7 from the FPGA. Therefore the crossbar from the device must be set accordingly.</p>
+<p>Due physical constraints Tx lanes are reordered as described in the following
+table: e.g physical lane 2 from DAC connects to logical lane 7 from the FPGA.
+Therefore the crossbar from the device must be set accordingly.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -1281,7 +1308,7 @@ Content on this topic
 </section>
 <section id="testing">
 <h1>Testing<a class="headerlink" href="#testing" title="Link to this heading"></a></h1>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/vck190.jpg"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/vck190.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/vck190.jpg" style="width: 900px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/vck190.jpg"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/vck190.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/vck190.jpg" width="900" />
 </a>
 <ul class="simple">
 <li><p>Connect the <a class="icon adi reference external" href="https://www.analog.com/AD9081-FMCA-EBZ" target="_blank">AD9081-FMCA-EBZ</a> FMC board to the FPGA carrier <strong>FMC+</strong> FMCP1 socket.</p></li>
@@ -1290,23 +1317,26 @@ Content on this topic
 <li><p>Insert System Controller SD card into socket J206.</p></li>
 <li><p>Configure ACAP for SD BOOT (mode SW1[4:1] switch in the position <strong>OFF,OFF,OFF,ON</strong> as seen in the below picture).</p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/vck190_sw1.jpg"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/vck190_sw1.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/vck190_sw1.jpg" style="width: 200px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/vck190_sw1.jpg"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/vck190_sw1.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/vck190_sw1.jpg" width="200" />
 </a>
 <ul class="simple">
 <li><p>Configure System Controller for SD BOOT (mode SW11[4:1] switch in the position <strong>OFF,OFF,OFF,ON</strong> as seen in the below picture).</p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/vck190_sw11.jpg"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/vck190_sw11.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/vck190_sw11.jpg" style="width: 200px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/vck190_sw11.jpg"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/vck190_sw11.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/vck190_sw11.jpg" width="200" />
 </a>
 <ul class="simple">
 <li><p>Connect an Ethernet cable to J307 and also to SYSCTL Ethernet port to access Board Evaluation &amp; Management Tool (BEAM).</p></li>
 <li><p>Turn on the power switch on the FPGA board.</p></li>
 <li><p>Observe kernel and serial console messages on your terminal, both the ACAP UART interface and the System controller. (use the first ttyUSB or COM port registered for the ACAP UART interface, and try the other 2 to find the one for System Controller)</p></li>
 <li><p>On the System Controller console, a BEAM Tool Web Address should be assigned. Go to this web address to set VADJ_FMC to 1.5V.</p></li>
-<li><p>To change VADJ_FMC On BEAM, click ‘Test The Board’&gt;’Board Settings’&gt;’FMC’. Then on ‘Set VADJ_FMC’, select 1.5V and click ‘Set’, ad9081 LEDs should turn on immediately.</p></li>
+<li><p>To change VADJ_FMC On BEAM, click ‘Test The Board’&gt;’Board Settings’&gt;’FMC’.
+Then on ‘Set VADJ_FMC’, select 1.5V and click ‘Set’, ad9081 LEDs should turn
+on immediately.</p></li>
 </ul>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-home.jpg"><img alt="image2" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-home.jpg" style="width: 600px;" /></a> <a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-board-settings.jpg"><img alt="image3" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-board-settings.jpg" style="width: 600px;" /></a> <a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-set-vadj.jpg"><img alt="image4" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-set-vadj.jpg" style="width: 600px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-home.jpg"><img alt="image2" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-home.jpg" width="600" /></a> <a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-board-settings.jpg"><img alt="image3" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-board-settings.jpg" width="600" /></a> <a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-set-vadj.jpg"><img alt="image4" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-set-vadj.jpg" width="600" /></a></p>
 <ul class="simple">
-<li><p>On the ACAP UART interface console, reboot the system. After reboot, ad9081 devices should be present.</p></li>
+<li><p>On the ACAP UART interface console, reboot the system. After reboot, ad9081
+devices should be present.</p></li>
 </ul>
 <div><div class="esd-warning docutils container">
 <div class="icon"></div><p>All the products described on this page include ESD (electrostatic discharge) sensitive devices. Electrostatic charges as high as 4000V readily accumulate on the human body or test equipment and can discharge without detection.
@@ -1329,7 +1359,8 @@ Although the boards feature ESD protection circuitry, permanent damage may occur
 </section>
 <section id="setting-up-uart">
 <h2>Setting up UART<a class="headerlink" href="#setting-up-uart" title="Link to this heading"></a></h2>
-<p>When setting up the UART make sure you connect to the ACAP UART interface and not the System controller.</p>
+<p>When setting up the UART make sure you connect to the ACAP UART interface and
+not the System controller.</p>
 </section>
 <section id="boot-messages">
 <h2>Boot messages<a class="headerlink" href="#boot-messages" title="Link to this heading"></a></h2>
@@ -1385,7 +1416,6 @@ eOeivE:
 7O000E  BL31: Non secure code at 0x8000000
 NOTICE:  BL31: v2.6(release):xilinx-v2022.1-7-g38ee444bc
 NOTICE:  BL31: Built : 18:20:28, Sep  2 2022
-
 
 U-Boot 2021.01-33453-g5651667 (Sep 23 2021 - 12:12:45 +0100), Build: jenkins-development-build_uboot-6
 
@@ -2355,8 +2385,9 @@ Password:
 </section>
 <section id="ad9081-ad9082-zynq-ultrascale-mpsoc-zcu102-quick-start-guide">
 <h1>AD9081/AD9082 Zynq UltraScale+ MPSoC ZCU102 Quick Start Guide<a class="headerlink" href="#ad9081-ad9082-zynq-ultrascale-mpsoc-zcu102-quick-start-guide" title="Link to this heading"></a></h1>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/hwsetup_vck190_ad9081.jpg"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/hwsetup_vck190_ad9081.jpg" style="width: 600px;" /></a> This guide provides some quick instructions (still takes awhile to download, and set things up) on how to setup the <a class="icon adi reference external" href="https://www.analog.com/AD9081-FMCA-EBZ" target="_blank">AD9081-FMCA-EBZ</a>/<a class="icon adi reference external" href="https://www.analog.com/AD9082-FMCA-EBZ" target="_blank">AD9082-FMCA-EBZ</a> on ZCU102</p>
-<p>Instructions on how to build the ZynqMP / MPSoC Linux kernel and devicetrees from source can be found here:</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/hwsetup_vck190_ad9081.jpg"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/hwsetup_vck190_ad9081.jpg" width="600" /></a> This guide provides some quick instructions (still takes awhile to download, and set things up) on how to setup the <a class="icon adi reference external" href="https://www.analog.com/AD9081-FMCA-EBZ" target="_blank">AD9081-FMCA-EBZ</a>/<a class="icon adi reference external" href="https://www.analog.com/AD9082-FMCA-EBZ" target="_blank">AD9082-FMCA-EBZ</a> on ZCU102</p>
+<p>Instructions on how to build the ZynqMP / MPSoC Linux kernel and devicetrees
+from source can be found here:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="../../ad-fmcomms2-ebz/software/linux/zynqmp.html"><span class="doc">Building the ZynqMP / MPSoC Linux kernel and devicetrees from source</span></a></p></li>
 <li><p><a class="reference internal" href="../../../../tools-software/linux-software/build-the-zynqmp-boot-image.html"><span class="doc">How to build the ZynqMP boot image BOOT.BIN</span></a></p></li>
@@ -2387,11 +2418,27 @@ Password:
 </div>
 <section id="id12">
 <h2>Functional Overview<a class="headerlink" href="#id12" title="Link to this heading"></a></h2>
-<p>The AD9081-FMCA-EBZ / AD9082-FMCA-EBZ reference design is a processor based (e.g. Microblaze) embedded system. The design consists from a receive and a transmit chain.</p>
-<p>The receive chain transports the captured samples from ADC to the system memory (DDR). Before transferring the data to DDR the samples are stored in a buffer implemented on block rams from the FPGA fabric (util_adc_fifo). The space allocated in the buffer for each channel depends on the number of currently active channels. It goes up to M x 64k samples if a single channel is selected or 64k samples per channel if all channels are selected.</p>
-<p>The transmit chain transports samples from the system memory to the DAC devices. Before streaming out the data to the DAC through the JESD link the samples first are loaded into a buffer (util_dac_fifo) which will cyclically stream the samples at the tx_device_clk data rate. The space allocated in the transmit buffer for each channel depends on the number of currently active channels. It goes up to M x 64k samples if a single channel is selected or 64k samples per channel if all channels are selected.</p>
-<p>All cores from the receive and transmit chains are programmable through an AXI-Lite interface.</p>
-<p>The transmit and receive chains can operate at different data rates having separate rx_device_clk/tx_device_clk and corresponding lane rates but must share the same reference clock.</p>
+<p>The AD9081-FMCA-EBZ / AD9082-FMCA-EBZ reference design is a processor based
+(e.g. Microblaze) embedded system. The design consists from a receive and a
+transmit chain.</p>
+<p>The receive chain transports the captured samples from ADC to the system memory
+(DDR). Before transferring the data to DDR the samples are stored in a buffer
+implemented on block rams from the FPGA fabric (util_adc_fifo). The space
+allocated in the buffer for each channel depends on the number of currently
+active channels. It goes up to M x 64k samples if a single channel is selected
+or 64k samples per channel if all channels are selected.</p>
+<p>The transmit chain transports samples from the system memory to the DAC devices.
+Before streaming out the data to the DAC through the JESD link the samples first
+are loaded into a buffer (util_dac_fifo) which will cyclically stream the
+samples at the tx_device_clk data rate. The space allocated in the transmit
+buffer for each channel depends on the number of currently active channels. It
+goes up to M x 64k samples if a single channel is selected or 64k samples per
+channel if all channels are selected.</p>
+<p>All cores from the receive and transmit chains are programmable through an
+AXI-Lite interface.</p>
+<p>The transmit and receive chains can operate at different data rates having
+separate rx_device_clk/tx_device_clk and corresponding lane rates but must share
+the same reference clock.</p>
 </section>
 <section id="id13">
 <h2>Board setup<a class="headerlink" href="#id13" title="Link to this heading"></a></h2>
@@ -2400,7 +2447,8 @@ Password:
 <p>The following rework is required:</p>
 <ul class="simple">
 <li><p>In order to avoid using an external clock source and fully rely on the HMC7044 clock chip,** rotate the C6D/C4D caps in C5D/C3D position** (Please note: In the latest version of the board, this is now the default configuration, so this configuration step might not be needed anymore)</p></li>
-<li><p>If LEDS V1P0_LED and VINT_LED are not on please ** depopulate R22M and populate R2M**</p></li>
+<li><p>If LEDS V1P0_LED and VINT_LED are not on please ** depopulate R22M and
+populate R2M**</p></li>
 </ul>
 </div>
 </section>
@@ -2432,7 +2480,8 @@ Password:
 </section>
 <section id="id20">
 <h2>Block design<a class="headerlink" href="#id20" title="Link to this heading"></a></h2>
-<p>The block design supports parameters and scales based on it as shown on the below two examples.</p>
+<p>The block design supports parameters and scales based on it as shown on the
+below two examples.</p>
 <p>The parameters for Rx or Tx links can be changed from the system_project.tcl :</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="c"># Parameter description:</span>
 <span class="c">#    JESD_MODE : used link layer encoder mode</span>
@@ -2535,7 +2584,8 @@ Password:
 <section id="id23">
 <h3>Example block design for Single Link; M=4; L=8;<a class="headerlink" href="#id23" title="Link to this heading"></a></h3>
 <img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_204b_m4l8.svg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_204b_m4l8.svg" />
-<p>The Rx links are set for full bandwidth mode and operate with the following parameters:</p>
+<p>The Rx links are set for full bandwidth mode and operate with the following
+parameters:</p>
 <ul class="simple">
 <li><p>Rx Deframer parameters: L=8, M=4, F=1, S=1, N’=16, N = 16 (Quick Config 0x12)</p></li>
 <li><p>Sample Rate : 1550 MSPS</p></li>
@@ -2545,7 +2595,8 @@ Password:
 <li><p>JESD204B Lane Rate – 15.5Gbps</p></li>
 <li><p>QPLL0</p></li>
 </ul>
-<p>The Tx links are set for full bandwidth mode and operate with the following parameters:</p>
+<p>The Tx links are set for full bandwidth mode and operate with the following
+parameters:</p>
 <ul class="simple">
 <li><p>Tx Framer parameters: L=8, M=4, F=1, S=1, N’=16, N = 16 (Quick Config 0x11)</p></li>
 <li><p>Sample Rate : 1550 MSPS</p></li>
@@ -2558,7 +2609,8 @@ Password:
 </section>
 <section id="id24">
 <h3>Example block design for Single Link; M=2; L=8; JESD204C<a class="headerlink" href="#id24" title="Link to this heading"></a></h3>
-<p>Observation: In 2019_R2 release the Xilinx JESD Physical layer IP Core is used, however in newer versions it is replaced with ADI’s util_adxcvr IP core.</p>
+<p>Observation: In 2019_R2 release the Xilinx JESD Physical layer IP Core is used,
+however in newer versions it is replaced with ADI’s util_adxcvr IP core.</p>
 <img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_204c_m2l8.svg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_204c_m2l8.svg" />
 <div class="admonition important">
 <p class="admonition-title">Important</p>
@@ -2602,7 +2654,8 @@ Password:
 </section>
 <section id="id25">
 <h2>Clock sources<a class="headerlink" href="#id25" title="Link to this heading"></a></h2>
-<p>The clock sources depend on the in use carrier and are depicted on the below diagrams:</p>
+<p>The clock sources depend on the in use carrier and are depicted on the below
+diagrams:</p>
 <section id="id26">
 <h3>ZCU102<a class="headerlink" href="#id26" title="Link to this heading"></a></h3>
 <img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_clocking_zcu102.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_clocking_zcu102.png" />
@@ -2616,7 +2669,9 @@ Password:
 <h2>Software considerations<a class="headerlink" href="#id28" title="Link to this heading"></a></h2>
 <section id="id29">
 <h3>ADC - crossbar config<a class="headerlink" href="#id29" title="Link to this heading"></a></h3>
-<p>Due physical constraints Rx lanes are reordered as described in the following table. e.g physical lane 2 from ADC connects to logical lane 7 from the FPGA. Therefore the crossbar from the device must be set accordingly.</p>
+<p>Due physical constraints Rx lanes are reordered as described in the following
+table. e.g physical lane 2 from ADC connects to logical lane 7 from the FPGA.
+Therefore the crossbar from the device must be set accordingly.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -2655,7 +2710,9 @@ Password:
 </section>
 <section id="id30">
 <h3>DAC - crossbar config<a class="headerlink" href="#id30" title="Link to this heading"></a></h3>
-<p>Due physical constraints Tx lanes are reordered as described in the following table: e.g physical lane 2 from DAC connects to logical lane 7 from the FPGA. Therefore the crossbar from the device must be set accordingly.</p>
+<p>Due physical constraints Tx lanes are reordered as described in the following
+table: e.g physical lane 2 from DAC connects to logical lane 7 from the FPGA.
+Therefore the crossbar from the device must be set accordingly.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -2859,7 +2916,7 @@ Password:
 </section>
 <section id="id40">
 <h1>Testing<a class="headerlink" href="#id40" title="Link to this heading"></a></h1>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/adrv9009/quickstart/zcu102.jpg"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/adrv9009/quickstart/zcu102.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/adrv9009/quickstart/zcu102.jpg" style="width: 900px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/adrv9009/quickstart/zcu102.jpg"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/adrv9009/quickstart/zcu102.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/adrv9009/quickstart/zcu102.jpg" width="900" />
 </a>
 <ul class="simple">
 <li><p>Connect the <a class="icon adi reference external" href="https://www.analog.com/AD9082-FMCA-EBZ" target="_blank">AD9082-FMCA-EBZ</a> FMC board to the FPGA carrier <strong>HPC0</strong> FMC0 socket.</p></li>
@@ -2867,9 +2924,10 @@ Password:
 <li><p>Insert SD card into socket.</p></li>
 <li><p>Configure ZCU102 for SD BOOT (mode SW6[4:1] switch in the position <strong>OFF,OFF,OFF,ON</strong> as seen in the below picture).</p></li>
 <li><p>Turn on the power switch on the FPGA board.</p></li>
-<li><p>Observe kernel and serial console messages on your terminal. (use the first ttyUSB or COM port registered)</p></li>
+<li><p>Observe kernel and serial console messages on your terminal. (use the first
+ttyUSB or COM port registered)</p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/adrv9009/quickstart/zcu102_1p0_bootmode.jpg"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/adrv9009/quickstart/zcu102_1p0_bootmode.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/adrv9009/quickstart/zcu102_1p0_bootmode.jpg" style="width: 400px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/adrv9009/quickstart/zcu102_1p0_bootmode.jpg"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/adrv9009/quickstart/zcu102_1p0_bootmode.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/adrv9009/quickstart/zcu102_1p0_bootmode.jpg" width="400" />
 </a>
 <div><div class="esd-warning docutils container">
 <div class="icon"></div><p>All the products described on this page include ESD (electrostatic discharge) sensitive devices. Electrostatic charges as high as 4000V readily accumulate on the human body or test equipment and can discharge without detection.
@@ -2897,7 +2955,7 @@ Although the boards feature ESD protection circuitry, permanent damage may occur
 <section id="id41">
 <h2>Setting up UART<a class="headerlink" href="#id41" title="Link to this heading"></a></h2>
 <p>When setting up the UART make sure you connect to the Interface 0</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/zcu102_uart.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/zcu102_uart.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/zcu102_uart.png" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/zcu102_uart.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/zcu102_uart.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/zcu102_uart.png" width="600" />
 </a>
 </section>
 <section id="id42">
@@ -2922,7 +2980,6 @@ NOTICE:  BL31: Non secure code at 0x8000000
 NOTICE:  BL31: v2.0(release):xilinx-v2019.2
 NOTICE:  BL31: Built : 10:19:24, Jan 13 2020
 PMUFW:  v1.1
-
 
 U-Boot 2018.01-21436-gbba91bc203 (Jan 13 2020 - 10:50:58 +0200) Xilinx ZynqMP ZCU102 rev1.0, Build: jenkins-development-build_uboot-1
 
@@ -3838,28 +3895,36 @@ root@analog:~#
 <section id="iio-oscilloscope-remote">
 <h2>IIO Oscilloscope Remote<a class="headerlink" href="#iio-oscilloscope-remote" title="Link to this heading"></a></h2>
 <p>Please see also here:<a class="reference internal" href="../../../../tools-software/linux-software/iio_oscilloscope.html"><span class="doc">Oscilloscope</span></a></p>
-<p>The IIO Oscilloscope application can be used locally on FPGA platforms featuring a graphical desktop environment such as ZCU102 or ZC706 or remote using a network connection.</p>
-<p>When using the remote option, once you logged in to the Linux terminal you need to check the IP address of the using the ifconfig command to see if there was any address assigned by a DHCP server. If not, you need to manually set an address with ifconfig in the same address space your PC is using.</p>
-<p>Once the IIO Osc application is launched goto Settings -&gt; Connect and enter the IP address of the target in the popup window.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-home.jpg"><img alt="image2" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-home.jpg" style="width: 600px;" /></a></p>
+<p>The IIO Oscilloscope application can be used locally on FPGA platforms featuring
+a graphical desktop environment such as ZCU102 or ZC706 or remote using a
+network connection.</p>
+<p>When using the remote option, once you logged in to the Linux terminal you need
+to check the IP address of the using the ifconfig command to see if there was
+any address assigned by a DHCP server. If not, you need to manually set an
+address with ifconfig in the same address space your PC is using.</p>
+<p>Once the IIO Osc application is launched goto Settings -&gt; Connect and enter the
+IP address of the target in the popup window.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-home.jpg"><img alt="image2" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-home.jpg" width="600" /></a></p>
 </section>
 </section>
 <section id="iio-osc-ad9081-capture-window">
 <h1>IIO OSC AD9081 Capture Window<a class="headerlink" href="#iio-osc-ad9081-capture-window" title="Link to this heading"></a></h1>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
-<p>Main receivers are handled by the axi-ad9081-rx-hpc IIO device, The number of channels depend on the JESD mode (M) parameter and can vary from case to case. When using complex IQ, two channels index by _i and _q from a receiver.</p>
+<p>Main receivers are handled by the axi-ad9081-rx-hpc IIO device, The number of
+channels depend on the JESD mode (M) parameter and can vary from case to case.
+When using complex IQ, two channels index by _i and _q from a receiver.</p>
 </section>
 <section id="screenshots">
 <h2>Screenshots<a class="headerlink" href="#screenshots" title="Link to this heading"></a></h2>
 <section id="time-domain-view">
 <h3>Time Domain View<a class="headerlink" href="#time-domain-view" title="Link to this heading"></a></h3>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_osc_time.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_osc_time.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_osc_time.png" style="width: 400px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_osc_time.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_osc_time.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_osc_time.png" width="400" />
 </a>
 </section>
 <section id="frequency-domain-view">
 <h3>Frequency Domain View<a class="headerlink" href="#frequency-domain-view" title="Link to this heading"></a></h3>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/hwsetup_vck190_ad9081.jpg"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/hwsetup_vck190_ad9081.jpg" style="width: 600px;" /></a> <a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-home.jpg"><img alt="image2" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-home.jpg" style="width: 600px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/hwsetup_vck190_ad9081.jpg"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/hwsetup_vck190_ad9081.jpg" width="600" /></a> <a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-home.jpg"><img alt="image2" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-home.jpg" width="600" /></a></p>
 </section>
 </section>
 </section>
@@ -3867,7 +3932,7 @@ root@analog:~#
 <h1>AD9081 Plugin Description<a class="headerlink" href="#ad9081-plugin-description" title="Link to this heading"></a></h1>
 <p>The AD9081 plugin works with the <a class="reference internal" href="../../../../tools-software/linux-software/iio_oscilloscope.html"><span class="doc">IIO Oscilloscope</span></a>. You always use the latest version if possible. Changing any field will immediately write changes which have been made to the AD9081 settings to the hardware, and then read it back to make sure the setting is valid. If you want to set something that the GUI changes to a different number, that either means that GUI is rounding (sorry), or the hardware (either the AD9081 or the FPGA fabric) does not support that mode/precision.</p>
 <p>If you want to go play with <code class="docutils literal notranslate"><span class="pre">/sys/bus/iio/devices/....</span></code> and manipulate the devices behind the back of the GUI, it’s still possible to see the settings by clicking the <code class="docutils literal notranslate"><span class="pre">Reload</span> <span class="pre">Settings</span></code> button at the bottom of the GUI.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin.png" class="align-right" src="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin.png" style="width: 400px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin.png" class="align-right" src="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin.png" width="400" />
 </a>
 <p>The AD9081 view is divided in three sections:</p>
 <ul class="simple">
@@ -3878,7 +3943,7 @@ root@analog:~#
 <hr class="docutils" />
 <section id="receive-chain">
 <h2>Receive Chain<a class="headerlink" href="#receive-chain" title="Link to this heading"></a></h2>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_rx.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_rx.png" class="align-right" src="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_rx.png" style="width: 300px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_rx.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_rx.png" class="align-right" src="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_rx.png" width="300" />
 </a>
 <ul class="simple">
 <li><p><strong>ADC Rate(MHz):</strong> Displays the ADC Sample Rate. <a class="reference internal" href="../../../../tools-software/linux-drivers/iio-mxfe/ad9081.html"><span class="doc">Read More</span></a></p></li>
@@ -3892,7 +3957,7 @@ root@analog:~#
 <hr class="docutils" />
 <section id="transmit-chain">
 <h2>Transmit Chain<a class="headerlink" href="#transmit-chain" title="Link to this heading"></a></h2>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_tx.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_tx.png" class="align-right" src="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_tx.png" style="width: 300px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_tx.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_tx.png" class="align-right" src="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_tx.png" width="300" />
 </a>
 <ul class="simple">
 <li><p><strong>DAC Rate(MHz):</strong> Displays the DAC Sample Rate. <a class="reference internal" href="../../../../tools-software/linux-drivers/iio-mxfe/ad9081.html"><span class="doc">Read More</span></a></p></li>
@@ -3909,7 +3974,7 @@ root@analog:~#
 <h2>FPGA Settings<a class="headerlink" href="#fpga-settings" title="Link to this heading"></a></h2>
 <section id="transmit-dds">
 <h3>Transmit/DDS<a class="headerlink" href="#transmit-dds" title="Link to this heading"></a></h3>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_fpga.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_fpga.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_fpga.png" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_fpga.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_fpga.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_fpga.png" width="600" />
 </a>
 <p>The plugin provides several options on how the transmitted data is generated.</p>
 <p>It is possible to either use the built-in two tone <strong>Direct Digital Synthesizer (DDS)</strong> to transmit a bi-tonal signal on channels I and Q of the DAC. Or it is possible to use the <strong>Direct Memory Access (DMA) facility</strong> to transmit custom data that you have stored in a file.</p>
@@ -3931,28 +3996,37 @@ root@analog:~#
 <p>In <strong>Independent I/Q Control</strong> the plugin displays the controls to set the frequencies, amplitudes and phases for the two tones that will be outputted on channel I and additionally it allows for the two tones that will be outputted on channel Q of the DAC to be configured independently.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Note: The bi-tonal signal (T) is defined as the sum of two tones: T(t) = A1 * sin(2 * p * F1 * t + P1) + A2 * sin(2 * p * F2 * t + P2), where A-amplitude, F-frequency, P-phase of a tone.</p>
+<p>Note: The bi-tonal signal (T) is defined as the sum of two tones: T(t) = A1
+* sin(2 * p * F1 * t + P1) + A2 * sin(2 * p * F2 * t + P2), where
+A-amplitude, F-frequency, P-phase of a tone.</p>
 </div>
 </section>
 <section id="dac-buffer-output">
 <h3>DAC Buffer Output<a class="headerlink" href="#dac-buffer-output" title="Link to this heading"></a></h3>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/hwsetup_vck190_ad9081.jpg"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/hwsetup_vck190_ad9081.jpg" style="width: 600px;" /></a> The file selector under the <strong>File Selection</strong> section is used to locate and choose the desired data file. Under the <strong>DAC Channels</strong> section the enabled channels will be used to transmit the data stored in the file. To finalize the process, a click on the <strong>Load</strong> button is required.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/hwsetup_vck190_ad9081.jpg"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/hwsetup_vck190_ad9081.jpg" width="600" /></a> The file selector under the <strong>File Selection</strong> section is used to locate and choose the desired data file. Under the <strong>DAC Channels</strong> section the enabled channels will be used to transmit the data stored in the file. To finalize the process, a click on the <strong>Load</strong> button is required.</p>
 <p><strong>Restrictions:</strong></p>
 <ul class="simple">
 <li><p>There are two types of files than can be loaded: <strong>.txt</strong> or <strong>.mat</strong>. The IIO-Oscilloscope comes with several <a class="icon git reference external" href="https://github.com/analogdevicesinc/iio-oscilloscope/tree/main/waveforms" target="_blank">data files</a> that can be used. If you want to create your own data files please take a look at the <a class="reference internal" href="../../ad-fmcomms2-ebz/software/basic_iq_datafiles.html"><span class="doc">Basic IQ Data Files</span></a> documentation first.</p></li>
-<li><p>Due to hardware limitation only specific combinations of enabled channels are possible. You can enable a total of 1, 2, 4, etc. channels. If 1 channel is enabled then it can be any of them. If two channels are enabled then channels 0, 1 or channels 2, 3 can be enabled and so on.</p></li>
+<li><p>Due to hardware limitation only specific combinations of enabled channels are
+possible. You can enable a total of 1, 2, 4, etc. channels. If 1 channel is
+enabled then it can be any of them. If two channels are enabled then channels
+0, 1 or channels 2, 3 can be enabled and so on.</p></li>
 </ul>
 </section>
 <section id="disable">
 <h3>Disable<a class="headerlink" href="#disable" title="Link to this heading"></a></h3>
-<p>In this mode both DDS and DMA are disabled causing the DAC channels to stop transmitting any data.</p>
+<p>In this mode both DDS and DMA are disabled causing the DAC channels to stop
+transmitting any data.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Upon pressing Reload Settings button the values will be reloaded with the corresponding driver values. Useful in scenarios where the diver values get changed outside this plugin and a refresh on plugin’s values is needed.</p>
+<p>Upon pressing Reload Settings button the values will be reloaded with the
+corresponding driver values. Useful in scenarios where the diver values get
+changed outside this plugin and a refresh on plugin’s values is needed.</p>
 </div>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
-<p>Some plugin values will be rounded to the nearest value supported by the hardware.</p>
+<p>Some plugin values will be rounded to the nearest value supported by the
+hardware.</p>
 </div>
 </section>
 </section>
@@ -3961,7 +4035,7 @@ root@analog:~#
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>Even thought this is Linux, this is a persistent file systems. Care should be taken not to corrupt the file system – please shut down things, don’t just turn off the power switch. Depending on your monitor, the standard power off could be hiding. You can do this from the terminal as well with <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">shutdown</span> <span class="pre">-h</span> <span class="pre">now</span></code></p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-board-settings.jpg"><img alt="image3" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-board-settings.jpg" style="width: 600px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-board-settings.jpg"><img alt="image3" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-board-settings.jpg" width="600" /></a></p>
 </div>
 </section>
 <section id="id43">
@@ -4083,8 +4157,9 @@ root@analog:~#
 </section>
 <section id="id51">
 <h1>AD9081/AD9082 Zynq UltraScale+ MPSoC ZCU102 Quick Start Guide<a class="headerlink" href="#id51" title="Link to this heading"></a></h1>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/hwsetup_vck190_ad9081.jpg"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/hwsetup_vck190_ad9081.jpg" style="width: 600px;" /></a> This guide provides some quick instructions (still takes awhile to download, and set things up) on how to setup the <a class="icon adi reference external" href="https://www.analog.com/AD9081-FMCA-EBZ" target="_blank">AD9081-FMCA-EBZ</a>/<a class="icon adi reference external" href="https://www.analog.com/AD9082-FMCA-EBZ" target="_blank">AD9082-FMCA-EBZ</a> on ZCU102</p>
-<p>Instructions on how to build the ZynqMP / MPSoC Linux kernel and devicetrees from source can be found here:</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/hwsetup_vck190_ad9081.jpg"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/hwsetup_vck190_ad9081.jpg" width="600" /></a> This guide provides some quick instructions (still takes awhile to download, and set things up) on how to setup the <a class="icon adi reference external" href="https://www.analog.com/AD9081-FMCA-EBZ" target="_blank">AD9081-FMCA-EBZ</a>/<a class="icon adi reference external" href="https://www.analog.com/AD9082-FMCA-EBZ" target="_blank">AD9082-FMCA-EBZ</a> on ZCU102</p>
+<p>Instructions on how to build the ZynqMP / MPSoC Linux kernel and devicetrees
+from source can be found here:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="../../ad-fmcomms2-ebz/software/linux/zynqmp.html"><span class="doc">Building the ZynqMP / MPSoC Linux kernel and devicetrees from source</span></a></p></li>
 <li><p><a class="reference internal" href="../../../../tools-software/linux-software/build-the-zynqmp-boot-image.html"><span class="doc">How to build the ZynqMP boot image BOOT.BIN</span></a></p></li>
@@ -4115,11 +4190,27 @@ root@analog:~#
 </div>
 <section id="id56">
 <h2>Functional Overview<a class="headerlink" href="#id56" title="Link to this heading"></a></h2>
-<p>The AD9081-FMCA-EBZ / AD9082-FMCA-EBZ reference design is a processor based (e.g. Microblaze) embedded system. The design consists from a receive and a transmit chain.</p>
-<p>The receive chain transports the captured samples from ADC to the system memory (DDR). Before transferring the data to DDR the samples are stored in a buffer implemented on block rams from the FPGA fabric (util_adc_fifo). The space allocated in the buffer for each channel depends on the number of currently active channels. It goes up to M x 64k samples if a single channel is selected or 64k samples per channel if all channels are selected.</p>
-<p>The transmit chain transports samples from the system memory to the DAC devices. Before streaming out the data to the DAC through the JESD link the samples first are loaded into a buffer (util_dac_fifo) which will cyclically stream the samples at the tx_device_clk data rate. The space allocated in the transmit buffer for each channel depends on the number of currently active channels. It goes up to M x 64k samples if a single channel is selected or 64k samples per channel if all channels are selected.</p>
-<p>All cores from the receive and transmit chains are programmable through an AXI-Lite interface.</p>
-<p>The transmit and receive chains can operate at different data rates having separate rx_device_clk/tx_device_clk and corresponding lane rates but must share the same reference clock.</p>
+<p>The AD9081-FMCA-EBZ / AD9082-FMCA-EBZ reference design is a processor based
+(e.g. Microblaze) embedded system. The design consists from a receive and a
+transmit chain.</p>
+<p>The receive chain transports the captured samples from ADC to the system memory
+(DDR). Before transferring the data to DDR the samples are stored in a buffer
+implemented on block rams from the FPGA fabric (util_adc_fifo). The space
+allocated in the buffer for each channel depends on the number of currently
+active channels. It goes up to M x 64k samples if a single channel is selected
+or 64k samples per channel if all channels are selected.</p>
+<p>The transmit chain transports samples from the system memory to the DAC devices.
+Before streaming out the data to the DAC through the JESD link the samples first
+are loaded into a buffer (util_dac_fifo) which will cyclically stream the
+samples at the tx_device_clk data rate. The space allocated in the transmit
+buffer for each channel depends on the number of currently active channels. It
+goes up to M x 64k samples if a single channel is selected or 64k samples per
+channel if all channels are selected.</p>
+<p>All cores from the receive and transmit chains are programmable through an
+AXI-Lite interface.</p>
+<p>The transmit and receive chains can operate at different data rates having
+separate rx_device_clk/tx_device_clk and corresponding lane rates but must share
+the same reference clock.</p>
 </section>
 <section id="id57">
 <h2>Board setup<a class="headerlink" href="#id57" title="Link to this heading"></a></h2>
@@ -4128,7 +4219,8 @@ root@analog:~#
 <p>The following rework is required:</p>
 <ul class="simple">
 <li><p>In order to avoid using an external clock source and fully rely on the HMC7044 clock chip,** rotate the C6D/C4D caps in C5D/C3D position** (Please note: In the latest version of the board, this is now the default configuration, so this configuration step might not be needed anymore)</p></li>
-<li><p>If LEDS V1P0_LED and VINT_LED are not on please ** depopulate R22M and populate R2M**</p></li>
+<li><p>If LEDS V1P0_LED and VINT_LED are not on please ** depopulate R22M and
+populate R2M**</p></li>
 </ul>
 </div>
 </section>
@@ -4160,7 +4252,8 @@ root@analog:~#
 </section>
 <section id="id64">
 <h2>Block design<a class="headerlink" href="#id64" title="Link to this heading"></a></h2>
-<p>The block design supports parameters and scales based on it as shown on the below two examples.</p>
+<p>The block design supports parameters and scales based on it as shown on the
+below two examples.</p>
 <p>The parameters for Rx or Tx links can be changed from the system_project.tcl :</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="c"># Parameter description:</span>
 <span class="c">#    JESD_MODE : used link layer encoder mode</span>
@@ -4263,7 +4356,8 @@ root@analog:~#
 <section id="id67">
 <h3>Example block design for Single Link; M=4; L=8;<a class="headerlink" href="#id67" title="Link to this heading"></a></h3>
 <img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_204b_m4l8.svg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_204b_m4l8.svg" />
-<p>The Rx links are set for full bandwidth mode and operate with the following parameters:</p>
+<p>The Rx links are set for full bandwidth mode and operate with the following
+parameters:</p>
 <ul class="simple">
 <li><p>Rx Deframer parameters: L=8, M=4, F=1, S=1, N’=16, N = 16 (Quick Config 0x12)</p></li>
 <li><p>Sample Rate : 1550 MSPS</p></li>
@@ -4273,7 +4367,8 @@ root@analog:~#
 <li><p>JESD204B Lane Rate – 15.5Gbps</p></li>
 <li><p>QPLL0</p></li>
 </ul>
-<p>The Tx links are set for full bandwidth mode and operate with the following parameters:</p>
+<p>The Tx links are set for full bandwidth mode and operate with the following
+parameters:</p>
 <ul class="simple">
 <li><p>Tx Framer parameters: L=8, M=4, F=1, S=1, N’=16, N = 16 (Quick Config 0x11)</p></li>
 <li><p>Sample Rate : 1550 MSPS</p></li>
@@ -4286,7 +4381,8 @@ root@analog:~#
 </section>
 <section id="id68">
 <h3>Example block design for Single Link; M=2; L=8; JESD204C<a class="headerlink" href="#id68" title="Link to this heading"></a></h3>
-<p>Observation: In 2019_R2 release the Xilinx JESD Physical layer IP Core is used, however in newer versions it is replaced with ADI’s util_adxcvr IP core.</p>
+<p>Observation: In 2019_R2 release the Xilinx JESD Physical layer IP Core is used,
+however in newer versions it is replaced with ADI’s util_adxcvr IP core.</p>
 <img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_204c_m2l8.svg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_204c_m2l8.svg" />
 <div class="admonition important">
 <p class="admonition-title">Important</p>
@@ -4330,7 +4426,8 @@ root@analog:~#
 </section>
 <section id="id69">
 <h2>Clock sources<a class="headerlink" href="#id69" title="Link to this heading"></a></h2>
-<p>The clock sources depend on the in use carrier and are depicted on the below diagrams:</p>
+<p>The clock sources depend on the in use carrier and are depicted on the below
+diagrams:</p>
 <section id="id70">
 <h3>ZCU102<a class="headerlink" href="#id70" title="Link to this heading"></a></h3>
 <img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_clocking_zcu102.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_clocking_zcu102.png" />
@@ -4344,7 +4441,9 @@ root@analog:~#
 <h2>Software considerations<a class="headerlink" href="#id72" title="Link to this heading"></a></h2>
 <section id="id73">
 <h3>ADC - crossbar config<a class="headerlink" href="#id73" title="Link to this heading"></a></h3>
-<p>Due physical constraints Rx lanes are reordered as described in the following table. e.g physical lane 2 from ADC connects to logical lane 7 from the FPGA. Therefore the crossbar from the device must be set accordingly.</p>
+<p>Due physical constraints Rx lanes are reordered as described in the following
+table. e.g physical lane 2 from ADC connects to logical lane 7 from the FPGA.
+Therefore the crossbar from the device must be set accordingly.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -4383,7 +4482,9 @@ root@analog:~#
 </section>
 <section id="id74">
 <h3>DAC - crossbar config<a class="headerlink" href="#id74" title="Link to this heading"></a></h3>
-<p>Due physical constraints Tx lanes are reordered as described in the following table: e.g physical lane 2 from DAC connects to logical lane 7 from the FPGA. Therefore the crossbar from the device must be set accordingly.</p>
+<p>Due physical constraints Tx lanes are reordered as described in the following
+table: e.g physical lane 2 from DAC connects to logical lane 7 from the FPGA.
+Therefore the crossbar from the device must be set accordingly.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -4587,7 +4688,7 @@ root@analog:~#
 </section>
 <section id="id85">
 <h1>Testing<a class="headerlink" href="#id85" title="Link to this heading"></a></h1>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/adrv9009/quickstart/zcu102.jpg"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/adrv9009/quickstart/zcu102.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/adrv9009/quickstart/zcu102.jpg" style="width: 900px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/adrv9009/quickstart/zcu102.jpg"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/adrv9009/quickstart/zcu102.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/adrv9009/quickstart/zcu102.jpg" width="900" />
 </a>
 <ul class="simple">
 <li><p>Connect the <a class="icon adi reference external" href="https://www.analog.com/AD9082-FMCA-EBZ" target="_blank">AD9082-FMCA-EBZ</a> FMC board to the FPGA carrier <strong>HPC0</strong> FMC0 socket.</p></li>
@@ -4595,9 +4696,10 @@ root@analog:~#
 <li><p>Insert SD card into socket.</p></li>
 <li><p>Configure ZCU102 for SD BOOT (mode SW6[4:1] switch in the position <strong>OFF,OFF,OFF,ON</strong> as seen in the below picture).</p></li>
 <li><p>Turn on the power switch on the FPGA board.</p></li>
-<li><p>Observe kernel and serial console messages on your terminal. (use the first ttyUSB or COM port registered)</p></li>
+<li><p>Observe kernel and serial console messages on your terminal. (use the first
+ttyUSB or COM port registered)</p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/adrv9009/quickstart/zcu102_1p0_bootmode.jpg"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/adrv9009/quickstart/zcu102_1p0_bootmode.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/adrv9009/quickstart/zcu102_1p0_bootmode.jpg" style="width: 400px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/adrv9009/quickstart/zcu102_1p0_bootmode.jpg"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/adrv9009/quickstart/zcu102_1p0_bootmode.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/adrv9009/quickstart/zcu102_1p0_bootmode.jpg" width="400" />
 </a>
 <div><div class="esd-warning docutils container">
 <div class="icon"></div><p>All the products described on this page include ESD (electrostatic discharge) sensitive devices. Electrostatic charges as high as 4000V readily accumulate on the human body or test equipment and can discharge without detection.
@@ -4625,7 +4727,7 @@ Although the boards feature ESD protection circuitry, permanent damage may occur
 <section id="id87">
 <h2>Setting up UART<a class="headerlink" href="#id87" title="Link to this heading"></a></h2>
 <p>When setting up the UART make sure you connect to the Interface 0</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/zcu102_uart.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/zcu102_uart.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/zcu102_uart.png" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/zcu102_uart.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/zcu102_uart.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/zcu102_uart.png" width="600" />
 </a>
 </section>
 <section id="id88">
@@ -4650,7 +4752,6 @@ NOTICE:  BL31: Non secure code at 0x8000000
 NOTICE:  BL31: v2.0(release):xilinx-v2019.2
 NOTICE:  BL31: Built : 10:19:24, Jan 13 2020
 PMUFW:  v1.1
-
 
 U-Boot 2018.01-21436-gbba91bc203 (Jan 13 2020 - 10:50:58 +0200) Xilinx ZynqMP ZCU102 rev1.0, Build: jenkins-development-build_uboot-1
 
@@ -5566,28 +5667,36 @@ root@analog:~#
 <section id="id90">
 <h2>IIO Oscilloscope Remote<a class="headerlink" href="#id90" title="Link to this heading"></a></h2>
 <p>Please see also here:<a class="reference internal" href="../../../../tools-software/linux-software/iio_oscilloscope.html"><span class="doc">Oscilloscope</span></a></p>
-<p>The IIO Oscilloscope application can be used locally on FPGA platforms featuring a graphical desktop environment such as ZCU102 or ZC706 or remote using a network connection.</p>
-<p>When using the remote option, once you logged in to the Linux terminal you need to check the IP address of the using the ifconfig command to see if there was any address assigned by a DHCP server. If not, you need to manually set an address with ifconfig in the same address space your PC is using.</p>
-<p>Once the IIO Osc application is launched goto Settings -&gt; Connect and enter the IP address of the target in the popup window.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-home.jpg"><img alt="image2" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-home.jpg" style="width: 600px;" /></a></p>
+<p>The IIO Oscilloscope application can be used locally on FPGA platforms featuring
+a graphical desktop environment such as ZCU102 or ZC706 or remote using a
+network connection.</p>
+<p>When using the remote option, once you logged in to the Linux terminal you need
+to check the IP address of the using the ifconfig command to see if there was
+any address assigned by a DHCP server. If not, you need to manually set an
+address with ifconfig in the same address space your PC is using.</p>
+<p>Once the IIO Osc application is launched goto Settings -&gt; Connect and enter the
+IP address of the target in the popup window.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-home.jpg"><img alt="image2" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-home.jpg" width="600" /></a></p>
 </section>
 </section>
 <section id="id91">
 <h1>IIO OSC AD9081 Capture Window<a class="headerlink" href="#id91" title="Link to this heading"></a></h1>
 <section id="id92">
 <h2>Introduction<a class="headerlink" href="#id92" title="Link to this heading"></a></h2>
-<p>Main receivers are handled by the axi-ad9081-rx-hpc IIO device, The number of channels depend on the JESD mode (M) parameter and can vary from case to case. When using complex IQ, two channels index by _i and _q from a receiver.</p>
+<p>Main receivers are handled by the axi-ad9081-rx-hpc IIO device, The number of
+channels depend on the JESD mode (M) parameter and can vary from case to case.
+When using complex IQ, two channels index by _i and _q from a receiver.</p>
 </section>
 <section id="id93">
 <h2>Screenshots<a class="headerlink" href="#id93" title="Link to this heading"></a></h2>
 <section id="id94">
 <h3>Time Domain View<a class="headerlink" href="#id94" title="Link to this heading"></a></h3>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_osc_time.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_osc_time.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_osc_time.png" style="width: 400px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_osc_time.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_osc_time.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_osc_time.png" width="400" />
 </a>
 </section>
 <section id="id95">
 <h3>Frequency Domain View<a class="headerlink" href="#id95" title="Link to this heading"></a></h3>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/hwsetup_vck190_ad9081.jpg"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/hwsetup_vck190_ad9081.jpg" style="width: 600px;" /></a> <a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-home.jpg"><img alt="image2" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-home.jpg" style="width: 600px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/hwsetup_vck190_ad9081.jpg"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/hwsetup_vck190_ad9081.jpg" width="600" /></a> <a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-home.jpg"><img alt="image2" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-home.jpg" width="600" /></a></p>
 </section>
 </section>
 </section>
@@ -5595,7 +5704,7 @@ root@analog:~#
 <h1>AD9081 Plugin Description<a class="headerlink" href="#id96" title="Link to this heading"></a></h1>
 <p>The AD9081 plugin works with the <a class="reference internal" href="../../../../tools-software/linux-software/iio_oscilloscope.html"><span class="doc">IIO Oscilloscope</span></a>. You always use the latest version if possible. Changing any field will immediately write changes which have been made to the AD9081 settings to the hardware, and then read it back to make sure the setting is valid. If you want to set something that the GUI changes to a different number, that either means that GUI is rounding (sorry), or the hardware (either the AD9081 or the FPGA fabric) does not support that mode/precision.</p>
 <p>If you want to go play with <code class="docutils literal notranslate"><span class="pre">/sys/bus/iio/devices/....</span></code> and manipulate the devices behind the back of the GUI, it’s still possible to see the settings by clicking the <code class="docutils literal notranslate"><span class="pre">Reload</span> <span class="pre">Settings</span></code> button at the bottom of the GUI.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin.png" class="align-right" src="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin.png" style="width: 400px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin.png" class="align-right" src="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin.png" width="400" />
 </a>
 <p>The AD9081 view is divided in three sections:</p>
 <ul class="simple">
@@ -5606,7 +5715,7 @@ root@analog:~#
 <hr class="docutils" />
 <section id="id97">
 <h2>Receive Chain<a class="headerlink" href="#id97" title="Link to this heading"></a></h2>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_rx.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_rx.png" class="align-right" src="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_rx.png" style="width: 300px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_rx.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_rx.png" class="align-right" src="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_rx.png" width="300" />
 </a>
 <ul class="simple">
 <li><p><strong>ADC Rate(MHz):</strong> Displays the ADC Sample Rate. <a class="reference internal" href="../../../../tools-software/linux-drivers/iio-mxfe/ad9081.html"><span class="doc">Read More</span></a></p></li>
@@ -5620,7 +5729,7 @@ root@analog:~#
 <hr class="docutils" />
 <section id="id98">
 <h2>Transmit Chain<a class="headerlink" href="#id98" title="Link to this heading"></a></h2>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_tx.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_tx.png" class="align-right" src="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_tx.png" style="width: 300px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_tx.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_tx.png" class="align-right" src="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_tx.png" width="300" />
 </a>
 <ul class="simple">
 <li><p><strong>DAC Rate(MHz):</strong> Displays the DAC Sample Rate. <a class="reference internal" href="../../../../tools-software/linux-drivers/iio-mxfe/ad9081.html"><span class="doc">Read More</span></a></p></li>
@@ -5637,7 +5746,7 @@ root@analog:~#
 <h2>FPGA Settings<a class="headerlink" href="#id99" title="Link to this heading"></a></h2>
 <section id="id100">
 <h3>Transmit/DDS<a class="headerlink" href="#id100" title="Link to this heading"></a></h3>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_fpga.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_fpga.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_fpga.png" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_fpga.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_fpga.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-software/ad9081_osc_plugin_fpga.png" width="600" />
 </a>
 <p>The plugin provides several options on how the transmitted data is generated.</p>
 <p>It is possible to either use the built-in two tone <strong>Direct Digital Synthesizer (DDS)</strong> to transmit a bi-tonal signal on channels I and Q of the DAC. Or it is possible to use the <strong>Direct Memory Access (DMA) facility</strong> to transmit custom data that you have stored in a file.</p>
@@ -5659,28 +5768,37 @@ root@analog:~#
 <p>In <strong>Independent I/Q Control</strong> the plugin displays the controls to set the frequencies, amplitudes and phases for the two tones that will be outputted on channel I and additionally it allows for the two tones that will be outputted on channel Q of the DAC to be configured independently.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Note: The bi-tonal signal (T) is defined as the sum of two tones: T(t) = A1 * sin(2 * p * F1 * t + P1) + A2 * sin(2 * p * F2 * t + P2), where A-amplitude, F-frequency, P-phase of a tone.</p>
+<p>Note: The bi-tonal signal (T) is defined as the sum of two tones: T(t) = A1
+* sin(2 * p * F1 * t + P1) + A2 * sin(2 * p * F2 * t + P2), where
+A-amplitude, F-frequency, P-phase of a tone.</p>
 </div>
 </section>
 <section id="id104">
 <h3>DAC Buffer Output<a class="headerlink" href="#id104" title="Link to this heading"></a></h3>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/hwsetup_vck190_ad9081.jpg"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/hwsetup_vck190_ad9081.jpg" style="width: 600px;" /></a> The file selector under the <strong>File Selection</strong> section is used to locate and choose the desired data file. Under the <strong>DAC Channels</strong> section the enabled channels will be used to transmit the data stored in the file. To finalize the process, a click on the <strong>Load</strong> button is required.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/hwsetup_vck190_ad9081.jpg"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/hwsetup_vck190_ad9081.jpg" width="600" /></a> The file selector under the <strong>File Selection</strong> section is used to locate and choose the desired data file. Under the <strong>DAC Channels</strong> section the enabled channels will be used to transmit the data stored in the file. To finalize the process, a click on the <strong>Load</strong> button is required.</p>
 <p><strong>Restrictions:</strong></p>
 <ul class="simple">
 <li><p>There are two types of files than can be loaded: <strong>.txt</strong> or <strong>.mat</strong>. The IIO-Oscilloscope comes with several <a class="icon git reference external" href="https://github.com/analogdevicesinc/iio-oscilloscope/tree/main/waveforms" target="_blank">data files</a> that can be used. If you want to create your own data files please take a look at the <a class="reference internal" href="../../ad-fmcomms2-ebz/software/basic_iq_datafiles.html"><span class="doc">Basic IQ Data Files</span></a> documentation first.</p></li>
-<li><p>Due to hardware limitation only specific combinations of enabled channels are possible. You can enable a total of 1, 2, 4, etc. channels. If 1 channel is enabled then it can be any of them. If two channels are enabled then channels 0, 1 or channels 2, 3 can be enabled and so on.</p></li>
+<li><p>Due to hardware limitation only specific combinations of enabled channels are
+possible. You can enable a total of 1, 2, 4, etc. channels. If 1 channel is
+enabled then it can be any of them. If two channels are enabled then channels
+0, 1 or channels 2, 3 can be enabled and so on.</p></li>
 </ul>
 </section>
 <section id="id105">
 <h3>Disable<a class="headerlink" href="#id105" title="Link to this heading"></a></h3>
-<p>In this mode both DDS and DMA are disabled causing the DAC channels to stop transmitting any data.</p>
+<p>In this mode both DDS and DMA are disabled causing the DAC channels to stop
+transmitting any data.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Upon pressing Reload Settings button the values will be reloaded with the corresponding driver values. Useful in scenarios where the diver values get changed outside this plugin and a refresh on plugin’s values is needed.</p>
+<p>Upon pressing Reload Settings button the values will be reloaded with the
+corresponding driver values. Useful in scenarios where the diver values get
+changed outside this plugin and a refresh on plugin’s values is needed.</p>
 </div>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
-<p>Some plugin values will be rounded to the nearest value supported by the hardware.</p>
+<p>Some plugin values will be rounded to the nearest value supported by the
+hardware.</p>
 </div>
 </section>
 </section>
@@ -5689,7 +5807,7 @@ root@analog:~#
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>Even thought this is Linux, this is a persistent file systems. Care should be taken not to corrupt the file system – please shut down things, don’t just turn off the power switch. Depending on your monitor, the standard power off could be hiding. You can do this from the terminal as well with <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">shutdown</span> <span class="pre">-h</span> <span class="pre">now</span></code></p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-board-settings.jpg"><img alt="image3" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-board-settings.jpg" style="width: 600px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-board-settings.jpg"><img alt="image3" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/beam-board-settings.jpg" width="600" /></a></p>
 </div>
 </section>
 <section id="id107">

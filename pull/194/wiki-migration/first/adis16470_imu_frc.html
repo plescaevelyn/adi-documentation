@@ -590,14 +590,15 @@ Content on this topic
             
   <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>This page is still under construction for the 2020 season! Please check back here for more updates.</p>
+<p>This page is still under construction for the 2020 season! Please check back
+here for more updates.</p>
 </div>
 <section id="adis16470-imu-board-for-first-robotics">
 <h1>ADIS16470 IMU Board for FIRST Robotics<a class="headerlink" href="#adis16470-imu-board-for-first-robotics" title="Link to this heading"></a></h1>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/ADIS16470" target="_blank">ADIS16470</a> IMU board is ADI’s rugged, tactical IMU designed for use in a wide variety of applications, including industrial robots, smart agriculture, and autonomous vehicles. The <a class="icon adi reference external" href="https://www.analog.com/ADIS16470" target="_blank">ADIS16470</a> is a 6 degree-of-freedom IMU, with a 3-axis gyro and a 3-axis accelerometer.</p>
 <p><a class="icon adi reference external" href="https://www.analog.com/ADIS16470" target="_blank">ADIS16470</a> software and examples for Java, C+ +, and LabVIEW can be found <a class="icon link reference external" href="https://github.com/juchong/ADIS16470-RoboRIO-Driver" target="_blank">here</a>. If your team wants to use this board with other programming languages, please refer to the <a class="icon adi reference external" href="https://www.analog.com/ADIS16470" target="_blank">ADIS16470</a> product datasheet for more information on how to communicate with this IMU via SPI.</p>
 <p>If you’re looking for information on other ADI donation resources, <a class="icon link reference external" href="https://wiki.analog.com/first/first_robotics_donation_resources" target="_blank">click here</a> to go back to the main page.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/first/adis16470_rotation_figure.jpg"><img alt="https://wiki.analog.com/_media/first/adis16470_rotation_figure.jpg" class="align-right" src="https://wiki.analog.com/_media/first/adis16470_rotation_figure.jpg" style="width: 250px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/first/adis16470_rotation_figure.jpg"><img alt="https://wiki.analog.com/_media/first/adis16470_rotation_figure.jpg" class="align-right" src="https://wiki.analog.com/_media/first/adis16470_rotation_figure.jpg" width="250" />
 </a>
 <section id="getting-started">
 <h2>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading"></a></h2>
@@ -605,35 +606,64 @@ Content on this topic
 </section>
 <section id="a-note-on-offset-calibration">
 <h2>A Note on Offset Calibration<a class="headerlink" href="#a-note-on-offset-calibration" title="Link to this heading"></a></h2>
-<p>To help the robot minimize start-up drift and improve overall sensor performance, an offset calibration function has been built into the IMU driver. This function captures several seconds worth of data and calculates an average offset which is then applied to the sensor outputs. By default, calibration is automatically started once the RoboRIO begins executing user code and usually takes about 10 seconds to complete. The “Ready?” LED indicator will also illuminate once calibration is complete. New in 2020, all three language libraries also have this functionality made available via the “Recalibrate” function.</p>
+<p>To help the robot minimize start-up drift and improve overall sensor
+performance, an offset calibration function has been built into the IMU driver.
+This function captures several seconds worth of data and calculates an average
+offset which is then applied to the sensor outputs. By default, calibration is
+automatically started once the RoboRIO begins executing user code and usually
+takes about 10 seconds to complete. The “Ready?” LED indicator will also
+illuminate once calibration is complete. New in 2020, all three language
+libraries also have this functionality made available via the “Recalibrate”
+function.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>The gyros used in the <a class="icon adi reference external" href="https://www.analog.com/ADIS16470" target="_blank">ADIS16470</a> measure <em>angular rate</em>, not <em>angle!</em> Any movement during the offset calibration routine will introduce some error into every sensor measurement! Over time, this error, will appear as “drift” in your angle measurement. It is VERY important that the robot remains completely stationary during this calibration period!</p>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>Offset calibration should be performed as soon as the robot is powered on to prevent the routine from interfering with any autonomous code execution. If your gyro angle readings are drifting drastically, clicking Restart Robot Code in the driver station will force the RoboRIO to re-execute the offset calibration routine. This should fix any drift issues caused by a bad offset measurement. You can also use the new Recalibrate function available in the 2020 libraries to re-perform the offset calibration (if, for example, the robot was kicked or moved during start-up). This function will also perform a “reset,” or re-zero the sensor, so be sure the robot is facing in the direction you want “zero” to be!</p>
+<p>Offset calibration should be performed as soon as the robot is powered on to
+prevent the routine from interfering with any autonomous code execution. If
+your gyro angle readings are drifting drastically, clicking Restart Robot
+Code in the driver station will force the RoboRIO to re-execute the offset
+calibration routine. This should fix any drift issues caused by a bad offset
+measurement. You can also use the new Recalibrate function available in the
+2020 libraries to re-perform the offset calibration (if, for example, the
+robot was kicked or moved during start-up). This function will also perform a
+“reset,” or re-zero the sensor, so be sure the robot is facing in the
+direction you want “zero” to be!</p>
 </div>
 </section>
 <section id="reset-vs-recalibrate">
 <h2>“Reset” vs. “Recalibrate”<a class="headerlink" href="#reset-vs-recalibrate" title="Link to this heading"></a></h2>
-<p>As mentioned above, the 2020 versions of the libraries include a new function called “recalibrate” that takes advantage of features available on the ADIS16470. It’s important to note the difference between “reset” and “recalibrate” as they are very different functions and have differing use cases!</p>
+<p>As mentioned above, the 2020 versions of the libraries include a new function
+called “recalibrate” that takes advantage of features available on the
+ADIS16470. It’s important to note the difference between “reset” and
+“recalibrate” as they are very different functions and have differing use cases!</p>
 <section id="recalibrate">
 <h3>Recalibrate<a class="headerlink" href="#recalibrate" title="Link to this heading"></a></h3>
 <p>“Recalibrating” the IMU will reconfigure the offset calibration in the device. Upon startup, the libraries for the ADIS16470 will automatically perform an offset calibration as described above. It does this by taking readings for a few seconds (the default is 4 seconds) and averaging those values together to form an offset, one for each axis. This allows the IMU to calibrate out <strong>some</strong> drift to improve the sensor performance. We discussed above that any movement of the robot during this calibration period will negatively impact sensor performance. Before 2020, there was no function that would allow teams to recalibrate the IMU without restarting robot code. If the robot was bumped or moved during startup, IMU performance would be impaired. The ADIS16470 has an internal feature which continuously averages the internal sensor readings and stores them on the device. The device can be instructed to use these averages as the new internal offset values when a certain command is issued. This is what the new recalibrate function does.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>The Recalibrate function should never be used during match play! Doing so may negatively affect sensor performance if the robot moves before Recalibrate is called, just as bumping the robot during the startup calibration will negatively affect sensor performance!</p>
+<p>The Recalibrate function should never be used during match play! Doing so may
+negatively affect sensor performance if the robot moves before Recalibrate is
+called, just as bumping the robot during the startup calibration will
+negatively affect sensor performance!</p>
 </div>
 </section>
 <section id="reset">
 <h3>Reset<a class="headerlink" href="#reset" title="Link to this heading"></a></h3>
-<p>“Resetting” the IMU simply “re-zeros” the device. You may recall that gyros output data as degrees per second, not degrees,and we must integrate the readings from the device in order to determine a heading in degrees. When we reset the IMU, we are resetting this integration and starting back at zero. This means that the direction that the robot is facing when you reset the IMU will become the new zero degrees direction.</p>
+<p>“Resetting” the IMU simply “re-zeros” the device. You may recall that gyros
+output data as degrees per second, not degrees,and we must integrate the
+readings from the device in order to determine a heading in degrees. When we
+reset the IMU, we are resetting this integration and starting back at zero. This
+means that the direction that the robot is facing when you reset the IMU will
+become the new zero degrees direction.</p>
 </section>
 </section>
 <section id="using-the-adis16470-imu-on-your-robot">
 <h2>Using the ADIS16470 IMU on Your Robot<a class="headerlink" href="#using-the-adis16470-imu-on-your-robot" title="Link to this heading"></a></h2>
-<p>For more information on how to add IMU functionality to your robot code, select your team’s programming language from the list below.</p>
+<p>For more information on how to add IMU functionality to your robot code, select
+your team’s programming language from the list below.</p>
 <p><a class="reference internal" href="adis16470_imu_frc/labview.html"><span class="doc">Using the ADIS16470 IMU in LabVIEW</span></a></p>
 <p><a class="reference internal" href="adis16470_imu_frc/cpp.html"><span class="doc">Using the ADIS16470 IMU in C++</span></a></p>
 <p><a class="reference internal" href="adis16470_imu_frc/java.html"><span class="doc">Using the ADIS16470IMU in Java</span></a></p>

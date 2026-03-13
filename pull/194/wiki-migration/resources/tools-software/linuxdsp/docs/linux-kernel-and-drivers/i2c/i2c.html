@@ -597,16 +597,34 @@ Content on this topic
 <h1>I2C<a class="headerlink" href="#i2c" title="Link to this heading"></a></h1>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
-<p>The Inter-Integrated Circuit (I2C) bus is a two wire multi-master/slave low speed serial bus. Multiple slave devices may be accessed over the same bus, using a unique 7-bit addresses for each slave. Communication on the bus is half-duplex, and slaves do not transmit any data unless a master has addressed it first.</p>
-<p>From the Linux point of view the driver for I2C hardware controller is the adapter driver, while drivers for the peripheral I2C devices are the client drivers. The adapter driver is provided by ADI, and most of the work that a product developer needs to do is in implementing the client driver to connect a specific I2C slave device to applications running under Linux on the SC5xx processor.</p>
-<p>This document focuses on explaining the programming interface for the I2C client driver, it talks about how to create the client driver from both kernel and user space, to guide the audience to develop the client driver of their own.</p>
+<p>The Inter-Integrated Circuit (I2C) bus is a two wire multi-master/slave low
+speed serial bus. Multiple slave devices may be accessed over the same bus,
+using a unique 7-bit addresses for each slave. Communication on the bus is
+half-duplex, and slaves do not transmit any data unless a master has addressed
+it first.</p>
+<p>From the Linux point of view the driver for I2C hardware controller is the
+adapter driver, while drivers for the peripheral I2C devices are the client
+drivers. The adapter driver is provided by ADI, and most of the work that a
+product developer needs to do is in implementing the client driver to connect a
+specific I2C slave device to applications running under Linux on the SC5xx
+processor.</p>
+<p>This document focuses on explaining the programming interface for the I2C client
+driver, it talks about how to create the client driver from both kernel and user
+space, to guide the audience to develop the client driver of their own.</p>
 </section>
 <section id="i2c-in-the-linux-kernel">
 <h2>I2C in the Linux Kernel<a class="headerlink" href="#i2c-in-the-linux-kernel" title="Link to this heading"></a></h2>
-<p>This section talks about the I2C kernel driver framework and how to implement the client I2C driver from kernel space.</p>
+<p>This section talks about the I2C kernel driver framework and how to implement
+the client I2C driver from kernel space.</p>
 <section id="i2c-kernel-driver">
 <h3>I2C Kernel Driver<a class="headerlink" href="#i2c-kernel-driver" title="Link to this heading"></a></h3>
-<p>The main source code for the SC5xx I2C adapter driver is in drivers/i2c/busses/i2c-bfin-twi.c. The “Blackfin” name is used here because the ADSP-SC5xx processors use the same hardware IP for the I2C interface as the ADSP-BFxxx series. The device tree description for the 3 controllers, i2c0, i2c1 and i2c2 is in file arch/arm/boot/dts/sc58x.dtsi or arch/arm/boot/dts/sc57x.dtsi. Select from the following options to enable the I2C adapter driver, and you can set the clock speed from there:</p>
+<p>The main source code for the SC5xx I2C adapter driver is in
+drivers/i2c/busses/i2c-bfin-twi.c. The “Blackfin” name is used here because the
+ADSP-SC5xx processors use the same hardware IP for the I2C interface as the
+ADSP-BFxxx series. The device tree description for the 3 controllers, i2c0, i2c1
+and i2c2 is in file arch/arm/boot/dts/sc58x.dtsi or
+arch/arm/boot/dts/sc57x.dtsi. Select from the following options to enable the
+I2C adapter driver, and you can set the clock speed from there:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Linux</span> <span class="n">Kernel</span> <span class="n">Configuration</span>
     <span class="n">Device</span> <span class="n">Drivers</span>  <span class="o">---&gt;</span>
         <span class="n">I2C</span> <span class="n">support</span>  <span class="o">---&gt;</span>
@@ -618,11 +636,19 @@ Content on this topic
 </section>
 <section id="i2c-client-driver-example">
 <h3>I2C Client Driver Example<a class="headerlink" href="#i2c-client-driver-example" title="Link to this heading"></a></h3>
-<p>In this section we take audio codec driver for ADAU1977 as an example to show the typical code structure for the I2C client driver, demonstrating how users normally initialize a client’s driver, register it to the system, then use the registered method to do data read/write via the I2C bus. The main source code file for this example includes sound/soc/codecs/adau1977-i2c.c, sound/soc/codecs/adau1977.c, drivers/base/regmap/regmap-i2c.c and device tree file arch/arm/boot/dts/sc589-ezkit.dts.</p>
+<p>In this section we take audio codec driver for ADAU1977 as an example to show
+the typical code structure for the I2C client driver, demonstrating how users
+normally initialize a client’s driver, register it to the system, then use the
+registered method to do data read/write via the I2C bus. The main source code
+file for this example includes sound/soc/codecs/adau1977-i2c.c,
+sound/soc/codecs/adau1977.c, drivers/base/regmap/regmap-i2c.c and device tree
+file arch/arm/boot/dts/sc589-ezkit.dts.</p>
 </section>
 <section id="client-driver-instance">
 <h3>Client driver instance<a class="headerlink" href="#client-driver-instance" title="Link to this heading"></a></h3>
-<p>The following C code defines a client driver instance, which is later registered to the Linux I2C sub-system. See the source code for details on the implementation of each method.</p>
+<p>The following C code defines a client driver instance, which is later registered
+to the Linux I2C sub-system. See the source code for details on the
+implementation of each method.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">static</span> <span class="n">struct</span> <span class="n">i2c_driver</span> <span class="n">adau1977_i2c_driver</span> <span class="o">=</span> <span class="p">{</span>
         <span class="o">.</span><span class="n">driver</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;adau1977&quot;</span><span class="p">,</span>
@@ -638,21 +664,28 @@ Content on this topic
 </section>
 <section id="register">
 <h3>Register<a class="headerlink" href="#register" title="Link to this heading"></a></h3>
-<p>The following C code registers the above client driver to the Linux I2C sub-system</p>
+<p>The following C code registers the above client driver to the Linux I2C
+sub-system</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module_i2c_driver</span><span class="p">(</span><span class="n">adau1977_i2c_driver</span><span class="p">);</span>
 </pre></div>
 </div>
 </section>
 <section id="data-read-write-method">
 <h3>Data read/write method<a class="headerlink" href="#data-read-write-method" title="Link to this heading"></a></h3>
-<p>This audio codec driver uses the regmap programming interface, which is built upon the lower level of the I2C data read/write interface, to do the data read/write immediately with code of the following style in the file sound/soc/codecs/adau1977.c</p>
+<p>This audio codec driver uses the regmap programming interface, which is built
+upon the lower level of the I2C data read/write interface, to do the data
+read/write immediately with code of the following style in the file
+sound/soc/codecs/adau1977.c</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ret</span> <span class="o">=</span> <span class="n">regmap_read</span><span class="p">(</span><span class="n">adau1977</span><span class="o">-&gt;</span><span class="n">regmap</span><span class="p">,</span> <span class="n">ADAU1977_REG_PLL</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">val</span><span class="p">);</span>
 
 <span class="n">ret</span> <span class="o">=</span> <span class="n">regmap_write</span><span class="p">(</span><span class="n">adau1977</span><span class="o">-&gt;</span><span class="n">regmap</span><span class="p">,</span> <span class="n">ADAU1977_REG_POWER</span><span class="p">,</span>
                         <span class="n">ADAU1977_POWER_RESET</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>This regmap interface for the I2C bus is implemented in file drivers/base/regmap/regmap-i2c.c. In this file, we can see the I2C bus data read/write is carried out via either the raw I2C transfer interface or the SMBus interface. Take the SMBus for example:</p>
+<p>This regmap interface for the I2C bus is implemented in file
+drivers/base/regmap/regmap-i2c.c. In this file, we can see the I2C bus data
+read/write is carried out via either the raw I2C transfer interface or the SMBus
+interface. Take the SMBus for example:</p>
 <p>Read data:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">static</span> <span class="nb">int</span> <span class="n">regmap_smbus_byte_reg_read</span><span class="p">(</span><span class="n">void</span> <span class="o">*</span><span class="n">context</span><span class="p">,</span> <span class="n">unsigned</span> <span class="nb">int</span> <span class="n">reg</span><span class="p">,</span>
                                       <span class="n">unsigned</span> <span class="nb">int</span> <span class="o">*</span><span class="n">val</span><span class="p">)</span>
@@ -682,13 +715,19 @@ Content on this topic
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>SMBus protocol and its APIs is a subset of the I2C protocol and is widely used for the I2C device driver in Linux, get more details on the SMBus protocol from the kernel source: Documentation/i2c/smbus-protocol.</p>
-<p>I2C in User Space Usually I2C devices are controlled by the device driver in kernel space, but we can also implement this from user space.</p>
+<p>SMBus protocol and its APIs is a subset of the I2C protocol and is widely used
+for the I2C device driver in Linux, get more details on the SMBus protocol from
+the kernel source: Documentation/i2c/smbus-protocol.</p>
+<p>I2C in User Space Usually I2C devices are controlled by the device driver in
+kernel space, but we can also implement this from user space.</p>
 </section>
 </section>
 <section id="kernel-configuration">
 <h2>Kernel configuration<a class="headerlink" href="#kernel-configuration" title="Link to this heading"></a></h2>
-<p>Linux kernel introduced an i2c-dev layer. It exports the adapter driver for the I2C controller as device nodes to user space, so we can implement the driver for a specific I2C client in user space. To take advantage of this feature, we need to enable the i2c-dev interface from the kernel menu configuration</p>
+<p>Linux kernel introduced an i2c-dev layer. It exports the adapter driver for the
+I2C controller as device nodes to user space, so we can implement the driver for
+a specific I2C client in user space. To take advantage of this feature, we need
+to enable the i2c-dev interface from the kernel menu configuration</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Linux</span> <span class="n">Kernel</span> <span class="n">Configuration</span>
     <span class="n">Device</span> <span class="n">Drivers</span>  <span class="o">---&gt;</span>
         <span class="n">I2C</span> <span class="n">support</span>  <span class="o">---&gt;</span>
@@ -698,12 +737,15 @@ Content on this topic
 <p>Get more details about i2c-dev interface from Documentation/i2c/dev-interface.</p>
 <section id="example">
 <h3>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h3>
-<p>The TWI LCD I2C driver code is a good example for an I2C user space driver. Add the following package to IMAGE_INSTALL_append in local.conf file:</p>
+<p>The TWI LCD I2C driver code is a good example for an I2C user space driver. Add
+the following package to IMAGE_INSTALL_append in local.conf file:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ vim build/conf/local.conf
 IMAGE_INSTALL_append = &quot; twi-lcd-test&quot;
 </pre></div>
 </div>
-<p>Once rebuilt, the file twilcd_userspace_test.c is the main source code for this example. We can see the general steps for implementing a user space I2C client driver in function main, code skeleton as follows:</p>
+<p>Once rebuilt, the file twilcd_userspace_test.c is the main source code for this
+example. We can see the general steps for implementing a user space I2C client
+driver in function main, code skeleton as follows:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">main</span> <span class="p">(</span><span class="nb">int</span> <span class="n">argc</span><span class="p">,</span> <span class="n">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
 <span class="p">{</span>
     <span class="nb">int</span> <span class="n">file</span><span class="p">;</span>

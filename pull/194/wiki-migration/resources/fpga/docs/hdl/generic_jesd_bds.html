@@ -611,7 +611,9 @@ Content on this topic
 <p class="admonition-title">Important</p>
 <p>We are in the process of migrating our documentation to GitHubIO. This page is outdated and the new one can be found at <a class="icon link reference external" href="https://analogdevicesinc.github.io/hdl/library/jesd204/generic_jesd_bds/index.html" target="_blank">https://analogdevicesinc.github.io/hdl/library/jesd204/generic_jesd_bds/index.html</a></p>
 </div>
-<p>Using the generic building blocks from the ADI IP library together with the JESD framework, parametrizable block designs can be built to interface ADI DACs and ADCs in various JESD modes.</p>
+<p>Using the generic building blocks from the ADI IP library together with the JESD
+framework, parametrizable block designs can be built to interface ADI DACs and
+ADCs in various JESD modes.</p>
 <section id="changing-the-link-parameters">
 <h2>Changing the Link parameters<a class="headerlink" href="#changing-the-link-parameters" title="Link to this heading"></a></h2>
 <p>Typically projects are built and configured to exercise the DAC/ADC devices maximum capability using all available lanes, this corresponds to a single JESD operation mode. In order to switch to other modes, the generic block designs can be reconfigured by changing its parameters. These parameters map to the JESD link parameters. See the example below taken from <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9009/common/adrv9009_bd.tcl" target="_blank">this block design</a>:</p>
@@ -628,7 +630,9 @@ Content on this topic
 </div>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>Changing the number of lanes parameter will affect the top level file, as the constraints file. If the number of lanes is reduced both files must be updated to remove references to the unused lanes.</p>
+<p>Changing the number of lanes parameter will affect the top level file, as the
+constraints file. If the number of lanes is reduced both files must be
+updated to remove references to the unused lanes.</p>
 </div>
 </section>
 </section>
@@ -784,8 +788,13 @@ Content on this topic
 </section>
 <section id="generic-tx-path">
 <h2>Generic Tx path<a class="headerlink" href="#generic-tx-path" title="Link to this heading"></a></h2>
-<p>The below diagram presents a generic JESD Tx path from application layer to the FPGA boundary. The application layer is connected to the Tx path through the DAC Transport Layer which for each converter accepts a data beat on every cycle. The width of data beat is defined by the SPC and NP parameter. SPC represents the number of samples per converter per data clock cycle. SPC must be a natural number (greater than one and a whole number).</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/docs/hdl/generic_tx_jesd_path.png"><img alt="https://wiki.analog.com/_media/resources/fpga/docs/hdl/generic_tx_jesd_path.png" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/generic_tx_jesd_path.png" style="width: 600px;" />
+<p>The below diagram presents a generic JESD Tx path from application layer to the
+FPGA boundary. The application layer is connected to the Tx path through the DAC
+Transport Layer which for each converter accepts a data beat on every cycle. The
+width of data beat is defined by the SPC and NP parameter. SPC represents the
+number of samples per converter per data clock cycle. SPC must be a natural
+number (greater than one and a whole number).</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/docs/hdl/generic_tx_jesd_path.png"><img alt="https://wiki.analog.com/_media/resources/fpga/docs/hdl/generic_tx_jesd_path.png" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/generic_tx_jesd_path.png" width="600" />
 </a>
 <p>On each clock cycle the Link Layer accepts 32 bits per every lane as a constraint from the physical layer that is configured to 32bit mode. This means that for each clock cycle the application layer must provide enough samples for each converter so the transport layer can fill 32 bits of data for each lane. Due this constraint the following equation must hold: <span class="math notranslate nohighlight">\(L \times 32 = M \times NP \times SPC\)</span></p>
 <p>In such design the following constraints apply to the transport layer:</p>
@@ -798,21 +807,29 @@ Content on this topic
 <section id="example-1-tx-link-for-l-4-m-1-s-1-f-2-np-16">
 <h3>Example 1 Tx link for L=4; M=1; S=1; F=2; NP=16<a class="headerlink" href="#example-1-tx-link-for-l-4-m-1-s-1-f-2-np-16" title="Link to this heading"></a></h3>
 <p>In this mode the Transport Layer will output two frames in every clock cycle. 32 bits / (F*8) = 2; The application layer must provide 8 samples each cycle to be able to fill the 2 frames. SPC = (L*32) / (M*NP) = (4*32) / (1*16) = 128/16 = 8</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/fpga/docs/hdl/sample_tx_jesd_path.png"><img alt="image1" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/sample_tx_jesd_path.png" style="width: 600px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/fpga/docs/hdl/sample_tx_jesd_path.png"><img alt="image1" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/sample_tx_jesd_path.png" width="600" /></a></p>
 </section>
 <section id="example-2-tx-link-for-l-4-m-4-s-1-f-2-np-16">
 <h3>Example 2 Tx link for L=4; M=4; S=1; F=2; NP=16<a class="headerlink" href="#example-2-tx-link-for-l-4-m-4-s-1-f-2-np-16" title="Link to this heading"></a></h3>
 <p>In this mode the Transport Layer will output two frames in every clock cycle. 32 bits / (F*8) = 2; The application layer must provide 8 samples each cycle to be able to fill the 2 frames. SPC = (L*32) / (M*NP) = (4*32) / (4*16) = 128/64 = 2</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/docs/hdl/generig_jesd_tx_samples_ex2.png"><img alt="https://wiki.analog.com/_media/resources/fpga/docs/hdl/generig_jesd_tx_samples_ex2.png" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/generig_jesd_tx_samples_ex2.png" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/docs/hdl/generig_jesd_tx_samples_ex2.png"><img alt="https://wiki.analog.com/_media/resources/fpga/docs/hdl/generig_jesd_tx_samples_ex2.png" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/generig_jesd_tx_samples_ex2.png" width="600" />
 </a>
 </section>
 </section>
 <section id="generic-rx-path">
 <h2>Generic Rx path<a class="headerlink" href="#generic-rx-path" title="Link to this heading"></a></h2>
-<p>The below diagram presents a generic JESD Rx path. The application layer is connected to the Rx path through the ADC Transport Layer which for each converter generates a data beat on every cycle. The width of data beat is defined by the SPC and NP parameter. SPC represents the number of samples per converter per data clock cycle. SPC must be a natural number (greater than one and a whole number).</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/docs/hdl/generic_rx_jesd_path.png"><img alt="https://wiki.analog.com/_media/resources/fpga/docs/hdl/generic_rx_jesd_path.png" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/generic_rx_jesd_path.png" style="width: 600px;" />
+<p>The below diagram presents a generic JESD Rx path. The application layer is
+connected to the Rx path through the ADC Transport Layer which for each
+converter generates a data beat on every cycle. The width of data beat is
+defined by the SPC and NP parameter. SPC represents the number of samples per
+converter per data clock cycle. SPC must be a natural number (greater than one
+and a whole number).</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/docs/hdl/generic_rx_jesd_path.png"><img alt="https://wiki.analog.com/_media/resources/fpga/docs/hdl/generic_rx_jesd_path.png" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/generic_rx_jesd_path.png" width="600" />
 </a>
-<p>On each clock cycle the Link Layer generates 32 bits per every lane as it is constrained from the physical layer that is configured to 32bit mode. This means that for each clock cycle the application layer must accept enough samples for each converter so the transport layer use 32 bits of data from each lane.</p>
+<p>On each clock cycle the Link Layer generates 32 bits per every lane as it is
+constrained from the physical layer that is configured to 32bit mode. This means
+that for each clock cycle the application layer must accept enough samples for
+each converter so the transport layer use 32 bits of data from each lane.</p>
 <p>In such design the following constraints apply to the transport layer:</p>
 <ul class="simple">
 <li><p>F = {1, 2, 4}</p></li>
@@ -823,7 +840,7 @@ Content on this topic
 <section id="example-rx-link-for-l-4-m-1-s-1-f-2-np-16">
 <h3>Example Rx link for L=4; M=1; S=1; F=2; NP=16<a class="headerlink" href="#example-rx-link-for-l-4-m-1-s-1-f-2-np-16" title="Link to this heading"></a></h3>
 <p>In this mode the Transport Layer will accept two frames in every clock cycle. 32 bits / (F*8) = 2; The application layer must accept 8 samples each cycle so the transport layer can deframe the 2 frames. SPC = (L*32) / (M*NP) = (4*32) / (1*16) = 128/16 = 8</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/fpga/docs/hdl/sample_rx_jesd_path.png"><img alt="image2" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/sample_rx_jesd_path.png" style="width: 600px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/fpga/docs/hdl/sample_rx_jesd_path.png"><img alt="image2" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/sample_rx_jesd_path.png" width="600" /></a></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Such a parametrizable block design was built for the <a class="reference internal" href="../../../eval/user-guides/adrv9009.html"><span class="doc">ADRV9009 Prototyping Platform</span></a> and can be found <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9009/common/adrv9009_bd.tcl" target="_blank">here</a>.</p>
@@ -832,20 +849,28 @@ Content on this topic
 </section>
 <section id="jesd-modes-with-f-8">
 <h2>JESD modes with F=8<a class="headerlink" href="#jesd-modes-with-f-8" title="Link to this heading"></a></h2>
-<p>In a period of LinkClk the Link layer always handles 32 bits per lane. The transport layer running at a same clock rate can fill the 32 bits with frames of 1,2 or 4 bytes.</p>
-<p>However, for a link with L=1, M=4, NP=16 the minimum number of bytes per frame that must be supported is 8 (F=8)</p>
+<p>In a period of LinkClk the Link layer always handles 32 bits per lane. The
+transport layer running at a same clock rate can fill the 32 bits with frames of
+1,2 or 4 bytes.</p>
+<p>However, for a link with L=1, M=4, NP=16 the minimum number of bytes per frame
+that must be supported is 8 (F=8)</p>
 <p><span class="math notranslate nohighlight">\(F= M \times S \times NP / L \times 8 ; F = 8 \times S\)</span></p>
 <section id="tx-path-for-f-8">
 <h3>Tx path for F=8<a class="headerlink" href="#tx-path-for-f-8" title="Link to this heading"></a></h3>
-<p>In order to comply the requirement that in every DataClk period for each converter from the application layer a sample must be accepted (64 bits in this case), DataClk must be run with half the speed of the LinkClk.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/docs/hdl/f8_tx_jesd_path.png"><img alt="https://wiki.analog.com/_media/resources/fpga/docs/hdl/f8_tx_jesd_path.png" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/f8_tx_jesd_path.png" style="width: 600px;" />
+<p>In order to comply the requirement that in every DataClk period for each
+converter from the application layer a sample must be accepted (64 bits in this
+case), DataClk must be run with half the speed of the LinkClk.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/docs/hdl/f8_tx_jesd_path.png"><img alt="https://wiki.analog.com/_media/resources/fpga/docs/hdl/f8_tx_jesd_path.png" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/f8_tx_jesd_path.png" width="600" />
 </a>
-<p>The rate adaptation and synchronization is done with a gearbox which receives its clocks from a PLL that ensures its output clocks are in phase.</p>
+<p>The rate adaptation and synchronization is done with a gearbox which receives
+its clocks from a PLL that ensures its output clocks are in phase.</p>
 </section>
 <section id="rx-path-for-f-8">
 <h3>Rx path for F=8<a class="headerlink" href="#rx-path-for-f-8" title="Link to this heading"></a></h3>
-<p>The Rx path is similar to the Tx. In order the transport layer to produce a sample per converter in every clock cycle the Data clock must be ran at half of the link clock speed.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/fpga/docs/hdl/f8_rx_jesd_path.png"><img alt="image3" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/f8_rx_jesd_path.png" style="width: 600px;" /></a></p>
+<p>The Rx path is similar to the Tx. In order the transport layer to produce a
+sample per converter in every clock cycle the Data clock must be ran at half of
+the link clock speed.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/fpga/docs/hdl/f8_rx_jesd_path.png"><img alt="image3" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/f8_rx_jesd_path.png" width="600" /></a></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Such a parametrizable block design that supports also F=8 was built for the <a class="reference internal" href="../../../eval/user-guides/adrv9009.html"><span class="doc">ADRV9009 Prototyping Platform</span></a> and can be found <a class="icon link reference external" href="https://github.com/ronagyl/hdl/blob/dev_adrv9009_less_lanes/projects/adrv9009/common/adrv9009_bd.tcl" target="_blank">here</a>.</p>

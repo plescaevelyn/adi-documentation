@@ -605,36 +605,72 @@ Content on this topic
 <h1>Activity : Using the CD4094 Shift Register for More Digital Inputs/Outputs<a class="headerlink" href="#activity-using-the-cd4094-shift-register-for-more-digital-inputs-outputs" title="Link to this heading"></a></h1>
 <section id="objective">
 <h2>Objective:<a class="headerlink" href="#objective" title="Link to this heading"></a></h2>
-<p>The goal of this tutorial is to examine how to expand the number of digital outputs in systems with as few as 3 available outputs through the use of shift registers, the serial to parallel conversion process.</p>
+<p>The goal of this tutorial is to examine how to expand the number of digital
+outputs in systems with as few as 3 available outputs through the use of shift
+registers, the serial to parallel conversion process.</p>
 </section>
 <section id="common-notes">
 <h2>Common Notes:<a class="headerlink" href="#common-notes" title="Link to this heading"></a></h2>
-<p>As in all the ALM labs we use the following terminology when referring to the connections to the M1000 connector and configuring the hardware. The green shaded rectangles indicate connections to the M1000 analog I/O connector. The blue shaded rectangles indicate connections to the M1000 digital I/O connector.</p>
-<p>The digital I/O channel pins are referred to as D0 through D3. These correspond to the pins labeled PIO 0 - PIO 3 on the ALM1000 board silkscreen.</p>
-<p>The analog I/O channel pins are referred to as CA and CB. When configured to force voltage / measure current -V is added as in CA-V or when configured to force current / measure voltage -I is added as in CA-I. When a channel is configured in the high impedance mode to only measure voltage -H is added as CA-H.</p>
+<p>As in all the ALM labs we use the following terminology when referring to the
+connections to the M1000 connector and configuring the hardware. The green
+shaded rectangles indicate connections to the M1000 analog I/O connector. The
+blue shaded rectangles indicate connections to the M1000 digital I/O connector.</p>
+<p>The digital I/O channel pins are referred to as D0 through D3. These correspond
+to the pins labeled PIO 0 - PIO 3 on the ALM1000 board silkscreen.</p>
+<p>The analog I/O channel pins are referred to as CA and CB. When configured to
+force voltage / measure current -V is added as in CA-V or when configured to
+force current / measure voltage -I is added as in CA-I. When a channel is
+configured in the high impedance mode to only measure voltage -H is added as
+CA-H.</p>
 </section>
 <section id="background">
 <h2>Background:<a class="headerlink" href="#background" title="Link to this heading"></a></h2>
-<p>The ALM1000 has 4 digital input/output pins. If more than 4 digital inputs/outputs are needed, one solution is to use an 8-bit shift and store register such as the CD4094 integrated circuit. This chip has 8 output pins that can be set to high or low depending on the value of an 8-bit number stored in the chip’s 8-bit storage register.</p>
-<p>Importantly, this 8-bit number can be sent in serially to the chip in the form of a binary number via an 8-bit shift register and the chip converts this serial input to a parallel output. For example, if the number 197 is sent serially to the chip, LSB first, (binary 11000101) then output pins Q1, Q2, Q6, and Q8 will be set high while output pins Q3, Q4, Q5 and Q7 will be set low. A way of thinking about the serial to parallel process is that on every rising edge of the serial clock pin, the bits in the shift register shift one place to the right and the least significant bit drops off. The most significant bit is set to whatever the serial data input pin is set to. So if the number in the shift register is 01110001, with the serial input pin is set high (1), and the serial clock is toggled high, the number stored in the shift register becomes 10111000.</p>
-<p>The chip includes a strobe pin. Data from each stage of the shift register is latched on a negative transition of the strobe input. The output data latch is transparent when strobe is high. By holding the strobe pin low we can change the shift register and hide the changes until we are finished, making it appear like we have individual control over all of the outputs. After new data has been shifted in we bring the strobe pin high to transfer the contents of the shift register to the eight parallel output pins.</p>
+<p>The ALM1000 has 4 digital input/output pins. If more than 4 digital
+inputs/outputs are needed, one solution is to use an 8-bit shift and store
+register such as the CD4094 integrated circuit. This chip has 8 output pins that
+can be set to high or low depending on the value of an 8-bit number stored in
+the chip’s 8-bit storage register.</p>
+<p>Importantly, this 8-bit number can be sent in serially to the chip in the form
+of a binary number via an 8-bit shift register and the chip converts this serial
+input to a parallel output. For example, if the number 197 is sent serially to
+the chip, LSB first, (binary 11000101) then output pins Q1, Q2, Q6, and Q8 will
+be set high while output pins Q3, Q4, Q5 and Q7 will be set low. A way of
+thinking about the serial to parallel process is that on every rising edge of
+the serial clock pin, the bits in the shift register shift one place to the
+right and the least significant bit drops off. The most significant bit is set
+to whatever the serial data input pin is set to. So if the number in the shift
+register is 01110001, with the serial input pin is set high (1), and the serial
+clock is toggled high, the number stored in the shift register becomes 10111000.</p>
+<p>The chip includes a strobe pin. Data from each stage of the shift register is
+latched on a negative transition of the strobe input. The output data latch is
+transparent when strobe is high. By holding the strobe pin low we can change the
+shift register and hide the changes until we are finished, making it appear like
+we have individual control over all of the outputs. After new data has been
+shifted in we bring the strobe pin high to transfer the contents of the shift
+register to the eight parallel output pins.</p>
 <section id="materials">
 <h3>Materials:<a class="headerlink" href="#materials" title="Link to this heading"></a></h3>
-<p>ADALM1000 hardware module CD4094 8 bit shift and store CMOS logic device 8 LEDs 8 100 Ω resistors</p>
+<p>ADALM1000 hardware module CD4094 8 bit shift and store CMOS logic device 8 LEDs
+8 100 Ω resistors</p>
 </section>
 <section id="directions">
 <h3>Directions:<a class="headerlink" href="#directions" title="Link to this heading"></a></h3>
 <p>Below is the pinout diagram for the CD4094 IC. Notice that pin OUTPUT ENABLE must be connected to V<sub>DD</sub> (3.3 V) for normal operation.</p>
 <p><strong>CD4094 Pinout Diagram:</strong></p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/tools/python-tutorial/python_tutorial-sreg_f1.png"><img alt="https://wiki.analog.com/_media/university/tools/python-tutorial/python_tutorial-sreg_f1.png" class="align-center" src="https://wiki.analog.com/_media/university/tools/python-tutorial/python_tutorial-sreg_f1.png" style="width: 300px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/tools/python-tutorial/python_tutorial-sreg_f1.png"><img alt="https://wiki.analog.com/_media/university/tools/python-tutorial/python_tutorial-sreg_f1.png" class="align-center" src="https://wiki.analog.com/_media/university/tools/python-tutorial/python_tutorial-sreg_f1.png" width="300" />
 </a>
 <p>Q1-Q8 - Output Pins V<sub>DD</sub> - 3.3 V V<sub>SS</sub> - 0 V STROBE - storage register clock pin CLOCK - shift register clock pin OUTPUT ENABLE - enables outputs if set high (must be connected to 5 V for normal operation) DATA - serial data input pin QS, Q’S - allows more than one chip to be daisy-chained together by sending the least significant bit to another CD4094’s DATA pin allowing for the effective creation of 16-bit (2 chips), 24-bit (3 chips), or larger shift and store registers.</p>
-<p>It is a fairly simple matter to connect the shift register to three of the general purpose digital I/O pins on the ALM1000. We can use PIO 0 for the CLOCK input, PIO 1 for the serial DATA input and PIO 2 for the STROBE input. Using Python we can step through the necessary sequence to serially shift an 8 bit number into the register and then set the STROBE bit high transferring the data in the register to the output pins.</p>
+<p>It is a fairly simple matter to connect the shift register to three of the
+general purpose digital I/O pins on the ALM1000. We can use PIO 0 for the CLOCK
+input, PIO 1 for the serial DATA input and PIO 2 for the STROBE input. Using
+Python we can step through the necessary sequence to serially shift an 8 bit
+number into the register and then set the STROBE bit high transferring the data
+in the register to the output pins.</p>
 </section>
 <section id="use-the-cd4094-to-light-up-leds">
 <h3>Use the CD4094 to Light Up LEDs<a class="headerlink" href="#use-the-cd4094-to-light-up-leds" title="Link to this heading"></a></h3>
 <p>Insert a CD4094 shift register in your solder-less breadboard. Connect the chip V<sub>DD</sub> to power (3.3V) and V<sub>SS</sub> to ground. Connect LEDs to output pins Q1 to Q8 (don’t forget to use current limiting resistors). Connect OUTPUT ENABLE to 3.3 V (high). Connect the CLOCK, DATA and STROBE pins to PIO 0,1,2 on the ALM1000 digital connector as shown in figure 1. Note that all the LED cathodes are tied to ground.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/tools/python-tutorial/python_tutorial-sreg_f2.png"><img alt="image1" src="https://wiki.analog.com/_media/university/tools/python-tutorial/python_tutorial-sreg_f2.png" style="width: 600px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/tools/python-tutorial/python_tutorial-sreg_f2.png"><img alt="image1" src="https://wiki.analog.com/_media/university/tools/python-tutorial/python_tutorial-sreg_f2.png" width="600" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 1 8 bit shift register connections</p>
 </div>
@@ -645,35 +681,68 @@ Content on this topic
 </section>
 <section id="procedure">
 <h3>Procedure:<a class="headerlink" href="#procedure" title="Link to this heading"></a></h3>
-<p>Open the shift_register.py Python program in your favorite editor. The IDLE that comes with Python is handy because you can run the program directly from there. Scroll down to the ShiftOut() function. The first thing the function does is convert the number into an eight character string of 1’s and 0’s representing the number in binary form. The while loop generates a series of eight low to high to low pulses on the CLOCK output while setting the DATA output to high or low based on the character in the binary string. At the end the STROBE output is set high and then back low to transfer the newly shifted data to the output pins on the CD4094.</p>
+<p>Open the shift_register.py Python program in your favorite editor. The IDLE that
+comes with Python is handy because you can run the program directly from there.
+Scroll down to the ShiftOut() function. The first thing the function does is
+convert the number into an eight character string of 1’s and 0’s representing
+the number in binary form. The while loop generates a series of eight low to
+high to low pulses on the CLOCK output while setting the DATA output to high or
+low based on the character in the binary string. At the end the STROBE output is
+set high and then back low to transfer the newly shifted data to the output pins
+on the CD4094.</p>
 </section>
 </section>
 <section id="use-the-cd4094-to-control-a-seven-segment-led-display">
 <h2>Use the CD4094 to Control a Seven-Segment LED Display<a class="headerlink" href="#use-the-cd4094-to-control-a-seven-segment-led-display" title="Link to this heading"></a></h2>
 <section id="id1">
 <h3>Objective:<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
-<p>Use a 7-Segment LED (Light Emitting Diode) display to output a numeric integer (and a few letters as well) using the digital outputs on your ALM1000 module. Many digital systems use seven segment displays for displaying digital values in a form that can be understood by the user. This information is often numerical data in the form of numbers, characters and symbols. Seven-segment displays produce the required number or symbol by illuminating the individual segments in various combinations.</p>
+<p>Use a 7-Segment LED (Light Emitting Diode) display to output a numeric integer
+(and a few letters as well) using the digital outputs on your ALM1000 module.
+Many digital systems use seven segment displays for displaying digital values in
+a form that can be understood by the user. This information is often numerical
+data in the form of numbers, characters and symbols. Seven-segment displays
+produce the required number or symbol by illuminating the individual segments in
+various combinations.</p>
 </section>
 <section id="id2">
 <h3>Background:<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
-<p>The 7-Segment LED is an extension of the basic LED that uses 8 pins to control, 7 segments and 1 decimal point. 7-Segment displays are used in many electronic devices such as home appliances like microwaves, alarm clocks, and many other numeric display applications such as laboratory instruments. It is important to note that a 7-Segment LED behaves exactly the same as a basic single LED, which is a diode that only allows current to flow in one direction and we will need to limit the current by connecting a resistor in series. 7-segment displays come in two connection configurations, common anode and common cathode. As the names imply, in each case either all the LED cathodes or all the LED anodes share a common connection in the package. Common cathode means that the negative side of all the LEDs are connected together. Common anode means that the positive side of all the LEDs are connected together.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/tools/python-tutorial/python_tutorial-sreg_f3.png"><img alt="image2" src="https://wiki.analog.com/_media/university/tools/python-tutorial/python_tutorial-sreg_f3.png" style="width: 150px;" /></a></p>
+<p>The 7-Segment LED is an extension of the basic LED that uses 8 pins to control,
+7 segments and 1 decimal point. 7-Segment displays are used in many electronic
+devices such as home appliances like microwaves, alarm clocks, and many other
+numeric display applications such as laboratory instruments. It is important to
+note that a 7-Segment LED behaves exactly the same as a basic single LED, which
+is a diode that only allows current to flow in one direction and we will need to
+limit the current by connecting a resistor in series. 7-segment displays come in
+two connection configurations, common anode and common cathode. As the names
+imply, in each case either all the LED cathodes or all the LED anodes share a
+common connection in the package. Common cathode means that the negative side of
+all the LEDs are connected together. Common anode means that the positive side
+of all the LEDs are connected together.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/tools/python-tutorial/python_tutorial-sreg_f3.png"><img alt="image2" src="https://wiki.analog.com/_media/university/tools/python-tutorial/python_tutorial-sreg_f3.png" width="150" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 2 Typical 7 segment LED display</p>
 </div>
-<p>Each of the 7 segments is identified by a letter as can be seen in figure 3 as well as the pinout and schematic for reference.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/tools/python-tutorial/python_tutorial-sreg_f4.png"><img alt="image3" src="https://wiki.analog.com/_media/university/tools/python-tutorial/python_tutorial-sreg_f4.png" style="width: 500px;" /></a></p>
+<p>Each of the 7 segments is identified by a letter as can be seen in figure 3 as
+well as the pinout and schematic for reference.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/tools/python-tutorial/python_tutorial-sreg_f4.png"><img alt="image3" src="https://wiki.analog.com/_media/university/tools/python-tutorial/python_tutorial-sreg_f4.png" width="500" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 3, schematic and example pinout</p>
 </div>
 </section>
 <section id="id3">
 <h3>Materials:<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
-<p>ADALM1000 hardware module Solder-less breadboard Jumper wires 7 - 100Ω Resistors 1 - 7 segment display</p>
+<p>ADALM1000 hardware module Solder-less breadboard Jumper wires 7 - 100Ω Resistors
+1 - 7 segment display</p>
 </section>
 <section id="id4">
 <h3>Directions:<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
-<p>As stated in the datasheet for most displays each LED segment can handle a typical current up to 20 mA, and is recommended to be used with 16 to 18 mA; so at 15.15 mA we will be safe. Starting with the circuit connections from figure 1, substitute the individual LEDs for the segments in your display. This will be simple if your 7 segment display is a common cathode type. Be sure to make any changes if your 7 segment display is a common anode type i.e. move the common anode to the 3.3 V supply.</p>
+<p>As stated in the datasheet for most displays each LED segment can handle a
+typical current up to 20 mA, and is recommended to be used with 16 to 18 mA; so
+at 15.15 mA we will be safe. Starting with the circuit connections from figure
+1, substitute the individual LEDs for the segments in your display. This will be
+simple if your 7 segment display is a common cathode type. Be sure to make any
+changes if your 7 segment display is a common anode type i.e. move the common
+anode to the 3.3 V supply.</p>
 </section>
 <section id="id5">
 <h3>Hardware Setup:<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
@@ -813,11 +882,15 @@ Content on this topic
 </section>
 <section id="questions">
 <h3>Questions:<a class="headerlink" href="#questions" title="Link to this heading"></a></h3>
-<p>In addition to the 10 decimal numbers what letters of the alphabet can you form using the seven segments?</p>
+<p>In addition to the 10 decimal numbers what letters of the alphabet can you form
+using the seven segments?</p>
 </section>
 <section id="extra-credit-assignment">
 <h3>Extra Credit Assignment:<a class="headerlink" href="#extra-credit-assignment" title="Link to this heading"></a></h3>
-<p>Use two CD4094 shift registers, two 7-segment displays, and modify the ShiftOut() function to make a circuit and program that counts from zero to 99 then repeats. Use the time.sleep() function to configure the program to take about one second per count.</p>
+<p>Use two CD4094 shift registers, two 7-segment displays, and modify the
+ShiftOut() function to make a circuit and program that counts from zero to 99
+then repeats. Use the time.sleep() function to configure the program to take
+about one second per count.</p>
 <p>To accomplish this the two shift registers must be daisy chained together.</p>
 <p><strong>For Further Reading:</strong></p>
 <p><a class="icon link reference external" href="https://en.wikipedia.org/wiki/Shift_register" target="_blank">https://en.wikipedia.org/wiki/Shift_register</a> <a class="icon link reference external" href="http://en.wikipedia.org/wiki/Seven-segment_display" target="_blank">http://en.wikipedia.org/wiki/Seven-segment_display</a></p>

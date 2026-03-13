@@ -607,12 +607,18 @@ Content on this topic
 <h1>RPMsg-Lite<a class="headerlink" href="#rpmsg-lite" title="Link to this heading"></a></h1>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
-<p>RPMsg is used to transfer messages between cores on ADSP devices. An implementation is available for ARM when running Linux and for bare metal applications a port of RPMsg-Lite is available for ARM and SHARC+ cores. It allows for transmitting a message to a specific endpoint on a different core via a dedicated transport link. Multiple endpoints can be registered against a single link.</p>
+<p>RPMsg is used to transfer messages between cores on ADSP devices. An
+implementation is available for ARM when running Linux and for bare metal
+applications a port of RPMsg-Lite is available for ARM and SHARC+ cores. It
+allows for transmitting a message to a specific endpoint on a different core via
+a dedicated transport link. Multiple endpoints can be registered against a
+single link.</p>
 <p>This page describes how to use RPMsg-Lite for bare metal applications.</p>
 <p>Additional information can be found here: <a class="icon link reference external" href="https://github.com/analogdevicesinc/rpmsg-lite" target="_blank">rpmsg-lite</a></p>
 <section id="resources-used">
 <h3>Resources used<a class="headerlink" href="#resources-used" title="Link to this heading"></a></h3>
-<p>In order to allow for message transmission between cores on ADSP-SC5xx devices RPMsg-Lite makes use of the following resources:</p>
+<p>In order to allow for message transmission between cores on ADSP-SC5xx devices
+RPMsg-Lite makes use of the following resources:</p>
 <ul class="simple">
 <li><p>Shared memory for storing message buffers and vring buffers containing message descriptors</p></li>
 <li><p>Interrupt on each core to indicate that a message has arrived</p></li>
@@ -620,7 +626,8 @@ Content on this topic
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>These resources should not be used for other purposes when using RPMsg-Lite in your application.</p>
+<p>These resources should not be used for other purposes when using RPMsg-Lite
+in your application.</p>
 </div>
 <p>The interrupts used are:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TRGS_TRU0_IRQ3</span>      <span class="o">/*</span> <span class="n">ARM</span> <span class="o">*/</span>
@@ -662,17 +669,26 @@ Content on this topic
 <h2>Using RPMsg-Lite on SC5xx<a class="headerlink" href="#using-rpmsg-lite-on-sc5xx" title="Link to this heading"></a></h2>
 <section id="allocate-memory-for-vring-buffers">
 <h3>Allocate memory for vring buffers<a class="headerlink" href="#allocate-memory-for-vring-buffers" title="Link to this heading"></a></h3>
-<p>The memory allocation for for the vring buffers should be done on a single core and the location of those buffers shared with the other cores via a resource table. To ensure that the cores pick up the data from the shared memory it is necessary to mark the memory as uncached on all cores using the buffers. Allocating memory and ensuring it is uncached is done differently on ARM and SHARC. If using RPMsg-Lite on the ARM it is recommended that the memory is allocated on the ARM as the SHARCs allow for simple run-time changes to caching via a set of registers.</p>
+<p>The memory allocation for for the vring buffers should be done on a single core
+and the location of those buffers shared with the other cores via a resource
+table. To ensure that the cores pick up the data from the shared memory it is
+necessary to mark the memory as uncached on all cores using the buffers.
+Allocating memory and ensuring it is uncached is done differently on ARM and
+SHARC. If using RPMsg-Lite on the ARM it is recommended that the memory is
+allocated on the ARM as the SHARCs allow for simple run-time changes to caching
+via a set of registers.</p>
 <p>Create an array for the vring buffers on the heap.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">uint8_t</span> <span class="n">vring_buffer</span><span class="p">[</span><span class="n">ADI_VRING_BUFFER_SIZE</span><span class="p">];</span>
 </pre></div>
 </div>
 <section id="disable-cache-on-arm">
 <h4>Disable cache on ARM<a class="headerlink" href="#disable-cache-on-arm" title="Link to this heading"></a></h4>
-<p>Disabling cache on the ARM for the vring buffers requires changes to the linker files.</p>
+<p>Disabling cache on the ARM for the vring buffers requires changes to the linker
+files.</p>
 <p>Example for allocating 4MB of L3 memory as uncached memory on an SC594:</p>
 <p>Modify apt.c:</p>
-<p>Add a definition for an uncached block of memory and adjust the block of memory from which it is taken from</p>
+<p>Add a definition for an uncached block of memory and adjust the block of memory
+from which it is taken from</p>
 <p>Change:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="mh">0xA0000000</span><span class="n">u</span><span class="p">,</span> <span class="mh">0xBFFFFFFF</span><span class="n">u</span><span class="p">,</span> <span class="n">ADI_MMU_WB_CACHED</span>           <span class="p">},</span> <span class="o">/*</span> <span class="mi">512</span><span class="n">MB</span> <span class="n">DDR</span><span class="o">-</span><span class="n">A</span> <span class="o">*/</span>
 </pre></div>
@@ -683,7 +699,8 @@ Content on this topic
 </pre></div>
 </div>
 <p>Modify app.ld:</p>
-<p>Add a definition for an uncached block of memory and adjust the block of memory from which it is taken from matching the changes maed to apt.c</p>
+<p>Add a definition for an uncached block of memory and adjust the block of memory
+from which it is taken from matching the changes maed to apt.c</p>
 <p>Change:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/*</span> <span class="n">ARM</span> <span class="n">Core</span> <span class="mi">0</span> <span class="n">L3</span><span class="p">,</span> <span class="n">DMC0</span> <span class="o">*/</span>
 <span class="n">MEM_L3</span> <span class="p">:</span> <span class="n">ORIGIN</span> <span class="o">=</span> <span class="mh">0xA0000000</span><span class="p">,</span> <span class="n">LENGTH</span> <span class="o">=</span> <span class="mi">512</span><span class="n">M</span>
@@ -703,7 +720,8 @@ Content on this topic
 <span class="p">}</span> <span class="o">&gt;</span><span class="n">MEM_L3_UNCACHED</span> <span class="o">=</span> <span class="mi">0</span>
 </pre></div>
 </div>
-<p>To store the vring buffers previously declared in the uncached memory block use __attribute__ to specify the memory section it should be mapped to.</p>
+<p>To store the vring buffers previously declared in the uncached memory block use
+__attribute__ to specify the memory section it should be mapped to.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">__attribute__</span> <span class="p">((</span><span class="n">section</span> <span class="p">(</span><span class="s2">&quot;.l3_data_uncached&quot;</span><span class="p">)))</span>
 <span class="n">uint8_t</span> <span class="n">vring_buffer</span><span class="p">[</span><span class="n">ADI_VRING_BUFFER_SIZE</span><span class="p">];</span>
 </pre></div>
@@ -711,7 +729,9 @@ Content on this topic
 </section>
 <section id="disable-cache-on-sharc">
 <h4>Disable cache on SHARC<a class="headerlink" href="#disable-cache-on-sharc" title="Link to this heading"></a></h4>
-<p>The SHARCs have a number of range registers allowing for sections of memory to be marked as uncached. We make use of these to mark the descriptor buffer range and the message buffer range as uncached like in the following example</p>
+<p>The SHARCs have a number of range registers allowing for sections of memory to
+be marked as uncached. We make use of these to mark the descriptor buffer range
+and the message buffer range as uncached like in the following example</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">Disable</span> <span class="n">cache</span> <span class="k">for</span> <span class="n">the</span> <span class="n">descriptors</span> <span class="n">memory</span> <span class="nb">range</span>
 <span class="n">status</span> <span class="o">=</span> <span class="n">adi_cache_set_range</span> <span class="p">((</span><span class="n">void</span> <span class="o">*</span><span class="p">)</span><span class="n">vring_buffer</span><span class="p">,</span>
                     <span class="p">(</span><span class="n">void</span> <span class="o">*</span><span class="p">)(</span><span class="n">vring_buffer</span> <span class="o">+</span> <span class="n">ADI_VRING_BUFFER_SIZE</span><span class="p">),</span>
@@ -719,12 +739,16 @@ Content on this topic
                     <span class="n">adi_cache_noncacheable_range</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>If the SHARC is acting as an RPMsg-Lite remote the ranges to mark as uncached are retrieved from the resource table.</p>
+<p>If the SHARC is acting as an RPMsg-Lite remote the ranges to mark as uncached
+are retrieved from the resource table.</p>
 </section>
 </section>
 <section id="create-resource-table">
 <h3>Create Resource Table<a class="headerlink" href="#create-resource-table" title="Link to this heading"></a></h3>
-<p>On the core on which the memory for the vring buffers was declared create the resource table used to provide information on the shared memory resources used for RPMsg-lite and instruct the linker to store it at a fixed location in L2 memory which is by default marked as uncached.</p>
+<p>On the core on which the memory for the vring buffers was declared create the
+resource table used to provide information on the shared memory resources used
+for RPMsg-lite and instruct the linker to store it at a fixed location in L2
+memory which is by default marked as uncached.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RL_PACKED_BEGIN</span>
 <span class="n">struct</span> <span class="n">sharc_resource_table</span> <span class="p">{</span>
     <span class="n">struct</span> <span class="n">resource_table</span> <span class="n">table_hdr</span><span class="p">;</span>
@@ -781,8 +805,10 @@ Content on this topic
 </section>
 <section id="adding-an-rpmsg-lite-instance">
 <h3>Adding an rpmsg-lite instance<a class="headerlink" href="#adding-an-rpmsg-lite-instance" title="Link to this heading"></a></h3>
-<p>Currently the rpmsg-lite port for ADSP devices only supports static context instances.</p>
-<p>Create a header file named “rpmsg_config.h” and define RL_USE_STATIC_API. RPMsg-Lite will attempt to include this header file during build.</p>
+<p>Currently the rpmsg-lite port for ADSP devices only supports static context
+instances.</p>
+<p>Create a header file named “rpmsg_config.h” and define RL_USE_STATIC_API.
+RPMsg-Lite will attempt to include this header file during build.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#define RL_USE_STATIC_API (1)</span>
 </pre></div>
 </div>
@@ -790,7 +816,8 @@ Content on this topic
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">struct</span> <span class="n">rpmsg_lite_instance</span> <span class="n">rpmsg_SHARC_channel</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>The instance makes use of a Link ID to determine which core the instance should connect to.</p>
+<p>The instance makes use of a Link ID to determine which core the instance should
+connect to.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/*</span> <span class="n">Link</span> <span class="n">IDs</span> <span class="n">to</span> <span class="n">use</span> <span class="n">on</span> <span class="n">ARM</span> <span class="n">core</span> <span class="o">*/</span>
 <span class="c1">#define RL_PLATFORM_ARM_SHARC0_LINK_ID (0U)  /* Link between ARM and SHARC0 */</span>
 <span class="c1">#define RL_PLATFORM_ARM_SHARC1_LINK_ID (1U)  /* Link between ARM and SHARC1 */</span>
@@ -809,7 +836,9 @@ Content on this topic
         <span class="o">&amp;</span><span class="n">rpmsg_SHARC_channel</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>Populate the resource table with the addresses of the vrings created by rpmsg_lite_master_init and signal the remote core that the resource table has been initialised</p>
+<p>Populate the resource table with the addresses of the vrings created by
+rpmsg_lite_master_init and signal the remote core that the resource table has
+been initialised</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">adi_resource_table</span> <span class="o">=</span> <span class="p">(</span><span class="n">struct</span> <span class="n">adi_resource_table</span> <span class="o">*</span><span class="p">)</span>
     <span class="p">((</span><span class="n">uint32_t</span><span class="p">)</span><span class="o">&amp;</span><span class="n">__MCAPI_common_start</span><span class="p">);</span>
 <span class="n">memcpy</span><span class="p">((</span><span class="n">void</span><span class="o">*</span><span class="p">)</span><span class="n">adi_resource_table</span><span class="p">,</span> <span class="p">(</span><span class="n">const</span> <span class="n">void</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">rsc_tbl_local</span><span class="p">,</span> <span class="n">sizeof</span><span class="p">(</span><span class="n">struct</span> <span class="n">adi_resource_table</span><span class="p">));</span>

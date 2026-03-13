@@ -768,17 +768,44 @@ Content on this topic
 </section>
 <section id="theory-of-operation">
 <h2>Theory of Operation<a class="headerlink" href="#theory-of-operation" title="Link to this heading"></a></h2>
-<p>The main features of this IP core are its independent operation and the fact that it does not require an external temperature sensor. All of the mechanisms contained inside the core are controlled by a state machine, so that they do not depend on the software in case the software fails. The state machine uses the temperature it reads from the SYSMONE4 primitive or via the “temp_in” bus to decide the correct PWM duty-cycle. The temperature thresholds and hysteresis have defaults set in hardware and can be modified by the software. The INTERNAL_SYSMONE paramater is used to set the temperature values source, 0 when reading from temp_in and 1 when instantiating the internal SYSMONE primitive.</p>
+<p>The main features of this IP core are its independent operation and the fact
+that it does not require an external temperature sensor. All of the mechanisms
+contained inside the core are controlled by a state machine, so that they do not
+depend on the software in case the software fails. The state machine uses the
+temperature it reads from the SYSMONE4 primitive or via the “temp_in” bus to
+decide the correct PWM duty-cycle. The temperature thresholds and hysteresis
+have defaults set in hardware and can be modified by the software. The
+INTERNAL_SYSMONE paramater is used to set the temperature values source, 0 when
+reading from temp_in and 1 when instantiating the internal SYSMONE primitive.</p>
 <section id="running-independently">
 <h3>Running independently<a class="headerlink" href="#running-independently" title="Link to this heading"></a></h3>
-<p>The hardware can operate with no input from the software; the IP core starts working after the bitstream is loaded, without the need to be brought out of reset. In order to activate the interrupts the software must write to the IRQ_MASK register. At this point the hardware starts operating and a minimal feedback is provided.</p>
+<p>The hardware can operate with no input from the software; the IP core starts
+working after the bitstream is loaded, without the need to be brought out of
+reset. In order to activate the interrupts the software must write to the
+IRQ_MASK register. At this point the hardware starts operating and a minimal
+feedback is provided.</p>
 <p>There are 9 temperature intervals defined in the hardware as below:</p>
 <img alt="PWM vs Temperature" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/docs/axi_fan_control_pvm_vs_temp.svg" />
-<p>Five of these intervals have only one possible duty-cycle and four of them can have either of the neighbouring values. After reset the PWM duty-cycle will start as 100%. The state-machine will begin reading the temperature and will decide on the PWM duty cycle depending on which interval the value matches. The PWM duty-cycle will only change when the temperature enters one of the five intervals with a single PWM duty-cycle, in the other four the previous duty-cycle will be maintained. In these intervals its value will depend on whether the temperature is rising or falling. The temperature can be reconfigured by the software.</p>
-<p>The temperature is obtained from the PL SYSMONE4 primitive as a 16 bit raw value or from the temp_in bus as 10 bit. This value can also be accessed by the software using the TEMPERATURE register however the reading is done periodically and overwrites the register so only the most value will be available. In order to keep the IP as light as possible, the temperateure values obtained are used as raw, it is not converted to Celsius. In order to convert to Celsius the following formula needs to be used:</p>
+<p>Five of these intervals have only one possible duty-cycle and four of them can
+have either of the neighbouring values. After reset the PWM duty-cycle will
+start as 100%. The state-machine will begin reading the temperature and will
+decide on the PWM duty cycle depending on which interval the value matches. The
+PWM duty-cycle will only change when the temperature enters one of the five
+intervals with a single PWM duty-cycle, in the other four the previous
+duty-cycle will be maintained. In these intervals its value will depend on
+whether the temperature is rising or falling. The temperature can be
+reconfigured by the software.</p>
+<p>The temperature is obtained from the PL SYSMONE4 primitive as a 16 bit raw value
+or from the temp_in bus as 10 bit. This value can also be accessed by the
+software using the TEMPERATURE register however the reading is done periodically
+and overwrites the register so only the most value will be available. In order
+to keep the IP as light as possible, the temperateure values obtained are used
+as raw, it is not converted to Celsius. In order to convert to Celsius the
+following formula needs to be used:</p>
 <p>//Internal SYSMONE4 primitive: Temperature [C] = (ADC × 501.3743 / 2^bits) – 273.6777// <a class="icon link reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug580-ultrascale-sysmon.pdf" target="_blank">ug580</a></p>
 <p><em>Reading from temp_in: Temperature [C] = (ADC *20 - 11195) / 41</em></p>
-<p>There are five configurations described in the hardware, each with a corresponding tacho period +/- 25% tolerance.</p>
+<p>There are five configurations described in the hardware, each with a
+corresponding tacho period +/- 25% tolerance.</p>
 <p><em>*The tacho parameters are for a SUNON PF92251B1-000U-S99 fan</em></p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -818,16 +845,35 @@ Content on this topic
 <section id="software-control-and-customization">
 <h3>Software control and customization<a class="headerlink" href="#software-control-and-customization" title="Link to this heading"></a></h3>
 <p>The software can overwrite the temperature thresholds and the tacho values if needed. The TEMP_00_H -&gt; TEMP_100_L registers can redefine the temperature intervals and the TACHO_25 -&gt; TACHO_100 registers can also be used to redefine tacho values if a different fan is installed. In this case the TACHO_*_TOL registers must also be written in orded to provide tolerances. They must be calculated by the software as % of the nominal value <em>(i.e. 20% of 10000 = 2000)</em>.</p>
-<p>The software can also set a custom PWM duty-cycle by using the provided registers. All the values inside the PWM/TACHO registers are in clock-cycle periods. The software can provide custom tacho parameters for that desired PWM if it wants to continue to evaluate the tacho signal. The PWM period can be read from the PWM_PERIOD register and is by default 20000.</p>
+<p>The software can also set a custom PWM duty-cycle by using the provided
+registers. All the values inside the PWM/TACHO registers are in clock-cycle
+periods. The software can provide custom tacho parameters for that desired PWM
+if it wants to continue to evaluate the tacho signal. The PWM period can be read
+from the PWM_PERIOD register and is by default 20000.</p>
 <p><em>i.e. 5KHz -&gt; 20000 * 10 ns = 200 us</em></p>
-<p>The new PWM value must be greater or equal to the value selected by the hardware and less or equal to the PWM period. The software can use the PWM_WIDTH and PWM_PERIOD registers in order to make sure the new value is valid.</p>
-<p>After requesting a new duty-cycle there is a 5 second delay during which the hardware waits for the fan rotaion speed to stabilize. The software will then have to provide parameters for the tacho signal in order for the hardware to be able to evaluate it. To do this the software will have to write the TACHO_PERIOD and TACHO_TOLERANCE registers in that order. The software can read the TACHO_MEASUREMENT register to obtain the new tacho period and derive the tolerance value from it.</p>
-<p>A mearsurement is performed by averaging 2^AVP_POW consecutive tacho perdiod measurements. The time needed to finish a measurement depends on the frequency of the signal.</p>
-<p>The software can now use this register to read the new tacho pediod and then write it to the TACHO_PERIOD register. Then it can write a tolerance value to the TACHO_TOLERANCE register. The hardware will only start to monitor the tacho signal when the tolerance is provided.</p>
+<p>The new PWM value must be greater or equal to the value selected by the hardware
+and less or equal to the PWM period. The software can use the PWM_WIDTH and
+PWM_PERIOD registers in order to make sure the new value is valid.</p>
+<p>After requesting a new duty-cycle there is a 5 second delay during which the
+hardware waits for the fan rotaion speed to stabilize. The software will then
+have to provide parameters for the tacho signal in order for the hardware to be
+able to evaluate it. To do this the software will have to write the TACHO_PERIOD
+and TACHO_TOLERANCE registers in that order. The software can read the
+TACHO_MEASUREMENT register to obtain the new tacho period and derive the
+tolerance value from it.</p>
+<p>A mearsurement is performed by averaging 2^AVP_POW consecutive tacho perdiod
+measurements. The time needed to finish a measurement depends on the frequency
+of the signal.</p>
+<p>The software can now use this register to read the new tacho pediod and then
+write it to the TACHO_PERIOD register. Then it can write a tolerance value to
+the TACHO_TOLERANCE register. The hardware will only start to monitor the tacho
+signal when the tolerance is provided.</p>
 </section>
 <section id="interrupts">
 <h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading"></a></h3>
-<p>The fan controller supports interrupts to both inform the software of any possible errors and also to facilitate the control of the core. There are four interrupt sources:</p>
+<p>The fan controller supports interrupts to both inform the software of any
+possible errors and also to facilitate the control of the core. There are four
+interrupt sources:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span><span class="n">The</span> <span class="s1">&#39;&#39;</span><span class="n">PWM_CHANGED</span><span class="s1">&#39;&#39;</span> <span class="n">interrupt</span> <span class="ow">is</span> <span class="n">generated</span> <span class="n">at</span> <span class="n">the</span> <span class="n">end</span> <span class="n">of</span> <span class="n">the</span> <span class="mi">5</span> <span class="n">second</span> <span class="n">delay</span> <span class="n">after</span> <span class="n">a</span> <span class="n">PWM</span> <span class="n">duty</span><span class="o">-</span><span class="n">cycle</span> <span class="n">change</span> <span class="n">request</span><span class="o">.</span> <span class="n">The</span> <span class="n">request</span> <span class="n">can</span> <span class="n">come</span> <span class="n">either</span> <span class="kn">from</span><span class="w"> </span><span class="nn">the</span> <span class="n">software</span> <span class="ow">or</span> <span class="kn">from</span><span class="w"> </span><span class="nn">the</span> <span class="n">hardware</span>
 <span class="o">*</span><span class="n">The</span> <span class="s1">&#39;&#39;</span><span class="n">TEMP_INCREASE</span><span class="s1">&#39;&#39;</span> <span class="n">occurs</span> <span class="n">when</span> <span class="n">the</span> <span class="n">hardware</span> <span class="n">requests</span> <span class="n">a</span> <span class="n">higher</span> <span class="n">PWM</span> <span class="n">width</span> <span class="n">than</span> <span class="n">the</span> <span class="n">curret</span> <span class="n">one</span><span class="p">,</span> <span class="n">indicating</span> <span class="n">a</span> <span class="n">rise</span> <span class="ow">in</span> <span class="n">temperature</span><span class="o">.</span>
 <span class="o">*</span><span class="s1">&#39;&#39;</span><span class="n">NEW_TACHO_MEASUREMENT</span><span class="s1">&#39;&#39;</span> <span class="ow">is</span> <span class="n">asserted</span> <span class="n">when</span> <span class="n">a</span> <span class="n">tacho</span> <span class="n">measurement</span> <span class="n">cycle</span> <span class="ow">is</span> <span class="n">completed</span> <span class="ow">and</span> <span class="n">the</span> <span class="n">value</span> <span class="ow">is</span> <span class="n">written</span> <span class="n">to</span> <span class="n">the</span> <span class="n">TACHO_MEASUREMENT</span> <span class="n">register</span><span class="o">.</span> <span class="n">The</span> <span class="n">software</span> <span class="n">can</span> <span class="n">use</span> <span class="n">this</span> <span class="n">interrupt</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">process</span> <span class="n">where</span> <span class="n">it</span> <span class="n">requests</span> <span class="n">a</span> <span class="n">new</span> <span class="n">PWM</span> <span class="n">width</span> <span class="ow">in</span> <span class="n">order</span> <span class="n">to</span> <span class="n">obtain</span> <span class="n">tacho</span> <span class="n">information</span><span class="o">.</span>

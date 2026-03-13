@@ -581,11 +581,20 @@ Content on this topic
   <section id="sharing-data-between-cores-system-telemetry">
 <h1>Sharing Data Between Cores / System Telemetry<a class="headerlink" href="#sharing-data-between-cores-system-telemetry" title="Link to this heading"></a></h1>
 <img alt="youtube&gt;srVoSbo7zB4" src="https://wiki.analog.com/_media/resources/tools-software/sharc-audio-module/baremetal/youtube&gt;srvosbo7zb4" />
-<p>All three processors have access to a block of shared L2 memory. The default Linker Description File (LDF) allocates a number of section for MCAPI but as the Bare Metal Framework does not rely on this heavier form of intra-core message passing, we can reuse this shared memory. There is one segment that all three cores are, by default, able to read from and write to which is located at address 0x20080000.</p>
+<p>All three processors have access to a block of shared L2 memory. The default
+Linker Description File (LDF) allocates a number of section for MCAPI but as the
+Bare Metal Framework does not rely on this heavier form of intra-core message
+passing, we can reuse this shared memory. There is one segment that all three
+cores are, by default, able to read from and write to which is located at
+address 0x20080000.</p>
 <p>The Bare Metal Framework uses a C struct that is placed in this shared block of L2 memory which is declared in <code class="docutils literal notranslate"><span class="pre">common/multicore_shared_memory.c</span></code> and <code class="docutils literal notranslate"><span class="pre">common/multicore_shared_memory.h</span></code>. The .h file contains the struct declaration and the .c file places this in the L2 segment that all three cores can access.</p>
-<p>The memory segment containing the C struct is 4Kbytes so we can’t store large buffers of audio. However, it is perfect for quickly and easily sharing parameters and telemetry data that all three cores can access from C.</p>
+<p>The memory segment containing the C struct is 4Kbytes so we can’t store large
+buffers of audio. However, it is perfect for quickly and easily sharing
+parameters and telemetry data that all three cores can access from C.</p>
 <p>the C struct declared in <code class="docutils literal notranslate"><span class="pre">common/multicore_shared_memory.h</span></code> is comprised predominantly of 32-bit data types. This is important to help guarantee proper atomic accesses between cores.</p>
-<p>You can customize the structure and add additional variables. The example below shows how to read a value from the shared memory structure and how to write into the structure.</p>
+<p>You can customize the structure and add additional variables. The example below
+shows how to read a value from the shared memory structure and how to write into
+the structure.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Read from the shared memory structure</span>
 <span class="kt">uint32_t</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">multicore_data</span><span class="o">-&gt;</span><span class="n">my_var_1</span><span class="p">;</span>
 
@@ -593,10 +602,16 @@ Content on this topic
 <span class="n">multicore_data</span><span class="o">-&gt;</span><span class="n">my_var_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sinf</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>There are a number of existing fields within this structure that are helpful as you develop and benchmark your audio algorithms.</p>
+<p>There are a number of existing fields within this structure that are helpful as
+you develop and benchmark your audio algorithms.</p>
 <p>** Peak and current MHz loading for each core **</p>
-<p>Each SHARC core measures the current loading in MHz of the audio processing algorithms and the framework itself. These values are in MHz. If you audio processing is consuming 45.0MHz on SHARC Core 1, you’re using roughly 10% of the processing available on that core.</p>
-<p>Additionally, each SHARC core keeps track of how many audio frames it has dropped due to the audio callback consuming too many processor cycles. Note that this information is also sent to the event logging system.</p>
+<p>Each SHARC core measures the current loading in MHz of the audio processing
+algorithms and the framework itself. These values are in MHz. If you audio
+processing is consuming 45.0MHz on SHARC Core 1, you’re using roughly 10% of the
+processing available on that core.</p>
+<p>Additionally, each SHARC core keeps track of how many audio frames it has
+dropped due to the audio callback consuming too many processor cycles. Note that
+this information is also sent to the event logging system.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Examine these variables to understand MHz loading for each core</span>
 <span class="kt">float</span><span class="w">           </span><span class="n">sharc_core1_cpuload_mhz</span><span class="p">;</span>
 <span class="kt">float</span><span class="w">           </span><span class="n">sharc_core1_cpuload_mhz_peak</span><span class="p">;</span>
@@ -607,12 +622,16 @@ Content on this topic
 <span class="kt">uint32_t</span><span class="w">        </span><span class="n">sharc_core2_dropped_audio_frames</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>All cores can read these fields. To read the current MHz loading of SHARC Core 2 on the ARM core, you can do something like this:</p>
+<p>All cores can read these fields. To read the current MHz loading of SHARC Core 2
+on the ARM core, you can do something like this:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">float</span><span class="w"> </span><span class="n">core2_loading</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">multicore_data</span><span class="o">-&gt;</span><span class="n">sharc_core2_cpuload_mhz</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>** Access push buttons and Pots values (from Audio Project Fin) **</p>
-<p>The Audio Project Fin has 3 Pots and a number of additional push buttons. These can be accessed from both SHARC cores. There is a flag for each pushbutton for each SHARC core. This prevents one core from acknowledging a button event before the other core sees it.</p>
+<p>The Audio Project Fin has 3 Pots and a number of additional push buttons. These
+can be accessed from both SHARC cores. There is a flag for each pushbutton for
+each SHARC core. This prevents one core from acknowledging a button event before
+the other core sees it.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="o">**/</span>
 <span class="cp">#ifdef SAM_AUDIOPROJ_FIN_BOARD_PRESENT</span>
 <span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">audioproj_fin_sw_1_core1_pressed</span><span class="p">;</span>
@@ -636,12 +655,15 @@ Content on this topic
 <span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">audioproj_fin_aux_hadc6</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>If you wanted to use the value of the Pot connected to HADC 0 on the Audio Project Fin for a delay algorithm running on SHARC Core 1, you could do the following:</p>
+<p>If you wanted to use the value of the Pot connected to HADC 0 on the Audio
+Project Fin for a delay algorithm running on SHARC Core 1, you could do the
+following:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">float</span><span class="w"> </span><span class="n">delay_feedback</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">multicore_data</span><span class="o">-&gt;</span><span class="n">audioproj_fin_pot_hadc0</span><span class="p">;</span>
 <span class="kt">float</span><span class="w"> </span><span class="n">delay_feedthrough</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">multicore_data</span><span class="o">-&gt;</span><span class="n">audioproj_fin_pot_hadc1</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>And to use a button to toggle an effect when SW1/PB1 (Push Button) is pressed, you could do the following:</p>
+<p>And to use a button to toggle an effect when SW1/PB1 (Push Button) is pressed,
+you could do the following:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">delay_enabled</span><span class="p">;</span>
 <span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">multicore_data</span><span class="o">-&gt;</span><span class="n">audioproj_fin_sw_1_core1_pressed</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">   </span><span class="n">delay_enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">!</span><span class="n">delay_enabled</span><span class="p">;</span>
@@ -649,11 +671,17 @@ Content on this topic
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>The HADC values are updated by the ARM core once per millisecond in the millisecond tick interrupt service routine. The PB fields are updated in the interrupt service routine for the PBs in the ARM core.</p>
-<p>If you want the ARM core to manage a user interface, this is a very easy way to get audio parameters to the SHARCs and it’s also an easy way for the ARM to read back values generated by the SHARC like signal levels.</p>
+<p>The HADC values are updated by the ARM core once per millisecond in the
+millisecond tick interrupt service routine. The PB fields are updated in the
+interrupt service routine for the PBs in the ARM core.</p>
+<p>If you want the ARM core to manage a user interface, this is a very easy way to
+get audio parameters to the SHARCs and it’s also an easy way for the ARM to read
+back values generated by the SHARC like signal levels.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>Tip: Add multicore_data to the expressions window in CCES. You can halt the ARM core and see the contents of the shared memory structure while the SHARC cores are running.</p>
+<p>Tip: Add multicore_data to the expressions window in CCES. You can halt the
+ARM core and see the contents of the shared memory structure while the SHARC
+cores are running.</p>
 </div>
 </section>
 

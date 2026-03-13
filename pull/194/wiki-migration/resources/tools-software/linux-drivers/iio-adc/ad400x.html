@@ -683,12 +683,15 @@ Content on this topic
 </section>
 <section id="driver-setup">
 <h1>Driver setup<a class="headerlink" href="#driver-setup" title="Link to this heading"></a></h1>
-<p>Since AD4003/4007/4011/4020 are high speed analog-to-digital converters with speeds up to 2 MSPS, additional components are required to achieve high performance. In this scenario, the following HDL components are required:</p>
+<p>Since AD4003/4007/4011/4020 are high speed analog-to-digital converters with
+speeds up to 2 MSPS, additional components are required to achieve high
+performance. In this scenario, the following HDL components are required:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="../../../fpga/peripherals/spi_engine.html"><span class="doc">SPI Engine</span></a></p></li>
 <li><p><a class="reference internal" href="../../../fpga/docs/axi_dmac.html"><span class="doc">High-Speed DMA Controller Peripheral</span></a></p></li>
 </ul>
-<p>The device will interface with these components and follow the device tree bindings.</p>
+<p>The device will interface with these components and follow the device tree
+bindings.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>properties:
@@ -715,7 +718,6 @@ Content on this topic
 
   dmas:
     description:
-
 
       DMA specifier, consisting of a phandle to DMA controller node.
     maxItems: 1
@@ -800,7 +802,6 @@ unevaluatedProperties: false
 examples:
   *
 
-
     spi {
         #address-cells = &lt;1&gt;;
         #size-cells = &lt;0&gt;;
@@ -860,7 +861,8 @@ examples:
 <h1>Adding Linux driver support<a class="headerlink" href="#adding-linux-driver-support" title="Link to this heading"></a></h1>
 <section id="enabling-the-driver">
 <h2>Enabling the driver<a class="headerlink" href="#enabling-the-driver" title="Link to this heading"></a></h2>
-<p>Configure kernel with “make menuconfig” (alternatively use “make xconfig” or “make qconfig”)</p>
+<p>Configure kernel with “make menuconfig” (alternatively use “make xconfig” or
+“make qconfig”)</p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <p>The AD400x driver depends on CONFIG_SPI_MASTER</p>
@@ -883,7 +885,15 @@ examples:
 </section>
 <section id="driver-testing">
 <h1>Driver testing<a class="headerlink" href="#driver-testing" title="Link to this heading"></a></h1>
-<p>Each and every IIO device, typically a hardware chip, has a device folder under /sys/bus/iio/devices/iio:deviceX. Where X is the IIO index of the device. Under every of these directory folders reside a set of files, depending on the characteristics and features of the hardware device in question. These files are consistently generalized and documented in the IIO ABI documentation. In order to determine which IIO deviceX corresponds to which hardware device, the user can read the name file /sys/bus/iio/devices/iio:deviceX/name. In case the sequence in which the iio device drivers are loaded/registered is constant, the numbering is constant and may be known in advance.</p>
+<p>Each and every IIO device, typically a hardware chip, has a device folder under
+/sys/bus/iio/devices/iio:deviceX. Where X is the IIO index of the device. Under
+every of these directory folders reside a set of files, depending on the
+characteristics and features of the hardware device in question. These files are
+consistently generalized and documented in the IIO ABI documentation. In order
+to determine which IIO deviceX corresponds to which hardware device, the user
+can read the name file /sys/bus/iio/devices/iio:deviceX/name. In case the
+sequence in which the iio device drivers are loaded/registered is constant, the
+numbering is constant and may be known in advance.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>TIP: An example program which uses the interface can be found here:</p>
@@ -972,7 +982,13 @@ examples:
 </pre></div>
 </div>
 </div>
-<p>The Industrial I/O subsystem provides support for various ring buffer based data acquisition methods. Apart from device specific hardware buffer support, the user can chose between two different software ring buffer implementations. One is the IIO lock free software ring, and the other is based on Linux kfifo. Devices with buffer support feature an additional sub-folder in the /sys/bus/iio/devices/deviceX/ folder hierarchy. Called deviceX:bufferY, where Y defaults to 0, for devices with a single buffer.</p>
+<p>The Industrial I/O subsystem provides support for various ring buffer based data
+acquisition methods. Apart from device specific hardware buffer support, the
+user can chose between two different software ring buffer implementations. One
+is the IIO lock free software ring, and the other is based on Linux kfifo.
+Devices with buffer support feature an additional sub-folder in the
+/sys/bus/iio/devices/deviceX/ folder hierarchy. Called deviceX:bufferY, where Y
+defaults to 0, for devices with a single buffer.</p>
 <p>Every buffer implementation features a set of files:</p>
 <div class="line-block">
 <div class="line"><strong>length</strong></div>
@@ -1034,7 +1050,8 @@ examples:
 <h2>Buffer Example<a class="headerlink" href="#buffer-example" title="Link to this heading"></a></h2>
 <p>When the buffer is enabled, the ad400x driver prepares a read transfer and configures the <a class="reference internal" href="../../../fpga/peripherals/spi_engine/offload.html"><span class="doc">SPI Engine Offload</span></a> module to repeat that transfer each time the offload module is triggered. Then, the ad400x driver sets a PWM device to trigger the offload module at the rate specified by the <code class="docutils literal notranslate"><span class="pre">sampling_frequency</span></code> attribute. With that, ADC readings are gathered continuously while the buffer remains enabled.</p>
 <div class="box bggreen docutils container">
-<p>This specifies any shell prompt running on the target - Example command sequence</p>
+<p>This specifies any shell prompt running on the target - Example command
+sequence</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@analog</span><span class="p">:</span><span class="o">~</span><span class="c1"># echo 1 &gt; /sys/bus/iio/devices/iio:device1/scan_elements/in_voltage0_en</span>
 <span class="n">root</span><span class="nd">@analog</span><span class="p">:</span><span class="o">~</span><span class="c1"># cat /sys/bus/iio/devices/iio:device1/scan_elements/in_voltage0_en</span>
 <span class="mi">1</span>
@@ -1046,7 +1063,10 @@ examples:
 </div>
 <section id="data-interpretation">
 <h3>Data interpretation<a class="headerlink" href="#data-interpretation" title="Link to this heading"></a></h3>
-<p>Each buffer entry contains one sample. The amount of bits and their meaning will vary according to ADC precision and output code pattern (whether output code is twos complement or not). Buffer raw data may be retrieved by reading the character device associated with the ADC device.</p>
+<p>Each buffer entry contains one sample. The amount of bits and their meaning will
+vary according to ADC precision and output code pattern (whether output code is
+twos complement or not). Buffer raw data may be retrieved by reading the
+character device associated with the ADC device.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@analog</span><span class="p">:</span><span class="o">~</span><span class="c1"># hexdump -n 512 -e &#39; 32 &quot;%d &quot; &quot;\n&quot;&#39; /dev/iio:device1</span>

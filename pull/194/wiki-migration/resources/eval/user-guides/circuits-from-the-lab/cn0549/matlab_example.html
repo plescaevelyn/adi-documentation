@@ -595,7 +595,11 @@ Content on this topic
   <section id="streaming-data-from-the-cn0549-into-matlab">
 <h1>Streaming Data from the CN0549 into MATLAB<a class="headerlink" href="#streaming-data-from-the-cn0549-into-matlab" title="Link to this heading"></a></h1>
 <p>This page is going to discuss how to use the <a class="icon adi reference external" href="https://www.analog.com/CN0549" target="_blank">CN0549</a> Machine Learning Enablement Platform for streaming high fidelity analog sensor data from a device under test (DUT), into MATLAB for data analysis. The goal is that once you have the data in these tools, you’ll be able to create your own algorithms and train your system using your own data.</p>
-<p>This page will outline how to get the data from the sensor all the way to MATLAB, using open-source hardware and software from Analog Devices. At the end of this page, links will also be provided to specific examples done in MATLAB, where you can recreate each example using the training data and scripts provided.</p>
+<p>This page will outline how to get the data from the sensor all the way to
+MATLAB, using open-source hardware and software from Analog Devices. At the end
+of this page, links will also be provided to specific examples done in MATLAB,
+where you can recreate each example using the training data and scripts
+provided.</p>
 <section id="requirements">
 <h2>Requirements<a class="headerlink" href="#requirements" title="Link to this heading"></a></h2>
 <div class="admonition important">
@@ -635,7 +639,9 @@ Content on this topic
 </ul>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>The user guide shows the USB OTG connector and the HDMI cable installed, but those two steps will not be needed here since we are streaming data over the network into the laptop.</p>
+<p>The user guide shows the USB OTG connector and the HDMI cable installed, but
+those two steps will not be needed here since we are streaming data over the
+network into the laptop.</p>
 </div>
 <ul class="simple">
 <li><p>Connect one end of the Ethernet cable into the DE10-Nano, and the other end of the Ethernet cable into a router or other network connection.</p></li>
@@ -645,7 +651,8 @@ Content on this topic
 <li><p>A driver for the board should automatically be detected and installed on your PC. If this does not happen you may have to manually install that driver in order to continue. Here is a link to the <a class="icon link reference external" href="https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers" target="_blank">UART Serial Driver</a></p></li>
 </ul>
 </li>
-<li><p>Plug the power supply into the wall outlet and use the DC barrel jack to power up the CN0549 setup.</p></li>
+<li><p>Plug the power supply into the wall outlet and use the DC barrel jack to
+power up the CN0549 setup.</p></li>
 </ul>
 <section id="system-block-diagram">
 <h3>System Block Diagram<a class="headerlink" href="#system-block-diagram" title="Link to this heading"></a></h3>
@@ -653,12 +660,14 @@ Content on this topic
 </section>
 <section id="finding-your-de10-nano">
 <h3>Finding your DE10-Nano<a class="headerlink" href="#finding-your-de10-nano" title="Link to this heading"></a></h3>
-<p>Before you can start gathering data, you first must locate the CN0549 system setup on your network.</p>
+<p>Before you can start gathering data, you first must locate the CN0549 system
+setup on your network.</p>
 <ul class="simple">
 <li><p>Setup a UART serial communication between your PC and the DE10-Nano board using the micro USB cable to USB type A</p></li>
-<li><p>Using your device manager, locate the COM port assigned to the DE10-Nano board</p></li>
+<li><p>Using your device manager, locate the COM port assigned to the DE10-Nano
+board</p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0540/com_port.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0540/com_port.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0540/com_port.png" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0540/com_port.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0540/com_port.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0540/com_port.png" width="600" />
 </a>
 <ul class="simple">
 <li><p>Open Putty, Tera Term, or other serial terminal program and open a terminal between the COM port the DE10-Nano board by setting the Baud rate to 115200, and connect.</p></li>
@@ -674,14 +683,15 @@ Content on this topic
 </div>
 <ul class="simple">
 <li><p>Type <strong>ifconfig</strong> into the terminal, hit “Enter”</p></li>
-<li><p>That should echo back some information where you can pull out the inet address of eth0.</p></li>
+<li><p>That should echo back some information where you can pull out the inet
+address of eth0.</p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0540/serial_terminal_linux_ifconfig_inet.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0540/serial_terminal_linux_ifconfig_inet.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0540/serial_terminal_linux_ifconfig_inet.png" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0540/serial_terminal_linux_ifconfig_inet.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0540/serial_terminal_linux_ifconfig_inet.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0540/serial_terminal_linux_ifconfig_inet.png" width="600" />
 </a>
 </section>
 <section id="id1">
 <h3>System Block Diagram<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0549/cn0549_matlab_generic_sw_blk_dig.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0549/cn0549_matlab_generic_sw_blk_dig.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0549/cn0549_matlab_generic_sw_blk_dig.png" style="width: 1200px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0549/cn0549_matlab_generic_sw_blk_dig.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0549/cn0549_matlab_generic_sw_blk_dig.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0549/cn0549_matlab_generic_sw_blk_dig.png" width="1200" />
 </a>
 </section>
 <section id="connecting-to-the-cn0549-via-matlab">

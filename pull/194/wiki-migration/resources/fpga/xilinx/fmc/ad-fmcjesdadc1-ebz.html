@@ -615,8 +615,13 @@ Content on this topic
 </div>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/AD9250" target="_blank">AD9250</a> is a dual, 14-bit ADC with sampling speeds of up to 250 MSPS. It features a multistage, differential pipelined architecture with integrated output error correction logic. It supports wide bandwidth inputs for a variety of user-selectable input ranges. The AD9250 features JESD204B high speed serial interface.</p>
 <p>The boards also feature the <a class="icon adi reference external" href="https://www.analog.com/AD9517-1" target="_blank">AD9517-1</a> for multi-output clock distribution with sub-picosecond jitter performance, along with an on-chip PLL and VCO. The devices may be clocked by either an internal clock source (optionally locked to an external reference) or an externally supplied sample clock.</p>
-<p>It also features an external trigger input for customized sampling control. The card is mechanically and electrically compliant to the FMC standard (ANSI/VITA 57.1).</p>
-<p>The reference design includes the device data capture via the JESD204B serial interface and the SPI interface. The samples are written to the external DDR-DRAM. It allows programming the device and monitoring it’s internal registers via SPI.</p>
+<p>It also features an external trigger input for customized sampling control. The
+card is mechanically and electrically compliant to the FMC standard (ANSI/VITA
+57.1).</p>
+<p>The reference design includes the device data capture via the JESD204B serial
+interface and the SPI interface. The samples are written to the external
+DDR-DRAM. It allows programming the device and monitoring it’s internal
+registers via SPI.</p>
 </section>
 <section id="supported-devices">
 <h2>Supported Devices<a class="headerlink" href="#supported-devices" title="Link to this heading"></a></h2>
@@ -649,29 +654,50 @@ Content on this topic
 </section>
 <section id="using-the-reference-design">
 <h2>Using the reference design<a class="headerlink" href="#using-the-reference-design" title="Link to this heading"></a></h2>
-<p>The reference design is built on a microblaze based system parameterized for linux. A functional block diagram of the design is given below.</p>
+<p>The reference design is built on a microblaze based system parameterized for
+linux. A functional block diagram of the design is given below.</p>
 <section id="xilinx-block-diagram">
 <h3>Xilinx block diagram<a class="headerlink" href="#xilinx-block-diagram" title="Link to this heading"></a></h3>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/ad-fmcjesdadc1-ebz/fmcjesdadc1_xilinx.svg"><img alt="block diagram" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/ad-fmcjesdadc1-ebz/fmcjesdadc1_xilinx.svg" style="width: 800px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/ad-fmcjesdadc1-ebz/fmcjesdadc1_xilinx.svg"><img alt="block diagram" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/ad-fmcjesdadc1-ebz/fmcjesdadc1_xilinx.svg" width="800" />
 </a>
 </section>
 <section id="ad-fmcjesdadc1-ebz-block-diagram">
 <h3>AD-FMCJESDADC1-EBZ block diagram<a class="headerlink" href="#ad-fmcjesdadc1-ebz-block-diagram" title="Link to this heading"></a></h3>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/ad-fmcjesdadc1-ebz/ad-fmcjesdadc1-ebz.svg"><img alt="block diagram" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/ad-fmcjesdadc1-ebz/ad-fmcjesdadc1-ebz.svg" style="width: 700px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/ad-fmcjesdadc1-ebz/ad-fmcjesdadc1-ebz.svg"><img alt="block diagram" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/ad-fmcjesdadc1-ebz/ad-fmcjesdadc1-ebz.svg" width="700" />
 </a>
-<p>The reference design consists of a single JESD204B core and two identical instances of AD9250 pcores.</p>
-<p>The AD9250 core consists of three functional modules, the ADC interface, a PN9/PN23 monitor and a DMA interface. The ADC interface captures and buffers data from the JESD204B core. The DMA interface then transfers the samples to the external DDR-DRAM. The capture is initiated by the software. The status of capture (overflow, over the range) are reported back to the software.</p>
-<p>All the pcores have an AXI lite interface that allows control and monitoring of data generation and/or capture.</p>
+<p>The reference design consists of a single JESD204B core and two identical
+instances of AD9250 pcores.</p>
+<p>The AD9250 core consists of three functional modules, the ADC interface, a
+PN9/PN23 monitor and a DMA interface. The ADC interface captures and buffers
+data from the JESD204B core. The DMA interface then transfers the samples to the
+external DDR-DRAM. The capture is initiated by the software. The status of
+capture (overflow, over the range) are reported back to the software.</p>
+<p>All the pcores have an AXI lite interface that allows control and monitoring of
+data generation and/or capture.</p>
 <p>The reference design also includes HDMI cores for GTX eye scan.</p>
 </section>
 <section id="changing-adc-sample-rates">
 <h3>Changing ADC Sample Rates<a class="headerlink" href="#changing-adc-sample-rates" title="Link to this heading"></a></h3>
-<p>The ADC sampling rate can vary from 40MHz to 250MHz. However, there are limitations imposed by the FPGA that may lower this range. In some cases, you may have to regenerate the cores for a different range. The reference design uses GTX (channel PLL) primitives and Xilinx’s JESD204B core IP. The default design runs at 250MHz clock (5Gbps rate).</p>
-<p>As of this writing, the GTX specification &amp; switching characteristics may be found at:</p>
+<p>The ADC sampling rate can vary from 40MHz to 250MHz. However, there are
+limitations imposed by the FPGA that may lower this range. In some cases, you
+may have to regenerate the cores for a different range. The reference design
+uses GTX (channel PLL) primitives and Xilinx’s JESD204B core IP. The default
+design runs at 250MHz clock (5Gbps rate).</p>
+<p>As of this writing, the GTX specification &amp; switching characteristics may be
+found at:</p>
 <p><a class="icon link reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug476_7Series_Transceivers.pdf" target="_blank">support/documentation/user_guides/ug476_7Series_Transceivers.pdf</a> <a class="icon link reference external" href="https://www.xilinx.com/support/documentation/data_sheets/ds182_Kintex_7_Data_Sheet.pdf" target="_blank">support/documentation/data_sheets/ds182_Kintex_7_Data_Sheet.pdf</a></p>
 <p>The key switching characteristics are-</p>
-<p>The reference clock has a range of 60MHz to 670MHz (700MHz). This limits the minimum sampling clock to 60MHz. Though it is NOT recommended, it is possible to use AD9517 to generate a 40MHz sampling clock to AD9250 and a 80MHz reference clock to the FPGA.</p>
-<p>The line rate however, varies based on speed grade, package type and the use of CPLL vs QPLL. The CPLL supports rates between 0.5Gbps to 6.6Gbps (the core may have to be changed for rates less than 3.2Gbps (sampling rate 160MHz) - and the IP may not support all the combinations). Again, it is possible to run the device on a single lane at a higher rate (rather than 2 lanes each at a lower rate) to circumvent some of the troubles of line rate dependency on parametrization, package type and speed grade.</p>
+<p>The reference clock has a range of 60MHz to 670MHz (700MHz). This limits the
+minimum sampling clock to 60MHz. Though it is NOT recommended, it is possible to
+use AD9517 to generate a 40MHz sampling clock to AD9250 and a 80MHz reference
+clock to the FPGA.</p>
+<p>The line rate however, varies based on speed grade, package type and the use of
+CPLL vs QPLL. The CPLL supports rates between 0.5Gbps to 6.6Gbps (the core may
+have to be changed for rates less than 3.2Gbps (sampling rate 160MHz) - and the
+IP may not support all the combinations). Again, it is possible to run the
+device on a single lane at a higher rate (rather than 2 lanes each at a lower
+rate) to circumvent some of the troubles of line rate dependency on
+parametrization, package type and speed grade.</p>
 <p>You must carefully evaluate these specifications against your requirements to run the design at a specific sampling frequency (or a range). As always, if you have any questions or run into any problems, <a class="icon ez reference external" href="https://ez.analog.com/fpga" target="_blank">ask help &amp; support</a>.</p>
 </section>
 </section>
@@ -704,19 +730,33 @@ Content on this topic
 </tbody>
 </table>
 </div>
-<p>This reference design may be used as it is for FMC-176 and it’s variations by selecting the appropriate number of DAC channels. It is also easy to port the design for other boards by removing one or more corresponding pcores. Also some devices may not be accessible depending on whether one choose to use LPC or HPC. To fully support both the DACs of the FMC-176, a carrier must have a fully populated HPC connector. The KC705 do not have a fully populated HPC.</p>
-<p>The reference design includes (if enabled) RF generation via DDS and the SPI interface for the DACs. At the prompt just enter the number of DAC channels you have in your hardware setup. As an example, if you are using FMC-176 with KC705, simply enter ‘1’ as the number of DAC channels. If you are using the ADC only boards, enter ‘0’ as the number of DAC channels.</p>
-<p>The quick start bit file also configures the AD9517 to generate a 2.5GHz clock to AD9129. It then generates a 333MHz tone for the DAC.</p>
+<p>This reference design may be used as it is for FMC-176 and it’s variations by
+selecting the appropriate number of DAC channels. It is also easy to port the
+design for other boards by removing one or more corresponding pcores. Also some
+devices may not be accessible depending on whether one choose to use LPC or HPC.
+To fully support both the DACs of the FMC-176, a carrier must have a fully
+populated HPC connector. The KC705 do not have a fully populated HPC.</p>
+<p>The reference design includes (if enabled) RF generation via DDS and the SPI
+interface for the DACs. At the prompt just enter the number of DAC channels you
+have in your hardware setup. As an example, if you are using FMC-176 with KC705,
+simply enter ‘1’ as the number of DAC channels. If you are using the ADC only
+boards, enter ‘0’ as the number of DAC channels.</p>
+<p>The quick start bit file also configures the AD9517 to generate a 2.5GHz clock
+to AD9129. It then generates a 333MHz tone for the DAC.</p>
 <p>The DAC spectrum for a 333MHz tone is shown below.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/cf_fmc27x_spectrum.jpg"><img alt="DAC Spectrum" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/cf_fmc27x_spectrum.jpg" style="width: 200px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/cf_fmc27x_spectrum.jpg"><img alt="DAC Spectrum" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/cf_fmc27x_spectrum.jpg" width="200" /></a></p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>It is possible to use an adapter board such as FMC-700 with KC705 to access both the DACs on a FMC-176 board. However, the routing delays of FMC-LPC pins to the FMC-700 will cause timing errors on DAC1 and you may see parity errors on the UART terminal.</p>
+<p>It is possible to use an adapter board such as FMC-700 with KC705 to access
+both the DACs on a FMC-176 board. However, the routing delays of FMC-LPC pins
+to the FMC-700 will cause timing errors on DAC1 and you may see parity errors
+on the UART terminal.</p>
 </div>
 </section>
 <section id="downloads">
 <h2>Downloads<a class="headerlink" href="#downloads" title="Link to this heading"></a></h2>
-<p>The HDL Reference Designs and the no-OS Software can be downloaded from the Analog Devices github.</p>
+<p>The HDL Reference Designs and the no-OS Software can be downloaded from the
+Analog Devices github.</p>
 <p><strong>FPGA Reference Designs:</strong></p>
 <div class="download admonition">
 <p class="admonition-title">Download</p>

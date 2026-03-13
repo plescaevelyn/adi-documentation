@@ -592,20 +592,30 @@ Content on this topic
 <p>Using the <a class="reference internal" href="project-wizard.html"><span class="doc">bare metal project wizard</span></a>:</p>
 <ul class="simple">
 <li><p>Give the project a meaningful name, click Next</p></li>
-<li><p>Choose the Audio Project Fin on the Expansion Fin Selection Page because it is required for part of the tutorial, click Finish</p></li>
+<li><p>Choose the Audio Project Fin on the Expansion Fin Selection Page because it
+is required for part of the tutorial, click Finish</p></li>
 </ul>
 <p><strong>No other options need to be changed.</strong></p>
 </section>
 <section id="tutorial-overview">
 <h2>Tutorial Overview<a class="headerlink" href="#tutorial-overview" title="Link to this heading"></a></h2>
 <p>In this tutorial, we will implement a basic volume control effect.</p>
-<p>Changing the volume or amplitude of the audio signal passing through the SHARC Audio Module requires us to simply multiply each sample by a constant value. If that value is between 0.0 and 1.0, the volume will be decreased, or “attenuated”. If the value is greater than 1.0, the volume will be increased, or “amplified”.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/sharc-audio-module/baremetal/volume_control_effect.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/sharc-audio-module/baremetal/volume_control_effect.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/sharc-audio-module/baremetal/volume_control_effect.png" style="width: 400px;" />
+<p>Changing the volume or amplitude of the audio signal passing through the SHARC
+Audio Module requires us to simply multiply each sample by a constant value. If
+that value is between 0.0 and 1.0, the volume will be decreased, or
+“attenuated”. If the value is greater than 1.0, the volume will be increased, or
+“amplified”.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/sharc-audio-module/baremetal/volume_control_effect.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/sharc-audio-module/baremetal/volume_control_effect.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/sharc-audio-module/baremetal/volume_control_effect.png" width="400" />
 </a>
 </section>
 <section id="attenuating-an-audio-signal-using-pots-on-the-audio-project-fin">
 <h2>Attenuating an Audio Signal using POTs on the Audio Project Fin<a class="headerlink" href="#attenuating-an-audio-signal-using-pots-on-the-audio-project-fin" title="Link to this heading"></a></h2>
-<p>In this tutorial, we’ll implement a stereo volume control function that will use the POTs on the Audio Project fin to control the left and right gain of the audio arriving at the 1/8” audio input jack on the SHARC Audio Module and the 1/4” audio input jack on the Audio Project fin. The output will be passed to the 1/8” output jack on the SHARC Audio Module, the 1/4” audio output jack on the Audio Project fin, and S/PDIF out.</p>
+<p>In this tutorial, we’ll implement a stereo volume control function that will use
+the POTs on the Audio Project fin to control the left and right gain of the
+audio arriving at the 1/8” audio input jack on the SHARC Audio Module and the
+1/4” audio input jack on the Audio Project fin. The output will be passed to the
+1/8” output jack on the SHARC Audio Module, the 1/4” audio output jack on the
+Audio Project fin, and S/PDIF out.</p>
 <p>For this tutorial, we’ll use an audio element called the “clickless volume control” which can be found in <code class="docutils literal notranslate"><span class="pre">src/audio_processing/audio_elements/clickless_vol_ctrl.c/.h</span></code>. This element will change the gain of an incoming audio signal by an arbitrary value. It also supports “clickless” gain adjustment. This means that if the gain is changed to a new value, the function will slew the gain over the course of several samples to the new value. You can change the slew rate of the volume using the <code class="docutils literal notranslate"><span class="pre">VOLUME_CTRL_TRANSITION_SPEED</span></code> constants defined in <code class="docutils literal notranslate"><span class="pre">clickless_vol_ctrl.h</span></code>. This is an argument in the <code class="docutils literal notranslate"><span class="pre">volume_control_set_gain()</span></code> function as shown below.</p>
 <p>Open up the file <code class="docutils literal notranslate"><span class="pre">src/callback_audio_processing.cpp</span></code> in the <code class="docutils literal notranslate"><span class="pre">&lt;PROJECT_NAME&gt;_core1</span></code> project and locate the <code class="docutils literal notranslate"><span class="pre">processaudio_setup()</span></code> and <code class="docutils literal notranslate"><span class="pre">processaudio_callback()</span></code> functions. The setup function is called when the system is initialized and is where we’ll set up our volume control function. And the processaudio_callback is called each time a new block of audio is ready for us to process. This is where we’ll apply the volume control.</p>
 <p>Prior to the setup function, we’ll need to declare two instances of the clickless volume control (one for left channel and one for right channel). And in <code class="docutils literal notranslate"><span class="pre">processaudio_setup()</span></code>, we’ll initialize the two instances using the current POT values as their initial gain values.</p>
@@ -645,8 +655,12 @@ Content on this topic
 </section>
 <section id="attenuating-and-amplifying-audio-using-pots-on-the-audio-project-fin">
 <h2>Attenuating and Amplifying Audio using POTs on the Audio Project Fin<a class="headerlink" href="#attenuating-and-amplifying-audio-using-pots-on-the-audio-project-fin" title="Link to this heading"></a></h2>
-<p>Thus far, we have only attenuated the audio. However, in this example, we’ll have the gain be set to 1.0 when the pots are in the middle position. And when the pots are turned all the way to the right, we’ll set the gain to 2.0. And when the pots are turned all the way to the left, we’ll set the gain to zero.</p>
-<p>The pots values range from 0.0 (full left) to 1.0 (full right) so in essence we just need to multiply the pot values by 2.0.</p>
+<p>Thus far, we have only attenuated the audio. However, in this example, we’ll
+have the gain be set to 1.0 when the pots are in the middle position. And when
+the pots are turned all the way to the right, we’ll set the gain to 2.0. And
+when the pots are turned all the way to the left, we’ll set the gain to zero.</p>
+<p>The pots values range from 0.0 (full left) to 1.0 (full right) so in essence we
+just need to multiply the pot values by 2.0.</p>
 <p>In our setup code, we’ll multiply the value of the current pots by 2.0…</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Instances of the clickless audio volume control</span>
 <span class="n">VOLUME_CTRL</span><span class="w">     </span><span class="n">vol_ctrl_l</span><span class="p">,</span><span class="w"> </span><span class="n">vol_ctrl_r</span><span class="p">;</span>
@@ -659,7 +673,6 @@ Content on this topic
 <span class="w">    </span><span class="c1">// ******************</span>
 <span class="w">    </span><span class="c1">// Add any custom setup code here</span>
 <span class="w">    </span><span class="c1">// ******************</span>
-
 
 <span class="w">    </span><span class="n">volume_control_setup</span><span class="p">(</span><span class="o">&amp;</span><span class="n">vol_ctrl_l</span><span class="p">,</span><span class="w"> </span><span class="n">multicore_data</span><span class="o">-&gt;</span><span class="n">audioproj_fin_pot_hadc0</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">2.0</span><span class="p">);</span>
 <span class="w">    </span><span class="n">volume_control_setup</span><span class="p">(</span><span class="o">&amp;</span><span class="n">vol_ctrl_r</span><span class="p">,</span><span class="w"> </span><span class="n">multicore_data</span><span class="o">-&gt;</span><span class="n">audioproj_fin_pot_hadc1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">2.0</span><span class="p">);</span>
@@ -689,7 +702,8 @@ Content on this topic
 <ul class="simple">
 <li><p>Move the audio processing to the second SHARC core by making the changes to the same file in the <code class="docutils literal notranslate"><span class="pre">&lt;PROJECT_NAME&gt;_core2</span></code> project rather than the <code class="docutils literal notranslate"><span class="pre">&lt;PROJECT_NAME&gt;_core1</span></code> project.</p></li>
 <li><p>Use a third pot to control the left-right balance of the signal</p></li>
-<li><p>Create a phase shift effect on one channel by multiplying it by a negated value of volume_level</p></li>
+<li><p>Create a phase shift effect on one channel by multiplying it by a negated
+value of volume_level</p></li>
 </ul>
 </section>
 </section>

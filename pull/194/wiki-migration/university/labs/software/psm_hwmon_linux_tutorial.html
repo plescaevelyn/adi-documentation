@@ -595,15 +595,23 @@ Content on this topic
 <h1>Power System Management on Linux Tutorial<a class="headerlink" href="#power-system-management-on-linux-tutorial" title="Link to this heading"></a></h1>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
-<p>The goal of this tutorial is to equip the reader with a collection of hardware and software tools for working with Power System Management devices, and more generally, devices that fall under the Linux hardware monitoring kernel API (HWMON) framework.</p>
-<p>The tutorial will focus on using standard tools and simple examples that can be used for debug and development.</p>
+<p>The goal of this tutorial is to equip the reader with a collection of hardware
+and software tools for working with Power System Management devices, and more
+generally, devices that fall under the Linux hardware monitoring kernel API
+(HWMON) framework.</p>
+<p>The tutorial will focus on using standard tools and simple examples that can be
+used for debug and development.</p>
 <p>Also note that the tutorial is geared toward Linux-based systems, in contrast to bare-metal, no-OS applications. A great resource for learning about this use case is the <cite>Linduino to PSM adapter shield &lt;ad&gt;:adi:`dc2294a&gt;`__</cite>. The instructions for this board go over how to run several examples on the Linduino (A clone of the Arduino UNO).</p>
 </section>
 <section id="videos">
 <h2>Videos<a class="headerlink" href="#videos" title="Link to this heading"></a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This video includes installation and configuration of Kuiper Linux, as well as building and installing the development branch of the libiio with HWMON support. The video will be re-done (and re-hosted on the CftL YouTube channel) once these features are merged to master and included in a Kuiper release.</p>
+<p>This video includes installation and configuration of Kuiper Linux, as well
+as building and installing the development branch of the libiio with HWMON
+support. The video will be re-done (and re-hosted on the CftL YouTube
+channel) once these features are merged to master and included in a Kuiper
+release.</p>
 <p><img alt="youtube&gt;mR9V8uN390M" src="https://wiki.analog.com/_media/university/labs/software/youtube&gt;mr9v8un390m" /></p>
 </div>
 </section>
@@ -636,14 +644,15 @@ Content on this topic
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dtoverlay</span><span class="o">=</span><span class="n">rpi</span><span class="o">-</span><span class="n">dc1962c</span>
 </pre></div>
 </div>
-<p>Make the fllowing connections between the DC1962C and the Raspberry Pi, following the pin mapping in Figure 1 and corresponding photo in Figure 2.</p>
+<p>Make the fllowing connections between the DC1962C and the Raspberry Pi,
+following the pin mapping in Figure 1 and corresponding photo in Figure 2.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Pin mapping diagram</p>
 </div>
 <div class="centeralign docutils container">
 <p>Figure 1. Pin Mapping Diagram</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/psm_hwmon_linux_tutorial/rpi_power_stick_jumpers.jpg"><img alt="image1" src="https://wiki.analog.com/_media/university/labs/software/psm_hwmon_linux_tutorial/rpi_power_stick_jumpers.jpg" style="width: 600px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/psm_hwmon_linux_tutorial/rpi_power_stick_jumpers.jpg"><img alt="image1" src="https://wiki.analog.com/_media/university/labs/software/psm_hwmon_linux_tutorial/rpi_power_stick_jumpers.jpg" width="600" /></a></p>
 </div>
 <div class="centeralign docutils container">
 <p>Figure 2. Connections with Discrete Wires</p>
@@ -651,7 +660,7 @@ Content on this topic
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Update photo when production boards arrive</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/psm_hwmon_linux_tutorial/rpi_adapter_power_stick.jpg"><img alt="image2" src="https://wiki.analog.com/_media/university/labs/software/psm_hwmon_linux_tutorial/rpi_adapter_power_stick.jpg" style="width: 600px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/psm_hwmon_linux_tutorial/rpi_adapter_power_stick.jpg"><img alt="image2" src="https://wiki.analog.com/_media/university/labs/software/psm_hwmon_linux_tutorial/rpi_adapter_power_stick.jpg" width="600" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 3. Connections with DesignSpark adapter</p>
 </div>
@@ -666,13 +675,21 @@ Content on this topic
 <p>And observe the output as shown in Figure X.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Re-take screenshot with other EEPROMs on experimenter setup disabled (0x50-0x53)</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/psm_hwmon_linux_tutorial/i2c-detect_drivers_enabled.png"><img alt="image3" src="https://wiki.analog.com/_media/university/labs/software/psm_hwmon_linux_tutorial/i2c-detect_drivers_enabled.png" style="width: 400px;" /></a></p>
+<p>Re-take screenshot with other EEPROMs on experimenter setup disabled
+(0x50-0x53)</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/labs/software/psm_hwmon_linux_tutorial/i2c-detect_drivers_enabled.png"><img alt="image3" src="https://wiki.analog.com/_media/university/labs/software/psm_hwmon_linux_tutorial/i2c-detect_drivers_enabled.png" width="400" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 4. Scanning I2C Bus 1 with i2c-detect</p>
 </div>
 </div>
-<p>The LTC2974, LTC2977, and LTC3880 are at I2C addresses 0x32, 0x33, and 0x30, respectively. i2c-detect reports “UU” for these addresses because these devices are controlled from kernelspace, and users cannot access them directly. The onboard 24AA02 EEPROM is not associated with a driver. The upper nibble of the i2c address is 0x5, and the lower 3 bits select banks within the device. Externally, addresses 0x50 to 0x57 are acknowledged. Note that no data transfer actually occurs, the i2c-detect command is simply testing which devices acknowledge, then a stop condition is issued.</p>
+<p>The LTC2974, LTC2977, and LTC3880 are at I2C addresses 0x32, 0x33, and 0x30,
+respectively. i2c-detect reports “UU” for these addresses because these devices
+are controlled from kernelspace, and users cannot access them directly. The
+onboard 24AA02 EEPROM is not associated with a driver. The upper nibble of the
+i2c address is 0x5, and the lower 3 bits select banks within the device.
+Externally, addresses 0x50 to 0x57 are acknowledged. Note that no data transfer
+actually occurs, the i2c-detect command is simply testing which devices
+acknowledge, then a stop condition is issued.</p>
 </section>
 <section id="toolbox-item-lm-sensors-utilities">
 <h2>Toolbox Item: LM Sensors utilities<a class="headerlink" href="#toolbox-item-lm-sensors-utilities" title="Link to this heading"></a></h2>
@@ -704,7 +721,9 @@ Content on this topic
 <p>Yup, this really works!</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>ToDo: Remove when merged to master and included in Kuiper release The libiio master branch now includes HWMON support, but is not included in the latest Kuiper release. It needs to be installed manually - but fear not, It’s easy:</p>
+<p>ToDo: Remove when merged to master and included in Kuiper release The libiio
+master branch now includes HWMON support, but is not included in the latest
+Kuiper release. It needs to be installed manually - but fear not, It’s easy:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>git clone `libiio &lt;https://github.com/analogdevicesinc/libiio&gt;`_
 cd libiio
 git checkout master
@@ -719,16 +738,23 @@ sudo reboot
 </section>
 <section id="toolbox-item-pmbus-dpsm-utilities">
 <h2>Toolbox Item: pmbus_dpsm utilities<a class="headerlink" href="#toolbox-item-pmbus-dpsm-utilities" title="Link to this heading"></a></h2>
-<p>When you need to dig in deeper, use cases, noting that you have to remove the device tree overlay in order to use userspace functions.</p>
+<p>When you need to dig in deeper, use cases, noting that you have to remove the
+device tree overlay in order to use userspace functions.</p>
 </section>
 <section id="putting-it-all-together-a-run-time-logging-application">
 <h2>Putting it all together: A Run-time Logging Application<a class="headerlink" href="#putting-it-all-together-a-run-time-logging-application" title="Link to this heading"></a></h2>
-<p>Put together a simple python script to periodically log data from the power stick over time, and save to a local file. Show how this can be used to detect anomalies, trends toward higher operating temperatures, and other diagnostic stuff.</p>
-<p>Show both a python HWMON example running locally, and a libiio based example that can run either locally or remotely.</p>
+<p>Put together a simple python script to periodically log data from the power
+stick over time, and save to a local file. Show how this can be used to detect
+anomalies, trends toward higher operating temperatures, and other diagnostic
+stuff.</p>
+<p>Show both a python HWMON example running locally, and a libiio based example
+that can run either locally or remotely.</p>
 </section>
 <section id="conclusion">
 <h2>Conclusion<a class="headerlink" href="#conclusion" title="Link to this heading"></a></h2>
-<p>Existing PSM tools are the workhorse of system design and bringup. The Linux HWMON drivers and utilities are additional tools available for run-time debug and monitoring. (obviously this conclusion needs work…)</p>
+<p>Existing PSM tools are the workhorse of system design and bringup. The Linux
+HWMON drivers and utilities are additional tools available for run-time debug
+and monitoring. (obviously this conclusion needs work…)</p>
 </section>
 </section>
 

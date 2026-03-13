@@ -601,29 +601,48 @@ devices themselves may be Recommended for New Designs or in
 Production. This page is here for historical/reference purposes only.</p>
 </div>
 <p>Both the <a class="icon adi reference external" href="https://www.analog.com/AD9122" target="_blank">AD9122</a> and the <a class="icon adi reference external" href="https://www.analog.com/AD9643" target="_blank">AD9643</a> have very tight FPGA &lt;-&gt; converter digital interface timing requirements. Ensuring that things work over voltage, temperature with different PCB carrier boards is a challenge. To meet this challenge, we use the on-chip verification of both the ADC and the DAC to ensure that good data is sent and received.</p>
-<p>The way that this is done is to send a known sequence, and then verify it on the other end. If things don’t work, adjust the timing, and try again.</p>
+<p>The way that this is done is to send a known sequence, and then verify it on the
+other end. If things don’t work, adjust the timing, and try again.</p>
 <section id="ad9122">
 <h2>AD9122<a class="headerlink" href="#ad9122" title="Link to this heading"></a></h2>
-<p>The AD9122 provides timing verification via it’s on-chip sample error detection (SED) circuitry. The SED circuitry compares the input data samples captured at the digital input pins with a set of comparison values loaded over the SPI interface. Differences between the captured values and the comparison values are detected and stored.</p>
-<p>The SED circuitry operates on a data set made up of four 16-bit input words, denoted as I0, Q0, I1, and Q1 (loaded over SPI to registers:</p>
+<p>The AD9122 provides timing verification via it’s on-chip sample error detection
+(SED) circuitry. The SED circuitry compares the input data samples captured at
+the digital input pins with a set of comparison values loaded over the SPI
+interface. Differences between the captured values and the comparison values are
+detected and stored.</p>
+<p>The SED circuitry operates on a data set made up of four 16-bit input words,
+denoted as I0, Q0, I1, and Q1 (loaded over SPI to registers:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">0x68</span></code> I0 LSBs, <code class="docutils literal notranslate"><span class="pre">0x69</span></code> I0 MSBs</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">0x6A</span></code> Q0 LSBs, <code class="docutils literal notranslate"><span class="pre">0x6B</span></code> Q0 MSBs</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">0x6C</span></code> I1 LSBs, <code class="docutils literal notranslate"><span class="pre">0x6D</span></code> I1 MSBs</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">0x6E</span></code> Q1 LSBs, <code class="docutils literal notranslate"><span class="pre">0x6F</span></code> Q1 MSBs</p></li>
 </ul>
-<p>The SED has three flag bits (Register 0x67, Bit 5, Bit 1, and Bit 0) that indicate the results of the input sample comparisons. The SED also provides registers that indicate which input data bits experienced errors (Register 0x70 through Register 0x73). These bits are latched and indicate the accumulated errors detected until cleared.</p>
+<p>The SED has three flag bits (Register 0x67, Bit 5, Bit 1, and Bit 0) that
+indicate the results of the input sample comparisons. The SED also provides
+registers that indicate which input data bits experienced errors (Register 0x70
+through Register 0x73). These bits are latched and indicate the accumulated
+errors detected until cleared.</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">0x70</span></code> I LSBs <code class="docutils literal notranslate"><span class="pre">0x71</span></code> I MSBs SED Errors Detected,</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">0x72</span></code> Q LSBs <code class="docutils literal notranslate"><span class="pre">0x73</span></code> Q MSBs SED Errors Detected</p></li>
 </ul>
-<p>With this, we can load (over SPI) a predetermined pattern, enable the SED functionality, and then start sending the data over the high speed digital interface. If an error is detected, we know we need to adjust DCI.</p>
-<p>“Adjusting DCI” is setting a programmable delay associated with the DCI (Data Clock Input).</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/ad9122_dci.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/ad9122_dci.png" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/ad9122_dci.png" style="width: 400px;" />
+<p>With this, we can load (over SPI) a predetermined pattern, enable the SED
+functionality, and then start sending the data over the high speed digital
+interface. If an error is detected, we know we need to adjust DCI.</p>
+<p>“Adjusting DCI” is setting a programmable delay associated with the DCI (Data
+Clock Input).</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/ad9122_dci.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/ad9122_dci.png" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/ad9122_dci.png" width="400" />
 </a>
-<p>The delay shifts (delays) the clock with respect to all the data pins. There are four programmable delay options (from 350 ps to 925 ps of delay). This additional delay can be added to improve timing margins in some systems, and we have found is almost always necessary.</p>
-<p>Note that this does not resolve data pin to data pin issues. These must still be resolved inside the FPGA.</p>
-<p>System level software (in this case the Linux, or no-OS drivers), sets up the SED (in both the HDL and in the DAC) lets it run, and then changes the DCI delay to ensure proper operation.</p>
+<p>The delay shifts (delays) the clock with respect to all the data pins. There are
+four programmable delay options (from 350 ps to 925 ps of delay). This
+additional delay can be added to improve timing margins in some systems, and we
+have found is almost always necessary.</p>
+<p>Note that this does not resolve data pin to data pin issues. These must still be
+resolved inside the FPGA.</p>
+<p>System level software (in this case the Linux, or no-OS drivers), sets up the
+SED (in both the HDL and in the DAC) lets it run, and then changes the DCI delay
+to ensure proper operation.</p>
 </section>
 <section id="ad9643">
 <h2>AD9643<a class="headerlink" href="#ad9643" title="Link to this heading"></a></h2>
@@ -641,10 +660,17 @@ Production. This page is here for historical/reference purposes only.</p>
 <p><span class="math notranslate nohighlight">\(Long == x^16 + x^6\)</span></p>
 <p><span class="math notranslate nohighlight">\(Short == x^8 + x^6 + x^0\)</span></p>
 <p>The verilog for this is included in the project, in the <code class="docutils literal notranslate"><span class="pre">cf_lib\edk\pcores\axi_adc_2c_v1_00_a\hdl\verilog\cf_pnmon.v</span></code> file. We use these sequences to generate a sequence of words that does not repeat, and that we know exactly what it will be. This way, we can verify the proper timing of the digital data from the ADC to the FPGA.</p>
-<p>When we find that the data does not match, we adjust the DCO (Data Clock Output) delay of the ADC. There is a SPI register (0x017) which sets a fine delay in the output latch relative to when the internal output registers are strobed. The output latch is changed to compensate for any external setup and hold time issues resulting from ADC/FPGA timing issues. The range of this delay can be between 100 ps and 3200 ps.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/ad9643_dco.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/ad9643_dco.png" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/ad9643_dco.png" style="width: 500px;" />
+<p>When we find that the data does not match, we adjust the DCO (Data Clock Output)
+delay of the ADC. There is a SPI register (0x017) which sets a fine delay in the
+output latch relative to when the internal output registers are strobed. The
+output latch is changed to compensate for any external setup and hold time
+issues resulting from ADC/FPGA timing issues. The range of this delay can be
+between 100 ps and 3200 ps.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/ad9643_dco.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/ad9643_dco.png" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/ad9643_dco.png" width="500" />
 </a>
-<p>Again, this is done largely in software (Linux and NO-OS). The PN test mode is turned on in both the ADC and inside the HDL, and the software monitors things, until things look robust.</p>
+<p>Again, this is done largely in software (Linux and NO-OS). The PN test mode is
+turned on in both the ADC and inside the HDL, and the software monitors things,
+until things look robust.</p>
 <p>As always - if you have any questions - feel free to ask in the <a class="icon ez reference external" href="https://ez.analog.com/community/fpga" target="_blank">support forums</a></p>
 </section>
 </section>

@@ -592,7 +592,10 @@ Content on this topic
 <h1>CRC Crypto Driver Guide<a class="headerlink" href="#crc-crypto-driver-guide" title="Link to this heading"></a></h1>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
-<p>The CRC peripheral in ADSP-SC5xx processors is a hardware block used to compute the CRC of a block of data. It is a CRC32 engine which computes the CRC value of 32-bit data words presented to it. For data words of &lt; 32-bit in size, it is the responsibility of application to pack the data into 32-bit data units.</p>
+<p>The CRC peripheral in ADSP-SC5xx processors is a hardware block used to compute
+the CRC of a block of data. It is a CRC32 engine which computes the CRC value of
+32-bit data words presented to it. For data words of &lt; 32-bit in size, it is the
+responsibility of application to pack the data into 32-bit data units.</p>
 <p>The main features of the CRC peripheral are:</p>
 <ul class="simple">
 <li><p>Memory Scan mode</p></li>
@@ -603,7 +606,17 @@ Content on this topic
 <li><p>Bit/Byte Mirroring option</p></li>
 <li><p>Fault/Error interrupt mechanisms</p></li>
 </ul>
-<p>The Linux CRC driver is based on the Linux crypto driver framework. The Scatterlist Crypto API takes page vectors (scatterlists) as arguments, and works directly on memory pages. The CRC driver implements the asynchronous hash interface. The CRC results are calculated via array-descriptor-based DMA operation, which is generated at run time. If the input buffer length is not a multiple of 32 bits this driver appends zeroes automatically. The framework only supports Memory Scan mode. This driver can be found at linux-kernel/drivers/crypto/adi_crc.c . The SC5xx and the BF609 share the same Linux CRC driver because the same CRC peripheral IP is used in both processors, the only difference is that the driver platform data is defined in the board file for BF609 but in the device tree file for SC5xx.</p>
+<p>The Linux CRC driver is based on the Linux crypto driver framework. The
+Scatterlist Crypto API takes page vectors (scatterlists) as arguments, and works
+directly on memory pages. The CRC driver implements the asynchronous hash
+interface. The CRC results are calculated via array-descriptor-based DMA
+operation, which is generated at run time. If the input buffer length is not a
+multiple of 32 bits this driver appends zeroes automatically. The framework only
+supports Memory Scan mode. This driver can be found at
+linux-kernel/drivers/crypto/adi_crc.c . The SC5xx and the BF609 share the same
+Linux CRC driver because the same CRC peripheral IP is used in both processors,
+the only difference is that the driver platform data is defined in the board
+file for BF609 but in the device tree file for SC5xx.</p>
 </section>
 <section id="hardware-setup">
 <h2>Hardware Setup<a class="headerlink" href="#hardware-setup" title="Link to this heading"></a></h2>
@@ -637,13 +650,17 @@ Content on this topic
 </section>
 <section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h2>
-<p>When the kernel is booting up on SC5xx, you can check if the Crypto CRC driver probes devices correctly by looking for the following two lines of output:</p>
+<p>When the kernel is booting up on SC5xx, you can check if the Crypto CRC driver
+probes devices correctly by looking for the following two lines of output:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ADI</span> <span class="n">hardware</span> <span class="n">CRC</span> <span class="n">crypto</span> <span class="n">driver</span>
 <span class="n">adi</span><span class="o">-</span><span class="n">hmac</span><span class="o">-</span><span class="n">crc</span> <span class="mf">31001200.</span><span class="n">crc</span><span class="p">:</span> <span class="n">initialized</span>
 <span class="n">adi</span><span class="o">-</span><span class="n">hmac</span><span class="o">-</span><span class="n">crc</span> <span class="mf">31001300.</span><span class="n">crc</span><span class="p">:</span> <span class="n">initialized</span>
 </pre></div>
 </div>
-<p>You can also run a full test with tcrypt kernel module. This test module always exits with the warning “can’t load module tcrypt” no mater whether the test passes or fails. However, if any test error occurs, “tcrypt: one or more tests failed” is printed out.</p>
+<p>You can also run a full test with tcrypt kernel module. This test module always
+exits with the warning “can’t load module tcrypt” no mater whether the test
+passes or fails. However, if any test error occurs, “tcrypt: one or more tests
+failed” is printed out.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/&gt;</span> <span class="n">modprobe</span> <span class="n">tcrypt</span> <span class="n">mode</span><span class="o">=</span><span class="mi">110</span>
 <span class="n">modprobe</span><span class="p">:</span> <span class="n">can</span><span class="s1">&#39;t load module tcrypt (kernel/crypto/tcrypt.ko): Resource temporarily unavailable</span>
 </pre></div>

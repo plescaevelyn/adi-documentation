@@ -581,11 +581,18 @@ Content on this topic
   <section id="iio-oscilliscope-internals">
 <h1>IIO Oscilliscope Internals<a class="headerlink" href="#iio-oscilliscope-internals" title="Link to this heading"></a></h1>
 <p>Making your own plugin for the IIO Oscilloscope.</p>
-<p>libiio connect your C code to the IIO device (backed by the IIO device driver), but it does not automatically connect your code to a GTK widget.</p>
+<p>libiio connect your C code to the IIO device (backed by the IIO device driver),
+but it does not automatically connect your code to a GTK widget.</p>
 <p>That is the responsibility of <a class="icon git reference external" href="https://github.com/analogdevicesinc/iio-oscilloscope/tree/main/iio_widget.c" target="_blank">iio_widget.c</a> and <a class="icon git reference external" href="https://github.com/analogdevicesinc/iio-oscilloscope/tree/main/iio_widget.c" target="_blank">iio_widget.h</a>, which are exclusively part of the IIO oscilloscope project.</p>
 <p>Those functions are called in the <a class="icon git reference external" href="https://github.com/analogdevicesinc/iio-oscilloscope/tree/main/plugins/fmcomms2.c#L1590" target="_blank">plugin file</a>, normally in the <code class="docutils literal notranslate"><span class="pre">init</span></code> function. Calling these functions (with the right parameters) ensures that libiio will connect with the GTK widget.</p>
 <p>The init function is called during the plugin load via the <a class="icon git reference external" href="https://github.com/analogdevicesinc/iio-oscilloscope/tree/main/plugins/fmcomms2.c#L2059" target="_blank">osc_plugin struct</a>.</p>
-<p>OSC Plugins are dynamically loaded (DL) libraries (.so or .dll). During OSC start-up each file under the plugin folder is accessed using the dlopen() API. Using dlsym(lib, “plugin”) the symbol to the osc_plugin structure is obtained. So each and every plugin is probed, weather or not the init() function is called depends on the return value of the identify() function call which takes place prior in time. Identify() is typically used to check the presence of a number of IIO devices required to a specific plugin to operate.</p>
+<p>OSC Plugins are dynamically loaded (DL) libraries (.so or .dll). During OSC
+start-up each file under the plugin folder is accessed using the dlopen() API.
+Using dlsym(lib, “plugin”) the symbol to the osc_plugin structure is obtained.
+So each and every plugin is probed, weather or not the init() function is called
+depends on the return value of the identify() function call which takes place
+prior in time. Identify() is typically used to check the presence of a number of
+IIO devices required to a specific plugin to operate.</p>
 <p>If you have any more detailed questions about how to write your own plugins for your own IIO devices, please ask on ADI’s <a class="icon ez reference external" href="https://ez.analog.com/community/linux-device-drivers/linux-software-drivers" target="_blank">EngineerZone</a>.</p>
 </section>
 

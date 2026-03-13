@@ -670,11 +670,19 @@ Content on this topic
 </section>
 <section id="example-platform-device-initialization">
 <h1>Example platform device initialization<a class="headerlink" href="#example-platform-device-initialization" title="Link to this heading"></a></h1>
-<p>For compile time configuration, it’s common Linux practice to keep board- and application-specific configuration out of the main driver file, instead putting it into the board support file.</p>
-<p>For devices on custom boards, as typical of embedded and SoC-(system-on-chip) based hardware, Linux uses platform_data to point to board-specific structures describing devices and how they are connected to the SoC. This can include available ports, chip variants, preferred modes, default initialization, additional pin roles, and so on. This shrinks the board-support packages (BSPs) and minimizes board and application specific #ifdefs in drivers.</p>
+<p>For compile time configuration, it’s common Linux practice to keep board- and
+application-specific configuration out of the main driver file, instead putting
+it into the board support file.</p>
+<p>For devices on custom boards, as typical of embedded and SoC-(system-on-chip)
+based hardware, Linux uses platform_data to point to board-specific structures
+describing devices and how they are connected to the SoC. This can include
+available ports, chip variants, preferred modes, default initialization,
+additional pin roles, and so on. This shrinks the board-support packages (BSPs)
+and minimizes board and application specific #ifdefs in drivers.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>platform_data: Platform data specific to the ADP1650 device. Includes feature selections and default initialization.</p>
+<p>platform_data: Platform data specific to the ADP1650 device. Includes feature
+selections and default initialization.</p>
 <p>Please see <a class="icon link reference external" href="http://blackfin.uclinux.org/git/?p=linux-kernel;a=blob_plain;f=include/linux/i2c/adp1650.h;hb=HEAD" target="_blank">include/linux/i2c/adp1650.h</a> for details.</p>
 </div>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;linux/i2c/adp1650.h&gt;</span>
@@ -682,14 +690,11 @@ Content on this topic
 <span class="k">static</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">adp1650_leds_platform_data</span><span class="w"> </span><span class="n">adp1650_pdata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="p">.</span><span class="n">timer_iocfg</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="n">ADP1650_IOCFG_IO2_HIGH_IMP</span>
 
-
 <span class="w">            </span><span class="n">ADP1650_IOCFG_IO1_TORCH</span><span class="w"> </span><span class="o">|</span>
 
 <span class="w">            </span><span class="n">ADP1650_FL_TIMER_ms</span><span class="p">(</span><span class="mi">500</span><span class="p">),</span>
 
 <span class="w">    </span><span class="p">.</span><span class="n">current_set</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="n">ADP1650_I_FL_mA</span><span class="p">(</span><span class="mi">900</span><span class="p">)</span>
-
-
 
 <span class="w">            </span><span class="n">ADP1650_I_TOR_mA</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span>
 
@@ -697,11 +702,9 @@ Content on this topic
 
 <span class="w">            </span><span class="n">ADP1650_STR_LV_EDGE</span>
 
-
 <span class="w">            </span><span class="n">ADP1650_FREQ_FB_EN</span><span class="w"> </span><span class="o">|</span>
 
 <span class="w">            </span><span class="n">ADP1650_OUTPUT_EN</span>
-
 
 <span class="w">            </span><span class="n">ADP1650_STR_MODE_HW</span><span class="w"> </span><span class="o">|</span>
 
@@ -709,19 +712,15 @@ Content on this topic
 
 <span class="w">    </span><span class="p">.</span><span class="n">control</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="n">ADP1650_I_TX2_mA</span><span class="p">(</span><span class="mi">400</span><span class="p">)</span>
 
-
-
 <span class="w">            </span><span class="n">ADP1650_I_TX1_mA</span><span class="p">(</span><span class="mi">400</span><span class="p">),</span>
 
 <span class="w">    </span><span class="p">.</span><span class="n">ad_mode</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="n">ADP1650_DYN_OVP_EN</span><span class="w"> </span><span class="o">|</span>
 
 <span class="w">            </span><span class="n">ADP1650_STR_POL_ACTIVE_HIGH</span>
 
-
 <span class="w">            </span><span class="n">ADP1650_I_ILED_2mA75</span><span class="w"> </span><span class="o">|</span>
 
 <span class="w">            </span><span class="n">ADP1650_IL_DC_1A50</span>
-
 
 <span class="w">            </span><span class="n">ADP1650_IL_DC_EN</span><span class="p">,</span>
 
@@ -734,9 +733,19 @@ Content on this topic
 <span class="p">};</span>
 </pre></div>
 </div>
-<p>Unlike PCI or USB devices, I2C devices are not enumerated at the hardware level. Instead, the software must know which devices are connected on each I2C bus segment, and what address these devices are using. For this reason, the kernel code must instantiate I2C devices explicitly. There are different ways to achieve this, depending on the context and requirements. However the most common method is to declare the I2C devices by bus number.</p>
-<p>This method is appropriate when the I2C bus is a system bus, as in many embedded systems, wherein each I2C bus has a number which is known in advance. It is thus possible to pre-declare the I2C devices that inhabit this bus. This is done with an array of struct i2c_board_info, which is registered by calling i2c_register_board_info().</p>
-<p>So, to enable such a driver one need only edit the board support file by adding an appropriate entry to i2c_board_info.</p>
+<p>Unlike PCI or USB devices, I2C devices are not enumerated at the hardware level.
+Instead, the software must know which devices are connected on each I2C bus
+segment, and what address these devices are using. For this reason, the kernel
+code must instantiate I2C devices explicitly. There are different ways to
+achieve this, depending on the context and requirements. However the most common
+method is to declare the I2C devices by bus number.</p>
+<p>This method is appropriate when the I2C bus is a system bus, as in many embedded
+systems, wherein each I2C bus has a number which is known in advance. It is thus
+possible to pre-declare the I2C devices that inhabit this bus. This is done with
+an array of struct i2c_board_info, which is registered by calling
+i2c_register_board_info().</p>
+<p>So, to enable such a driver one need only edit the board support file by adding
+an appropriate entry to i2c_board_info.</p>
 <p>For more information see: <a href="#id2"><span class="problematic" id="id3">`instantiating-devices.rst &lt;/git.linux.org&gt;documentation/i2c/instantiating-devices.rst&gt;`__</span></a></p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">i2c_board_info</span><span class="w"> </span><span class="n">__initdata</span><span class="w"> </span><span class="n">board_i2c_board_info</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
 <span class="cp">#if defined(CONFIG_LEDS_ADP1650) || defined(CONFIG_LEDS_ADP1650_MODULE)</span>
@@ -764,7 +773,8 @@ Content on this topic
 </section>
 <section id="adding-linux-driver-support">
 <h1>Adding Linux driver support<a class="headerlink" href="#adding-linux-driver-support" title="Link to this heading"></a></h1>
-<p>Configure kernel with “make menuconfig” (alternatively use “make xconfig” or “make qconfig”)</p>
+<p>Configure kernel with “make menuconfig” (alternatively use “make xconfig” or
+“make qconfig”)</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>The ADP1650 LED driver depends on I2C.</p>
@@ -785,7 +795,9 @@ Content on this topic
 <h1>Driver testing<a class="headerlink" href="#driver-testing" title="Link to this heading"></a></h1>
 <section id="led-handling-under-linux">
 <h2>LED handling under Linux<a class="headerlink" href="#led-handling-under-linux" title="Link to this heading"></a></h2>
-<p>The LED class allows control of LEDs from userspace. LEDs appear in /sys/class/leds/. The brightness file will set the brightness of the LED (taking a value 0-255).</p>
+<p>The LED class allows control of LEDs from userspace. LEDs appear in
+/sys/class/leds/. The brightness file will set the brightness of the LED (taking
+a value 0-255).</p>
 <p>For more information read <a class="icon link reference external" href="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/linux/Documentaion/leds-class.txt" target="_blank">linux/Documentaion/leds-class.txt</a></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;</span> <span class="n">brightness</span> <span class="p">:</span> <span class="n">get</span><span class="o">/</span><span class="nb">set</span> <span class="n">LED</span> <span class="n">brightness</span> <span class="p">(</span><span class="n">an</span> <span class="n">integer</span> <span class="n">between</span> <span class="mi">0</span> <span class="ow">and</span> <span class="mi">255</span><span class="p">)</span>
 <span class="p">;</span> <span class="n">max_brightness</span> <span class="p">:</span> <span class="n">the</span> <span class="n">maximum</span> <span class="n">brightness</span> <span class="n">value</span><span class="o">.</span>

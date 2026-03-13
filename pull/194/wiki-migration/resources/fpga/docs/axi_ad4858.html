@@ -948,24 +948,39 @@ Content on this topic
 <li><p>the ADC common register map</p></li>
 <li><p>the AXI handling interface</p></li>
 </ul>
-<p>For the axi_ad4858 CMOS interface module, data is de-serialized according to the number of active lanes and the number of active channels. up_adc_common module implements the ADC COMMON register map, allowing for basic monitoring and control of the ADC. Up_adc_channel module implements the ADC CHANNEL register map, allowing for basic monitoring and control of the ADC’s channel.</p>
+<p>For the axi_ad4858 CMOS interface module, data is de-serialized according to the
+number of active lanes and the number of active channels. up_adc_common module
+implements the ADC COMMON register map, allowing for basic monitoring and
+control of the ADC. Up_adc_channel module implements the ADC CHANNEL register
+map, allowing for basic monitoring and control of the ADC’s channel.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>The axi_ad4858 is used in conjunction with axi_pwm_gen which is responsible for generating the cnvs(conversion start signal)</p>
+<p>The axi_ad4858 is used in conjunction with axi_pwm_gen which is responsible
+for generating the cnvs(conversion start signal)</p>
 </div>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>The valid signal will only be asserted after all enabled channels are captured. The capture period depends on the combination of active lanes and active channels. AD4858 has an internal ring buffer which stores the channel data and CRC data. It must be taken into consideration the maximum index difference between the channel index and lane index when setting the sampling rate(axi_pwm_gen). A one index difference means 2x the captured period, a two index difference means 3x captured period. In case the cnvs is asserted before all channels are captured the valid signal will never be asserted. See the timing diagrams below.</p>
+<p>The valid signal will only be asserted after all enabled channels are
+captured. The capture period depends on the combination of active lanes and
+active channels. AD4858 has an internal ring buffer which stores the channel
+data and CRC data. It must be taken into consideration the maximum index
+difference between the channel index and lane index when setting the sampling
+rate(axi_pwm_gen). A one index difference means 2x the captured period, a two
+index difference means 3x captured period. In case the cnvs is asserted
+before all channels are captured the valid signal will never be asserted. See
+the timing diagrams below.</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>The serial configuration CS must be pulled down before capturing data, this is to enable internal clock buffers in AD4858</p>
+<p>The serial configuration CS must be pulled down before capturing data, this
+is to enable internal clock buffers in AD4858</p>
 </div>
 <section id="timing-diagrams">
 <h3>Timing Diagrams<a class="headerlink" href="#timing-diagrams" title="Link to this heading"></a></h3>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>Yellow represents first receive packet data. Blue represents the second received packet data.</p>
+<p>Yellow represents first receive packet data. Blue represents the second
+received packet data.</p>
 </div>
 <p>Timing diagram for all lines active CMOS.</p>
 <p><img alt="image1" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/ad4858/all_lanes_active.png" /></p>
@@ -32643,12 +32658,17 @@ Valid for 64b66b encoder.</p></td>
 </section>
 <section id="known-limitations">
 <h2>Known Limitations<a class="headerlink" href="#known-limitations" title="Link to this heading"></a></h2>
-<p>For CMOS interface, the CRC check breaks the captured data when using max sample rate with scki = 100MHz and packet format &gt;= 20 bit. There is simply not enough time to capture all data bits. For more info see the datasheet. The solutions:</p>
+<p>For CMOS interface, the CRC check breaks the captured data when using max sample
+rate with scki = 100MHz and packet format &gt;= 20 bit. There is simply not enough
+time to capture all data bits. For more info see the datasheet. The solutions:</p>
 <ul class="simple">
 <li><p>Use lower sampling rates</p></li>
 <li><p>Increase the core clock(100MHz in the reference design)</p></li>
 </ul>
-<p>For LVDS interface, enabling the oversampling breaks the captured data when using max sample rate with CRC enabled and packet format = 32 bit. Not enough time to enable the quiet time before sample acquisition and capture all data bits. For more info see the datasheet.</p>
+<p>For LVDS interface, enabling the oversampling breaks the captured data when
+using max sample rate with CRC enabled and packet format = 32 bit. Not enough
+time to enable the quiet time before sample acquisition and capture all data
+bits. For more info see the datasheet.</p>
 </section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>

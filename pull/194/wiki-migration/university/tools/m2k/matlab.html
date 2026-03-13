@@ -592,9 +592,13 @@ Content on this topic
 <p>After installation of the driver and the MLTBX file, you will have access to the bindings through <a class="icon link reference external" href="https://www.mathworks.com/help/matlab/call-cpp-library-functions.html" target="_blank">MATLAB’s clib interface for C++ libraries</a>. For libm2k this will be in the form:<code class="docutils literal notranslate"><span class="pre">clib.libm2k.libm2k.&lt;M2K</span> <span class="pre">classes&gt;</span></code></p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>Note that not every libm2k method is supported due to MATLAB limitations but these methods are usually uncommon.</p>
+<p>Note that not every libm2k method is supported due to MATLAB limitations but
+these methods are usually uncommon.</p>
 </div>
-<p>This is a common API styling MATLAB uses for external languages or even internal components that are Java-like or class-like. Below is a simple example of how to call into the library and construct an M2K object, then call into the API from that object.</p>
+<p>This is a common API styling MATLAB uses for external languages or even internal
+components that are Java-like or class-like. Below is a simple example of how to
+call into the library and construct an M2K object, then call into the API from
+that object.</p>
 <div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="cm">%{</span>
 <span class="cm">This example reads the analog voltage from channel 0 of the analog input</span>
 <span class="cm">%}</span>
@@ -665,12 +669,14 @@ Content on this topic
 </section>
 <section id="manual-build">
 <h1>Manual Build<a class="headerlink" href="#manual-build" title="Link to this heading"></a></h1>
-<p>You require two main dependencies which have build/install instructions (make sure you are using compatible versions):</p>
+<p>You require two main dependencies which have build/install instructions (make
+sure you are using compatible versions):</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="../../../resources/tools-software/linux-software/libiio.html"><span class="doc">libiio</span></a></p></li>
 <li><p><a class="reference internal" href="libm2k/libm2k.html"><span class="doc">libm2k</span></a></p></li>
 </ul>
-<p>Once these are built and installed the MATLAB bindings can be built. To do this follow these steps:</p>
+<p>Once these are built and installed the MATLAB bindings can be built. To do this
+follow these steps:</p>
 <p>Inside libm2k repo go to /bindings/matlab</p>
 <p>Next, update the locations of the <a class="icon git reference external" href="https://github.com/analogdevicesinc/libm2k/tree/main/bindings/matlab/build_library_linux64.m#L13" target="_blank">libm2k headers</a> to point to where libm2k is build. On Ubuntu these may look similar to:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">includepath</span>  <span class="o">=</span> <span class="n">fullfile</span><span class="p">(</span><span class="s1">&#39;/usr&#39;</span><span class="p">,</span><span class="s1">&#39;local&#39;</span><span class="p">,</span><span class="s1">&#39;include&#39;</span><span class="p">);</span>
@@ -695,10 +701,11 @@ Content on this topic
 </div>
 <p>Make sure “definelibm2k.m” does not exist. If exists remove it.</p>
 <p>Run “build_library_linux64.m” (on Linux) or “build_library_win64.m” (on Windows)</p>
-<p>Inside “definelibm2k.m” you will get an error for a “inputoutput” value replace it with “input”</p>
-<p>Inside “definelibm2k.m” uncomment all functions that you need and replace “&lt;SHAPE&gt;” with the right value Before :</p>
+<p>Inside “definelibm2k.m” you will get an error for a “inputoutput” value replace
+it with “input”</p>
+<p>Inside “definelibm2k.m” uncomment all functions that you need and replace
+“&lt;SHAPE&gt;” with the right value Before :</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>%% C++ class method |m2kOpen| for C++ class
-
 
 |libm2k::context::ContextBuilder|
 
@@ -717,7 +724,6 @@ Content on this topic
 <p>After:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>%% C++ class method |m2kOpen| for C++ class
 
-
 |libm2k::context::ContextBuilder|
 
 % C++ Signature: static libm2k::context::M2k * libm2k::context::ContextBuilder::m2kOpen()
@@ -732,7 +738,8 @@ defineOutput(m2kOpenDefinition, &quot;RetVal&quot;, &quot;clib.libm2k.libm2k.con
 validate(m2kOpenDefinition);
 </pre></div>
 </div>
-<p>Replace the content from “definelibm2k_linux64.m” (on Linux) or the content from “definelibm2k_win64.m” (on Windows) with the content from “definelibm2k.m”</p>
+<p>Replace the content from “definelibm2k_linux64.m” (on Linux) or the content from
+“definelibm2k_win64.m” (on Windows) with the content from “definelibm2k.m”</p>
 <p>Comment the following code section:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">clibgen</span><span class="o">.</span><span class="n">generateLibraryDefinition</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span><span class="o">...</span>
         <span class="s1">&#39;IncludePath&#39;</span><span class="p">,</span> <span class="n">includepath</span><span class="p">,</span><span class="o">...</span>
@@ -753,7 +760,8 @@ validate(m2kOpenDefinition);
 <span class="n">build</span><span class="p">(</span><span class="n">pkg</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>Run “build_library_linux64.m” ( on Linux ) or “build_library_win64.m” ( on Windows )</p>
+<p>Run “build_library_linux64.m” ( on Linux ) or “build_library_win64.m” ( on
+Windows )</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;</span> <span class="n">builder</span>
 <span class="n">Using</span> <span class="n">g</span><span class="o">++</span> <span class="n">compiler</span><span class="o">.</span>
 <span class="n">Generated</span> <span class="n">definition</span> <span class="n">file</span> <span class="n">definelibm2k</span><span class="o">.</span><span class="n">mlx</span> <span class="ow">and</span> <span class="n">data</span> <span class="n">file</span> <span class="s1">&#39;libm2kData.xml&#39;</span> <span class="n">contain</span> <span class="n">definitions</span> <span class="k">for</span> <span class="mi">344</span> <span class="n">constructs</span> <span class="n">supported</span> <span class="n">by</span> <span class="n">MATLAB</span><span class="o">.</span>
@@ -766,7 +774,8 @@ validate(m2kOpenDefinition);
 <span class="n">To</span> <span class="n">use</span> <span class="n">the</span> <span class="n">library</span><span class="p">,</span> <span class="n">add</span> <span class="n">the</span> <span class="n">interface</span> <span class="n">file</span> <span class="n">folder</span> <span class="n">to</span> <span class="n">the</span> <span class="n">MATLAB</span> <span class="n">path</span><span class="o">.</span>
 </pre></div>
 </div>
-<p>This will create a library named libm2kInterface.so in the libm2k folder. Simply adding that folder to path will allow you to use the bindings.</p>
+<p>This will create a library named libm2kInterface.so in the libm2k folder. Simply
+adding that folder to path will allow you to use the bindings.</p>
 </section>
 <section id="support">
 <h1>Support<a class="headerlink" href="#support" title="Link to this heading"></a></h1>

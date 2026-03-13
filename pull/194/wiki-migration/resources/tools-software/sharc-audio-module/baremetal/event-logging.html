@@ -593,8 +593,15 @@ Content on this topic
             
   <section id="event-logging">
 <h1>Event Logging<a class="headerlink" href="#event-logging" title="Link to this heading"></a></h1>
-<p>The Bare Metal framework includes an event logging system that is more suitable for real-time telemetry. The event logging system stores time stamped events from all three cores in a single, circular buffer on the ARM core. These events are also sent to the UART and can be accessed via a simple USB-to-UART device connected to connector P8 on the SHARC Audio Module.</p>
-<p>Event logging is provided via the bm_event_logging.c/.h file pair. The system uses a few locations in shared L2 memory to pass messages from the SHARC cores to the ARM core. This file pair is designed to be portable and can be used outside of the baremetal framework.</p>
+<p>The Bare Metal framework includes an event logging system that is more suitable
+for real-time telemetry. The event logging system stores time stamped events
+from all three cores in a single, circular buffer on the ARM core. These events
+are also sent to the UART and can be accessed via a simple USB-to-UART device
+connected to connector P8 on the SHARC Audio Module.</p>
+<p>Event logging is provided via the bm_event_logging.c/.h file pair. The system
+uses a few locations in shared L2 memory to pass messages from the SHARC cores
+to the ARM core. This file pair is designed to be portable and can be used
+outside of the baremetal framework.</p>
 <section id="configuring-event-logging">
 <h2>Configuring Event Logging<a class="headerlink" href="#configuring-event-logging" title="Link to this heading"></a></h2>
 <section id="configuring-event-logging-on-the-arm-core">
@@ -641,7 +648,9 @@ Content on this topic
 </section>
 <section id="servicing-the-event-logger">
 <h2>Servicing the event logger<a class="headerlink" href="#servicing-the-event-logger" title="Link to this heading"></a></h2>
-<p>A service routine is provided for both ARM and SHARC cores which should be periodically called to process new events. The Bare Metal framework currently uses a 1ms timer interrupt on all three cores.</p>
+<p>A service routine is provided for both ARM and SHARC cores which should be
+periodically called to process new events. The Bare Metal framework currently
+uses a 1ms timer interrupt on all three cores.</p>
 <section id="servicing-the-event-logger-on-the-arm-cores">
 <h3>Servicing the Event Logger on the ARM Cores<a class="headerlink" href="#servicing-the-event-logger-on-the-arm-cores" title="Link to this heading"></a></h3>
 <p>The code snippet below shows a 1ms timer tick that is enabled by default on the ARM core. Within the audio_framework code, we have a callback to the 1ms tick event and within this, we are servicing the event logging system via the <code class="docutils literal notranslate"><span class="pre">event_logging_poll_sharc_cores_for_new_message</span></code> function call.</p>
@@ -695,7 +704,8 @@ Content on this topic
 <section id="logging-an-event">
 <h2>Logging an event<a class="headerlink" href="#logging-an-event" title="Link to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">log_event()</span></code> function is used to log a new event on all three cores. This function takes two arguments.</p>
-<p>The first argument is the level of the event and relies on a start syslog naming convention:</p>
+<p>The first argument is the level of the event and relies on a start syslog naming
+convention:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">EVENT_INFO</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">EVENT_DEBUG</span></code></p></li>
@@ -704,7 +714,8 @@ Content on this topic
 <li><p><code class="docutils literal notranslate"><span class="pre">EVENT_FATAL</span></code></p></li>
 </ul>
 <p>These are defined as an enum in bm_event_logging.h.</p>
-<p>The second argument is a string of the event. The max string length is 128 characters.</p>
+<p>The second argument is a string of the event. The max string length is 128
+characters.</p>
 <p>The code snippet below shows how to log an event</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">log_event</span><span class="p">(</span><span class="n">EVENT_INFO</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Bare Metal Framework for the ADI SHARC Audio Module&quot;</span><span class="p">);</span>
 </pre></div>

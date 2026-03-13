@@ -589,21 +589,32 @@ Content on this topic
 <p class="admonition-title">Note</p>
 <p>This is still in a draft stage. If you have any comments, please comment on the <a class="icon ez reference external" href="https://ez.analog.com/community/fpga" target="_blank">forums</a></p>
 </div>
-<p>In a traditional radio transmit architecture, a baseband signal (voice or data), is modulated to an intermediate frequency (IF) and then modulated again to the transmit radio frequency (RF) and on the receive side, the opposite happened, from RF to IF to baseband. This was done since inexpensive up-converting modulators/down-converting demodulators only provide adequate performance over roughly one decade of frequency conversion, so it is often necessary to execute the complete up-conversion in two or more frequency hops.</p>
+<p>In a traditional radio transmit architecture, a baseband signal (voice or data),
+is modulated to an intermediate frequency (IF) and then modulated again to the
+transmit radio frequency (RF) and on the receive side, the opposite happened,
+from RF to IF to baseband. This was done since inexpensive up-converting
+modulators/down-converting demodulators only provide adequate performance over
+roughly one decade of frequency conversion, so it is often necessary to execute
+the complete up-conversion in two or more frequency hops.</p>
 <p>This is no longer the case using modern modulator devices, such as the <a class="icon adi reference external" href="https://www.analog.com/ADL5375" target="_blank">ADL5375</a> or <a class="icon adi reference external" href="https://www.analog.com/ADL5380" target="_blank">ADL5380</a>. These provide up to 200MHz of baseband bandwidth, (fig 64 in the ADL5375 datasheet and fig 6 of ADL5380) and allow up/down conversion from 400 to 6000MHz. In order to use these types of devices, a <em>complex</em> (real and imaginary, not difficult) modulation/demodulation scheme must be used.</p>
-<p>Like most mathematical derivations, we will ignore the real world imperfections, and these will be discussed at near the end.</p>
+<p>Like most mathematical derivations, we will ignore the real world imperfections,
+and these will be discussed at near the end.</p>
 <section id="complex-modulation">
 <h2>Complex modulation<a class="headerlink" href="#complex-modulation" title="Link to this heading"></a></h2>
 <p><a class="icon link reference external" href="https://en.wikipedia.org/wiki/Quadrature_amplitude_modulation" target="_blank">Complex modulation</a> is not difficult to understand at the very basics. We take have 2 baseband signals - for now, <em>I</em> and <em>Q</em>, where one is sine, and the other is cosine.</p>
 <p><span class="math notranslate nohighlight">\(I = sin(\omega \times t)\)</span> ; <span class="math notranslate nohighlight">\(Q = cos(\omega \times t)\)</span></p>
-<a class="reference internal image-reference" href="http://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Sine_cosine_one_period.svg/500px-Sine_cosine_one_period.svg.png"><img alt="http://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Sine_cosine_one_period.svg/500px-Sine_cosine_one_period.svg.png" class="align-right" src="http://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Sine_cosine_one_period.svg/500px-Sine_cosine_one_period.svg.png" style="width: 400px;" />
+<a class="reference internal image-reference" href="http://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Sine_cosine_one_period.svg/500px-Sine_cosine_one_period.svg.png"><img alt="http://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Sine_cosine_one_period.svg/500px-Sine_cosine_one_period.svg.png" class="align-right" src="http://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Sine_cosine_one_period.svg/500px-Sine_cosine_one_period.svg.png" width="400" />
 </a>
 <p>Since we know through trig identities (plus <a class="icon link reference external" href="https://en.wikipedia.org/wiki/Trigonometric_functions" target="_blank">Wikipedia</a> says it’s true) that:</p>
 <p><span class="math notranslate nohighlight">\(cos(\omega \times t) == sin (\pi/2 - (\omega \times t))\)</span></p>
 <p>then:</p>
 <p><span class="math notranslate nohighlight">\(I = sin(\omega \times t)\)</span> ; <span class="math notranslate nohighlight">\(Q = sin(\pi/2 - (\omega \times t))\)</span></p>
-<p>these are the two signals coming out of the DAC - two sine waves, phase offset from each other, which we call I and Q, like the picture. Whether we call them both sine, or sine and cosine, is immaterial. Sometimes both are used, whatever is easier for the (a) math, or (b) conceptual understanding, and many people will swap back and forth depending on what is being discussed at that time.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/adl5375-fbl.gif"><img alt="ADL5375 Block Diagram" class="align-right" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/adl5375-fbl.gif" style="width: 200px;" />
+<p>these are the two signals coming out of the DAC - two sine waves, phase offset
+from each other, which we call I and Q, like the picture. Whether we call them
+both sine, or sine and cosine, is immaterial. Sometimes both are used, whatever
+is easier for the (a) math, or (b) conceptual understanding, and many people
+will swap back and forth depending on what is being discussed at that time.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/adl5375-fbl.gif"><img alt="ADL5375 Block Diagram" class="align-right" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/adl5375-fbl.gif" width="200" />
 </a>
 <p>Most modern modulators, like the <a class="icon adi reference external" href="https://www.analog.com/ADL5375" target="_blank">ADL5375</a> will take the:</p>
 <ul class="simple">
@@ -618,7 +629,8 @@ Content on this topic
 <p>And you get single tone, which is multiplied by the carrier.</p>
 <p>You can derive the same using <a class="icon link reference external" href="https://en.wikipedia.org/wiki/Euler's_formula#Relationship_to_trigonometry" target="_blank">Euler’s Formulas</a>,</p>
 <p><span class="math notranslate nohighlight">\(\displaystyle sin(\omega \times t) = \frac{e^{j \omega t} - e^{-j \omega t}}{j2}\)</span> ;</p>
-<p>but we end up with the same thing – a single tone on the RF output by taking three tones (I, Q, and LO) and multiplying and adding them.</p>
+<p>but we end up with the same thing – a single tone on the RF output by taking
+three tones (I, Q, and LO) and multiplying and adding them.</p>
 </section>
 <section id="modulation">
 <h2>Modulation<a class="headerlink" href="#modulation" title="Link to this heading"></a></h2>
@@ -630,24 +642,31 @@ Content on this topic
 <p><span class="math notranslate nohighlight">\(LO_{I} \times I = A \times cos(\kappa) \times sin(\omega)\)</span> ; <span class="math notranslate nohighlight">\(LO_{Q} \times Q = B \times sin(\kappa) \times cos(\omega)\)</span></p>
 <p>That gives an output of:</p>
 <p><span class="math notranslate nohighlight">\(x(t) = A \times cos(\kappa) \times sin(\omega) + B \times sin(\kappa) \times cos(\omega)\)</span></p>
-<p>This doesn’t really match with Trig Identities, and it’s easier to use easier (and by that I mean possible) to use Euler’s Formulas</p>
+<p>This doesn’t really match with Trig Identities, and it’s easier to use easier
+(and by that I mean possible) to use Euler’s Formulas</p>
 <p><span class="math notranslate nohighlight">\(\displaystyle sin(x) = (\frac{1}{2}e^{-j x} - \frac{1}{2}e^{j x})\)</span> ; <span class="math notranslate nohighlight">\(\displaystyle cos(x) = (\frac{1}{2}e^{-j x} + \frac{1}{2}e^{j x})\)</span></p>
 <p>therefore:</p>
 <div class="math-wrapper docutils container">
 <div class="math notranslate nohighlight">
-\[x(t) = A \times (\frac{1}{2}e^{-j \kappa} + \frac{1}{2}e^{j \kappa}) \times (\frac{1}{2}e^{-j \omega} - \frac{1}{2}e^{j \omega}) +
-          B \times (\frac{1}{2}e^{-j \kappa} - \frac{1}{2}e^{j \kappa}) \times (\frac{1}{2}e^{-j \omega} + \frac{1}{2}e^{j \omega})\]</div>
+\[x(t) = A \times (\frac{1}{2}e^{-j \kappa} + \frac{1}{2}e^{j \kappa}) \times
+(\frac{1}{2}e^{-j \omega} - \frac{1}{2}e^{j \omega}) +
+          B \times (\frac{1}{2}e^{-j \kappa} - \frac{1}{2}e^{j \kappa})
+          \times (\frac{1}{2}e^{-j \omega} + \frac{1}{2}e^{j \omega})\]</div>
 </div>
 <div class="math-wrapper docutils container">
 <div class="math notranslate nohighlight">
-\[x(t) = \frac{A}{2} \times (e^{-j \kappa} + e^{j \kappa}) \times (e^{-j \omega} - e^{j \omega}) +
-          \frac{B}{2} \times (e^{-j \kappa} - e^{j \kappa}) \times (e^{-j \omega} + e^{j \omega})\]</div>
+\[x(t) = \frac{A}{2} \times (e^{-j \kappa} + e^{j \kappa}) \times (e^{-j
+\omega} - e^{j \omega}) +
+          \frac{B}{2} \times (e^{-j \kappa} - e^{j \kappa}) \times (e^{-j
+          \omega} + e^{j \omega})\]</div>
 </div>
 <p>If we expand this, we get:</p>
 <div class="math-wrapper docutils container">
 <div class="math notranslate nohighlight">
-\[x(t) = \frac{1}{2} \times ((Ae^{-j \kappa -j \omega} + Ae^{j \kappa -j \omega} - Ae^{-j \kappa + j \omega} - Ae^{j \kappa + j \omega}) +
-          (Be^{-j \kappa -j \omega} - Be^{j \kappa -j \omega} + Be^{-j \kappa + j \omega} - Be^{j \kappa + j \omega}))\]</div>
+\[x(t) = \frac{1}{2} \times ((Ae^{-j \kappa -j \omega} + Ae^{j \kappa -j
+\omega} - Ae^{-j \kappa + j \omega} - Ae^{j \kappa + j \omega}) +
+          (Be^{-j \kappa -j \omega} - Be^{j \kappa -j \omega} + Be^{-j \kappa
+          + j \omega} - Be^{j \kappa + j \omega}))\]</div>
 </div>
 <p>and then:</p>
 <p><span class="math notranslate nohighlight">\(\displaystyle x(t) = \frac{1}{2} \times (((A+B)e^{-j \kappa -j \omega} + (A - B)e^{j \kappa -j \omega} - (A - B)e^{-j \kappa + j \omega} - (A + B)e^{j \kappa + j \omega}))\)</span></p>
@@ -655,7 +674,8 @@ Content on this topic
 <p><span class="math notranslate nohighlight">\(\displaystyle x(t) = \frac{1}{2} \times ((A+B)(e^{-j \kappa -j \omega} - e^{j \kappa + j \omega}) + (A - B)(e^{j \kappa -j \omega} - e^{-j \kappa + j \omega}) )\)</span></p>
 <p>and then:</p>
 <p><span class="math notranslate nohighlight">\(\displaystyle x(t) = \frac{A+B}{2}(sin(\kappa + \omega)) + \frac{A-B}{2}(sin(\kappa - \omega))\)</span></p>
-<p>If this is due to amplitude mismatch, this creates something (an image) on the other side of the local oscillator.</p>
+<p>If this is due to amplitude mismatch, this creates something (an image) on the
+other side of the local oscillator.</p>
 </section>
 </section>
 

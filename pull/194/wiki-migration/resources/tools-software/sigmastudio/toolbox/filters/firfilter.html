@@ -597,22 +597,39 @@ Content on this topic
 <ul class="simple">
 <li><p>Drag the block into the workspace.</p></li>
 <li><p>Click Table.</p></li>
-<li><p>Enter the coefficients as calculated by your chosen software (see below). (Max is 800.)</p></li>
+<li><p>Enter the coefficients as calculated by your chosen software (see below).
+(Max is 800.)</p></li>
 </ul>
-<p>Frequency response can be shaped by specifying the appropriate filter coefficients, as shown here:</p>
+<p>Frequency response can be shaped by specifying the appropriate filter
+coefficients, as shown here:</p>
 <img alt="firpic2.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/firpic2.png" />
-<p>You can use this popup window to input as many more coefficients as you desire, resulting in your own custom FIR filter. (Remember, the more numbers the closer to an ideal IIR filter, but at the cost of memory.)</p>
-<p>CAD programs are available which simplify the design of lowpass, highpass, bandpass, or bandstop FIR filters. A popular one was developed by Parks and McClellan and uses the Remez exchange algorithm. The design begins by specifying such parameters as passband ripple, stopband [attenuation] ripple, and the transition region. One such CAD program is QED1000 from Momentum Data Systems; a free version is downloadable from www.mds.com.</p>
-<p>The frequency response of the filter coefficients in the RMS Table editor figure shown above is pictured below:</p>
+<p>You can use this popup window to input as many more coefficients as you desire,
+resulting in your own custom FIR filter. (Remember, the more numbers the closer
+to an ideal IIR filter, but at the cost of memory.)</p>
+<p>CAD programs are available which simplify the design of lowpass, highpass,
+bandpass, or bandstop FIR filters. A popular one was developed by Parks and
+McClellan and uses the Remez exchange algorithm. The design begins by specifying
+such parameters as passband ripple, stopband [attenuation] ripple, and the
+transition region. One such CAD program is QED1000 from Momentum Data Systems; a
+free version is downloadable from www.mds.com.</p>
+<p>The frequency response of the filter coefficients in the RMS Table editor figure
+shown above is pictured below:</p>
 <img alt="firpic3.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/firpic3.png" />
-<p>To add input / output sets, right-click and Add Algorithm, IC1, FIR. After the default algorithm is established, this block can have algorithms added to it. (If you’re using more than one DSP board, you will need to add the initial default algorithm for the desired board.) Right-click the block and select Add Algorithm &gt; IC N &gt; Pink Noise Filter. This adds another set of input/output pins for connection.</p>
+<p>To add input / output sets, right-click and Add Algorithm, IC1, FIR. After the
+default algorithm is established, this block can have algorithms added to it.
+(If you’re using more than one DSP board, you will need to add the initial
+default algorithm for the desired board.) Right-click the block and select Add
+Algorithm &gt; IC N &gt; Pink Noise Filter. This adds another set of input/output pins
+for connection.</p>
 <p>For background detail and theory, see <a class="icon link reference external" href="https://wiki.analog.com/resources/tools-software/sigmastudio/algorithminformation/firfilter" target="_blank">FIR Filter Algorithm</a>.</p>
 </section>
 <section id="scripting-the-fir-filter-from-python">
 <h1>Scripting the FIR Filter from Python<a class="headerlink" href="#scripting-the-fir-filter-from-python" title="Link to this heading"></a></h1>
 <p>First, establish a connection between Python and SigmaStudio as described on the page <a class="reference internal" href="../../usingsigmastudio/scripting/python.html"><span class="doc">SigmaStudio Scripting from Python</span></a>.</p>
-<p>After a connection between Python and SigmaStudio has been established, the FIR Filter can be updated with new coefficients using the following code.</p>
-<p>Here, fir_filter_coeffs is a list containing the coefficients and ‘FIR1’ is the name of the FIR block in SigmaStudio.</p>
+<p>After a connection between Python and SigmaStudio has been established, the FIR
+Filter can be updated with new coefficients using the following code.</p>
+<p>Here, fir_filter_coeffs is a list containing the coefficients and ‘FIR1’ is the
+name of the FIR block in SigmaStudio.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fir_filter_coeffs</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">]</span>
 <span class="n">v_obj</span> <span class="o">=</span> <span class="n">VARIANT</span><span class="p">(</span><span class="n">pythoncom</span><span class="o">.</span><span class="n">VT_ARRAY</span> <span class="o">|</span> <span class="n">pythoncom</span><span class="o">.</span><span class="n">VT_R8</span><span class="p">,</span> <span class="n">fir_filter_coeffs</span><span class="p">)</span>
 <span class="n">server</span><span class="o">.</span><span class="n">SET_OBJECT_PROPERTY</span><span class="p">(</span><span class="s1">&#39;setControlValue&#39;</span><span class="p">,</span> <span class="s1">&#39;FIR1&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Number_of_Coeffs&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">fir_filter_coeffs</span><span class="p">))</span>

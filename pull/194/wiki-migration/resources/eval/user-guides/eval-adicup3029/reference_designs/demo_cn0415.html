@@ -601,11 +601,17 @@ Content on this topic
 <p>The <strong>ADuCM3029_demo_cn0415</strong> provides a solution for controlling and monitoring solenoid actuator current, using an <strong>EVAL-CN0415-ARDZ</strong> shield installed on an <strong>EVAL-ADICUP3029</strong> base board. The user interface is implemented as a command line interface (CLI) through a serial UART connection. The project is created using <strong>CrossCore Embedded Studio</strong> and <strong>GNU ARM compiler</strong>.</p>
 <section id="general-description-overview">
 <h2>General Description/Overview<a class="headerlink" href="#general-description-overview" title="Link to this heading"></a></h2>
-<p>The circuit can be divided into four parts for the purpose of analyzing interaction with the software project: The supply block, the sense block, the actuator block, and the overcurrent fault / reset block.</p>
-<p>The supply block consists of DC-DC converters and protection circuits. This block does not interact with the software.</p>
+<p>The circuit can be divided into four parts for the purpose of analyzing
+interaction with the software project: The supply block, the sense block, the
+actuator block, and the overcurrent fault / reset block.</p>
+<p>The supply block consists of DC-DC converters and protection circuits. This
+block does not interact with the software.</p>
 <p>Overcurrent fault and Overcurrent Reset block, controlled by general-purpose input/output (GPIO) pins on <strong>ADICUP3029</strong>. If the solenoid current exceeds a resistor-programmed threshold, a comparator trips off the MOSFET gate driver and notifies software via a GPIO signal. The user can then re-enable the driver once the fault condition is removed.</p>
-<p>The sense block, consisting of a 0.1Ω current sense resistor, sense amplifier, filtering, and 14-bit Analog to Digital converter (ADC). The ADC is connected to the ADICUP3029 via Serial Peripheral Interface (SPI)</p>
-<p>The voltage fed to the ADC with respect to current passing through the solenoid is given by the equation:</p>
+<p>The sense block, consisting of a 0.1Ω current sense resistor, sense amplifier,
+filtering, and 14-bit Analog to Digital converter (ADC). The ADC is connected to
+the ADICUP3029 via Serial Peripheral Interface (SPI)</p>
+<p>The voltage fed to the ADC with respect to current passing through the solenoid
+is given by the equation:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">VADC</span> <span class="o">=</span> <span class="n">Isolenoid</span> <span class="o">*</span> <span class="n">Rsense</span> <span class="o">*</span> <span class="mi">20</span>       <span class="n">Isolenoid</span> <span class="o">-</span> <span class="n">Current</span> <span class="n">through</span> <span class="n">solenoid</span>
                                      <span class="n">Rsense</span>    <span class="o">-</span> <span class="n">Sense</span> <span class="n">resistor</span> <span class="p">(</span><span class="mf">0.1</span><span class="n">Ω</span><span class="p">)</span>
 </pre></div>
@@ -622,8 +628,18 @@ Content on this topic
 </pre></div>
 </div>
 <p>The actuator block, consisting of a logic-level to MOSFET driver. The logic signal is driven by the <strong>ADICUP3029</strong>’s PWM peripheral, allowing the the effective voltage across the solenoid to be varied.</p>
-<p>The software implements several functions with the sense and actuator blocks. PWM frequency and duty cycle can be controlled directly. This mode of operation would normally be combined with an outer feedback loop in a control system. One example would be a system in which the solenoid controls air pressure, that is in turn measured by a pressure sensor, which is then used to determine a new duty cycle value that brings the pressure closer to the desired setpoint.</p>
-<p>A PID control loop allows the solenoid current to be accurately controlled, compensating for variations in supply voltage and coil resistance. This mode of operation allows for optimum drive current for 2-state solenoids, minimizing power dissipation. An additional function allows a higher initial “pull in” current to be applied for a short time, after which current drops back to a lower “hold” current.</p>
+<p>The software implements several functions with the sense and actuator blocks.
+PWM frequency and duty cycle can be controlled directly. This mode of operation
+would normally be combined with an outer feedback loop in a control system. One
+example would be a system in which the solenoid controls air pressure, that is
+in turn measured by a pressure sensor, which is then used to determine a new
+duty cycle value that brings the pressure closer to the desired setpoint.</p>
+<p>A PID control loop allows the solenoid current to be accurately controlled,
+compensating for variations in supply voltage and coil resistance. This mode of
+operation allows for optimum drive current for 2-state solenoids, minimizing
+power dissipation. An additional function allows a higher initial “pull in”
+current to be applied for a short time, after which current drops back to a
+lower “hold” current.</p>
 <img alt="PID equation" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup3029/reference_designs/pid_controller_equation.png" />
 <p>Using the data gathered form the sense block the a <strong>PID controller</strong> is implemented that can be used to set a specific current value or duty cycle. To use the <strong>PID controller</strong> it must be first tuned with the right values of <strong>Kp</strong>, <strong>Ki</strong> and <strong>Kd</strong>. Various methods can be used for tunning. The proposed method, which is easy, but does not yield perfect results, is:</p>
 <ul class="simple">
@@ -631,7 +647,8 @@ Content on this topic
 <li><p>Start increasing <strong>Ki</strong> constant until the actuation time is reasonable and the current overshoot is within 5% of the wanted value.</p></li>
 <li><p>Pick <strong>Kd</strong> as 25% (1/4) of <strong>Ki</strong>.</p></li>
 </ul>
-<p>A dither function allows a low-frequency AC signal to be superimposed, minimizing mechanical “stiction” in proportional solenoid applications.</p>
+<p>A dither function allows a low-frequency AC signal to be superimposed,
+minimizing mechanical “stiction” in proportional solenoid applications.</p>
 </section>
 <section id="demo-requirements">
 <h2>Demo Requirements<a class="headerlink" href="#demo-requirements" title="Link to this heading"></a></h2>
@@ -925,13 +942,18 @@ from 0 to 1 amperes.</p></td>
 </section>
 <section id="obtaining-the-software">
 <h2>Obtaining the Software<a class="headerlink" href="#obtaining-the-software" title="Link to this heading"></a></h2>
-<p>There are two basic ways to program the ADICUP3029 with the software for the CN0415.</p>
+<p>There are two basic ways to program the ADICUP3029 with the software for the
+CN0415.</p>
 <ul class="simple">
 <li><p>Dragging and Dropping the .Hex to the Daplink drive</p></li>
 <li><p>Building, Compiling, and Debugging using CCES</p></li>
 </ul>
-<p>Using the drag and drop method, the software is going to be a version that Analog Devices creates for testing and evaluation purposes. This is the EASIEST way to get started with the reference design</p>
-<p>Importing the project into CrossCore is going to allow you to change parameters and customize the software to fit your needs, but will be a bit more advanced and will require you to download the CrossCore toolchain.</p>
+<p>Using the drag and drop method, the software is going to be a version that
+Analog Devices creates for testing and evaluation purposes. This is the EASIEST
+way to get started with the reference design</p>
+<p>Importing the project into CrossCore is going to allow you to change parameters
+and customize the software to fit your needs, but will be a bit more advanced
+and will require you to download the CrossCore toolchain.</p>
 <p>The software for the <strong>ADuCM3029_demo_cn0415</strong> can be found here:</p>
 <div class="download admonition">
 <p class="admonition-title">Download</p>

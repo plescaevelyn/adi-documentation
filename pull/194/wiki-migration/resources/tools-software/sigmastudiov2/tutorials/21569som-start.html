@@ -596,7 +596,9 @@ Content on this topic
 <h1>Getting Started with the ADSP-21569-SOM<a class="headerlink" href="#getting-started-with-the-adsp-21569-som" title="Link to this heading"></a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
-<p>There are several options for developing SigmaStudio+ projects with the ADSP21569 This example will use the ADSP-21569 SOM processor board and the EV-SOMCRR-EZKit carrier board</p>
+<p>There are several options for developing SigmaStudio+ projects with the
+ADSP21569 This example will use the ADSP-21569 SOM processor board and the
+EV-SOMCRR-EZKit carrier board</p>
 <section id="outline-of-steps-for-getting-started">
 <h3>Outline of Steps for Getting Started<a class="headerlink" href="#outline-of-steps-for-getting-started" title="Link to this heading"></a></h3>
 <p>(see also installation documentation on previous pages)</p>
@@ -605,13 +607,16 @@ Content on this topic
 <li><p>Install CrossCore Embedded Studio (CCES) tools</p>
 <ul class="simple">
 <li><p>CCES is used for compiling and linking SHARC code</p></li>
-<li><p>CCES tools will be invoked (behind the scenes) by SigmaStudio+ to build the SHARC code</p></li>
+<li><p>CCES tools will be invoked (behind the scenes) by SigmaStudio+ to build
+the SHARC code</p></li>
 </ul>
 </li>
 <li><p>Obtain and set up the hardware to use for your system</p>
 <ul class="simple">
 <li><p>for example: Processor System On Module (SOM) plus a base board to plug the SOM onto (carrier board). The carrier board (like the EV-SOMCRR-EZKIT) - this pair of boards is shown below</p></li>
-<li><p>the EVAL-ADUSB2EBZ USB-to-I2C/SPI commincations adapter (also referred to as the USBi) - SPI communications is used for the SigmaStudio+ to SHARC programming and tuning</p></li>
+<li><p>the EVAL-ADUSB2EBZ USB-to-I2C/SPI commincations adapter (also referred to
+as the USBi) - SPI communications is used for the SigmaStudio+ to SHARC
+programming and tuning</p></li>
 </ul>
 <p><img alt="resources-tools-software-sigmastudiov2-tutorials-usbi.jpg" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/tutorials/usbi.jpg" /></p>
 </li>
@@ -621,48 +626,60 @@ Content on this topic
 <h3>Hardware for this Example<a class="headerlink" href="#hardware-for-this-example" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>the SOM module used here is a Rev E with Rev 0.2 ADSP-21569 silicon (also tested with Rev B SOM and 0.0 silicon)</p></li>
-<li><p>the EV-SOMCRR-EZKit carrier board is a Rev D (the version shown in the previous setup pages is a Rev A)</p>
+<li><p>the EV-SOMCRR-EZKit carrier board is a Rev D (the version shown in the
+previous setup pages is a Rev A)</p>
 <ul>
 <li><p>(the version shown in the previous setup pages is a Rev A)</p></li>
-<li><p>Note: the USBi header is flipped 180 degrees from the Rev A to the Rev D board (Rev A also uses an unshrouded header for the USBi connection at P3)</p></li>
+<li><p>Note: the USBi header is flipped 180 degrees from the Rev A to the Rev D
+board (Rev A also uses an unshrouded header for the USBi connection at P3)</p></li>
 </ul>
 </li>
 <li><p>the SOM module plugs onto the carrier board</p>
 <ul>
-<li><p>the SOM module is powered from the carrier board - Install a jumper on pins 2-3 of JP1 of the SOM module (towards the “POWER” label, this will select power from the carrier base board</p></li>
+<li><p>the SOM module is powered from the carrier board - Install a jumper on
+pins 2-3 of JP1 of the SOM module (towards the “POWER” label, this will
+select power from the carrier base board</p></li>
 </ul>
 </li>
 <li><p>assorted cables and power supply for the processor/carrier board</p>
 <ul>
 <li><p>3.5mm stereo audio cables for connecting the the EZKIT carrier board</p></li>
 <li><p>a mini USB cable for connecting the USBi to the PC</p></li>
-<li><p>a micro USB cable to connect to the SOM (only used for initial loader file flashing). note the usb connector on the processor SOM may be different for other SOM boards</p></li>
+<li><p>a micro USB cable to connect to the SOM (only used for initial loader file
+flashing). note the usb connector on the processor SOM may be different
+for other SOM boards</p></li>
 </ul>
 </li>
 </ul>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>Before the SOM/carrier can be used with SigmaStudio+, the SOM’s flash memory must be programmed (see steps below)</p>
+<p>Before the SOM/carrier can be used with SigmaStudio+, the SOM’s flash memory
+must be programmed (see steps below)</p>
 </div>
 </section>
 </section>
 <section id="setup-the-som-and-ezkit-carrier">
 <h2>Setup the SOM and EzKit Carrier<a class="headerlink" href="#setup-the-som-and-ezkit-carrier" title="Link to this heading"></a></h2>
-<p>Here is a picture of the 21569 SOM installed on the EV-SOMCRR-EZKIT carrier board</p>
+<p>Here is a picture of the 21569 SOM installed on the EV-SOMCRR-EZKIT carrier
+board</p>
 <p><img alt="image1" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/tutorials/21569som-ezkit.jpg" /></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Don’t worry about the state of the LEDs at this point if you have not already programmed the loader (.ldr) file. Instructions for programming the loader file follow this section</p>
+<p>Don’t worry about the state of the LEDs at this point if you have not already
+programmed the loader (.ldr) file. Instructions for programming the loader
+file follow this section</p>
 </div>
 <ul class="simple">
 <li><p>JP1 power to SOM should be on pins 2-3 (toward the POWER label)</p></li>
 <li><p>Boot Select switch should be on position 1 (SPI2 master boot) – this is after you have programmed the flash with the loader (.ldr file)</p>
 <ul>
-<li><p>it is recommended to program the flash with the CrossCore serial flash programmer as I think it is much easier</p></li>
+<li><p>it is recommended to program the flash with the CrossCore serial flash
+programmer as I think it is much easier</p></li>
 </ul>
 </li>
 <li><p>Power with 12V wall wart or 12V supply (supplied adapter is 1.6A)</p></li>
-<li><p>USBi dongle (for connection to the PC) for SigmaStudio+ programming and tuning</p>
+<li><p>USBi dongle (for connection to the PC) for SigmaStudio+ programming and
+tuning</p>
 <ul>
 <li><p>tested with USBi version 1.3, 1.4, and 1.5</p></li>
 </ul>
@@ -670,7 +687,8 @@ Content on this topic
 <li><p>Connect and audio source to ADC 1-2</p></li>
 <li><p>Connect a powered speaker (or headphones) (can also use the headphones jack)</p></li>
 <li><p>LEDs 4 and 6 should light (with the modified ldr file), they will be off with the original ldr file supplied with the default installation of SigmaStudio+ for Sharc release 2.4.0</p></li>
-<li><p>LED 8 and 9 will come on at startup/powerup and then LED 10 will light with a successful compile and download from SigmaStudio+</p></li>
+<li><p>LED 8 and 9 will come on at startup/powerup and then LED 10 will light with a
+successful compile and download from SigmaStudio+</p></li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -679,10 +697,12 @@ Content on this topic
 </section>
 <section id="programming-the-loader-file">
 <h2>Programming the Loader File<a class="headerlink" href="#programming-the-loader-file" title="Link to this heading"></a></h2>
-<p>At this point we are assuming that the hardware is set up and ready to program the loader file.</p>
+<p>At this point we are assuming that the hardware is set up and ready to program
+the loader file.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>A modified loader file is provided here that can be used in place of the default loader if desired</p>
+<p>A modified loader file is provided here that can be used in place of the
+default loader if desired</p>
 </div>
 <p>This is the modified loader file: <a class="icon link reference external" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/tutorials/ss_app_21569_leds_.zip" target="_blank">ss_app_21569_leds</a></p>
 <ul class="simple">
@@ -702,22 +722,24 @@ Content on this topic
 <ul class="simple">
 <li></li>
 </ul>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/tutorials/cces-serial-programmer.jpg"><img alt="image2" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/tutorials/cces-serial-programmer.jpg" style="width: 400px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/tutorials/cces-serial-programmer.jpg"><img alt="image2" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/tutorials/cces-serial-programmer.jpg" width="400" /></a></p>
 </li>
 <li><p>set the SOM boot mode switch to “3” (this puts the processor into UART boot mode), (don’t power the carrier board yet)</p></li>
 <li><p>You should see a screen similar to this:</p>
 <ul class="simple">
 <li></li>
 </ul>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/tutorials/serialprog1.jpg"><img alt="image3" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/tutorials/serialprog1.jpg" style="width: 400px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/tutorials/serialprog1.jpg"><img alt="image3" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/tutorials/serialprog1.jpg" width="400" /></a></p>
 </li>
 <li><p>power up the EzKit carrier board (with the SOM USB cable NOT connected)</p></li>
 <li><p>reset the board (either SW2 RESET pushbutton on the carrier board or the small SW2 RESET on the SOM)</p></li>
-<li><p>To determine which serial port is used for programming, we start without the USB programming cable attached to the SOM. Note which COMM ports are shown in the Serial Port (B) fields:</p>
+<li><p>To determine which serial port is used for programming, we start without the
+USB programming cable attached to the SOM. Note which COMM ports are shown in
+the Serial Port (B) fields:</p>
 <ul class="simple">
 <li></li>
 </ul>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/tutorials/serialprog3.jpg"><img alt="image4" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/tutorials/serialprog3.jpg" style="width: 400px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/tutorials/serialprog3.jpg"><img alt="image4" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/tutorials/serialprog3.jpg" width="400" /></a></p>
 </li>
 <li><p>Plug the USB micro cable into the processor SOM (for the 21569 SOM, this is labeled P2 UART) (Note: other SOMs may have a different USB connector). If the programming port was detected, then it will now be shown in the dropdown list of Serial Ports (B)</p></li>
 <li><p>Select the COMM port that was added when the cable was plugged in</p></li>
@@ -728,14 +750,18 @@ Content on this topic
 <li><p>Press “Start” (F) to program the SPI flash device on the SOM</p></li>
 <li><p>The Status window will show the Download, Erase and Programming cycles and will respond with “Flash Completed”</p></li>
 <li><p>At this point, the programming USB cable can be disconnected from P2</p></li>
-<li><p>Change the Boot Mode rotary selector to “1” (SPI flash boot) and power cycle or reset the board</p>
+<li><p>Change the Boot Mode rotary selector to “1” (SPI flash boot) and power cycle
+or reset the board</p>
 <ul class="simple">
 <li><p>if using the “modified” loader file, LEDs 4 and 6 will be on and LED 7 will be off</p></li>
 <li><p>the board is now ready for connection to SigmaStudio+</p></li>
-<li><p>programming the loader only needs to be done once (unless you want to change the framework/loader file for some reason)</p></li>
+<li><p>programming the loader only needs to be done once (unless you want to
+change the framework/loader file for some reason)</p></li>
 </ul>
 </li>
-<li><p>connect the USBi USB-to-SPI communications board to P3 (if not already attached). The RED power LED should be on and the YELLOW SPI LED should be on (solid).</p></li>
+<li><p>connect the USBi USB-to-SPI communications board to P3 (if not already
+attached). The RED power LED should be on and the YELLOW SPI LED should be on
+(solid).</p></li>
 </ul>
 </section>
 </section>
@@ -757,13 +783,13 @@ Content on this topic
 <ul class="simple">
 <li></li>
 </ul>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/tutorials/ss_screen1.jpg"><img alt="image5" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/tutorials/ss_screen1.jpg" style="width: 600px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/tutorials/ss_screen1.jpg"><img alt="image5" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/tutorials/ss_screen1.jpg" width="600" /></a></p>
 </li>
 <li><p>The USBi Firmware Version <strong>must</strong> be correctly set to match the USBi Revision being used! (from the <strong>System</strong> tab)</p>
 <ul class="simple">
 <li></li>
 </ul>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/tutorials/ss_usbi.jpg"><img alt="image6" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/tutorials/ss_usbi.jpg" style="width: 600px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/tutorials/ss_usbi.jpg"><img alt="image6" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudiov2/tutorials/ss_usbi.jpg" width="600" /></a></p>
 </li>
 <li><p>execute the <strong>Link-Compile-Download</strong> operation (from the <strong>Action</strong> menu, or from the taskbar button)</p></li>
 <li><p>after the schematic compilation and download, you should see the message: “Schematic Downloaded Sucessfully” and then the “<strong>ACTIVE</strong>” status should be set on the right side of the status bar at the bottom of the window</p></li>

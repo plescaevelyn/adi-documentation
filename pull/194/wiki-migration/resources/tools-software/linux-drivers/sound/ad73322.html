@@ -591,7 +591,8 @@ Content on this topic
 <p>This driver is written for a custome board which has 4 cascaded AD73322s,but since there is a macro(NUM_DEVICES_CHAIN)to decide how many DAC/ADC pairs are connected,so it should be a generic driver for <a class="icon adi reference external" href="https://www.analog.com/AD73322" target="_blank">AD73322</a>.</p>
 <section id="adding-kernel-support">
 <h2>Adding Kernel Support<a class="headerlink" href="#adding-kernel-support" title="Link to this heading"></a></h2>
-<p>To add support for the AD73322 to the kernel build system, a few things must be enabled properly for things to work. The configuration is as following:</p>
+<p>To add support for the AD73322 to the kernel build system, a few things must be
+enabled properly for things to work. The configuration is as following:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Linux</span> <span class="n">Kernel</span> <span class="n">Configuration</span>
    <span class="n">Sound</span>  <span class="o">---&gt;</span>
      <span class="p">[</span><span class="o">*</span><span class="p">]</span> <span class="n">Sound</span> <span class="n">card</span> <span class="n">support</span>
@@ -609,11 +610,16 @@ Content on this topic
 </div>
 <ul class="simple">
 <li><p>“Blackfin Audio SPORT port” has 3 options:0,1 or 2,if you only have one card on SPORT0 or SPORT1,then input 0 or 1.if you have 2 cards on both SPORT0 and SPORT1 then input 2.</p></li>
-<li><p>Default PF pins used above may have been requested by other devices,if so, you need either disable that device or select another one.</p></li>
+<li><p>Default PF pins used above may have been requested by other devices,if so,
+you need either disable that device or select another one.</p></li>
 </ul>
 <section id="testing-the-built-in-kernel-driver">
 <h3>Testing the built in kernel driver<a class="headerlink" href="#testing-the-built-in-kernel-driver" title="Link to this heading"></a></h3>
-<p>If audio is configured as modules, skip this section. If audio is built into kernel and you have booted the kernel, you need to check if audio is working: Check the boot messages to see if you have booted the correct kernel. During kernel booting, it should print out message like this(There are two cards on both SPORT0 and SPORT1 in this case):</p>
+<p>If audio is configured as modules, skip this section. If audio is built into
+kernel and you have booted the kernel, you need to check if audio is working:
+Check the boot messages to see if you have booted the correct kernel. During
+kernel booting, it should print out message like this(There are two cards on
+both SPORT0 and SPORT1 in this case):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Advanced</span> <span class="n">Linux</span> <span class="n">Sound</span> <span class="n">Architecture</span> <span class="n">Driver</span> <span class="n">Version</span> <span class="mf">1.0.18</span><span class="n">rc3</span><span class="o">.</span>
 <span class="n">dma_alloc_init</span><span class="p">:</span> <span class="n">dma_page</span> <span class="o">@</span> <span class="mh">0x032e6000</span> <span class="o">-</span> <span class="mi">512</span> <span class="n">pages</span> <span class="n">at</span> <span class="mh">0x03e00000</span>
 <span class="n">ALSA</span> <span class="n">device</span> <span class="nb">list</span><span class="p">:</span>
@@ -626,7 +632,11 @@ Content on this topic
 <section id="usage-notes">
 <h2>Usage notes<a class="headerlink" href="#usage-notes" title="Link to this heading"></a></h2>
 <p><strong>Configure file:</strong></p>
-<p>Since AD73322 card has at least two pairs of ADC/DAC(also called input/output devices, and index of device is mapped to index of ADC/DAC in cascade mode),a configure file is needed to make full use of all these devices,otherwise only the first pair of ADC/DAC of card 0 can be used as default devices.An example of the config file is as following,it should be copy to /etc/asound.conf</p>
+<p>Since AD73322 card has at least two pairs of ADC/DAC(also called input/output
+devices, and index of device is mapped to index of ADC/DAC in cascade mode),a
+configure file is needed to make full use of all these devices,otherwise only
+the first pair of ADC/DAC of card 0 can be used as default devices.An example of
+the config file is as following,it should be copy to /etc/asound.conf</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>#Copy this file as /etc/asound.conf to use device &quot;plughw:x,y&quot;.
 #x:index of card, from 0 to 1 for two cards case; y:index of device,from 0 to 7 for 4 AD73322s on each card case.
 pcm.!plughw {
@@ -699,7 +709,13 @@ pcm.!plughw {
 </section>
 <section id="driver-souce-code-note">
 <h2>Driver Souce code note<a class="headerlink" href="#driver-souce-code-note" title="Link to this heading"></a></h2>
-<p>As mentioned above this driver is written for a customer board( with 4 cascaded AD73322 on it),and there are wrong mappings between the input Jacks and and input data lines on the board,so a function named get_cap_slotindex is implemented to correct it.Normally,it is not necessary and just get the slot_index by NUM_DEVICE_CHAN-(index+1),please refer to playback side functions.Also please feel free to tell the author if you find that something need be changed for your card,Since we want it to be more generic.</p>
+<p>As mentioned above this driver is written for a customer board( with 4 cascaded
+AD73322 on it),and there are wrong mappings between the input Jacks and and
+input data lines on the board,so a function named get_cap_slotindex is
+implemented to correct it.Normally,it is not necessary and just get the
+slot_index by NUM_DEVICE_CHAN-(index+1),please refer to playback side
+functions.Also please feel free to tell the author if you find that something
+need be changed for your card,Since we want it to be more generic.</p>
 </section>
 </section>
 

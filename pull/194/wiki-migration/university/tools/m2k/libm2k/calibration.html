@@ -601,7 +601,10 @@ Content on this topic
 <ul class="simple">
 <li><p>calibrateADC(): calibrate ADC</p></li>
 <li><p>calibrateDAC(): calibrate DAC</p></li>
-<li><p>isCalibrated(): true if at least one calibration procedure was performed on the current session (firmware version &lt; v0.26) or on the board since was plugged in (firmware version &gt;= v0.26). The function’s output does not imply that the last calibration is still valid.</p></li>
+<li><p>isCalibrated(): true if at least one calibration procedure was performed on
+the current session (firmware version &lt; v0.26) or on the board since was
+plugged in (firmware version &gt;= v0.26). The function’s output does not imply
+that the last calibration is still valid.</p></li>
 </ul>
 <p>Python example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">libm2k</span>
@@ -622,15 +625,24 @@ Content on this topic
 <p class="admonition-title">Important</p>
 <p>Only available from firmware version <a class="icon link reference external" href="https://github.com/analogdevicesinc/m2k-fw/releases/tag/v0.26" target="_blank">v0.26</a></p>
 </div>
-<p>Libm2k offers a way to use prerecorded calibration values that are stored in a context attribute. Using this approach, there is no need to disconnect the analog inputs/outputs at every run because the calibration parameters are stored on the device. Since calibration values are dependent on temperature, a script will record the values at different temperatures and eventually create a file that is compatible with libm2k and the context attribute format.</p>
+<p>Libm2k offers a way to use prerecorded calibration values that are stored in a
+context attribute. Using this approach, there is no need to disconnect the
+analog inputs/outputs at every run because the calibration parameters are stored
+on the device. Since calibration values are dependent on temperature, a script
+will record the values at different temperatures and eventually create a file
+that is compatible with libm2k and the context attribute format.</p>
 <section id="generating-the-file">
 <h3>Generating the file<a class="headerlink" href="#generating-the-file" title="Link to this heading"></a></h3>
-<p>The calibration values are written to the context attribute from a file on the ADALM2000 partition. The values will be stored on the device until they are overwritten.</p>
+<p>The calibration values are written to the context attribute from a file on the
+ADALM2000 partition. The values will be stored on the device until they are
+overwritten.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>There is a known limitation: The maximum temperature file size is 4 kb. This will change in a future release.</p>
+<p>There is a known limitation: The maximum temperature file size is 4 kb. This
+will change in a future release.</p>
 </div>
-<p>This file must be called ‘m2k-calib-temp-lut.ini’ and it should contain only a row having the following format:</p>
+<p>This file must be called ‘m2k-calib-temp-lut.ini’ and it should contain only a
+row having the following format:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cal</span><span class="p">,</span><span class="n">temp_lut</span><span class="o">=</span><span class="p">[</span><span class="o">&lt;</span><span class="n">temperature</span><span class="o">&gt;</span><span class="p">,</span><span class="o">&lt;</span><span class="n">adc_offset1</span><span class="o">&gt;</span><span class="p">,</span><span class="o">&lt;</span><span class="n">adc_offset2</span><span class="o">&gt;</span><span class="p">,</span><span class="o">&lt;</span><span class="n">adc_gain1</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">adc_gain2</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">dac_offset1</span><span class="o">&gt;</span><span class="p">,</span><span class="o">&lt;</span><span class="n">dac_offset2</span><span class="o">&gt;</span><span class="p">,</span><span class="o">&lt;</span><span class="n">dac_gain1</span><span class="o">&gt;</span><span class="p">,</span><span class="o">&lt;</span><span class="n">dac_gain2</span><span class="o">&gt;</span> <span class="p">[</span><span class="o">...</span><span class="p">]]</span>
 </pre></div>
 </div>
@@ -664,13 +676,19 @@ Content on this topic
 <section id="examples">
 <h4>examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h4>
 <ul class="simple">
-<li><p>Create the ini file ‘m2k-calib-temp-lut.ini’. The process can be stopped by pressing ‘CTRL + C’, otherwise the process will stop when the temperature of the board rises up to 75 °C or after 30 minutes</p></li>
+<li><p>Create the ini file ‘m2k-calib-temp-lut.ini’. The process can be stopped by
+pressing ‘CTRL + C’, otherwise the process will stop when the temperature of
+the board rises up to 75 °C or after 30 minutes</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">generate_temperature_calib_lut</span><span class="o">.</span><span class="n">py</span> <span class="n">ip</span><span class="p">:</span><span class="mf">192.168.2.1</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><p>Create the ini file ‘example.ini’. The process can be stopped by pressing ‘CTRL + C’, otherwise the process will stop when the temperature of the board rises up to 54 °C or after 15 minutes. Extract 5 values from all computed calibration parameters. If the file is already created, the new computed values will be appended.</p></li>
+<li><p>Create the ini file ‘example.ini’. The process can be stopped by pressing
+‘CTRL + C’, otherwise the process will stop when the temperature of the board
+rises up to 54 °C or after 15 minutes. Extract 5 values from all computed
+calibration parameters. If the file is already created, the new computed
+values will be appended.</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">generate_temperature_calib_lut</span><span class="o">.</span><span class="n">py</span> <span class="n">auto</span> <span class="o">-</span><span class="n">v</span> <span class="mi">5</span> <span class="o">-</span><span class="n">t</span> <span class="mi">54</span> <span class="o">-</span><span class="n">T</span> <span class="mi">15</span> <span class="o">-</span><span class="n">f</span> <span class="s2">&quot;example.ini&quot;</span> <span class="o">-</span><span class="n">a</span>
 </pre></div>
@@ -679,15 +697,22 @@ Content on this topic
 </section>
 <section id="calibrating-using-the-ini-file">
 <h3>Calibrating using the ini file<a class="headerlink" href="#calibrating-using-the-ini-file" title="Link to this heading"></a></h3>
-<p>The purpose of this calibration type is to automate and to make the calibration process faster. Please make sure to have the following minimum requirements:</p>
+<p>The purpose of this calibration type is to automate and to make the calibration
+process faster. Please make sure to have the following minimum requirements:</p>
 <ul class="simple">
 <li><p>A valid calibration file. The file can be generated using the script mentioned above.</p></li>
 <li><p>Firmware v0.26 on your board</p></li>
 <li><p>libm2k v0.3.1</p></li>
 </ul>
-<p>After the board booted, copy the ini file inside the m2k drive. Then eject the drive (do not unplug!) and wait for ADALM2000 to boot. Once booted, the temperature calibration lookup table will be usable from libm2k.</p>
-<p>If you are using the -f or –file option you should rename the file to ‘m2k-calib-temp-lut.ini’ before copying it to the device.</p>
-<p>In order to perform a fast calibration call the fallowing context method: calibrateFromContext(). The method hasContextCalibration() will validate if the temperature calibration can be performed on the current board. There are some reasons why the calibration can be performed:</p>
+<p>After the board booted, copy the ini file inside the m2k drive. Then eject the
+drive (do not unplug!) and wait for ADALM2000 to boot. Once booted, the
+temperature calibration lookup table will be usable from libm2k.</p>
+<p>If you are using the -f or –file option you should rename the file to
+‘m2k-calib-temp-lut.ini’ before copying it to the device.</p>
+<p>In order to perform a fast calibration call the fallowing context method:
+calibrateFromContext(). The method hasContextCalibration() will validate if the
+temperature calibration can be performed on the current board. There are some
+reasons why the calibration can be performed:</p>
 <ul class="simple">
 <li><p>the values are not loaded onto the device</p></li>
 <li><p>the values are incorrect (not numerical values)</p></li>

@@ -598,14 +598,42 @@ Content on this topic
             
   <section id="a-simple-bbp-for-rf-transceivers">
 <h1>A simple BBP for RF Transceivers<a class="headerlink" href="#a-simple-bbp-for-rf-transceivers" title="Link to this heading"></a></h1>
-<p>This wiki page is a follow up documentation to the ADI article titled “A Simple Baseband Processor for RF Transceivers”. The article covers the theory and implementation details of a simple BBP using the ZC706 + AD-FMCOMMS3 rapid prototyping platform. This page details the demonstration and build process of the BBP design on the ZC706 + AD-FMCOMMS3 hardware.</p>
-<p>Please note that Analog Devices does NOT support this design. It is unlikely that we maintain this core or design as we would the reference design. The recommended procedure for a BBP design is to model it in Simulink and subsequently implement the design using HDL coder. The core of the axi_xcomm2ip is intentionally obfuscated to discourage any use or modification of the IP. However, the radio communication demonstration detailed here may be used as a frame work and implementation flow for such designs. It is also meant to illustrate a work flow using the ADI github repositories, especially the HDL. The build process serves as a use case example for a set of frequently asked questions about the use of the HDL repository and the project frame work.</p>
-<p>This document and the design, at present, is applicable and built only for Xilinx tools and devices. An Altera equivalent is in the plans and may be added sometime in the near future. It is assumed that the reader is familiar with the ADI reference designs, Vivado, TCL scripts and Linux. Also note that the instructions exclusively use a Linux command line environment. Please do not seek support or ask questions outside the scope of this document.</p>
-<p>This guide has two sections, the first section covers the hardware demonstration, what it is and how to run it. The second section covers the build process of the demo from the source files.</p>
+<p>This wiki page is a follow up documentation to the ADI article titled “A Simple
+Baseband Processor for RF Transceivers”. The article covers the theory and
+implementation details of a simple BBP using the ZC706 + AD-FMCOMMS3 rapid
+prototyping platform. This page details the demonstration and build process of
+the BBP design on the ZC706 + AD-FMCOMMS3 hardware.</p>
+<p>Please note that Analog Devices does NOT support this design. It is unlikely
+that we maintain this core or design as we would the reference design. The
+recommended procedure for a BBP design is to model it in Simulink and
+subsequently implement the design using HDL coder. The core of the axi_xcomm2ip
+is intentionally obfuscated to discourage any use or modification of the IP.
+However, the radio communication demonstration detailed here may be used as a
+frame work and implementation flow for such designs. It is also meant to
+illustrate a work flow using the ADI github repositories, especially the HDL.
+The build process serves as a use case example for a set of frequently asked
+questions about the use of the HDL repository and the project frame work.</p>
+<p>This document and the design, at present, is applicable and built only for
+Xilinx tools and devices. An Altera equivalent is in the plans and may be added
+sometime in the near future. It is assumed that the reader is familiar with the
+ADI reference designs, Vivado, TCL scripts and Linux. Also note that the
+instructions exclusively use a Linux command line environment. Please do not
+seek support or ask questions outside the scope of this document.</p>
+<p>This guide has two sections, the first section covers the hardware
+demonstration, what it is and how to run it. The second section covers the build
+process of the demo from the source files.</p>
 </section>
 <section id="setup-and-running-the-demo">
 <h1>Setup and Running the demo<a class="headerlink" href="#setup-and-running-the-demo" title="Link to this heading"></a></h1>
-<p>The demo is a simple chat (as in transmitting and receiving text messages) program between two ZC706 + AD-FMCOMMS3-EBZ platforms. You may place the two boards adjacent to each other within your lab desk space. Please do NOT try to use it with your significant other(s) across the seven seas. The best learning or experimentation setup requires two hardware platforms. This allows one to understand the importance and need for carrier tracking. It is possible for you to run the demo on a single platform in loopback mode. The default setup assumes two independent hardware platforms. So the single platform loopback mode requires some additional LO changes.</p>
+<p>The demo is a simple chat (as in transmitting and receiving text messages)
+program between two ZC706 + AD-FMCOMMS3-EBZ platforms. You may place the two
+boards adjacent to each other within your lab desk space. Please do NOT try to
+use it with your significant other(s) across the seven seas. The best learning
+or experimentation setup requires two hardware platforms. This allows one to
+understand the importance and need for carrier tracking. It is possible for you
+to run the demo on a single platform in loopback mode. The default setup assumes
+two independent hardware platforms. So the single platform loopback mode
+requires some additional LO changes.</p>
 </section>
 <section id="download-run-time-files">
 <h1>Download run-time files<a class="headerlink" href="#download-run-time-files" title="Link to this heading"></a></h1>
@@ -616,8 +644,11 @@ Content on this topic
 </section>
 <section id="setup-host-linux-desktop">
 <h1>Setup (host Linux desktop)<a class="headerlink" href="#setup-host-linux-desktop" title="Link to this heading"></a></h1>
-<p>The setup assumes that you are familiar with the AD-FMCOMMS3-EBZ user guide and used it to capture some signals or at least done a sanity level testing. You also have the image with the boot and file system partitions in the SD card.</p>
-<p>To begin with, download the RFBBP demo run-time files and extract the contents. ++++ Show/Hide Commands: |</p>
+<p>The setup assumes that you are familiar with the AD-FMCOMMS3-EBZ user guide and
+used it to capture some signals or at least done a sanity level testing. You
+also have the image with the boot and file system partitions in the SD card.</p>
+<p>To begin with, download the RFBBP demo run-time files and extract the contents.
+++++ Show/Hide Commands: |</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">~</span><span class="p">]</span><span class="o">&gt;</span> <span class="n">mkdir</span> <span class="n">rfbbp</span>
 <span class="p">[</span><span class="o">~</span><span class="p">]</span><span class="o">&gt;</span> <span class="n">cd</span> <span class="n">rfbbp</span>
 
@@ -626,14 +657,19 @@ Content on this topic
 </pre></div>
 </div>
 <hr class="docutils" />
-<p>Now mount your SD card. You should see two mount points; BOOT and rootfs. The software routines run in user space and we need a directory to keep them. This way, you can blow it away when you don’t need it. You may have to be a little mindful of the file permissions as the board user is “analog”. A simple solution is to grant the permissions to everyone. ++++ Show/Hide Commands: |</p>
+<p>Now mount your SD card. You should see two mount points; BOOT and rootfs. The
+software routines run in user space and we need a directory to keep them. This
+way, you can blow it away when you don’t need it. You may have to be a little
+mindful of the file permissions as the board user is “analog”. A simple solution
+is to grant the permissions to everyone. ++++ Show/Hide Commands: |</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">~/</span><span class="n">rfbbp</span><span class="p">]</span><span class="o">&gt;</span> <span class="n">cp</span> <span class="n">uImage</span> <span class="o">/</span><span class="n">media</span><span class="o">/</span><span class="n">rkutty</span><span class="o">/</span><span class="n">BOOT</span><span class="o">/</span>
 <span class="p">[</span><span class="o">~/</span><span class="n">rfbbp</span><span class="p">]</span><span class="o">&gt;</span> <span class="n">cp</span> <span class="n">BOOT</span><span class="o">.</span><span class="n">BIN</span> <span class="o">/</span><span class="n">media</span><span class="o">/</span><span class="n">rkutty</span><span class="o">/</span><span class="n">BOOT</span><span class="o">/</span>
 <span class="p">[</span><span class="o">~/</span><span class="n">rfbbp</span><span class="p">]</span><span class="o">&gt;</span> <span class="n">cp</span> <span class="n">devicetree</span><span class="o">.</span><span class="n">dtb</span> <span class="o">/</span><span class="n">media</span><span class="o">/</span><span class="n">rkutty</span><span class="o">/</span><span class="n">BOOT</span><span class="o">/</span>
 </pre></div>
 </div>
 <hr class="docutils" />
-<p>Simply copy the the Linux user space files to the “xcomm2ip” folder in the home directory. ++++ Show/Hide Commands: |</p>
+<p>Simply copy the the Linux user space files to the “xcomm2ip” folder in the home
+directory. ++++ Show/Hide Commands: |</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">~/</span><span class="n">rfbbp</span><span class="p">]</span><span class="o">&gt;</span> <span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">/</span><span class="n">media</span><span class="o">/</span><span class="n">rkutty</span><span class="o">/</span><span class="n">rootfs</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">analog</span><span class="o">/</span><span class="n">xcomm2ip</span><span class="o">/</span>
 <span class="p">[</span><span class="o">~/</span><span class="n">rfbbp</span><span class="p">]</span><span class="o">&gt;</span> <span class="n">cp</span> <span class="n">xcomm2ip_m</span><span class="o">.</span><span class="n">c</span> <span class="o">/</span><span class="n">media</span><span class="o">/</span><span class="n">rkutty</span><span class="o">/</span><span class="n">rootfs</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">analog</span><span class="o">/</span><span class="n">xcomm2ip</span><span class="o">/</span>
 <span class="p">[</span><span class="o">~/</span><span class="n">rfbbp</span><span class="p">]</span><span class="o">&gt;</span> <span class="n">cp</span> <span class="n">xcomm2ip</span><span class="o">.</span><span class="n">c</span> <span class="o">/</span><span class="n">media</span><span class="o">/</span><span class="n">rkutty</span><span class="o">/</span><span class="n">rootfs</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">analog</span><span class="o">/</span><span class="n">xcomm2ip</span><span class="o">/</span>
@@ -644,11 +680,28 @@ Content on this topic
 </pre></div>
 </div>
 <hr class="docutils" />
-<p>Now unmount the SD card 1, and mount SD card 2 and repeat the same process. After that, unmount SD card 2. If you haven’t already done so, you need to prepare the two hardware platforms (let’s designate them as SYSTEM-1 and SYSTEM-2 for easy reference) with the keyboard, mouse and display connections. Insert the SD cards into the SYSTEM-1 and SYSTEM-2 ZC706 boards and power them up. The rest of the setup is done in the hardware platforms. That is, the following instructions do NOT use your host machine.</p>
+<p>Now unmount the SD card 1, and mount SD card 2 and repeat the same process.
+After that, unmount SD card 2. If you haven’t already done so, you need to
+prepare the two hardware platforms (let’s designate them as SYSTEM-1 and
+SYSTEM-2 for easy reference) with the keyboard, mouse and display connections.
+Insert the SD cards into the SYSTEM-1 and SYSTEM-2 ZC706 boards and power them
+up. The rest of the setup is done in the hardware platforms. That is, the
+following instructions do NOT use your host machine.</p>
 </section>
 <section id="setup-system-1-board-linux-desktop">
 <h1>Setup SYSTEM-1 (board Linux desktop)<a class="headerlink" href="#setup-system-1-board-linux-desktop" title="Link to this heading"></a></h1>
-<p>In the desktop, open a terminal and login as root. If the OSC application is already open and running, close it. Then run the shell script with the “System ID” set to 1. The script compiles the two c files and then opens three terminals. In the first terminal it runs the osc application with a profile that sets the receive and transmit LO differenty. The second is a “view” terminal. This terminal echo the transmit text messages and display the received text messages. The third terminal is the “transmit-text-entry” terminal. You may enter the text messages in this terminal. A null entry (pressing enter without any text) exits the chat routines. This in any way meant to suggest or otherwise taken as a method of writing a software application. The inner workings of this is discussed in detail later in the build process section. ++++ Show/Hide Commands: |</p>
+<p>In the desktop, open a terminal and login as root. If the OSC application is
+already open and running, close it. Then run the shell script with the “System
+ID” set to 1. The script compiles the two c files and then opens three
+terminals. In the first terminal it runs the osc application with a profile that
+sets the receive and transmit LO differenty. The second is a “view” terminal.
+This terminal echo the transmit text messages and display the received text
+messages. The third terminal is the “transmit-text-entry” terminal. You may
+enter the text messages in this terminal. A null entry (pressing enter without
+any text) exits the chat routines. This in any way meant to suggest or otherwise
+taken as a method of writing a software application. The inner workings of this
+is discussed in detail later in the build process section. ++++ Show/Hide
+Commands: |</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">~/</span><span class="n">xcomm2ip</span><span class="p">]</span><span class="o">&gt;</span> <span class="o">./</span><span class="n">xcomm2ip</span><span class="o">.</span><span class="n">sh</span>
 <span class="n">System</span> <span class="n">ID</span> <span class="p">[</span><span class="mi">1</span><span class="o">|</span><span class="mi">2</span><span class="p">]</span><span class="o">&gt;</span> <span class="mi">1</span>
 </pre></div>
@@ -656,12 +709,15 @@ Content on this topic
 <hr class="docutils" />
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>If you are running this demo in a single system with loopback, set the receive and transmit LO frequencies to be the same.</p>
+<p>If you are running this demo in a single system with loopback, set the
+receive and transmit LO frequencies to be the same.</p>
 </div>
 </section>
 <section id="setup-system-2-board-linux-desktop">
 <h1>Setup SYSTEM-2 (board Linux desktop)<a class="headerlink" href="#setup-system-2-board-linux-desktop" title="Link to this heading"></a></h1>
-<p>As you may have now guessed, the setup is same as SYSTEM-1 except that you set the ID to 2. This sets the receive LO frequency of SYSTEM-2 same as the transmit LO frequency of SYSTEM-1 and vice-versa. ++++ Show/Hide Commands: |</p>
+<p>As you may have now guessed, the setup is same as SYSTEM-1 except that you set
+the ID to 2. This sets the receive LO frequency of SYSTEM-2 same as the transmit
+LO frequency of SYSTEM-1 and vice-versa. ++++ Show/Hide Commands: |</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">~/</span><span class="n">xcomm2ip</span><span class="p">]</span><span class="o">&gt;</span> <span class="o">./</span><span class="n">xcomm2ip</span><span class="o">.</span><span class="n">sh</span>
 <span class="n">System</span> <span class="n">ID</span> <span class="p">[</span><span class="mi">1</span><span class="o">|</span><span class="mi">2</span><span class="p">]</span><span class="o">&gt;</span> <span class="mi">2</span>
 </pre></div>
@@ -669,16 +725,29 @@ Content on this topic
 <hr class="docutils" />
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Obviously, though we also mention it, in a single system with loopback, you skip this setup.</p>
+<p>Obviously, though we also mention it, in a single system with loopback, you
+skip this setup.</p>
 </div>
 </section>
 <section id="using-the-chat-application">
 <h1>Using the chat application<a class="headerlink" href="#using-the-chat-application" title="Link to this heading"></a></h1>
-<p>Now you may enter text messages in the “transmit-text-entry” terminals of either SYSTEM-1 or SYSTEM-2 and the “view” terminal of the “other” system should display them. This all seem a round about way of “talking to yourself”, but that is not really the idea here. As you may have now realized that you don’t have much to communicate with your “other-self”, exit the applications and shutdown the system gracefully. Then return to this document as it explains some behind-the-demo points which may be a bit more interesting than the demo itself.</p>
+<p>Now you may enter text messages in the “transmit-text-entry” terminals of either
+SYSTEM-1 or SYSTEM-2 and the “view” terminal of the “other” system should
+display them. This all seem a round about way of “talking to yourself”, but that
+is not really the idea here. As you may have now realized that you don’t have
+much to communicate with your “other-self”, exit the applications and shutdown
+the system gracefully. Then return to this document as it explains some
+behind-the-demo points which may be a bit more interesting than the demo itself.</p>
 </section>
 <section id="building-the-demo-files-from-source">
 <h1>Building the demo files from source<a class="headerlink" href="#building-the-demo-files-from-source" title="Link to this heading"></a></h1>
-<p>The main intent behind this design excercise is to illustrate as an example to some of the most frequently asked questions about the HDL repository and how to modify and use it. The following sections may be able to give you some ideas. These sections do a walk through of the build process to generate the demo files above from the source files. As we go through these sections, we cover the above mentioned frequently asked question and reveal (hopefully) our method to madness.</p>
+<p>The main intent behind this design excercise is to illustrate as an example to
+some of the most frequently asked questions about the HDL repository and how to
+modify and use it. The following sections may be able to give you some ideas.
+These sections do a walk through of the build process to generate the demo files
+above from the source files. As we go through these sections, we cover the above
+mentioned frequently asked question and reveal (hopefully) our method to
+madness.</p>
 </section>
 <section id="download-source-files">
 <h1>Download Source files<a class="headerlink" href="#download-source-files" title="Link to this heading"></a></h1>
@@ -690,7 +759,14 @@ Content on this topic
 <section id="setup-a-workspace">
 <h1>Setup a workspace<a class="headerlink" href="#setup-a-workspace" title="Link to this heading"></a></h1>
 <p>** How to best use the ADI HDL repository? **</p>
-<p>The ADI reference design repositories are hosted on GitHub and uses git version control system. However you may use your own repository and/or a different version control system. In any case, try not to download the repository as a zip file. The best strategy is to clone the repository and leave it as it is. Occassionally, perhaps, fetching and rebasing it. The RFBBP build flow shows how to setup the ADI HDL repository and another repository side by side. The two repositories are independent to each other but sharing files and frame work. ++++ Show/Hide Commands: |</p>
+<p>The ADI reference design repositories are hosted on GitHub and uses git version
+control system. However you may use your own repository and/or a different
+version control system. In any case, try not to download the repository as a zip
+file. The best strategy is to clone the repository and leave it as it is.
+Occassionally, perhaps, fetching and rebasing it. The RFBBP build flow shows how
+to setup the ADI HDL repository and another repository side by side. The two
+repositories are independent to each other but sharing files and frame work.
+++++ Show/Hide Commands: |</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">~</span><span class="p">]</span><span class="o">&gt;</span> <span class="n">mkdir</span> <span class="n">rfbbp</span>
 <span class="p">[</span><span class="o">~</span><span class="p">]</span><span class="o">&gt;</span> <span class="n">cd</span> <span class="n">rfbbp</span>
 
@@ -703,7 +779,11 @@ Content on this topic
 </pre></div>
 </div>
 <hr class="docutils" />
-<p>The build setup assumes you have cloned the “hdl” and “linux” repositories with the respective branches checked out. The RFBBP files are separated into two additional independent repositories namely “ip” and “zc706”. Note that the “linux” repository doesn’t work the same way as the HDL and requires some special handling. We cover that later in this page. ++++ Show/Hide Commands: |</p>
+<p>The build setup assumes you have cloned the “hdl” and “linux” repositories with
+the respective branches checked out. The RFBBP files are separated into two
+additional independent repositories namely “ip” and “zc706”. Note that the
+“linux” repository doesn’t work the same way as the HDL and requires some
+special handling. We cover that later in this page. ++++ Show/Hide Commands: |</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">~/</span><span class="n">rfbbp</span><span class="p">]</span><span class="o">&gt;</span> <span class="n">git</span> <span class="n">clone</span> <span class="n">git</span><span class="nd">@github</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="n">analogdevicesinc</span><span class="o">/</span><span class="n">linux</span><span class="o">.</span><span class="n">git</span>
 <span class="p">[</span><span class="o">~/</span><span class="n">rfbbp</span><span class="p">]</span><span class="o">&gt;</span> <span class="n">cd</span> <span class="n">linux</span>
 <span class="p">[</span><span class="o">~/</span><span class="n">rfbbp</span><span class="o">/</span><span class="n">linux</span><span class="p">]</span><span class="o">&gt;</span> <span class="n">git</span> <span class="n">checkout</span> <span class="mi">2016</span><span class="n">_R1</span>
@@ -717,7 +797,16 @@ Content on this topic
 <section id="creating-the-ip-library">
 <h1>Creating the IP library<a class="headerlink" href="#creating-the-ip-library" title="Link to this heading"></a></h1>
 <p><strong>How do I create my own Vivado IP library and IP core?</strong></p>
-<p>The RFBBP is developed as an IP core that is part of a different library separate from the ADI library. A Vivado library is just a directory that needs to contain some specific files. In our case, we create a library (named “ip”) and the RFBBP core (named “axi_xcomm2ip”) inside our workspace. The generic set of files an IP needs are the Makefile, HDL files, constraints (if any) along with a TCL file to build the IP. The structure of our source files is presented below , that is - this is how you see the downloaded source files. You do NOT run these commands but simply extract the source files from the archive. The files simply falls into the directory structure referenced here. ++++ Show/Hide Commands: |</p>
+<p>The RFBBP is developed as an IP core that is part of a different library
+separate from the ADI library. A Vivado library is just a directory that needs
+to contain some specific files. In our case, we create a library (named “ip”)
+and the RFBBP core (named “axi_xcomm2ip”) inside our workspace. The generic set
+of files an IP needs are the Makefile, HDL files, constraints (if any) along
+with a TCL file to build the IP. The structure of our source files is presented
+below , that is - this is how you see the downloaded source files. You do NOT
+run these commands but simply extract the source files from the archive. The
+files simply falls into the directory structure referenced here. ++++ Show/Hide
+Commands: |</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">~/</span><span class="n">rfbbp</span><span class="p">]</span><span class="o">&gt;</span> <span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="n">ip</span><span class="o">/</span><span class="n">axi_xcomm2ip</span>
 <span class="p">[</span><span class="o">~/</span><span class="n">rfbbp</span><span class="p">]</span><span class="o">&gt;</span> <span class="n">touch</span> <span class="n">ip</span><span class="o">/</span><span class="n">axi_xcomm2ip</span><span class="o">/</span><span class="n">Makefile</span>
 <span class="p">[</span><span class="o">~/</span><span class="n">rfbbp</span><span class="p">]</span><span class="o">&gt;</span> <span class="n">touch</span> <span class="n">ip</span><span class="o">/</span><span class="n">axi_xcomm2ip</span><span class="o">/</span><span class="n">axi_xcomm2ip</span><span class="o">.</span><span class="n">v</span>
@@ -726,13 +815,24 @@ Content on this topic
 </pre></div>
 </div>
 <hr class="docutils" />
-<p>This library can later be added to the Vivado library search paths to include all the IP cores within as follows. This is detailed in the project script flow sections below. ++++ Show/Hide Commands: |</p>
+<p>This library can later be added to the Vivado library search paths to include
+all the IP cores within as follows. This is detailed in the project script flow
+sections below. ++++ Show/Hide Commands: |</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_property</span> <span class="n">ip_repo_paths</span> <span class="n">ip</span> <span class="p">[</span><span class="n">current_fileset</span><span class="p">]</span>
 </pre></div>
 </div>
 <hr class="docutils" />
 <p><strong>Why write a TCL file to create a custom IP core?</strong></p>
-<p>The TCL file is optional. You may create the IP and save the generated files. However, we like the TCL flow because it makes the tool conform to our needs. We do not wish to discuss the reasons (too many), but consider this- so far we were unable to generate the Vivado library files across various versions using the same tool commands. If you plan to stay with a single version of the tools you may not see these benefits. So the choice is up to you, but we encourage you to use the TCL flow. We have created some wrapper procedures around the tool commands. As Xilinx changes its commands and functionality over each version of the tool, we change them within these procedures so that bulk of our library remains unaltered. ++++ Show/Hide Commands: |</p>
+<p>The TCL file is optional. You may create the IP and save the generated files.
+However, we like the TCL flow because it makes the tool conform to our needs. We
+do not wish to discuss the reasons (too many), but consider this- so far we were
+unable to generate the Vivado library files across various versions using the
+same tool commands. If you plan to stay with a single version of the tools you
+may not see these benefits. So the choice is up to you, but we encourage you to
+use the TCL flow. We have created some wrapper procedures around the tool
+commands. As Xilinx changes its commands and functionality over each version of
+the tool, we change them within these procedures so that bulk of our library
+remains unaltered. ++++ Show/Hide Commands: |</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>set ad_hdl_dir $::env(ADI_HDL_DIR)
 set ad_phdl_dir $::env(ADI_HDL_DIR)
 
@@ -754,9 +854,15 @@ ipx::save_core [ipx::current_core]
 </pre></div>
 </div>
 <hr class="docutils" />
-<p>Note the use of the environment variable “AD_HDL_DIR” in the TCL file. This variable is used to point to the ADI HDL repository and use the files and scripts inside of it. This way, your IP may reside anywhere in your file system independent of the ADI HDL repository.</p>
+<p>Note the use of the environment variable “AD_HDL_DIR” in the TCL file. This
+variable is used to point to the ADI HDL repository and use the files and
+scripts inside of it. This way, your IP may reside anywhere in your file system
+independent of the ADI HDL repository.</p>
 <p><strong>Why write a Make file to create a custom IP core?</strong></p>
-<p>As with the TCL file, the Makefile is also a choice (watched the Matrix too many times). If you choose to follow our frame work, simply list your dependencies and targets. Again note the export of the environment variable. This variable is set based on the workspace setup we discussed above. ++++ Show/Hide Commands: |</p>
+<p>As with the TCL file, the Makefile is also a choice (watched the Matrix too many
+times). If you choose to follow our frame work, simply list your dependencies
+and targets. Again note the export of the environment variable. This variable is
+set based on the workspace setup we discussed above. ++++ Show/Hide Commands: |</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export ADI_HDL_DIR := ../../../hdl
 export ADI_PHDL_DIR := ../../../hdl
 
@@ -783,13 +889,10 @@ M_FLIST += .Xil
 .PHONY: all clean clean-all
 all: axi_xcomm2ip.xpr
 
-
 clean:clean-all
-
 
 clean-all:
     rm -rf $(M_FLIST)
-
 
 axi_xcomm2ip.xpr: $(M_DEPS)
     rm -rf $(M_FLIST)
@@ -798,7 +901,11 @@ axi_xcomm2ip.xpr: $(M_DEPS)
 </div>
 <hr class="docutils" />
 <p><strong>How do I build the IP cores and library?</strong></p>
-<p>In order for our directory “ip” to be a library, it must alteast have one “ip-core” inside it. The “ip-core” is identified by the tool with the existence of the generated files from the TCL script. Also note that you don’t need to generate this separately, the project make does check the existence of all the “ip-cores” it needs and builds them accordingly. ++++ Show/Hide Commands: |</p>
+<p>In order for our directory “ip” to be a library, it must alteast have one
+“ip-core” inside it. The “ip-core” is identified by the tool with the existence
+of the generated files from the TCL script. Also note that you don’t need to
+generate this separately, the project make does check the existence of all the
+“ip-cores” it needs and builds them accordingly. ++++ Show/Hide Commands: |</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">~/</span><span class="n">rfbbp</span><span class="p">]</span><span class="o">&gt;</span> <span class="n">cd</span> <span class="n">ip</span><span class="o">/</span><span class="n">axi_xcomm2ip</span>
 <span class="p">[</span><span class="o">~/</span><span class="n">rfbbp</span><span class="o">/</span><span class="n">ip</span><span class="o">/</span><span class="n">axi_xcomm2ip</span><span class="p">]</span><span class="o">&gt;</span> <span class="n">make</span>
 <span class="p">[</span><span class="o">~/</span><span class="n">rfbbp</span><span class="o">/</span><span class="n">ip</span><span class="o">/</span><span class="n">axi_xcomm2ip</span><span class="p">]</span><span class="o">&gt;</span> <span class="n">cd</span> <span class="o">../..</span>
@@ -810,7 +917,17 @@ axi_xcomm2ip.xpr: $(M_DEPS)
 <section id="creating-the-ip-core">
 <h1>Creating the IP core<a class="headerlink" href="#creating-the-ip-core" title="Link to this heading"></a></h1>
 <p><strong>How do I create a custom AXI IP core using ADI frame work?</strong></p>
-<p>As mentioned in the article, the RFBBP IP is an AXI core, making it a peripheral that interfaces to the processor so that it can be accessed via software. In order to create an AXI IP core, one could make use of the ADI library common modules. All you need in such a case would be to instantiate the “up_axi” module. This module interfaces to the processor’s AXI master bus (via an interconnect in most cases) and translates AXI bus transactions to simple memory like interface internally. The BBP IP core illustrates how to use this interface to implement the register and memory address space for the processor access. The “up_axi” module uses dword addressing, instead of the AXI byte addressing. The following code in the RFBBP core infers the “up_axi” module, there by in-effect creating it as an AXI IP core. ++++ Show/Hide Commands: |</p>
+<p>As mentioned in the article, the RFBBP IP is an AXI core, making it a peripheral
+that interfaces to the processor so that it can be accessed via software. In
+order to create an AXI IP core, one could make use of the ADI library common
+modules. All you need in such a case would be to instantiate the “up_axi”
+module. This module interfaces to the processor’s AXI master bus (via an
+interconnect in most cases) and translates AXI bus transactions to simple memory
+like interface internally. The BBP IP core illustrates how to use this interface
+to implement the register and memory address space for the processor access. The
+“up_axi” module uses dword addressing, instead of the AXI byte addressing. The
+following code in the RFBBP core infers the “up_axi” module, there by in-effect
+creating it as an AXI IP core. ++++ Show/Hide Commands: |</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wire</span>            <span class="n">up_clk</span><span class="p">;</span>
 <span class="n">wire</span>            <span class="n">up_rstn</span><span class="p">;</span>
 <span class="n">wire</span>            <span class="n">up_wreq_s</span><span class="p">;</span>
@@ -858,14 +975,30 @@ axi_xcomm2ip.xpr: $(M_DEPS)
 <hr class="docutils" />
 <p><strong>How do I infer register and memory space using the “up_axi” module?</strong></p>
 <p><strong>How do I create a custom AXI IP core to be able to use inside an ADI project?</strong></p>
-<p>The BBP is implemented as an “insert-able” core in the ADI design. If you are pondering to do something similar in other designs, you could follow the same procedure. However, in terms of placement, this requires a better understanding of the design and the various data path components. If your custom IP core can meet the throughput, placing it next to the interface core is a logical choice. If you need it to be an offline core, place it along with a DMA engine off the DDR memory. This allows you to collect data in the DDR and pass it to your custom core at its own pace.</p>
-<p>Once the placement has been fixed, match the “inserting-point” interfaces of the data path. The custom IP core interfaces are simply mirrored from its adjoining cores. As you may have already guessed, the RFBBP is intended to interface with the “axi_ad9361” core. It is placed right in front of the “axi_ad9361” IP core. It is also intended to run at the AD9361 interface clock. So we use the same clock and reset signals as that of the AXI_AD9361 IP. ++++ Show/Hide Commands: |</p>
+<p>The BBP is implemented as an “insert-able” core in the ADI design. If you are
+pondering to do something similar in other designs, you could follow the same
+procedure. However, in terms of placement, this requires a better understanding
+of the design and the various data path components. If your custom IP core can
+meet the throughput, placing it next to the interface core is a logical choice.
+If you need it to be an offline core, place it along with a DMA engine off the
+DDR memory. This allows you to collect data in the DDR and pass it to your
+custom core at its own pace.</p>
+<p>Once the placement has been fixed, match the “inserting-point” interfaces of the
+data path. The custom IP core interfaces are simply mirrored from its adjoining
+cores. As you may have already guessed, the RFBBP is intended to interface with
+the “axi_ad9361” core. It is placed right in front of the “axi_ad9361” IP core.
+It is also intended to run at the AD9361 interface clock. So we use the same
+clock and reset signals as that of the AXI_AD9361 IP. ++++ Show/Hide Commands:
+|</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">input</span>           <span class="n">clk</span><span class="p">,</span>
 <span class="nb">input</span>           <span class="n">rst</span><span class="p">,</span>
 </pre></div>
 </div>
 <hr class="docutils" />
-<p>In the receive direction it needs to interface to the ADC data ports of the AXI_AD9361 core. This makes it essentially an offline data processing core. So we mirror the “axi_ad9361” core’s adc data interface. ++++ Show/Hide Commands: |</p>
+<p>In the receive direction it needs to interface to the ADC data ports of the
+AXI_AD9361 core. This makes it essentially an offline data processing core. So
+we mirror the “axi_ad9361” core’s adc data interface. ++++ Show/Hide Commands:
+|</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">input</span>           <span class="n">adc_valid_i0</span><span class="p">,</span>
 <span class="nb">input</span>   <span class="p">[</span><span class="mi">15</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>  <span class="n">adc_data_i0</span><span class="p">,</span>
 <span class="nb">input</span>           <span class="n">adc_valid_q0</span><span class="p">,</span>
@@ -877,7 +1010,11 @@ axi_xcomm2ip.xpr: $(M_DEPS)
 </pre></div>
 </div>
 <hr class="docutils" />
-<p>Similarly, in the transmit direction it needs to interface to the DAC data ports of the AXI_AD9361 core. However, this breaks the default data path of the ADI design in which the DAC data is sourced from the DMA core. So the BBP IP core needs the DMA signals in order to maintain the default data path unless programmed by the software otherwise. ++++ Show/Hide Commands: |</p>
+<p>Similarly, in the transmit direction it needs to interface to the DAC data ports
+of the AXI_AD9361 core. However, this breaks the default data path of the ADI
+design in which the DAC data is sourced from the DMA core. So the BBP IP core
+needs the DMA signals in order to maintain the default data path unless
+programmed by the software otherwise. ++++ Show/Hide Commands: |</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">input</span>           <span class="n">dac_valid_i0</span><span class="p">,</span>
 <span class="nb">input</span>   <span class="p">[</span><span class="mi">15</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>  <span class="n">dma_data_i0</span><span class="p">,</span>
 <span class="n">output</span>  <span class="p">[</span><span class="mi">15</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>  <span class="n">dac_data_i0</span><span class="p">,</span>
@@ -897,7 +1034,8 @@ axi_xcomm2ip.xpr: $(M_DEPS)
 </pre></div>
 </div>
 <hr class="docutils" />
-<p>The data path can then be altered by infering a simple multiplexer. ++++ Show/Hide Commands: |</p>
+<p>The data path can then be altered by infering a simple multiplexer. ++++
+Show/Hide Commands: |</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">assign</span> <span class="n">dac_data_i0</span> <span class="o">=</span> <span class="n">dac_data_i0_int</span><span class="p">;</span>
 <span class="n">assign</span> <span class="n">dac_data_q0</span> <span class="o">=</span> <span class="n">dac_data_q0_int</span><span class="p">;</span>
 <span class="n">assign</span> <span class="n">dac_data_i1</span> <span class="o">=</span> <span class="n">dac_data_i1_int</span><span class="p">;</span>
@@ -939,13 +1077,30 @@ axi_xcomm2ip.xpr: $(M_DEPS)
 </div>
 <hr class="docutils" />
 <p><strong>How do I send my own data to the ADI IP core?</strong></p>
-<p>This is NOT something we can answer. It is also a question of “what” than “how”. The “how” part is that you either generate the data in hardware or in software. As for the “what”, note that the most of the interface cores are meant to for analog data. That is, though it is a digital interface, the data must be and considered to be analog. An often asked question is why the data one sent to the DAC does not match the data received at the ADC. This is a mis-conception, the digital data to the DAC is must be and in fact a “digitized” analog signal. The “data” in its commonly used sense, must be encoded and modulated before passing it to the analog domain.</p>
-<p>As for our RFBBP core, it is suffice to say that the rest of the logic generate its own transmit data for the DAC and process the received data from the ADC as it seems fit. This part, though critical to understanding the workings of a radio design, is beyond the scope of this document and is intentionally left out of our discussion.</p>
+<p>This is NOT something we can answer. It is also a question of “what” than “how”.
+The “how” part is that you either generate the data in hardware or in software.
+As for the “what”, note that the most of the interface cores are meant to for
+analog data. That is, though it is a digital interface, the data must be and
+considered to be analog. An often asked question is why the data one sent to the
+DAC does not match the data received at the ADC. This is a mis-conception, the
+digital data to the DAC is must be and in fact a “digitized” analog signal. The
+“data” in its commonly used sense, must be encoded and modulated before passing
+it to the analog domain.</p>
+<p>As for our RFBBP core, it is suffice to say that the rest of the logic generate
+its own transmit data for the DAC and process the received data from the ADC as
+it seems fit. This part, though critical to understanding the workings of a
+radio design, is beyond the scope of this document and is intentionally left out
+of our discussion.</p>
 </section>
 <section id="modifying-and-customizing-adi-projects">
 <h1>Modifying and customizing ADI projects<a class="headerlink" href="#modifying-and-customizing-adi-projects" title="Link to this heading"></a></h1>
 <p><strong>How do I insert a custom AXI IP core inside an ADI project?</strong></p>
-<p>As mentioned above, the RFBBP AXI core is designed for the “fmcomms2” projects and is to be placed next to the “axi_ad9361” core. In order to do this, we need to modify the “fmcomms2” project. This can be easily done using the ADI TCL frame work. We create this as a new project inheritting the “fmcomms2” board design and doing the necessary customizations. In the RFBBP design, this is all done using a single TCL file. ++++ Show/Hide Commands: |</p>
+<p>As mentioned above, the RFBBP AXI core is designed for the “fmcomms2” projects
+and is to be placed next to the “axi_ad9361” core. In order to do this, we need
+to modify the “fmcomms2” project. This can be easily done using the ADI TCL
+frame work. We create this as a new project inheritting the “fmcomms2” board
+design and doing the necessary customizations. In the RFBBP design, this is all
+done using a single TCL file. ++++ Show/Hide Commands: |</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">~/</span><span class="n">rfbbp</span><span class="p">]</span><span class="o">&gt;</span> <span class="n">mkdir</span> <span class="n">zc706</span>
 <span class="p">[</span><span class="o">~/</span><span class="n">rfbbp</span><span class="p">]</span><span class="o">&gt;</span> <span class="n">cd</span> <span class="n">zc706</span>
 <span class="p">[</span><span class="o">~/</span><span class="n">rfbbp</span><span class="o">/</span><span class="n">zc706</span><span class="p">]</span><span class="o">&gt;</span> <span class="n">touch</span> <span class="n">zc706</span><span class="o">.</span><span class="n">tcl</span>
@@ -953,7 +1108,8 @@ axi_xcomm2ip.xpr: $(M_DEPS)
 </pre></div>
 </div>
 <hr class="docutils" />
-<p>Lets look at the “zc706.tcl” file contents. In order to use the ADI frame work we need to source the TCL procedures. ++++ Show/Hide Commands: |</p>
+<p>Lets look at the “zc706.tcl” file contents. In order to use the ADI frame work
+we need to source the TCL procedures. ++++ Show/Hide Commands: |</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>set ad_hdl_dir $::env(ADI_HDL_DIR)
 set ad_phdl_dir $::env(ADI_HDL_DIR)
 
@@ -962,7 +1118,8 @@ source $ad_hdl_dir/projects/scripts/adi_project.tcl
 </pre></div>
 </div>
 <hr class="docutils" />
-<p>Then we set the “zynq” flag and create the new project. Set the board part for the predefined settings. ++++ Show/Hide Commands: |</p>
+<p>Then we set the “zynq” flag and create the new project. Set the board part for
+the predefined settings. ++++ Show/Hide Commands: |</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">sys_zynq</span> <span class="mi">1</span>
 
 <span class="n">create_project</span> <span class="n">zc706</span> <span class="o">.</span> <span class="o">-</span><span class="n">part</span> <span class="n">xc7z045ffg900</span><span class="o">-</span><span class="mi">2</span> <span class="o">-</span><span class="n">force</span>
@@ -971,21 +1128,28 @@ source $ad_hdl_dir/projects/scripts/adi_project.tcl
 </pre></div>
 </div>
 <hr class="docutils" />
-<p>Now, pay special attention, we set the ip repository folders. The default ADI library and the “ip” library we created above for the “axi_xcomm2ip” core. ++++ Show/Hide Commands: |</p>
+<p>Now, pay special attention, we set the ip repository folders. The default ADI
+library and the “ip” library we created above for the “axi_xcomm2ip” core. ++++
+Show/Hide Commands: |</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>set_property ip_repo_paths [list $ad_hdl_dir/library ../ip]  [current_fileset]
 
 update_ip_catalog
 </pre></div>
 </div>
 <hr class="docutils" />
-<p>Once the libraries are read, we can inherit the “fmcomms2” board design and customize it. The board design is inherited by simply sourcing the carrier (zc706) and the fmc (fmcomms2) board. ++++ Show/Hide Commands: |</p>
+<p>Once the libraries are read, we can inherit the “fmcomms2” board design and
+customize it. The board design is inherited by simply sourcing the carrier
+(zc706) and the fmc (fmcomms2) board. ++++ Show/Hide Commands: |</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>create_bd_design &quot;system&quot;
 source $ad_hdl_dir/projects/common/zc706/zc706_system_bd.tcl
 source $ad_hdl_dir/projects/fmcomms2/common/fmcomms2_bd.tcl
 </pre></div>
 </div>
 <hr class="docutils" />
-<p>The customization, inserting the “axi_xcomm2ip”, requires us to remove the existing connection at the “axi_ad9361” DAC interface. This can be done by removing the nets connected to the “axi_ad9361” DAC interface ports using the “delete_bd_objs” command. ++++ Show/Hide Commands: |</p>
+<p>The customization, inserting the “axi_xcomm2ip”, requires us to remove the
+existing connection at the “axi_ad9361” DAC interface. This can be done by
+removing the nets connected to the “axi_ad9361” DAC interface ports using the
+“delete_bd_objs” command. ++++ Show/Hide Commands: |</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">delete_bd_objs</span> <span class="p">[</span><span class="n">get_bd_nets</span> <span class="o">-</span><span class="n">of_objects</span> <span class="p">[</span><span class="n">find_bd_objs</span> <span class="o">-</span><span class="n">relation</span> <span class="n">connected_to</span> <span class="p">[</span><span class="n">get_bd_pins</span> <span class="n">axi_ad9361</span><span class="o">/</span><span class="n">dac_valid_i0</span><span class="p">]]]</span>
 <span class="n">delete_bd_objs</span> <span class="p">[</span><span class="n">get_bd_nets</span> <span class="o">-</span><span class="n">of_objects</span> <span class="p">[</span><span class="n">find_bd_objs</span> <span class="o">-</span><span class="n">relation</span> <span class="n">connected_to</span> <span class="p">[</span><span class="n">get_bd_pins</span> <span class="n">axi_ad9361</span><span class="o">/</span><span class="n">dac_data_i0</span><span class="p">]]]</span>
 <span class="n">delete_bd_objs</span> <span class="p">[</span><span class="n">get_bd_nets</span> <span class="o">-</span><span class="n">of_objects</span> <span class="p">[</span><span class="n">find_bd_objs</span> <span class="o">-</span><span class="n">relation</span> <span class="n">connected_to</span> <span class="p">[</span><span class="n">get_bd_pins</span> <span class="n">axi_ad9361</span><span class="o">/</span><span class="n">dac_valid_q0</span><span class="p">]]]</span>
@@ -1004,12 +1168,14 @@ set_property -dict [list CONFIG.XCOMM2IP_1T1R_OR_2T2R_N {0}] $axi_xcomm2ip
 </pre></div>
 </div>
 <hr class="docutils" />
-<p>Connect its slave AXI interface to the “ps7” with an address map of 0x79040000. ++++ Show/Hide Commands: |</p>
+<p>Connect its slave AXI interface to the “ps7” with an address map of 0x79040000.
+++++ Show/Hide Commands: |</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ad_cpu_interconnect</span> <span class="mh">0x79040000</span> <span class="n">axi_xcomm2ip</span>
 </pre></div>
 </div>
 <hr class="docutils" />
-<p>And the data path connections; clock, reset, ADC and DAC interfaces. ++++ Show/Hide Commands: |</p>
+<p>And the data path connections; clock, reset, ADC and DAC interfaces. ++++
+Show/Hide Commands: |</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ad_connect</span>  <span class="n">axi_ad9361</span><span class="o">/</span><span class="n">clk</span> <span class="n">axi_xcomm2ip</span><span class="o">/</span><span class="n">clk</span>
 <span class="n">ad_connect</span>  <span class="n">axi_ad9361</span><span class="o">/</span><span class="n">rst</span> <span class="n">axi_xcomm2ip</span><span class="o">/</span><span class="n">rst</span>
 <span class="n">ad_connect</span>  <span class="n">axi_ad9361</span><span class="o">/</span><span class="n">adc_valid_i0</span> <span class="n">axi_xcomm2ip</span><span class="o">/</span><span class="n">adc_valid_i0</span>
@@ -1050,7 +1216,8 @@ set_property -dict [list CONFIG.XCOMM2IP_1T1R_OR_2T2R_N {0}] $axi_xcomm2ip
 </pre></div>
 </div>
 <hr class="docutils" />
-<p>Generate all the targets, create the top level wrapper and add the reset of the files. ++++ Show/Hide Commands: |</p>
+<p>Generate all the targets, create the top level wrapper and add the reset of the
+files. ++++ Show/Hide Commands: |</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">generate_target</span> <span class="p">{</span><span class="n">synthesis</span> <span class="n">implementation</span><span class="p">}</span> <span class="p">[</span><span class="n">get_files</span> <span class="n">zc706</span><span class="o">.</span><span class="n">srcs</span><span class="o">/</span><span class="n">sources_1</span><span class="o">/</span><span class="n">bd</span><span class="o">/</span><span class="n">system</span><span class="o">/</span><span class="n">system</span><span class="o">.</span><span class="n">bd</span><span class="p">]</span>
 <span class="n">make_wrapper</span> <span class="o">-</span><span class="n">files</span> <span class="p">[</span><span class="n">get_files</span> <span class="n">zc706</span><span class="o">.</span><span class="n">srcs</span><span class="o">/</span><span class="n">sources_1</span><span class="o">/</span><span class="n">bd</span><span class="o">/</span><span class="n">system</span><span class="o">/</span><span class="n">system</span><span class="o">.</span><span class="n">bd</span><span class="p">]</span> <span class="o">-</span><span class="n">top</span>
 <span class="n">import_files</span> <span class="o">-</span><span class="n">force</span> <span class="o">-</span><span class="n">norecurse</span> <span class="o">-</span><span class="n">fileset</span> <span class="n">sources_1</span> <span class="n">zc706</span><span class="o">.</span><span class="n">srcs</span><span class="o">/</span><span class="n">sources_1</span><span class="o">/</span><span class="n">bd</span><span class="o">/</span><span class="n">system</span><span class="o">/</span><span class="n">hdl</span><span class="o">/</span><span class="n">system_wrapper</span><span class="o">.</span><span class="n">v</span>

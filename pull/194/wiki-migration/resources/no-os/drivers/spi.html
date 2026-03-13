@@ -612,7 +612,8 @@ Content on this topic
 <span class="p">};</span>
 </pre></div>
 </div>
-<p>Creating/removing a SPI slave device descriptor with the above parameters can be achieved with:</p>
+<p>Creating/removing a SPI slave device descriptor with the above parameters can be
+achieved with:</p>
 <div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span>
 <span class="k">struct</span><span class="w"> </span><span class="nc">no_os_spi_desc</span><span class="w"> </span><span class="o">*</span><span class="n">slave_desc</span><span class="p">;</span>
 <span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">no_os_spi_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">slave_desc</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">slave_ip</span><span class="p">);</span>
@@ -622,14 +623,25 @@ Content on this topic
 <span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">no_os_spi_remove</span><span class="p">(</span><span class="n">slave_desc</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>Such a descriptor is needed for each slave because each slave may require different communication settings. When performing transfers, the SPI peripheral is reconfigured with the SPI settings of the particular slave being targeted.</p>
-<p>In the above example, the max_speed_hz parameter given is 4 MHz. The no_os_spi_init() function will choose such a SPI peripheral prescaler so that SCLK is guaranteed to be the closest possible value to 4 MHz, provided a fixed input clock and the range of available prescalers. For example, if the SPI input clock is 24 MHz and available prescalers are 1, 2, 4, 8, 16, 32, the no_os_spi_init() will choose the prescaler value of 8 which results in an SCLK clock frequency of 24 / 8 = 3 MHz.</p>
+<p>Such a descriptor is needed for each slave because each slave may require
+different communication settings. When performing transfers, the SPI peripheral
+is reconfigured with the SPI settings of the particular slave being targeted.</p>
+<p>In the above example, the max_speed_hz parameter given is 4 MHz. The
+no_os_spi_init() function will choose such a SPI peripheral prescaler so that
+SCLK is guaranteed to be the closest possible value to 4 MHz, provided a fixed
+input clock and the range of available prescalers. For example, if the SPI input
+clock is 24 MHz and available prescalers are 1, 2, 4, 8, 16, 32, the
+no_os_spi_init() will choose the prescaler value of 8 which results in an SCLK
+clock frequency of 24 / 8 = 3 MHz.</p>
 </section>
 <section id="transfers">
 <h3>Transfers<a class="headerlink" href="#transfers" title="Link to this heading"></a></h3>
 <section id="using-no-os-spi-write-and-read">
 <h4>using no_os_spi_write_and_read<a class="headerlink" href="#using-no-os-spi-write-and-read" title="Link to this heading"></a></h4>
-<p>In the case of full duplex 4-wire SPI transfers, both MISO and MOSI lines are used to simultaneously shift in/out data. The way no_os_spi_write_and_read() works is by first shifting out data buffer on MOSI and then and then by replacing the data buffer content with data shifted in from MISO.</p>
+<p>In the case of full duplex 4-wire SPI transfers, both MISO and MOSI lines are
+used to simultaneously shift in/out data. The way no_os_spi_write_and_read()
+works is by first shifting out data buffer on MOSI and then and then by
+replacing the data buffer content with data shifted in from MISO.</p>
 <div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
 <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xAB</span><span class="p">;</span>
 <span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">no_os_spi_write_and_read</span><span class="p">(</span><span class="n">slave_desc</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
@@ -652,10 +664,15 @@ Content on this topic
 <h4>using no_os_spi_transfer<a class="headerlink" href="#using-no-os-spi-transfer" title="Link to this heading"></a></h4>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>no_os_spi_transfer() is not necessarily available on each no-OS platform! See drivers/platform/[platform]/[platform]_spi.c</p>
+<p>no_os_spi_transfer() is not necessarily available on each no-OS platform! See
+drivers/platform/[platform]/[platform]_spi.c</p>
 </div>
-<p>An alternative way is using the no_os_spi_transfer() which splits a transfer sequence into basic transfers. A basic transfer contains transmit and receive buffers, the size of the transfer and the option to deassert the chip select signal after each basic transfer.</p>
-<p>The following sequence can be broken down into two transfer phases (0x?? - don’t care):</p>
+<p>An alternative way is using the no_os_spi_transfer() which splits a transfer
+sequence into basic transfers. A basic transfer contains transmit and receive
+buffers, the size of the transfer and the option to deassert the chip select
+signal after each basic transfer.</p>
+<p>The following sequence can be broken down into two transfer phases (0x?? - don’t
+care):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>MOSI: 0xAA 0x?? 0x??
 MISO: 0x?? 0xBB 0xCC
 </pre></div>

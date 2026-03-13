@@ -644,8 +644,10 @@ Content on this topic
 </section>
 <section id="adding-adxrs450-to-the-kernel">
 <h1>Adding ADXRS450 to the Kernel<a class="headerlink" href="#adding-adxrs450-to-the-kernel" title="Link to this heading"></a></h1>
-<p>To add support for the ADXRS450 to the kernel build system, a few things must be enabled properly for things to work.The configuration is as following:</p>
-<p>Configure kernel with “make menuconfig” (alternatively use “make xconfig” or “make qconfig”)</p>
+<p>To add support for the ADXRS450 to the kernel build system, a few things must be
+enabled properly for things to work.The configuration is as following:</p>
+<p>Configure kernel with “make menuconfig” (alternatively use “make xconfig” or
+“make qconfig”)</p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <p>The ADXRS450 Driver depends on CONFIG_SPI</p>
@@ -697,8 +699,16 @@ Content on this topic
 <section id="example-platform-device-initialization">
 <h1>Example platform device initialization<a class="headerlink" href="#example-platform-device-initialization" title="Link to this heading"></a></h1>
 <p>Below is an example which is used on Blackfin board file.</p>
-<p>Unlike PCI or USB devices, SPI devices are not enumerated at the hardware level. Instead, the software must know which devices are connected on each SPI bus segment, and what slave selects these devices are using. For this reason, the kernel code must instantiate SPI devices explicitly. The most common method is to declare the SPI devices by bus number.</p>
-<p>This method is appropriate when the SPI bus is a system bus, as in many embedded systems, wherein each SPI bus has a number which is known in advance. It is thus possible to pre-declare the SPI devices that inhabit this bus. This is done with an array of struct spi_board_info, which is registered by calling spi_register_board_info().</p>
+<p>Unlike PCI or USB devices, SPI devices are not enumerated at the hardware level.
+Instead, the software must know which devices are connected on each SPI bus
+segment, and what slave selects these devices are using. For this reason, the
+kernel code must instantiate SPI devices explicitly. The most common method is
+to declare the SPI devices by bus number.</p>
+<p>This method is appropriate when the SPI bus is a system bus, as in many embedded
+systems, wherein each SPI bus has a number which is known in advance. It is thus
+possible to pre-declare the SPI devices that inhabit this bus. This is done with
+an array of struct spi_board_info, which is registered by calling
+spi_register_board_info().</p>
 <p>For more information see: <a href="#id1"><span class="problematic" id="id2">`spi-summary.rst &lt;/git.linux.org&gt;documentation/spi/spi-summary.rst&gt;`__</span></a></p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">spi_board_info</span><span class="w"> </span><span class="n">board_spi_board_info</span><span class="p">[]</span><span class="w"> </span><span class="n">__initdata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
 <span class="cp">#if defined(CONFIG_ADXRS450) \</span>
@@ -730,9 +740,9 @@ Content on this topic
 </section>
 <section id="hardware-configuration">
 <h1>Hardware configuration<a class="headerlink" href="#hardware-configuration" title="Link to this heading"></a></h1>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/software/driver/linux/adxrs450_eval_lr.jpg"><img alt="EVAL-ADXRS450" class="align-left" src="https://wiki.analog.com/_media/software/driver/linux/adxrs450_eval_lr.jpg" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/software/driver/linux/adxrs450_eval_lr.jpg"><img alt="EVAL-ADXRS450" class="align-left" src="https://wiki.analog.com/_media/software/driver/linux/adxrs450_eval_lr.jpg" width="600" />
 </a>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-gyroscope/pmodgyro2_lr.jpg"><img alt="PmodGYRO2" class="align-left" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-gyroscope/pmodgyro2_lr.jpg" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-gyroscope/pmodgyro2_lr.jpg"><img alt="PmodGYRO2" class="align-left" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-gyroscope/pmodgyro2_lr.jpg" width="600" />
 </a>
 </section>
 <section id="driver-testing">
@@ -747,7 +757,15 @@ Content on this topic
 </pre></div>
 </div>
 </div>
-<p>Each and every IIO device, typically a hardware chip, has a device folder under /sys/bus/iio/devices/iio:deviceX. Where X is the IIO index of the device. Under every of these directory folders reside a set of files, depending on the characteristics and features of the hardware device in question. These files are consistently generalized and documented in the IIO ABI documentation. In order to determine which IIO deviceX corresponds to which hardware device, the user can read the name file /sys/bus/iio/devices/iio:deviceX/name. In case the sequence in which the iio device drivers are loaded/registered is constant, the numbering is constant and may be known in advance.</p>
+<p>Each and every IIO device, typically a hardware chip, has a device folder under
+/sys/bus/iio/devices/iio:deviceX. Where X is the IIO index of the device. Under
+every of these directory folders reside a set of files, depending on the
+characteristics and features of the hardware device in question. These files are
+consistently generalized and documented in the IIO ABI documentation. In order
+to determine which IIO deviceX corresponds to which hardware device, the user
+can read the name file /sys/bus/iio/devices/iio:deviceX/name. In case the
+sequence in which the iio device drivers are loaded/registered is constant, the
+numbering is constant and may be known in advance.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/&gt;</span> <span class="n">cd</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">iio</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span>
@@ -793,7 +811,8 @@ Content on this topic
 </section>
 <section id="show-angular-rate">
 <h2>Show angular rate<a class="headerlink" href="#show-angular-rate" title="Link to this heading"></a></h2>
-<p>Rotate the device and read angular rate sampling values from sysfs nodes like this:</p>
+<p>Rotate the device and read angular rate sampling values from sysfs nodes like
+this:</p>
 <section id="rotate-in-positive-direction">
 <h3>Rotate in positive direction<a class="headerlink" href="#rotate-in-positive-direction" title="Link to this heading"></a></h3>
 <div class="box bggreen docutils container">
@@ -821,7 +840,8 @@ Content on this topic
 </section>
 <section id="show-quadrature-correction">
 <h2>Show quadrature correction<a class="headerlink" href="#show-quadrature-correction" title="Link to this heading"></a></h2>
-<p>This attribute is used to read the amount of quadrature error present in the device at a given time.</p>
+<p>This attribute is used to read the amount of quadrature error present in the
+device at a given time.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">bfin</span><span class="o">-</span><span class="n">spi</span><span class="mf">.0</span><span class="o">/</span><span class="n">spi0</span><span class="mf">.18</span><span class="o">/</span><span class="n">iio</span><span class="p">:</span><span class="n">device0</span> <span class="o">&gt;</span> <span class="n">cat</span> <span class="n">in_anglvel_z_quadrature_correction_raw</span>
@@ -832,7 +852,9 @@ Content on this topic
 </section>
 <section id="set-dynamic-null-correction">
 <h2>Set dynamic null correction<a class="headerlink" href="#set-dynamic-null-correction" title="Link to this heading"></a></h2>
-<p>This attribute is used to make small adjustments to the rateout of the device. This 10-bit value allows the user to adjust the static rateout of the device by up to ±6.4°/sec.</p>
+<p>This attribute is used to make small adjustments to the rateout of the device.
+This 10-bit value allows the user to adjust the static rateout of the device by
+up to ±6.4°/sec.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">bfin</span><span class="o">-</span><span class="n">spi</span><span class="mf">.0</span><span class="o">/</span><span class="n">spi0</span><span class="mf">.18</span><span class="o">/</span><span class="n">iio</span><span class="p">:</span><span class="n">device0</span> <span class="o">&gt;</span> <span class="n">cat</span> <span class="n">in_gyro_z_raw</span>

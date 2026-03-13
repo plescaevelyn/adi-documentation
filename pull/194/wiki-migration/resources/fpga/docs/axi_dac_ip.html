@@ -734,23 +734,41 @@ Content on this topic
 <p class="admonition-title">Important</p>
 <p>We are in the process of migrating our documentation to GitHubIO. This page is outdated and the new one can be found at <a class="icon link reference external" href="https://analogdevicesinc.github.io/hdl/user_guide/ip_cores/axi_dac/index.html" target="_blank">https://analogdevicesinc.github.io/hdl/user_guide/ip_cores/axi_dac/index.html</a></p>
 </div>
-<p>The following wiki page presents a generic framework, which is used to design and develop an AXI based IP core for interfacing a Digital to Analog Converter (DAC) device with a high speed serial (JESD204B) or source synchronous parallel interface (LVDS/CMOS). This is a generic framework, there can be minor differences on each and every IP, the user should study this wiki page along with the IP’s wiki page.</p>
-<p>The main role of this page to ease the understanding of each DAC IP, and to provide a base knowledge which can be used to develop new IPs for currently unsupported devices.</p>
+<p>The following wiki page presents a generic framework, which is used to design
+and develop an AXI based IP core for interfacing a Digital to Analog Converter
+(DAC) device with a high speed serial (JESD204B) or source synchronous parallel
+interface (LVDS/CMOS). This is a generic framework, there can be minor
+differences on each and every IP, the user should study this wiki page along
+with the IP’s wiki page.</p>
+<p>The main role of this page to ease the understanding of each DAC IP, and to
+provide a base knowledge which can be used to develop new IPs for currently
+unsupported devices.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>Any kind of feedback regarding the DAC IP architecture or the following document is highly appreciated and can be addressed through the <a class="icon ez reference external" href="https://ez.analog.com/community/fpga" target="_blank">FPGA Reference Designs</a> community forum.</p>
 </div>
 <section id="architecture">
 <h2>Architecture<a class="headerlink" href="#architecture" title="Link to this heading"></a></h2>
-<p>The main function of an AXI DAC IP is to handle all the low level signalling, which is defined by the device’s digital data interface, and to forward the received data from the DMA or any other data source to the device. Beside this functionality there are a few processing modules inside the data path of the core, which can be used for signal conditioning. All these processing modules are optional, the are enabled or disabled by setting the appropriate parameters. The following block diagram presents a generic AXI DAC IP cores data path.</p>
+<p>The main function of an AXI DAC IP is to handle all the low level signalling,
+which is defined by the device’s digital data interface, and to forward the
+received data from the DMA or any other data source to the device. Beside this
+functionality there are a few processing modules inside the data path of the
+core, which can be used for signal conditioning. All these processing modules
+are optional, the are enabled or disabled by setting the appropriate parameters.
+The following block diagram presents a generic AXI DAC IP cores data path.</p>
 <img alt="AXI DAC datapath" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/docs/dac_datapath.svg" />
 <section id="transmit-phy">
 <h3>Transmit PHY<a class="headerlink" href="#transmit-phy" title="Link to this heading"></a></h3>
-<p>The most important part of the core is the Transmit PHY module. This module contains all the IO primitive instantiations and all the control logic required to receive data from the device.</p>
+<p>The most important part of the core is the Transmit PHY module. This module
+contains all the IO primitive instantiations and all the control logic required
+to receive data from the device.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>All the PHY modules follows the same naming convention: axi_&lt;device_name&gt;_if.v (e.g. axi_ad9467_if.v)</p>
-<p>In some cases, when the IP supports multiple interface type, the name of the PHY module look like: axi_&lt;device_name&gt;_&lt;interface_type&gt;_if.v (e.g. axi_ad9361_lvds_if.v)</p>
+<p>All the PHY modules follows the same naming convention:
+axi_&lt;device_name&gt;_if.v (e.g. axi_ad9467_if.v)</p>
+<p>In some cases, when the IP supports multiple interface type, the name of the
+PHY module look like: axi_&lt;device_name&gt;_&lt;interface_type&gt;_if.v (e.g.
+axi_ad9361_lvds_if.v)</p>
 </div>
 <p>Currently the Transmit PHY supports two different transmit interface:</p>
 <ul class="simple">
@@ -758,7 +776,8 @@ Content on this topic
 <li><p><a class="reference internal" href="../peripherals/jesd204/axi_jesd204_tx.html"><span class="doc">JESD204B interface</span></a><code class="docutils literal notranslate"><span class="pre">(1)</span></code></p></li>
 </ul>
 <p>All these interfaces are supported on both Altera (Intel) and Xilinx devices.</p>
-<p>This module is perfect choice for those, who wants a HDL logic for the device interface, with a minimal resource footprint.</p>
+<p>This module is perfect choice for those, who wants a HDL logic for the device
+interface, with a minimal resource footprint.</p>
 <p><code class="docutils literal notranslate"><span class="pre">(1)</span></code> The transmit module contains just the Transport Layer of the JESD204B interface. Lower layers are implemented by other cores.</p>
 </section>
 <section id="dac-channel">
@@ -784,7 +803,9 @@ Content on this topic
 </section>
 <section id="register-map">
 <h2>Register Map<a class="headerlink" href="#register-map" title="Link to this heading"></a></h2>
-<p>The following block diagram presents the different register maps physical location in the core. These register maps are generic and can be found in each AXI DAC core.</p>
+<p>The following block diagram presents the different register maps physical
+location in the core. These register maps are generic and can be found in each
+AXI DAC core.</p>
 <img alt="AXI DAC Register Map" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/docs/dac_regmap.svg" />
 <p>The base and <strong>DAC common</strong> register map is implemented in the same verilog file. It contains registers which controls and monitors the overall core, like:</p>
 <ul class="simple">

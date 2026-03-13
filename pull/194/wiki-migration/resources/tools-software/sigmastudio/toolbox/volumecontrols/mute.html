@@ -596,24 +596,34 @@ Content on this topic
 </table>
 </div>
 <p><strong>To Enable/Disable the mute:</strong> Click the check box; the signal is muted when the box is checked.</p>
-<p>The mute block is available as a Slew or Non-Slew algorithm. The Slew version of the algorithm will smoothly transition the gain to its target value, eliminating any click or pops, but require more system resources.</p>
+<p>The mute block is available as a Slew or Non-Slew algorithm. The Slew version of
+the algorithm will smoothly transition the gain to its target value, eliminating
+any click or pops, but require more system resources.</p>
 <p><strong>Algorithms:</strong></p>
 <ul class="simple">
 <li><p><em>No Slew (Standard)</em> - The default mute algorithm is a “no slew” type algorithm which mutes the signal immediately when enabled, there is no gain ramping, this algorithm requires less resources than the slew algorithms, but it can result in discontinuities (clicks and pops) when toggled in real-time.</p></li>
 <li><p><em>HW (RCtype Slew)</em> - The AD1940 / 1941 include support for mute controls that use a target/slew RAM hardware to slew (smoothly transition) from 0dB gain to muted.</p></li>
 <li><p><em>SW (RCtype Slew)</em> - Slew type algorithm that smoothly transitions from 0dB gain to muted and muted to 0dB gain. This slew algorithm is implemented in software, “SW”, and thus requires more instructions than the No Slew algorithm.</p></li>
 </ul>
-<p>This block supports both Grow Algorithm (adds additional inputs and outputs) and Add Algorithm (adds an independent mute algorithm plus associated inputs and outputs).</p>
+<p>This block supports both Grow Algorithm (adds additional inputs and outputs) and
+Add Algorithm (adds an independent mute algorithm plus associated inputs and
+outputs).</p>
 </section>
 <section id="controlling-mute-from-a-microcontroller">
 <h1>Controlling Mute from a Microcontroller<a class="headerlink" href="#controlling-mute-from-a-microcontroller" title="Link to this heading"></a></h1>
 <p>The following assumes you have a working microcontroller platform, with SigmaDSP interface code based on <a class="reference internal" href="../../tutorials/microcontroller.html"><span class="doc">Interfacing SigmaDSP Processors with a Microcontroller</span></a>.</p>
-<p>Within SigmaDSP processors, the Mute function is implemented as a gain. When the checkbox is selected (Mute Enabled), the DSP multiplies the input by 0. This produces a 0 at the output. When the checkbox is unchecked (Mute Disabled), the DSP multiplies the input by 1, allowing the input signal to pass through to the output.</p>
-<p>To set the algorithm to Mute, write a 0 to the MuteOnOff address. To unmute the output, write a 1 to the MuteOnOff address.</p>
+<p>Within SigmaDSP processors, the Mute function is implemented as a gain. When the
+checkbox is selected (Mute Enabled), the DSP multiplies the input by 0. This
+produces a 0 at the output. When the checkbox is unchecked (Mute Disabled), the
+DSP multiplies the input by 1, allowing the input signal to pass through to the
+output.</p>
+<p>To set the algorithm to Mute, write a 0 to the MuteOnOff address. To unmute the
+output, write a 1 to the MuteOnOff address.</p>
 <p>As usual, adjust the variable name of <code class="docutils literal notranslate"><span class="pre">MOD_MUTE1_ALG0_MUTEONOFF_ADDR</span></code> to match your exported files.</p>
 <section id="reading-mute-values-from-the-sigmadsp">
 <h2>Reading Mute Values from the SigmaDSP<a class="headerlink" href="#reading-mute-values-from-the-sigmadsp" title="Link to this heading"></a></h2>
-<p>Mute values are stored in decimal format (8.24 or 5.23), so use the SIGMA_READ_REGISTER_FLOAT function to get the current value.</p>
+<p>Mute values are stored in decimal format (8.24 or 5.23), so use the
+SIGMA_READ_REGISTER_FLOAT function to get the current value.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">double</span><span class="w"> </span><span class="n">mute_state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SIGMA_READ_REGISTER_FLOAT</span><span class="p">(</span><span class="n">MOD_MUTE1_ALG0_MUTEONOFF_ADDR</span><span class="p">);</span>
 <span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">mute_state</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w"> </span><span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">&quot;System is Unmuted&quot;</span><span class="p">);</span>

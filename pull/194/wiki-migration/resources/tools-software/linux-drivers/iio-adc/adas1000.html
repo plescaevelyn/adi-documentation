@@ -691,8 +691,15 @@ Content on this topic
 </section>
 <section id="example-platform-device-initialization">
 <h1>Example platform device initialization<a class="headerlink" href="#example-platform-device-initialization" title="Link to this heading"></a></h1>
-<p>For compile time configuration, it’s common Linux practice to keep board- and application-specific configuration out of the main driver file, instead putting it into the board support file.</p>
-<p>For devices on custom boards, as typical of embedded and SoC-(system-on-chip) based hardware, Linux uses platform_data to point to board-specific structures describing devices and how they are connected to the SoC. This can include available ports, chip variants, preferred modes, default initialization, additional pin roles, and so on. This shrinks the board-support packages (BSPs) and minimizes board and application specific #ifdefs in drivers.</p>
+<p>For compile time configuration, it’s common Linux practice to keep board- and
+application-specific configuration out of the main driver file, instead putting
+it into the board support file.</p>
+<p>For devices on custom boards, as typical of embedded and SoC-(system-on-chip)
+based hardware, Linux uses platform_data to point to board-specific structures
+describing devices and how they are connected to the SoC. This can include
+available ports, chip variants, preferred modes, default initialization,
+additional pin roles, and so on. This shrinks the board-support packages (BSPs)
+and minimizes board and application specific #ifdefs in drivers.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/**</span>
 <span class="cm">  * struct adas1000_platform_data - ADAS1000 platform data</span>
 <span class="cm">  * @enbale_vref_buffer: If true enable the vref buffer</span>
@@ -718,11 +725,23 @@ Content on this topic
 <span class="p">};</span>
 </pre></div>
 </div>
-<p>If no platform data is provided the driver will use the device’s default setting for all registers.</p>
-<p>Unlike PCI or USB devices, SPI devices are not enumerated at the hardware level. Instead, the software must know which devices are connected on each SPI bus segment, and what slave selects these devices are using. For this reason, the kernel code must instantiate SPI devices explicitly. The most common method is to declare the SPI devices by bus number.</p>
-<p>This method is appropriate when the SPI bus is a system bus, as in many embedded systems, wherein each SPI bus has a number which is known in advance. It is thus possible to pre-declare the SPI devices that inhabit this bus. This is done with an array of struct spi_board_info, which is registered by calling spi_register_board_info().</p>
+<p>If no platform data is provided the driver will use the device’s default setting
+for all registers.</p>
+<p>Unlike PCI or USB devices, SPI devices are not enumerated at the hardware level.
+Instead, the software must know which devices are connected on each SPI bus
+segment, and what slave selects these devices are using. For this reason, the
+kernel code must instantiate SPI devices explicitly. The most common method is
+to declare the SPI devices by bus number.</p>
+<p>This method is appropriate when the SPI bus is a system bus, as in many embedded
+systems, wherein each SPI bus has a number which is known in advance. It is thus
+possible to pre-declare the SPI devices that inhabit this bus. This is done with
+an array of struct spi_board_info, which is registered by calling
+spi_register_board_info().</p>
 <p>For more information see: <a href="#id2"><span class="problematic" id="id3">`spi-summary.rst &lt;/git.linux.org&gt;documentation/spi/spi-summary.rst&gt;`__</span></a></p>
-<p>Depending on the converter IC used, you may need to set the modalias accordingly, matching your part name. It may also required to adjust max_speed_hz. Please consult the datasheet, for maximum spi clock supported by the device in question.</p>
+<p>Depending on the converter IC used, you may need to set the modalias
+accordingly, matching your part name. It may also required to adjust
+max_speed_hz. Please consult the datasheet, for maximum spi clock supported by
+the device in question.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">spi_board_info</span><span class="w"> </span><span class="n">board_spi_board_info</span><span class="p">[]</span><span class="w"> </span><span class="n">__initdata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="p">.</span><span class="n">modalias</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;adas1000&quot;</span><span class="p">,</span>
@@ -751,7 +770,8 @@ Content on this topic
 </section>
 <section id="adding-linux-driver-support">
 <h1>Adding Linux driver support<a class="headerlink" href="#adding-linux-driver-support" title="Link to this heading"></a></h1>
-<p>Configure kernel with “make menuconfig” (alternatively use “make xconfig” or “make qconfig”)</p>
+<p>Configure kernel with “make menuconfig” (alternatively use “make xconfig” or
+“make qconfig”)</p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <p>The ADAS1000 Driver depends on CONFIG_SPI</p>
@@ -774,7 +794,15 @@ Content on this topic
 </section>
 <section id="driver-testing">
 <h1>Driver testing<a class="headerlink" href="#driver-testing" title="Link to this heading"></a></h1>
-<p>Each and every IIO device, typically a hardware chip, has a device folder under /sys/bus/iio/devices/iio:deviceX. Where X is the IIO index of the device. Under every of these directory folders reside a set of files, depending on the characteristics and features of the hardware device in question. These files are consistently generalized and documented in the IIO ABI documentation. In order to determine which IIO deviceX corresponds to which hardware device, the user can read the name file /sys/bus/iio/devices/iio:deviceX/name. In case the sequence in which the iio device drivers are loaded/registered is constant, the numbering is constant and may be known in advance.</p>
+<p>Each and every IIO device, typically a hardware chip, has a device folder under
+/sys/bus/iio/devices/iio:deviceX. Where X is the IIO index of the device. Under
+every of these directory folders reside a set of files, depending on the
+characteristics and features of the hardware device in question. These files are
+consistently generalized and documented in the IIO ABI documentation. In order
+to determine which IIO deviceX corresponds to which hardware device, the user
+can read the name file /sys/bus/iio/devices/iio:deviceX/name. In case the
+sequence in which the iio device drivers are loaded/registered is constant, the
+numbering is constant and may be known in advance.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/&gt;</span> <span class="n">cd</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">iio</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span>
@@ -841,12 +869,14 @@ Content on this topic
 </pre></div>
 </div>
 </div>
-<p>Contains the device name, this will always be “adas1000” for the adas1000 driver.</p>
+<p>Contains the device name, this will always be “adas1000” for the adas1000
+driver.</p>
 </section>
 <section id="list-available-low-filter-frequencies">
 <h2>List available low filter frequencies<a class="headerlink" href="#list-available-low-filter-frequencies" title="Link to this heading"></a></h2>
 <p><strong>Description:</strong> in_voltage-voltage_filter_low_pass_3db_frequency_available</p>
-<p>Lists all available low pass filter frequencies, which may be set by writing to in_voltage-voltage_filter_low_pass_3db_frequency.</p>
+<p>Lists all available low pass filter frequencies, which may be set by writing to
+in_voltage-voltage_filter_low_pass_3db_frequency.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">bfin</span><span class="o">-</span><span class="n">spi</span><span class="mf">.0</span><span class="o">/</span><span class="n">spi0</span><span class="mf">.3</span><span class="o">/</span><span class="n">device0</span><span class="o">&gt;</span> <span class="n">cat</span> <span class="n">in_voltage</span><span class="o">-</span><span class="n">voltage_filter_low_pass_3db_frequency_available</span>
@@ -859,7 +889,8 @@ Content on this topic
 <section id="set-and-show-low-filter-frequency">
 <h2>Set and show low filter frequency<a class="headerlink" href="#set-and-show-low-filter-frequency" title="Link to this heading"></a></h2>
 <p><strong>Description:</strong> in_voltage-voltage_filter_low_pass_3db_frequency</p>
-<p>Writing to this file will set the low pass filter frequency, reading from this file will show the currently selected low pass filter.</p>
+<p>Writing to this file will set the low pass filter frequency, reading from this
+file will show the currently selected low pass filter.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">bfin</span><span class="o">-</span><span class="n">spi</span><span class="mf">.0</span><span class="o">/</span><span class="n">spi0</span><span class="mf">.3</span><span class="o">/</span><span class="n">device0</span><span class="o">&gt;</span> <span class="n">cat</span> <span class="n">in_voltage</span><span class="o">-</span><span class="n">voltage_filter_low_pass_3db_frequency</span>
@@ -873,10 +904,12 @@ Content on this topic
 </div>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
-<p>The low pass filter will only be active when sampling with 2kHz base frequency.</p>
+<p>The low pass filter will only be active when sampling with 2kHz base
+frequency.</p>
 </div>
 <p>=== List available sampling frequencies === <strong>Description:</strong> in_voltage-voltage_sampling_frequency_available</p>
-<p>Lists all available sampling frequencies, which may be set by writing to in_voltage-voltage_sampling_frequency.</p>
+<p>Lists all available sampling frequencies, which may be set by writing to
+in_voltage-voltage_sampling_frequency.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">bfin</span><span class="o">-</span><span class="n">spi</span><span class="mf">.0</span><span class="o">/</span><span class="n">spi0</span><span class="mf">.3</span><span class="o">/</span><span class="n">device0</span><span class="o">&gt;</span> <span class="n">cat</span> <span class="n">in_voltage</span><span class="o">-</span><span class="n">voltage_sampling_frequency_available</span>
@@ -887,13 +920,16 @@ Content on this topic
 </div>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
-<p>The only actuall supported sampling rates by the ADAS1000 are 128000, 16000 and 2000, all other sampling rates will be achieved by using a 2x or 4x decimation filter.</p>
+<p>The only actuall supported sampling rates by the ADAS1000 are 128000, 16000
+and 2000, all other sampling rates will be achieved by using a 2x or 4x
+decimation filter.</p>
 </div>
 </section>
 <section id="set-and-show-filter-frequency">
 <h2>Set and show filter frequency<a class="headerlink" href="#set-and-show-filter-frequency" title="Link to this heading"></a></h2>
 <p><strong>Description:</strong> in_voltage-voltage_sampling_frequency</p>
-<p>Writing to this file will set the sampling frequency, reading from the file will return the currently selected sampling frequency.</p>
+<p>Writing to this file will set the sampling frequency, reading from the file will
+return the currently selected sampling frequency.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">bfin</span><span class="o">-</span><span class="n">spi</span><span class="mf">.0</span><span class="o">/</span><span class="n">spi0</span><span class="mf">.3</span><span class="o">/</span><span class="n">device0</span><span class="o">&gt;</span> <span class="n">cat</span> <span class="n">in_voltage</span><span class="o">-</span><span class="n">voltage_sampling_frequency</span>
@@ -916,7 +952,8 @@ Content on this topic
 <section id="list-available-adc-gain-values">
 <h2>List available ADC gain values<a class="headerlink" href="#list-available-adc-gain-values" title="Link to this heading"></a></h2>
 <p><strong>Description:</strong> in_voltage-voltage_scale_available</p>
-<p>List the available ADC gain settings, which can be set using in_voltage-voltage_scale.</p>
+<p>List the available ADC gain settings, which can be set using
+in_voltage-voltage_scale.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">bfin</span><span class="o">-</span><span class="n">spi</span><span class="mf">.0</span><span class="o">/</span><span class="n">spi0</span><span class="mf">.3</span><span class="o">/</span><span class="n">device0</span><span class="o">&gt;</span> <span class="n">cat</span> <span class="n">in_voltage</span><span class="o">-</span><span class="n">voltage_scale_available</span>
@@ -929,7 +966,8 @@ Content on this topic
 <section id="set-and-adc-gain-value">
 <h2>Set and ADC gain value<a class="headerlink" href="#set-and-adc-gain-value" title="Link to this heading"></a></h2>
 <p><strong>Description:</strong> in_voltage-voltage_scale</p>
-<p>Scale to be applied to in_voltageY-voltageZ_raw in order to obtain the measured voltage in millivolts.</p>
+<p>Scale to be applied to in_voltageY-voltageZ_raw in order to obtain the measured
+voltage in millivolts.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">bfin</span><span class="o">-</span><span class="n">spi</span><span class="mf">.0</span><span class="o">/</span><span class="n">spi0</span><span class="mf">.3</span><span class="o">/</span><span class="n">device0</span><span class="o">&gt;</span> <span class="n">cat</span> <span class="n">in_voltage</span><span class="o">-</span><span class="n">voltage_scale</span>
@@ -945,7 +983,9 @@ Content on this topic
 <section id="set-adc-calibration-gain">
 <h2>Set ADC calibration gain<a class="headerlink" href="#set-adc-calibration-gain" title="Link to this heading"></a></h2>
 <p><strong>Description:</strong> in_voltage0-voltage2_calibscale in_voltage0-voltage5_calibscale in_voltage1-voltage0_calibscale in_voltage1-voltage2_calibscale in_voltage1-voltage5_calibscale in_voltage2-voltage5_calibscale in_voltage3-voltage5_calibscale in_voltage4-voltage5_calibscale</p>
-<p>Set the channel calibration gain. Writing to these files will set the calibration gain for the respective channel. Valid values are in the range of -2048 to 2047.</p>
+<p>Set the channel calibration gain. Writing to these files will set the
+calibration gain for the respective channel. Valid values are in the range of
+-2048 to 2047.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">bfin</span><span class="o">-</span><span class="n">spi</span><span class="mf">.0</span><span class="o">/</span><span class="n">spi0</span><span class="mf">.3</span><span class="o">/</span><span class="n">device0</span><span class="o">&gt;</span> <span class="n">echo</span> <span class="mi">1020</span> <span class="o">&gt;</span> <span class="n">in_voltage0</span><span class="o">-</span><span class="n">voltage2_calibscale</span>
@@ -957,7 +997,10 @@ Content on this topic
 </div>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
-<p>in_voltage0-voltage2_calibscale and in_voltage0-voltage5_calibscale, in_voltage1-voltage0_calibscale and in_voltage1-voltage5_calibscale, in_voltage1-voltage2_calibscale and in_voltage2-voltage5_calibscale refer to the same set of calibration data.</p>
+<p>in_voltage0-voltage2_calibscale and in_voltage0-voltage5_calibscale,
+in_voltage1-voltage0_calibscale and in_voltage1-voltage5_calibscale,
+in_voltage1-voltage2_calibscale and in_voltage2-voltage5_calibscale refer to
+the same set of calibration data.</p>
 </div>
 </section>
 <section id="list-available-right-leg-drive-outputs">
@@ -990,7 +1033,9 @@ Content on this topic
 <section id="enable-disable-right-leg-drive-output">
 <h2>Enable/Disable Right Leg drive output<a class="headerlink" href="#enable-disable-right-leg-drive-output" title="Link to this heading"></a></h2>
 <p><strong>Description:</strong> rld_powerdown</p>
-<p>Enable or disable the Right Leg drive output. Writing a ‘0’ to this file will enable the Right Leg drive, writing a ‘1’ to this file will enable the Right Leg drive.</p>
+<p>Enable or disable the Right Leg drive output. Writing a ‘0’ to this file will
+enable the Right Leg drive, writing a ‘1’ to this file will enable the Right Leg
+drive.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">bfin</span><span class="o">-</span><span class="n">spi</span><span class="mf">.0</span><span class="o">/</span><span class="n">spi_master</span><span class="o">/</span><span class="n">spi0</span><span class="o">/</span><span class="n">spi0</span><span class="mf">.18</span><span class="o">/</span><span class="n">iio</span><span class="p">:</span><span class="n">device0</span><span class="o">&gt;</span> <span class="n">cat</span> <span class="n">rld_powerdown</span>
@@ -1005,7 +1050,8 @@ Content on this topic
 <section id="setup-right-leg-drive-summing-junction-configuration">
 <h2>Setup Right Leg drive summing junction configuration<a class="headerlink" href="#setup-right-leg-drive-summing-junction-configuration" title="Link to this heading"></a></h2>
 <p><strong>Description:</strong> rld_summing_junction_ce_en rld_summing_junction_la_en rld_summing_junction_ll_en rld_summing_junction_ra_en rld_summing_junction_v1_en rld_summing_junction_v2_en</p>
-<p>Writing a ‘1’ to a file will add the respective channel to the Right Leg driver summing junction, writing a ‘0’ will remove it.</p>
+<p>Writing a ‘1’ to a file will add the respective channel to the Right Leg driver
+summing junction, writing a ‘0’ will remove it.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">bfin</span><span class="o">-</span><span class="n">spi</span><span class="mf">.0</span><span class="o">/</span><span class="n">spi_master</span><span class="o">/</span><span class="n">spi0</span><span class="o">/</span><span class="n">spi0</span><span class="mf">.18</span><span class="o">/</span><span class="n">iio</span><span class="p">:</span><span class="n">device0</span><span class="o">&gt;</span> <span class="n">cat</span> <span class="n">rld_summing_junction_la_en</span>
@@ -1020,7 +1066,8 @@ Content on this topic
 <section id="setup-vcm-summing-junction-configuration">
 <h2>Setup VCM summing junction configuration<a class="headerlink" href="#setup-vcm-summing-junction-configuration" title="Link to this heading"></a></h2>
 <p><strong>Description:</strong> vcm_summing_junction_ce_en vcm_summing_junction_la_en vcm_summing_junction_ll_en vcm_summing_junction_ra_en vcm_summing_junction_v1_en vcm_summing_junction_v2_en</p>
-<p>Writing a ‘1’ to a file will add the respective channel to the VCM summing junction, writing a ‘0’ will remove it.</p>
+<p>Writing a ‘1’ to a file will add the respective channel to the VCM summing
+junction, writing a ‘0’ will remove it.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">bfin</span><span class="o">-</span><span class="n">spi</span><span class="mf">.0</span><span class="o">/</span><span class="n">spi_master</span><span class="o">/</span><span class="n">spi0</span><span class="o">/</span><span class="n">spi0</span><span class="mf">.18</span><span class="o">/</span><span class="n">iio</span><span class="p">:</span><span class="n">device0</span><span class="o">&gt;</span> <span class="n">cat</span> <span class="n">vcm_summing_junction_ra_en</span>
@@ -1035,7 +1082,8 @@ Content on this topic
 <section id="enable-disable-shield-driver">
 <h2>Enable/Disable shield driver<a class="headerlink" href="#enable-disable-shield-driver" title="Link to this heading"></a></h2>
 <p><strong>Description:</strong> shield_driver_powerdown</p>
-<p>Enable or disable the shield driver. Writing a ‘0’ to this file will enable the shild driver, writing a ‘1’ to this file will enable the shield driver.</p>
+<p>Enable or disable the shield driver. Writing a ‘0’ to this file will enable the
+shild driver, writing a ‘1’ to this file will enable the shield driver.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">bfin</span><span class="o">-</span><span class="n">spi</span><span class="mf">.0</span><span class="o">/</span><span class="n">spi_master</span><span class="o">/</span><span class="n">spi0</span><span class="o">/</span><span class="n">spi0</span><span class="mf">.18</span><span class="o">/</span><span class="n">iio</span><span class="p">:</span><span class="n">device0</span><span class="o">&gt;</span> <span class="n">cat</span> <span class="n">shield_driver_powerdown</span>
@@ -1051,7 +1099,9 @@ Content on this topic
 <section id="enable-disable-calibration-dac">
 <h2>Enable/Disable calibration DAC<a class="headerlink" href="#enable-disable-calibration-dac" title="Link to this heading"></a></h2>
 <p><strong>Description:</strong> out_voltage6_calibration_powerdown</p>
-<p>Enable or disable the calibration DAC. Writing a ‘0’ to this file will enable the calibration DAC, writing a ‘1’ to this file will disable the calibration DAC.</p>
+<p>Enable or disable the calibration DAC. Writing a ‘0’ to this file will enable
+the calibration DAC, writing a ‘1’ to this file will disable the calibration
+DAC.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">bfin</span><span class="o">-</span><span class="n">spi</span><span class="mf">.0</span><span class="o">/</span><span class="n">spi_master</span><span class="o">/</span><span class="n">spi0</span><span class="o">/</span><span class="n">spi0</span><span class="mf">.18</span><span class="o">/</span><span class="n">iio</span><span class="p">:</span><span class="n">device0</span><span class="o">&gt;</span> <span class="n">cat</span> <span class="n">out_voltage6_calibration_raw</span>
@@ -1086,24 +1136,32 @@ Content on this topic
 </pre></div>
 </div>
 </div>
-<p>Vout = (out_voltage6_calibration_offset + out_voltage6_calibration_raw) * out_voltage6_calibration_scale</p>
+<p>Vout = (out_voltage6_calibration_offset + out_voltage6_calibration_raw) *
+out_voltage6_calibration_scale</p>
 </section>
 <section id="debugfs">
 <h2>Debugfs<a class="headerlink" href="#debugfs" title="Link to this heading"></a></h2>
-<p>The adas1000 driver exposes also some files, which are meant for debugging purposes, in debugfs. These files can be used to read the OPSTAT register and to configure the testtone generator.</p>
-<p>root:/sys/kernel/debug/iio/iio:device0&gt; ls direct_reg_access pll_locked testtone_la_en testtone_v1_en fuse_crc_failure testtone_en testtone_ll_en testtone_v2_en fuse_status testtone_frequency testtone_out_en pll_lock_lost testtone_internal testtone_ra_en root:/sys/kernel/debug/iio/iio:device0&gt;</p>
+<p>The adas1000 driver exposes also some files, which are meant for debugging
+purposes, in debugfs. These files can be used to read the OPSTAT register and to
+configure the testtone generator.</p>
+<p>root:/sys/kernel/debug/iio/iio:device0&gt; ls direct_reg_access pll_locked
+testtone_la_en testtone_v1_en fuse_crc_failure testtone_en testtone_ll_en
+testtone_v2_en fuse_status testtone_frequency testtone_out_en pll_lock_lost
+testtone_internal testtone_ra_en root:/sys/kernel/debug/iio/iio:device0&gt;</p>
 </section>
 <section id="direct-register-read-and-write-acccess">
 <h2>Direct register read and write acccess<a class="headerlink" href="#direct-register-read-and-write-acccess" title="Link to this heading"></a></h2>
 <p><strong>Description:</strong> direct_reg_access</p>
-<p>Allows direct register access to the device. To write to a register write the register address and the register value seperated by a space to the file.</p>
+<p>Allows direct register access to the device. To write to a register write the
+register address and the register value seperated by a space to the file.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">iio</span><span class="o">/</span><span class="n">iio</span><span class="p">:</span><span class="n">device0</span><span class="o">&gt;</span> <span class="n">echo</span> <span class="mh">0x12</span> <span class="mh">0x17</span> <span class="o">&gt;</span> <span class="n">direct_reg_access</span>
 </pre></div>
 </div>
 </div>
-<p>To read a register value, first write the register address to the file followed by a read.</p>
+<p>To read a register value, first write the register address to the file followed
+by a read.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">iio</span><span class="o">/</span><span class="n">iio</span><span class="p">:</span><span class="n">device0</span><span class="o">&gt;</span> <span class="n">echo</span> <span class="mh">0x05</span> <span class="o">&gt;</span> <span class="n">direct_reg_access</span>
@@ -1133,7 +1191,8 @@ Content on this topic
 <p>Enable the testtone generator.</p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
-<p>If both the testtone and the calibration DAC are enabled, the testtone will take precedence.</p>
+<p>If both the testtone and the calibration DAC are enabled, the testtone will
+take precedence.</p>
 </div>
 </section>
 <section id="set-testtone-frequnecy">
@@ -1158,7 +1217,8 @@ Content on this topic
 <p>Enables or disables testtone output to the external CAL_DAC_IO pin.</p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
-<p>The testtone signal will be routed to the CAL_DAC_IO pin by default and only if internal routing is enabled this switch will have an effect.</p>
+<p>The testtone signal will be routed to the CAL_DAC_IO pin by default and only
+if internal routing is enabled this switch will have an effect.</p>
 </div>
 </section>
 <section id="enable-testtone-routing-to-individual-ecg-channels">
@@ -1168,7 +1228,9 @@ Content on this topic
 </section>
 <section id="trigger-management">
 <h2>Trigger management<a class="headerlink" href="#trigger-management" title="Link to this heading"></a></h2>
-<p>The adas1000 driver will register a IIO trigger for the device. The trigger will be hooked up to the devices DATARDY IRQ. Normally you would want to use this trigger as the trigger for the device.</p>
+<p>The adas1000 driver will register a IIO trigger for the device. The trigger will
+be hooked up to the devices DATARDY IRQ. Normally you would want to use this
+trigger as the trigger for the device.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">bfin</span><span class="o">-</span><span class="n">spi</span><span class="mf">.0</span><span class="o">/</span><span class="n">spi_master</span><span class="o">/</span><span class="n">spi0</span><span class="o">/</span><span class="n">spi0</span><span class="mf">.18</span><span class="o">/</span><span class="n">iio</span><span class="p">:</span><span class="n">device0</span><span class="o">/&gt;</span> <span class="n">echo</span> <span class="n">adas1000</span><span class="o">-</span><span class="n">dev0</span> <span class="o">&gt;</span> <span class="n">trigger</span><span class="o">/</span><span class="n">current_trigger</span>
@@ -1180,7 +1242,13 @@ Content on this topic
 </section>
 <section id="buffer-management">
 <h2>Buffer management<a class="headerlink" href="#buffer-management" title="Link to this heading"></a></h2>
-<p>The Industrial I/O subsystem provides support for various ring buffer based data acquisition methods. Apart from device specific hardware buffer support, the user can chose between two different software ring buffer implementations. One is the IIO lock free software ring, and the other is based on Linux kfifo. Devices with buffer support feature an additional sub-folder in the /sys/bus/iio/devices/deviceX/ folder hierarchy. Called deviceX:bufferY, where Y defaults to 0, for devices with a single buffer.</p>
+<p>The Industrial I/O subsystem provides support for various ring buffer based data
+acquisition methods. Apart from device specific hardware buffer support, the
+user can chose between two different software ring buffer implementations. One
+is the IIO lock free software ring, and the other is based on Linux kfifo.
+Devices with buffer support feature an additional sub-folder in the
+/sys/bus/iio/devices/deviceX/ folder hierarchy. Called deviceX:bufferY, where Y
+defaults to 0, for devices with a single buffer.</p>
 <p>Every buffer implementation features a set of files:</p>
 <div class="line-block">
 <div class="line"><strong>length</strong></div>
@@ -1260,7 +1328,10 @@ Content on this topic
 </tbody>
 </table>
 </div>
-<p>If any of the first three channels is selected the device will operate in Lead mode, otherwise it will operate in single-end mode. If channels from the first three channels are selected channels from the second three channels can not be selected and vice versa.</p>
+<p>If any of the first three channels is selected the device will operate in Lead
+mode, otherwise it will operate in single-end mode. If channels from the first
+three channels are selected channels from the second three channels can not be
+selected and vice versa.</p>
 <div class="line-block">
 <div class="line"><strong>in_voltageX_en / in_voltageX-voltageY_en / timestamp_en:</strong></div>
 <div class="line">Scan element control for triggered data capture. Writing 1 will enable the scan element, writing 0 will disable it</div>

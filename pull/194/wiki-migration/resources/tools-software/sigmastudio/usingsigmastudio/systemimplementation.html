@@ -581,19 +581,25 @@ Content on this topic
   <section id="system-implementation">
 <h1>System Implementation<a class="headerlink" href="#system-implementation" title="Link to this heading"></a></h1>
 <p><a class="reference internal" href="../usingsigmastudio.html"><span class="doc">Click here to return to the Using Sigma Studio page</span></a></p>
-<p>When you have finished designing your schematic and have compiled your project, you are ready to translate your design into microcontroller code, following these basic steps:</p>
+<p>When you have finished designing your schematic and have compiled your project,
+you are ready to translate your design into microcontroller code, following
+these basic steps:</p>
 <ul class="simple">
 <li><p>Obtain parameters and addresses from SigmaStudio (export the .params, .hex, and .h files).</p></li>
 <li><p>Parse the file with parameter information.</p></li>
 <li><p>Incorporate (integrate) into microcontroller code.</p></li>
 </ul>
-<p>To access the parameters and addresses from SigmaStudio, you must have already compiled your project and exported the parameter files. After doing that, you’ll have two parameter files:</p>
+<p>To access the parameters and addresses from SigmaStudio, you must have already
+compiled your project and exported the parameter files. After doing that, you’ll
+have two parameter files:</p>
 <ul class="simple">
 <li><p><em>yourfilename</em>.hex - hex values of parameters to be written to DSP.</p></li>
 <li><p><em>yourfilename</em>.params - detailed file with addresses and values of all parameters.</p></li>
 </ul>
 <p>You can view sample *.params and *.hex files in the <a class="reference internal" href="exportprogramandparameterdata.html"><span class="doc">Export Program and Parameters</span></a> topic.</p>
-<p>Following is an example of how you can integrate the parameters into microcontroller code (AD1940). The highlighted functions in the main function are also defined:</p>
+<p>Following is an example of how you can integrate the parameters into
+microcontroller code (AD1940). The highlighted functions in the main function
+are also defined:</p>
 <p><img alt="codepic1.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/usingsigmastudio/codepic1.png" /> <img alt="codepic2.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/usingsigmastudio/codepic2.png" /> <img alt="codepic3.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/usingsigmastudio/codepic3.png" /> <img alt="codepic4.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/usingsigmastudio/codepic4.png" /> <img alt="codepic5.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/usingsigmastudio/codepic5.png" /> <img alt="codepic6.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/usingsigmastudio/codepic6.png" /></p>
 <p>~~~~ Click here to view the above source code as plain text |</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>#include &quot;prog_data.h&quot;
@@ -608,8 +614,6 @@ Content on this topic
 
 #define byte unsigned char
 
-
-
 // Microcontroller Code MAIN program
 
 int main(void)
@@ -622,19 +626,13 @@ SpiInit();
 
 Mute();
 
-
-
 // Write a program to DSP
 
 SpiWrite(PROG_START_ADR, PROGRAM_DATA, PROG_LENGTH\*6);
 
-
-
 // Wait some time
 
 Wait(...);
-
-
 
 // Write a parameter file
 
@@ -644,8 +642,6 @@ Wait(...);
 
 UnMute();
 
-
-
 // Write a single value (0.242) to specified address
 
 // The address, MODULE_Main_Single1_VALUE, is defined in the
@@ -654,8 +650,6 @@ UnMute();
 
 ParamWrite(MODULE_Main_Single1_VALUE, 0.242);
 
-
-
 // Example safeload of single parameter, will safeload 1.999 in 5.23
 
 // format to address 2
@@ -663,8 +657,6 @@ ParamWrite(MODULE_Main_Single1_VALUE, 0.242);
 // This function includes the initiate safeload to parameter RAM
 
 SafeloadSingleParamWrite(2, 1.999);
-
-
 
 // Example of a multiple parameter safeload (i.e. filter coefficients)
 
@@ -684,13 +676,9 @@ SafeloadMultipleParamWrite(MODULE_Main_MidEQ1_Alg0_Stage0_A2_ADDRESS, 1.999, 4);
 
 InitSafeloadParam();
 
-
-
 return 0;
 
 }
-
-
 
 // Microcontroller Code Wait function
 
@@ -712,8 +700,6 @@ while (cycles != 0)
 
 }
 
-
-
 // Microcontroller Code Mute function
 
 void Mute()
@@ -732,8 +718,6 @@ Wait(20);
 
 }
 
-
-
 // Microcontroller Code UnMute function
 
 void UnMute()
@@ -751,8 +735,6 @@ SpiWrite(CORE_CONTROL_REG, corecontrol, 2);
 Wait(20);
 
 }
-
-
 
 // Microcontroller SpiWrite function
 
@@ -774,8 +756,6 @@ address_lo = (byte)address; // get low byte of register/RAM address
 
 address_hi = (byte)(address&gt;&gt;8); // get high byte of address shift left by 8 bits
 
-
-
 // Fill in your write function here
 
 SPI_TX_REG = 0x00; // Write to DSP at chip address 0
@@ -792,15 +772,11 @@ for (i=0; i&lt;length; i++) // Write specified length of data
 
 }
 
-
-
 // Note: After each write to SPI_TX_REG, you may need to verify that the buffer
 
 // has been emptied (meaning the write has completed). This is hardware-specific.
 
 }
-
-
 
 // Microcontroller Code - functions, write a single parameter
 
@@ -818,8 +794,6 @@ SpiWrite(address, param_hex, 4);
 
 }
 
-
-
 // Microcontroller Code functions, safeload: single parameter write
 
 void SafeloadSingleParamWrite(short address, float param)
@@ -827,8 +801,6 @@ void SafeloadSingleParamWrite(short address, float param)
 {
 
 byte param_hex[4] = {0x00, 0x00, 0x00, 0x00};
-
-
 
 //convert decimal paramater value to 5.23 format
 
@@ -846,8 +818,6 @@ paramex_hex[3]=param_hex[2];
 
 paramex_hex[4]=param_hex[3];
 
-
-
 SafeParam(SAFELOAD_DATA_0, paramex_hex);
 
 SafeAddr(SAFELOAD_ADDRESS_0, address);
@@ -855,8 +825,6 @@ SafeAddr(SAFELOAD_ADDRESS_0, address);
 InitSafeloadParam();
 
 }
-
-
 
 // Microcontroller Code functions, safeload: multiple parameter write
 
@@ -868,8 +836,6 @@ void SafeloadMultipleParamWrite(short address, float param, int location)
 
 byte param_hex[4] = {0x00, 0x00, 0x00, 0x00};
 
-
-
 //convert decimal paramater value to 5.23 format
 
 To523(param, param_hex);
@@ -886,15 +852,11 @@ paramex_hex[3]=param_hex[2];
 
 paramex_hex[4]=param_hex[3];
 
-
-
 SafeParam(SAFELOAD_DATA_0+location, paramex_hex);
 
 SafeAddr(SAFELOAD_ADDRESS_0+location, address);
 
 }
-
-
 
 // Microcontroller Code - functions, safeload: Initiate the safeload
 
@@ -906,19 +868,13 @@ void InitSafeloadParam()
 
 byte corecontrol[2] = {2, 0};
 
-
-
 //Read contents of core control register
 
 SpiRead(CORE_CONTROL_REG, corecontrol, 2);
 
-
-
 //Set Initiate Safe Transfer to Param RAM bit
 
 corecontrol[1] = corecontrol[1] | 0x10;
-
-
 
 //Write back to core control register
 
@@ -927,8 +883,6 @@ SpiWrite(CORE_CONTROL_REG, corecontrol, 2);
 Wait(20);  //Wait 20us
 
 }
-
-
 
 //Microcontroller Code - functions, SpiRead
 
@@ -942,8 +896,6 @@ byte address_hi = 0; //DSP register/RAM address high byte
 
 byte address_lo = 0; //DSP register/RAM address lo byte
 
-
-
 //get low byte of register/RAM address
 
 address_lo = (byte)address;
@@ -951,8 +903,6 @@ address_lo = (byte)address;
 //get high byte of address shift, left by 8 bits
 
 address_hi = (byte)(address&gt;&gt;8);
-
-
 
 //Fill in you write function here
 
@@ -962,8 +912,6 @@ SPI_RX_REG = address_hi;  //Write high address byte
 
 SPI_RX_REG = address_lo;  //Write lo address byte
 
-
-
 for (i=0; i&lt;length; i++) //read specified length of data
 
 {
@@ -972,15 +920,11 @@ for (i=0; i&lt;length; i++) //read specified length of data
 
 }
 
-
-
 // Note: After each write to SPI_TX_REG, you may need to verify that the buffer has
 
 // been emptied (meaning the write has completed). This is hardware-specific.
 
 }
-
-
 
 //Microcontroller Code - functions, Safeload: SafeAddr
 
@@ -992,8 +936,6 @@ byte safe_addr_lo;
 
 byte safe_addr_hi;
 
-
-
 //get low byte of register/RAM address
 
 safe_addr_lo=(byte)safe_addr;
@@ -1002,13 +944,9 @@ safe_addr_lo=(byte)safe_addr;
 
 safe_addr_hi=(byte)(safe_addr&gt;&gt;8);
 
-
-
 byte param_addr_lo;
 
 byte param_addr_hi;
-
-
 
 //get low byte of parameter address
 
@@ -1018,23 +956,17 @@ param_addr_lo=(byte)param_addr;
 
 param_addr_hi=(byte)(param_addr&gt;&gt;8);
 
-
-
 SPI_TX_REG = 0x00; // Write to DSP at chip address 0
 
 SPI_TX_REG = safe_addr_hi; //Write high byte of safeload address
 
 SPI_TX_REG = safe_addr_lo; //Write low byte of safeload address
 
-
-
 SPI_TX_REG = param_addr_hi; //Write high byte of parameter address
 
 SPI_TX_REG = param_addr_lo; //Write low byte of parameter address
 
 }
-
-
 
 //Microcontroller Code - functions, Safeload: SafeParam
 
@@ -1046,8 +978,6 @@ byte safe_param_lo;
 
 byte safe_param_hi;
 
-
-
 //get low byte of register/RAM address
 
 safe_param_lo=(byte)safe_param;
@@ -1056,15 +986,11 @@ safe_param_lo=(byte)safe_param;
 
 safe_param_hi=(byte)(safe_param&gt;&gt;8);
 
-
-
 SPI_TX_REG = 0x00; //Write to DSP at chip address 0
 
 SPI_TX_REG = safe_param_hi; //Write high byte of Safeload address
 
 SPI_TX_REG = safe_param_lo; //Write low byte of Safeload address
-
-
 
 SPI_TX_REG = param_data[4]; //Write parameter byte 4 (MSBs)
 
@@ -1078,11 +1004,7 @@ SPI_TX_REG = param_data[0]; //Write parameter byte 1 (LSBs)
 
 }
 
-
-
 // Note: SafeParam and SafeAddr must be executed together.
-
-
 
 // Microcontroller code - functions: convert a float number to 5.23 format
 
@@ -1094,8 +1016,6 @@ long param223;
 
 long param227;
 
-
-
 //multiply decimal number by 2^23
 
 param223 = param_dec * (1 &lt;&lt; 23);
@@ -1103,8 +1023,6 @@ param223 = param_dec * (1 &lt;&lt; 23);
 //convert to positive binary
 
 param227 = param223 + (1 &lt;&lt; 27);
-
-
 
 param_hex[3]=(byte)param227;  //get byte 3 (LSBs) of parameter value
 

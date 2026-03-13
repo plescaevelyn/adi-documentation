@@ -596,18 +596,36 @@ Content on this topic
             
   <section id="daq2-hdl-project-for-altera">
 <h1>DAQ2 HDL Project for Altera<a class="headerlink" href="#daq2-hdl-project-for-altera" title="Link to this heading"></a></h1>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcdaq2-ebz/daq2_altera.svg"><img alt="Altera HDL Block Diagram" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcdaq2-ebz/daq2_altera.svg" style="width: 800px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcdaq2-ebz/daq2_altera.svg"><img alt="Altera HDL Block Diagram" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcdaq2-ebz/daq2_altera.svg" width="800" />
 </a>
-<p>The reference design is a processor based embedded system. The sources are split into three different folders:</p>
+<p>The reference design is a processor based embedded system. The sources are split
+into three different folders:</p>
 <ul class="simple">
 <li><p>base design for the carrier board, <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/common" target="_blank">/projects/common</a> where all generic peripherals are instantiated. Here we do most of the PS8 configuration, add SPI, I2C and GPIOs. In some cases, we have scripts to instantiate also the PL DDR as ADC offload memory or DAC offload memory</p></li>
 <li><p>base design for the evaluation board, <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/daq2/common" target="_blank">/projects/daq2/common</a>, where all the IPs to control the DAQ2 evaluation board are instantiated, in a way in which it can be integrated with most of the carriers that we support</p></li>
 <li><p>specific design for the project, in our case the A10SOC <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/daq2/a10soc" target="_blank">/projects/daq2/a10soc</a>. Here, we source the carrier board configuration, then the evaluation board configuration and then we do some specific parameter modification, if required. In this folder, the constraints and <code class="docutils literal notranslate"><span class="pre">system_top.v</span></code> are also defined.</p></li>
 </ul>
-<p>The reference design is a processor based (ARM or Nios2) embedded system. A functional block diagram of the system is given above. The shared transceivers are followed by the individual JESD204B and ADC/DAC IP cores. The cores are programmable through an AXI-lite interface.</p>
-<p>The digital interface consists of 4 transmit and 4 receive lanes running at 10Gbps, by default. The transceivers interface the ADC/DAC cores at <a class="reference external" href="mailto:128bits&#37;&#52;&#48;250MHz">128bits<span>&#64;</span>250MHz</a>. The data is sent or received based on the configuration of separate transmit and receive chains.</p>
-<p>When using Qsys, implementing JESD204B protocol requires several IPs. AVL_XCVR is a wrapper which instantiates all the required IPs and configures them according to the desired data rate. One AVL_XCVR must be instantiated for the transmit path and one for the receive path. It adds clock bridges, PLL and reconfiguration IP, proper reset, lane PLL for the transmit path, a JESD204B IP instantiating the JESD204B base and a JESD204B IP for each lane instantiating the PHY.</p>
-<p>One important aspect for AD-FMCDAQ2-EBZ is that the reference clock needed for the FPGA transceiver calibration is generated only after the AD9523-1 clock generator is configured The programming is done only after the FPGA is configured and software is running. Because of this, the software needs to perform a transceiver re-calibration after the transceiver reference clock is stable and before taking AXI_XCVR cores out of reset.</p>
+<p>The reference design is a processor based (ARM or Nios2) embedded system. A
+functional block diagram of the system is given above. The shared transceivers
+are followed by the individual JESD204B and ADC/DAC IP cores. The cores are
+programmable through an AXI-lite interface.</p>
+<p>The digital interface consists of 4 transmit and 4 receive lanes running at
+10Gbps, by default. The transceivers interface the ADC/DAC cores at
+<a class="reference external" href="mailto:128bits&#37;&#52;&#48;250MHz">128bits<span>&#64;</span>250MHz</a>. The data is sent or received based on the configuration of
+separate transmit and receive chains.</p>
+<p>When using Qsys, implementing JESD204B protocol requires several IPs. AVL_XCVR
+is a wrapper which instantiates all the required IPs and configures them
+according to the desired data rate. One AVL_XCVR must be instantiated for the
+transmit path and one for the receive path. It adds clock bridges, PLL and
+reconfiguration IP, proper reset, lane PLL for the transmit path, a JESD204B IP
+instantiating the JESD204B base and a JESD204B IP for each lane instantiating
+the PHY.</p>
+<p>One important aspect for AD-FMCDAQ2-EBZ is that the reference clock needed for
+the FPGA transceiver calibration is generated only after the AD9523-1 clock
+generator is configured The programming is done only after the FPGA is
+configured and software is running. Because of this, the software needs to
+perform a transceiver re-calibration after the transceiver reference clock is
+stable and before taking AXI_XCVR cores out of reset.</p>
 <section id="project-flow">
 <h2>Project Flow<a class="headerlink" href="#project-flow" title="Link to this heading"></a></h2>
 <p>The entry point for project creation is <code class="docutils literal notranslate"><span class="pre">system_project.tcl</span></code>. Some support scripts are first loaded then the project is created. Based on the suffix of the project, the carrier board is automatically detected. The constraint files and custom modules instantiated directly in the system_top module must be added to the project files list.</p>
@@ -628,7 +646,8 @@ Content on this topic
 <span class="nv">execute_flow</span><span class="w"> </span><span class="o">-</span>compile
 </pre></div>
 </div>
-<p>Because transceiver sharing is used in this design, explicit assignments are needed.</p>
+<p>Because transceiver sharing is used in this design, explicit assignments are
+needed.</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="c"># Merge RX and TX into single transceiver</span>
 <span class="k">for</span><span class="w"> </span><span class="k">{set</span><span class="w"> </span>i<span class="w"> </span><span class="mi">0</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">$i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nv">4</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nb">incr</span><span class="w"> </span>i<span class="k">}</span><span class="w"> </span><span class="k">{</span>
 <span class="w">  </span><span class="nv">set_instance_assignment</span><span class="w"> </span><span class="o">-</span>name<span class="w"> </span>XCVR_RECONFIG_GROUP<span class="w"> </span>xcvr_<span class="nv">${i}</span><span class="w"> </span><span class="o">-</span>to<span class="w"> </span>rx_serial_data<span class="k">[</span><span class="nv">${i}</span><span class="k">]</span>
@@ -647,7 +666,8 @@ Content on this topic
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span><span class="o">/</span>projects<span class="o">/</span>common<span class="o">/</span>a10soc<span class="o">/</span>a10soc_system_qsys.tcl
 </pre></div>
 </div>
-<p>If ADC/DAC FIFOs implemented in the PL DDR will be used in the system, the corresponding tcl file must be sourced.</p>
+<p>If ADC/DAC FIFOs implemented in the PL DDR will be used in the system, the
+corresponding tcl file must be sourced.</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span><span class="o">/</span>projects<span class="o">/</span>common<span class="o">/</span>a10soc<span class="o">/</span>a10soc_plddr4_dacfifo_qsys.tcl
 </pre></div>
 </div>
@@ -660,7 +680,11 @@ Content on this topic
 <h2>DAQ2 Design<a class="headerlink" href="#daq2-design" title="Link to this heading"></a></h2>
 <section id="physical-data-link-layer">
 <h3>Physical/Data Link Layer<a class="headerlink" href="#physical-data-link-layer" title="Link to this heading"></a></h3>
-<p>The ADI_JESD204 IP is a wrapper which instantiates all the submodules implementing the physical and data Link layers. It covers all internal clock and reset generation for the transceivers. For some FPGAs, the HARD PCS componend doesn’t run at maximum speeds, so a SOFT_PCS implementation is available. If lane swapping is required, it can be selected as a parameter.</p>
+<p>The ADI_JESD204 IP is a wrapper which instantiates all the submodules
+implementing the physical and data Link layers. It covers all internal clock and
+reset generation for the transceivers. For some FPGAs, the HARD PCS componend
+doesn’t run at maximum speeds, so a SOFT_PCS implementation is available. If
+lane swapping is required, it can be selected as a parameter.</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">add_instance</span><span class="w"> </span>ad9144_jesd204<span class="w"> </span>adi_jesd204
 <span class="nv">set_instance_parameter_value</span><span class="w"> </span>ad9144_jesd204<span class="w"> </span><span class="k">{</span><span class="nv">ID</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">0</span><span class="k">}</span>
 <span class="nv">set_instance_parameter_value</span><span class="w"> </span>ad9144_jesd204<span class="w"> </span><span class="k">{</span><span class="nv">TX_OR_RX_N</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">1</span><span class="k">}</span>
@@ -706,7 +730,9 @@ Content on this topic
 </section>
 <section id="transport-layer">
 <h3>Transport Layer<a class="headerlink" href="#transport-layer" title="Link to this heading"></a></h3>
-<p>The transport layer peripherals are responsible for converter specific data framing and de-framing and provide a generic FIFO interface to the rest of the system.</p>
+<p>The transport layer peripherals are responsible for converter specific data
+framing and de-framing and provide a generic FIFO interface to the rest of the
+system.</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">add_instance</span><span class="w"> </span>axi_ad9144_core<span class="w"> </span>axi_ad9144
 <span class="nv">set_instance_parameter_value</span><span class="w"> </span>axi_ad9144_core<span class="w"> </span><span class="k">{</span><span class="nv">QUAD_OR_DUAL_N</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">0</span><span class="k">}</span>
 
@@ -727,7 +753,12 @@ Content on this topic
 </section>
 <section id="additional-ips">
 <h3>Additional IPs<a class="headerlink" href="#additional-ips" title="Link to this heading"></a></h3>
-<p>For a complete system, we use additional modules to transfer data. The transport layer transfers data continuously from/to the ADC/DAC. CPACK/Upack will only send the enabled channels to the DMA which in turn will transfer it to the system memory. Depending on system specifics, data offload FIFOs may be inserted between upack/cpack and the DMA. When a FIFO is used, the DMA connection to the DDR can run at a lower speed, as data capture cannot be done continuously.</p>
+<p>For a complete system, we use additional modules to transfer data. The transport
+layer transfers data continuously from/to the ADC/DAC. CPACK/Upack will only
+send the enabled channels to the DMA which in turn will transfer it to the
+system memory. Depending on system specifics, data offload FIFOs may be inserted
+between upack/cpack and the DMA. When a FIFO is used, the DMA connection to the
+DDR can run at a lower speed, as data capture cannot be done continuously.</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">add_instance</span><span class="w"> </span>util_ad9144_upack<span class="w"> </span>util_upack
 <span class="nv">set_instance_parameter_value</span><span class="w"> </span>util_ad9144_upack<span class="w"> </span><span class="k">{</span><span class="nv">CHANNEL_DATA_WIDTH</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">64</span><span class="k">}</span>
 <span class="nv">set_instance_parameter_value</span><span class="w"> </span>util_ad9144_upack<span class="w"> </span><span class="k">{</span><span class="nv">NUM_OF_CHANNELS</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">2</span><span class="k">}</span>
@@ -817,7 +848,8 @@ Content on this topic
 </section>
 <section id="transceiver-reconfiguration">
 <h3>Transceiver Reconfiguration<a class="headerlink" href="#transceiver-reconfiguration" title="Link to this heading"></a></h3>
-<p>Reconfiguration IP for all the transceiver channels. Channels have a TX port and an RX port, which may affect each other when reconfiguration is performed.</p>
+<p>Reconfiguration IP for all the transceiver channels. Channels have a TX port and
+an RX port, which may affect each other when reconfiguration is performed.</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">for</span><span class="w"> </span><span class="k">{set</span><span class="w"> </span>i<span class="w"> </span><span class="mi">0</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">$i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nv">4</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nb">incr</span><span class="w"> </span>i<span class="k">}</span><span class="w"> </span><span class="k">{</span>
 <span class="w">  </span><span class="nv">add_instance</span><span class="w"> </span>avl_adxcfg_<span class="nv">${i}</span><span class="w"> </span>avl_adxcfg
 <span class="w">  </span><span class="nv">add_connection</span><span class="w"> </span>sys_clk.clk<span class="w"> </span>avl_adxcfg_<span class="nv">${i}</span>.rcfg_clk

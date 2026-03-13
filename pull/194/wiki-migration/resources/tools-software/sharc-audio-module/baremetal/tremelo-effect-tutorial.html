@@ -593,20 +593,25 @@ Content on this topic
 <p>Using the <a class="reference internal" href="project-wizard.html"><span class="doc">bare metal project wizard</span></a>:</p>
 <ul class="simple">
 <li><p>Give the project a meaningful name, click Next</p></li>
-<li><p>Choose the Audio Project Fin on the Expansion Fin Selection Page because it is required for part of the tutorial, click Finish</p></li>
+<li><p>Choose the Audio Project Fin on the Expansion Fin Selection Page because it
+is required for part of the tutorial, click Finish</p></li>
 </ul>
 <p><strong>No other options need to be changed.</strong></p>
 </section>
 <section id="tutorial-overview">
 <h2>Tutorial Overview<a class="headerlink" href="#tutorial-overview" title="Link to this heading"></a></h2>
-<p>A tremolo is a classic audio effect whereby we modulate the volume, or amplitude, of our audio signal using an oscillator. Here’s a nice explanation of how the tremolo effect works and its various parameters.</p>
+<p>A tremolo is a classic audio effect whereby we modulate the volume, or
+amplitude, of our audio signal using an oscillator. Here’s a nice explanation of
+how the tremolo effect works and its various parameters.</p>
 <img alt="youtube&gt;oOCNB1izw8A" src="https://wiki.analog.com/_media/resources/tools-software/sharc-audio-module/baremetal/youtube&gt;oocnb1izw8a" />
-<p>In this tutorial, we’re going to start by building a basic tremolo effect. We’ll then add a few additional bells and whistles.</p>
+<p>In this tutorial, we’re going to start by building a basic tremolo effect. We’ll
+then add a few additional bells and whistles.</p>
 <p>Just like last time, we’ll be working in the <code class="docutils literal notranslate"><span class="pre">callback_audio_processing.cpp</span></code> file. We can implement this code either on SHARC core 1 or SHARC core 2.</p>
 </section>
 <section id="basic-tremolo-with-fixed-parameters">
 <h2>Basic Tremolo with Fixed Parameters<a class="headerlink" href="#basic-tremolo-with-fixed-parameters" title="Link to this heading"></a></h2>
-<p>To begin, we’ll build a tremolo effect that relies on fixed parameters just like we did with volume.</p>
+<p>To begin, we’ll build a tremolo effect that relies on fixed parameters just like
+we did with volume.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma optimize_for_speed</span>
 <span class="kt">void</span><span class="w"> </span><span class="nf">processaudio_callback</span><span class="p">(</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 
@@ -636,7 +641,11 @@ Content on this topic
 </section>
 <section id="controlling-the-tremolo-parameters-with-pots-on-the-audio-project-fin">
 <h2>Controlling the Tremolo Parameters with Pots on the Audio Project Fin<a class="headerlink" href="#controlling-the-tremolo-parameters-with-pots-on-the-audio-project-fin" title="Link to this heading"></a></h2>
-<p>Now we will map the HADC0 pot to our rate parameter and the HADC1 pot to our depth parameter. We don’t want our rate to drop down to 0.0 since we’d effectively be multiplying our audio by a constant value at some point along the sine wave we’re using to modulate. So we’ll map the HADC0 input from a value of 0.1 to 1.0 rather than 0.0 to 1.0.</p>
+<p>Now we will map the HADC0 pot to our rate parameter and the HADC1 pot to our
+depth parameter. We don’t want our rate to drop down to 0.0 since we’d
+effectively be multiplying our audio by a constant value at some point along the
+sine wave we’re using to modulate. So we’ll map the HADC0 input from a value of
+0.1 to 1.0 rather than 0.0 to 1.0.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma optimize_for_speed</span>
 <span class="kt">void</span><span class="w"> </span><span class="nf">processaudio_callback</span><span class="p">(</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 
@@ -713,8 +722,11 @@ Content on this topic
 </section>
 <section id="using-sw2-on-the-audio-project-fin-to-set-the-tremolo-rate">
 <h2>Using SW2 on the Audio Project Fin to Set the Tremolo Rate<a class="headerlink" href="#using-sw2-on-the-audio-project-fin-to-set-the-tremolo-rate" title="Link to this heading"></a></h2>
-<p>Some more advanced tremolo pedals allow you to repeatedly tap a button at the desired tempo or rate of the effect. We’ll use SW2 to allow the user to set the rate of the tremolo by tapping SW2 at the desired tempo.</p>
-<p>To do this, we’ll add some code to our background loop. This loop is called repeatedly when we’re not in the processaudio_callback routine.</p>
+<p>Some more advanced tremolo pedals allow you to repeatedly tap a button at the
+desired tempo or rate of the effect. We’ll use SW2 to allow the user to set the
+rate of the tremolo by tapping SW2 at the desired tempo.</p>
+<p>To do this, we’ll add some code to our background loop. This loop is called
+repeatedly when we’re not in the processaudio_callback routine.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">processaudio_background_loop</span><span class="p">(</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 
 <span class="w">    </span><span class="c1">// ******************</span>

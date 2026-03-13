@@ -592,7 +592,9 @@ Content on this topic
 <section id="theory-of-operation">
 <h2>Theory of Operation<a class="headerlink" href="#theory-of-operation" title="Link to this heading"></a></h2>
 <p>The AD9361 transceiver has no built-in functionality to provide phase synchronization, but through external equipment and additional software and HDL phase alignment can be achieved across multiple transceiver chips. The calibration process is documented on this <a class="reference internal" href="multi-chip-sync.html"><span class="doc">wiki page</span></a> and as well in this <a class="icon link reference external" href="https://wiki.analog.com/_media/resources/tools-software/linux-software/doa_whitepaper.pdf" target="_blank">whitepage</a> in the “Phase Alignment” discussion.</p>
-<p>The calibration procedures are implemented in both IIO-Scope and in a C library libad9361. It can be useful to see how they are implemented, or if end-users want additional debug to be extracted start at the following linked lines:</p>
+<p>The calibration procedures are implemented in both IIO-Scope and in a C library
+libad9361. It can be useful to see how they are implemented, or if end-users
+want additional debug to be extracted start at the following linked lines:</p>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/iio-oscilloscope/tree/main/plugins/fmcomms2_adv.c#L830" target="_blank">IIO-Scope</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/libad9361-iio/tree/main/ad9361_fmcomms5_phase_sync.c#L507" target="_blank">libad9361</a></p></li>
@@ -601,51 +603,84 @@ Content on this topic
 </section>
 <section id="external-lo-adf5355-vs-internal-lo-generation">
 <h2>External LO (ADF5355) vs Internal LO Generation<a class="headerlink" href="#external-lo-adf5355-vs-internal-lo-generation" title="Link to this heading"></a></h2>
-<p>The AD9361 has no mechanism to phase align multiple transceivers together, even when using an external LO. When using the internal LOs multiple transceivers will have a random phase relationship, which will change when LO is changed, sample rate is changed, gain (in some cases) is changed, and even during quadrature tracking. When an external LO is used, like with the ADF5355 on the FMComms5 development system, the transceiver still will have a random phase relation, but it is limited to an 0 or 180 degree offset. This offset is due to the input divider on the external LO input pins and cannot be bypassed. This phase relationship is randomized when the transceivers are power cycled or the power of the external LO is reduced to a certain point. This can happen even with an unmuted ADF5355 during large frequency changes.</p>
+<p>The AD9361 has no mechanism to phase align multiple transceivers together, even
+when using an external LO. When using the internal LOs multiple transceivers
+will have a random phase relationship, which will change when LO is changed,
+sample rate is changed, gain (in some cases) is changed, and even during
+quadrature tracking. When an external LO is used, like with the ADF5355 on the
+FMComms5 development system, the transceiver still will have a random phase
+relation, but it is limited to an 0 or 180 degree offset. This offset is due to
+the input divider on the external LO input pins and cannot be bypassed. This
+phase relationship is randomized when the transceivers are power cycled or the
+power of the external LO is reduced to a certain point. This can happen even
+with an unmuted ADF5355 during large frequency changes.</p>
 </section>
 <section id="iio-scope-example-implementation">
 <h2>IIO-Scope Example Implementation<a class="headerlink" href="#iio-scope-example-implementation" title="Link to this heading"></a></h2>
-<p>For Rev-A and Rev-B FMComms5 boards, low LOs are recommended due to severe attenuation from onboard RF switches used for calibration above 1 GHz. Be aware on Rev-B and earlier, traces from the transceivers to the SMA connectors are not matched. This can cause residual phase ambiguity depending on LO frequency and tolerances required.</p>
-<p>The following example assumes the board is brought up in the standard configuration used by the driver. To guarantee this make sure IIO-Scope profiles have been removed from the board. Close IIO-Scope on the development system and removed the profile with command:</p>
+<p>For Rev-A and Rev-B FMComms5 boards, low LOs are recommended due to severe
+attenuation from onboard RF switches used for calibration above 1 GHz. Be aware
+on Rev-B and earlier, traces from the transceivers to the SMA connectors are not
+matched. This can cause residual phase ambiguity depending on LO frequency and
+tolerances required.</p>
+<p>The following example assumes the board is brought up in the standard
+configuration used by the driver. To guarantee this make sure IIO-Scope profiles
+have been removed from the board. Close IIO-Scope on the development system and
+removed the profile with command:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rm</span> <span class="o">~/.</span><span class="n">osc_profile</span><span class="o">.</span><span class="n">ini</span>
 </pre></div>
 </div>
 <p>Then reboot the board.</p>
-<p>On your host machine, run the same command as above for Linux and on Windows remove the same file from:</p>
+<p>On your host machine, run the same command as above for Linux and on Windows
+remove the same file from:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C</span><span class="p">:</span>\<span class="n">Users</span>\<span class="o">&lt;</span><span class="n">username</span><span class="o">&gt;</span>\<span class="n">AppData</span>\<span class="n">Local</span>
 </pre></div>
 </div>
-<p>Close IIO-Scope and reopen it once the board it booted. To verify the default configuration, the sample rate should be at 30.72 MSPS with RF Bandwidth 18.00 MHz. All LOs should be at 2.4 GHz by default.</p>
+<p>Close IIO-Scope and reopen it once the board it booted. To verify the default
+configuration, the sample rate should be at 30.72 MSPS with RF Bandwidth 18.00
+MHz. All LOs should be at 2.4 GHz by default.</p>
 <p>To calibrate FMComms5, perform the following within IIO-Scope:</p>
 <ul class="simple">
 <li><p>From the FMComms5 panel, match all LOs to the same frequency for all four datapaths</p></li>
 <li><p>Disable all receiver trackings: Quadrature, RF DC, and BB DC</p></li>
 <li><p>Put all receivers into <strong>manual</strong> Gain Control Mode</p></li>
-<li><p>Set manual hardware gains for all receivers to the same level within a reasonable range. With loopback cables connecting RX and TX and DDSs set to -18 dB RSSI should be ~37-43 dB. You should have something similar to the below figure.</p></li>
+<li><p>Set manual hardware gains for all receivers to the same level within a
+reasonable range. With loopback cables connecting RX and TX and DDSs set to
+-18 dB RSSI should be ~37-43 dB. You should have something similar to the
+below figure.</p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-software/screenshot_20190530_143140.png"><img alt="Example Configuration" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-software/screenshot_20190530_143140.png" style="width: 1000px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-software/screenshot_20190530_143140.png"><img alt="Example Configuration" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-software/screenshot_20190530_143140.png" width="1000" />
 </a>
 <ul class="simple">
 <li><p>From the FMComms2/3/4/5 Advanced (or AD936X Advanced) panel, select the FMComms5 tab. From here click the “Reset Calibration” button</p></li>
 <li><p>Click the “MCS Sync” button at the bottom</p></li>
 <li><p>Click the “Calibrate” button which will launch the procedure</p></li>
-<li><p>To maintain minimal ambiguity over time disable Quadrature tracking again in the FMComms5 panel</p></li>
+<li><p>To maintain minimal ambiguity over time disable Quadrature tracking again in
+the FMComms5 panel</p></li>
 </ul>
-<p>Once this completes, the DDSs used for calibration will remain on. To view the relative sync, you can open a capture window to view received data on the SMA connected receivers. The figure below was created with a FMComms5 configuration with a matched splitter feeding into 3 channels driven by a single receiver. SMA 4 was left disconnected. Standard SMA cables were used, not matched length cables which will provide better performance.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/linux-software/screenshot_20190530_141142.png"><img alt="image1" src="https://wiki.analog.com/_media/resources/tools-software/linux-software/screenshot_20190530_141142.png" style="width: 1000px;" /></a></p>
+<p>Once this completes, the DDSs used for calibration will remain on. To view the
+relative sync, you can open a capture window to view received data on the SMA
+connected receivers. The figure below was created with a FMComms5 configuration
+with a matched splitter feeding into 3 channels driven by a single receiver. SMA
+4 was left disconnected. Standard SMA cables were used, not matched length
+cables which will provide better performance.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/linux-software/screenshot_20190530_141142.png"><img alt="image1" src="https://wiki.analog.com/_media/resources/tools-software/linux-software/screenshot_20190530_141142.png" width="1000" /></a></p>
 </section>
 <section id="libad9361-example-implementation">
 <h2>libad9361 Example Implementation<a class="headerlink" href="#libad9361-example-implementation" title="Link to this heading"></a></h2>
 </section>
 <section id="trace-differences">
 <h2>Trace Differences<a class="headerlink" href="#trace-differences" title="Link to this heading"></a></h2>
-<p>On Rev-A and Rev-B boards there are trace differences to the SMA which can cause phase rotation. This rotation will be based on the operation frequency of the LO unless you sample rate is close to the LO. We can calculate the theoretical phase for what the maximum phase shift will be depending on your LO with the following equation:</p>
+<p>On Rev-A and Rev-B boards there are trace differences to the SMA which can cause
+phase rotation. This rotation will be based on the operation frequency of the LO
+unless you sample rate is close to the LO. We can calculate the theoretical
+phase for what the maximum phase shift will be depending on your LO with the
+following equation:</p>
 <div class="math-wrapper docutils container">
 <div class="math notranslate nohighlight">
 \[\phi = 360 \times D \times f/c\]</div>
 </div>
 <p>where <span class="math notranslate nohighlight">\(\phi\)</span> is the phase difference in degrees, <span class="math notranslate nohighlight">\(D\)</span> is the distance in meters, <span class="math notranslate nohighlight">\(f\)</span> is the frequency in hertz, and <span class="math notranslate nohighlight">\(c\)</span> is the speed of light through a specific medium in meters per second. For FMComms5 <span class="math notranslate nohighlight">\(c=15 cm/nsec\)</span> which is in reference to FR4. Grab the <a class="reference internal" href="hardware.html"><span class="doc">board files</span></a> for your specific revision to get the actual trace lengths for specific channels, which will determine <span class="math notranslate nohighlight">\(D\)</span> . Below is a plot of possible offsets across frequency and trace distance deltas.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/linux-software/phasediff.png"><img alt="Phase difference over frequency and distance" src="https://wiki.analog.com/_media/resources/tools-software/linux-software/phasediff.png" style="width: 600px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/linux-software/phasediff.png"><img alt="Phase difference over frequency and distance" src="https://wiki.analog.com/_media/resources/tools-software/linux-software/phasediff.png" width="600" /></a></p>
 <p>MATLAB code for plot</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dmils</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mf">0.01</span><span class="p">:</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="s1">&#39;;</span>
 <span class="n">meters</span> <span class="o">=</span> <span class="n">dmils</span>\<span class="o">*</span><span class="mf">2.54e-5</span><span class="p">;</span>
@@ -674,7 +709,8 @@ Content on this topic
 </section>
 <section id="phase-performance-rev-b-vs-rev-c">
 <h2>Phase Performance: Rev B vs. Rev C<a class="headerlink" href="#phase-performance-rev-b-vs-rev-c" title="Link to this heading"></a></h2>
-<p>Phase performance across frequency of phase difference with channel 1 as reference. Note that matched cables were not used resulting in phase biasing.</p>
+<p>Phase performance across frequency of phase difference with channel 1 as
+reference. Note that matched cables were not used resulting in phase biasing.</p>
 <p>Internal LO Rev B</p>
 <img alt="Rev B Internal LO" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-software/fm5_phase_performance_rev_b.svg" />
 <p>Internal LO Rev C</p>

@@ -595,7 +595,11 @@ Content on this topic
 <p class="admonition-title">Important</p>
 <p>We are in the process of migrating our documentation to GitHubIO. This page is outdated and the new one can be found at <a class="icon link reference external" href="https://analogdevicesinc.github.io/hdl/library/util_axis_fifo_asym/index.html" target="_blank">https://analogdevicesinc.github.io/hdl/library/util_axis_fifo_asym/index.html</a></p>
 </div>
-<p>The util_axis_fifo_asym IP core is a simple FIFO (First Input First Output) with AXI streaming interfaces, supporting synchronous and asynchronous operation modes with an asymmetric data width on its salve and master interface. It can be used to mitigate data width differences or transfer an AXI stream to a different clock domain.</p>
+<p>The util_axis_fifo_asym IP core is a simple FIFO (First Input First Output) with
+AXI streaming interfaces, supporting synchronous and asynchronous operation
+modes with an asymmetric data width on its salve and master interface. It can be
+used to mitigate data width differences or transfer an AXI stream to a different
+clock domain.</p>
 <section id="features">
 <h2>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
 <ul class="simple">
@@ -629,24 +633,36 @@ localparam A_ALMOST_EMPTY_THRESHOLD = (RATIO_TYPE) ? (ALMOST_EMPTY_THRESHOLD/RAT
 <h3>Status signal delays<a class="headerlink" href="#status-signal-delays" title="Link to this heading"></a></h3>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>In case of asynchronous mode, because of the delays introduced by the clock domain crossing logic, the ROOM and LEVEL indicators can not reflect the actual state of the FIFO in real time. Source and destination logic should take this into account when controlling the data stream into and from the FIFO. Carefully adjusting the ALMOST_EMPTY/ALMOST_FULL indicators can provide a save operating margin.</p>
+<p>In case of asynchronous mode, because of the delays introduced by the clock
+domain crossing logic, the ROOM and LEVEL indicators can not reflect the
+actual state of the FIFO in real time. Source and destination logic should
+take this into account when controlling the data stream into and from the
+FIFO. Carefully adjusting the ALMOST_EMPTY/ALMOST_FULL indicators can provide
+a save operating margin.</p>
 </div>
-<p>The FIFO has three different status indicator ports on both side, which provides information about the state of the FIFO for both the source and destination logic:</p>
+<p>The FIFO has three different status indicator ports on both side, which provides
+information about the state of the FIFO for both the source and destination
+logic:</p>
 <ul class="simple">
 <li><p>FULL or EMPTY - If these outputs are asserted the FIFO is full or empty. In case of a full FIFO all the write operations are suspended. In case of an empty FIFO all the read operations are suspended.</p></li>
 <li><p>ALMOST_EMPTY/ALMOST_FULL - It can be used to foresee a potential FULL or EMPTY state, asserting before the EMPTY/FULL before a predefined number of word. The offset between ALMOST_EMPTY and EMPTY, and between ALMOST_FULL and FULL can be set by using the parameters ALMOST_EMPTY_THRESHOLD and ALMOST_FULL_THRESHOLD. The offset values are automatically adjusted according to M_DATA_WIDTH and S_DATA_WIDTH ratio.</p></li>
 <li><p>S_AXIS_ROOM - Indicate how many word can be written in the FIFO at the current moment, until the FIFO become FULL.</p></li>
-<li><p>M_AXIS_LEVEL - Indicate how many word can be read from the FIFO at the current moment, until the FIFO become EMPTY.</p></li>
+<li><p>M_AXIS_LEVEL - Indicate how many word can be read from the FIFO at the
+current moment, until the FIFO become EMPTY.</p></li>
 </ul>
 </section>
 <section id="fifo-depth-calculation">
 <h3>FIFO Depth Calculation<a class="headerlink" href="#fifo-depth-calculation" title="Link to this heading"></a></h3>
-<p>The FIFO Depth is calculated based on parameters M_DATA_WIDTH, S_DATA_WIDTH, ADDRESS_WIDTH, FIFO_LIMITED and ADDRESS_WIDTH_PERSPECTIVE:</p>
+<p>The FIFO Depth is calculated based on parameters M_DATA_WIDTH, S_DATA_WIDTH,
+ADDRESS_WIDTH, FIFO_LIMITED and ADDRESS_WIDTH_PERSPECTIVE:</p>
 <ul class="simple">
 <li><p>ADDRESS_WIDTH_PERSPECTIVE is 1 and FIFO_LIMITED is 1 - This means that the address specified is from the perspective of the Master interface. Since the limit is enabled the FIFO size will be reduced if the S_DATA_WIDTH is &gt; M_DATA_WIDTH, leading to a smaller FIFO implementation.</p></li>
 <li><p>ADDRESS_WIDTH_PERSPECTIVE is 1 and FIFO_LIMITED is 0 - This means that the address specified is from the perspective of the Master interface. Since the limit is disable the FIFO size will remain the same if the S_DATA_WIDTH is &gt; M_DATA_WIDTH, leading to a bigger FIFO implementation.</p></li>
 <li><p>ADDRESS_WIDTH_PERSPECTIVE is 0 and FIFO_LIMITED is 1 - This means that the address specified is from the perspective of the Slave interface. Since the limit is enabled the FIFO size will be reduced if the S_DATA_WIDTH is &lt; M_DATA_WIDTH, leading to a smaller FIFO implementation.</p></li>
-<li><p>ADDRESS_WIDTH_PERSPECTIVE is 0 and FIFO_LIMITED is 0 - This means that the address specified is from the perspective of the Slave interface. Since the limit is disable the FIFO size will remain the same if the S_DATA_WIDTH is &lt; M_DATA_WIDTH, leading to a bigger FIFO implementation.</p></li>
+<li><p>ADDRESS_WIDTH_PERSPECTIVE is 0 and FIFO_LIMITED is 0 - This means that the
+address specified is from the perspective of the Slave interface. Since the
+limit is disable the FIFO size will remain the same if the S_DATA_WIDTH is &lt;
+M_DATA_WIDTH, leading to a bigger FIFO implementation.</p></li>
 </ul>
 </section>
 </section>

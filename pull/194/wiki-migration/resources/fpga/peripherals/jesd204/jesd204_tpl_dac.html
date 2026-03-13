@@ -804,15 +804,20 @@ Content on this topic
 <p>We are in the process of migrating our documentation to GitHubIO. This page is outdated and the new one can be found at <a class="icon link reference external" href="https://analogdevicesinc.github.io/hdl/library/jesd204/ad_ip_jesd204_tpl_dac/index.html" target="_blank">https://analogdevicesinc.github.io/hdl/library/jesd204/ad_ip_jesd204_tpl_dac/index.html</a></p>
 </div>
 <p>The DAC JESD204B/C Transport Peripheral (AD-IP-JESD204-TRANSPORT-DAC) implements the transport level handling of a JESD204B/C transmitter device. It is compatible with a <a class="icon link reference external" href="https://wiki.analog.com/" target="_blank">wide range of Analog Devices high-speed digital-to-analog converters</a>.</p>
-<p>The core handles the JESD204B/C framing of the user-provided payload data. In addition it is capable of generating standard and user-defined test-pattern data for interface verification. It also features a per-channel dual-tone DDS that can be used to dynamically generate test-tones.</p>
-<p>The peripheral can be configured at runtime through a AXI4-Lite memory mapped register map.</p>
+<p>The core handles the JESD204B/C framing of the user-provided payload data. In
+addition it is capable of generating standard and user-defined test-pattern data
+for interface verification. It also features a per-channel dual-tone DDS that
+can be used to dynamically generate test-tones.</p>
+<p>The peripheral can be configured at runtime through a AXI4-Lite memory mapped
+register map.</p>
 <section id="features">
 <h2>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>ADI high-speed DAC compatible JESD204B/C data framing</p></li>
 <li><p>Test-pattern generator for interface verification</p></li>
 <li><p>Per-channel dual-tone DDS (optional)</p></li>
-<li><p>Runtime re-configurability through memory-mapped register interface (AXI4-Lite)</p></li>
+<li><p>Runtime re-configurability through memory-mapped register interface
+(AXI4-Lite)</p></li>
 </ul>
 </section>
 <section id="files">
@@ -43160,13 +43165,16 @@ Valid for 64b66b encoder.</p></td>
 <h3>Interfaces and Signals<a class="headerlink" href="#interfaces-and-signals" title="Link to this heading"></a></h3>
 <section id="application-layer-interface">
 <h4>Application layer interface<a class="headerlink" href="#application-layer-interface" title="Link to this heading"></a></h4>
-<p>The application layer connects to the framer block when the DMA source is selected. The framer module takes sample data and maps it onto the format that the JESD204 link expects for the specified framer configuration.</p>
+<p>The application layer connects to the framer block when the DMA source is
+selected. The framer module takes sample data and maps it onto the format that
+the JESD204 link expects for the specified framer configuration.</p>
 <p>The data in the application layer interface <code class="docutils literal notranslate"><span class="pre">dac_ddata</span></code> is expected to have the following layout:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">MSB</span>                                                                  <span class="n">LSB</span>
 <span class="p">[</span> <span class="n">MmSn</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="n">MmS1</span><span class="p">,</span> <span class="n">MnS0</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="n">M1Sn</span><span class="p">,</span> <span class="o">...</span> <span class="n">M1S1</span><span class="p">,</span> <span class="n">M1S0</span><span class="p">,</span> <span class="n">M0Sn</span><span class="p">,</span> <span class="o">...</span> <span class="n">M0S1</span><span class="p">,</span> <span class="n">M0S0</span> <span class="p">]</span>
 </pre></div>
 </div>
-<p>Where MjSi refers to the i-th sample of the j-th converter. With m being the number of converters and n the number of samples per converter per beat.</p>
+<p>Where MjSi refers to the i-th sample of the j-th converter. With m being the
+number of converters and n the number of samples per converter per beat.</p>
 <p>The core asserts the <code class="docutils literal notranslate"><span class="pre">enable</span></code> signal for each channel that is enabled by the software. The <code class="docutils literal notranslate"><span class="pre">dac_ddata</span></code> data bus must contain data for each channel regardless if the channels are enabled or not.</p>
 </section>
 <section id="link-layer-interface">
@@ -43176,12 +43184,15 @@ Valid for 64b66b encoder.</p></td>
 <section id="clock-monitor">
 <h4>Clock Monitor<a class="headerlink" href="#clock-monitor" title="Link to this heading"></a></h4>
 <p>The <code class="docutils literal notranslate"><span class="pre">REG_STATUS</span></code> (<code class="docutils literal notranslate"><span class="pre">0x054</span></code>) register <code class="docutils literal notranslate"><span class="pre">CLK_FREQ</span></code> field allows to determine the clock rate of the device clock (<code class="docutils literal notranslate"><span class="pre">link_clk</span></code>) relative to the AXI interface clock (<code class="docutils literal notranslate"><span class="pre">s_axi_aclk</span></code>). This can be used to verify that the device clock is running at the expected rate.</p>
-<p>The number is represented as unsigned 16.16 format. Assuming a 100MHz processor clock this corresponds to a resolution of 1.523kHz per LSB. A raw value of 0 indicates that the link clock is currently not active.</p>
+<p>The number is represented as unsigned 16.16 format. Assuming a 100MHz processor
+clock this corresponds to a resolution of 1.523kHz per LSB. A raw value of 0
+indicates that the link clock is currently not active.</p>
 </section>
 <section id="external-synchronization">
 <h4>External synchronization<a class="headerlink" href="#external-synchronization" title="Link to this heading"></a></h4>
 <p>By setting the <code class="docutils literal notranslate"><span class="pre">EXT_SYNC</span></code> parameter of the IP to 1 an external synchronization signal <code class="docutils literal notranslate"><span class="pre">dac_sync_in</span></code> can be used to trigger data movement from user application layer to the link layer, reset internal DDS cores or PRBS generators. If the <code class="docutils literal notranslate"><span class="pre">EXT_SYNC</span></code> parameter is set to zero the external signal is ignored and only a software controlled reset happens inside the DDS,PRBS logic.</p>
-<p>The external synchronization signal should be synchronous with the dac clock. Synchronization will be done on the rising edge of the signal.</p>
+<p>The external synchronization signal should be synchronous with the dac clock.
+Synchronization will be done on the rising edge of the signal.</p>
 <p>The self clearing <code class="docutils literal notranslate"><span class="pre">SYNC</span></code> control bit from the <code class="docutils literal notranslate"><span class="pre">REG_CNTRL_1</span></code> (<code class="docutils literal notranslate"><span class="pre">0x44</span></code>) register will arm the trigger logic to wait for the external sync signal. The <code class="docutils literal notranslate"><span class="pre">DAC_SYNC_STATUS</span></code> status bit from the <code class="docutils literal notranslate"><span class="pre">REG_SYNC_STATUS</span></code> (<code class="docutils literal notranslate"><span class="pre">0x68</span></code>) register will show that the synchronization is armed but the synchronization signal has not yet been received.</p>
 <p>Once the sync signal is received the data will start to flow and the <code class="docutils literal notranslate"><span class="pre">DAC_SYNC_STATUS</span></code> status bit will reflect that with a deassertion.</p>
 <p>While the synchronization mechanism is armed the <code class="docutils literal notranslate"><span class="pre">dac_valid</span></code> output signal is gated until the trigger signal is received. The gating happens only during this period, meaning that <code class="docutils literal notranslate"><span class="pre">dac_valid</span></code> will stay high in all other cases (normal operation).</p>
@@ -43199,7 +43210,10 @@ Valid for 64b66b encoder.</p></td>
 <h2>Software Support<a class="headerlink" href="#software-support" title="Link to this heading"></a></h2>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>To ensure correct operation it is highly recommended to use the Analog Devices provided JESD204B/C software packages for interfacing the peripheral. Analog Devices is not able to provide support in case issues arise from using custom low-level software for interfacing the peripheral.</p>
+<p>To ensure correct operation it is highly recommended to use the Analog
+Devices provided JESD204B/C software packages for interfacing the peripheral.
+Analog Devices is not able to provide support in case issues arise from using
+custom low-level software for interfacing the peripheral.</p>
 </div>
 </section>
 <section id="supported-devices">
@@ -43212,8 +43226,23 @@ Valid for 64b66b encoder.</p></td>
 <p class="admonition-title">Warning</p>
 <p>We are in the process of migrating our documentation to GitHubIO. This page is outdated and the new one can be found at <a class="icon link reference external" href="https://analogdevicesinc.github.io/hdl/library/jesd204/index.html" target="_blank">https://analogdevicesinc.github.io/hdl/library/jesd204/index.html</a></p>
 </div>
-<p>The JESD204, JESD204A, JESD204B and the JESD204C data converter serial interface standard was created through the JEDEC committee to standardize and reduce the number of data inputs/outputs between high-speed data converters and other devices, such as FPGAs (field-programmable gate arrays). Fewer interconnects simplifies layout and allows smaller form factor realization without impacting overall system performance. These attributes are important to address the system size and cost constraints of a range of high speed ADC applications, including wireless infrastructure (GSM, EDGE, W-CDMA, LTE, CDMA2000, WiMAX, TD-SCDMA) transceiver architectures, software-defined radios, portable instrumentation, medical ultrasound equipment, and Mil/Aero applications such as radar and secure communications. Analog Devices is an original participating member of the JEDEC JESD204 standards committee and we have concurrently developed compliant data converter technology and tools, and a comprehensive product roadmap to fully enable our customers to take advantage of this significant interfacing breakthrough.</p>
-<p>Analog Devices supplies a full-stack supporting JESD204B/C which provides a fully integrated system level experience. This solution includes</p>
+<p>The JESD204, JESD204A, JESD204B and the JESD204C data converter serial interface
+standard was created through the JEDEC committee to standardize and reduce the
+number of data inputs/outputs between high-speed data converters and other
+devices, such as FPGAs (field-programmable gate arrays). Fewer interconnects
+simplifies layout and allows smaller form factor realization without impacting
+overall system performance. These attributes are important to address the system
+size and cost constraints of a range of high speed ADC applications, including
+wireless infrastructure (GSM, EDGE, W-CDMA, LTE, CDMA2000, WiMAX, TD-SCDMA)
+transceiver architectures, software-defined radios, portable instrumentation,
+medical ultrasound equipment, and Mil/Aero applications such as radar and secure
+communications. Analog Devices is an original participating member of the JEDEC
+JESD204 standards committee and we have concurrently developed compliant data
+converter technology and tools, and a comprehensive product roadmap to fully
+enable our customers to take advantage of this significant interfacing
+breakthrough.</p>
+<p>Analog Devices supplies a full-stack supporting JESD204B/C which provides a
+fully integrated system level experience. This solution includes</p>
 <div class="download admonition">
 <p class="admonition-title">Download</p>
 <ul class="simple">
@@ -43234,16 +43263,28 @@ Valid for 64b66b encoder.</p></td>
 </section>
 <section id="fpga-hdl-support">
 <h2>FPGA HDL Support<a class="headerlink" href="#fpga-hdl-support" title="Link to this heading"></a></h2>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/peripherals/jesd204_layers2.png"><img alt="https://wiki.analog.com/_media/resources/fpga/peripherals/jesd204_layers2.png" class="align-right" src="https://wiki.analog.com/_media/resources/fpga/peripherals/jesd204_layers2.png" style="width: 100px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/peripherals/jesd204_layers2.png"><img alt="https://wiki.analog.com/_media/resources/fpga/peripherals/jesd204_layers2.png" class="align-right" src="https://wiki.analog.com/_media/resources/fpga/peripherals/jesd204_layers2.png" width="100" />
 </a>
-<p>The JESD204B/C standard defines multiple layers, each layer being responsible for a particular function. The Analog Devices JESD204B/C HDL solution follows the standard here and defines 4 layers. Physical layer, link layer, transport layer and application layer. For the first three layers Analog Devices provides standard components that can be linked up to provide a full JESD204B/C protocol processing chain.</p>
-<p>Depending on the FPGA and converter combinations that are being interfaced different components can be chosen for the physical and transport layer. The FPGA defines which physical layer component should be used and the interfaced converter defines which transport layer component should be used.</p>
-<p>The link layer component is selected based on the direction of the JESD204B/C link.</p>
-<p>The application layer is user defined and can be used to implement application specific signal processing.</p>
+<p>The JESD204B/C standard defines multiple layers, each layer being responsible
+for a particular function. The Analog Devices JESD204B/C HDL solution follows
+the standard here and defines 4 layers. Physical layer, link layer, transport
+layer and application layer. For the first three layers Analog Devices provides
+standard components that can be linked up to provide a full JESD204B/C protocol
+processing chain.</p>
+<p>Depending on the FPGA and converter combinations that are being interfaced
+different components can be chosen for the physical and transport layer. The
+FPGA defines which physical layer component should be used and the interfaced
+converter defines which transport layer component should be used.</p>
+<p>The link layer component is selected based on the direction of the JESD204B/C
+link.</p>
+<p>The application layer is user defined and can be used to implement application
+specific signal processing.</p>
 <img alt="https://wiki.analog.com/_media/resources/fpga/peripherals/jesd204_chain.png" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/peripherals/jesd204_chain.png" />
 <section id="physical-layer">
 <h3>Physical Layer<a class="headerlink" href="#physical-layer" title="Link to this heading"></a></h3>
-<p>Physical layer peripherals are responsible for interfacing and configuring the high-speed serial transceivers. Currently we have support for GTXE2, GTHE3, GTHE4, GTYE4 for Xilinx and Arria 10 transceivers for Intel.</p>
+<p>Physical layer peripherals are responsible for interfacing and configuring the
+high-speed serial transceivers. Currently we have support for GTXE2, GTHE3,
+GTHE4, GTYE4 for Xilinx and Arria 10 transceivers for Intel.</p>
 <ul class="simple">
 <li><p><a class="icon link reference external" href="https://wiki.analog.com/../docs/axi_adxcvr" target="_blank">AXI_ADXCVR</a>: JESD204B Gigabit Transceiver Register Configuration Peripheral</p></li>
 <li><p><a class="icon link reference external" href="https://wiki.analog.com/../docs/util_xcvr" target="_blank">UTIL_ADXCVR</a>: JESD204B Gigabit Transceiver Interface Peripheral for Xilinx FPGAs</p></li>
@@ -43251,7 +43292,9 @@ Valid for 64b66b encoder.</p></td>
 </section>
 <section id="link-layer">
 <h3>Link Layer<a class="headerlink" href="#link-layer" title="Link to this heading"></a></h3>
-<p>Link layer peripherals are responsible for JESD204B/C protocol handling, including scrambling/descrambling, lane alignment, character replacement and alignment monitoring.</p>
+<p>Link layer peripherals are responsible for JESD204B/C protocol handling,
+including scrambling/descrambling, lane alignment, character replacement and
+alignment monitoring.</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="axi_jesd204_tx.html"><span class="doc">JESD204B/C Transmit Peripheral</span></a>: JESD204B/C Link Layer Transmit Peripheral</p></li>
 <li><p><a class="reference internal" href="axi_jesd204_rx.html"><span class="doc">JESD204B/C Receive Peripheral</span></a>: JESD204B/C Link Layer Receive Peripheral</p></li>
@@ -43259,7 +43302,8 @@ Valid for 64b66b encoder.</p></td>
 </section>
 <section id="transport-layer">
 <h3>Transport Layer<a class="headerlink" href="#transport-layer" title="Link to this heading"></a></h3>
-<p>Transport layer peripherals are responsible for converter specific data framing and de-framing.</p>
+<p>Transport layer peripherals are responsible for converter specific data framing
+and de-framing.</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="jesd204_tpl_adc.html"><span class="doc">ADC JESD204B/C Transport Peripheral</span></a> : JESD204B/C Transport Layer Receive Peripheral</p></li>
 <li><p><a class="reference internal" href="#"><span class="doc">DAC JESD204B/C Transport Peripheral</span></a> : JESD204B/C Transport Layer Transmit Peripheral</p></li>
@@ -43267,7 +43311,9 @@ Valid for 64b66b encoder.</p></td>
 </section>
 <section id="interfaces">
 <h3>Interfaces<a class="headerlink" href="#interfaces" title="Link to this heading"></a></h3>
-<p>Interfaces are a well-defined collection of wires that are used to communicate between components. The following interfaces are used to connect components of the HDL JESD204B/C processing stack.</p>
+<p>Interfaces are a well-defined collection of wires that are used to communicate
+between components. The following interfaces are used to connect components of
+the HDL JESD204B/C processing stack.</p>
 </section>
 </section>
 <section id="id82">
@@ -43511,8 +43557,23 @@ Valid for 64b66b encoder.</p></td>
 <p class="admonition-title">Warning</p>
 <p>We are in the process of migrating our documentation to GitHubIO. This page is outdated and the new one can be found at <a class="icon link reference external" href="https://analogdevicesinc.github.io/hdl/library/jesd204/index.html" target="_blank">https://analogdevicesinc.github.io/hdl/library/jesd204/index.html</a></p>
 </div>
-<p>The JESD204, JESD204A, JESD204B and the JESD204C data converter serial interface standard was created through the JEDEC committee to standardize and reduce the number of data inputs/outputs between high-speed data converters and other devices, such as FPGAs (field-programmable gate arrays). Fewer interconnects simplifies layout and allows smaller form factor realization without impacting overall system performance. These attributes are important to address the system size and cost constraints of a range of high speed ADC applications, including wireless infrastructure (GSM, EDGE, W-CDMA, LTE, CDMA2000, WiMAX, TD-SCDMA) transceiver architectures, software-defined radios, portable instrumentation, medical ultrasound equipment, and Mil/Aero applications such as radar and secure communications. Analog Devices is an original participating member of the JEDEC JESD204 standards committee and we have concurrently developed compliant data converter technology and tools, and a comprehensive product roadmap to fully enable our customers to take advantage of this significant interfacing breakthrough.</p>
-<p>Analog Devices supplies a full-stack supporting JESD204B/C which provides a fully integrated system level experience. This solution includes</p>
+<p>The JESD204, JESD204A, JESD204B and the JESD204C data converter serial interface
+standard was created through the JEDEC committee to standardize and reduce the
+number of data inputs/outputs between high-speed data converters and other
+devices, such as FPGAs (field-programmable gate arrays). Fewer interconnects
+simplifies layout and allows smaller form factor realization without impacting
+overall system performance. These attributes are important to address the system
+size and cost constraints of a range of high speed ADC applications, including
+wireless infrastructure (GSM, EDGE, W-CDMA, LTE, CDMA2000, WiMAX, TD-SCDMA)
+transceiver architectures, software-defined radios, portable instrumentation,
+medical ultrasound equipment, and Mil/Aero applications such as radar and secure
+communications. Analog Devices is an original participating member of the JEDEC
+JESD204 standards committee and we have concurrently developed compliant data
+converter technology and tools, and a comprehensive product roadmap to fully
+enable our customers to take advantage of this significant interfacing
+breakthrough.</p>
+<p>Analog Devices supplies a full-stack supporting JESD204B/C which provides a
+fully integrated system level experience. This solution includes</p>
 <div class="download admonition">
 <p class="admonition-title">Download</p>
 <ul class="simple">
@@ -43533,16 +43594,28 @@ Valid for 64b66b encoder.</p></td>
 </section>
 <section id="id88">
 <h2>FPGA HDL Support<a class="headerlink" href="#id88" title="Link to this heading"></a></h2>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/peripherals/jesd204_layers2.png"><img alt="https://wiki.analog.com/_media/resources/fpga/peripherals/jesd204_layers2.png" class="align-right" src="https://wiki.analog.com/_media/resources/fpga/peripherals/jesd204_layers2.png" style="width: 100px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/peripherals/jesd204_layers2.png"><img alt="https://wiki.analog.com/_media/resources/fpga/peripherals/jesd204_layers2.png" class="align-right" src="https://wiki.analog.com/_media/resources/fpga/peripherals/jesd204_layers2.png" width="100" />
 </a>
-<p>The JESD204B/C standard defines multiple layers, each layer being responsible for a particular function. The Analog Devices JESD204B/C HDL solution follows the standard here and defines 4 layers. Physical layer, link layer, transport layer and application layer. For the first three layers Analog Devices provides standard components that can be linked up to provide a full JESD204B/C protocol processing chain.</p>
-<p>Depending on the FPGA and converter combinations that are being interfaced different components can be chosen for the physical and transport layer. The FPGA defines which physical layer component should be used and the interfaced converter defines which transport layer component should be used.</p>
-<p>The link layer component is selected based on the direction of the JESD204B/C link.</p>
-<p>The application layer is user defined and can be used to implement application specific signal processing.</p>
+<p>The JESD204B/C standard defines multiple layers, each layer being responsible
+for a particular function. The Analog Devices JESD204B/C HDL solution follows
+the standard here and defines 4 layers. Physical layer, link layer, transport
+layer and application layer. For the first three layers Analog Devices provides
+standard components that can be linked up to provide a full JESD204B/C protocol
+processing chain.</p>
+<p>Depending on the FPGA and converter combinations that are being interfaced
+different components can be chosen for the physical and transport layer. The
+FPGA defines which physical layer component should be used and the interfaced
+converter defines which transport layer component should be used.</p>
+<p>The link layer component is selected based on the direction of the JESD204B/C
+link.</p>
+<p>The application layer is user defined and can be used to implement application
+specific signal processing.</p>
 <img alt="https://wiki.analog.com/_media/resources/fpga/peripherals/jesd204_chain.png" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/peripherals/jesd204_chain.png" />
 <section id="id89">
 <h3>Physical Layer<a class="headerlink" href="#id89" title="Link to this heading"></a></h3>
-<p>Physical layer peripherals are responsible for interfacing and configuring the high-speed serial transceivers. Currently we have support for GTXE2, GTHE3, GTHE4, GTYE4 for Xilinx and Arria 10 transceivers for Intel.</p>
+<p>Physical layer peripherals are responsible for interfacing and configuring the
+high-speed serial transceivers. Currently we have support for GTXE2, GTHE3,
+GTHE4, GTYE4 for Xilinx and Arria 10 transceivers for Intel.</p>
 <ul class="simple">
 <li><p><a class="icon link reference external" href="https://wiki.analog.com/../docs/axi_adxcvr" target="_blank">AXI_ADXCVR</a>: JESD204B Gigabit Transceiver Register Configuration Peripheral</p></li>
 <li><p><a class="icon link reference external" href="https://wiki.analog.com/../docs/util_xcvr" target="_blank">UTIL_ADXCVR</a>: JESD204B Gigabit Transceiver Interface Peripheral for Xilinx FPGAs</p></li>
@@ -43550,7 +43623,9 @@ Valid for 64b66b encoder.</p></td>
 </section>
 <section id="id92">
 <h3>Link Layer<a class="headerlink" href="#id92" title="Link to this heading"></a></h3>
-<p>Link layer peripherals are responsible for JESD204B/C protocol handling, including scrambling/descrambling, lane alignment, character replacement and alignment monitoring.</p>
+<p>Link layer peripherals are responsible for JESD204B/C protocol handling,
+including scrambling/descrambling, lane alignment, character replacement and
+alignment monitoring.</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="axi_jesd204_tx.html"><span class="doc">JESD204B/C Transmit Peripheral</span></a>: JESD204B/C Link Layer Transmit Peripheral</p></li>
 <li><p><a class="reference internal" href="axi_jesd204_rx.html"><span class="doc">JESD204B/C Receive Peripheral</span></a>: JESD204B/C Link Layer Receive Peripheral</p></li>
@@ -43558,7 +43633,8 @@ Valid for 64b66b encoder.</p></td>
 </section>
 <section id="id93">
 <h3>Transport Layer<a class="headerlink" href="#id93" title="Link to this heading"></a></h3>
-<p>Transport layer peripherals are responsible for converter specific data framing and de-framing.</p>
+<p>Transport layer peripherals are responsible for converter specific data framing
+and de-framing.</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="jesd204_tpl_adc.html"><span class="doc">ADC JESD204B/C Transport Peripheral</span></a> : JESD204B/C Transport Layer Receive Peripheral</p></li>
 <li><p><a class="reference internal" href="#"><span class="doc">DAC JESD204B/C Transport Peripheral</span></a> : JESD204B/C Transport Layer Transmit Peripheral</p></li>
@@ -43566,7 +43642,9 @@ Valid for 64b66b encoder.</p></td>
 </section>
 <section id="id94">
 <h3>Interfaces<a class="headerlink" href="#id94" title="Link to this heading"></a></h3>
-<p>Interfaces are a well-defined collection of wires that are used to communicate between components. The following interfaces are used to connect components of the HDL JESD204B/C processing stack.</p>
+<p>Interfaces are a well-defined collection of wires that are used to communicate
+between components. The following interfaces are used to connect components of
+the HDL JESD204B/C processing stack.</p>
 </section>
 </section>
 <section id="id95">
@@ -43810,8 +43888,23 @@ Valid for 64b66b encoder.</p></td>
 <p class="admonition-title">Warning</p>
 <p>We are in the process of migrating our documentation to GitHubIO. This page is outdated and the new one can be found at <a class="icon link reference external" href="https://analogdevicesinc.github.io/hdl/library/jesd204/index.html" target="_blank">https://analogdevicesinc.github.io/hdl/library/jesd204/index.html</a></p>
 </div>
-<p>The JESD204, JESD204A, JESD204B and the JESD204C data converter serial interface standard was created through the JEDEC committee to standardize and reduce the number of data inputs/outputs between high-speed data converters and other devices, such as FPGAs (field-programmable gate arrays). Fewer interconnects simplifies layout and allows smaller form factor realization without impacting overall system performance. These attributes are important to address the system size and cost constraints of a range of high speed ADC applications, including wireless infrastructure (GSM, EDGE, W-CDMA, LTE, CDMA2000, WiMAX, TD-SCDMA) transceiver architectures, software-defined radios, portable instrumentation, medical ultrasound equipment, and Mil/Aero applications such as radar and secure communications. Analog Devices is an original participating member of the JEDEC JESD204 standards committee and we have concurrently developed compliant data converter technology and tools, and a comprehensive product roadmap to fully enable our customers to take advantage of this significant interfacing breakthrough.</p>
-<p>Analog Devices supplies a full-stack supporting JESD204B/C which provides a fully integrated system level experience. This solution includes</p>
+<p>The JESD204, JESD204A, JESD204B and the JESD204C data converter serial interface
+standard was created through the JEDEC committee to standardize and reduce the
+number of data inputs/outputs between high-speed data converters and other
+devices, such as FPGAs (field-programmable gate arrays). Fewer interconnects
+simplifies layout and allows smaller form factor realization without impacting
+overall system performance. These attributes are important to address the system
+size and cost constraints of a range of high speed ADC applications, including
+wireless infrastructure (GSM, EDGE, W-CDMA, LTE, CDMA2000, WiMAX, TD-SCDMA)
+transceiver architectures, software-defined radios, portable instrumentation,
+medical ultrasound equipment, and Mil/Aero applications such as radar and secure
+communications. Analog Devices is an original participating member of the JEDEC
+JESD204 standards committee and we have concurrently developed compliant data
+converter technology and tools, and a comprehensive product roadmap to fully
+enable our customers to take advantage of this significant interfacing
+breakthrough.</p>
+<p>Analog Devices supplies a full-stack supporting JESD204B/C which provides a
+fully integrated system level experience. This solution includes</p>
 <div class="download admonition">
 <p class="admonition-title">Download</p>
 <ul class="simple">
@@ -43832,16 +43925,28 @@ Valid for 64b66b encoder.</p></td>
 </section>
 <section id="id115">
 <h2>FPGA HDL Support<a class="headerlink" href="#id115" title="Link to this heading"></a></h2>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/peripherals/jesd204_layers2.png"><img alt="https://wiki.analog.com/_media/resources/fpga/peripherals/jesd204_layers2.png" class="align-right" src="https://wiki.analog.com/_media/resources/fpga/peripherals/jesd204_layers2.png" style="width: 100px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/peripherals/jesd204_layers2.png"><img alt="https://wiki.analog.com/_media/resources/fpga/peripherals/jesd204_layers2.png" class="align-right" src="https://wiki.analog.com/_media/resources/fpga/peripherals/jesd204_layers2.png" width="100" />
 </a>
-<p>The JESD204B/C standard defines multiple layers, each layer being responsible for a particular function. The Analog Devices JESD204B/C HDL solution follows the standard here and defines 4 layers. Physical layer, link layer, transport layer and application layer. For the first three layers Analog Devices provides standard components that can be linked up to provide a full JESD204B/C protocol processing chain.</p>
-<p>Depending on the FPGA and converter combinations that are being interfaced different components can be chosen for the physical and transport layer. The FPGA defines which physical layer component should be used and the interfaced converter defines which transport layer component should be used.</p>
-<p>The link layer component is selected based on the direction of the JESD204B/C link.</p>
-<p>The application layer is user defined and can be used to implement application specific signal processing.</p>
+<p>The JESD204B/C standard defines multiple layers, each layer being responsible
+for a particular function. The Analog Devices JESD204B/C HDL solution follows
+the standard here and defines 4 layers. Physical layer, link layer, transport
+layer and application layer. For the first three layers Analog Devices provides
+standard components that can be linked up to provide a full JESD204B/C protocol
+processing chain.</p>
+<p>Depending on the FPGA and converter combinations that are being interfaced
+different components can be chosen for the physical and transport layer. The
+FPGA defines which physical layer component should be used and the interfaced
+converter defines which transport layer component should be used.</p>
+<p>The link layer component is selected based on the direction of the JESD204B/C
+link.</p>
+<p>The application layer is user defined and can be used to implement application
+specific signal processing.</p>
 <img alt="https://wiki.analog.com/_media/resources/fpga/peripherals/jesd204_chain.png" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/peripherals/jesd204_chain.png" />
 <section id="id116">
 <h3>Physical Layer<a class="headerlink" href="#id116" title="Link to this heading"></a></h3>
-<p>Physical layer peripherals are responsible for interfacing and configuring the high-speed serial transceivers. Currently we have support for GTXE2, GTHE3, GTHE4, GTYE4 for Xilinx and Arria 10 transceivers for Intel.</p>
+<p>Physical layer peripherals are responsible for interfacing and configuring the
+high-speed serial transceivers. Currently we have support for GTXE2, GTHE3,
+GTHE4, GTYE4 for Xilinx and Arria 10 transceivers for Intel.</p>
 <ul class="simple">
 <li><p><a class="icon link reference external" href="https://wiki.analog.com/../docs/axi_adxcvr" target="_blank">AXI_ADXCVR</a>: JESD204B Gigabit Transceiver Register Configuration Peripheral</p></li>
 <li><p><a class="icon link reference external" href="https://wiki.analog.com/../docs/util_xcvr" target="_blank">UTIL_ADXCVR</a>: JESD204B Gigabit Transceiver Interface Peripheral for Xilinx FPGAs</p></li>
@@ -43849,7 +43954,9 @@ Valid for 64b66b encoder.</p></td>
 </section>
 <section id="id119">
 <h3>Link Layer<a class="headerlink" href="#id119" title="Link to this heading"></a></h3>
-<p>Link layer peripherals are responsible for JESD204B/C protocol handling, including scrambling/descrambling, lane alignment, character replacement and alignment monitoring.</p>
+<p>Link layer peripherals are responsible for JESD204B/C protocol handling,
+including scrambling/descrambling, lane alignment, character replacement and
+alignment monitoring.</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="axi_jesd204_tx.html"><span class="doc">JESD204B/C Transmit Peripheral</span></a>: JESD204B/C Link Layer Transmit Peripheral</p></li>
 <li><p><a class="reference internal" href="axi_jesd204_rx.html"><span class="doc">JESD204B/C Receive Peripheral</span></a>: JESD204B/C Link Layer Receive Peripheral</p></li>
@@ -43857,7 +43964,8 @@ Valid for 64b66b encoder.</p></td>
 </section>
 <section id="id120">
 <h3>Transport Layer<a class="headerlink" href="#id120" title="Link to this heading"></a></h3>
-<p>Transport layer peripherals are responsible for converter specific data framing and de-framing.</p>
+<p>Transport layer peripherals are responsible for converter specific data framing
+and de-framing.</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="jesd204_tpl_adc.html"><span class="doc">ADC JESD204B/C Transport Peripheral</span></a> : JESD204B/C Transport Layer Receive Peripheral</p></li>
 <li><p><a class="reference internal" href="#"><span class="doc">DAC JESD204B/C Transport Peripheral</span></a> : JESD204B/C Transport Layer Transmit Peripheral</p></li>
@@ -43865,7 +43973,9 @@ Valid for 64b66b encoder.</p></td>
 </section>
 <section id="id121">
 <h3>Interfaces<a class="headerlink" href="#id121" title="Link to this heading"></a></h3>
-<p>Interfaces are a well-defined collection of wires that are used to communicate between components. The following interfaces are used to connect components of the HDL JESD204B/C processing stack.</p>
+<p>Interfaces are a well-defined collection of wires that are used to communicate
+between components. The following interfaces are used to connect components of
+the HDL JESD204B/C processing stack.</p>
 </section>
 </section>
 <section id="id122">

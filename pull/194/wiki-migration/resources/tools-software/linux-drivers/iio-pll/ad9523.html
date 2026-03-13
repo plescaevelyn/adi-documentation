@@ -667,9 +667,17 @@ Content on this topic
 </section>
 <section id="example-platform-device-initialization">
 <h1>Example platform device initialization<a class="headerlink" href="#example-platform-device-initialization" title="Link to this heading"></a></h1>
-<p>For compile time configuration, it’s common Linux practice to keep board- and application-specific configuration out of the main driver file, instead putting it into the board support file.</p>
-<p>For devices on custom boards, as typical of embedded and SoC-(system-on-chip) based hardware, Linux uses platform_data to point to board-specific structures describing devices and how they are connected to the SoC. This can include available ports, chip variants, preferred modes, default initialization, additional pin roles, and so on. This shrinks the board-support packages (BSPs) and minimizes board and application specific #ifdefs in drivers.</p>
-<p>The reference frequency and GPIO numbers may vary between boards. The platform_data for the device’s “struct device” holds this information.</p>
+<p>For compile time configuration, it’s common Linux practice to keep board- and
+application-specific configuration out of the main driver file, instead putting
+it into the board support file.</p>
+<p>For devices on custom boards, as typical of embedded and SoC-(system-on-chip)
+based hardware, Linux uses platform_data to point to board-specific structures
+describing devices and how they are connected to the SoC. This can include
+available ports, chip variants, preferred modes, default initialization,
+additional pin roles, and so on. This shrinks the board-support packages (BSPs)
+and minimizes board and application specific #ifdefs in drivers.</p>
+<p>The reference frequency and GPIO numbers may vary between boards. The
+platform_data for the device’s “struct device” holds this information.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/**</span>
 <span class="cm">  * struct ad9523_channel_spec - Output channel configuration</span>
 <span class="cm"> *</span>
@@ -917,10 +925,20 @@ Content on this topic
 <span class="p">};</span>
 </pre></div>
 </div>
-<p>Unlike PCI or USB devices, SPI devices are not enumerated at the hardware level. Instead, the software must know which devices are connected on each SPI bus segment, and what slave selects these devices are using. For this reason, the kernel code must instantiate SPI devices explicitly. The most common method is to declare the SPI devices by bus number.</p>
-<p>This method is appropriate when the SPI bus is a system bus, as in many embedded systems, wherein each SPI bus has a number which is known in advance. It is thus possible to pre-declare the SPI devices that inhabit this bus. This is done with an array of struct spi_board_info, which is registered by calling spi_register_board_info().</p>
+<p>Unlike PCI or USB devices, SPI devices are not enumerated at the hardware level.
+Instead, the software must know which devices are connected on each SPI bus
+segment, and what slave selects these devices are using. For this reason, the
+kernel code must instantiate SPI devices explicitly. The most common method is
+to declare the SPI devices by bus number.</p>
+<p>This method is appropriate when the SPI bus is a system bus, as in many embedded
+systems, wherein each SPI bus has a number which is known in advance. It is thus
+possible to pre-declare the SPI devices that inhabit this bus. This is done with
+an array of struct spi_board_info, which is registered by calling
+spi_register_board_info().</p>
 <p>For more information see: <a href="#id1"><span class="problematic" id="id2">`spi-summary.rst &lt;/git.linux.org&gt;documentation/spi/spi-summary.rst&gt;`__</span></a></p>
-<p>Depending on the IC used, you may need to set the modalias accordingly, matching your part name. It may also required to adjust max_speed_hz. Please consult the datasheet, for maximum spi clock supported by the device in question.</p>
+<p>Depending on the IC used, you may need to set the modalias accordingly, matching
+your part name. It may also required to adjust max_speed_hz. Please consult the
+datasheet, for maximum spi clock supported by the device in question.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">spi_board_info</span><span class="w"> </span><span class="n">board_spi_board_info</span><span class="p">[]</span><span class="w"> </span><span class="n">__initdata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
 <span class="cp">#if defined(CONFIG_AD9523) || defined(CONFIG_AD9523_MODULE)</span>
 <span class="w">    </span><span class="p">{</span>
@@ -950,7 +968,8 @@ Content on this topic
 </section>
 <section id="adding-linux-driver-support">
 <h1>Adding Linux driver support<a class="headerlink" href="#adding-linux-driver-support" title="Link to this heading"></a></h1>
-<p>Configure kernel with “make menuconfig” (alternatively use “make xconfig” or “make qconfig”)</p>
+<p>Configure kernel with “make menuconfig” (alternatively use “make xconfig” or
+“make qconfig”)</p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <p>The AD9523 Driver depends on CONFIG_SPI</p>
@@ -972,7 +991,15 @@ Content on this topic
 </section>
 <section id="driver-testing">
 <h1>Driver testing<a class="headerlink" href="#driver-testing" title="Link to this heading"></a></h1>
-<p>Each and every IIO device, typically a hardware chip, has a device folder under /sys/bus/iio/devices/iio:deviceX. Where X is the IIO index of the device. Under every of these directory folders reside a set of files, depending on the characteristics and features of the hardware device in question. These files are consistently generalized and documented in the IIO ABI documentation. In order to determine which IIO deviceX corresponds to which hardware device, the user can read the name file /sys/bus/iio/devices/iio:deviceX/name. In case the sequence in which the iio device drivers are loaded/registered is constant, the numbering is constant and may be known in advance.</p>
+<p>Each and every IIO device, typically a hardware chip, has a device folder under
+/sys/bus/iio/devices/iio:deviceX. Where X is the IIO index of the device. Under
+every of these directory folders reside a set of files, depending on the
+characteristics and features of the hardware device in question. These files are
+consistently generalized and documented in the IIO ABI documentation. In order
+to determine which IIO deviceX corresponds to which hardware device, the user
+can read the name file /sys/bus/iio/devices/iio:deviceX/name. In case the
+sequence in which the iio device drivers are loaded/registered is constant, the
+numbering is constant and may be known in advance.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/&gt;</span> <span class="n">cd</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">iio</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span>
@@ -1039,7 +1066,8 @@ Content on this topic
 <section id="set-channely-output-frequency">
 <h2>Set ChannelY Output Frequency<a class="headerlink" href="#set-channely-output-frequency" title="Link to this heading"></a></h2>
 <p>/sys/bus/iio/devices/iio:deviceX/out_altvoltageY_frequency</p>
-<p>Output frequency for channel Y in Hz. The number must always be specified and unique if the output corresponds to a single channel.</p>
+<p>Output frequency for channel Y in Hz. The number must always be specified and
+unique if the output corresponds to a single channel.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/&gt;</span> <span class="n">cat</span> <span class="n">out_altvoltage1_DAC_CLK_frequency</span>
@@ -1054,7 +1082,10 @@ Content on this topic
 <section id="set-channely-output-divider-phase">
 <h2>Set ChannelY Output Divider Phase<a class="headerlink" href="#set-channely-output-divider-phase" title="Link to this heading"></a></h2>
 <p>/sys/bus/iio/devices/iio:deviceX/out_altvoltageY_phase</p>
-<p>Phase in radians of one frequency/clock output Y (out_altvoltageY) relative to another frequency/clock output (out_altvoltageZ) of the device X. The number must always be specified and unique if the output corresponds to a single channel.</p>
+<p>Phase in radians of one frequency/clock output Y (out_altvoltageY) relative to
+another frequency/clock output (out_altvoltageZ) of the device X. The number
+must always be specified and unique if the output corresponds to a single
+channel.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/&gt;</span> <span class="n">cat</span> <span class="n">out_altvoltage1_DAC_CLK_phase</span>
@@ -1069,7 +1100,8 @@ Content on this topic
 <section id="disable-power-down-channely">
 <h2>Disable / Power Down ChannelY<a class="headerlink" href="#disable-power-down-channely" title="Link to this heading"></a></h2>
 <p>/sys/bus/iio/devices/iio:deviceX/out_altvoltageY_phase</p>
-<p>Writing ‘0’ powers down channelY, while writing any any value &gt; 0 enables the channel.</p>
+<p>Writing ‘0’ powers down channelY, while writing any any value &gt; 0 enables the
+channel.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/&gt;</span> <span class="n">cat</span> <span class="n">out_altvoltage1_DAC_CLK_raw</span>
@@ -1083,8 +1115,17 @@ Content on this topic
 </section>
 <section id="query-device-status">
 <h2>Query Device Status<a class="headerlink" href="#query-device-status" title="Link to this heading"></a></h2>
-<p>/sys/bus/iio/devices/iio:deviceX/pll1_locked /sys/bus/iio/devices/iio:deviceX/pll1_reference_clk_a_present /sys/bus/iio/devices/iio:deviceX/pll1_reference_clk_b_present /sys/bus/iio/devices/iio:deviceX/pll1_reference_clk_test_present /sys/bus/iio/devices/iio:deviceX/pll2_feedback_clk_present /sys/bus/iio/devices/iio:deviceX/pll2_locked /sys/bus/iio/devices/iio:deviceX/pll2_reference_clk_present /sys/bus/iio/devices/iio:deviceX/vcxo_clk_present</p>
-<p>Reading returns either ‘1’ or ‘0’. ‘1’ means that the clock in question is present or the pllY is locked. ‘0’ means that the clock is missing or the pllY is unlocked.</p>
+<p>/sys/bus/iio/devices/iio:deviceX/pll1_locked
+/sys/bus/iio/devices/iio:deviceX/pll1_reference_clk_a_present
+/sys/bus/iio/devices/iio:deviceX/pll1_reference_clk_b_present
+/sys/bus/iio/devices/iio:deviceX/pll1_reference_clk_test_present
+/sys/bus/iio/devices/iio:deviceX/pll2_feedback_clk_present
+/sys/bus/iio/devices/iio:deviceX/pll2_locked
+/sys/bus/iio/devices/iio:deviceX/pll2_reference_clk_present
+/sys/bus/iio/devices/iio:deviceX/vcxo_clk_present</p>
+<p>Reading returns either ‘1’ or ‘0’. ‘1’ means that the clock in question is
+present or the pllY is locked. ‘0’ means that the clock is missing or the pllY
+is unlocked.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/&gt;</span> <span class="n">cat</span> <span class="n">pll1_locked</span>
@@ -1106,7 +1147,9 @@ Content on this topic
 <section id="save-current-device-config-to-eeprom">
 <h2>Save Current Device Config to EEPROM<a class="headerlink" href="#save-current-device-config-to-eeprom" title="Link to this heading"></a></h2>
 <p>/sys/bus/iio/devices/iio:deviceX/store_eeprom</p>
-<p>Writing ‘1’ stores the current device configuration into on-chip EEPROM. After power-up or chip reset the device will automatically load the saved configuration.</p>
+<p>Writing ‘1’ stores the current device configuration into on-chip EEPROM. After
+power-up or chip reset the device will automatically load the saved
+configuration.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/&gt;</span> <span class="n">echo</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="n">store_eeprom</span>
@@ -1117,7 +1160,10 @@ Content on this topic
 <section id="sync-device">
 <h2>SYNC Device<a class="headerlink" href="#sync-device" title="Link to this heading"></a></h2>
 <p>/sys/bus/iio/devices/iio:deviceX/sync_dividers</p>
-<p>Writing ‘1’ triggers the clock distribution synchronization functionality. All dividers are reset and the channels start with their predefined phase offsets (out_altvoltageY_phase). Writing this file has the effect as driving the external /SYNC pin low.</p>
+<p>Writing ‘1’ triggers the clock distribution synchronization functionality. All
+dividers are reset and the channels start with their predefined phase offsets
+(out_altvoltageY_phase). Writing this file has the effect as driving the
+external /SYNC pin low.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/&gt;</span> <span class="n">echo</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="n">sync_dividers</span>

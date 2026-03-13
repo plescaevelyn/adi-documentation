@@ -622,7 +622,8 @@ Content on this topic
 <p>There are 2 modes for SHARC-ALSA, and they differ in how the SHARCs are programmed. The mode is set in the <code class="docutils literal notranslate"><span class="pre">conf/local.conf</span></code> file, when building the Linux image. E.g. : <code class="docutils literal notranslate"><span class="pre">DISTRO_FEATURES:append</span> <span class="pre">=</span> <span class="pre">&quot;</span> <span class="pre">adi_sharc_alsa_audio&quot;</span></code></p>
 <section id="adi-sharc-alsa-audio">
 <h3>adi_sharc_alsa_audio<a class="headerlink" href="#adi-sharc-alsa-audio" title="Link to this heading"></a></h3>
-<p>Audio playback handled through SHARC firmware, no codec control (volume, etc) from Linux. Remoteproc is used to load the SHARC LDR firmware files.</p>
+<p>Audio playback handled through SHARC firmware, no codec control (volume, etc)
+from Linux. Remoteproc is used to load the SHARC LDR firmware files.</p>
 </section>
 <section id="adi-sharc-alsa-audio-uboot">
 <h3>adi_sharc_alsa_audio_uboot<a class="headerlink" href="#adi-sharc-alsa-audio-uboot" title="Link to this heading"></a></h3>
@@ -673,29 +674,39 @@ Load<span class="w"> </span>Remote<span class="w"> </span>Processor<span class="
 <span class="o">=</span>&gt;<span class="w"> </span>rproc<span class="w"> </span>start<span class="w"> </span><span class="m">0</span>
 </pre></div>
 </div>
-<p>You can now proceed to booting Linux as per usual. The SHARCs will be programmed and running.</p>
+<p>You can now proceed to booting Linux as per usual. The SHARCs will be programmed
+and running.</p>
 </section>
 </section>
 <section id="playing-audio">
 <h2>Playing Audio<a class="headerlink" href="#playing-audio" title="Link to this heading"></a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The audio from the SHARC is routed to DAC1/2. Connect a set of speakers to J17 also labelled as DAC1/2.</p>
+<p>The audio from the SHARC is routed to DAC1/2. Connect a set of speakers to
+J17 also labelled as DAC1/2.</p>
 </div>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/quickstartguide/adsp-sc594-som-ezkit-alsa-example.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/quickstartguide/adsp-sc594-som-ezkit-alsa-example.jpg" src="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/quickstartguide/adsp-sc594-som-ezkit-alsa-example.jpg" style="width: 400px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/quickstartguide/adsp-sc594-som-ezkit-alsa-example.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/quickstartguide/adsp-sc594-som-ezkit-alsa-example.jpg" src="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/quickstartguide/adsp-sc594-som-ezkit-alsa-example.jpg" width="400" />
 </a>
 <p>Play back the audio sample file stored in <code class="docutils literal notranslate"><span class="pre">/usr/share/sounds/alsa/</span></code></p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>aplay<span class="w"> </span>/usr/share/sounds/alsa/2Ch_L440_R200_48kHz_16bit_6s.wav
 </pre></div>
 </div>
-<p>You will hear a 440Hz tone on the left channel and a 200Hz tone on the right channel being played for 6 seconds.</p>
+<p>You will hear a 440Hz tone on the left channel and a 200Hz tone on the right
+channel being played for 6 seconds.</p>
 <section id="adding-a-tone-to-a-channel">
 <h3>Adding a Tone to a Channel<a class="headerlink" href="#adding-a-tone-to-a-channel" title="Link to this heading"></a></h3>
-<p>The SHARC can be instructed to add a tone to the audio played using aplay. This is done through a command interface which also uses RPMsg for passing on the instructions to the SHARC Core. A helper tool for simplifying this is installed on the target. The tool creates a character device which will accept a channel number and a frequency to be added to the audio as strings allowing for simple interaction from the command line.</p>
+<p>The SHARC can be instructed to add a tone to the audio played using aplay. This
+is done through a command interface which also uses RPMsg for passing on the
+instructions to the SHARC Core. A helper tool for simplifying this is installed
+on the target. The tool creates a character device which will accept a channel
+number and a frequency to be added to the audio as strings allowing for simple
+interaction from the command line.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>rpmsg-bind-chardev<span class="w"> </span>-d<span class="w"> </span>virtio0.sharc-audioweaver.-1.201<span class="w"> </span>-a<span class="w"> </span><span class="m">60</span>
 </pre></div>
 </div>
-<p>Once the binding has been created a character device /dev/rpmsg0 is available and will accept commands with the syntax &lt;channel&gt; &lt;frequency&gt;. To add a 800Hz tone to channel 0 (Left) enter the following at the command line:</p>
+<p>Once the binding has been created a character device /dev/rpmsg0 is available
+and will accept commands with the syntax &lt;channel&gt; &lt;frequency&gt;. To add a 800Hz
+tone to channel 0 (Left) enter the following at the command line:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">800</span>.0<span class="w"> </span>&gt;<span class="w"> </span>/dev/rpmsg0
 </pre></div>
 </div>
@@ -703,7 +714,9 @@ Load<span class="w"> </span>Remote<span class="w"> </span>Processor<span class="
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">500</span>.0<span class="w"> </span>&gt;<span class="w"> </span>/dev/rpmsg0
 </pre></div>
 </div>
-<p>When running aplay again you will hear a dual tone frequency on both channels. The left channel will contain 440Hz + 800Hz whereas the right channel will contain 200Hz + 500Hz.</p>
+<p>When running aplay again you will hear a dual tone frequency on both channels.
+The left channel will contain 440Hz + 800Hz whereas the right channel will
+contain 200Hz + 500Hz.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>aplay<span class="w"> </span>/usr/share/sounds/alsa/2Ch_L440_R200_48kHz_16bit_6s.wav
 </pre></div>
 </div>

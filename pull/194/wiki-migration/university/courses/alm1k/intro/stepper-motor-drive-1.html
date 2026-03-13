@@ -597,17 +597,30 @@ Content on this topic
 <h1>Activity: Stepper Motor Control, For ADALM1000<a class="headerlink" href="#activity-stepper-motor-control-for-adalm1000" title="Link to this heading"></a></h1>
 <section id="objective">
 <h2>Objective:<a class="headerlink" href="#objective" title="Link to this heading"></a></h2>
-<p>A stepper motor is a brushless DC electric motor that divides one full rotation into a number of equal steps. The motor’s position can then be forced to rotate to and hold at one of these steps without a feedback sensor, as long as the motor is properly sized to the target application. In this activity you will learn how to rotate a stepper motor in both directions using full and half steps.</p>
+<p>A stepper motor is a brushless DC electric motor that divides one full rotation
+into a number of equal steps. The motor’s position can then be forced to rotate
+to and hold at one of these steps without a feedback sensor, as long as the
+motor is properly sized to the target application. In this activity you will
+learn how to rotate a stepper motor in both directions using full and half
+steps.</p>
 </section>
 <section id="notes">
 <h2>Notes:<a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
-<p>As in all the ALM labs we use the following terminology when referring to the connections to the ALM1000 connector and configuring the hardware. The blue shaded rectangles indicate connections to the ALM1000 digital I/O connector.</p>
+<p>As in all the ALM labs we use the following terminology when referring to the
+connections to the ALM1000 connector and configuring the hardware. The blue
+shaded rectangles indicate connections to the ALM1000 digital I/O connector.</p>
 <p>The digital I/O channel pins are referred to as D0 through D3. These correspond to the pins labeled PIO 0 – PIO 3 on the ALM1000 board silkscreen.</p>
 </section>
 <section id="background">
 <h2>Background:<a class="headerlink" href="#background" title="Link to this heading"></a></h2>
-<p>Stepper motors are used in floppy disk drives, flatbed scanners, computer printers, XY plotters, slot machines, image scanners, compact disc drives, intelligent lighting, camera lenses, CNC machines and, most recently, in 3D printers.</p>
-<p>To rotate the stepper motor a sequence of “high” and “low” levels is applied to each of the 4 inputs in sequence. By setting the correct sequence of high and low levels the motor spindle will rotate. The direction can be reversed by reversing the sequence.</p>
+<p>Stepper motors are used in floppy disk drives, flatbed scanners, computer
+printers, XY plotters, slot machines, image scanners, compact disc drives,
+intelligent lighting, camera lenses, CNC machines and, most recently, in 3D
+printers.</p>
+<p>To rotate the stepper motor a sequence of “high” and “low” levels is applied to
+each of the 4 inputs in sequence. By setting the correct sequence of high and
+low levels the motor spindle will rotate. The direction can be reversed by
+reversing the sequence.</p>
 <section id="materials">
 <h3>Materials:<a class="headerlink" href="#materials" title="Link to this heading"></a></h3>
 <p>ADALM1000 hardware module Solder-less breadboard adapter Jumper wires 2 – 74HC541 octal drivers 1 – 5 V Stepper motor (Mitsumi M35SP-7T bipolar stepper motor or similar) 1 Amp 5 V power supply, USB wall charger and micro USB to breadboard adapter is a good option</p>
@@ -615,17 +628,48 @@ Content on this topic
 </section>
 <section id="program-to-drive-a-stepper-motor">
 <h2>Program to Drive A Stepper Motor<a class="headerlink" href="#program-to-drive-a-stepper-motor" title="Link to this heading"></a></h2>
-<p>The Python software development layer (libsmu and pysmu) for the ADALM1000 provides a way to write specific control routines for external hardware like stepper motors. Be sure to install the libsmu and Python bindings, if you have not done so already, before continuing with this activity.</p>
+<p>The Python software development layer (libsmu and pysmu) for the ADALM1000
+provides a way to write specific control routines for external hardware like
+stepper motors. Be sure to install the libsmu and Python bindings, if you have
+not done so already, before continuing with this activity.</p>
 <p><a class="icon git reference external" href="https://github.com/analogdevicesinc/libsmu/tree/main/tree/master" target="_blank">libsmu on GitHub</a></p>
-<p>This activity will cover one example using Python to control a Mitsumi M35SP-7T stepper motor salvaged from a flatbed scanner. Other similar stepper motors can be substituted. The example driver circuit, shown in figure 1, is somewhat incidental to this programing discussion and the code examples can in general be used to control any similar driver circuit / motor combination. This particular stepper motor is of the bipolar drive (4 wire differential) variety and it thus needs to be driven by an H-Bridge configuration.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/intro/intro_stepper_motor_f1.png"><img alt="image1" src="https://wiki.analog.com/_media/university/courses/alm1k/intro/intro_stepper_motor_f1.png" style="width: 500px;" /></a></p>
+<p>This activity will cover one example using Python to control a Mitsumi M35SP-7T
+stepper motor salvaged from a flatbed scanner. Other similar stepper motors can
+be substituted. The example driver circuit, shown in figure 1, is somewhat
+incidental to this programing discussion and the code examples can in general be
+used to control any similar driver circuit / motor combination. This particular
+stepper motor is of the bipolar drive (4 wire differential) variety and it thus
+needs to be driven by an H-Bridge configuration.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/intro/intro_stepper_motor_f1.png"><img alt="image1" src="https://wiki.analog.com/_media/university/courses/alm1k/intro/intro_stepper_motor_f1.png" width="500" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 1, Differential stepper motor driver schematic</p>
 </div>
-<p>The M35SP-7T stepper motor has 9Ω windings and is specified to be driven nominally with 5 volts which would give a coil current of around 555 mA. Do not attempt to use the +5V supply from ADALM1000 for this. Use a supply that is capable of supplying at least 1A of current. A 1 Amp 5V USB wall charger and the micro USB to breadboard adapter from the ALP2000 kit will work.</p>
-<p>To make the driver circuit simple for this activity, an octal CMOS buffer such as the 74HC541 can serve as an H-bridge. To supply sufficient current to the motor windings we will need to connect multiple buffers in parallel. The schematic example shows two of the 8 buffers connected in parallel to make the four H Bridge outputs. The ALM1000 digital output pins are 3.3V CMOS but for this simple demonstration the 3.3V output is sufficient to switch the 74HC541 running from +5 V. Using a 74HCT541 devices with lower TTL logic input thresholds would work even better.</p>
-<p>Because of the on resistance of the CMOS buffer output transistors in the 74HC541, the coil voltage will not be the full 5 V power supply. Two buffers are strong enough to make the motor spin but not with full torque. Combining two 74HC541 packages will provide 4 buffers in parallel. Using 4 buffers in parallel results in about 250 mA of drive current which is about one half of the rated current so the maximum pulse rate will also be about one half of the specified rate or 50 Hz. One way to combine two 74HC541 packages with fewer breadboard wires is by piggy-backing the two DIP packages one on top of the other and soldering their leads together.</p>
-<p>Two H-bridge circuits using four NMOS and four PMOS power transistors such as the ZVN2110A and ZVP2110A from the parts kit (ADALP2000) could be constructed to provide higher coil currents. To drive a 5 or 6 wire unipolar stepper motor single ended Darlington drivers like the ULN2003 can be used.</p>
+<p>The M35SP-7T stepper motor has 9Ω windings and is specified to be driven
+nominally with 5 volts which would give a coil current of around 555 mA. Do not
+attempt to use the +5V supply from ADALM1000 for this. Use a supply that is
+capable of supplying at least 1A of current. A 1 Amp 5V USB wall charger and the
+micro USB to breadboard adapter from the ALP2000 kit will work.</p>
+<p>To make the driver circuit simple for this activity, an octal CMOS buffer such
+as the 74HC541 can serve as an H-bridge. To supply sufficient current to the
+motor windings we will need to connect multiple buffers in parallel. The
+schematic example shows two of the 8 buffers connected in parallel to make the
+four H Bridge outputs. The ALM1000 digital output pins are 3.3V CMOS but for
+this simple demonstration the 3.3V output is sufficient to switch the 74HC541
+running from +5 V. Using a 74HCT541 devices with lower TTL logic input
+thresholds would work even better.</p>
+<p>Because of the on resistance of the CMOS buffer output transistors in the
+74HC541, the coil voltage will not be the full 5 V power supply. Two buffers are
+strong enough to make the motor spin but not with full torque. Combining two
+74HC541 packages will provide 4 buffers in parallel. Using 4 buffers in parallel
+results in about 250 mA of drive current which is about one half of the rated
+current so the maximum pulse rate will also be about one half of the specified
+rate or 50 Hz. One way to combine two 74HC541 packages with fewer breadboard
+wires is by piggy-backing the two DIP packages one on top of the other and
+soldering their leads together.</p>
+<p>Two H-bridge circuits using four NMOS and four PMOS power transistors such as
+the ZVN2110A and ZVP2110A from the parts kit (ADALP2000) could be constructed to
+provide higher coil currents. To drive a 5 or 6 wire unipolar stepper motor
+single ended Darlington drivers like the ULN2003 can be used.</p>
 <section id="hardware-setup">
 <h3>Hardware Setup:<a class="headerlink" href="#hardware-setup" title="Link to this heading"></a></h3>
 <p>Build the schematic shown in figure 1 on your solderless bread board.</p>
@@ -633,18 +677,26 @@ Content on this topic
 <section id="procedure">
 <h3>Procedure:<a class="headerlink" href="#procedure" title="Link to this heading"></a></h3>
 <p><strong>Drive Waveforms</strong></p>
-<p>The pulse waveform sequence for “forward” rotation is shown in figure 2. A pulse on PIO 0 will energize coil A with a positive polarity and a pulse on PIO 2 will energize coil A with an opposite negative polarity. Similarly, a pulse on PIO 1 will energize coil B with a positive polarity and a pulse on PIO 3 will energize coil B with an opposite negative polarity.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/intro/intro_stepper_motor_f2.png"><img alt="image2" src="https://wiki.analog.com/_media/university/courses/alm1k/intro/intro_stepper_motor_f2.png" style="width: 600px;" /></a></p>
+<p>The pulse waveform sequence for “forward” rotation is shown in figure 2. A pulse
+on PIO 0 will energize coil A with a positive polarity and a pulse on PIO 2 will
+energize coil A with an opposite negative polarity. Similarly, a pulse on PIO 1
+will energize coil B with a positive polarity and a pulse on PIO 3 will energize
+coil B with an opposite negative polarity.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/intro/intro_stepper_motor_f2.png"><img alt="image2" src="https://wiki.analog.com/_media/university/courses/alm1k/intro/intro_stepper_motor_f2.png" width="600" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 2, Pulse sequence for forward rotation</p>
 </div>
-<p>As we can see from the timing diagram the coils are energized in a +A, +B, -A, -B sequence. One cycle is four full steps.</p>
-<p>For “reverse” rotation we need to swap the pulse sequence as shown in figure 3. As we can see this is essentially the sequence in reverse order.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/intro/intro_stepper_motor_f3.png"><img alt="image3" src="https://wiki.analog.com/_media/university/courses/alm1k/intro/intro_stepper_motor_f3.png" style="width: 600px;" /></a></p>
+<p>As we can see from the timing diagram the coils are energized in a +A, +B, -A,
+-B sequence. One cycle is four full steps.</p>
+<p>For “reverse” rotation we need to swap the pulse sequence as shown in figure 3.
+As we can see this is essentially the sequence in reverse order.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/intro/intro_stepper_motor_f3.png"><img alt="image3" src="https://wiki.analog.com/_media/university/courses/alm1k/intro/intro_stepper_motor_f3.png" width="600" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 3, Pulse sequence for reverse rotation</p>
 </div>
-<p>The libsmu Python layer for controlling the ADALM1000 contains a function to configure and control the digital input / output pins. The digital outputs can be configured as either static inputs or outputs.</p>
+<p>The libsmu Python layer for controlling the ADALM1000 contains a function to
+configure and control the digital input / output pins. The digital outputs can
+be configured as either static inputs or outputs.</p>
 <p><strong>Code example 1:</strong></p>
 <p>In this first code example we configure the four digital pins, PIO 0 – 3, as outputs using the basic devx.ctrl_transfer() function to turn them on and off one at a time in the desired sequence by looping through a look-up table.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># assign digital pins</span>
@@ -659,7 +711,9 @@ Content on this topic
 <span class="n">D3steptab</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>While this is a fairly simple approach it is sort of brute force and the width and frequency of the pulses is highly dependent on the speed and activity level of the computer being used.</p>
+<p>While this is a fairly simple approach it is sort of brute force and the width
+and frequency of the pulses is highly dependent on the speed and activity level
+of the computer being used.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">StepCount</span><span class="p">:</span>
     <span class="n">pointer</span> <span class="o">=</span> <span class="n">pointer</span> <span class="o">+</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="n">pointer</span> <span class="o">&gt;</span> <span class="n">pointermax</span><span class="p">:</span>
@@ -678,9 +732,15 @@ Content on this topic
     <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
 </pre></div>
 </div>
-<p>We need to define two functions, one for forward rotation and one for reverse rotation. All that is different is the way we step through the look-up table by incrementing the pointer to go forward and decrementing the pointer to go in reverse. The time.sleep(steptime) function adds a delay which determines the time a bit is on before the next in the sequence is turned on. The StepCount variable is used to determine how many times the bit pattern is sent.</p>
+<p>We need to define two functions, one for forward rotation and one for reverse
+rotation. All that is different is the way we step through the look-up table by
+incrementing the pointer to go forward and decrementing the pointer to go in
+reverse. The time.sleep(steptime) function adds a delay which determines the
+time a bit is on before the next in the sequence is turned on. The StepCount
+variable is used to determine how many times the bit pattern is sent.</p>
 <p><strong>Code example 2:</strong></p>
-<p>To rotate the motor using half steps all we need to do is expand the look-up table as shown here:</p>
+<p>To rotate the motor using half steps all we need to do is expand the look-up
+table as shown here:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># step tables for 1/2 steps</span>
 <span class="n">D0steptab</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
 <span class="n">D1steptab</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
@@ -688,10 +748,12 @@ Content on this topic
 <span class="n">D3steptab</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>As we can see there are now 8 bit patterns in the table. The half way between steps are produced when both coils are on at the same time.</p>
+<p>As we can see there are now 8 bit patterns in the table. The half way between
+steps are produced when both coils are on at the same time.</p>
 <p>Program files ( <a class="icon link reference external" href="https://wiki.analog.com/_media/university/courses/alm1k/intro/alm1000_stepper.zip" target="_blank">alm1000_stepper.zip</a> ) for this activity are available. Stepper_test_1.py produces full step pulses. Stepper_test_2.py produces half step pulses. Open the Stepper_1.py or Stepper_2.py Python program in your favorite editor. The IDLE that comes with Python is handy because you can run the program directly from there.</p>
-<p>Stepper_test_1.py produces full step pulses. Stepper_test_2.py produces half step pulses. Run the program. You should see something like figure 4.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/intro/intro_stepper_motor_f4.png"><img alt="image4" src="https://wiki.analog.com/_media/university/courses/alm1k/intro/intro_stepper_motor_f4.png" style="width: 200px;" /></a></p>
+<p>Stepper_test_1.py produces full step pulses. Stepper_test_2.py produces half
+step pulses. Run the program. You should see something like figure 4.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/intro/intro_stepper_motor_f4.png"><img alt="image4" src="https://wiki.analog.com/_media/university/courses/alm1k/intro/intro_stepper_motor_f4.png" width="200" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 4 Stepper_1.py</p>
 </div>

@@ -598,19 +598,42 @@ Content on this topic
 <h1>Activity: Semi-Digital FIR Filter<a class="headerlink" href="#activity-semi-digital-fir-filter" title="Link to this heading"></a></h1>
 <section id="objective">
 <h2>Objective:<a class="headerlink" href="#objective" title="Link to this heading"></a></h2>
-<p>The objective of this Lab activity is to examine the Finite Impulse Filter (FIR) structure where the single-bit digital signal to be filtered is fed into a digital shift register with an analog reconstruction output stage. This digital/analog hybrid arrangement is most often referred to as a semi-digital filter.</p>
+<p>The objective of this Lab activity is to examine the Finite Impulse Filter (FIR)
+structure where the single-bit digital signal to be filtered is fed into a
+digital shift register with an analog reconstruction output stage. This
+digital/analog hybrid arrangement is most often referred to as a semi-digital
+filter.</p>
 </section>
 <section id="notes">
 <h2>Notes:<a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
 <p>As in all the ALM labs we use the following terminology when referring to the connections to the M1000 connector and configuring the hardware. The green shaded rectangles indicate connections to the M1000 analog I/O connector. The analog I/O channel pins are referred to as CA and CB. When configured to force voltage / measure current –V is added as in CA-V or when configured to force current / measure voltage –I is added as in CA-I. When a channel is configured in the high impedance mode to only measure voltage –H is added as CA-H.</p>
-<p>Scope traces are similarly referred to by channel and voltage / current. Such as CA-V , CB-V for the voltage waveforms and CA-I , CB-I for the current waveforms.</p>
+<p>Scope traces are similarly referred to by channel and voltage / current. Such as
+CA-V , CB-V for the voltage waveforms and CA-I , CB-I for the current waveforms.</p>
 </section>
 <section id="background">
 <h2>Background:<a class="headerlink" href="#background" title="Link to this heading"></a></h2>
-<p>When converting a digital audio signal or other type of band-limited digital signal into analog form, it is desirable to preserve a given frequency band of the signal content, while filtering out unwanted frequencies in other bands (typically higher in frequency than the desired band). For example, the digital to analog conversion process generally includes a low pass filtering stage, which removes out of band noise in the resulting output analog signal.</p>
-<p>When the raw unfiltered analog output of a digital to analog converter is fed to an analog circuit such as an amplifier, out of band noise can have a negative interaction with the linear amplification process, and can alias back into the desired frequency band, distorting the output signal. One means of low pass filtering for removing the out of band noise during the digital to analog conversion may be through the use of a semi-digital finite impulse response (FIR) filter. The input to the filter could be pulse width modulated (PWM) or pulse density modulated (PDM). The semi-digital FIR filter uses the digital input value delayed in time to switch voltage mode summation switches on and off to generate an analog output reconstruction of the digital input signal that is inherently low-pass filtered. In a conventional design, the coefficients of the semi-digital FIR filter are computed using classical digital filter design techniques in which the filter is constrained to be a linear phase filter, which results in a symmetrical set of FIR filter coefficients.</p>
+<p>When converting a digital audio signal or other type of band-limited digital
+signal into analog form, it is desirable to preserve a given frequency band of
+the signal content, while filtering out unwanted frequencies in other bands
+(typically higher in frequency than the desired band). For example, the digital
+to analog conversion process generally includes a low pass filtering stage,
+which removes out of band noise in the resulting output analog signal.</p>
+<p>When the raw unfiltered analog output of a digital to analog converter is fed to
+an analog circuit such as an amplifier, out of band noise can have a negative
+interaction with the linear amplification process, and can alias back into the
+desired frequency band, distorting the output signal. One means of low pass
+filtering for removing the out of band noise during the digital to analog
+conversion may be through the use of a semi-digital finite impulse response
+(FIR) filter. The input to the filter could be pulse width modulated (PWM) or
+pulse density modulated (PDM). The semi-digital FIR filter uses the digital
+input value delayed in time to switch voltage mode summation switches on and off
+to generate an analog output reconstruction of the digital input signal that is
+inherently low-pass filtered. In a conventional design, the coefficients of the
+semi-digital FIR filter are computed using classical digital filter design
+techniques in which the filter is constrained to be a linear phase filter, which
+results in a symmetrical set of FIR filter coefficients.</p>
 <p>The Semi-digital FIR filter principle is shown in figure 1, where the single-bit digital signal to be filtered is fed into a shift register. An analog summing node is coupled to the contents of the shift register though a weighting network. In the simple form we are looking at in this activity, the unit delay (Z<sup>-1</sup>) taps have associated resistances which are the coefficients of the filter (B<sub>0</sub> – B<sub>N</sub>). The analog sum at the output produces a filtered analog version of the digital input signal that was fed to the input of the shift register delay line.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-ss-lab-sdf-fig_1.png"><img alt="image1" src="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-ss-lab-sdf-fig_1.png" style="width: 600px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-ss-lab-sdf-fig_1.png"><img alt="image1" src="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-ss-lab-sdf-fig_1.png" width="600" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 1, Semi-digital FIR filter</p>
 </div>
@@ -621,16 +644,29 @@ Content on this topic
 </section>
 <section id="directions">
 <h3>Directions:<a class="headerlink" href="#directions" title="Link to this heading"></a></h3>
-<p>Build the semi-digital FIR low pass filter using a 74HC273 Octal D-type register on your solderless breadboard. An 8 stage shift register is constructed by connecting the Q output of one FF to the D input of the next as shown in figure 2. The digital input signal to be filtered is connected to the first FF D input. A delayed version of the digital input appears at each Q output. The delay is equal to one clock period per stage in the register. So the first Q output is delayed by one clock period and the eighth (or last) Q output is delayed by 8 clock periods.</p>
-<p>The analog output representation of the digital input signal is created as a weighted summation of the digital input and all 8 Q outputs. In this first example, using resistor values from the ADALP2000 parts kit, all the coefficients are similar in weight with the first two and last two of equal value (10 KΩ) an the middle 5 slightly higher weight equal to 6.8 KΩ.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-ss-lab-sdf-fig_2.png"><img alt="image2" src="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-ss-lab-sdf-fig_2.png" style="width: 600px;" /></a></p>
+<p>Build the semi-digital FIR low pass filter using a 74HC273 Octal D-type register
+on your solderless breadboard. An 8 stage shift register is constructed by
+connecting the Q output of one FF to the D input of the next as shown in figure
+2. The digital input signal to be filtered is connected to the first FF D input.
+A delayed version of the digital input appears at each Q output. The delay is
+equal to one clock period per stage in the register. So the first Q output is
+delayed by one clock period and the eighth (or last) Q output is delayed by 8
+clock periods.</p>
+<p>The analog output representation of the digital input signal is created as a
+weighted summation of the digital input and all 8 Q outputs. In this first
+example, using resistor values from the ADALP2000 parts kit, all the
+coefficients are similar in weight with the first two and last two of equal
+value (10 KΩ) an the middle 5 slightly higher weight equal to 6.8 KΩ.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-ss-lab-sdf-fig_2.png"><img alt="image2" src="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-ss-lab-sdf-fig_2.png" width="600" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 2, Shift register FIR filter</p>
 </div>
 </section>
 <section id="clock-source">
 <h3>Clock source:<a class="headerlink" href="#clock-source" title="Link to this heading"></a></h3>
-<p>This experiment needs a square wave clock source for the shift register. A variable frequency square wave source can be built using the AD654 voltage-to-frequency converter IC, as shown in figure 3.</p>
+<p>This experiment needs a square wave clock source for the shift register. A
+variable frequency square wave source can be built using the AD654
+voltage-to-frequency converter IC, as shown in figure 3.</p>
 </section>
 <section id="id1">
 <h3>Materials:<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
@@ -639,23 +675,43 @@ Content on this topic
 <section id="id2">
 <h3>Directions:<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
 <p>Alongside the shift register construct the AD645 based digital clock source generator shown in figure 3. Refer to the AD654 datasheet for more details on the operation of the circuit. The output frequency is determined by the values of C<sub>2</sub> and R<sub>5</sub> and the voltage applied to pin 4 (V<sub>REF</sub>). A variable voltage divider consisting of R<sub>1</sub>, R<sub>3</sub> and potentiometer R<sub>2</sub>, across the 2.5 V supply creates V<sub>REF</sub>. The square wave output at pin 1 of the AD654 drives the clock input of the 74HC273 at pin 11.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-ss-lab-delta-sigma-fig_3.png"><img alt="image3" src="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-ss-lab-delta-sigma-fig_3.png" style="width: 600px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-ss-lab-delta-sigma-fig_3.png"><img alt="image3" src="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-ss-lab-delta-sigma-fig_3.png" width="600" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 3, Voltage-to-frequency Converter square wave source</p>
 </div>
-<p>Check the output frequency of the clock source with scope cannel B. It should be at least 10 KHz and be able to be adjusted up to 25 KHz or as much as 35 or 40 KHz.</p>
+<p>Check the output frequency of the clock source with scope cannel B. It should be
+at least 10 KHz and be able to be adjusted up to 25 KHz or as much as 35 or 40
+KHz.</p>
 </section>
 <section id="procedure">
 <h3>Procedure:<a class="headerlink" href="#procedure" title="Link to this heading"></a></h3>
 <p>The first step is to test the step response of the filter. Set the AWG channel A Min value to 0 and Max vale to 5. Set the Freq to 500 Hz. From the AWG channel A Shape menu select Square. Using scope channel B, observe the response at the output to the rising and falling edge of the input. As you change the clock frequency generated by the AD654 (adjust pot R<sub>2</sub>) you should see the slope of the output change. You should see 9 or 10 distinct levels as the output transitions. To further smooth these intermediate steps a filter capacitor can be connected from the output to ground.</p>
-<p>To observe the impulse response of the filter adjust the Freq of channel A to a lower number say 200 Hz and reduce the duty cycle value to produce a narrow pulse. The width of the pulse needs to be at least one clock cycle wide but not more than 2 clock cycles wide.</p>
+<p>To observe the impulse response of the filter adjust the Freq of channel A to a
+lower number say 200 Hz and reduce the duty cycle value to produce a narrow
+pulse. The width of the pulse needs to be at least one clock cycle wide but not
+more than 2 clock cycles wide.</p>
 </section>
 <section id="generating-digital-signals-to-filter">
 <h3>Generating digital signals to filter:<a class="headerlink" href="#generating-digital-signals-to-filter" title="Link to this heading"></a></h3>
-<p>We would now like to test the response of the filter with more complex digital waveforms. One way to do that is to load the waveform from a .csv file. Download the waveform file containing a pulse width modulated waveform (pwm-sine-5.zip) and extract the .csv file. This file was generated using 128 Master 100 KHz clock pulses for the base pulse width and 128 “samples” of a sine wave. It is 128 * 128 or 16384 samples long and the sinewave output frequency is about 6 Hz. From the AWG channel A Shape menu select Read CSV to load the waveform into the AWG A waveform buffer. (Be sure that Repeat is checked to produce a continuous output.) To actually see the modulating sine wave you can use the simple RC filter shown in figure 4.</p>
-<p>The ALICE software can also generate Pulse Width Modulated sine waves. From the Shape drop-down menu select the PWM sine option. The Min and Max values are used to set the low and high values of the pulse. The Freq entry is used to set the frequency of the modulation sine wave. The number in the duty cycle entry set the number of master clock cycles (100 KHz) used for the pulse width that will be modulated by the sine wave. The more master clock cycles used the higher the resolution, but also the lower the sine wave frequency has to be.</p>
+<p>We would now like to test the response of the filter with more complex digital
+waveforms. One way to do that is to load the waveform from a .csv file. Download
+the waveform file containing a pulse width modulated waveform (pwm-sine-5.zip)
+and extract the .csv file. This file was generated using 128 Master 100 KHz
+clock pulses for the base pulse width and 128 “samples” of a sine wave. It is
+128 * 128 or 16384 samples long and the sinewave output frequency is about 6
+Hz. From the AWG channel A Shape menu select Read CSV to load the waveform into
+the AWG A waveform buffer. (Be sure that Repeat is checked to produce a
+continuous output.) To actually see the modulating sine wave you can use the
+simple RC filter shown in figure 4.</p>
+<p>The ALICE software can also generate Pulse Width Modulated sine waves. From the
+Shape drop-down menu select the PWM sine option. The Min and Max values are used
+to set the low and high values of the pulse. The Freq entry is used to set the
+frequency of the modulation sine wave. The number in the duty cycle entry set
+the number of master clock cycles (100 KHz) used for the pulse width that will
+be modulated by the sine wave. The more master clock cycles used the higher the
+resolution, but also the lower the sine wave frequency has to be.</p>
 <p>Try generating a few different PWM sinewaves and observe the filter response.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-ss-lab-sdf-fig_4.png"><img alt="image4" src="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-ss-lab-sdf-fig_4.png" style="width: 300px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-ss-lab-sdf-fig_4.png"><img alt="image4" src="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-ss-lab-sdf-fig_4.png" width="300" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 4, Simple first order RC reconstruction filter.</p>
 </div>
@@ -664,16 +720,28 @@ Content on this topic
 <section id="appendix">
 <h3>Appendix:<a class="headerlink" href="#appendix" title="Link to this heading"></a></h3>
 <p><strong>74HC273 functional block diagram</strong></p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-ss-lab-lfsr-fig_6.png"><img alt="image5" src="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-ss-lab-lfsr-fig_6.png" style="width: 250px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-ss-lab-lfsr-fig_6.png"><img alt="image5" src="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-ss-lab-lfsr-fig_6.png" width="250" /></a></p>
 <div class="centeralign docutils container">
 <p>74HC273 Pinout</p>
 </div>
 </section>
 <section id="moving-average-filter-boxcar-filter">
 <h3>Moving Average Filter (Boxcar filter):<a class="headerlink" href="#moving-average-filter-boxcar-filter" title="Link to this heading"></a></h3>
-<p>The moving average filter is a simple Low Pass FIR (Finite Impulse Response) filter commonly used for smoothing an array of sampled data/signal values. It takes the last M samples of the input at a time and takes the average of those M-samples and produces a single output point. It is a very simple LPF (Low Pass Filter) structure that comes in handy for scientists and engineers to filter unwanted noisy or higher frequency components from the sampled data.</p>
-<p>As the filter length increases (the parameter M) the smoothness of the output increases, whereas the sharp transitions in the data are made increasingly blunt. This implies that this filter has excellent time domain response but a poor frequency response.</p>
-<p>The Moving Average filter performs three important functions: 1) It takes M input points, computes the average of those M-points and produces a single output point 2) Due to the computation/calculations involved, the filter introduces a definite amount of delay 3) The filter acts as a Low Pass Filter (with poor frequency domain response and a good time domain response).</p>
+<p>The moving average filter is a simple Low Pass FIR (Finite Impulse Response)
+filter commonly used for smoothing an array of sampled data/signal values. It
+takes the last M samples of the input at a time and takes the average of those
+M-samples and produces a single output point. It is a very simple LPF (Low Pass
+Filter) structure that comes in handy for scientists and engineers to filter
+unwanted noisy or higher frequency components from the sampled data.</p>
+<p>As the filter length increases (the parameter M) the smoothness of the output
+increases, whereas the sharp transitions in the data are made increasingly
+blunt. This implies that this filter has excellent time domain response but a
+poor frequency response.</p>
+<p>The Moving Average filter performs three important functions: 1) It takes M
+input points, computes the average of those M-points and produces a single
+output point 2) Due to the computation/calculations involved, the filter
+introduces a definite amount of delay 3) The filter acts as a Low Pass Filter
+(with poor frequency domain response and a good time domain response).</p>
 <p><strong>For Further Reading:</strong></p>
 <p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/data-sheets/AD654.pdf" target="_blank">AD654 datasheet</a> <a class="icon link reference external" href="https://en.wikipedia.org/wiki/Finite_impulse_response" target="_blank">Finite impulse response</a> <a class="icon link reference external" href="https://ptolemy.berkeley.edu/eecs20/week12/freqResponseRA.html" target="_blank">Frequency Response of the Running Average Filter</a></p>
 <p><strong>Return to Lab Activity</strong> <a class="reference internal" href="../alm-signals-labs-list.html"><span class="doc">Table of Contents</span></a><strong>.</strong></p>

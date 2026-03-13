@@ -724,20 +724,31 @@ Content on this topic
 <li><p>clocks: phandle to the external clock. Should be set according to “clock-names”. If this field is left empty, the internal clock is used.</p></li>
 <li><p>clock-names: The name of the external clock to be used. Valid values are:</p>
 <ul>
-<li><p>sync: This mode is the same as internal clock mode with one exception, the SYNC pin pulses when the internal processor collects data from the inertial sensors. The clock-frequency must be:</p>
+<li><p>sync: This mode is the same as internal clock mode with one exception, the
+SYNC pin pulses when the internal processor collects data from the
+inertial sensors. The clock-frequency must be:</p>
 <ul>
 <li><p>1900 to 2100 Hz.</p></li>
-<li><p>direct-sync: In this mode, the signal of SYNC pin directly controls the sample clock. In this mode, the processor collects gyroscope data samples on the rising edge of the clock and it collects accelerometer data samples on both rising and falling edge of the clock. The clock-frequency must be:</p>
+<li><p>direct-sync: In this mode, the signal of SYNC pin directly controls the
+sample clock. In this mode, the processor collects gyroscope data
+samples on the rising edge of the clock and it collects accelerometer
+data samples on both rising and falling edge of the clock. The
+clock-frequency must be:</p>
 <ul>
 <li><p>1900 to 2100 Hz.</p></li>
 </ul>
 </li>
-<li><p>scaled-sync: This mode is useful when synchronizing the data processing with a PPS signal from a global positioning system (GPS) receiver or with a synchronization signal from a video processing system. The clock-frequency must be:</p>
+<li><p>scaled-sync: This mode is useful when synchronizing the data processing
+with a PPS signal from a global positioning system (GPS) receiver or
+with a synchronization signal from a video processing system. The
+clock-frequency must be:</p>
 <ul>
 <li><p>1 to 128 Hz.</p></li>
 </ul>
 </li>
-<li><p>pulse-sync: In this mode, the processor only collects accelerometer samples on the leading edge of the clock, which enables the use of narrow pulse width in the clock signal. The clock-frequency must be:</p>
+<li><p>pulse-sync: In this mode, the processor only collects accelerometer
+samples on the leading edge of the clock, which enables the use of
+narrow pulse width in the clock signal. The clock-frequency must be:</p>
 <ul>
 <li><p>1000 to 2100 Hz.</p>
 <ul>
@@ -755,7 +766,9 @@ Content on this topic
 <li><p>1900 to 2100 Hz.</p></li>
 </ul>
 </li>
-<li><p>adi,burst32-enable: In this mode, a burst reading contains calibrated gyroscope and accelerometer data in 32-bit format. This mode is only supported by adis1650x devices!</p></li>
+<li><p>adi,burst32-enable: In this mode, a burst reading contains calibrated
+gyroscope and accelerometer data in 32-bit format. This mode is only
+supported by adis1650x devices!</p></li>
 </ul>
 </section>
 <section id="example">
@@ -777,7 +790,8 @@ Content on this topic
 </section>
 <section id="adding-linux-driver-support">
 <h1>Adding Linux driver support<a class="headerlink" href="#adding-linux-driver-support" title="Link to this heading"></a></h1>
-<p>Configure kernel with “make menuconfig” (alternatively use “make xconfig” or “make qconfig”)</p>
+<p>Configure kernel with “make menuconfig” (alternatively use “make xconfig” or
+“make qconfig”)</p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <p>The adis16475 driver depends on CONFIG_SPI_MASTER</p>
@@ -799,7 +813,11 @@ Content on this topic
 </section>
 <section id="hardware-configuration">
 <h1>Hardware configuration<a class="headerlink" href="#hardware-configuration" title="Link to this heading"></a></h1>
-<p>The evaluation kits simplify the process of connecting an IMU to an embedded processor system using a 16-pin, 1mm ribbon cable. For a detailed description check the links (on the beginning of the page) for the appropriated evaluation kit. Here is an example of basic connection from one ADIS device interface connector to the host:(microprocessor):</p>
+<p>The evaluation kits simplify the process of connecting an IMU to an embedded
+processor system using a 16-pin, 1mm ribbon cable. For a detailed description
+check the links (on the beginning of the page) for the appropriated evaluation
+kit. Here is an example of basic connection from one ADIS device interface
+connector to the host:(microprocessor):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>DEVICE          HOST MICROPROCESSOR
 * DR   ———————&gt; IRQ GPIO
 * CS   &lt;——————— SPI_SEL
@@ -808,7 +826,15 @@ Content on this topic
 * DOUT ———————&gt; SPI_MISO
 </pre></div>
 </div>
-<p>Each and every IIO device, typically a hardware chip, has a device folder under /sys/bus/iio/devices/iio:deviceX. Where X is the IIO index of the device. Under every of these directory folders reside a set of files, depending on the characteristics and features of the hardware device in question. These files are consistently generalized and documented in the IIO ABI documentation. In order to determine which IIO deviceX corresponds to which hardware device, the user can read the name file /sys/bus/iio/devices/iio:deviceX/name. In case the sequence in which the iio device drivers are loaded/registered is constant, the numbering is constant and may be known in advance.</p>
+<p>Each and every IIO device, typically a hardware chip, has a device folder under
+/sys/bus/iio/devices/iio:deviceX. Where X is the IIO index of the device. Under
+every of these directory folders reside a set of files, depending on the
+characteristics and features of the hardware device in question. These files are
+consistently generalized and documented in the IIO ABI documentation. In order
+to determine which IIO deviceX corresponds to which hardware device, the user
+can read the name file /sys/bus/iio/devices/iio:deviceX/name. In case the
+sequence in which the iio device drivers are loaded/registered is constant, the
+numbering is constant and may be known in advance.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>TIP: An example program which uses the interface can be found here:</p>
@@ -1035,7 +1061,13 @@ Content on this topic
 </pre></div>
 </div>
 </div>
-<p>The Industrial I/O subsystem provides support for various ring buffer based data acquisition methods. Apart from device specific hardware buffer support, the user can chose between two different software ring buffer implementations. One is the IIO lock free software ring, and the other is based on Linux kfifo. Devices with buffer support feature an additional sub-folder in the /sys/bus/iio/devices/deviceX/ folder hierarchy. Called deviceX:bufferY, where Y defaults to 0, for devices with a single buffer.</p>
+<p>The Industrial I/O subsystem provides support for various ring buffer based data
+acquisition methods. Apart from device specific hardware buffer support, the
+user can chose between two different software ring buffer implementations. One
+is the IIO lock free software ring, and the other is based on Linux kfifo.
+Devices with buffer support feature an additional sub-folder in the
+/sys/bus/iio/devices/deviceX/ folder hierarchy. Called deviceX:bufferY, where Y
+defaults to 0, for devices with a single buffer.</p>
 <p>Every buffer implementation features a set of files:</p>
 <div class="line-block">
 <div class="line"><strong>length</strong></div>
@@ -1164,7 +1196,8 @@ Content on this topic
 </table>
 </div>
 <p>// SPDX-License-Identifier: GPL-2.0 /dts-v1/; /plugin/;</p>
-<p>#include &lt;dt-bindings/interrupt-controller/irq.h&gt; #include &lt;dt-bindings/gpio/gpio.h&gt;</p>
+<p>#include &lt;dt-bindings/interrupt-controller/irq.h&gt; #include
+&lt;dt-bindings/gpio/gpio.h&gt;</p>
 <p>/ {</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">compatible</span> <span class="o">=</span> <span class="s2">&quot;brcm,bcm2835&quot;</span><span class="p">;</span>
 </pre></div>

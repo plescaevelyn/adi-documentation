@@ -603,18 +603,33 @@ Content on this topic
 <h1>Monopulse Tracking using Phased Array Beamforming<a class="headerlink" href="#monopulse-tracking-using-phased-array-beamforming" title="Link to this heading"></a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
-<p>Monopulse tracking, introduced by Robert Page in 1943 during World War II, significantly advanced radar tracking capabilities. This technology uses a phased array to accurately track an object’s path by arranging the array elements in a line parallel to the horizon, enabling precise tracking of horizontal motion.</p>
-<p>The term “monopulse” combines the Greek word “mono,” meaning single, and “pulse,” referring to a single burst of electromagnetic transmission received by the antenna. This method tracks a target’s location in terms of azimuth (horizontal angle) and elevation (vertical angle).</p>
-<p>The tracking capability relies on 4×8 antenna lobes, divided into right and left lobes.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0566/antenna_lobe.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0566/antenna_lobe.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0566/antenna_lobe.png" style="width: 600px;" />
+<p>Monopulse tracking, introduced by Robert Page in 1943 during World War II,
+significantly advanced radar tracking capabilities. This technology uses a
+phased array to accurately track an object’s path by arranging the array
+elements in a line parallel to the horizon, enabling precise tracking of
+horizontal motion.</p>
+<p>The term “monopulse” combines the Greek word “mono,” meaning single, and
+“pulse,” referring to a single burst of electromagnetic transmission received by
+the antenna. This method tracks a target’s location in terms of azimuth
+(horizontal angle) and elevation (vertical angle).</p>
+<p>The tracking capability relies on 4×8 antenna lobes, divided into right and left
+lobes.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0566/antenna_lobe.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0566/antenna_lobe.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0566/antenna_lobe.png" width="600" />
 </a>
-<p>Signals received by these lobes are processed to create a Sum signal (total power received) and Difference or Delta signals (difference between signals from the left and right lobes). The Sum and Delta signals help estimate the target’s angle:</p>
+<p>Signals received by these lobes are processed to create a Sum signal (total
+power received) and Difference or Delta signals (difference between signals from
+the left and right lobes). The Sum and Delta signals help estimate the target’s
+angle:</p>
 <ul class="simple">
 <li><p>If the target is at the center of the radar beam, the delta signal is zero.</p></li>
-<li><p>If the target is off-center, the delta signal indicates the direction and distance of deviation.</p></li>
+<li><p>If the target is off-center, the delta signal indicates the direction and
+distance of deviation.</p></li>
 </ul>
-<p>By comparing the Sum and Delta signals, the system can determine the exact angle of the target in both azimuth and elevation.</p>
-<p>Today, monopulse tracking is used in various applications, including military, air traffic control, space and satellite tracking, aerospace, weather radars, surveillance, reconnaissance, and telecommunications.</p>
+<p>By comparing the Sum and Delta signals, the system can determine the exact angle
+of the target in both azimuth and elevation.</p>
+<p>Today, monopulse tracking is used in various applications, including military,
+air traffic control, space and satellite tracking, aerospace, weather radars,
+surveillance, reconnaissance, and telecommunications.</p>
 </section>
 <hr class="docutils" />
 <section id="demo-objective">
@@ -659,7 +674,8 @@ Content on this topic
 <li><p>Connect the USB keyboard and mouse to the Raspberry Pi USB ports.</p></li>
 <li><p>Plug the USB-C wall adapter into the USB-C power jack on the EVAL-CN0566-RPIZ. Do NOT plug into the Raspberry Pi USB-C port.</p></li>
 <li><p>Carefully thread the tripod into the tripod mount.</p></li>
-<li><p>Power up the HB100 microwave source with 5V power bank using a micro USB to USB cable. Aim this at the array.</p></li>
+<li><p>Power up the HB100 microwave source with 5V power bank using a micro USB to
+USB cable. Aim this at the array.</p></li>
 </ul>
 </section>
 <section id="software-setup">
@@ -669,10 +685,12 @@ Content on this topic
 <div class="indent docutils container">
 <p><strong>SD Card Image</strong></p>
 <p>Install ADI Kuiper Linux on an SD card. Detailed instructions, including downloading the SD card image, writing it to the SD card, and configuring the system, are available at <a class="reference internal" href="../../../../tools-software/linux-software/kuiper-linux.html"><span class="doc">Analog Devices Kuiper Linux</span></a>.</p>
-<p>Pay close attention to localization settings, keyboard settings, etc., especially when running examples directly on the Raspberry Pi.</p>
+<p>Pay close attention to localization settings, keyboard settings, etc.,
+especially when running examples directly on the Raspberry Pi.</p>
 <p>** SD Card Configuration**</p>
 <p>After burning the image, log into the Raspberry Pi and open the configuration utility. Set the hostname to <strong>“phaser”</strong> and configure the locale, keyboard, and Wi-Fi country (if using Wi-Fi).</p>
-<p>Run the necessary commands to complete the setup. Review the setup script for any updates, as newer versions of Kuiper Linux may have changes.</p>
+<p>Run the necessary commands to complete the setup. Review the setup script for
+any updates, as newer versions of Kuiper Linux may have changes.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">thorenscientific</span><span class="o">/</span><span class="n">rpi_setup_stuff</span><span class="o">/</span><span class="n">raw</span><span class="o">/</span><span class="n">main</span><span class="o">/</span><span class="n">phaser</span><span class="o">/</span><span class="n">phaser_sdcard_setup</span><span class="o">.</span><span class="n">sh</span>
 <span class="n">sudo</span> <span class="n">chmod</span> <span class="o">+</span><span class="n">x</span> <span class="n">phaser_sdcard_setup</span><span class="o">.</span><span class="n">sh</span>
 <span class="o">./</span><span class="n">phaser_sdcard_setup</span><span class="o">.</span><span class="n">sh</span>
@@ -690,7 +708,8 @@ Content on this topic
 <li><p>During installation, check <strong>“Add Python version to PATH”</strong> before clicking <strong>``Install Now``</strong></p></li>
 </ul>
 </li>
-<li><p>To check if the download is successful, go to command prompt and type the command line below: &lt;code&gt; Python –version &lt;/code&gt;</p></li>
+<li><p>To check if the download is successful, go to command prompt and type the
+command line below: &lt;code&gt; Python –version &lt;/code&gt;</p></li>
 </ul>
 </section>
 <section id="libiio-installation">
@@ -744,7 +763,8 @@ Content on this topic
 </section>
 <section id="help-and-support">
 <h2>Help and Support<a class="headerlink" href="#help-and-support" title="Link to this heading"></a></h2>
-<p>For questions and more information, please visit the Analog Devices Engineer Zone.</p>
+<p>For questions and more information, please visit the Analog Devices Engineer
+Zone.</p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <p>For internal support, you can raise a question or submit a ticket through our Jira Service Desk using the following link: <a class="icon link reference external" href="https://jira.analog.com/servicedesk/customer/portal/131" target="_blank">BU Applications Technical Support</a>.</p>

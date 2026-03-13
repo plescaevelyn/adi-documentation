@@ -599,7 +599,9 @@ Content on this topic
 <h1>Activity: Successive Approximation Register (SAR) ADC<a class="headerlink" href="#activity-successive-approximation-register-sar-adc" title="Link to this heading"></a></h1>
 <section id="objective">
 <h2>Objective:<a class="headerlink" href="#objective" title="Link to this heading"></a></h2>
-<p>The objective of this lab activity is to explore the concepts of analog to digital conversion by building an example of a Successive Approximation Register (SAR) ADC partially implemented in both hardware and software.</p>
+<p>The objective of this lab activity is to explore the concepts of analog to
+digital conversion by building an example of a Successive Approximation Register
+(SAR) ADC partially implemented in both hardware and software.</p>
 </section>
 <section id="notes">
 <h2>Notes:<a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
@@ -607,12 +609,17 @@ Content on this topic
 </section>
 <section id="background">
 <h2>Background:<a class="headerlink" href="#background" title="Link to this heading"></a></h2>
-<p>The successive approximation ADC (SAR) converts the input analog waveform into a discrete digital representation via a binary search technique through all possible quantization levels before finally converging on a digital output representation for the current input. Typically, the SAR ADC consists of four sub blocks (figure 1):</p>
+<p>The successive approximation ADC (SAR) converts the input analog waveform into a
+discrete digital representation via a binary search technique through all
+possible quantization levels before finally converging on a digital output
+representation for the current input. Typically, the SAR ADC consists of four
+sub blocks (figure 1):</p>
 <ul class="simple">
 <li><p>Sample and hold circuit (S/H) to acquire the input voltage (Vin).</p></li>
 <li><p>Analog voltage comparator that compares Vin to the output of the internal DAC and outputs the result of the comparison to the SAR</p></li>
 <li><p>Successive approximation register block designed to supply an approximate digital code of Vin to the internal DAC</p></li>
-<li><p>Internal reference DAC that supplies the comparator with an analog voltage equal to the digital code output of the SAR.</p></li>
+<li><p>Internal reference DAC that supplies the comparator with an analog voltage
+equal to the digital code output of the SAR.</p></li>
 </ul>
 <div class="centeralign docutils container">
 </div>
@@ -620,7 +627,17 @@ Content on this topic
 <div class="centeralign docutils container">
 <p>Figure 1. SAR ADC - Typical Architecture</p>
 </div>
-<p>At the start of a conversion, the contents of the SAR is initialized so that the most significant bit (MSB) is set to a digital 1 (on) and all the remaining bits are set to a digital 0 (off). This code is fed into the DAC, which then supplies the analog equivalent of this digital code (mid-sacle) into the comparator circuit for comparison with the sampled input voltage. If this analog voltage exceeds Vin the comparator causes the SAR to reset (reject) this bit; otherwise, the bit is left a 1 (retained). Then the next most significant bit is set to 1 and the same test is done, continuing this binary search algorithm until every bit in the SAR (DAC) has been tested. The resulting code is the digital approximation of the sampled input voltage and is finally output by the SAR at the end of the conversion (EOC).</p>
+<p>At the start of a conversion, the contents of the SAR is initialized so that the
+most significant bit (MSB) is set to a digital 1 (on) and all the remaining bits
+are set to a digital 0 (off). This code is fed into the DAC, which then supplies
+the analog equivalent of this digital code (mid-sacle) into the comparator
+circuit for comparison with the sampled input voltage. If this analog voltage
+exceeds Vin the comparator causes the SAR to reset (reject) this bit; otherwise,
+the bit is left a 1 (retained). Then the next most significant bit is set to 1
+and the same test is done, continuing this binary search algorithm until every
+bit in the SAR (DAC) has been tested. The resulting code is the digital
+approximation of the sampled input voltage and is finally output by the SAR at
+the end of the conversion (EOC).</p>
 <div class="centeralign docutils container">
 </div>
 <p><img alt="image2" src="https://wiki.analog.com/_media/university/courses/electronics/sar_adc_example.png" /></p>
@@ -630,20 +647,33 @@ Content on this topic
 <p>Figure 2 shows an example of a 4-bit conversion. The y-axis represents the DAC output voltage. In the example, the first comparison shows that V<sub>IN</sub> &lt; V<sub>DAC</sub>. Thus, bit 3 is set to 0. The DAC is then set to 0100 and the second comparison is performed. As V<sub>IN</sub> &gt; V<sub>DAC</sub>, bit 2 remains at 1. The DAC is then set to 0110, and the third comparison is performed. Bit 1 is set to 0, and the DAC is then set to 0101 for the final comparison. Finally, bit 0 remains at 1 because V<sub>IN</sub> &gt; V<sub>DAC</sub>.</p>
 <section id="materials">
 <h3>Materials:<a class="headerlink" href="#materials" title="Link to this heading"></a></h3>
-<p>ADALM1000 hardware module Solderless Breadboard AD8541 CMOS rail-rail op-amp (or 1/2 AD8542 dual op-amp) AD5626 12 bit serial DAC 10 KΩ Potentiometer 220 Ω resistor 470 Ω resistor</p>
+<p>ADALM1000 hardware module Solderless Breadboard AD8541 CMOS rail-rail op-amp (or
+1/2 AD8542 dual op-amp) AD5626 12 bit serial DAC 10 KΩ Potentiometer 220 Ω
+resistor 470 Ω resistor</p>
 </section>
 <section id="hardware-setup">
 <h3>Hardware Setup:<a class="headerlink" href="#hardware-setup" title="Link to this heading"></a></h3>
-<p>In order to demonstrate the operation principle of the SAR ADC with ADALM1000, we will use the AD5626 12 serial DAC from the ADALP2000 parts kit. The output of the DAC will be connected to a comparator, the CMOS rail-rail I/O AD8541 op-amp works well for this. The Successive Approximation algorithm will be simulated via a Python script that performs the binary search based on the comparator’s output (connected to one of the digital I/O pins) and generates the proper binary value which will be shifted serially to the AD5626 using 3 of the digital I/O pins.</p>
+<p>In order to demonstrate the operation principle of the SAR ADC with ADALM1000,
+we will use the AD5626 12 serial DAC from the ADALP2000 parts kit. The output of
+the DAC will be connected to a comparator, the CMOS rail-rail I/O AD8541 op-amp
+works well for this. The Successive Approximation algorithm will be simulated
+via a Python script that performs the binary search based on the comparator’s
+output (connected to one of the digital I/O pins) and generates the proper
+binary value which will be shifted serially to the AD5626 using 3 of the digital
+I/O pins.</p>
 <p>On your solderless breadboard connect the AD8541 and AD5626 as shown in figure 3. Potentiometer, R<sub>1</sub> provides an adjustable analog input voltage from the +5 V supply to the input of the ADC circuit. The AD5625 DAC will produce a 0 to 4.095 volt output swing when powered from the fixed +5 V power supply. The AD8541 is also powered from the +5 V supply to accommodate this swing range. The digital input, while compatible with 5 volt logic levels really requires only 0 to 3.3 V logic levels. Resistor divider R<sub>2</sub> and R<sub>3</sub> reduces the 5 V swing at the AD8541 output to a swing less than 0 to 3.3 V.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-sar-adc-fig3.png"><img alt="image3" src="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-sar-adc-fig3.png" style="width: 550px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-sar-adc-fig3.png"><img alt="image3" src="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-sar-adc-fig3.png" width="550" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 3. SAR ADC connections</p>
 </div>
 </section>
 <section id="procedure">
 <h3>Procedure:<a class="headerlink" href="#procedure" title="Link to this heading"></a></h3>
-<p>The libsmu Python layer for controlling the ADALM1000 contains a function to configure and control the digital input / output pins. The digital pins can be configured as either static inputs or outputs. We can output a series of pulses on three of the pins to serially load different values into the AD5626 DAC and then read back the state of the AD8541 comparator on the fourth pin.</p>
+<p>The libsmu Python layer for controlling the ADALM1000 contains a function to
+configure and control the digital input / output pins. The digital pins can be
+configured as either static inputs or outputs. We can output a series of pulses
+on three of the pins to serially load different values into the AD5626 DAC and
+then read back the state of the AD8541 comparator on the fourth pin.</p>
 <p>The routine to send serial data to the DAC looks like this:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">ShiftOut</span><span class="p">(</span><span class="n">DValue</span><span class="p">):</span>
     <span class="k">global</span> <span class="n">PIO_0</span><span class="p">,</span> <span class="n">PIO_1</span><span class="p">,</span> <span class="n">PIO_2</span><span class="p">,</span> <span class="n">PIO_3</span>
@@ -673,7 +703,8 @@ Content on this topic
     <span class="n">devx</span><span class="o">.</span><span class="n">ctrl_transfer</span><span class="p">(</span><span class="mh">0x40</span><span class="p">,</span> <span class="mh">0x50</span><span class="p">,</span> <span class="n">PIO_0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="c1"># strobe to 0</span>
 </pre></div>
 </div>
-<p>The Successive Approximation algorithm that performs the binary search based on the comparator’s output is shown in the next code example.</p>
+<p>The Successive Approximation algorithm that performs the binary search based on
+the comparator’s output is shown in the next code example.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">SAR</span><span class="p">():</span>
     <span class="k">global</span> <span class="n">PIO_0</span><span class="p">,</span> <span class="n">PIO_1</span><span class="p">,</span> <span class="n">PIO_2</span><span class="p">,</span> <span class="n">PIO_3</span>
     <span class="k">while</span> <span class="p">(</span><span class="kc">True</span><span class="p">):</span>       <span class="c1"># Main loop</span>
@@ -700,16 +731,22 @@ Content on this topic
 </pre></div>
 </div>
 <p>Download the SAR ADC Python script from this link (<a class="icon link reference external" href="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/sar-8541-5626.zip" target="_blank">SAR-8541-5626.zip</a>).</p>
-<p>Open the SAR-8541-5626.py Python program in your favorite editor. The IDLE that comes with Python is handy because you can run the program directly from there. Run the program. You should see something like figure 4.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-sar-adc-fig4.png"><img alt="image4" src="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-sar-adc-fig4.png" style="width: 175px;" /></a></p>
+<p>Open the SAR-8541-5626.py Python program in your favorite editor. The IDLE that
+comes with Python is handy because you can run the program directly from there.
+Run the program. You should see something like figure 4.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-sar-adc-fig4.png"><img alt="image4" src="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-sar-adc-fig4.png" width="175" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 4. SAR ADC demo program</p>
 </div>
-<p>Adjust the Potentiometer up and down and notice how the conversion results change. If you have a DMM, connect it to the wiper of the pot and ground to measure the input voltage as the pot is turned. Move the DMM to the output of the DAC and compare the voltage there to the voltage on the wiper of the pot.</p>
+<p>Adjust the Potentiometer up and down and notice how the conversion results
+change. If you have a DMM, connect it to the wiper of the pot and ground to
+measure the input voltage as the pot is turned. Move the DMM to the output of
+the DAC and compare the voltage there to the voltage on the wiper of the pot.</p>
 </section>
 <section id="extra-credit">
 <h3>Extra Credit<a class="headerlink" href="#extra-credit" title="Link to this heading"></a></h3>
-<p>As an extra credit exercise, extend the Python program to draw a graph of the DAC value at each step in the search algorithm like what is shown in figure 2.</p>
+<p>As an extra credit exercise, extend the Python program to draw a graph of the
+DAC value at each step in the search algorithm like what is shown in figure 2.</p>
 </section>
 </section>
 <section id="ad7920-12-bit-adc">
@@ -719,45 +756,77 @@ Content on this topic
 <p>The <a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/data-sheets/AD7910_7920.pdf" target="_blank">AD7920</a> is a 12-bit high speed, low power, successive approximation ADC. It can operate with a single power supply in range 2.35V to 5.25V. This ADC can be serial interfaced. The serial clock provides the conversion clock and also controls the transfer of information from the AD7920 during conversion. The conversion process and data acquisition are controlled using /CS and the serial clock, allowing the devices to interface with microprocessors or DSPs. The input signal is sampled on the falling edge of CS and the conversion is initiated at this point. In figure 5 are shown simplified schematics of the ADC during the acquisition and the conversion phase.</p>
 <div class="centeralign docutils container">
 <p></p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/electronics/acquisition_conversion_ad792.png"><img alt="image5" src="https://wiki.analog.com/_media/university/courses/electronics/acquisition_conversion_ad792.png" style="width: 800px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/electronics/acquisition_conversion_ad792.png"><img alt="image5" src="https://wiki.analog.com/_media/university/courses/electronics/acquisition_conversion_ad792.png" width="800" /></a></p>
 </div>
 <div class="centeralign docutils container">
 <p>Figure 5. AD7920 acquisition and conversion phase</p>
 </div>
-<p>The acquisition phase is when the SW2 is closed and SW1 is in position A. With this setup, the comparator is held in a balanced condition, and the sampling capacitor acquires the signal on Vin. For the ADC to start a conversion, SW2 opens and SW1 moves to Position B causing the comparator to become unbalanced. The control logic and charge redistribution DAC are used to add and subtract fixed amounts of charge from the sampling capacitor to bring the comparator back to a balanced condition as the conversion is completed.</p>
+<p>The acquisition phase is when the SW2 is closed and SW1 is in position A. With
+this setup, the comparator is held in a balanced condition, and the sampling
+capacitor acquires the signal on Vin. For the ADC to start a conversion, SW2
+opens and SW1 moves to Position B causing the comparator to become unbalanced.
+The control logic and charge redistribution DAC are used to add and subtract
+fixed amounts of charge from the sampling capacitor to bring the comparator back
+to a balanced condition as the conversion is completed.</p>
 </section>
 <section id="id2">
 <h3>Hardware Setup<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
-<p>Figure 6 shows the breadboard connections for the AD7920. VREF is taken internally from VDD so it should be well decoupled. This provides an analog input range of 0 V to VDD. The conversion result is output in a 16-bit word with four leading zeros followed by the MSB of the 12-bit data.</p>
-<p>Because of the relatively slow rise/fall times of the ADALM1000 AWG outputs when generating digital square waves, it is necessary to buffer the signals with a 74HC14 Hex inverting Schmitt trigger. Two inverters connected in series sharpens up the edges without introducing an inversion of the signals. Note: non Schmitt trigger gates will not work properly in this circuit.</p>
+<p>Figure 6 shows the breadboard connections for the AD7920. VREF is taken
+internally from VDD so it should be well decoupled. This provides an analog
+input range of 0 V to VDD. The conversion result is output in a 16-bit word with
+four leading zeros followed by the MSB of the 12-bit data.</p>
+<p>Because of the relatively slow rise/fall times of the ADALM1000 AWG outputs when
+generating digital square waves, it is necessary to buffer the signals with a
+74HC14 Hex inverting Schmitt trigger. Two inverters connected in series sharpens
+up the edges without introducing an inversion of the signals. Note: non Schmitt
+trigger gates will not work properly in this circuit.</p>
 <p>The SDATA output of the AD7920 returns to a tri-state condition after 16 SCLK cycles or CSB is logic high. A 10 KΩ pull up resistor, R<sub>1</sub>, to the +5 V rail defines the value when in tri-state.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-sar-adc-fig6.png"><img alt="image6" src="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-sar-adc-fig6.png" style="width: 600px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-sar-adc-fig6.png"><img alt="image6" src="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-sar-adc-fig6.png" width="600" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 6. AD7920 connections</p>
 </div>
-<p>Lacking a 74HC14 Hex inverting Schmitt trigger, some positive feedback can be added around the two input AND gates in a 74HC08 (from part kit) as shown in figure 6A. A 1 KΩ resistor tied from the output of the gate back to the two shorted together inputs along with a 100 Ω resistor in series with the driving source introduces about 400 mV of hysteresis which is enough to sharpen up the edges. This is not generally standard practice when designing with logic gates, where using actual Schmitt trigger input gates should be done, but in a pinch when you might not have one available, standard input gates such as the 74HC08 (in the parts kit) can be pressed into service.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-sar-adc-fig6a.png"><img alt="image7" src="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-sar-adc-fig6a.png" style="width: 600px;" /></a></p>
+<p>Lacking a 74HC14 Hex inverting Schmitt trigger, some positive feedback can be
+added around the two input AND gates in a 74HC08 (from part kit) as shown in
+figure 6A. A 1 KΩ resistor tied from the output of the gate back to the two
+shorted together inputs along with a 100 Ω resistor in series with the driving
+source introduces about 400 mV of hysteresis which is enough to sharpen up the
+edges. This is not generally standard practice when designing with logic gates,
+where using actual Schmitt trigger input gates should be done, but in a pinch
+when you might not have one available, standard input gates such as the 74HC08
+(in the parts kit) can be pressed into service.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-sar-adc-fig6a.png"><img alt="image7" src="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-sar-adc-fig6a.png" width="600" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 6A. Alternate Schmitt Trigger connections adds hysteresis</p>
 </div>
-<p>Figure 7 shows the AD7920 as mounted on the break out board suppled in the ADALP2000 kit. It is important to note where pin 1 is, square solder pad vs round solder pad. This pinout is up side down as compared to a conventional thru hole 8 pin DIP package. It is IMPORTANT to get the pin connections correct when you wire up your breadboard.</p>
+<p>Figure 7 shows the AD7920 as mounted on the break out board suppled in the
+ADALP2000 kit. It is important to note where pin 1 is, square solder pad vs
+round solder pad. This pinout is up side down as compared to a conventional thru
+hole 8 pin DIP package. It is IMPORTANT to get the pin connections correct when
+you wire up your breadboard.</p>
 <div class="centeralign docutils container">
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/tools/adalp2000/bob_ad7920.png"><img alt="image8" src="https://wiki.analog.com/_media/university/tools/adalp2000/bob_ad7920.png" style="width: 300px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/tools/adalp2000/bob_ad7920.png"><img alt="image8" src="https://wiki.analog.com/_media/university/tools/adalp2000/bob_ad7920.png" width="300" /></a></p>
 </div>
 <div class="centeralign docutils container">
 <p>Figure 7. AD7920 break out board</p>
 </div>
-<p>We can use the AWG outputs to generate the SCLK and CSB inputs. Both AWG CH A and CH B are set as a square wave in SVMI split I/O mode. Their Min, Max and frequency values are set as shown in figure 8.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-sar-adc-fig8.png"><img alt="image9" src="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-sar-adc-fig8.png" style="width: 250px;" /></a></p>
+<p>We can use the AWG outputs to generate the SCLK and CSB inputs. Both AWG CH A
+and CH B are set as a square wave in SVMI split I/O mode. Their Min, Max and
+frequency values are set as shown in figure 8.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-sar-adc-fig8.png"><img alt="image9" src="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-sar-adc-fig8.png" width="250" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 8, AWG channels settings.</p>
 </div>
-<p>We can use the scope input channels of the ALM1000 to read the SDATA output waveform. While also monitoring the SCLK and CSB signals generated by the AWG outputs. A typical set of waveforms is shown in figure 8. Green trace is SDATA, dark Orange trace is SCLK and the light Orange trace is CSB.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-sar-adc-fig9.png"><img alt="image10" src="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-sar-adc-fig9.png" style="width: 700px;" /></a></p>
+<p>We can use the scope input channels of the ALM1000 to read the SDATA output
+waveform. While also monitoring the SCLK and CSB signals generated by the AWG
+outputs. A typical set of waveforms is shown in figure 8. Green trace is SDATA,
+dark Orange trace is SCLK and the light Orange trace is CSB.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-sar-adc-fig9.png"><img alt="image10" src="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-sar-adc-fig9.png" width="700" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 9, SCLK, CSB and SDATA waveforms</p>
 </div>
-<p>Note that, as per the AD7920 datasheet, the first 4 bits of SDATA as read on the falling edge of SCLK are logic 0. The next 12 bits are read on the falling edge of the next 12 SCLK cycles.</p>
+<p>Note that, as per the AD7920 datasheet, the first 4 bits of SDATA as read on the
+falling edge of SCLK are logic 0. The next 12 bits are read on the falling edge
+of the next 12 SCLK cycles.</p>
 <p>You can check the result using the formula for ADC transfer function, where the SDATA data is the Digital output code at pin 2, read on Oscilloscope AIN channel. Optionally the BIN scope channel can be used to measure the Analog Input of the AD7920 at pin 8. The V<sub>REF</sub> is equal to the fixed +5 V supply rail.</p>
 <div class="centeralign docutils container">
 <p><span class="math notranslate nohighlight">\(Digital output code = ((Analog input)/ (Reference input)) \times ( (2^N)-1)\)</span></p>
@@ -767,11 +836,14 @@ Content on this topic
 <p><span class="math notranslate nohighlight">\(\displaystyle Vin= (\frac{2043}{4095}) \times 3.04 V\)</span></p>
 <p><span class="math notranslate nohighlight">\(Vin=1.5 V\)</span></p>
 <p>To automate the decoding of the serial data stream on SDATA we can write a Python script that configures the two AWG outputs as was just done in figure 8 and reads the data from the AIN scope input. Download and extract the ad7920-decode.py program from <a class="icon link reference external" href="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/ad7920-decode.zip" target="_blank">ad7920-decode.zip</a>. Make sure to exit ALICE before running the program (only one program can access the ALM1000 board at a time). You should see a small GUI screen like figure 10. Watch the conversion results, displayed in binary and decimal while you adjust the R<sub>2</sub> pot.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-sar-adc-fig10.png"><img alt="image11" src="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-sar-adc-fig10.png" style="width: 200px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-sar-adc-fig10.png"><img alt="image11" src="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/alm-sar-adc-fig10.png" width="200" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 10, Simple AD7920 decoder GUI.</p>
 </div>
-<p>For extra credit modify the program to display the ADC output results in volts. You could also try to add the ability to use the BIN scope input reading (with BIN connected to pin 8) to also measure the analog voltage at the ADC input and compare these two values.</p>
+<p>For extra credit modify the program to display the ADC output results in volts.
+You could also try to add the ability to use the BIN scope input reading (with
+BIN connected to pin 8) to also measure the analog voltage at the ADC input and
+compare these two values.</p>
 <p><strong>For Further Reading:</strong></p>
 <p><a class="icon link reference external" href="https://en.wikipedia.org/wiki/Successive_approximation_ADC" target="_blank">Successive approximation ADC</a> <a class="icon adi reference external" href="https://www.analog.com/media/en/training-seminars/tutorials/MT-021.pdf" target="_blank">ADC Architectures II: Successive Approximation ADCs</a> <a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/dsp-book/dsp_book_Ch3.pdf" target="_blank">ADC and DAC</a> <a class="icon adi reference external" href="https://www.analog.com/en/technical-articles/exploring-different-sar-adc-analog-input-architectures.html" target="_blank">Exploring Different SAR ADC Analog Input Architectures</a></p>
 <p><strong>Return to Lab Activity</strong> <a class="reference internal" href="../alm-signals-labs-list.html"><span class="doc">Table of Contents</span></a><strong>.</strong></p>

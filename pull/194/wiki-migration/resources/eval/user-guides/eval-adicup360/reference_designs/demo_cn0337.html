@@ -605,7 +605,7 @@ Content on this topic
 <h2>General description<a class="headerlink" href="#general-description" title="Link to this heading"></a></h2>
 <p>This project is a good example for how to use <a class="reference internal" href="../hardware/base_board.html"><span class="doc">EVAL-ADICUP360 board</span></a> in different combinations with pmod boards. It expand the list of possible applications that can be done with the base board.</p>
 <p>The <strong>ADuCM360_demo_cn0337</strong> project uses the <a class="icon adi reference external" href="https://www.analog.com/en/design-center/reference-designs/hardware-reference-design/circuits-from-the-lab/cn0337" target="_blank">EVAL-CN0337-PMDZ pmod</a> which is a completely isolated <strong>12-bits</strong>, <strong>300 kSPS RTD</strong> temperature measuring system (with only three active devices) that processes the output of a <strong>Pt100 RTD</strong> and includes an innovative circuit for lead-wire compensation using a standard <strong>3-wire</strong> connection.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0337_demo_1.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0337_demo_1.png" class="align-left" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0337_demo_1.png" style="width: 550px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0337_demo_1.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0337_demo_1.png" class="align-left" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0337_demo_1.png" width="550" />
 </a>
 <p>The CN0337 circuit translates the <strong>RTD</strong> input <strong>resistance</strong> range (<strong>100 Ω</strong> - <strong>212.05 Ω</strong> for a <strong>0°C</strong> - <strong>300°C</strong> temperature) into <strong>voltage</strong> levels compatible with the input range of the ADC (<strong>0 V</strong> - <strong>2.5 V</strong>). The 12-bits ADC value is received via SPI interface of the EVAL-ADICUP360 board.</p>
 <p>The <strong>EVAL-CN0337-PMDZ</strong> comes with an evaluation software which can help you to test and to calibrate your pmod before you use it with an RTD sensor.</p>
@@ -613,7 +613,7 @@ Content on this topic
 <p class="admonition-title">Note</p>
 <p>Please visit <a class="reference internal" href="../../circuits-from-the-lab/cn0337.html"><span class="doc">CN0337 Software User Guide page</span></a> to find out how to get and how to use the CN0337 evaluation software.</p>
 </div>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0337_demo_2.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0337_demo_2.png" class="align-right" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0337_demo_2.png" style="width: 550px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0337_demo_2.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0337_demo_2.png" class="align-right" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0337_demo_2.png" width="550" />
 </a>
 <p>The <strong>ADuCM360_demo_cn0337</strong> application processes ADC output value and make all necessary conversions in order to provide RTD measure results. A UART interface (9600 baud rate and 8-bits data length) is used to send the results to terminal window: RTD <strong>temperature</strong> and <strong>resistance</strong> values, <strong>voltage</strong> calculation and <strong>ADC code</strong>. If the resistance and temperature values are out of range you get an error message which means that you need to check your settings.</p>
 <p>The output values are displayed when you press ENTER key (CR) from the keyboard. Also you can decide how often the measurements take place (see <em>SCAN_TIME</em> parameter).</p>
@@ -629,9 +629,16 @@ Content on this topic
 <p>Because the transfer function of the RTD (resistance vs. temperature) is nonlinear is needed a software linearization to eliminate the nonlinearity error of the RTD Pt100 sensor. This project used so called <strong>Piecewise Linear Approximation</strong> method.</p>
 <section id="piecewise-linear-approximation-method">
 <h3>Piecewise Linear Approximation Method<a class="headerlink" href="#piecewise-linear-approximation-method" title="Link to this heading"></a></h3>
-<p>This method characterized by taking linear approximation one step further, one can conceptualize any number of linear segments strung together to better approximate the nonlinear RTD transfer function. Generating this series of linear segments so that each segment’s endpoints meet those of neighboring segments results in what can be viewed as a number of points connected by straight lines.</p>
+<p>This method characterized by taking linear approximation one step further, one
+can conceptualize any number of linear segments strung together to better
+approximate the nonlinear RTD transfer function. Generating this series of
+linear segments so that each segment’s endpoints meet those of neighboring
+segments results in what can be viewed as a number of points connected by
+straight lines.</p>
 <p>These coefficients is calculated once to best match the RTD’s nonlinear transfer function and then stored permanently in a look-up table (see <em>C_rtd[]</em> table). From this table of coefficients, the software can perform simple linear interpolation to determine temperature based on measured RTD resistance.</p>
-<p>The look-up table can have how many coefficients you needed depending how accurate you want to be. For this project the RTD resistance range is separated into 100 linearization segments.</p>
+<p>The look-up table can have how many coefficients you needed depending how
+accurate you want to be. For this project the RTD resistance range is separated
+into 100 linearization segments.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This method is also used in the <a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/application-notes/AN709_0.pdf" target="_blank">AN-709 application note</a> which provide also an <a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/application-notes/AN-709_files.zip" target="_blank">RTD coefficient generator tool</a> that you also can use.</p>
@@ -669,24 +676,31 @@ Content on this topic
 <section id="setting-up-the-hardware">
 <h2>Setting up the hardware<a class="headerlink" href="#setting-up-the-hardware" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p>To program the base board, set the jumpers/switches as shown in the next figure. The important jumpers/switches are highlighted in red.</p></li>
+<li><p>To program the base board, set the jumpers/switches as shown in the next
+figure. The important jumpers/switches are highlighted in red.</p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0337_demo_3.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0337_demo_3.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0337_demo_3.png" style="width: 500px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0337_demo_3.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0337_demo_3.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0337_demo_3.png" width="500" />
 </a>
 <ul class="simple">
 <li><p>Plug the EVAL-CN0337-PMDZ PMOD in the EVAL-ADICUP360 base board, via the PMOD_SPI port (P4).</p></li>
-<li><p>Plug in the USB cable from the PC to the EVAL-ADICUP360 base board via the Debug USB.(P14)</p></li>
+<li><p>Plug in the USB cable from the PC to the EVAL-ADICUP360 base board via the
+Debug USB.(P14)</p></li>
 </ul>
 </section>
 <section id="obtaining-the-source-code">
 <h2>Obtaining the Source Code<a class="headerlink" href="#obtaining-the-source-code" title="Link to this heading"></a></h2>
-<p>There are two basic ways to program the ADICUP360 with the software for the CN0337.</p>
+<p>There are two basic ways to program the ADICUP360 with the software for the
+CN0337.</p>
 <ul class="simple">
 <li><p>Dragging and Dropping the .Bin to the MBED drive</p></li>
 <li><p>Building, Compiling, and Debugging using CCES</p></li>
 </ul>
-<p>Using the drag and drop method, the software is going to be a version that Analog Devices creates for testing and evaluation purposes. This is the EASIEST way to get started with the reference design.</p>
-<p>Importing the project into CrossCore is going to allow you to change parameters and customize the software to fit your needs, but will be a bit more advanced and will require you to download the CrossCore toolchain.</p>
+<p>Using the drag and drop method, the software is going to be a version that
+Analog Devices creates for testing and evaluation purposes. This is the EASIEST
+way to get started with the reference design.</p>
+<p>Importing the project into CrossCore is going to allow you to change parameters
+and customize the software to fit your needs, but will be a bit more advanced
+and will require you to download the CrossCore toolchain.</p>
 <p>The software for the <strong>ADuCM360_demo_cn0337</strong> demo can be found here:</p>
 <div class="download admonition">
 <p class="admonition-title">Download</p>
@@ -765,7 +779,7 @@ Content on this topic
 <ul class="simple">
 <li><p>The user must press the <strong>&lt;ENTER&gt;</strong> key every time they want new data.</p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0337_demo_2.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0337_demo_2.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0337_demo_2.png" style="width: 550px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0337_demo_2.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0337_demo_2.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0337_demo_2.png" width="550" />
 </a>
 </section>
 </section>
@@ -784,9 +798,12 @@ Content on this topic
 <section id="project-structure">
 <h2>Project structure<a class="headerlink" href="#project-structure" title="Link to this heading"></a></h2>
 <p>The <strong>ADuCM360_demo_cn0337</strong> project use ADuCM36x C/C++ Project structure.</p>
-<p>This project contains: system initialization part - disabling watchdog, setting system clock, enabling clock for peripherals; port configuration for SPI0, UART via P0.1/P0.2; SPI, UART read/write functions; AD7091R control and RTD conversions.</p>
+<p>This project contains: system initialization part - disabling watchdog, setting
+system clock, enabling clock for peripherals; port configuration for SPI0, UART
+via P0.1/P0.2; SPI, UART read/write functions; AD7091R control and RTD
+conversions.</p>
 <p>In the <strong>src</strong> and <strong>include</strong> folders you will find the source and header files related to CN0337 software application. The <em>Communication.c/h</em> files contain SPI and UART specific data, meanwhile the <em>AD7091R.c/h</em> files contain the ADC control data and the <em>CN0337.c/h</em> files contain the RTD measurements management.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0337_demo_5.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0337_demo_5.png" class="align-left" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0337_demo_5.png" style="width: 340px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0337_demo_5.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0337_demo_5.png" class="align-left" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0337_demo_5.png" width="340" />
 </a>
 <p>The <strong>RTE</strong> folder contains device and system related files:</p>
 <ul class="simple">

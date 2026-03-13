@@ -592,7 +592,9 @@ Content on this topic
             
   <section id="tutorial-using-hardware-peripherals-with-micropython">
 <h1>Tutorial: Using hardware peripherals with MicroPython<a class="headerlink" href="#tutorial-using-hardware-peripherals-with-micropython" title="Link to this heading"></a></h1>
-<p>One advantage of MicroPython over a normal Python running on Linux for the SHARC Audio Module is that it has direct support of many hardware features, such as GPIO, TWI etc. This page gives a few examples of using these peripherals.</p>
+<p>One advantage of MicroPython over a normal Python running on Linux for the SHARC
+Audio Module is that it has direct support of many hardware features, such as
+GPIO, TWI etc. This page gives a few examples of using these peripherals.</p>
 <section id="getting-help">
 <h2>Getting Help<a class="headerlink" href="#getting-help" title="Link to this heading"></a></h2>
 <p>MicroPython has a <code class="docutils literal notranslate"><span class="pre">help()</span></code> function builtin. You can always use the help to get a list of supported properties and functions:</p>
@@ -622,7 +624,8 @@ Content on this topic
 <p>The machine module is the base module for almost all hardware related functions. On some MicroPython ports it is also called <code class="docutils literal notranslate"><span class="pre">pyb</span></code>, an acronym of <code class="docutils literal notranslate"><span class="pre">pyboard</span></code>.</p>
 <section id="gpio">
 <h3>GPIO<a class="headerlink" href="#gpio" title="Link to this heading"></a></h3>
-<p>The GPIO support of MicroPython is part of the machine library, called the Pin class.</p>
+<p>The GPIO support of MicroPython is part of the machine library, called the Pin
+class.</p>
 <p>Here is a example using the Pin class to light up an LED:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">machine</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pin</span>
 <span class="n">led</span> <span class="o">=</span> <span class="n">Pin</span><span class="p">(</span><span class="s2">&quot;LED10&quot;</span><span class="p">,</span> <span class="n">Pin</span><span class="o">.</span><span class="n">OUT</span><span class="p">)</span>
@@ -656,11 +659,13 @@ Content on this topic
 <span class="n">button</span><span class="o">.</span><span class="n">irq</span><span class="p">(</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span><span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="n">trigger</span><span class="o">=</span><span class="n">Pin</span><span class="o">.</span><span class="n">IRQ_RISING</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>In the example, the interrupt service routine (ISR) is a lambda function. It can also be a full Python function.</p>
+<p>In the example, the interrupt service routine (ISR) is a lambda function. It can
+also be a full Python function.</p>
 <p>The trigger can be <code class="docutils literal notranslate"><span class="pre">Pin.IRQ_RISING</span></code>, <code class="docutils literal notranslate"><span class="pre">Pin.IRQ_FALLING</span></code>, or <code class="docutils literal notranslate"><span class="pre">Pin.IRQ_LOW</span></code>.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>Though this is in Python, the interrupt is still the real hardware interrupt. Just like in C, restrictions apply:</p>
+<p>Though this is in Python, the interrupt is still the real hardware interrupt.
+Just like in C, restrictions apply:</p>
 <ul class="simple">
 <li><p>One may not allocate memory inside an ISR.</p></li>
 <li><p>One needs to process all the errors raised before exiting the ISR.</p></li>
@@ -670,7 +675,10 @@ Content on this topic
 </section>
 <section id="spi">
 <h3>SPI<a class="headerlink" href="#spi" title="Link to this heading"></a></h3>
-<p>SPI support is also part of the machine library, called the SPI class. On the SHARC Audio Module main board, SPI0 is routed to the expansion interface, SPI1 is routed to the Sigma Studio connector, and SPI2 is connected to the SPI Flash. To test SPI1 on the Sigma Studio connector:</p>
+<p>SPI support is also part of the machine library, called the SPI class. On the
+SHARC Audio Module main board, SPI0 is routed to the expansion interface, SPI1
+is routed to the Sigma Studio connector, and SPI2 is connected to the SPI Flash.
+To test SPI1 on the Sigma Studio connector:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">machine</span><span class="w"> </span><span class="kn">import</span> <span class="n">SPI</span>
 <span class="n">spi</span> <span class="o">=</span> <span class="n">SPI</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">baudrate</span><span class="o">=</span><span class="mi">600000</span><span class="p">,</span> <span class="n">polarity</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">phase</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">spi</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;1234&#39;</span><span class="p">)</span>
@@ -686,13 +694,18 @@ Content on this topic
 </section>
 <section id="twi">
 <h3>TWI<a class="headerlink" href="#twi" title="Link to this heading"></a></h3>
-<p>TWI, which is also called as I2C, is also supported by the machine library. On the SHARC Audio Module main board, TWI0 (I2C0) connects to the audio codec and A2B transceiver, also routed to the Sigma Studio connector. To scan the devices connected to the I2C0:</p>
+<p>TWI, which is also called as I2C, is also supported by the machine library. On
+the SHARC Audio Module main board, TWI0 (I2C0) connects to the audio codec and
+A2B transceiver, also routed to the Sigma Studio connector. To scan the devices
+connected to the I2C0:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">machine</span><span class="w"> </span><span class="kn">import</span> <span class="n">I2C</span>
 <span class="n">i2c</span> <span class="o">=</span> <span class="n">I2C</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="mi">400000</span><span class="p">)</span>
 <span class="n">i2c</span><span class="o">.</span><span class="n">scan</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Note the scan is accomplished by simply sending the address and wait for acknowledge. If no acknowledge is received, no such device exists. Unlike normal transmission, no actual data bytes will be sent out during the scan process.</p>
+<p>Note the scan is accomplished by simply sending the address and wait for
+acknowledge. If no acknowledge is received, no such device exists. Unlike normal
+transmission, no actual data bytes will be sent out during the scan process.</p>
 </section>
 <section id="sd-card">
 <h3>SD card<a class="headerlink" href="#sd-card" title="Link to this heading"></a></h3>
@@ -700,14 +713,16 @@ Content on this topic
 <p class="admonition-title">Note</p>
 <p>If an SD card is inserted before powering up, it will automatically initialize the SD card and mount the filesystem to <code class="docutils literal notranslate"><span class="pre">/sd</span></code> during boot. So there is no need to manually go through the process.</p>
 </div>
-<p>The SD card is connected to the ADSP-SC589 through the MSI (or called RSI in the ADI drivers). SD is also a class of the machine module.</p>
+<p>The SD card is connected to the ADSP-SC589 through the MSI (or called RSI in the
+ADI drivers). SD is also a class of the machine module.</p>
 <p>To print out the information about the SD card:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">machine</span><span class="w"> </span><span class="kn">import</span> <span class="n">SD</span>
 <span class="n">SD</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">SD</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>To interface with the SD driver directly without using the filesystem, the SD driver provides these API:</p>
+<p>To interface with the SD driver directly without using the filesystem, the SD
+driver provides these API:</p>
 <ul class="simple">
 <li><p>present</p></li>
 <li><p>power</p></li>
@@ -722,13 +737,17 @@ Content on this topic
 <p class="admonition-title">Note</p>
 <p>In another way, any driver with this block device interface can work with the filesystem. <code class="docutils literal notranslate"><span class="pre">drivers\sdcard\sdcard.py</span></code> provides a good example of writing an SD card driver purely in Python language.</p>
 </div>
-<p>Refer to MicroPython’s documentation for more information about the block device interface.</p>
+<p>Refer to MicroPython’s documentation for more information about the block device
+interface.</p>
 </section>
 </section>
 <section id="sharc-core">
 <h2>SHARC Core<a class="headerlink" href="#sharc-core" title="Link to this heading"></a></h2>
-<p>MicroPython only works on the ARM core. In order to utilize the SHARC core, a user can use MicroPython to boot the SHARC core with a pre-compiled loader file, and then use shared memory to exchange data with the SHARC core.</p>
-<p>Here is a example of loading an audio pass-through application located on the SD card:</p>
+<p>MicroPython only works on the ARM core. In order to utilize the SHARC core, a
+user can use MicroPython to boot the SHARC core with a pre-compiled loader file,
+and then use shared memory to exchange data with the SHARC core.</p>
+<p>Here is a example of loading an audio pass-through application located on the SD
+card:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;pass_through.ldr&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
 <span class="n">stream</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sharc</span>

@@ -632,33 +632,60 @@ Content on this topic
             
   <section id="hdl-support-for-ad9361-tdd-mode">
 <h1>HDL support for AD9361 TDD mode<a class="headerlink" href="#hdl-support-for-ad9361-tdd-mode" title="Link to this heading"></a></h1>
-<p>Using the AD9361 RF Agile Transceiver(tm) in TDD (Time Division Duplex) mode, the user has multiple solutions to control the time period of the receive and transmit bursts. The internal enable state machine of device (ENSM) can either be controlled by SPI writes or ENABLE/TXNRX pins. SPI control is considered asynchronous to the DATA_CLK because the SPI_CLK can be derived from a different clock reference and still function properly. The SPI control ENSM method is recommended when real time control of the synthesizers is not necessary. SPI control can be used for real time control as long as the Base Band Processor (BBP) has the ability to perform timed SPI writes accurately.</p>
-<p>The ENABLE/TXNRX pin control method is recommended if the BBP has extra control outputs that can be controlled in real time, allowing a simple two-wire interface to control the state of the AD9361 device. This user guide intend to provide an in-depth description about the HDL support of the ENABLE/TXNRX pin control method.</p>
+<p>Using the AD9361 RF Agile Transceiver(tm) in TDD (Time Division Duplex) mode,
+the user has multiple solutions to control the time period of the receive and
+transmit bursts. The internal enable state machine of device (ENSM) can either
+be controlled by SPI writes or ENABLE/TXNRX pins. SPI control is considered
+asynchronous to the DATA_CLK because the SPI_CLK can be derived from a different
+clock reference and still function properly. The SPI control ENSM method is
+recommended when real time control of the synthesizers is not necessary. SPI
+control can be used for real time control as long as the Base Band Processor
+(BBP) has the ability to perform timed SPI writes accurately.</p>
+<p>The ENABLE/TXNRX pin control method is recommended if the BBP has extra control
+outputs that can be controlled in real time, allowing a simple two-wire
+interface to control the state of the AD9361 device. This user guide intend to
+provide an in-depth description about the HDL support of the ENABLE/TXNRX pin
+control method.</p>
 <section id="enable-txnrx-pin-control">
 <h2>ENABLE/TXNRX pin control<a class="headerlink" href="#enable-txnrx-pin-control" title="Link to this heading"></a></h2>
-<p>In TDD, the state of the TXNRX pin controls whether the AD9361 will transition from ALERT to Rx or ALERT to Tx. If TXNRX is high, the device will move into the Tx state. If TXNRX is low, the device will move into the Rx state. The TXNRX pin level should be set during the ALERT state. The logic level of TXNRX must not change during the Rx, Tx, or FDD states. The role of the ENABLE pin is to transition the ENSM state to the next state, and can be operated in pulse mode or level mode.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-pzsdr2400tdd-ebz/ad9361_tdd_pincntr_pulse.png"><img alt="Enable Level Mode" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-pzsdr2400tdd-ebz/ad9361_tdd_pincntr_pulse.png" style="width: 850px;" /></a></p>
+<p>In TDD, the state of the TXNRX pin controls whether the AD9361 will transition
+from ALERT to Rx or ALERT to Tx. If TXNRX is high, the device will move into the
+Tx state. If TXNRX is low, the device will move into the Rx state. The TXNRX pin
+level should be set during the ALERT state. The logic level of TXNRX must not
+change during the Rx, Tx, or FDD states. The role of the ENABLE pin is to
+transition the ENSM state to the next state, and can be operated in pulse mode
+or level mode.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-pzsdr2400tdd-ebz/ad9361_tdd_pincntr_pulse.png"><img alt="Enable Level Mode" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-pzsdr2400tdd-ebz/ad9361_tdd_pincntr_pulse.png" width="850" /></a></p>
 <div class="centeralign docutils container">
 <p><em>Enable Pulse Mode (TDD)</em></p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-pzsdr2400tdd-ebz/ad9361_tdd_pincntr_level.png"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-pzsdr2400tdd-ebz/ad9361_tdd_pincntr_level.png" style="width: 850px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-pzsdr2400tdd-ebz/ad9361_tdd_pincntr_level.png"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-pzsdr2400tdd-ebz/ad9361_tdd_pincntr_level.png" width="850" /></a></p>
 </div>
 <div class="centeralign docutils container">
 <p><em>Enable Level Mode (TDD)</em></p>
 </div>
-<p>By default the ENABLE and TXNRX pins are controlled by GPIO’s. This solution similarly to the SPI write ENSM control, can not provide a real time control of these pins.</p>
+<p>By default the ENABLE and TXNRX pins are controlled by GPIO’s. This solution
+similarly to the SPI write ENSM control, can not provide a real time control of
+these pins.</p>
 <p>The <strong>axi_ad9361</strong> IP core has an integrated TDD controller, which gives the possibility to control the ENABLE/TXNRX pins in real time. The TDD controller consist of a counter, which counts on every positive edge of the FB_CLK, and a several software accessible registers, which defines the time when the ENABLE and TXNRX pins should be set or reset.</p>
 </section>
 <section id="tdd-controller">
 <h2>TDD Controller<a class="headerlink" href="#tdd-controller" title="Link to this heading"></a></h2>
 <p>In the block diagram bellow can be seen the <strong>axi_ad9361</strong> IP core with the integrated TDD controller modules inside. If the controller is enabled, all the data flow from or to the device will be controlled by this module.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-pzsdr2400tdd-ebz/ad9361_tdd_ip_bd_v3.png"><img alt="axi_ad9361 IP cores block diagram with the integrated TDD controller module" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-pzsdr2400tdd-ebz/ad9361_tdd_ip_bd_v3.png" style="width: 810px; height: 668px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-pzsdr2400tdd-ebz/ad9361_tdd_ip_bd_v3.png"><img alt="axi_ad9361 IP cores block diagram with the integrated TDD controller module" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-pzsdr2400tdd-ebz/ad9361_tdd_ip_bd_v3.png" style="height: 668px;" width="810" /></a></p>
 <div class="centeralign docutils container">
 <p><em>axi_ad9361 IP block diagram</em></p>
 </div>
 <p>The AXI register map of the TDD controller, and the description of each reagisters can be found under the following link: <a class="reference internal" href="../../../fpga/docs/hdl/regmap.html"><span class="doc">TDD REGISTER MAP</span></a></p>
-<p>The foundation of the TDD controller is a counter, which can be configured to count until a specified frame length. The maximum value of the counter can be defined by simple divide the desired frame length with the current FB_CLK clock period, e.g. in the case of a 10 ms frame length, when the FB_CLK is 122.88 Mhz the value of the REG_TDD_FRAME_LENGTH register must be 1228800.</p>
-<p>After defining the frame length, the user can define one or two sets of pointers, which will tell the exact location, when the device will start/stop a receive/transmit burst inside a frame.</p>
-<p>Start and stop a receive burst consist of the following action points, each point will define a pointer:</p>
+<p>The foundation of the TDD controller is a counter, which can be configured to
+count until a specified frame length. The maximum value of the counter can be
+defined by simple divide the desired frame length with the current FB_CLK clock
+period, e.g. in the case of a 10 ms frame length, when the FB_CLK is 122.88 Mhz
+the value of the REG_TDD_FRAME_LENGTH register must be 1228800.</p>
+<p>After defining the frame length, the user can define one or two sets of
+pointers, which will tell the exact location, when the device will start/stop a
+receive/transmit burst inside a frame.</p>
+<p>Start and stop a receive burst consist of the following action points, each
+point will define a pointer:</p>
 <ul class="simple">
 <li><p>Enabling the RX synthesizer</p></li>
 <li><p>Enabling the RX RF path inside the device (ALERT to RX state transition)</p></li>
@@ -667,7 +694,8 @@ Content on this topic
 <li><p>Disabling the RX RF path inside the device (RX to ALERT state transition)</p></li>
 <li><p>Disabling the RX synthesizer</p></li>
 </ul>
-<p>Start or stop a transmit burst consist of the following action points, each point will define a pointer:</p>
+<p>Start or stop a transmit burst consist of the following action points, each
+point will define a pointer:</p>
 <ul class="simple">
 <li><p>Enabling the TX synthesizer</p></li>
 <li><p>Enabling the TX RF path inside the device (ALERT to TX state transition)</p></li>
@@ -11232,11 +11260,12 @@ Valid for 64b66b encoder.</p></td>
 <section id="synchronization">
 <h2>Synchronization<a class="headerlink" href="#synchronization" title="Link to this heading"></a></h2>
 <p>To test and validate the functionality of the TDD controller, two Avnet <a class="icon link reference external" href="http://www.picozed.org/product/picozed-sdr-development-kit" target="_blank">http://www.picozed.org/product/picozed-sdr-development-kit</a> were used, in conjunction with the Avnet <a class="icon adi reference external" href="https://www.analog.com/adrv9361-z7035" target="_blank">AES-PZSDRCC-FMC-G</a> carrier board and the <a class="icon adi reference external" href="https://www.analog.com/AD-PZSDR2400TDD-EB" target="_blank">RF personality card</a>.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-pzsdr2400tdd-ebz/util_tdd_sync.png"><img alt="util_tdd_sync core" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-pzsdr2400tdd-ebz/util_tdd_sync.png" style="width: 250px;" /></a> TDD systems are using the same frequency channel for both Uplink (UL) and Downlink (DL) transmission, but in different times. This scheme gives the possibility to dynamically allocate the amount of time for UL and DL, resulting an asymmetric UL/DL transmission. To prevent unwanted interference of different transmission links between nodes, a network synchronization is required between base stations and users. In practice this synchronization can be obtained by using IEEE 1588 or GPS.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-pzsdr2400tdd-ebz/util_tdd_sync.png"><img alt="util_tdd_sync core" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-pzsdr2400tdd-ebz/util_tdd_sync.png" width="250" /></a> TDD systems are using the same frequency channel for both Uplink (UL) and Downlink (DL) transmission, but in different times. This scheme gives the possibility to dynamically allocate the amount of time for UL and DL, resulting an asymmetric UL/DL transmission. To prevent unwanted interference of different transmission links between nodes, a network synchronization is required between base stations and users. In practice this synchronization can be obtained by using IEEE 1588 or GPS.</p>
 <p>In our case, the goal was to showcase the TDD support of the AD9361, so the synchronization of the two devices is solved as simple as possible, without using any of the above mentioned method. The reference design contains a pulse generator core (<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_tdd_sync" target="_blank">library/util_tdd_sync</a>), which is independent of the <strong>axi_ad9361</strong> core, and can be generate a small pulse in a defined time interval. Than this pulse will be fed into both <strong>axi_ad9361</strong> core and will reset the counter, this way the two controller will stay synced.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>This reference design will not provide a complete solution for the network synchronization.</p>
+<p>This reference design will not provide a complete solution for the network
+synchronization.</p>
 </div>
 <section id="parameters-of-util-tdd-sync">
 <h3>Parameters of util_tdd_sync<a class="headerlink" href="#parameters-of-util-tdd-sync" title="Link to this heading"></a></h3>
@@ -11324,12 +11353,18 @@ Valid for 64b66b encoder.</p></td>
 <h2>Linux Driver<a class="headerlink" href="#linux-driver" title="Link to this heading"></a></h2>
 <section id="example-platform-device-initialization">
 <h3>Example platform device initialization<a class="headerlink" href="#example-platform-device-initialization" title="Link to this heading"></a></h3>
-<p>The TDD HDL core driver is a platform driver and can currently only be instantiated via devicetree.</p>
+<p>The TDD HDL core driver is a platform driver and can currently only be
+instantiated via devicetree.</p>
 <p>Required devicetree properties:</p>
 <ul class="simple">
 <li><p>compatible: Should always be “adi,axi-tdd-1.00”</p></li>
 <li><p>reg: Base address and register area size. This parameter expects a register range.</p></li>
-<li><p>adi,profile-config0: At least one (maximum 7) configuration profile should be defined. A profile contains the values of the registers: COUNTER_2 (0x8048), FRAME_LENGTH (0x804c), SYNC_TERM_TYPE (0x8050), VCO_RX_ON_1 (0x8080), VCO_RX_OFF_1 (0x8084), VCO_TX_ON_1 (0x8088), VCO_TX_OFF_1 (0x808C), RX_ON_1 (0x8090), RX_OFF_1 (0x8094), TX_ON_1 (0x8098), TX_OFF_1 (0x809C), TX_DP_ON_1 (0x80A0), TX_DP_OFF_1 (0x80A4), RX_DP_ON_1 (0x80A8), RX_DP_OFF_1 (0x80AC).</p></li>
+<li><p>adi,profile-config0: At least one (maximum 7) configuration profile should be
+defined. A profile contains the values of the registers: COUNTER_2 (0x8048),
+FRAME_LENGTH (0x804c), SYNC_TERM_TYPE (0x8050), VCO_RX_ON_1 (0x8080),
+VCO_RX_OFF_1 (0x8084), VCO_TX_ON_1 (0x8088), VCO_TX_OFF_1 (0x808C), RX_ON_1
+(0x8090), RX_OFF_1 (0x8094), TX_ON_1 (0x8098), TX_OFF_1 (0x809C), TX_DP_ON_1
+(0x80A0), TX_DP_OFF_1 (0x80A4), RX_DP_ON_1 (0x80A8), RX_DP_OFF_1 (0x80AC).</p></li>
 </ul>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cf_ad9361_tdd_core_0</span><span class="p">:</span> <span class="n">cf</span><span class="o">-</span><span class="n">ad9361</span><span class="o">-</span><span class="n">tdd</span><span class="o">-</span><span class="n">core</span><span class="o">-</span><span class="n">lpc</span><span class="o">@</span><span class="mi">79028000</span> <span class="p">{</span>
@@ -11343,7 +11378,15 @@ Valid for 64b66b encoder.</p></td>
 </section>
 <section id="device-attributes">
 <h3>Device Attributes<a class="headerlink" href="#device-attributes" title="Link to this heading"></a></h3>
-<p>Each and every IIO device, typically a hardware chip, has a device folder under /sys/bus/iio/devices/iio:deviceX. Where X is the IIO index of the device. Under every of these directory folders reside a set of files, depending on the characteristics and features of the hardware device in question. These files are consistently generalized and documented in the IIO ABI documentation. In order to determine which IIO deviceX corresponds to which hardware device, the user can read the name file /sys/bus/iio/devices/iio:deviceX/name. In case the sequence in which the iio device drivers are loaded/registered is constant, the numbering is constant and may be known in advance.</p>
+<p>Each and every IIO device, typically a hardware chip, has a device folder under
+/sys/bus/iio/devices/iio:deviceX. Where X is the IIO index of the device. Under
+every of these directory folders reside a set of files, depending on the
+characteristics and features of the hardware device in question. These files are
+consistently generalized and documented in the IIO ABI documentation. In order
+to determine which IIO deviceX corresponds to which hardware device, the user
+can read the name file /sys/bus/iio/devices/iio:deviceX/name. In case the
+sequence in which the iio device drivers are loaded/registered is constant, the
+numbering is constant and may be known in advance.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">iio</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">iio</span><span class="p">:</span><span class="n">device5</span><span class="o">&gt;</span> <span class="n">ls</span> <span class="o">-</span><span class="n">l</span>
@@ -11414,9 +11457,9 @@ Valid for 64b66b encoder.</p></td>
 </pre></div>
 </div>
 </div>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-pzsdr2400tdd-eb/tdd_scope_1.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad-pzsdr2400tdd-eb/tdd_scope_1.png" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-pzsdr2400tdd-eb/tdd_scope_1.png" style="width: 400px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-pzsdr2400tdd-eb/tdd_scope_1.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad-pzsdr2400tdd-eb/tdd_scope_1.png" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-pzsdr2400tdd-eb/tdd_scope_1.png" width="400" />
 </a>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-pzsdr2400tdd-eb/tdd_scope_2.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad-pzsdr2400tdd-eb/tdd_scope_2.png" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-pzsdr2400tdd-eb/tdd_scope_2.png" style="width: 400px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-pzsdr2400tdd-eb/tdd_scope_2.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad-pzsdr2400tdd-eb/tdd_scope_2.png" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-pzsdr2400tdd-eb/tdd_scope_2.png" width="400" />
 </a>
 </section>
 </section>

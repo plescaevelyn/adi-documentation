@@ -584,7 +584,9 @@ Content on this topic
   <section id="sample-rate-converter-src-example">
 <h1>Sample Rate Converter (SRC) example<a class="headerlink" href="#sample-rate-converter-src-example" title="Link to this heading"></a></h1>
 <p><a class="reference internal" href="../tutorials.html"><span class="doc">Click here to return to the Tutorials page</span></a></p>
-<p>Here is an example of how to use the Sample Rate Converter in the ADAV801 audio codec. The input will be an 1kHz test tone with a sample rate of 11.5kHz and the codec will output the same 1 kHz tone with a new sample rate of 44.1 kHz.</p>
+<p>Here is an example of how to use the Sample Rate Converter in the ADAV801 audio
+codec. The input will be an 1kHz test tone with a sample rate of 11.5kHz and the
+codec will output the same 1 kHz tone with a new sample rate of 44.1 kHz.</p>
 <p>The routing inside the chip will be as follows:</p>
 <ul class="simple">
 <li><p>Use the I<sup>2</sup>S Playback Port as input</p></li>
@@ -595,13 +597,16 @@ Content on this topic
 <img alt="SRCrouting.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/tutorials/srcrouting.png" />
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>Please refer to the following supporting documents if any further clarification is needed throughout this example</p>
+<p>Please refer to the following supporting documents if any further
+clarification is needed throughout this example</p>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/static/imported-files/data_sheets/ADAV801.pdf" target="_blank">ADAV801 datasheet</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/static/imported-files/application_notes/60376866819334AN749_0.pdf" target="_blank">Application Note AN-749</a></p></li>
 </ul>
 </div>
-<p>In order to achieve this routing, the Datapath Control Register 1 (0x62) register needs to be set. If you desire different routing for your own project, refer to the datasheet page listed in the following table(s).</p>
+<p>In order to achieve this routing, the Datapath Control Register 1 (0x62)
+register needs to be set. If you desire different routing for your own project,
+refer to the datasheet page listed in the following table(s).</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -620,7 +625,10 @@ Content on this topic
 </tbody>
 </table>
 </div>
-<p>Now you need to set the clocks for the desired output sampling rate, 44.1KHz in this example. Create the master clock using PLL2. You will need to modify the PLL Control Register 1 (0x74), PLL Control Register 2 (0x75), Internal Clocking Control Register 1 (0x76), and Internal Clocking Control Register (0x77).</p>
+<p>Now you need to set the clocks for the desired output sampling rate, 44.1KHz in
+this example. Create the master clock using PLL2. You will need to modify the
+PLL Control Register 1 (0x74), PLL Control Register 2 (0x75), Internal Clocking
+Control Register 1 (0x76), and Internal Clocking Control Register (0x77).</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -654,7 +662,8 @@ Content on this topic
 </tbody>
 </table>
 </div>
-<p>To assign the new clock to the sample rate converter master clock (SRC MCLK), modify the SRC and Clock Control (0x00) register.</p>
+<p>To assign the new clock to the sample rate converter master clock (SRC MCLK),
+modify the SRC and Clock Control (0x00) register.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -673,7 +682,10 @@ Content on this topic
 </tbody>
 </table>
 </div>
-<p>You can use this same clock as the source for the Record Port by modifying the Record Port Control (0x06) register. It is also important to make sure that the Playback Port is in slave mode, so modifying the Playback Port Control (0x04) register is necessary.</p>
+<p>You can use this same clock as the source for the Record Port by modifying the
+Record Port Control (0x06) register. It is also important to make sure that the
+Playback Port is in slave mode, so modifying the Playback Port Control (0x04)
+register is necessary.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -719,10 +731,10 @@ Content on this topic
 <section id="verify-functionality">
 <h2>Verify Functionality<a class="headerlink" href="#verify-functionality" title="Link to this heading"></a></h2>
 <p>To verify that the sample rate conversion is working correctly, a 1 Khz tone with a 11.5kHz sample rate was created using SigmaStudio and an ADAU1781 evaluation board which output to the I<sup>2</sup>S Playback Port of an ADAV801. The sample rate was verified with an oscilloscope by placing a probe on the LRCLK of the input.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/tutorials/inputfreq.png"><img alt="InputFreq.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/tutorials/inputfreq.png" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/tutorials/inputfreq.png"><img alt="InputFreq.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/tutorials/inputfreq.png" width="600" />
 </a>
 <p>To verify the correct output, a probe was placed on the LRCLK pin of the Record Port I<sup>2</sup>S output of the ADAV801. The signal was also analyzed to ensure the correct 1 kHz tone output.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/tutorials/outputfreq.png"><img alt="OutputFreq.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/tutorials/outputfreq.png" style="width: 600px;" /></a> <a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/tutorials/fft.png"><img alt="fft.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/tutorials/fft.png" style="width: 600px;" /></a> <a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/tutorials/levels.png"><img alt="levels.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/tutorials/levels.png" style="width: 600px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/tutorials/outputfreq.png"><img alt="OutputFreq.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/tutorials/outputfreq.png" width="600" /></a> <a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/tutorials/fft.png"><img alt="fft.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/tutorials/fft.png" width="600" /></a> <a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/tutorials/levels.png"><img alt="levels.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/tutorials/levels.png" width="600" /></a></p>
 </section>
 </section>
 

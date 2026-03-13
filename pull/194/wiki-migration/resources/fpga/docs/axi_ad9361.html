@@ -830,12 +830,32 @@ Content on this topic
 </ul>
 <section id="device-ad9361-interface-description">
 <h3>Device (AD9361) Interface Description<a class="headerlink" href="#device-ad9361-interface-description" title="Link to this heading"></a></h3>
-<p>The IP supports both LVDS and CMOS Dual Port Full Duplex interfaces (configurable, see parameters section). It avoids all the programmable flavors of the device interface mess. The interface is in fact quite simple, in LVDS mode samples require two active clock edges and in CMOS mode a single edge. The samples are then delineated in-order using the FRAME signal. This is applicable to both DDR and SDR modes. There is a limitation though, the IP core does NOT support swapping of the data ports in CMOS mode. This option is left as a constraint. As an example the PZSDR projects uses SWAP on some boards based on the board layout.</p>
-<p>Let’s consider the 2R2T configuration, each frame consists of 4 samples in each direction. In LVDS-DDR mode that is 8 clock edges (4 full clock cycles) identified by a frame pattern of 8’b11110000. The IP interface logic simply collects data on consecutive 8 edges and deframes using the FRAME signal and outputs the samples. The device does the same in the transmit direction. In CMOS mode, the same is done over 4 clock edges.</p>
-<p>The interface also provides a single clock tree for the entire core. This clock uses a global buffer that has the minimum skew all across the die. On Altera devices, this is done via the PLL and because the LVDS cores do NOT support a serialization factor of 2, runs at half the interface clock frequency. On Xilinx devices, this is done via the BUFG and the core and interface runs at the same clock frequency.</p>
+<p>The IP supports both LVDS and CMOS Dual Port Full Duplex interfaces
+(configurable, see parameters section). It avoids all the programmable flavors
+of the device interface mess. The interface is in fact quite simple, in LVDS
+mode samples require two active clock edges and in CMOS mode a single edge. The
+samples are then delineated in-order using the FRAME signal. This is applicable
+to both DDR and SDR modes. There is a limitation though, the IP core does NOT
+support swapping of the data ports in CMOS mode. This option is left as a
+constraint. As an example the PZSDR projects uses SWAP on some boards based on
+the board layout.</p>
+<p>Let’s consider the 2R2T configuration, each frame consists of 4 samples in each
+direction. In LVDS-DDR mode that is 8 clock edges (4 full clock cycles)
+identified by a frame pattern of 8’b11110000. The IP interface logic simply
+collects data on consecutive 8 edges and deframes using the FRAME signal and
+outputs the samples. The device does the same in the transmit direction. In CMOS
+mode, the same is done over 4 clock edges.</p>
+<p>The interface also provides a single clock tree for the entire core. This clock
+uses a global buffer that has the minimum skew all across the die. On Altera
+devices, this is done via the PLL and because the LVDS cores do NOT support a
+serialization factor of 2, runs at half the interface clock frequency. On Xilinx
+devices, this is done via the BUFG and the core and interface runs at the same
+clock frequency.</p>
 <section id="altera">
 <h4>Altera<a class="headerlink" href="#altera" title="Link to this heading"></a></h4>
-<p>The core is tested to work only on Cyclone V Arrow SOC Kit. Since Altera does half-thought board designs that do not favor FMC bank allocations, we are incapable of validating the core on other devices.</p>
+<p>The core is tested to work only on Cyclone V Arrow SOC Kit. Since Altera does
+half-thought board designs that do not favor FMC bank allocations, we are
+incapable of validating the core on other devices.</p>
 </section>
 <section id="xilinx">
 <h4>Xilinx<a class="headerlink" href="#xilinx" title="Link to this heading"></a></h4>
@@ -848,29 +868,63 @@ Content on this topic
 <section id="alternative-use-models">
 <h5>Alternative Use Models<a class="headerlink" href="#alternative-use-models" title="Link to this heading"></a></h5>
 <ol class="arabic simple">
-<li><p>Interface Logic Only 2. Disable DSP Functions 3. Removing AXI interface and Processor Control</p></li>
+<li><p>Interface Logic Only 2. Disable DSP Functions 3. Removing AXI interface and
+Processor Control</p></li>
 </ol>
 </section>
 </section>
 </section>
 <section id="internal-interface-description">
 <h3>Internal Interface Description<a class="headerlink" href="#internal-interface-description" title="Link to this heading"></a></h3>
-<p>The main purpose of all (including this) ADI IP cores is to provide a common, well-defined internal interface within the FPGA. This interface consists of the following signals per channel.</p>
+<p>The main purpose of all (including this) ADI IP cores is to provide a common,
+well-defined internal interface within the FPGA. This interface consists of the
+following signals per channel.</p>
 <section id="enable">
 <h4>ENABLE<a class="headerlink" href="#enable" title="Link to this heading"></a></h4>
-<p>The enable signal is strictly for software use and is controlled by the corresponding register bit. The core simply reflects the programmed bit as an output port. In ADI reference projects, this bit is used to activate the channel of interest. It is then used by the PACK/UNPACK cores to route the data based on total number of channels and the selected number of channels. As an example, AXI_AD9361 supports a total of 4 channels 16bits each. This corresponds to a packed channel data width of 64bits. If software enables only two channels the packed 64bits of data is exclusively shared by the enabled 2 channels (each channel gets 32 bits of data).</p>
+<p>The enable signal is strictly for software use and is controlled by the
+corresponding register bit. The core simply reflects the programmed bit as an
+output port. In ADI reference projects, this bit is used to activate the channel
+of interest. It is then used by the PACK/UNPACK cores to route the data based on
+total number of channels and the selected number of channels. As an example,
+AXI_AD9361 supports a total of 4 channels 16bits each. This corresponds to a
+packed channel data width of 64bits. If software enables only two channels the
+packed 64bits of data is exclusively shared by the enabled 2 channels (each
+channel gets 32 bits of data).</p>
 </section>
 <section id="valid">
 <h4>VALID<a class="headerlink" href="#valid" title="Link to this heading"></a></h4>
-<p>The valid signal is sourced by the core to indicate a valid sample on the DATA port. In the receive (ADC) direction this indicates a valid sample and in the transmit (DAC) direction this indicates the current sample is being read by the core. The valid is simply a ‘reflective’ of the ‘sampling rate’. Note that he cores always run at the interface clock. This is to avoid any customized clock handling or transfer within this core. However in many cases interface clock may not be the sampling clock. As an example for AD9361 the interface clock is 244Mhz for a sampling clock of 61MHz. That is each channel’s sampling rate is 61MHz. This translates into the VALID signal being asserted once every 4 clocks. In cores where sampling rate is same as the interface clock, VALID is always asserted and may be safely ignored.</p>
-<p>A common interpretation of this is that all channels has the same VALID behavior. This is NOT necessarily true. A majority of use cases may have this as a result of data path equivalency. However, if software decides to enable/disable functions differently among channels, the VALID signals of those channels will NOT be the same.</p>
+<p>The valid signal is sourced by the core to indicate a valid sample on the DATA
+port. In the receive (ADC) direction this indicates a valid sample and in the
+transmit (DAC) direction this indicates the current sample is being read by the
+core. The valid is simply a ‘reflective’ of the ‘sampling rate’. Note that he
+cores always run at the interface clock. This is to avoid any customized clock
+handling or transfer within this core. However in many cases interface clock may
+not be the sampling clock. As an example for AD9361 the interface clock is
+244Mhz for a sampling clock of 61MHz. That is each channel’s sampling rate is
+61MHz. This translates into the VALID signal being asserted once every 4 clocks.
+In cores where sampling rate is same as the interface clock, VALID is always
+asserted and may be safely ignored.</p>
+<p>A common interpretation of this is that all channels has the same VALID
+behavior. This is NOT necessarily true. A majority of use cases may have this as
+a result of data path equivalency. However, if software decides to
+enable/disable functions differently among channels, the VALID signals of those
+channels will NOT be the same.</p>
 </section>
 <section id="data">
 <h4>DATA<a class="headerlink" href="#data" title="Link to this heading"></a></h4>
 <p>The DATA is the raw Analog samples. It follows two simple rules.</p>
 <ul class="simple">
 <li><p>The samples are always 16bits, regardless of the ADC/DAC data width. That is the source or destination is intended to handle samples as 16bits. In the transmit direction, if the DAC data width is less than 16bits, the most significant bits are used. In the receive direction, if the ADC data width is less than 16bits, the most significant bits are sign extended. This allows the same source or destination portable across different ADC/DAC data widths. In other words, if the source is generating a 16bits tone the signal appears the same across a 12bit, 14bit or 16bit DAC with only the corresponding amplitude change. The source can thus be independent of the number of bits supported by DAC. In the receive direction, the samples are sign extended. Thus the destination always receives a 16bit sample with different amplitude levels corresponding to the number of bits supported by the ADC. This may seem to break the symmetry rule, but in most DSP functions the samples are rounded up towards the MSB as only precision is allowed to lost or gained at the expense of the LSB bits. The MSB bits retains all the physical nature of the signal.</p></li>
-<li><p>The DATA is received and transmitted with most significant sample “newest” regardless of the channel width. In other words the most significant sample is the “newest” sample. If the total channel width is 64bits, it carries 4 samples (16bits) per clock. If we were to name these samples as S3 (bits 63 down to 48), S2 (bits 47 down to 32), S1 (bits 31 down to 16) and S0 (bits 15 down to 0), the following is true. In the transmit direction, S0 is sent first and S3 is sent last to the DAC. The analog samples are S0, S1, S2 and S3 across time with S0 being the oldest and S3 being the newest sample. In the receive direction, S0 carries the oldest sample received and S3 carries the newest sample from the ADC.</p></li>
+<li><p>The DATA is received and transmitted with most significant sample “newest”
+regardless of the channel width. In other words the most significant sample
+is the “newest” sample. If the total channel width is 64bits, it carries 4
+samples (16bits) per clock. If we were to name these samples as S3 (bits 63
+down to 48), S2 (bits 47 down to 32), S1 (bits 31 down to 16) and S0 (bits 15
+down to 0), the following is true. In the transmit direction, S0 is sent
+first and S3 is sent last to the DAC. The analog samples are S0, S1, S2 and
+S3 across time with S0 being the oldest and S3 being the newest sample. In
+the receive direction, S0 carries the oldest sample received and S3 carries
+the newest sample from the ADC.</p></li>
 </ul>
 </section>
 </section>

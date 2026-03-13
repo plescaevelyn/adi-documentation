@@ -613,13 +613,20 @@ Content on this topic
             
   <section id="mobile-storage-interface-for-mmc-sd">
 <h1>Mobile Storage Interface for MMC/SD<a class="headerlink" href="#mobile-storage-interface-for-mmc-sd" title="Link to this heading"></a></h1>
-<p>The ADSP-SC5xx processors provide a mobile storage interface (MSI). MSI is a fast, synchronous controller that uses various protocols to communicate with MMC, SD, and SDIO cards to address the growing storage need in embedded systems, handheld and consumer electronics applications requiring low power. The MSI is compatible with the following protocols.</p>
+<p>The ADSP-SC5xx processors provide a mobile storage interface (MSI). MSI is a
+fast, synchronous controller that uses various protocols to communicate with
+MMC, SD, and SDIO cards to address the growing storage need in embedded systems,
+handheld and consumer electronics applications requiring low power. The MSI is
+compatible with the following protocols.</p>
 <ul class="simple">
 <li><p>MMC (Multimedia Card) bus protocol</p></li>
 <li><p>SD (Secure Digital) bus protocol</p></li>
 <li><p>SDIO (Secure Digital Input Output) bus protocol</p></li>
 </ul>
-<p>All of these storage solutions use similar interface protocols. The main difference between MMC and SD support is the initialization sequence. The main difference between SD and SDIO support is the use of interrupt and read wait signals for SDIO.</p>
+<p>All of these storage solutions use similar interface protocols. The main
+difference between MMC and SD support is the initialization sequence. The main
+difference between SD and SDIO support is the use of interrupt and read wait
+signals for SDIO.</p>
 <section id="hardware-setup">
 <h2>Hardware Setup<a class="headerlink" href="#hardware-setup" title="Link to this heading"></a></h2>
 <p>An ADSP-SC5xx EZ-Board:</p>
@@ -630,14 +637,15 @@ Content on this topic
 <li><p>SC584 processor does not include MMC/SD controller</p></li>
 </ul>
 <p>The SD/MMC card slot is <strong>J18</strong> on the SC589/SC573 EZKIT board and is <strong>J6</strong> on the SC589 MINI board. This slot accepts full-size SD and MMC cards, or microSD cards with an adapter.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/mmc/lkad-mobile_storage_interface_for_mmc-hw_setup.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/mmc/lkad-mobile_storage_interface_for_mmc-hw_setup.jpg" src="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/mmc/lkad-mobile_storage_interface_for_mmc-hw_setup.jpg" style="width: 400px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/mmc/lkad-mobile_storage_interface_for_mmc-hw_setup.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/mmc/lkad-mobile_storage_interface_for_mmc-hw_setup.jpg" src="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/mmc/lkad-mobile_storage_interface_for_mmc-hw_setup.jpg" width="400" />
 </a>
 </section>
 <section id="software-configuration">
 <h2>Software Configuration<a class="headerlink" href="#software-configuration" title="Link to this heading"></a></h2>
 <section id="package-configuration">
 <h3>Package Configuration<a class="headerlink" href="#package-configuration" title="Link to this heading"></a></h3>
-<p>Add Bonnie++ package in the filesystem. Bonnie++ is a program for testing filesystem throughput, see www.coker.com.au/bonnie++ for details.</p>
+<p>Add Bonnie++ package in the filesystem. Bonnie++ is a program for testing
+filesystem throughput, see www.coker.com.au/bonnie++ for details.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vim</span> <span class="n">build</span><span class="o">/</span><span class="n">conf</span><span class="o">/</span><span class="n">local</span><span class="o">.</span><span class="n">conf</span>
 <span class="n">IMAGE_INSTALL_append</span> <span class="o">=</span> <span class="s2">&quot; dosfstools e2fsprogs bonnie++&quot;</span>
 </pre></div>
@@ -658,7 +666,8 @@ Content on this topic
 </section>
 <section id="file-system-support">
 <h4>File System Support<a class="headerlink" href="#file-system-support" title="Link to this heading"></a></h4>
-<p>If you want to mount an SD card in a particular format, you should compile the Linux kernel with the corresponding file-system first.</p>
+<p>If you want to mount an SD card in a particular format, you should compile the
+Linux kernel with the corresponding file-system first.</p>
 <p><strong>Example1</strong>：FAT32 SD card, corresponding filesystem is VFAT.  Configuration is shown below:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">File</span> <span class="n">systems</span> <span class="o">---&gt;</span>
     <span class="n">DOS</span><span class="o">/</span><span class="n">FAT</span><span class="o">/</span><span class="n">NT</span> <span class="n">Filesystems</span>  <span class="o">---&gt;</span>
@@ -681,16 +690,28 @@ Content on this topic
 <section id="build-and-load-linux-kernel">
 <h2>Build and Load Linux Kernel<a class="headerlink" href="#build-and-load-linux-kernel" title="Link to this heading"></a></h2>
 <p>Run “<strong>bitbake linux-adi -C compile</strong>” to compile the linux kernel to generate the zImage and dtb file.</p>
-<p>A kernel image and dtb file can now be built and loaded onto the target board.  See SC5xx ezkit Linux quick start guide for details.</p>
+<p>A kernel image and dtb file can now be built and loaded onto the target board.
+ See SC5xx ezkit Linux quick start guide for details.</p>
 </section>
 <section id="usage-of-msi">
 <h2>Usage of MSI<a class="headerlink" href="#usage-of-msi" title="Link to this heading"></a></h2>
-<p>The most typical use of an SD Card in embedded applications is as a removable storage device (disk) that can be easily taken from the embedded target board. In such contexts, the SD Card installed to the embedded target board is typically already formatted with an MS-DOS file system. The Linux kernel must be specially configured to allow mounting the MS-DOS file system. See part 2 in section 2.1 for details. The mount utility is also needed. Typically,  mount will already be enabled in your busybox configuration.</p>
+<p>The most typical use of an SD Card in embedded applications is as a removable
+storage device (disk) that can be easily taken from the embedded target board.
+In such contexts, the SD Card installed to the embedded target board is
+typically already formatted with an MS-DOS file system. The Linux kernel must be
+specially configured to allow mounting the MS-DOS file system. See part 2 in
+section 2.1 for details. The mount utility is also needed. Typically,  mount
+will already be enabled in your busybox configuration.</p>
 <section id="formatting-the-sd-card">
 <h3>Formatting the SD Card<a class="headerlink" href="#formatting-the-sd-card" title="Link to this heading"></a></h3>
-<p>In order to use an SD Card with Linux we need to prepare it by formatting it in the correct format.</p>
-<p>This section of instructions requires you to correctly identify the SD Card and format the card. If you select the wrong drive you may cause irreversible damage to you Host PC.</p>
-<p>To format the SD Card, follow the commands below. The example code in this section assumes that the SD Card device is reported to be /dev/sdb. Ensure that you change these commands to use your device.</p>
+<p>In order to use an SD Card with Linux we need to prepare it by formatting it in
+the correct format.</p>
+<p>This section of instructions requires you to correctly identify the SD Card and
+format the card. If you select the wrong drive you may cause irreversible damage
+to you Host PC.</p>
+<p>To format the SD Card, follow the commands below. The example code in this
+section assumes that the SD Card device is reported to be /dev/sdb. Ensure that
+you change these commands to use your device.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo fdisk /dev/sdb
 /* Create primary partition 1, 256M size*/
 Command (m for help): n
@@ -713,7 +734,9 @@ Command (m for help): w
 </div>
 <section id="insert-a-pre-formatted-card-with-an-ms-dos-fat-file-system-to-the-sd-card-slot-on-the-adsp-sc5xx">
 <h4>Insert a pre-formatted card with an MS-DOS (FAT) file system to the SD Card slot on the ADSP-SC5xx<a class="headerlink" href="#insert-a-pre-formatted-card-with-an-ms-dos-fat-file-system-to-the-sd-card-slot-on-the-adsp-sc5xx" title="Link to this heading"></a></h4>
-<p>When you boot the zImage on the ADSP-SC5xx, there should be messages similar to the ones shown below. In the below example, Linux has detected an SD Card with a single partition on it:</p>
+<p>When you boot the zImage on the ADSP-SC5xx, there should be messages similar to
+the ones shown below. In the below example, Linux has detected an SD Card with a
+single partition on it:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mmc_host</span> <span class="n">mmc0</span><span class="p">:</span> <span class="n">Bus</span> <span class="n">speed</span> <span class="p">(</span><span class="n">slot</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mi">50000000</span><span class="n">Hz</span> <span class="p">(</span><span class="n">slot</span> <span class="n">req</span> <span class="mi">25000000</span><span class="n">Hz</span><span class="p">,</span> <span class="n">actual</span> <span class="mi">25000000</span><span class="n">HZ</span> <span class="n">div</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">mmc0</span><span class="p">:</span> <span class="n">new</span> <span class="n">SD</span> <span class="n">card</span> <span class="n">at</span> <span class="n">address</span> <span class="n">b368</span>
 <span class="n">mmcblk0</span><span class="p">:</span> <span class="n">mmc0</span><span class="p">:</span><span class="n">b368</span> <span class="n">FFFFF</span> <span class="mf">1.85</span> <span class="n">GiB</span>
@@ -747,7 +770,9 @@ Command (m for help): w
 </section>
 <section id="write-something-to-the-sd-card">
 <h3>Write something to the SD Card<a class="headerlink" href="#write-something-to-the-sd-card" title="Link to this heading"></a></h3>
-<p>In the below example, we store the current date and time to a log file, although in real-life applications you will probably want to do something more meaningful:</p>
+<p>In the below example, we store the current date and time to a log file, although
+in real-life applications you will probably want to do something more
+meaningful:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># date &gt; /mnt/log.file</span>
 </pre></div>
 </div>

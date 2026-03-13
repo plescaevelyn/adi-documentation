@@ -595,7 +595,8 @@ Content on this topic
   <p><a class="reference internal" href="../filters.html"><span class="doc">Click here to return to the filters page</span></a></p>
 <section id="tracking-filter-adsp-sc5xx-215xx">
 <h1>Tracking Filter(ADSP-SC5xx/215xx)<a class="headerlink" href="#tracking-filter-adsp-sc5xx-215xx" title="Link to this heading"></a></h1>
-<p>Tracking Filters are useful for dynamic shifting of filtering. The tracking filter allows for the centre frequency to be determined by an external input.</p>
+<p>Tracking Filters are useful for dynamic shifting of filtering. The tracking
+filter allows for the centre frequency to be determined by an external input.</p>
 <img alt="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/trackingfilter-tbx.jpg" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/trackingfilter-tbx.jpg" />
 <section id="input-pins">
 <h2>Input Pins<a class="headerlink" href="#input-pins" title="Link to this heading"></a></h2>
@@ -730,23 +731,49 @@ Content on this topic
 <p><img alt="trackingpic1.png" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/trackingpic1.png" /> Tracking Filters are useful for dynamic shifting of filtering. This particular tracking Filter is a Peaking Filter algorithm. In many applications rather than having a fixed center frequency for a Peaking filter, it would be useful to have a moving center frequency. For example a LFO (low-frequency oscillator) could drive a Tracking Filter in order to produce a phasing audio effect. The tracking filter allows for the center frequency to be determined by an external input.</p>
 <section id="id1">
 <h2>Input Pins:<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
-<p>There are two inputs and one output to the tracking filter block. The first input is the actual audio input that you want to filter. The second input pin is the value of the center frequency of the filter. You will notice that this pin is orange, denoting that it is a control pin and not an audio pin. Here you can connect LFOs or DC input blocks to designate the desired fixed or moving center frequency of the tracking filter.</p>
+<p>There are two inputs and one output to the tracking filter block. The first
+input is the actual audio input that you want to filter. The second input pin is
+the value of the center frequency of the filter. You will notice that this pin
+is orange, denoting that it is a control pin and not an audio pin. Here you can
+connect LFOs or DC input blocks to designate the desired fixed or moving center
+frequency of the tracking filter.</p>
 </section>
 <section id="id2">
 <h2>Algorithm Description:<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
-<p>The Tracking Filter is a unique filter in the SigmaStudio Filter library. It is one of the only filters in which the coefficients are calculated dynamically by the DSP processor. The equations are embedded in the block’s algorithm code, and depending on the input center frequency, the coefficients are then generated.</p>
-<p>The input center frequency that the tracking filter algorithm is expecting, is a 5.23 data format value, computed by: Hz/(fs/2). For example if you are operating at fs = 44100 Hz and you have an fc = 500 Hz the value being sent should be: 0.0226757 = 500 /(44100/2).</p>
-<p>The Tracking Filter is based on the coefficient generation for an IIR Peaking Filter. The following equations show how the DSP attains the 5 biquad coefficients from the controls. The controls of the tracking filter are overall_gain which is the dB value of the overall gain of the filter, boost which is the dB value of the cut or boost of the Peaking filter, and Q which determines the width of the frequency cut or boost. The center frequency fc of the Peaking Filter is given by the second input pin.</p>
+<p>The Tracking Filter is a unique filter in the SigmaStudio Filter library. It is
+one of the only filters in which the coefficients are calculated dynamically by
+the DSP processor. The equations are embedded in the block’s algorithm code, and
+depending on the input center frequency, the coefficients are then generated.</p>
+<p>The input center frequency that the tracking filter algorithm is expecting, is a
+5.23 data format value, computed by: Hz/(fs/2). For example if you are operating
+at fs = 44100 Hz and you have an fc = 500 Hz the value being sent should be:
+0.0226757 = 500 /(44100/2).</p>
+<p>The Tracking Filter is based on the coefficient generation for an IIR Peaking
+Filter. The following equations show how the DSP attains the 5 biquad
+coefficients from the controls. The controls of the tracking filter are
+overall_gain which is the dB value of the overall gain of the filter, boost
+which is the dB value of the cut or boost of the Peaking filter, and Q which
+determines the width of the frequency cut or boost. The center frequency fc of
+the Peaking Filter is given by the second input pin.</p>
 <p>gainLinear = 10^(overall_gain/20) w = 2*pi*fc/Fs alpha = sin(w)/(2*Q) A = 10^(boost/40) a0 = 1 + alpha/A a1 = -2 * cos(w) a2 = 1 - alpha/A b0 = (1 + alpha*A) * gainLinear b1 = -(2 * cos(w)) * gainLinear b2 = (1 - alpha*A) * gainLinear</p>
 </section>
 <section id="usage">
 <h2>Usage:<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
-<p>The tracking filter can be used in many situations. It should be used when a changing center frequency to a peaking filter is desired. For fixed center frequency applications you should use a general second order filter. There is a lot of overhead in MIPS/Memory in order for the changing center frequency to be supported for this algorithm. However, the first example here using the tracking filter has a fixed center frequency just for ease in explaining the format of the center frequency.</p>
+<p>The tracking filter can be used in many situations. It should be used when a
+changing center frequency to a peaking filter is desired. For fixed center
+frequency applications you should use a general second order filter. There is a
+lot of overhead in MIPS/Memory in order for the changing center frequency to be
+supported for this algorithm. However, the first example here using the tracking
+filter has a fixed center frequency just for ease in explaining the format of
+the center frequency.</p>
 </section>
 <hr class="docutils" />
 <section id="example-1">
 <h2>Example 1:<a class="headerlink" href="#example-1" title="Link to this heading"></a></h2>
-<p>Here a DC entry block is connected to the second pin of the tracking filter. The value inside the block corresponds to 500Hz. Thus the audio coming in on the first pin will be boosted 5dB at 500Hz with a Q of 1.71, and an overall gain adjustment of -3dB will be applied over the entire frequency range.</p>
+<p>Here a DC entry block is connected to the second pin of the tracking filter. The
+value inside the block corresponds to 500Hz. Thus the audio coming in on the
+first pin will be boosted 5dB at 500Hz with a Q of 1.71, and an overall gain
+adjustment of -3dB will be applied over the entire frequency range.</p>
 <img alt="trackingpic2.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/sigmastudio/toolbox/filters/trackingpic2.png" />
 </section>
 <section id="example-2">
@@ -756,7 +783,8 @@ Content on this topic
 <p>Fc control input = (F2 – F1)*sin(.1Hz) + F2 + F1</p>
 <p>Since a normal sine tone ranges from ±1, this LFO ranges from:</p>
 <p>+(F2-F1) + F2 + F1 = 2*F2 -(F2-F1) + F2 + F1 = 2* F1</p>
-<p>Then to figure out what the frequencies are in Hz corresponding to .01 and .25 in the schematic use the following formula:</p>
+<p>Then to figure out what the frequencies are in Hz corresponding to .01 and .25
+in the schematic use the following formula:</p>
 <p>(44100/2) * Fc = Value in Hz</p>
 <p>Keep in mind though that F1 and F2 are the numbers in the DC block, but the range will go from 2*F1 to 2*F2, so first multiply by 2 to get the correct range value, then use the above formula to find out the value in Hz:</p>
 <p>(0.01*2)*44100/2 = 441 Hz (0.25*2)*(44100/2) = 11025 Hz</p>

@@ -599,7 +599,8 @@ Content on this topic
 <h1>Linux LCD Touchscreen<a class="headerlink" href="#linux-lcd-touchscreen" title="Link to this heading"></a></h1>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
-<p>This section describes the steps required to build and use SPI Touchscreen device on Linux using an ADSP-SC58x board and a WVGA/LCD EI3 extender board.</p>
+<p>This section describes the steps required to build and use SPI Touchscreen
+device on Linux using an ADSP-SC58x board and a WVGA/LCD EI3 extender board.</p>
 </section>
 <section id="hardware-setup">
 <h2>Hardware Setup<a class="headerlink" href="#hardware-setup" title="Link to this heading"></a></h2>
@@ -607,22 +608,27 @@ Content on this topic
 <li><p>ADSP-SC58x EZ-KIT: ADSP-SC589/SC584 EZ-Board</p></li>
 <li><p>A WVGA/LCD EI3 Extender Board</p></li>
 </ul>
-<p>Connect the J1 connector on the LCD EI3 Extender Board to the P1A connector on the SC58x-EZKIT</p>
+<p>Connect the J1 connector on the LCD EI3 Extender Board to the P1A connector on
+the SC58x-EZKIT</p>
 </section>
 <section id="software-configuration">
 <h2>Software Configuration<a class="headerlink" href="#software-configuration" title="Link to this heading"></a></h2>
-<p>The following configuration should be done on top of the sc589-ezkit/sc584-ezkit default configuration.</p>
+<p>The following configuration should be done on top of the sc589-ezkit/sc584-ezkit
+default configuration.</p>
 <section id="configure-linux-kernel">
 <h3>Configure Linux Kernel<a class="headerlink" href="#configure-linux-kernel" title="Link to this heading"></a></h3>
 <p>Run <strong>bitbake linux-adi -c menuconfig</strong> and configure the kernel as follows:</p>
-<p>There are two things to enable in the Linux kernel.  First, you need the common code for the event interface.  Then you need the specific driver for the touchscreen device you’re using.</p>
+<p>There are two things to enable in the Linux kernel.  First, you need the common
+code for the event interface.  Then you need the specific driver for the
+touchscreen device you’re using.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Device</span> <span class="n">Drivers</span>  <span class="o">---&gt;</span>
     <span class="n">Input</span> <span class="n">device</span> <span class="n">support</span>  <span class="o">---&gt;</span>
         <span class="p">[</span><span class="o">*</span><span class="p">]</span> <span class="n">Generic</span> <span class="nb">input</span> <span class="n">layer</span> <span class="p">(</span><span class="n">needed</span> <span class="k">for</span> <span class="n">keyboard</span><span class="p">,</span> <span class="n">mouse</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
         <span class="o">&lt;*&gt;</span>   <span class="n">Event</span> <span class="n">interface</span>
 </pre></div>
 </div>
-<p>The touchscreen drivers will be in the same place.  Enable the driver for the device you’re using.</p>
+<p>The touchscreen drivers will be in the same place.  Enable the driver for the
+device you’re using.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Device</span> <span class="n">Drivers</span>  <span class="o">---&gt;</span>
     <span class="n">Input</span> <span class="n">device</span> <span class="n">support</span>  <span class="o">---&gt;</span>
         <span class="p">[</span><span class="o">*</span><span class="p">]</span> <span class="n">Touchscreens</span>  <span class="o">---&gt;</span>
@@ -643,7 +649,8 @@ Content on this topic
 </section>
 <section id="enable-packages">
 <h3>Enable Packages<a class="headerlink" href="#enable-packages" title="Link to this heading"></a></h3>
-<p>Add the touchscreen test program in the filesystem images, it’s enabled in adsp-sc5xx-full image by default.</p>
+<p>Add the touchscreen test program in the filesystem images, it’s enabled in
+adsp-sc5xx-full image by default.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vim</span> <span class="n">build</span><span class="o">/</span><span class="n">conf</span><span class="o">/</span><span class="n">local</span><span class="o">.</span><span class="n">conf</span>
 <span class="n">IMAGE_INSTALL_append</span> <span class="o">=</span> <span class="s2">&quot;tslib tslib-calibrate evtest&quot;</span>
 </pre></div>
@@ -698,7 +705,9 @@ Content on this topic
 </section>
 <section id="runtime-config">
 <h3>Runtime Config<a class="headerlink" href="#runtime-config" title="Link to this heading"></a></h3>
-<p>Before you can use the touchscreen, you need to export a few environment variables.  You may want to put these into a file so you can easily source it at runtime.</p>
+<p>Before you can use the touchscreen, you need to export a few environment
+variables.  You may want to put these into a file so you can easily source it at
+runtime.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># vi /etc/tslib.env</span>
 <span class="n">export</span> <span class="n">TSLIB_FBDEVICE</span><span class="o">=/</span><span class="n">dev</span><span class="o">/</span><span class="n">fb0</span>
 <span class="n">export</span> <span class="n">TSLIB_CONSOLEDEVICE</span><span class="o">=</span><span class="n">none</span>
@@ -711,8 +720,11 @@ Content on this topic
 </section>
 <section id="calibration">
 <h3>Calibration<a class="headerlink" href="#calibration" title="Link to this heading"></a></h3>
-<p>Before you start using the touchscreen, you should calibrate it.  This can be easily accomplished with the ts_calibrate application on the EI3 LCD extender.  Just follow the on-screen directions.</p>
-<p>Then run following commands and touch the appropriate location according to screen`s prompts .</p>
+<p>Before you start using the touchscreen, you should calibrate it.  This can be
+easily accomplished with the ts_calibrate application on the EI3 LCD extender.
+Just follow the on-screen directions.</p>
+<p>Then run following commands and touch the appropriate location according to
+screen`s prompts .</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># ts_calibrate</span>
 <span class="n">xres</span> <span class="o">=</span> <span class="mi">800</span><span class="p">,</span> <span class="n">yres</span> <span class="o">=</span> <span class="mi">480</span>
 <span class="n">Took</span> <span class="mi">3</span> <span class="n">samples</span><span class="o">...</span>
@@ -733,7 +745,8 @@ Content on this topic
 </section>
 <section id="event-test">
 <h3>Event Test<a class="headerlink" href="#event-test" title="Link to this heading"></a></h3>
-<p>After run following the command, start using the touchscreen.  The application should decode the input immediately.</p>
+<p>After run following the command, start using the touchscreen.  The application
+should decode the input immediately.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># evtest /dev/input/event0</span>
 <span class="n">Input</span> <span class="n">driver</span> <span class="n">version</span> <span class="ow">is</span> <span class="mf">1.0.1</span>
 <span class="n">Input</span> <span class="n">device</span> <span class="n">ID</span><span class="p">:</span> <span class="n">bus</span> <span class="mh">0x1c</span> <span class="n">vendor</span> <span class="mh">0x0</span> <span class="n">product</span> <span class="mh">0x7a</span> <span class="n">version</span> <span class="mh">0x3</span>

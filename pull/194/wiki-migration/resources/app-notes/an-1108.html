@@ -599,11 +599,22 @@ Content on this topic
 <p>View the original <a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/application-notes/AN-1108.pdf" target="_blank">AN-1108</a> document posted to <a class="icon link reference external" href="https://www.analog.com/" target="_blank">Analog.com</a>.</p>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
-<p>This application note describes how to load a sinusoidal waveform on the output of the AD9832/AD9835 parts. This includes setting up the AD9832/AD9835 from a power-on scenario, setting up the FSELECT control bit, and loading new data to the part while using the FSELECT control bit.</p>
+<p>This application note describes how to load a sinusoidal waveform on the output
+of the AD9832/AD9835 parts. This includes setting up the AD9832/AD9835 from a
+power-on scenario, setting up the FSELECT control bit, and loading new data to
+the part while using the FSELECT control bit.</p>
 </section>
 <section id="programming-the-ad9832-ad9835">
 <h2>Programming the AD9832/AD9835<a class="headerlink" href="#programming-the-ad9832-ad9835" title="Link to this heading"></a></h2>
-<p>When the AD9832/AD9835 is powered up, the part should be reset. This resets the appropriate internal registers to 0 to provide an analog output of full scale. To avoid spurious DAC outputs while the AD9832 is being initialized, the RESET bit should be set to 1 until the part is ready to begin generating an output. The RESET bit does not reset the phase, frequency, or control registers. These registers will contain invalid data, and, therefore, should be set to a known value by the user. The RESET bit should then be set to 0 to begin generating an output. The data appears on the DAC output seven to eight MCLK cycles after RESET is set to 0.</p>
+<p>When the AD9832/AD9835 is powered up, the part should be reset. This resets the
+appropriate internal registers to 0 to provide an analog output of full scale.
+To avoid spurious DAC outputs while the AD9832 is being initialized, the RESET
+bit should be set to 1 until the part is ready to begin generating an output.
+The RESET bit does not reset the phase, frequency, or control registers. These
+registers will contain invalid data, and, therefore, should be set to a known
+value by the user. The RESET bit should then be set to 0 to begin generating an
+output. The data appears on the DAC output seven to eight MCLK cycles after
+RESET is set to 0.</p>
 <section id="functional-block-diagram">
 <h3>Functional Block Diagram<a class="headerlink" href="#functional-block-diagram" title="Link to this heading"></a></h3>
 <p><img alt="an1108-09651-001.png" src="https://wiki.analog.com/_media/resources/app-notes/an1108-09651-001.png" /> <em>Figure 1. AD9832 Functional Block Diagram</em></p>
@@ -614,7 +625,8 @@ Content on this topic
 <p>A simple example is best to explain how to program the AD9832 and the AD9835. For further details, refer to the AN-621 Application Note and the <a class="icon adi reference external" href="https://www.analog.com/AD9832" target="_blank">AD9832</a> or the <a class="icon adi reference external" href="https://www.analog.com/AD9835" target="_blank">AD9835</a> data sheet.</p>
 <section id="example-1-setting-up-the-part-after-power-up">
 <h3>Example 1: Setting Up the Part After Power-Up<a class="headerlink" href="#example-1-setting-up-the-part-after-power-up" title="Link to this heading"></a></h3>
-<p>The aim is to generate two output frequencies, loading 3 kHz to the FREQ0 register, and 10 kHz to the FREQ1 register, with a 25 MHz MCLK.</p>
+<p>The aim is to generate two output frequencies, loading 3 kHz to the FREQ0
+register, and 10 kHz to the FREQ1 register, with a 25 MHz MCLK.</p>
 <p>The dial-up code for this is defined by the equation</p>
 <p><span class="math notranslate nohighlight">\(FreqReg=f_{OUT} x 2^28/f_{MCLK}\)</span></p>
 <p>For <em>FREQ0</em> = 3000 Hz</p>
@@ -675,7 +687,12 @@ Content on this topic
 <h3>Command Sequence Explained<a class="headerlink" href="#command-sequence-explained" title="Link to this heading"></a></h3>
 <p>Use the register tables in the <a class="icon adi reference external" href="https://www.analog.com/AD9832" target="_blank">AD9832</a> or <a class="icon adi reference external" href="https://www.analog.com/AD9835" target="_blank">AD9835</a> data sheet for reference.</p>
 <p>0xD000—Resets AD9832</p>
-<p>RESET Bit D12 is set to 1. This resets the internal registers to 0, which corresponds to an analog output of full scale (see Figure 2). Ch1 is the spurious output set to reset. Ch2 is FSYNC, Ch3 is SDATA, and Ch4 is SCLK. Note that data is valid on the falling edge of SCLK. Ignore the SDATA high after eight SCLK cycles; this is an inherent feature of the particular SPI driver used and does not affect the part.</p>
+<p>RESET Bit D12 is set to 1. This resets the internal registers to 0, which
+corresponds to an analog output of full scale (see Figure 2). Ch1 is the
+spurious output set to reset. Ch2 is FSYNC, Ch3 is SDATA, and Ch4 is SCLK. Note
+that data is valid on the falling edge of SCLK. Ignore the SDATA high after
+eight SCLK cycles; this is an inherent feature of the particular SPI driver used
+and does not affect the part.</p>
 <p><img alt="an1108-09651-002.png" src="https://wiki.analog.com/_media/resources/app-notes/an1108-09651-002.png" /> <em>Figure 2. Put AD9832/AD9835 in Reset–0xD000</em></p>
 <p>0x3044</p>
 <ul class="simple">
@@ -702,13 +719,16 @@ Content on this topic
 </ul>
 <p>0xC000—Frequency Register 1, L LSB data.</p>
 <ul class="simple">
-<li><p>Exit reset mode. A 3 kHz signal, from the FREQ0 register, appears at the output of the DAC eight MCLK cycles after the RESET bit is set to 0.</p></li>
+<li><p>Exit reset mode. A 3 kHz signal, from the FREQ0 register, appears at the
+output of the DAC eight MCLK cycles after the RESET bit is set to 0.</p></li>
 </ul>
 <p><img alt="an1108-09651-004.png" src="https://wiki.analog.com/_media/resources/app-notes/an1108-09651-004.png" /> <em>Figure 4. Take Part Out of Reset–0xC000</em></p>
 </section>
 <section id="example-2-changing-the-fselect-bit">
 <h3>Example 2: Changing the FSELECT Bit<a class="headerlink" href="#example-2-changing-the-fselect-bit" title="Link to this heading"></a></h3>
-<p>The part is now set up with a 3 kHz signal on the output and is controllable by the FSELECT bit, as opposed to the FSELECT pin. To change this frequency to 10 KHz requires only a write to the control register to change the FSELECT bit.</p>
+<p>The part is now set up with a 3 kHz signal on the output and is controllable by
+the FSELECT bit, as opposed to the FSELECT pin. To change this frequency to 10
+KHz requires only a write to the control register to change the FSELECT bit.</p>
 <p>0x5800—Selects the FREQ1 register.</p>
 <ul class="simple">
 <li><p>That is, 0x5 written to the Command Bits C3:C0.</p></li>
@@ -720,7 +740,8 @@ Content on this topic
 </section>
 <section id="example-3-updating-the-output-as-needed">
 <h3>Example 3: Updating the Output as Needed<a class="headerlink" href="#example-3-updating-the-output-as-needed" title="Link to this heading"></a></h3>
-<p>The next step is to change the FREQ1 register from 10 kHz to 40 kHz without entering RESET mode.</p>
+<p>The next step is to change the FREQ1 register from 10 kHz to 40 kHz without
+entering RESET mode.</p>
 <ul class="simple">
 <li><p>For FREQ1 = 40 kHz</p></li>
 </ul>

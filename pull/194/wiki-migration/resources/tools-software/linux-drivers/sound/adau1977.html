@@ -681,9 +681,18 @@ Content on this topic
 </section>
 <section id="example-device-initialization">
 <h1>Example device initialization<a class="headerlink" href="#example-device-initialization" title="Link to this heading"></a></h1>
-<p>For compile time configuration, it’s common Linux practice to keep board- and application-specific configuration out of the main driver file, instead putting it into the board support file.</p>
-<p>For devices on custom boards, as typical of embedded and SoC-(system-on-chip) based hardware, Linux uses platform_data to point to board-specific structures describing devices and how they are connected to the SoC. This can include available ports, chip variants, preferred modes, default initialization, additional pin roles, and so on. This shrinks the board-support packages (BSPs) and minimizes board and application specific #ifdefs in drivers.</p>
-<p>The platform data for the ADAU1977 allow to specify the MICBIAS pin voltage. If no platform data is specified (i.e. set to NULL) the default voltage of 8.5 V will be used.</p>
+<p>For compile time configuration, it’s common Linux practice to keep board- and
+application-specific configuration out of the main driver file, instead putting
+it into the board support file.</p>
+<p>For devices on custom boards, as typical of embedded and SoC-(system-on-chip)
+based hardware, Linux uses platform_data to point to board-specific structures
+describing devices and how they are connected to the SoC. This can include
+available ports, chip variants, preferred modes, default initialization,
+additional pin roles, and so on. This shrinks the board-support packages (BSPs)
+and minimizes board and application specific #ifdefs in drivers.</p>
+<p>The platform data for the ADAU1977 allow to specify the MICBIAS pin voltage. If
+no platform data is specified (i.e. set to NULL) the default voltage of 8.5 V
+will be used.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/**</span>
 <span class="cm">  * enum adau1977_micbias - ADAU1977 MICBIAS pin voltage setting</span>
 <span class="cm">  * @ADAU1977_MICBIAS_5V0: MICBIAS is set to 5.0 V</span>
@@ -719,8 +728,13 @@ Content on this topic
 </div>
 <section id="voltage-supplies">
 <h2>Voltage Supplies<a class="headerlink" href="#voltage-supplies" title="Link to this heading"></a></h2>
-<p>The ADAU1977 driver expects a regulator supply for the AVDD voltage to be specified. This allows the driver to disable the supply when not needed, which helps to conserve power. Additionally the driver optionally accepts a supply for the DVDD voltage. If a supply for the DVDD voltage is specified the driver will use that regulator and disable the internal LDO.</p>
-<p>When using machine board files to register the device the regulators can be specified in the board file.</p>
+<p>The ADAU1977 driver expects a regulator supply for the AVDD voltage to be
+specified. This allows the driver to disable the supply when not needed, which
+helps to conserve power. Additionally the driver optionally accepts a supply for
+the DVDD voltage. If a supply for the DVDD voltage is specified the driver will
+use that regulator and disable the internal LDO.</p>
+<p>When using machine board files to register the device the regulators can be
+specified in the board file.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">regulator_consumer_supply</span><span class="w"> </span><span class="n">adau1977_avdd_consumer_supplies</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">REGULATOR_SUPPLY</span><span class="p">(</span><span class="s">&quot;AVDD&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;spi0.1&quot;</span><span class="p">),</span>
 <span class="p">};</span>
@@ -785,7 +799,8 @@ Content on this topic
 </section>
 <section id="devicetree-bindings">
 <h2>Devicetree bindings<a class="headerlink" href="#devicetree-bindings" title="Link to this heading"></a></h2>
-<p>The ADAU1977 driver is fully devicetree compatible. Depending on the bus type the device is connected to different properties must/can be specified.</p>
+<p>The ADAU1977 driver is fully devicetree compatible. Depending on the bus type
+the device is connected to different properties must/can be specified.</p>
 <p><strong>Shared required properties:</strong></p>
 <ul class="simple">
 <li><p><strong>compatible</strong>: Must be “adi,adau1977”, “adi,adau1978” or adi,adau1979”</p></li>
@@ -821,11 +836,22 @@ Content on this topic
 </section>
 <section id="i2c">
 <h2>I2C<a class="headerlink" href="#i2c" title="Link to this heading"></a></h2>
-<p>Unlike PCI or USB devices, I2C devices are not enumerated at the hardware level. Instead, the software must know which devices are connected on each I2C bus segment, and what address these devices are using. For this reason, the kernel code must instantiate I2C devices explicitly. There are different ways to achieve this, depending on the context and requirements. However the most common method is to declare the I2C devices by bus number.</p>
-<p>This method is appropriate when the I2C bus is a system bus, as in many embedded systems, wherein each I2C bus has a number which is known in advance. It is thus possible to pre-declare the I2C devices that inhabit this bus. This is done with an array of struct i2c_board_info, which is registered by calling i2c_register_board_info().</p>
-<p>So, to enable such a driver one need only edit the board support file by adding an appropriate entry to i2c_board_info.</p>
+<p>Unlike PCI or USB devices, I2C devices are not enumerated at the hardware level.
+Instead, the software must know which devices are connected on each I2C bus
+segment, and what address these devices are using. For this reason, the kernel
+code must instantiate I2C devices explicitly. There are different ways to
+achieve this, depending on the context and requirements. However the most common
+method is to declare the I2C devices by bus number.</p>
+<p>This method is appropriate when the I2C bus is a system bus, as in many embedded
+systems, wherein each I2C bus has a number which is known in advance. It is thus
+possible to pre-declare the I2C devices that inhabit this bus. This is done with
+an array of struct i2c_board_info, which is registered by calling
+i2c_register_board_info().</p>
+<p>So, to enable such a driver one need only edit the board support file by adding
+an appropriate entry to i2c_board_info.</p>
 <p>For more information see: <a href="#id2"><span class="problematic" id="id3">`instantiating-devices.rst &lt;/git.linux.org&gt;documentation/i2c/instantiating-devices.rst&gt;`__</span></a></p>
-<p>The I2C device id depends on the ADDR0 and ADDR1 pin settings and needs to be set according to your board setup.</p>
+<p>The I2C device id depends on the ADDR0 and ADDR1 pin settings and needs to be
+set according to your board setup.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -911,8 +937,16 @@ Content on this topic
 </section>
 <section id="spi">
 <h2>SPI<a class="headerlink" href="#spi" title="Link to this heading"></a></h2>
-<p>Unlike PCI or USB devices, SPI devices are not enumerated at the hardware level. Instead, the software must know which devices are connected on each SPI bus segment, and what slave selects these devices are using. For this reason, the kernel code must instantiate SPI devices explicitly. The most common method is to declare the SPI devices by bus number.</p>
-<p>This method is appropriate when the SPI bus is a system bus, as in many embedded systems, wherein each SPI bus has a number which is known in advance. It is thus possible to pre-declare the SPI devices that inhabit this bus. This is done with an array of struct spi_board_info, which is registered by calling spi_register_board_info().</p>
+<p>Unlike PCI or USB devices, SPI devices are not enumerated at the hardware level.
+Instead, the software must know which devices are connected on each SPI bus
+segment, and what slave selects these devices are using. For this reason, the
+kernel code must instantiate SPI devices explicitly. The most common method is
+to declare the SPI devices by bus number.</p>
+<p>This method is appropriate when the SPI bus is a system bus, as in many embedded
+systems, wherein each SPI bus has a number which is known in advance. It is thus
+possible to pre-declare the SPI devices that inhabit this bus. This is done with
+an array of struct spi_board_info, which is registered by calling
+spi_register_board_info().</p>
 <p>For more information see: <a href="#id2"><span class="problematic" id="id4">`spi-summary.rst &lt;/git.linux.org&gt;documentation/spi/spi-summary.rst&gt;`__</span></a></p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">adau1977_platform_data</span><span class="w"> </span><span class="n">adau1977_pdata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="p">.</span><span class="n">micbias</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ADAU1977_MICBIAS_7V5</span><span class="p">,</span>
@@ -1170,7 +1204,8 @@ Content on this topic
 </section>
 <section id="system-clock-configuration">
 <h2>System clock configuration<a class="headerlink" href="#system-clock-configuration" title="Link to this heading"></a></h2>
-<p>The sysclk can either be provided by the internal PLL derived from the MCLK signal or by the LRCLK signal.</p>
+<p>The sysclk can either be provided by the internal PLL derived from the MCLK
+signal or by the LRCLK signal.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">enum</span><span class="w"> </span><span class="n">adau1977_clk_id</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">ADAU1977_SYSCLK</span><span class="p">,</span>
 <span class="p">};</span>
@@ -1181,23 +1216,41 @@ Content on this topic
 <span class="p">};</span>
 </pre></div>
 </div>
-<p>If the MCLK is used the supported sampling rates of the device is constraint to those sample rates that can be derived from the the MCLK. The constraints are setup in the CODEC driver’s startup routine. This means that the sysclk needs to be configured before the CODEC’s startup callback is called. This can either be done from the machine driver’s startup or init callback.</p>
-<p>For some hardware configurations it might be possible to change the MCLK frequency at runtime (e.g. to support both 44.1kHz and 48kHz based sample rates). In this case in order for the CODEC driver to not set any sample rate constraints the sysclk frequency should be set to 0 until it has been decided which MCLK frequency is used. This can for example be implemented by setting the sysclk to 0 in the machine driver’s startup callback and setting it to the actual frequency in the hw_params callback.</p>
+<p>If the MCLK is used the supported sampling rates of the device is constraint to
+those sample rates that can be derived from the the MCLK. The constraints are
+setup in the CODEC driver’s startup routine. This means that the sysclk needs to
+be configured before the CODEC’s startup callback is called. This can either be
+done from the machine driver’s startup or init callback.</p>
+<p>For some hardware configurations it might be possible to change the MCLK
+frequency at runtime (e.g. to support both 44.1kHz and 48kHz based sample
+rates). In this case in order for the CODEC driver to not set any sample rate
+constraints the sysclk frequency should be set to 0 until it has been decided
+which MCLK frequency is used. This can for example be implemented by setting the
+sysclk to 0 in the machine driver’s startup callback and setting it to the
+actual frequency in the hw_params callback.</p>
 </section>
 <section id="tdm-configuration">
 <h2>TDM configuration<a class="headerlink" href="#tdm-configuration" title="Link to this heading"></a></h2>
-<p>The TDM mode of the ADAU1977 can be configured using the snd_soc_dai_set_tdm_slot() function.</p>
+<p>The TDM mode of the ADAU1977 can be configured using the
+snd_soc_dai_set_tdm_slot() function.</p>
 <ul class="simple">
 <li><p>The number of slots can be either 2, 4, 8 or 16. If the number of slots is set to 0 the device will go to I2S mode.</p></li>
 <li><p>The slot width can be 16, 24, 32 bits per slot (In master mode only 16 and 32 bits per slot are supported)</p></li>
 <li><p>tx_mask must always be 0.</p></li>
-<li><p>Each slot can hold the data sample of one channel. Which slot holds which channel is configured by rx_mask. The first bit that is set in rx_mask is the slot that holds the first channel, the second bit the slot that holds the second channel and so on. If less then 4 bits are set the channels for which no slot has been provided are disabled. (E.g. 0x33, configures channel 0 to slot 0, channel 1 to slot 1, channel 2 to slot 4 and channel 3 to slot 4).</p></li>
+<li><p>Each slot can hold the data sample of one channel. Which slot holds which
+channel is configured by rx_mask. The first bit that is set in rx_mask is the
+slot that holds the first channel, the second bit the slot that holds the
+second channel and so on. If less then 4 bits are set the channels for which
+no slot has been provided are disabled. (E.g. 0x33, configures channel 0 to
+slot 0, channel 1 to slot 1, channel 2 to slot 4 and channel 3 to slot 4).</p></li>
 </ul>
 <p>Example TDM configuration:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">snd_soc_dai_set_tdm_slot</span><span class="p">(</span><span class="n">codec_dai</span><span class="p">,</span><span class="w"> </span><span class="mh">0x00</span><span class="p">,</span><span class="w"> </span><span class="mh">0x0f</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">32</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>To configure whether the unused TDM slots should be tristated or actively driven low the snd_soc_dai_set_tristate() function is used. By default they are driven low.</p>
+<p>To configure whether the unused TDM slots should be tristated or actively driven
+low the snd_soc_dai_set_tristate() function is used. By default they are driven
+low.</p>
 <p>Example tristate configuration:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">snd_soc_dai_set_tristate</span><span class="p">(</span><span class="n">codec_dai</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
 </pre></div>
@@ -1222,7 +1275,6 @@ Content on this topic
 <span class="w">    </span><span class="p">.</span><span class="n">codec_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;adau1977.0-0011&quot;</span><span class="p">,</span>
 <span class="w">    </span><span class="p">.</span><span class="n">init</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">eval_adau1977_init</span><span class="p">,</span>
 <span class="w">    </span><span class="p">.</span><span class="n">dai_fmt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SND_SOC_DAIFMT_I2S</span>
-
 
 <span class="w">        </span><span class="n">SND_SOC_DAIFMT_NB_NF</span><span class="w"> </span><span class="o">|</span>
 
@@ -1270,7 +1322,6 @@ Content on this topic
 <span class="w">    </span><span class="p">.</span><span class="n">ops</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">eval_adau1977_ops</span><span class="p">,</span>
 <span class="w">    </span><span class="p">.</span><span class="n">init</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">eval_adau1977_init</span><span class="p">,</span>
 <span class="w">    </span><span class="p">.</span><span class="n">dai_fmt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SND_SOC_DAIFMT_I2S</span>
-
 
 <span class="w">        </span><span class="n">SND_SOC_DAIFMT_NB_NF</span><span class="w"> </span><span class="o">|</span>
 

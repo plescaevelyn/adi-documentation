@@ -592,11 +592,18 @@ Content on this topic
 <h1>Deep Neural Network Object Classification with 3D ToF Python Demo<a class="headerlink" href="#deep-neural-network-object-classification-with-3d-tof-python-demo" title="Link to this heading"></a></h1>
 <section id="description">
 <h2>Description<a class="headerlink" href="#description" title="Link to this heading"></a></h2>
-<p>The Python example uses a pre-trained deep neural network (DNN), which is trained to classify 20 objects. The network is described by two files, which are loaded into the script and converted into a classifier structure using OpenCV’s “dnn” module. After establishing a connection with the 3D ToF camera, the depth map and a blended image from the IR image and the depth image are streaming. The classifier is applied to the video stream of the blended image in real time.</p>
+<p>The Python example uses a pre-trained deep neural network (DNN), which is
+trained to classify 20 objects. The network is described by two files, which are
+loaded into the script and converted into a classifier structure using OpenCV’s
+“dnn” module. After establishing a connection with the 3D ToF camera, the depth
+map and a blended image from the IR image and the depth image are streaming. The
+classifier is applied to the video stream of the blended image in real time.</p>
 </section>
 <section id="build">
 <h2>Build<a class="headerlink" href="#build" title="Link to this heading"></a></h2>
-<p>Presuming the 3D ToF SDK has already been built on your machine, in order to build the Python bindings, you’ll need to do the following, depending on your host platform :</p>
+<p>Presuming the 3D ToF SDK has already been built on your machine, in order to
+build the Python bindings, you’ll need to do the following, depending on your
+host platform :</p>
 <section id="linux">
 <h3>Linux<a class="headerlink" href="#linux" title="Link to this heading"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cmake</span> <span class="o">-</span><span class="n">DWITH_PYTHON</span><span class="o">=</span><span class="n">on</span> <span class="o">..</span>
@@ -610,7 +617,10 @@ Content on this topic
 <span class="n">cmake</span> <span class="o">--</span><span class="n">build</span> <span class="o">.</span> <span class="o">--</span><span class="n">config</span> <span class="n">Release</span> <span class="p">(</span><span class="ow">or</span> <span class="n">Debug</span> <span class="n">depending</span> <span class="n">on</span> <span class="n">the</span> <span class="n">configuration</span><span class="p">)</span> <span class="o">-</span><span class="n">j</span> <span class="mi">4</span>
 </pre></div>
 </div>
-<p>This step will create the python aditof library. It will also ensure that the two files that describe the network – MobileNetSSD_deploy.prototxt and MobileNetSSD_deploy.caffemodel – are downloaded. In order for the Python example to work, the OpenCV python package needs to be installed, via pip.</p>
+<p>This step will create the python aditof library. It will also ensure that the
+two files that describe the network – MobileNetSSD_deploy.prototxt and
+MobileNetSSD_deploy.caffemodel – are downloaded. In order for the Python
+example to work, the OpenCV python package needs to be installed, via pip.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip3</span> <span class="n">install</span> <span class="n">opencv</span><span class="o">-</span><span class="n">contrib</span><span class="o">-</span><span class="n">python</span>
 </pre></div>
 </div>
@@ -618,18 +628,36 @@ Content on this topic
 </section>
 <section id="run">
 <h2>Run<a class="headerlink" href="#run" title="Link to this heading"></a></h2>
-<p>To run the application, run the dnn.py script either from your Python IDE or directly from the command line. The example can be found under bindings/python/examples/dnn. For the script to be able to load the network model, the location of the network files must be given as an argument, as illustrated below. Alternatively, you can copy the MobileNetSSD_deploy.prototxt and MobileNetSSD_deploy.caffemodel next to the dnn script.</p>
+<p>To run the application, run the dnn.py script either from your Python IDE or
+directly from the command line. The example can be found under
+bindings/python/examples/dnn. For the script to be able to load the network
+model, the location of the network files must be given as an argument, as
+illustrated below. Alternatively, you can copy the MobileNetSSD_deploy.prototxt
+and MobileNetSSD_deploy.caffemodel next to the dnn script.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">dnn</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">prototxt</span> \<span class="n">pathTo</span>\<span class="n">MobileNetSSD_deploy</span><span class="o">.</span><span class="n">prototxt</span>
         <span class="o">--</span><span class="n">weights</span> \<span class="n">pathTo</span>\<span class="n">MobileNetSSD_deploy</span><span class="o">.</span><span class="n">caffemodel</span>
 </pre></div>
 </div>
-<p>The example provides the option to run it both locally and on network backend. If you want to run it on network, you must give the device’s ip as an argument with the –ip option.</p>
-<p>Once the application is started, the camera’s parameters will be printed in the console and the video stream will be shown on screen.</p>
+<p>The example provides the option to run it both locally and on network backend.
+If you want to run it on network, you must give the device’s ip as an argument
+with the –ip option.</p>
+<p>Once the application is started, the camera’s parameters will be printed in the
+console and the video stream will be shown on screen.</p>
 <img alt="dnn-preview.png" src="https://wiki.analog.com/_media/dnn-preview.png" />
 </section>
 <section id="process">
 <h2>Process<a class="headerlink" href="#process" title="Link to this heading"></a></h2>
-<p>This demo is a combination of SSD Mobilenet object detection example from OpenCV and ToF SDK. In order to build the network model, the two downloaded files are loaded. The MobileNetSSD_deploy.prototxt is a text file which describes the architecture of the network, containing features such as input dimensions, layer types and hierarchy. The second file, MobileNetSSD_deploy.caffemodel, contains the weights of the model. After building the classifier model, a connection to the ToF device is established and frames are requested. The process of computing and displaying IR and depth maps is also illustrated in this example. A blended image is created, which is results as a mixture of the depth and IR frame. With the aid of the depth map, the area of interest is easily identified. The network then determines the class of object detected based on its shape.</p>
+<p>This demo is a combination of SSD Mobilenet object detection example from OpenCV
+and ToF SDK. In order to build the network model, the two downloaded files are
+loaded. The MobileNetSSD_deploy.prototxt is a text file which describes the
+architecture of the network, containing features such as input dimensions, layer
+types and hierarchy. The second file, MobileNetSSD_deploy.caffemodel, contains
+the weights of the model. After building the classifier model, a connection to
+the ToF device is established and frames are requested. The process of computing
+and displaying IR and depth maps is also illustrated in this example. A blended
+image is created, which is results as a mixture of the depth and IR frame. With
+the aid of the depth map, the area of interest is easily identified. The network
+then determines the class of object detected based on its shape.</p>
 </section>
 </section>
 

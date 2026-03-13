@@ -613,10 +613,12 @@ Content on this topic
 </section>
 <section id="setting-up-your-host-pc">
 <h1>Setting Up Your Host PC<a class="headerlink" href="#setting-up-your-host-pc" title="Link to this heading"></a></h1>
-<p>The build system is currently supported on host PCs running Ubuntu 20.04 LTS 64-bit.</p>
+<p>The build system is currently supported on host PCs running Ubuntu 20.04 LTS
+64-bit.</p>
 <section id="installing-required-packages">
 <h2>Installing Required Packages<a class="headerlink" href="#installing-required-packages" title="Link to this heading"></a></h2>
-<p>In order to build and deploy Linux to your ADSP-SC598-EZKIT development board you will need to install the following packages on your host PC.</p>
+<p>In order to build and deploy Linux to your ADSP-SC598-EZKIT development board
+you will need to install the following packages on your host PC.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get update
 $ sudo apt-get install -y gawk wget git-core diffstat unzip texinfo gcc-multilib build-essential chrpath socat libsdl1.2-dev xterm u-boot-tools openssl curl tftpd-hpa python
 </pre></div>
@@ -624,7 +626,10 @@ $ sudo apt-get install -y gawk wget git-core diffstat unzip texinfo gcc-multilib
 </section>
 <section id="installing-crosscore-embedded-studio">
 <h2>Installing CrossCore Embedded Studio<a class="headerlink" href="#installing-crosscore-embedded-studio" title="Link to this heading"></a></h2>
-<p>CrossCore Embedded Studio contains OpenOCD which is used to transfer U-Boot into RAM for the first initial boot of the device. The tools are created for 32-bit architecture and therefore requires a 32-bit libz package to run. Download and install it.</p>
+<p>CrossCore Embedded Studio contains OpenOCD which is used to transfer U-Boot into
+RAM for the first initial boot of the device. The tools are created for 32-bit
+architecture and therefore requires a 32-bit libz package to run. Download and
+install it.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ wget https://download.analog.com/tools/CrossCoreEmbeddedStudio/Releases/Release_2.11.0/adi-CrossCoreEmbeddedStudio-linux-x86-2.11.0.deb
 $ sudo dpkg -i ./adi-CrossCoreEmbeddedStudio-linux-x86-2.11.0.deb
 $ sudo apt install lib32z1
@@ -633,7 +638,8 @@ $ sudo apt install lib32z1
 </section>
 <section id="configuring-tftp-service">
 <h2>Configuring TFTP Service<a class="headerlink" href="#configuring-tftp-service" title="Link to this heading"></a></h2>
-<p>A TFTP server on the host is used to transfer images to the development board. Install and configure.</p>
+<p>A TFTP server on the host is used to transfer images to the development board.
+Install and configure.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo vi /etc/default/tftpd-hpa
 
 #Replace the existing file with the following
@@ -651,13 +657,15 @@ $ sudo service tftpd-hpa restart
 </section>
 <section id="configure-minicom">
 <h2>Configure Minicom<a class="headerlink" href="#configure-minicom" title="Link to this heading"></a></h2>
-<p>In order to communicate with the U-Boot bootloader, a UART connection must be made between the host PC and the development board. It is recommended that you use minicom to do this. Minicom must be configured to connect to U-Boot correctly.</p>
+<p>In order to communicate with the U-Boot bootloader, a UART connection must be
+made between the host PC and the development board. It is recommended that you
+use minicom to do this. Minicom must be configured to connect to U-Boot
+correctly.</p>
 <p>On the host PC open a terminal and execute the following commands:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get install -y minicom
 $ sudo minicom -s
 
             +-----[configuration]------+
-
 
             | Filenames and paths      |
 
@@ -670,7 +678,6 @@ $ sudo minicom -s
             | Exit                     |
             | Exit from Minicom        |
             +--------------------------+
-
 
 # Select Serial port setup
      Set Serial Device to /dev/ttyUSB0
@@ -685,8 +692,10 @@ $ sudo minicom -s
 </section>
 <section id="installing-the-sources">
 <h2>Installing the Sources<a class="headerlink" href="#installing-the-sources" title="Link to this heading"></a></h2>
-<p>The example is fully contained in the Analog Devices Yocto Linux github repositories.</p>
-<p>To install the sources: TODO: Make sure its the correct repo, branch, manifest file etc</p>
+<p>The example is fully contained in the Analog Devices Yocto Linux github
+repositories.</p>
+<p>To install the sources: TODO: Make sure its the correct repo, branch, manifest
+file etc</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ mkdir ~/gxp2
 $ cd ~/gxp2
 $ mkdir bin
@@ -705,25 +714,38 @@ $ ./bin/repo sync
 <h1>Building the Image<a class="headerlink" href="#building-the-image" title="Link to this heading"></a></h1>
 <section id="preparing-the-buildtool">
 <h2>Preparing the buildtool<a class="headerlink" href="#preparing-the-buildtool" title="Link to this heading"></a></h2>
-<p>Yocto requires the environment to be configured before building is possible. A setup-environment script in the gxp2 folder contains all the required environment settings for your build target. Source the setup script for your board:</p>
+<p>Yocto requires the environment to be configured before building is possible. A
+setup-environment script in the gxp2 folder contains all the required
+environment settings for your build target. Source the setup script for your
+board:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ source setup-environment -m adsp-sc598-som-ezkit
 </pre></div>
 </div>
-<p>Sourcing the script will configure your build environment and create a build folder along with a local build configuration file. See the Yocto Manual for further details.</p>
+<p>Sourcing the script will configure your build environment and create a build
+folder along with a local build configuration file. See the Yocto Manual for
+further details.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>Note that the build environment needs to be sourced once only before building. If later working in a different terminal the setup-environment script should be sourced again. If sourcing the setup-environment script is done without specifying the machine Yocto will reuse the previous configuration settings and retain any changes made to the files in the conf folder.</p>
+<p>Note that the build environment needs to be sourced once only before
+building. If later working in a different terminal the setup-environment
+script should be sourced again. If sourcing the setup-environment script is
+done without specifying the machine Yocto will reuse the previous
+configuration settings and retain any changes made to the files in the conf
+folder.</p>
 </div>
 </section>
 <section id="building-the-example">
 <h2>Building the example<a class="headerlink" href="#building-the-example" title="Link to this heading"></a></h2>
-<p>You can build three different versions of the root filesystem; minimal, ramdisk and full. To build the example images invoke bitbake from within the build directory created previously.</p>
+<p>You can build three different versions of the root filesystem; minimal, ramdisk
+and full. To build the example images invoke bitbake from within the build
+directory created previously.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ bitbake adsp-sc5xx-minimal
 $ bitbake adsp-sc5xx-ramdisk
 $ bitbake adsp-sc5xx-full
 </pre></div>
 </div>
-<p>When the build completes you will see a warning that the ELF binary has relocations in .text. It is OK to ignore this warning</p>
+<p>When the build completes you will see a warning that the ELF binary has
+relocations in .text. It is OK to ignore this warning</p>
 </section>
 <section id="running-u-boot-on-the-board-for-the-first-time">
 <h2>Running U-Boot on the Board for the first time<a class="headerlink" href="#running-u-boot-on-the-board-for-the-first-time" title="Link to this heading"></a></h2>
@@ -731,27 +753,32 @@ $ bitbake adsp-sc5xx-full
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cp tmp/deploy/images/adsp-sc598-som-ezkit/u-boot-proper-sc598-som-ezkit.elf /tftpboot/
 </pre></div>
 </div>
-<p>Before installing the software on to the development board, ensure that the following cables are connected:</p>
+<p>Before installing the software on to the development board, ensure that the
+following cables are connected:</p>
 <ul class="simple">
 <li><p>Board connected to network via ethernet cable using J13 connector.</p></li>
 <li><p>Board connected to host PC using USB micro cable, connected to USB/UART port on the development board</p></li>
 <li><p>Board connected to the ICE 1000 or ICE 2000 via the DEBUG port on the board</p></li>
 <li><p>ICE is also connected to host PC via USB mini cable</p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/quickstartguide/adsp-sc598-som-ezkit_overview-4.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/quickstartguide/adsp-sc598-som-ezkit_overview-4.png" src="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/quickstartguide/adsp-sc598-som-ezkit_overview-4.png" style="width: 400px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/quickstartguide/adsp-sc598-som-ezkit_overview-4.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/quickstartguide/adsp-sc598-som-ezkit_overview-4.png" src="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/quickstartguide/adsp-sc598-som-ezkit_overview-4.png" width="400" />
 </a>
 <ul class="simple">
-<li><p>On the SOMCRR-EZKIT is a set of micro switches labelled SW1. These should all be set to the OFF position before continuing.</p></li>
+<li><p>On the SOMCRR-EZKIT is a set of micro switches labelled SW1. These should all
+be set to the OFF position before continuing.</p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/quickstartguide/adsp-sc594-som-ezkit-switches.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/quickstartguide/adsp-sc594-som-ezkit-switches.jpg" src="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/quickstartguide/adsp-sc594-som-ezkit-switches.jpg" style="width: 400px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/quickstartguide/adsp-sc594-som-ezkit-switches.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/quickstartguide/adsp-sc594-som-ezkit-switches.jpg" src="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/quickstartguide/adsp-sc594-som-ezkit-switches.jpg" width="400" />
 </a>
 <ul class="simple">
-<li><p>The Power jumper JP1 on the EV-SC598-SOM board should be fitted so that it shorts the two pins closest to the edge. This will enable the routing of power from the SOMCRR-EZKIT.</p></li>
+<li><p>The Power jumper JP1 on the EV-SC598-SOM board should be fitted so that it
+shorts the two pins closest to the edge. This will enable the routing of
+power from the SOMCRR-EZKIT.</p></li>
 <li><p>The BOOT MODE selector on the EV-SC598-SOM board should be turned to “0”.</p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/quickstartguide/sc598-closeup-1.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/quickstartguide/sc598-closeup-1.jpg" src="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/quickstartguide/sc598-closeup-1.jpg" style="width: 400px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/quickstartguide/sc598-closeup-1.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/quickstartguide/sc598-closeup-1.jpg" src="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/quickstartguide/sc598-closeup-1.jpg" width="400" />
 </a>
-<p>The console output from U-Boot and later on Linux will appear on the USB serial port configured in minicom earlier so open up minicom.</p>
+<p>The console output from U-Boot and later on Linux will appear on the USB serial
+port configured in minicom earlier so open up minicom.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>;&#39;&#39;Terminal1: minicom&#39;&#39;
 :&lt;code&gt;$ sudo minicom &lt;/code&gt;
 </pre></div>
@@ -787,8 +814,24 @@ $ bitbake adsp-sc5xx-full
 <span class="p">:</span> <span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<p>$ cd /tftpboot $ /opt/analog/cces/2.11.0/ARM/aarch64-none-elf/bin/aarch64-none-elf-gdb u-boot-proper-sc598-som-ezkit.elf … (gdb) target extended-remote :3333 Remote debugging using :3333 0x000000000000352c in ?? () (gdb) load u-boot-proper-sc598-som-ezkit.elf Loading section .text, size 0x150 lma 0x96000000 Loading section .efi_runtime, size 0xfb0 lma 0x96000150 Loading section .text_rest, size 0x5ad94 lma 0x96001800 Loading section .rodata, size 0x12f1c lma 0x9605c598 Loading section .hash, size 0x18 lma 0x9606f4b8 Loading section .dtb.init.rodata, size 0xac0 lma 0x9606f4d0 Loading section .data, size 0x47e8 lma 0x9606ff90 Loading section .got, size 0x8 lma 0x96074778 Loading section .got.plt, size 0x18 lma 0x96074780 Loading section .u_boot_list, size 0x2800 lma 0x96074798 Loading section .efi_runtime_rel, size 0x1b0 lma 0x96076f98 Loading section .rela.dyn, size 0xb700 lma 0x96077148 Start address 0x96000000, load size 532800 Transfer rate: 29 KB/sec, 12685 bytes/write. (gdb) c Continuing. &lt;/code&gt;</p>
-<p>At this point U-Boot will now be running in RAM on your target board. You should see U-Boot booting in the minicom console (Terminal 1). Press a key to interrupt the boot process before the countdown terminates:</p>
+<p>$ cd /tftpboot $
+/opt/analog/cces/2.11.0/ARM/aarch64-none-elf/bin/aarch64-none-elf-gdb
+u-boot-proper-sc598-som-ezkit.elf … (gdb) target extended-remote :3333 Remote
+debugging using :3333 0x000000000000352c in ?? () (gdb) load
+u-boot-proper-sc598-som-ezkit.elf Loading section .text, size 0x150 lma
+0x96000000 Loading section .efi_runtime, size 0xfb0 lma 0x96000150 Loading
+section .text_rest, size 0x5ad94 lma 0x96001800 Loading section .rodata, size
+0x12f1c lma 0x9605c598 Loading section .hash, size 0x18 lma 0x9606f4b8 Loading
+section .dtb.init.rodata, size 0xac0 lma 0x9606f4d0 Loading section .data, size
+0x47e8 lma 0x9606ff90 Loading section .got, size 0x8 lma 0x96074778 Loading
+section .got.plt, size 0x18 lma 0x96074780 Loading section .u_boot_list, size
+0x2800 lma 0x96074798 Loading section .efi_runtime_rel, size 0x1b0 lma
+0x96076f98 Loading section .rela.dyn, size 0xb700 lma 0x96077148 Start address
+0x96000000, load size 532800 Transfer rate: 29 KB/sec, 12685 bytes/write. (gdb)
+c Continuing. &lt;/code&gt;</p>
+<p>At this point U-Boot will now be running in RAM on your target board. You should
+see U-Boot booting in the minicom console (Terminal 1). Press a key to interrupt
+the boot process before the countdown terminates:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;</span><span class="s1">&#39;&#39;</span><span class="n">Terminal1</span><span class="p">:</span> <span class="n">minicom</span><span class="s1">&#39;&#39;</span>
 <span class="p">:</span>  <span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
 </pre></div>
@@ -798,11 +841,18 @@ $ bitbake adsp-sc5xx-full
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Watchdog</span> <span class="n">enabled</span>
 </pre></div>
 </div>
-<p>I2C: ready DRAM: 224 MiB MMC: <a class="reference external" href="mailto:mmc&#37;&#52;&#48;310C7000">mmc<span>&#64;</span>310C7000</a>: 0 Loading Environment from SPIFlash… SF: Detected is25lp512 with page size 256 Bytes, erase size 64 KiB, total 64 MiB OK In: <a class="reference external" href="mailto:serial&#37;&#52;&#48;0x31003000">serial<span>&#64;</span>0x31003000</a> Out: <a class="reference external" href="mailto:serial&#37;&#52;&#48;0x31003000">serial<span>&#64;</span>0x31003000</a> Err: <a class="reference external" href="mailto:serial&#37;&#52;&#48;0x31003000">serial<span>&#64;</span>0x31003000</a> Net: eth0: <a class="reference external" href="mailto:eth&#37;&#52;&#48;0x31040000">eth<span>&#64;</span>0x31040000</a> Hit any key to stop autoboot: 0 =&gt; &lt;/code&gt;</p>
+<p>I2C: ready DRAM: 224 MiB MMC: <a class="reference external" href="mailto:mmc&#37;&#52;&#48;310C7000">mmc<span>&#64;</span>310C7000</a>: 0 Loading Environment from
+SPIFlash… SF: Detected is25lp512 with page size 256 Bytes, erase size 64 KiB,
+total 64 MiB OK In: <a class="reference external" href="mailto:serial&#37;&#52;&#48;0x31003000">serial<span>&#64;</span>0x31003000</a> Out: <a class="reference external" href="mailto:serial&#37;&#52;&#48;0x31003000">serial<span>&#64;</span>0x31003000</a> Err:
+<a class="reference external" href="mailto:serial&#37;&#52;&#48;0x31003000">serial<span>&#64;</span>0x31003000</a> Net: eth0: <a class="reference external" href="mailto:eth&#37;&#52;&#48;0x31040000">eth<span>&#64;</span>0x31040000</a> Hit any key to stop autoboot: 0 =&gt;
+&lt;/code&gt;</p>
 </section>
 <section id="booting-the-minimal-image-from-qspi">
 <h2>Booting the minimal image from QSPI<a class="headerlink" href="#booting-the-minimal-image-from-qspi" title="Link to this heading"></a></h2>
-<p>The U-Boot console is used to copy U-Boot (SPL and Proper), the minimal root filesystem image and the fitImage (which contains the kernel image and dtb file) into RAM and then write them to Flash. Copy the required files from &lt;BUILD DIR&gt;/tmp/deploy/images to your /tftpboot directory.</p>
+<p>The U-Boot console is used to copy U-Boot (SPL and Proper), the minimal root
+filesystem image and the fitImage (which contains the kernel image and dtb file)
+into RAM and then write them to Flash. Copy the required files from &lt;BUILD
+DIR&gt;/tmp/deploy/images to your /tftpboot directory.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cp tmp/deploy/images/adsp-sc598-som-ezkit/stage1-boot.ldr /tftpboot/
 $ cp tmp/deploy/images/adsp-sc598-som-ezkit/stage2-boot.ldr /tftpboot/
 $ cp tmp/deploy/images/adsp-sc598-som-ezkit/fitImage /tftpboot/
@@ -833,7 +883,8 @@ $ cp tmp/deploy/images/adsp-sc598-som-ezkit/adsp-sc5xx-minimal-adsp-sc598-som-ez
 =&gt; run update_qspi_sc598
 </pre></div>
 </div>
-<p>After removing “run init_ethernet;” from update_spi_sc598, issue the “run update_qspi_sc598” command as above.</p>
+<p>After removing “run init_ethernet;” from update_spi_sc598, issue the “run
+update_qspi_sc598” command as above.</p>
 <p>You should see output similar to the following.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">=&gt;</span> <span class="n">run</span> <span class="n">update_qspi_sc598</span>
 <span class="n">PHY</span> <span class="mh">0x00</span><span class="p">:</span> <span class="n">OUI</span> <span class="o">=</span> <span class="mh">0x80028</span><span class="p">,</span> <span class="n">Model</span> <span class="o">=</span> <span class="mh">0x23</span><span class="p">,</span> <span class="n">Rev</span> <span class="o">=</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mi">100</span><span class="n">baseT</span><span class="p">,</span> <span class="n">FDX</span>
@@ -944,7 +995,6 @@ $ cp tmp/deploy/images/adsp-sc598-som-ezkit/adsp-sc5xx-minimal-adsp-sc598-som-ez
          <span class="n">Starting</span> <span class="n">Update</span> <span class="n">UTMP</span> <span class="n">about</span> <span class="n">System</span> <span class="n">Runlevel</span> <span class="n">Changes</span><span class="o">...</span>
 <span class="p">[</span>  <span class="n">OK</span>  <span class="p">]</span> <span class="n">Started</span> <span class="n">Update</span> <span class="n">UTMP</span> <span class="n">about</span> <span class="n">System</span> <span class="n">Runlevel</span> <span class="n">Changes</span><span class="o">.</span>
 
-
      <span class="o">@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@</span>
      <span class="o">@@@@@@@@</span>  <span class="o">@@@@@@@@@@@@@@@@@@@@@@@@@@@@@</span>
      <span class="o">@@@@@@@@</span>     <span class="o">@@@@@@@@@@@@@@@@@@@@@@@@@@</span>
@@ -983,14 +1033,17 @@ $ cp tmp/deploy/images/adsp-sc598-som-ezkit/sc598-som-ezkit.dtb /tftpboot
 </div>
 <section id="ram-boot">
 <h3>RAM Boot<a class="headerlink" href="#ram-boot" title="Link to this heading"></a></h3>
-<p>For RAM boot a copy of the image containing the filesystem needs copied to the /tftpboot directory.</p>
+<p>For RAM boot a copy of the image containing the filesystem needs copied to the
+/tftpboot directory.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cp tmp/deploy/images/adsp-sc598-som-ezkit/adsp-sc5xx-ramdisk-adsp-sc598-som-ezkit.cpio.xz.u-boot /tftpboot/ramdisk.cpio.xz.u-boot
 </pre></div>
 </div>
 </section>
 <section id="nfs-boot">
 <h3>NFS Boot<a class="headerlink" href="#nfs-boot" title="Link to this heading"></a></h3>
-<p>For NFS boot we use the Network File System which is stored in local Ubuntu Host. This is suggested when you do application development. To setup the NFS server:</p>
+<p>For NFS boot we use the Network File System which is stored in local Ubuntu
+Host. This is suggested when you do application development. To setup the NFS
+server:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get install nfs-kernel-server
 $ sudo vi /etc/exports
 
@@ -1037,7 +1090,6 @@ Sep 06 14:38:31 $YOUR_HOSTNAME systemd[1]: Finished NFS server and services.
 <span class="o">......</span>
          <span class="n">Starting</span> <span class="n">Update</span> <span class="n">UTMP</span> <span class="n">about</span> <span class="n">System</span> <span class="n">Runlevel</span> <span class="n">Changes</span><span class="o">...</span>
 <span class="p">[</span>  <span class="n">OK</span>  <span class="p">]</span> <span class="n">Started</span> <span class="n">Update</span> <span class="n">UTMP</span> <span class="n">about</span> <span class="n">System</span> <span class="n">Runlevel</span> <span class="n">Changes</span><span class="o">.</span>
-
 
      <span class="o">@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@</span>
      <span class="o">@@@@@@@@</span>  <span class="o">@@@@@@@@@@@@@@@@@@@@@@@@@@@@@</span>

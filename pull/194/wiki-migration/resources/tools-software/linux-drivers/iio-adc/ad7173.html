@@ -732,7 +732,9 @@ Content on this topic
 <ul>
 <li><p>diff-channels: expects a two value array, will define a channel marked as differential.</p></li>
 <li><p>single-channel + common-mode-channel: each expects a single value, will define a channel marked as single-ended.</p></li>
-<li><p>single-channel + adi,current-channel: only single-channel expects a value, will be used to define a current measuring channel on AD411x models with current inputs.</p></li>
+<li><p>single-channel + adi,current-channel: only single-channel expects a value,
+will be used to define a current measuring channel on AD411x models with
+current inputs.</p></li>
 </ul>
 </li>
 </ul>
@@ -744,7 +746,9 @@ Content on this topic
 <li><p>interrupts: maps the interrupts to a pin and a trigger level</p>
 <ul>
 <li><p>Ready: Multiplexed with the DOUT pin, can be used as indication of a finished conversion, should be IRQ_TYPE_EDGE_FALLING. The device tree property is optional for the bindings, the upstream version of the driver is <strong>required</strong> to have the interrupt defined in order to be functional.</p></li>
-<li><p>Error: Used to detect if one of the following errors has occurred: ADC_ERROR/CRC_ERROR/REG_ERROR. At the time of writing, this feature is not implemented in the driver.</p></li>
+<li><p>Error: Used to detect if one of the following errors has occurred:
+ADC_ERROR/CRC_ERROR/REG_ERROR. At the time of writing, this feature is not
+implemented in the driver.</p></li>
 </ul>
 </li>
 <li><p>interrupt-names: The name of the interrupts, order should coincide with the values from the interrupts property.</p></li>
@@ -778,7 +782,11 @@ Content on this topic
 <li><p>avdd: will use the AVDD/AVSS supply defined at avdd-supply</p></li>
 </ul>
 </li>
-<li><p>bipolar: If set, the channel will be setup in bipolar mode where the ADC accepts negative differential input voltages, and the output coding is offset binary. If the property is missing, the channel will be set in unipolar mode and the ADC accepts only positive differential voltages, and the coding is straight binary.</p></li>
+<li><p>bipolar: If set, the channel will be setup in bipolar mode where the ADC
+accepts negative differential input voltages, and the output coding is offset
+binary. If the property is missing, the channel will be set in unipolar mode
+and the ADC accepts only positive differential voltages, and the coding is
+straight binary.</p></li>
 </ul>
 </section>
 </section>
@@ -787,7 +795,8 @@ Content on this topic
 <ul class="simple">
 <li><p>Analog inputs differences:</p>
 <ul>
-<li><p>Voltage inputs: Besides the different number of inputs, there are special pins that are only available on certain models:</p>
+<li><p>Voltage inputs: Besides the different number of inputs, there are special
+pins that are only available on certain models:</p>
 <ul>
 <li><p>(AVDD1 − AVSS)/5: Available only on <a class="icon adi reference external" href="https://www.analog.com/AD7172-2" target="_blank">AD7172-2</a>, <a class="icon adi reference external" href="https://www.analog.com/AD7172-4" target="_blank">AD7172-4</a>, <a class="icon adi reference external" href="https://www.analog.com/AD7175-2" target="_blank">AD7175-2</a>, <a class="icon adi reference external" href="https://www.analog.com/AD7175-8" target="_blank">AD7175-8</a> and <a class="icon adi reference external" href="https://www.analog.com/AD7177-2" target="_blank">AD7177-2</a></p></li>
 <li><p>VINCOM: Available on AD411x models.</p></li>
@@ -813,7 +822,8 @@ Content on this topic
 </section>
 <section id="adding-linux-driver-support">
 <h1>Adding Linux driver support<a class="headerlink" href="#adding-linux-driver-support" title="Link to this heading"></a></h1>
-<p>Configure kernel with “make menuconfig” (alternatively use “make xconfig” or “make qconfig”)</p>
+<p>Configure kernel with “make menuconfig” (alternatively use “make xconfig” or
+“make qconfig”)</p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <p>The AD7173 driver depends on CONFIG_IIO and CONFIG_SPI_MASTER</p>
@@ -835,7 +845,9 @@ Content on this topic
 </section>
 <section id="hardware-configuration">
 <h1>Hardware configuration<a class="headerlink" href="#hardware-configuration" title="Link to this heading"></a></h1>
-<p>The evaluation kits were connected using the exposed digital I/O pins to a Raspberry pi 3B+. Here is an example of connection from the ADC evaluation board to the RPI:</p>
+<p>The evaluation kits were connected using the exposed digital I/O pins to a
+Raspberry pi 3B+. Here is an example of connection from the ADC evaluation board
+to the RPI:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>DEVICE              HOST RPI
 * CS       &lt;——————— Pin 24 (GPIO08) SPI_CE0_N
 * SCLK     &lt;——————— Pin 23 (GPIO11) SPI_CLK
@@ -847,7 +859,15 @@ Content on this topic
 </section>
 <section id="driver-testing">
 <h1>Driver testing<a class="headerlink" href="#driver-testing" title="Link to this heading"></a></h1>
-<p>Each and every IIO device, typically a hardware chip, has a device folder under /sys/bus/iio/devices/iio:deviceX. Where X is the IIO index of the device. Under every of these directory folders reside a set of files, depending on the characteristics and features of the hardware device in question. These files are consistently generalized and documented in the IIO ABI documentation. In order to determine which IIO deviceX corresponds to which hardware device, the user can read the name file /sys/bus/iio/devices/iio:deviceX/name. In case the sequence in which the iio device drivers are loaded/registered is constant, the numbering is constant and may be known in advance.</p>
+<p>Each and every IIO device, typically a hardware chip, has a device folder under
+/sys/bus/iio/devices/iio:deviceX. Where X is the IIO index of the device. Under
+every of these directory folders reside a set of files, depending on the
+characteristics and features of the hardware device in question. These files are
+consistently generalized and documented in the IIO ABI documentation. In order
+to determine which IIO deviceX corresponds to which hardware device, the user
+can read the name file /sys/bus/iio/devices/iio:deviceX/name. In case the
+sequence in which the iio device drivers are loaded/registered is constant, the
+numbering is constant and may be known in advance.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>TIP: An example program which uses the interface can be found here:</p>
@@ -924,8 +944,12 @@ Content on this topic
 <section id="show-channel-raw-scale-and-offset">
 <h2>Show channel raw, scale and offset<a class="headerlink" href="#show-channel-raw-scale-and-offset" title="Link to this heading"></a></h2>
 <p><strong>Description:</strong> Scales and offsets to be applied to in_voltagex_voltagey_raw in order to obtain the measured voltage in millivolts.</p>
-<p>Compute formula is: (RAW + OFFSET) * SCALE for channels that are configured with bipolar coding within the devicetree. For channels missing the offset property, RAW * SCALE will be used. Example channel configured with AIN0-AIN1, internal reference and bipolar coding:</p>
-<p>U = (in_voltage0-voltage1_raw + in_voltage0-voltage1_offset) * cat in_voltage0-voltage1_scale = 517.683236334 mV</p>
+<p>Compute formula is: (RAW + OFFSET) * SCALE for channels that are configured
+with bipolar coding within the devicetree. For channels missing the offset
+property, RAW * SCALE will be used. Example channel configured with AIN0-AIN1,
+internal reference and bipolar coding:</p>
+<p>U = (in_voltage0-voltage1_raw + in_voltage0-voltage1_offset) * cat
+in_voltage0-voltage1_scale = 517.683236334 mV</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">iio</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">iio</span><span class="p">:</span><span class="n">device0</span><span class="o">&gt;</span> <span class="n">cat</span> <span class="n">in_voltage0</span><span class="o">-</span><span class="n">voltage1_scale</span>
@@ -943,7 +967,9 @@ Content on this topic
 <p><strong>Description:</strong> The output sampling rate cat be set to each channel individually.</p>
 <ul class="simple">
 <li><p>When reading channel values individually or using buffered mode with a single channel enabled, the data rate will coincide with the set value.</p></li>
-<li><p>When using buffered mode with multiple channels, the effective data rate will be lower and depend on the number of enabled channels and their respective sampling frequency setting.</p></li>
+<li><p>When using buffered mode with multiple channels, the effective data rate will
+be lower and depend on the number of enabled channels and their respective
+sampling frequency setting.</p></li>
 </ul>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
@@ -961,12 +987,18 @@ Content on this topic
 </section>
 <section id="calibration">
 <h2>Calibration<a class="headerlink" href="#calibration" title="Link to this heading"></a></h2>
-<p>The family supports both internal and system calibrations which can be done at full or zero scale.</p>
+<p>The family supports both internal and system calibrations which can be done at
+full or zero scale.</p>
 <ul class="simple">
-<li><p>Internal zero scale: removes ADC core offset errors. * Internal full scale: removes ADC core gain errors. * System zero scale: reduces offset error to the order of channel noise. * System full scale: reduces gain error to the order of channel noise.</p></li>
+<li><p>Internal zero scale: removes ADC core offset errors. * Internal full scale:
+removes ADC core gain errors. * System zero scale: reduces offset error to
+the order of channel noise. * System full scale: reduces gain error to the
+order of channel noise.</p></li>
 </ul>
-<p>All voltage channels will undergo an internal zero/full scale calibration at bootup.</p>
-<p>System zero/full scale can be done after bootup using the newly created iio interface ‘sys_calibration’ and ‘sys_calibration_mode’</p>
+<p>All voltage channels will undergo an internal zero/full scale calibration at
+bootup.</p>
+<p>System zero/full scale can be done after bootup using the newly created iio
+interface ‘sys_calibration’ and ‘sys_calibration_mode’</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">iio</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">iio</span><span class="p">:</span><span class="n">device0</span><span class="o">&gt;</span> <span class="n">echo</span> <span class="s1">&#39;zero_scale&#39;</span> <span class="o">&gt;</span> <span class="n">sys_calibration_mode</span>
@@ -979,13 +1011,22 @@ Content on this topic
 </section>
 <section id="openwire-detection-for-ad4111">
 <h2>Openwire detection for AD4111<a class="headerlink" href="#openwire-detection-for-ad4111" title="Link to this heading"></a></h2>
-<p>AD4111 supports openwire detection and will report a fault event through an iio_event when an openwire condition is detected when running a single conversion.</p>
-<p>The fault is level triggered, it will keep being sent as long as the condition still exists.</p>
+<p>AD4111 supports openwire detection and will report a fault event through an
+iio_event when an openwire condition is detected when running a single
+conversion.</p>
+<p>The fault is level triggered, it will keep being sent as long as the condition
+still exists.</p>
 <p>The tool <strong>iio_event_monitor</strong> found in your kernel sources <strong>tools/iio/iio_event_monitor.c</strong> can be used to read those events.</p>
 </section>
 <section id="buffer-management">
 <h2>Buffer management<a class="headerlink" href="#buffer-management" title="Link to this heading"></a></h2>
-<p>The Industrial I/O subsystem provides support for various ring buffer based data acquisition methods. Apart from device specific hardware buffer support, the user can chose between two different software ring buffer implementations. One is the IIO lock free software ring, and the other is based on Linux kfifo. Devices with buffer support feature an additional sub-folder in the /sys/bus/iio/devices/deviceX/ folder hierarchy. Called deviceX:bufferY, where Y defaults to 0, for devices with a single buffer.</p>
+<p>The Industrial I/O subsystem provides support for various ring buffer based data
+acquisition methods. Apart from device specific hardware buffer support, the
+user can chose between two different software ring buffer implementations. One
+is the IIO lock free software ring, and the other is based on Linux kfifo.
+Devices with buffer support feature an additional sub-folder in the
+/sys/bus/iio/devices/deviceX/ folder hierarchy. Called deviceX:bufferY, where Y
+defaults to 0, for devices with a single buffer.</p>
 <p>Every buffer implementation features a set of files:</p>
 <div class="line-block">
 <div class="line"><strong>length</strong></div>

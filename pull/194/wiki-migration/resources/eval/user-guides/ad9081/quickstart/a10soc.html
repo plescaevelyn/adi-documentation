@@ -634,7 +634,7 @@ Content on this topic
 <p class="admonition-title">Important</p>
 <p>We are in the process of migrating our documentation to GitHubIO. This page is outdated and the new one can be found at <a class="icon link reference external" href="https://analogdevicesinc.github.io/documentation/solutions/reference-designs/eval-ad9081/quickstart/a10soc.html" target="_blank">https://analogdevicesinc.github.io/documentation/solutions/reference-designs/eval-ad9081/quickstart/a10soc.html</a></p>
 </div>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081/quickstart/a10soc_adrv9081.jpg"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081/quickstart/a10soc_adrv9081.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081/quickstart/a10soc_adrv9081.jpg" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081/quickstart/a10soc_adrv9081.jpg"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081/quickstart/a10soc_adrv9081.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081/quickstart/a10soc_adrv9081.jpg" width="600" />
 </a>
 <section id="requirements">
 <h2>Requirements<a class="headerlink" href="#requirements" title="Link to this heading"></a></h2>
@@ -701,11 +701,27 @@ root@raspberrypi:~# dd if=&quot;./u-boot-splx4.sfp&quot; of=&quot;/dev/sda3&quot
 </div>
 <section id="functional-overview">
 <h2>Functional Overview<a class="headerlink" href="#functional-overview" title="Link to this heading"></a></h2>
-<p>The AD9081-FMCA-EBZ / AD9082-FMCA-EBZ reference design is a processor based (e.g. Microblaze) embedded system. The design consists from a receive and a transmit chain.</p>
-<p>The receive chain transports the captured samples from ADC to the system memory (DDR). Before transferring the data to DDR the samples are stored in a buffer implemented on block rams from the FPGA fabric (util_adc_fifo). The space allocated in the buffer for each channel depends on the number of currently active channels. It goes up to M x 64k samples if a single channel is selected or 64k samples per channel if all channels are selected.</p>
-<p>The transmit chain transports samples from the system memory to the DAC devices. Before streaming out the data to the DAC through the JESD link the samples first are loaded into a buffer (util_dac_fifo) which will cyclically stream the samples at the tx_device_clk data rate. The space allocated in the transmit buffer for each channel depends on the number of currently active channels. It goes up to M x 64k samples if a single channel is selected or 64k samples per channel if all channels are selected.</p>
-<p>All cores from the receive and transmit chains are programmable through an AXI-Lite interface.</p>
-<p>The transmit and receive chains can operate at different data rates having separate rx_device_clk/tx_device_clk and corresponding lane rates but must share the same reference clock.</p>
+<p>The AD9081-FMCA-EBZ / AD9082-FMCA-EBZ reference design is a processor based
+(e.g. Microblaze) embedded system. The design consists from a receive and a
+transmit chain.</p>
+<p>The receive chain transports the captured samples from ADC to the system memory
+(DDR). Before transferring the data to DDR the samples are stored in a buffer
+implemented on block rams from the FPGA fabric (util_adc_fifo). The space
+allocated in the buffer for each channel depends on the number of currently
+active channels. It goes up to M x 64k samples if a single channel is selected
+or 64k samples per channel if all channels are selected.</p>
+<p>The transmit chain transports samples from the system memory to the DAC devices.
+Before streaming out the data to the DAC through the JESD link the samples first
+are loaded into a buffer (util_dac_fifo) which will cyclically stream the
+samples at the tx_device_clk data rate. The space allocated in the transmit
+buffer for each channel depends on the number of currently active channels. It
+goes up to M x 64k samples if a single channel is selected or 64k samples per
+channel if all channels are selected.</p>
+<p>All cores from the receive and transmit chains are programmable through an
+AXI-Lite interface.</p>
+<p>The transmit and receive chains can operate at different data rates having
+separate rx_device_clk/tx_device_clk and corresponding lane rates but must share
+the same reference clock.</p>
 </section>
 <section id="board-setup">
 <h2>Board setup<a class="headerlink" href="#board-setup" title="Link to this heading"></a></h2>
@@ -714,7 +730,8 @@ root@raspberrypi:~# dd if=&quot;./u-boot-splx4.sfp&quot; of=&quot;/dev/sda3&quot
 <p>The following rework is required:</p>
 <ul class="simple">
 <li><p>In order to avoid using an external clock source and fully rely on the HMC7044 clock chip,** rotate the C6D/C4D caps in C5D/C3D position** (Please note: In the latest version of the board, this is now the default configuration, so this configuration step might not be needed anymore)</p></li>
-<li><p>If LEDS V1P0_LED and VINT_LED are not on please ** depopulate R22M and populate R2M**</p></li>
+<li><p>If LEDS V1P0_LED and VINT_LED are not on please ** depopulate R22M and
+populate R2M**</p></li>
 </ul>
 </div>
 </section>
@@ -746,7 +763,8 @@ root@raspberrypi:~# dd if=&quot;./u-boot-splx4.sfp&quot; of=&quot;/dev/sda3&quot
 </section>
 <section id="block-design">
 <h2>Block design<a class="headerlink" href="#block-design" title="Link to this heading"></a></h2>
-<p>The block design supports parameters and scales based on it as shown on the below two examples.</p>
+<p>The block design supports parameters and scales based on it as shown on the
+below two examples.</p>
 <p>The parameters for Rx or Tx links can be changed from the system_project.tcl :</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="c"># Parameter description:</span>
 <span class="c">#    JESD_MODE : used link layer encoder mode</span>
@@ -849,7 +867,8 @@ root@raspberrypi:~# dd if=&quot;./u-boot-splx4.sfp&quot; of=&quot;/dev/sda3&quot
 <section id="example-block-design-for-single-link-m-4-l-8">
 <h3>Example block design for Single Link; M=4; L=8;<a class="headerlink" href="#example-block-design-for-single-link-m-4-l-8" title="Link to this heading"></a></h3>
 <img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_204b_m4l8.svg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_204b_m4l8.svg" />
-<p>The Rx links are set for full bandwidth mode and operate with the following parameters:</p>
+<p>The Rx links are set for full bandwidth mode and operate with the following
+parameters:</p>
 <ul class="simple">
 <li><p>Rx Deframer parameters: L=8, M=4, F=1, S=1, N’=16, N = 16 (Quick Config 0x12)</p></li>
 <li><p>Sample Rate : 1550 MSPS</p></li>
@@ -859,7 +878,8 @@ root@raspberrypi:~# dd if=&quot;./u-boot-splx4.sfp&quot; of=&quot;/dev/sda3&quot
 <li><p>JESD204B Lane Rate – 15.5Gbps</p></li>
 <li><p>QPLL0</p></li>
 </ul>
-<p>The Tx links are set for full bandwidth mode and operate with the following parameters:</p>
+<p>The Tx links are set for full bandwidth mode and operate with the following
+parameters:</p>
 <ul class="simple">
 <li><p>Tx Framer parameters: L=8, M=4, F=1, S=1, N’=16, N = 16 (Quick Config 0x11)</p></li>
 <li><p>Sample Rate : 1550 MSPS</p></li>
@@ -872,7 +892,8 @@ root@raspberrypi:~# dd if=&quot;./u-boot-splx4.sfp&quot; of=&quot;/dev/sda3&quot
 </section>
 <section id="example-block-design-for-single-link-m-2-l-8-jesd204c">
 <h3>Example block design for Single Link; M=2; L=8; JESD204C<a class="headerlink" href="#example-block-design-for-single-link-m-2-l-8-jesd204c" title="Link to this heading"></a></h3>
-<p>Observation: In 2019_R2 release the Xilinx JESD Physical layer IP Core is used, however in newer versions it is replaced with ADI’s util_adxcvr IP core.</p>
+<p>Observation: In 2019_R2 release the Xilinx JESD Physical layer IP Core is used,
+however in newer versions it is replaced with ADI’s util_adxcvr IP core.</p>
 <img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_204c_m2l8.svg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_204c_m2l8.svg" />
 <div class="admonition important">
 <p class="admonition-title">Important</p>
@@ -916,7 +937,8 @@ root@raspberrypi:~# dd if=&quot;./u-boot-splx4.sfp&quot; of=&quot;/dev/sda3&quot
 </section>
 <section id="clock-sources">
 <h2>Clock sources<a class="headerlink" href="#clock-sources" title="Link to this heading"></a></h2>
-<p>The clock sources depend on the in use carrier and are depicted on the below diagrams:</p>
+<p>The clock sources depend on the in use carrier and are depicted on the below
+diagrams:</p>
 <section id="id1">
 <h3>ZCU102<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
 <img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_clocking_zcu102.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_clocking_zcu102.png" />
@@ -930,7 +952,9 @@ root@raspberrypi:~# dd if=&quot;./u-boot-splx4.sfp&quot; of=&quot;/dev/sda3&quot
 <h2>Software considerations<a class="headerlink" href="#software-considerations" title="Link to this heading"></a></h2>
 <section id="adc-crossbar-config">
 <h3>ADC - crossbar config<a class="headerlink" href="#adc-crossbar-config" title="Link to this heading"></a></h3>
-<p>Due physical constraints Rx lanes are reordered as described in the following table. e.g physical lane 2 from ADC connects to logical lane 7 from the FPGA. Therefore the crossbar from the device must be set accordingly.</p>
+<p>Due physical constraints Rx lanes are reordered as described in the following
+table. e.g physical lane 2 from ADC connects to logical lane 7 from the FPGA.
+Therefore the crossbar from the device must be set accordingly.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -969,7 +993,9 @@ root@raspberrypi:~# dd if=&quot;./u-boot-splx4.sfp&quot; of=&quot;/dev/sda3&quot
 </section>
 <section id="dac-crossbar-config">
 <h3>DAC - crossbar config<a class="headerlink" href="#dac-crossbar-config" title="Link to this heading"></a></h3>
-<p>Due physical constraints Tx lanes are reordered as described in the following table: e.g physical lane 2 from DAC connects to logical lane 7 from the FPGA. Therefore the crossbar from the device must be set accordingly.</p>
+<p>Due physical constraints Tx lanes are reordered as described in the following
+table: e.g physical lane 2 from DAC connects to logical lane 7 from the FPGA.
+Therefore the crossbar from the device must be set accordingly.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -1126,17 +1152,23 @@ root@raspberrypi:~# dd if=&quot;./u-boot-splx4.sfp&quot; of=&quot;/dev/sda3&quot
 <h3>FMC Pin Connection Configuration Change<a class="headerlink" href="#fmc-pin-connection-configuration-change" title="Link to this heading"></a></h3>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>To be compatible with the EVAL-AD9081-9082 the Arria10 SoC Development Kit requires a minor rework.</p>
+<p>To be compatible with the EVAL-AD9081-9082 the Arria10 SoC Development Kit
+requires a minor rework.</p>
 </div>
-<p>In the default configuration of the Arria10 SoC Development Kit some of the FMC header pins are connected to a dedicated clock chip. To be compatible with the EVAL-AD9081-9082 these pins need to be connected directly to the FPGA.</p>
-<p>The connection of those pins can be changed by moving the position of four zero Ohm resistors:</p>
+<p>In the default configuration of the Arria10 SoC Development Kit some of the FMC
+header pins are connected to a dedicated clock chip. To be compatible with the
+EVAL-AD9081-9082 these pins need to be connected directly to the FPGA.</p>
+<p>The connection of those pins can be changed by moving the position of four zero
+Ohm resistors:</p>
 <ul class="simple">
 <li><p>R612 to R610</p></li>
 <li><p>R613 to R611</p></li>
 <li><p>R621 to R620</p></li>
 <li><p>R633 to R632</p></li>
 </ul>
-<p>These resistors can be found on the backside of the Arria10 SoC Development Kit underneath the FMC A connector (J29). The following picture shows the required configuration to be compatible with the EVAL-AD9081-9082.</p>
+<p>These resistors can be found on the backside of the Arria10 SoC Development Kit
+underneath the FMC A connector (J29). The following picture shows the required
+configuration to be compatible with the EVAL-AD9081-9082.</p>
 <img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcdaq2-ebz/quickstart/a10soc_fmc_rework.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcdaq2-ebz/quickstart/a10soc_fmc_rework.jpg" />
 </section>
 </section>
@@ -1153,7 +1185,8 @@ root@raspberrypi:~# dd if=&quot;./u-boot-splx4.sfp&quot; of=&quot;/dev/sda3&quot
 </section>
 <section id="booting-the-system">
 <h2>Booting the System<a class="headerlink" href="#booting-the-system" title="Link to this heading"></a></h2>
-<p>After turning on the power switch the following messages should appear on the serial console.</p>
+<p>After turning on the power switch the following messages should appear on the
+serial console.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">nowiki</span><span class="o">&gt;</span>
 <span class="n">U</span><span class="o">-</span><span class="n">Boot</span> <span class="n">SPL</span> <span class="mf">2021.07</span><span class="o">-</span><span class="mi">16360</span><span class="o">-</span><span class="n">gee63370553</span><span class="o">-</span><span class="n">dirty</span> <span class="p">(</span><span class="n">Jan</span> <span class="mi">26</span> <span class="mi">2022</span> <span class="o">-</span> <span class="mi">11</span><span class="p">:</span><span class="mi">11</span><span class="p">:</span><span class="mi">00</span> <span class="o">+</span><span class="mi">0200</span><span class="p">)</span>
 <span class="n">FPGA</span><span class="p">:</span> <span class="n">Checking</span> <span class="n">FPGA</span> <span class="n">configuration</span> <span class="n">setting</span> <span class="o">...</span>
@@ -1174,7 +1207,8 @@ root@raspberrypi:~# dd if=&quot;./u-boot-splx4.sfp&quot; of=&quot;/dev/sda3&quot
 <span class="o">&lt;/</span><span class="n">nowiki</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<p>Configuring the FPGA will take a few seconds. Once the FPGA has been configured the green D18 LED will turn on and the boot process will continue.</p>
+<p>Configuring the FPGA will take a few seconds. Once the FPGA has been configured
+the green D18 LED will turn on and the boot process will continue.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">nowiki</span><span class="o">&gt;</span>
 <span class="n">U</span><span class="o">-</span><span class="n">Boot</span> <span class="mf">2021.07</span><span class="o">-</span><span class="mi">16360</span><span class="o">-</span><span class="n">gee63370553</span><span class="o">-</span><span class="n">dirty</span> <span class="p">(</span><span class="n">Jan</span> <span class="mi">26</span> <span class="mi">2022</span> <span class="o">-</span> <span class="mi">11</span><span class="p">:</span><span class="mi">11</span><span class="p">:</span><span class="mi">00</span> <span class="o">+</span><span class="mi">0200</span><span class="p">)</span><span class="n">socfpga_arria10</span><span class="p">,</span> <span class="n">Build</span><span class="p">:</span> <span class="n">jenkins</span><span class="o">-</span><span class="n">master</span><span class="o">-</span><span class="n">quartus_boot_on_ubuntu_master</span><span class="o">-</span><span class="mi">40</span>
 
@@ -1660,13 +1694,15 @@ root@analog:~#
 <section id="iio-oscilloscope-remote">
 <h2>IIO Oscilloscope Remote<a class="headerlink" href="#iio-oscilloscope-remote" title="Link to this heading"></a></h2>
 <p>Please see also here:<a class="reference internal" href="../../../../tools-software/linux-software/iio_oscilloscope.html"><span class="doc">Oscilloscope</span></a></p>
-<p>The IIO Oscilloscope application can be used to connect to another platform that has a connected device in order to configure the device and read data from it.</p>
+<p>The IIO Oscilloscope application can be used to connect to another platform that
+has a connected device in order to configure the device and read data from it.</p>
 <p>Build and start osc on a network enabled Linux host.</p>
-<p>Once the application is launched goto Settings -&gt; Connect and enter the IP address of the target in the popup window.</p>
+<p>Once the application is launched goto Settings -&gt; Connect and enter the IP
+address of the target in the popup window.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>Even thought this is Linux, this is a persistent file systems. Care should be taken not to corrupt the file system – please shut down things, don’t just turn off the power switch. Depending on your monitor, the standard power off could be hiding. You can do this from the terminal as well with <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">shutdown</span> <span class="pre">-h</span> <span class="pre">now</span></code></p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/ad-fmcomms1-ebz/shutdown.png"><img alt="image1" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/ad-fmcomms1-ebz/shutdown.png" style="width: 300px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/ad-fmcomms1-ebz/shutdown.png"><img alt="image1" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/ad-fmcomms1-ebz/shutdown.png" width="300" /></a></p>
 </div>
 </section>
 </section>

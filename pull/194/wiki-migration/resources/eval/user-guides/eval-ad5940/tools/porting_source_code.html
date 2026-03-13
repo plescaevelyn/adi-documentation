@@ -585,22 +585,30 @@ Content on this topic
             
   <section id="how-to-port-ad594x-firmware-examples-to-other-micro-controller-families">
 <h1>How to port AD594x Firmware Examples to other Micro controller Families<a class="headerlink" href="#how-to-port-ad594x-firmware-examples-to-other-micro-controller-families" title="Link to this heading"></a></h1>
-<p>The AD594x example projects are written for the ADuCM3029 micro controller. There are also examples written for the NUCLEO-F411RE board. The example projects are designed to be easily ported to other micro controllers. This document details the steps involved.</p>
+<p>The AD594x example projects are written for the ADuCM3029 micro controller.
+There are also examples written for the NUCLEO-F411RE board. The example
+projects are designed to be easily ported to other micro controllers. This
+document details the steps involved.</p>
 <section id="source-code-structure">
 <h2>Source Code Structure<a class="headerlink" href="#source-code-structure" title="Link to this heading"></a></h2>
-<p>This section describes the file structure for the firmware examples. The following image is a capture from the AD5940_BIA example project opened in Keil IDE.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-ad5940/tools/folder_structure.png"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-ad5940/tools/folder_structure.png" style="width: 300px;" /></a></p>
+<p>This section describes the file structure for the firmware examples. The
+following image is a capture from the AD5940_BIA example project opened in Keil
+IDE.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-ad5940/tools/folder_structure.png"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-ad5940/tools/folder_structure.png" width="300" /></a></p>
 <ul class="simple">
 <li><p><strong>AD5940Lib</strong></p>
 <ul>
 <li><p><em>ad5940.c</em></p>
 <ul>
-<li><p>This is the main AD5940 library file and contains all library function. No modifications should be made to this file.</p></li>
+<li><p>This is the main AD5940 library file and contains all library function.
+No modifications should be made to this file.</p></li>
 </ul>
 </li>
 <li><p><em>ADICUP3029.c</em></p>
 <ul>
-<li><p>Contains specific functions for the ADuCM3029 microcontroller. The functions defined in this file will need to be modified according to the MCU. Descriptions of each function are outlined below.</p></li>
+<li><p>Contains specific functions for the ADuCM3029 microcontroller. The
+functions defined in this file will need to be modified according to
+the MCU. Descriptions of each function are outlined below.</p></li>
 </ul>
 </li>
 </ul>
@@ -609,36 +617,45 @@ Content on this topic
 <ul>
 <li><p><em>main.c</em></p>
 <ul>
-<li><p>This is the main file in the program that handles the MCU core initialization functions such as configuring Uart interface and MCU system clocks. This file needs to be re-written for a new MCU</p></li>
+<li><p>This is the main file in the program that handles the MCU core
+initialization functions such as configuring Uart interface and MCU
+system clocks. This file needs to be re-written for a new MCU</p></li>
 </ul>
 </li>
 <li><p><em>AD5940Main.c</em></p>
 <ul>
-<li><p>This file provides high level application control functions such as dealing with interrupts and transmitting data. This does not need to be modified when porting to a new MCU.</p></li>
+<li><p>This file provides high level application control functions such as
+dealing with interrupts and transmitting data. This does not need to be
+modified when porting to a new MCU.</p></li>
 </ul>
 </li>
 <li><p><em>BodyImpedance.c</em></p>
 <ul>
-<li><p>This file handles the core measurement sequences including sequencer configuration, reading data from the FIFO and processing the data. This file does not need to be modified when porting to a new MCU.</p></li>
+<li><p>This file handles the core measurement sequences including sequencer
+configuration, reading data from the FIFO and processing the data. This
+file does not need to be modified when porting to a new MCU.</p></li>
 </ul>
 </li>
 </ul>
 </li>
 <li><p>CMSIS</p>
 <ul>
-<li><p>This is the CMSIS pack for the selected MCU. This CMSIS pack should be imported for the particular MCU and should not be edited</p></li>
+<li><p>This is the CMSIS pack for the selected MCU. This CMSIS pack should be
+imported for the particular MCU and should not be edited</p></li>
 </ul>
 </li>
 <li><p>Device</p>
 <ul>
-<li><p>This folder has the startup file for the chosen MCU and should not be edited.</p></li>
+<li><p>This folder has the startup file for the chosen MCU and should not be
+edited.</p></li>
 </ul>
 </li>
 </ul>
 </section>
 <section id="porting-functions-in-adicup3029port-c">
 <h2>Porting Functions in ADICUP3029Port.c<a class="headerlink" href="#porting-functions-in-adicup3029port-c" title="Link to this heading"></a></h2>
-<p>The main port file between the MCU and AD5940 is the ADICUP3029Port.c file. The following are the main functions and their purpose:</p>
+<p>The main port file between the MCU and AD5940 is the ADICUP3029Port.c file. The
+following are the main functions and their purpose:</p>
 <ul class="simple">
 <li><p><strong>AD5940_ReadWriteNBytes(unsigned char *pSendBuffer,unsigned char *pRecvBuff,unsigned long length)</strong></p>
 <ul>
@@ -648,7 +665,8 @@ Content on this topic
 </li>
 <li><p><strong>AD5940_CsClr(void)</strong></p>
 <ul>
-<li><p>This function simply drives the GPIO pin connected to the AD5940’s CS pin low</p></li>
+<li><p>This function simply drives the GPIO pin connected to the AD5940’s CS pin
+low</p></li>
 </ul>
 </li>
 <li><p><strong>AD5940_CsSet(void)</strong></p>
@@ -663,17 +681,23 @@ Content on this topic
 </li>
 <li><p><strong>AD5940_RstClr(void)</strong></p>
 <ul>
-<li><p>This function drives the GPIO pin connected the AD5940 reset pin low to initiate a hardware reset</p></li>
+<li><p>This function drives the GPIO pin connected the AD5940 reset pin low to
+initiate a hardware reset</p></li>
 </ul>
 </li>
 <li><p><strong>AD5940_Delay10us(uint32_t time)</strong></p>
 <ul>
-<li><p>This function implements a wait period using the systick timer on the cortex core. This function will vary depending on MCU. Take care that this function is implemented correctly to ensure the AD5940 library functions correctly.</p></li>
+<li><p>This function implements a wait period using the systick timer on the
+cortex core. This function will vary depending on MCU. Take care that this
+function is implemented correctly to ensure the AD5940 library functions
+correctly.</p></li>
 </ul>
 </li>
 <li><p><strong>AD5940_GetMCUIntFlag(void)</strong></p>
 <ul>
-<li><p>This function returns the status of the interrupt flag that is set in the external interrupt handler to indicate the AD5940 has generated an interrupt.</p></li>
+<li><p>This function returns the status of the interrupt flag that is set in the
+external interrupt handler to indicate the AD5940 has generated an
+interrupt.</p></li>
 </ul>
 </li>
 <li><p><strong>AD5940_ClrMCUIntFlag(void)</strong></p>
@@ -683,7 +707,8 @@ Content on this topic
 </li>
 <li><p><strong>AD5940_MCUResourceInit(void *pCfg)</strong></p>
 <ul>
-<li><p>This function initializes and configures the main peripherals for the functions defined above.</p>
+<li><p>This function initializes and configures the main peripherals for the
+functions defined above.</p>
 <ul>
 <li><p>The GPIOs are configured accordingly for the SPI interface, Reset pin and external interrupt pin</p></li>
 <li><p>The SPI is configured according to the AD5940 datasheet</p></li>
@@ -695,7 +720,9 @@ Content on this topic
 </li>
 <li><p><strong>Ext_Int0_Handler()</strong></p>
 <ul>
-<li><p>The interrupt handler handles the interrupt to the MCU when the AD5940 INTC pin generates an interrupt to alert the MCU that data is ready. It sets the ucInterrupted flag to 1.</p></li>
+<li><p>The interrupt handler handles the interrupt to the MCU when the AD5940
+INTC pin generates an interrupt to alert the MCU that data is ready. It
+sets the ucInterrupted flag to 1.</p></li>
 </ul>
 </li>
 </ul>
@@ -711,7 +738,8 @@ Content on this topic
 </li>
 <li><p><strong>UrtCfg(int iBaud)</strong></p>
 <ul>
-<li><p>This function initializes the the Uart interface on the MCU to print results to the Uart.</p></li>
+<li><p>This function initializes the the Uart interface on the MCU to print
+results to the Uart.</p></li>
 </ul>
 </li>
 </ul>

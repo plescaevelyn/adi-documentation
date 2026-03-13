@@ -667,10 +667,20 @@ Content on this topic
 </section>
 <section id="example-device-initialization">
 <h1>Example device initialization<a class="headerlink" href="#example-device-initialization" title="Link to this heading"></a></h1>
-<p>Unlike PCI or USB devices, SPI devices are not enumerated at the hardware level. Instead, the software must know which devices are connected on each SPI bus segment, and what slave selects these devices are using. For this reason, the kernel code must instantiate SPI devices explicitly. The most common method is to declare the SPI devices by bus number.</p>
-<p>This method is appropriate when the SPI bus is a system bus, as in many embedded systems, wherein each SPI bus has a number which is known in advance. It is thus possible to pre-declare the SPI devices that inhabit this bus. This is done with an array of struct spi_board_info, which is registered by calling spi_register_board_info().</p>
+<p>Unlike PCI or USB devices, SPI devices are not enumerated at the hardware level.
+Instead, the software must know which devices are connected on each SPI bus
+segment, and what slave selects these devices are using. For this reason, the
+kernel code must instantiate SPI devices explicitly. The most common method is
+to declare the SPI devices by bus number.</p>
+<p>This method is appropriate when the SPI bus is a system bus, as in many embedded
+systems, wherein each SPI bus has a number which is known in advance. It is thus
+possible to pre-declare the SPI devices that inhabit this bus. This is done with
+an array of struct spi_board_info, which is registered by calling
+spi_register_board_info().</p>
 <p>For more information see: <a href="#id1"><span class="problematic" id="id2">`spi-summary.rst &lt;/git.linux.org&gt;documentation/spi/spi-summary.rst&gt;`__</span></a></p>
-<p>You need to set the modalias of your SPI info according to your codec. Valid values are “ad1835”, “ad1836”, “ad1837”, “ad1838” and “ad1839”. You’ll also have to adjust bus_num and chip_select according to your board setup.</p>
+<p>You need to set the modalias of your SPI info according to your codec. Valid
+values are “ad1835”, “ad1836”, “ad1837”, “ad1838” and “ad1839”. You’ll also have
+to adjust bus_num and chip_select according to your board setup.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">spi_board_info</span><span class="w"> </span><span class="n">board_spi_board_info</span><span class="p">[]</span><span class="w"> </span><span class="n">__initdata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="p">[</span><span class="o">--</span><span class="n">snip</span><span class="o">--</span><span class="p">]</span>
 <span class="w">    </span><span class="p">{</span>
@@ -959,7 +969,9 @@ Content on this topic
 <h1>AD1836 evaluation board driver<a class="headerlink" href="#ad1836-evaluation-board-driver" title="Link to this heading"></a></h1>
 <section id="adding-kernel-support-as-a-module">
 <h2>Adding Kernel Support - As a module<a class="headerlink" href="#adding-kernel-support-as-a-module" title="Link to this heading"></a></h2>
-<p>To add support for the built-in codec AD183X of BF5XX to the kernel build system, a few things must be enabled properly for things to work.The configuration is as following:</p>
+<p>To add support for the built-in codec AD183X of BF5XX to the kernel build
+system, a few things must be enabled properly for things to work.The
+configuration is as following:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Linux</span> <span class="n">Kernel</span> <span class="n">Configuration</span>
   <span class="n">Device</span> <span class="n">Drivers</span>  <span class="o">---&gt;</span>
     <span class="n">Sound</span>  <span class="o">---&gt;</span>
@@ -974,12 +986,17 @@ Content on this topic
               <span class="o">&lt;</span><span class="n">M</span><span class="o">&gt;</span>   <span class="n">SoC</span> <span class="n">AD183X</span> <span class="n">Audio</span> <span class="n">support</span> <span class="k">for</span> <span class="n">BF5xx</span>
 </pre></div>
 </div>
-<p>Doing this will create modules (outside the kernel). The modules will be inserted automatically when it is needed. You can also build sound driver into kernel.</p>
+<p>Doing this will create modules (outside the kernel). The modules will be
+inserted automatically when it is needed. You can also build sound driver into
+kernel.</p>
 <section id="testing-the-built-in-kernel-driver">
 <h3>Testing the built in kernel driver<a class="headerlink" href="#testing-the-built-in-kernel-driver" title="Link to this heading"></a></h3>
-<p>If audio is configured as modules, skip this section. If audio is built into kernel and you have booted the kernel, there are a few things to check to ensure audio is working:</p>
+<p>If audio is configured as modules, skip this section. If audio is built into
+kernel and you have booted the kernel, there are a few things to check to ensure
+audio is working:</p>
 <ul class="simple">
-<li><p>Check the boot messages to see if you have booted the correct kernel. During kernel boot, it should print out:</p></li>
+<li><p>Check the boot messages to see if you have booted the correct kernel. During
+kernel boot, it should print out:</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Advanced</span> <span class="n">Linux</span> <span class="n">Sound</span> <span class="n">Architecture</span> <span class="n">Driver</span> <span class="n">Version</span> <span class="mf">1.0.12</span><span class="n">rc1</span> <span class="p">(</span><span class="n">Thu</span> <span class="n">Jun</span> <span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">55</span><span class="p">:</span><span class="mi">50</span> <span class="mi">2006</span> <span class="n">UTC</span><span class="p">)</span><span class="o">.</span>
 <span class="n">ASoC</span> <span class="n">version</span> <span class="mf">0.13.1</span>

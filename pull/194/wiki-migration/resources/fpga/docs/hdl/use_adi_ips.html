@@ -599,7 +599,13 @@ Content on this topic
 <p>Clone the github repository: &lt;code&gt; git clone <a class="icon link reference external" href="https://github.com/analogdevicesinc/hdl" target="_blank">hdl</a> &lt;/code&gt;</p>
 <section id="vivado">
 <h2>Vivado<a class="headerlink" href="#vivado" title="Link to this heading"></a></h2>
-<p>Navigate to hdl/library and build all the libraries &lt;code&gt; make -C library all &lt;/code&gt; Launch a Vivado GUI and open the Settings window. Go to IP section and expand it. There you will find a section called Repository. From here you can add the path to the library folder inside the ADI repository you just cloned. &lt;code&gt; &lt;hdl_path&gt;/hdl/library &lt;/code&gt; Click apply and Ok to save the changes. Wait for the IP Catalog to refresh and now you should be able to see the IPs there, under User Repository/Analog Devices section.</p>
+<p>Navigate to hdl/library and build all the libraries &lt;code&gt; make -C library all
+&lt;/code&gt; Launch a Vivado GUI and open the Settings window. Go to IP section and
+expand it. There you will find a section called Repository. From here you can
+add the path to the library folder inside the ADI repository you just cloned.
+&lt;code&gt; &lt;hdl_path&gt;/hdl/library &lt;/code&gt; Click apply and Ok to save the changes.
+Wait for the IP Catalog to refresh and now you should be able to see the IPs
+there, under User Repository/Analog Devices section.</p>
 </section>
 <section id="quartus">
 <h2>Quartus<a class="headerlink" href="#quartus" title="Link to this heading"></a></h2>
@@ -612,28 +618,38 @@ Content on this topic
 <h2>Vivado<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
 <p>For the JESD204 IP, it is not as straightforward as for other modules. Here you have an example of an instantiation for this interface: <a class="icon link reference external" href="https://github.com/hdl/blob/master/projects/daq2/common/daq2_bd.tcl" target="_blank">hdl/blob/master/projects/daq2/common/daq2_bd.tcl</a> First, you will have to source the jesd204.tcl script, inside your &lt;project&gt;_bd.tcl. &lt;code&gt; source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl &lt;/code&gt;</p>
 <p>The following code is for the TX/DAC part. The RX/ADC is similar.</p>
-<p>Add the PL (Physical Layer). &lt;code&gt; ad_ip_instance axi_adxcvr axi_ad9144_xcvr [list \</p>
+<p>Add the PL (Physical Layer). &lt;code&gt; ad_ip_instance axi_adxcvr axi_ad9144_xcvr
+[list \</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>NUM_OF_LANES $TX_NUM_OF_LANES \
 QPLL_ENABLE 1 \
 TX_OR_RX_N 1 \
 </pre></div>
 </div>
 <p>] &lt;/code&gt;</p>
-<p>Then you have to add the Data Link Layer with the desired number of lanes. For RX you will swap this one with adi_axi_jesd204_rx_create. &lt;code&gt; adi_axi_jesd204_tx_create axi_ad9144_jesd $TX_NUM_OF_LANES &lt;/code&gt;</p>
-<p>Let’s instantiate the TPL (Transport Layer). For RX you will swap this one with adi_tpl_jesd204_rx_create. &lt;code&gt; adi_tpl_jesd204_tx_create axi_ad9144_tpl $TX_NUM_OF_LANES \</p>
+<p>Then you have to add the Data Link Layer with the desired number of lanes. For
+RX you will swap this one with adi_axi_jesd204_rx_create. &lt;code&gt;
+adi_axi_jesd204_tx_create axi_ad9144_jesd $TX_NUM_OF_LANES &lt;/code&gt;</p>
+<p>Let’s instantiate the TPL (Transport Layer). For RX you will swap this one with
+adi_tpl_jesd204_rx_create. &lt;code&gt; adi_tpl_jesd204_tx_create axi_ad9144_tpl
+$TX_NUM_OF_LANES \</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$TX_NUM_OF_CONVERTERS \
 $TX_SAMPLES_PER_FRAME \
 $TX_SAMPLE_WIDTH \ &lt;/code&gt;
 </pre></div>
 </div>
-<p>You can optionally add the util_upack2 module for unpacking the data. For RX you will swap this one with util_cpack2. &lt;code&gt; ad_ip_instance util_upack2 axi_ad9144_upack [list \</p>
+<p>You can optionally add the util_upack2 module for unpacking the data. For RX you
+will swap this one with util_cpack2. &lt;code&gt; ad_ip_instance util_upack2
+axi_ad9144_upack [list \</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>NUM_OF_CHANNELS $TX_NUM_OF_CONVERTERS \
 SAMPLES_PER_CHANNEL $TX_SAMPLES_PER_CHANNEL \
 SAMPLE_DATA_WIDTH $TX_SAMPLE_WIDTH \
 </pre></div>
 </div>
 <p>] &lt;/code&gt;</p>
-<p>After you added the modules for RX and TX logic, you will have to link them together with the util_adxcvr IP. This IP includes the shared transceiver core, so it will appear only once per RX-TX pair. &lt;code&gt; ad_ip_instance util_adxcvr util_daq2_xcvr [list \</p>
+<p>After you added the modules for RX and TX logic, you will have to link them
+together with the util_adxcvr IP. This IP includes the shared transceiver core,
+so it will appear only once per RX-TX pair. &lt;code&gt; ad_ip_instance util_adxcvr
+util_daq2_xcvr [list \</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>RX_NUM_OF_LANES $MAX_RX_NUM_OF_LANES \
 TX_NUM_OF_LANES $MAX_TX_NUM_OF_LANES \
 QPLL_REFCLK_DIV 1 \
@@ -651,11 +667,13 @@ RX_CDR_CFG 0x0B000023FF10400020 \
 <span class="n">ad_xcvrpll</span>  <span class="n">axi_ad9144_xcvr</span><span class="o">/</span><span class="n">up_pll_rst</span> <span class="n">util_daq2_xcvr</span><span class="o">/</span><span class="n">up_qpll_rst_</span><span class="o">*</span>
 </pre></div>
 </div>
-<p>Almost done, now it is time to use the ad_xcvrcon to connect the pieces together.</p>
+<p>Almost done, now it is time to use the ad_xcvrcon to connect the pieces
+together.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ad_xcvrcon  util_daq2_xcvr axi_ad9144_xcvr axi_ad9144_jesd {0 2 3 1} {} {} $MAX_TX_NUM_OF_LANES
 </pre></div>
 </div>
-<p>Now just add the interconnects and the interrupts for the added layers (PL, TPL, LL).</p>
+<p>Now just add the interconnects and the interrupts for the added layers (PL, TPL,
+LL).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ad_cpu_interconnect</span> <span class="mh">0x44A60000</span> <span class="n">axi_ad9144_xcvr</span>
 <span class="n">ad_cpu_interconnect</span> <span class="mh">0x44A04000</span> <span class="n">axi_ad9144_tpl</span>
 <span class="n">ad_cpu_interconnect</span> <span class="mh">0x44A90000</span> <span class="n">axi_ad9144_jesd</span>
@@ -671,7 +689,10 @@ RX_CDR_CFG 0x0B000023FF10400020 \
 <section id="id2">
 <h2>Vivado<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
 <p>The SPI Engine is a special module too, since it consists of more than one IP. In order to use it into your own project, you will have to add all of its components. For this example, the code shown here is from the ad4630_fmc project: <a class="icon link reference external" href="https://github.com/hdl/blob/master/projects/ad4630_fmc/common/ad463x_bd.tcl" target="_blank">hdl/blob/master/projects/ad4630_fmc/common/ad463x_bd.tcl</a></p>
-<p>Let’s start with sourcing the spi_engine.tcl script inside your &lt;project&gt;_db.tcl. &lt;code&gt; source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl &lt;/code&gt; The SPI engine has 4 modules: Execution, interconnect, regmap and offload.</p>
+<p>Let’s start with sourcing the spi_engine.tcl script inside your
+&lt;project&gt;_db.tcl. &lt;code&gt; source
+$ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl &lt;/code&gt; The SPI engine has
+4 modules: Execution, interconnect, regmap and offload.</p>
 <p>All of the modules are instantiated inside the spi_engine_create function. This function requires 7 parameters. The default values for them are as follow, but feel free to configure it as you want: &lt;code&gt; <img alt="name &quot;spi_engine&quot;} {data_width 32} {async_spi_clk 1} {num_cs 1} {num_sdi 1} {sdi_delay 0} {echo_sclk 0" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/name_&quot;spi_engine&quot;}_{data_width_32}_{async_spi_clk_1}_{num_cs_1}_{num_sdi_1}_{sdi_delay_0}_{echo_sclk_0" /> &lt;/code&gt; An example of instantiation:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>#                 name         data_width async_spi_clk num_csn num_sdi     sdi_delay  echo_sclk
 spi_engine_create &quot;spi_ad463x&quot; 32         1             1       $NUM_OF_SDI 0          1

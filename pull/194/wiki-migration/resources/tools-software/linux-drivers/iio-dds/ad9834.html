@@ -697,7 +697,9 @@ Content on this topic
 <span class="p">};</span>
 </pre></div>
 </div>
-<p>This example also references a regulator (vcc-supply) and a clock (osc). These can be left out, in which case it’s assumed they are somehow hard-wired on the board to a proper voltage supply and clock source.</p>
+<p>This example also references a regulator (vcc-supply) and a clock (osc). These
+can be left out, in which case it’s assumed they are somehow hard-wired on the
+board to a proper voltage supply and clock source.</p>
 <p>The <strong>compabtible</strong> string can be any of the following:</p>
 <ul class="simple">
 <li><p>adi,ad9833</p></li>
@@ -706,7 +708,8 @@ Content on this topic
 <li><p>adi,ad9838</p></li>
 </ul>
 <p>Note that, the *adi,* prefix can be omitted and this still works. It is preferred to be added to avoid any potential collisions with other drivers from other vendors.</p>
-<p>However, the voltage supply &amp; clock can be defined via device-tree as well. See example below:</p>
+<p>However, the voltage supply &amp; clock can be defined via device-tree as well. See
+example below:</p>
 <div class="highlight-dts notranslate"><div class="highlight"><pre><span></span><span class="nf">/</span><span class="cm"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nl">vcc</span><span class="p">:</span><span class="w"> </span><span class="nf">fixedregulator</span><span class="o">@</span><span class="mi">0</span><span class="cm"> </span><span class="p">{</span>
 <span class="w">        </span><span class="kr">compatible</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;regulator-fixed&quot;</span><span class="p">;</span>
@@ -724,11 +727,13 @@ Content on this topic
 <span class="p">};</span>
 </pre></div>
 </div>
-<p>This assumes that the board has the chips &amp; drivers to generate voltages like this &amp; clock frequencies.</p>
+<p>This assumes that the board has the chips &amp; drivers to generate voltages like
+this &amp; clock frequencies.</p>
 </section>
 <section id="adding-linux-driver-support">
 <h1>Adding Linux driver support<a class="headerlink" href="#adding-linux-driver-support" title="Link to this heading"></a></h1>
-<p>Configure kernel with “make menuconfig” (alternatively use “make xconfig” or “make qconfig”)</p>
+<p>Configure kernel with “make menuconfig” (alternatively use “make xconfig” or
+“make qconfig”)</p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <p>The AD9834 Driver depends on CONFIG_SPI</p>
@@ -756,7 +761,15 @@ Content on this topic
 </section>
 <section id="driver-testing">
 <h1>Driver testing<a class="headerlink" href="#driver-testing" title="Link to this heading"></a></h1>
-<p>Each and every IIO device, typically a hardware chip, has a device folder under /sys/bus/iio/devices/iio:deviceX. Where X is the IIO index of the device. Under every of these directory folders reside a set of files, depending on the characteristics and features of the hardware device in question. These files are consistently generalized and documented in the IIO ABI documentation. In order to determine which IIO deviceX corresponds to which hardware device, the user can read the name file /sys/bus/iio/devices/iio:deviceX/name. In case the sequence in which the iio device drivers are loaded/registered is constant, the numbering is constant and may be known in advance.</p>
+<p>Each and every IIO device, typically a hardware chip, has a device folder under
+/sys/bus/iio/devices/iio:deviceX. Where X is the IIO index of the device. Under
+every of these directory folders reside a set of files, depending on the
+characteristics and features of the hardware device in question. These files are
+consistently generalized and documented in the IIO ABI documentation. In order
+to determine which IIO deviceX corresponds to which hardware device, the user
+can read the name file /sys/bus/iio/devices/iio:deviceX/name. In case the
+sequence in which the iio device drivers are loaded/registered is constant, the
+numbering is constant and may be known in advance.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/&gt;</span> <span class="n">cd</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">iio</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span>
@@ -800,7 +813,9 @@ Content on this topic
 <section id="show-frequency-scale">
 <h2>Show frequency scale<a class="headerlink" href="#show-frequency-scale" title="Link to this heading"></a></h2>
 <p>/sys/bus/iio/devices/…/ddsX_freqY_scale</p>
-<p>Scale to be applied to ddsX_freqY in order to obtain the desired value in Hz. If shared across all frequency registers Y is not present. It is also possible X is not present if shared across all channels.</p>
+<p>Scale to be applied to ddsX_freqY in order to obtain the desired value in Hz. If
+shared across all frequency registers Y is not present. It is also possible X is
+not present if shared across all channels.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">bfin</span><span class="o">-</span><span class="n">spi</span><span class="mf">.0</span><span class="o">/</span><span class="n">spi0</span><span class="mf">.3</span><span class="o">/</span><span class="n">device0</span><span class="o">&gt;</span> <span class="n">cat</span> <span class="n">dds0_freq_scale</span>
@@ -812,7 +827,10 @@ Content on this topic
 <section id="set-frequency-symbol-0-1">
 <h2>Set frequency symbol 0/1<a class="headerlink" href="#set-frequency-symbol-0-1" title="Link to this heading"></a></h2>
 <p>/sys/bus/iio/devices/…/ddsX_freqY</p>
-<p>Stores frequency into tuning word Y. There will be more than one ddsX_freqY file, which allows for pin controlled FSK Frequency Shift Keying (ddsX_pincontrol_freq_en is active) or the user can control the desired active tuning word by writing Y to the ddsX_freqsymbol file.</p>
+<p>Stores frequency into tuning word Y. There will be more than one ddsX_freqY
+file, which allows for pin controlled FSK Frequency Shift Keying
+(ddsX_pincontrol_freq_en is active) or the user can control the desired active
+tuning word by writing Y to the ddsX_freqsymbol file.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">bfin</span><span class="o">-</span><span class="n">spi</span><span class="mf">.0</span><span class="o">/</span><span class="n">spi0</span><span class="mf">.3</span><span class="o">/</span><span class="n">device0</span><span class="o">&gt;</span> <span class="n">echo</span> <span class="mi">1000000</span> <span class="o">&gt;</span> <span class="n">dds0_freq0</span>
@@ -825,7 +843,9 @@ Content on this topic
 <section id="show-phase-scale">
 <h2>Show phase scale<a class="headerlink" href="#show-phase-scale" title="Link to this heading"></a></h2>
 <p>/sys/bus/iio/devices/…/ddsX_phaseY_scale</p>
-<p>Scale to be applied to ddsX_phaseY in order to obtain the desired value in rad. If shared across all phase registers Y is not present. It is also possible X is not present if shared across all channels.</p>
+<p>Scale to be applied to ddsX_phaseY in order to obtain the desired value in rad.
+If shared across all phase registers Y is not present. It is also possible X is
+not present if shared across all channels.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">bfin</span><span class="o">-</span><span class="n">spi</span><span class="mf">.0</span><span class="o">/</span><span class="n">spi0</span><span class="mf">.3</span><span class="o">/</span><span class="n">device0</span><span class="o">&gt;</span> <span class="n">cat</span> <span class="n">dds0_phase_scale</span>
@@ -837,7 +857,10 @@ Content on this topic
 <section id="set-phase-symbol-0-1">
 <h2>Set phase symbol 0/1<a class="headerlink" href="#set-phase-symbol-0-1" title="Link to this heading"></a></h2>
 <p>/sys/bus/iio/devices/…/ddsX_phaseY</p>
-<p>Stores phase into Y. There will be more than one ddsX_phaseY file, which allows for pin controlled PSK Phase Shift Keying (ddsX_pincontrol_phase_en is active) or the user can control the desired phase Y which is added to the phase accumulator output by writing Y to the en_phase file.</p>
+<p>Stores phase into Y. There will be more than one ddsX_phaseY file, which allows
+for pin controlled PSK Phase Shift Keying (ddsX_pincontrol_phase_en is active)
+or the user can control the desired phase Y which is added to the phase
+accumulator output by writing Y to the en_phase file.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">bfin</span><span class="o">-</span><span class="n">spi</span><span class="mf">.0</span><span class="o">/</span><span class="n">spi0</span><span class="mf">.3</span><span class="o">/</span><span class="n">device0</span><span class="o">&gt;</span> <span class="n">echo</span> <span class="mi">512</span> <span class="o">&gt;</span> <span class="n">dds0_phase0</span>
@@ -862,7 +885,8 @@ Content on this topic
 <section id="set-wavetype">
 <h2>Set wavetype<a class="headerlink" href="#set-wavetype" title="Link to this heading"></a></h2>
 <p>/sys/bus/iio/devices/…/ddsX_outY_wavetype</p>
-<p>Specifies the output waveform. (sine, triangle, ramp, square, …) For a list of available output waveform options read available_output_modes.</p>
+<p>Specifies the output waveform. (sine, triangle, ramp, square, …) For a list of
+available output waveform options read available_output_modes.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">bfin</span><span class="o">-</span><span class="n">spi</span><span class="mf">.0</span><span class="o">/</span><span class="n">spi0</span><span class="mf">.3</span><span class="o">/</span><span class="n">device0</span><span class="o">&gt;</span> <span class="n">echo</span> <span class="n">sine</span> <span class="o">&gt;</span> <span class="n">dds0_out0_wavetype</span>
@@ -873,7 +897,10 @@ Content on this topic
 <section id="disable-fsk-psk-pincontrol">
 <h2>Disable FSK/PSK pincontrol<a class="headerlink" href="#disable-fsk-psk-pincontrol" title="Link to this heading"></a></h2>
 <p>/sys/bus/iio/devices/…/ddsX_pincontrol_en</p>
-<p>ddsX_pincontrol_en: Both, the active frequency and phase is controlled by the respective phase and frequency control inputs. In case the device in question allows to independent controls, then there are dedicated files (ddsX_pincontrol_freq_en, ddsX_pincontrol_phase_en).</p>
+<p>ddsX_pincontrol_en: Both, the active frequency and phase is controlled by the
+respective phase and frequency control inputs. In case the device in question
+allows to independent controls, then there are dedicated files
+(ddsX_pincontrol_freq_en, ddsX_pincontrol_phase_en).</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">bfin</span><span class="o">-</span><span class="n">spi</span><span class="mf">.0</span><span class="o">/</span><span class="n">spi0</span><span class="mf">.3</span><span class="o">/</span><span class="n">device0</span><span class="o">&gt;</span> <span class="n">echo</span> <span class="mi">0</span> <span class="o">&gt;</span> <span class="n">dds0_pincontrol_en</span>
@@ -883,8 +910,10 @@ Content on this topic
 </section>
 <section id="enable-output-0">
 <h2>Enable output 0<a class="headerlink" href="#enable-output-0" title="Link to this heading"></a></h2>
-<p>/sys/bus/iio/devices/…/ddsX_out_enable /sys/bus/iio/devices/…/ddsX_outY_enable</p>
-<p>ddsX_outY_enable controls signal generation on output Y of channel X. Y may be suppressed if all channels are controlled together.</p>
+<p>/sys/bus/iio/devices/…/ddsX_out_enable
+/sys/bus/iio/devices/…/ddsX_outY_enable</p>
+<p>ddsX_outY_enable controls signal generation on output Y of channel X. Y may be
+suppressed if all channels are controlled together.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">bfin</span><span class="o">-</span><span class="n">spi</span><span class="mf">.0</span><span class="o">/</span><span class="n">spi0</span><span class="mf">.3</span><span class="o">/</span><span class="n">device0</span><span class="o">&gt;</span> <span class="n">echo</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="n">dds0_out_enable</span>
@@ -895,7 +924,9 @@ Content on this topic
 <section id="switch-between-frequency-symbol-0-1">
 <h2>Switch between frequency symbol 0/1<a class="headerlink" href="#switch-between-frequency-symbol-0-1" title="Link to this heading"></a></h2>
 <p>/sys/bus/iio/devices/…/ddsX_freqsymbol</p>
-<p>Specifies the active output frequency tuning word. The value corresponds to the Y in ddsX_freqY. To exit this mode the user can write ddsX_pincontrol_freq_en or ddsX_out_enable file.</p>
+<p>Specifies the active output frequency tuning word. The value corresponds to the
+Y in ddsX_freqY. To exit this mode the user can write ddsX_pincontrol_freq_en or
+ddsX_out_enable file.</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">bfin</span><span class="o">-</span><span class="n">spi</span><span class="mf">.0</span><span class="o">/</span><span class="n">spi0</span><span class="mf">.3</span><span class="o">/</span><span class="n">device0</span><span class="o">&gt;</span> <span class="n">echo</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="n">dds0_freqsymbol</span>

@@ -612,7 +612,8 @@ Content on this topic
 <h1>Creating ADRV9361 RF SOM production testing SD cards<a class="headerlink" href="#creating-adrv9361-rf-som-production-testing-sd-cards" title="Link to this heading"></a></h1>
 <section id="som2">
 <h2>SOM2<a class="headerlink" href="#som2" title="Link to this heading"></a></h2>
-<p>The code for all the various pieces required to create testing SD cards can be found on Github. See the following list for links to the various parts:</p>
+<p>The code for all the various pieces required to create testing SD cards can be
+found on Github. See the following list for links to the various parts:</p>
 <div class="download admonition">
 <p class="admonition-title">Download</p>
 <p><strong>U-Boot:</strong></p>
@@ -620,7 +621,9 @@ Content on this topic
 <li><p>U-Boot test branch: <a class="icon git reference external" href="https://github.com/analogdevicesinc/u-boot-xlnx/tree/main/tree/pzsdr-test" target="_blank">tree/pzsdr-test</a></p></li>
 <li><p>U-Boot QSPI booting branch: <a class="icon git reference external" href="https://github.com/analogdevicesinc/u-boot-xlnx/tree/main/tree/qspiboot" target="_blank">tree/qspiboot</a></p></li>
 </ul>
-<p>A version of U-Boot built from the test branch will run through the tests assuming a properly formatted SD card while the QSPI branch is for flashing to the device.</p>
+<p>A version of U-Boot built from the test branch will run through the tests
+assuming a properly formatted SD card while the QSPI branch is for flashing
+to the device.</p>
 <p><strong>No-OS:</strong></p>
 <ul class="simple">
 <li><p>HDL dev branch: <a class="icon link reference external" href="https://github.com/analogdevicesinc/hdl/tree/dev/projects/pzsdr/ccbrk" target="_blank">https://github.com/analogdevicesinc/hdl/tree/dev/projects/pzsdr/ccbrk</a></p></li>
@@ -628,7 +631,11 @@ Content on this topic
 </ul>
 <p>Xilinx SDK 2015.2 is currently required to build both of these projects.</p>
 </div>
-<p>In order to create an SD card for testing, the various test binaries, u-boot versions, and other files must be built and placed in the correct location in the boot partition of the standard SD card image. See the following hierarchy of test and flash related files on an SD card’s boot partition mounted on /media/BOOT:</p>
+<p>In order to create an SD card for testing, the various test binaries, u-boot
+versions, and other files must be built and placed in the correct location in
+the boot partition of the standard SD card image. See the following hierarchy of
+test and flash related files on an SD card’s boot partition mounted on
+/media/BOOT:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/media/BOOT
 ├── BOOT.BIN
 ├── devicetree.dtb
@@ -641,10 +648,14 @@ Content on this topic
 └── uImage
 </pre></div>
 </div>
-<p>Follow the instructions below to create the various files in the hierarchy seen above. Note that it is assumed the required Xilinx SDKs are installed and initialized properly for use in the current environment.</p>
+<p>Follow the instructions below to create the various files in the hierarchy seen
+above. Note that it is assumed the required Xilinx SDKs are installed and
+initialized properly for use in the current environment.</p>
 <section id="fpga-bitstream">
 <h3>FPGA bitstream<a class="headerlink" href="#fpga-bitstream" title="Link to this heading"></a></h3>
-<p>The bitstream is already available on the SD card in the bootgen_sysfiles.tgz file located in the related platform directory on the BOOT partition. This assumes the SD card’s BOOT partition is already mounted at /media/BOOT.</p>
+<p>The bitstream is already available on the SD card in the bootgen_sysfiles.tgz
+file located in the related platform directory on the BOOT partition. This
+assumes the SD card’s BOOT partition is already mounted at /media/BOOT.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">~/</span><span class="n">zynq</span><span class="o">-</span><span class="n">picozed</span><span class="o">-</span><span class="n">sdr2</span><span class="o">/</span><span class="n">bootgen</span>
 <span class="n">cd</span> <span class="o">/</span><span class="n">media</span><span class="o">/</span><span class="n">BOOT</span><span class="o">/</span><span class="n">zynq</span><span class="o">-</span><span class="n">picozed</span><span class="o">-</span><span class="n">sdr</span><span class="o">-</span><span class="n">bob</span>
 <span class="n">tar</span> <span class="o">-</span><span class="n">xvf</span> <span class="n">bootgen_sysfiles</span><span class="o">.</span><span class="n">tgz</span> <span class="o">-</span><span class="n">C</span> <span class="o">~/</span><span class="n">zynq</span><span class="o">-</span><span class="n">picozed</span><span class="o">-</span><span class="n">sdr2</span><span class="o">/</span><span class="n">bootgen</span>
@@ -660,7 +671,8 @@ git checkout dev
 make pzsdr.ccbrk
 </pre></div>
 </div>
-<p>Symlink the created bitstream into the unpacked bootgen directory for future use when building BOOT.BIN files.</p>
+<p>Symlink the created bitstream into the unpacked bootgen directory for future use
+when building BOOT.BIN files.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">~/</span><span class="n">zynq</span><span class="o">-</span><span class="n">picozed</span><span class="o">-</span><span class="n">sdr2</span><span class="o">/</span><span class="n">bootgen</span>
 <span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="o">~/</span><span class="n">zynq</span><span class="o">-</span><span class="n">picozed</span><span class="o">-</span><span class="n">sdr2</span><span class="o">/</span><span class="n">hdl</span><span class="o">/</span><span class="n">projects</span><span class="o">/</span><span class="n">pzsdr</span><span class="o">/</span><span class="n">ccbrk</span><span class="o">/</span><span class="n">ccbrk_pzsdr</span><span class="o">.</span><span class="n">runs</span><span class="o">/</span><span class="n">impl_1</span><span class="o">/</span><span class="n">system_top</span><span class="o">.</span><span class="n">bit</span>
 </pre></div>
@@ -668,7 +680,8 @@ make pzsdr.ccbrk
 </section>
 <section id="creating-the-main-u-boot-test-binary">
 <h3>Creating the main U-Boot test binary<a class="headerlink" href="#creating-the-main-u-boot-test-binary" title="Link to this heading"></a></h3>
-<p>The main U-Boot test ELF should be created using a process similar to the following:</p>
+<p>The main U-Boot test ELF should be created using a process similar to the
+following:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cd ~/zynq-picozed-sdr2
 git clone `u-boot-xlnx &lt;https://github.com/analogdevicesinc/u-boot-xlnx&gt;`_
 cd u-boot-xlnx
@@ -678,7 +691,10 @@ make zynq_picozed_sdr2_defconfig
 make -j$(nproc)
 </pre></div>
 </div>
-<p>Next the BOOT.BIN file must be created. Note that the default bif file used for BOOT.BIN generation has a few file name mismatches in it. We’ve already corrected the bitstream name mismatch (since we symlinked our own version in) and to fix the FSBL so do the below (or change the name in the bif file):</p>
+<p>Next the BOOT.BIN file must be created. Note that the default bif file used for
+BOOT.BIN generation has a few file name mismatches in it. We’ve already
+corrected the bitstream name mismatch (since we symlinked our own version in)
+and to fix the FSBL so do the below (or change the name in the bif file):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">~/</span><span class="n">zynq</span><span class="o">-</span><span class="n">picozed</span><span class="o">-</span><span class="n">sdr2</span><span class="o">/</span><span class="n">bootgen</span>
 <span class="n">mv</span> <span class="n">zynq_fsbl_0</span><span class="o">.</span><span class="n">elf</span> <span class="n">fsbl</span><span class="o">.</span><span class="n">elf</span>
 </pre></div>
@@ -713,7 +729,8 @@ make -j$(nproc)
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cp</span> <span class="n">u</span><span class="o">-</span><span class="n">boot</span> <span class="o">~/</span><span class="n">zynq</span><span class="o">-</span><span class="n">picozed</span><span class="o">-</span><span class="n">sdr2</span><span class="o">/</span><span class="n">bootgen</span><span class="o">/</span><span class="n">u</span><span class="o">-</span><span class="n">boot</span><span class="o">-</span><span class="n">picozed</span><span class="o">-</span><span class="n">qspi</span><span class="o">.</span><span class="n">elf</span>
 </pre></div>
 </div>
-<p>Create a new bif file in ~/zynq-picozed-sdr2/bootgen named zynq-qspi.bif with the following content:</p>
+<p>Create a new bif file in ~/zynq-picozed-sdr2/bootgen named zynq-qspi.bif with
+the following content:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">the_ROM_image</span><span class="p">:</span>
 <span class="p">{</span>
 <span class="p">[</span><span class="n">bootloader</span><span class="p">]</span><span class="o">./</span><span class="n">fsbl</span><span class="o">.</span><span class="n">elf</span>
@@ -721,7 +738,8 @@ make -j$(nproc)
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>This removes the FPGA bitstream from the generated BOOT.BIN (it’ll be flashed separately) and points to our newly generated U-Boot ELF file.</p>
+<p>This removes the FPGA bitstream from the generated BOOT.BIN (it’ll be flashed
+separately) and points to our newly generated U-Boot ELF file.</p>
 <p>Generate the new BOOT.BIN file:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">~/</span><span class="n">zynq</span><span class="o">-</span><span class="n">picozed</span><span class="o">-</span><span class="n">sdr2</span><span class="o">/</span><span class="n">bootgen</span>
 <span class="n">bootgen</span> <span class="o">-</span><span class="n">image</span> <span class="n">zynq</span><span class="o">-</span><span class="n">qspi</span><span class="o">.</span><span class="n">bif</span> <span class="o">-</span><span class="n">w</span> <span class="o">-</span><span class="n">o</span> <span class="n">BOOT</span><span class="o">.</span><span class="n">BIN</span>
@@ -776,7 +794,8 @@ cp sdk/loopback/Release/loopback.elf /media/BOOT
 </section>
 <section id="fmc-carrier">
 <h2>FMC Carrier<a class="headerlink" href="#fmc-carrier" title="Link to this heading"></a></h2>
-<p>The code for all the various pieces required to create testing SD cards can be found on Github. See the following list for links to the various parts:</p>
+<p>The code for all the various pieces required to create testing SD cards can be
+found on Github. See the following list for links to the various parts:</p>
 <div class="download admonition">
 <p class="admonition-title">Download</p>
 <p><strong>U-Boot:</strong></p>
@@ -795,10 +814,13 @@ cp sdk/loopback/Release/loopback.elf /media/BOOT
 <p>The remaining files used by the tests can be found in the parent directory: <a class="icon git reference external" href="https://github.com/analogdevicesinc/board-tests/tree/main/picozed-sdr2-fmc" target="_blank">picozed-sdr2-fmc</a></p>
 </div>
 <p>First, write the latest available SD card image found at <a class="reference internal" href="../../../../tools-software/linux-software/kuiper-linux.html"><span class="doc">Analog Devices Kuiper Linux</span></a> to a spare card and prepare the card to boot into Linux as detailed on that page.</p>
-<p>When that is ready follow the instructions below the create the various files necessary to run the test suite.</p>
+<p>When that is ready follow the instructions below the create the various files
+necessary to run the test suite.</p>
 <section id="id6">
 <h3>FPGA bitstream<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
-<p>Unpack the bootgen_sysfiles.tgz file located in the related platform directory on the BOOT partition of the SD card. The following commands assume the SD card’s BOOT partition is already mounted at /media/BOOT.</p>
+<p>Unpack the bootgen_sysfiles.tgz file located in the related platform directory
+on the BOOT partition of the SD card. The following commands assume the SD
+card’s BOOT partition is already mounted at /media/BOOT.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">~/</span><span class="n">zynq</span><span class="o">-</span><span class="n">picozed</span><span class="o">-</span><span class="n">sdr2</span><span class="o">/</span><span class="n">bootgen</span>
 <span class="n">cd</span> <span class="o">/</span><span class="n">media</span><span class="o">/</span><span class="n">BOOT</span><span class="o">/</span><span class="n">zynq</span><span class="o">-</span><span class="n">picozed</span><span class="o">-</span><span class="n">sdr</span><span class="o">-</span><span class="n">bob</span>
 <span class="n">tar</span> <span class="o">-</span><span class="n">xvf</span> <span class="n">bootgen_sysfiles</span><span class="o">.</span><span class="n">tgz</span> <span class="o">-</span><span class="n">C</span> <span class="o">~/</span><span class="n">zynq</span><span class="o">-</span><span class="n">picozed</span><span class="o">-</span><span class="n">sdr2</span><span class="o">/</span><span class="n">bootgen</span>
@@ -813,7 +835,8 @@ git checkout dev
 make pzsdr.ccfmc
 </pre></div>
 </div>
-<p>Symlink the created bitstream into the unpacked bootgen directory for future use when building BOOT.BIN files.</p>
+<p>Symlink the created bitstream into the unpacked bootgen directory for future use
+when building BOOT.BIN files.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">~/</span><span class="n">zynq</span><span class="o">-</span><span class="n">picozed</span><span class="o">-</span><span class="n">sdr2</span><span class="o">/</span><span class="n">bootgen</span>
 <span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="o">~/</span><span class="n">zynq</span><span class="o">-</span><span class="n">picozed</span><span class="o">-</span><span class="n">sdr2</span><span class="o">/</span><span class="n">hdl</span><span class="o">/</span><span class="n">projects</span><span class="o">/</span><span class="n">pzsdr</span><span class="o">/</span><span class="n">ccbrk</span><span class="o">/</span><span class="n">ccbrk_pzsdr</span><span class="o">.</span><span class="n">runs</span><span class="o">/</span><span class="n">impl_1</span><span class="o">/</span><span class="n">system_top</span><span class="o">.</span><span class="n">bit</span>
 </pre></div>
@@ -821,7 +844,8 @@ make pzsdr.ccfmc
 </section>
 <section id="id7">
 <h3>Creating the main U-Boot test binary<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
-<p>The main U-Boot test ELF should be created using a process similar to the following:</p>
+<p>The main U-Boot test ELF should be created using a process similar to the
+following:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cd ~/zynq-picozed-sdr2
 git clone `u-boot-xlnx &lt;https://github.com/analogdevicesinc/u-boot-xlnx&gt;`_
 cd u-boot-xlnx
@@ -831,7 +855,10 @@ make zynq_picozed_sdr2_defconfig
 make -j$(nproc)
 </pre></div>
 </div>
-<p>Next the BOOT.BIN file must be created. Note that the default bif file used for BOOT.BIN generation has a few file name mismatches in it. We’ve already corrected the bitstream name mismatch (since we symlinked our own version in) and to fix the FSBL so do the below (or change the name in the bif file):</p>
+<p>Next the BOOT.BIN file must be created. Note that the default bif file used for
+BOOT.BIN generation has a few file name mismatches in it. We’ve already
+corrected the bitstream name mismatch (since we symlinked our own version in)
+and to fix the FSBL so do the below (or change the name in the bif file):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">~/</span><span class="n">zynq</span><span class="o">-</span><span class="n">picozed</span><span class="o">-</span><span class="n">sdr2</span><span class="o">/</span><span class="n">bootgen</span>
 <span class="n">mv</span> <span class="n">zynq_fsbl_0</span><span class="o">.</span><span class="n">elf</span> <span class="n">fsbl</span><span class="o">.</span><span class="n">elf</span>
 </pre></div>
@@ -865,7 +892,10 @@ cp sdk/loopback/Release/loopback.elf /media/BOOT
 </section>
 <section id="linux-test-scripts">
 <h3>Linux test scripts<a class="headerlink" href="#linux-test-scripts" title="Link to this heading"></a></h3>
-<p>Finally the test script repository must cloned onto the rootfs of the card and the script must be set to be run automated on boot. This can either be done by mounting the SD card on another computer or running the SD card on a board connected to the Internet which we’ll assume is the case here.</p>
+<p>Finally the test script repository must cloned onto the rootfs of the card and
+the script must be set to be run automated on boot. This can either be done by
+mounting the SD card on another computer or running the SD card on a board
+connected to the Internet which we’ll assume is the case here.</p>
 <p>Once the board is booted up open a terminal and run the following commands:</p>
 <p>First, clone the board testing git repo analog user’s home directory:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>git clone `board-tests &lt;https://github.com/analogdevicesinc/board-tests&gt;`_
@@ -890,7 +920,8 @@ cp sdk/loopback/Release/loopback.elf /media/BOOT
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">chmod</span> <span class="o">+</span><span class="n">x</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">analog</span><span class="o">/.</span><span class="n">config</span><span class="o">/</span><span class="n">autostart</span><span class="o">/</span><span class="n">picozed</span><span class="o">-</span><span class="n">sdr2</span><span class="o">-</span><span class="n">fmc</span><span class="o">-</span><span class="n">tests</span><span class="o">.</span><span class="n">desktop</span>
 </pre></div>
 </div>
-<p>Now the SD card could be ready to automatically launch the test script in a terminal window on startup.</p>
+<p>Now the SD card could be ready to automatically launch the test script in a
+terminal window on startup.</p>
 </section>
 </section>
 <section id="breakout-board">

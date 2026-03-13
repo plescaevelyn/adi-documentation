@@ -596,16 +596,18 @@ Content on this topic
 <p class="admonition-title">Warning</p>
 <p>NOTE: Support for the ad_fmclidar_ebz is discontinued on all supported carriers: Arria10 SOC, ZC706 and ZCU102. ad_fmclidar_ebz will not be supported in future releases, last release image in which pre-build files can be found is 2021_r1. (check this <a class="reference internal" href="../../../tools-software/linux-software/adi-kuiper_images/release_notes.html"><span class="doc">link</span></a> to see all available Kuiper Linux releases).</p>
 </div>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmclidar1-ebz/lidar_system_1.jpg"><img alt="Complete system assembled including additional optics and FPGA board" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmclidar1-ebz/lidar_system_1.jpg" style="width: 400px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmclidar1-ebz/lidar_system_1.jpg"><img alt="Complete system assembled including additional optics and FPGA board" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmclidar1-ebz/lidar_system_1.jpg" width="400" />
 </a>
 <p>To get the system up and running follow the steps below:</p>
 <ul class="simple">
 <li><p>Connect the DAQ board to the FMC HPC connector on the FPGA carrier board</p></li>
 <li><p>Connect the ribbon cables between the DAQ board and the Laser and AFE boards. The DAQ board has labels on the silkscreen next to the AFE and Laser board connectors indicating which board these correspond to</p></li>
 <li><p>Connect the SMA cables between the DAQ and the AFE board. It is recommended to match the TIA outputs with the ADC inputs using the labeling on the SMA connectors so that they have the same letter (A, B, C, D). Make sure that the P (positive) and N (negative) are matched between the boards.</p></li>
-<li><p>It is is also possible to use one of the ADC channels to sample the laser dive signal by connecting the SMA outputs of the Laser board to one of the ADC channels</p></li>
+<li><p>It is is also possible to use one of the ADC channels to sample the laser
+dive signal by connecting the SMA outputs of the Laser board to one of the
+ADC channels</p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmclidar1-ebz/lidar_lens.jpg"><img alt="Lens mount" class="align-right" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmclidar1-ebz/lidar_lens.jpg" style="width: 100px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmclidar1-ebz/lidar_lens.jpg"><img alt="Lens mount" class="align-right" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmclidar1-ebz/lidar_lens.jpg" width="100" />
 </a>
 <ul class="simple">
 <li><p>Insert the lens into the 1.5” lens tube (the longer one) with the spherical surface pointing outwards. The tube comes with a retaining ring that is used to set the position of the lens inside the tube. Position the lens such that top of the spherical surface is aligned with the edge of the tube. Use the retaining ring provided in the box to lock the lens in place.</p></li>
@@ -633,16 +635,26 @@ Content on this topic
 <p>The IIO Oscilloscope enables viewing the raw data acquired on all the ADC channels as well as controlling some hardware settings through the LIDAR plugin. It uses the <a class="reference internal" href="../../../tools-software/linux-software/libiio_internals.html"><span class="doc">libiio library</span></a> to talk to the system and the functionality of the controls in the LIDAR plugin is implemented by reading and writing different attributes of the Linux drivers in the system. The source code of the plugin, showing how to access the available attributes, can be found <a class="icon git reference external" href="https://github.com/analogdevicesinc/iio-oscilloscope/tree/main/plugins/lidar.c" target="_blank">here</a>.</p>
 <section id="iio-oscilloscope-data-capture-window">
 <h2>IIO Oscilloscope data capture window<a class="headerlink" href="#iio-oscilloscope-data-capture-window" title="Link to this heading"></a></h2>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/liadr_iio_scope_plot.png"><img alt="LIDAR IIO Oscilloscope" class="align-right" src="https://wiki.analog.com/_media/resources/eval/user-guides/liadr_iio_scope_plot.png" style="width: 400px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/liadr_iio_scope_plot.png"><img alt="LIDAR IIO Oscilloscope" class="align-right" src="https://wiki.analog.com/_media/resources/eval/user-guides/liadr_iio_scope_plot.png" width="400" />
 </a>
-<p>The main window of the IIO Osciloscope allows setting the length of the data captures and selecting the ADC channels that will be displayed on the plot. The length of the data capture must be always set to a multiple of 256 to match the internal data bus length, otherwise the plot will either hang or display incorrect data.</p>
-<p>There are 5 channels under the axi-ad9094-hpc device, 4 of them (voltage0 to voltage3) corresponding to the physical data channels of the AD9094 and the 5th one (voltage4) showing the mux selections of the 4 TIAs on the AFE board. The mux selections channel is encoded on 8 bits with 2 bits for each TIA showing the actual bit values for the CHSEL0 and CHSEL1 TIA inputs. This channel is always selected. If it’s interfering with the display of the other data channels it can always be multiplied with 0 using the Math function of the IIO oscilloscope.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmclidar1-ebz/lidar_voltage4_format.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmclidar1-ebz/lidar_voltage4_format.png" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmclidar1-ebz/lidar_voltage4_format.png" style="width: 400px;" />
+<p>The main window of the IIO Osciloscope allows setting the length of the data
+captures and selecting the ADC channels that will be displayed on the plot. The
+length of the data capture must be always set to a multiple of 256 to match the
+internal data bus length, otherwise the plot will either hang or display
+incorrect data.</p>
+<p>There are 5 channels under the axi-ad9094-hpc device, 4 of them (voltage0 to
+voltage3) corresponding to the physical data channels of the AD9094 and the 5th
+one (voltage4) showing the mux selections of the 4 TIAs on the AFE board. The
+mux selections channel is encoded on 8 bits with 2 bits for each TIA showing the
+actual bit values for the CHSEL0 and CHSEL1 TIA inputs. This channel is always
+selected. If it’s interfering with the display of the other data channels it can
+always be multiplied with 0 using the Math function of the IIO oscilloscope.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmclidar1-ebz/lidar_voltage4_format.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmclidar1-ebz/lidar_voltage4_format.png" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmclidar1-ebz/lidar_voltage4_format.png" width="400" />
 </a>
 </section>
 <section id="iio-oscilloscope-lidar-plugin">
 <h2>IIO Oscilloscope LIDAR plugin<a class="headerlink" href="#iio-oscilloscope-lidar-plugin" title="Link to this heading"></a></h2>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/liadr_iio_scope_plugin.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/liadr_iio_scope_plugin.png" class="align-right" src="https://wiki.analog.com/_media/resources/eval/user-guides/liadr_iio_scope_plugin.png" style="width: 350px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/liadr_iio_scope_plugin.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/liadr_iio_scope_plugin.png" class="align-right" src="https://wiki.analog.com/_media/resources/eval/user-guides/liadr_iio_scope_plugin.png" width="350" />
 </a>
 <section id="sequencer-settings">
 <h3>Sequencer Settings<a class="headerlink" href="#sequencer-settings" title="Link to this heading"></a></h3>
@@ -652,7 +664,11 @@ Content on this topic
 </section>
 <section id="laser-pulse-generator-settings">
 <h3>Laser Pulse Generator Settings<a class="headerlink" href="#laser-pulse-generator-settings" title="Link to this heading"></a></h3>
-<p>The HDL design contains a pulse generator that precisely controls the timing of the laser pulses. The generator must be enabled before the data capture is started because the captures are triggered by the laser pulses. There are 2 parameters that can be controlled for the laser pulses - the frequency and the width, which actually define the total optical power of the system.</p>
+<p>The HDL design contains a pulse generator that precisely controls the timing of
+the laser pulses. The generator must be enabled before the data capture is
+started because the captures are triggered by the laser pulses. There are 2
+parameters that can be controlled for the laser pulses - the frequency and the
+width, which actually define the total optical power of the system.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>The system was certified for Eye Safety Class 1 with 20ns pulse width and 50KHz laser settings. When operating the system above these settings eye safety class 1 is no longer guaranteed and laser safety glasses (e.g <a class="icon link reference external" href="https://www.thorlabs.com/thorproduct.cfm?partnumber=LG2" target="_blank">LG2 laser safety glasses</a>) must be worn all the time. It is recommended to wear laser safety glasses all the time irrespective of the laser setting to avoid any dangerous situations that might arise when modifying the software.</p>
@@ -677,10 +693,30 @@ Content on this topic
 <section id="make-some-actual-distance-measurements">
 <h1>Make some actual distance measurements<a class="headerlink" href="#make-some-actual-distance-measurements" title="Link to this heading"></a></h1>
 <p><a class="icon git reference external" href="https://github.com/analogdevicesinc/pyadi-iio/tree/main/examples/lidar.py" target="_blank">examples/lidar.py</a> is a standalone GUI application developed on top of Analog Devices’ <a class="icon link reference external" href="https://github.com/analogdevicesinc/pyadi-iio" target="_blank">pyadi-iio library</a>.</p>
-<p>Besides displaying the received signals, lidar.py can be used configure all the relevant board parameters, including the Pulse Width, APD Bias, Tilt Voltage, Sequencer Settings and the parameters used to generate the reference signal. This reference signal is then used to approximate and display the distance to the first object the LIDAR laser is pointed at. All these parameters, signals and measurements are displayed and can be configured in real time.</p>
+<p>Besides displaying the received signals, lidar.py can be used configure all the
+relevant board parameters, including the Pulse Width, APD Bias, Tilt Voltage,
+Sequencer Settings and the parameters used to generate the reference signal.
+This reference signal is then used to approximate and display the distance to
+the first object the LIDAR laser is pointed at. All these parameters, signals
+and measurements are displayed and can be configured in real time.</p>
 <img alt="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmclidar1-ebz/lidarpy_gui_screenshot.png" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmclidar1-ebz/lidarpy_gui_screenshot.png" />
-<p>For the distance measurement, a correlation method is used. The LIDAR board has a reference signal which can be connected to one of the output channels, but this example does not use that approach. Instead, we try to approximate this reference signal by taking a single square pulse signal with the width equal to the pulse width specified in the Laser Settings of the GUI section. A FIR filter is then applied to this square pulse signal to obtain a reference signal approximation, which is plotted along with the received signals. The Filter Length and the Filter Cutoff Frequency can be modified in real time via the GUI’s interface to improve the accuracy of the measurement. Modifying the Filter Length, while potentially improving the correlation method accuracy, will also shift the generated signal, so the Distance Offset will also have to be manually adjusted. You can play with all these parameters and see what works best for you.</p>
-<p>Each displayed distance measurement is a mean value of the last 10 measurements to smooth out the variations in the received signals as much as possible. Each change to the GUI parameters only takes effect after Config Board is pressed. A snapshot of all the current received signals can be saved in a CSV file format.</p>
+<p>For the distance measurement, a correlation method is used. The LIDAR board has
+a reference signal which can be connected to one of the output channels, but
+this example does not use that approach. Instead, we try to approximate this
+reference signal by taking a single square pulse signal with the width equal to
+the pulse width specified in the Laser Settings of the GUI section. A FIR filter
+is then applied to this square pulse signal to obtain a reference signal
+approximation, which is plotted along with the received signals. The Filter
+Length and the Filter Cutoff Frequency can be modified in real time via the
+GUI’s interface to improve the accuracy of the measurement. Modifying the Filter
+Length, while potentially improving the correlation method accuracy, will also
+shift the generated signal, so the Distance Offset will also have to be manually
+adjusted. You can play with all these parameters and see what works best for
+you.</p>
+<p>Each displayed distance measurement is a mean value of the last 10 measurements
+to smooth out the variations in the received signals as much as possible. Each
+change to the GUI parameters only takes effect after Config Board is pressed. A
+snapshot of all the current received signals can be saved in a CSV file format.</p>
 </section>
 
 

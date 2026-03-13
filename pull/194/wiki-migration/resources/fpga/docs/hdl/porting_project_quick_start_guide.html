@@ -604,20 +604,34 @@ Content on this topic
 <p>We are in the process of migrating our documentation to GitHubIO. This page is outdated. Please check out our latest guide at <a class="icon link reference external" href="https://analogdevicesinc.github.io/hdl/user_guide/porting_project.html" target="_blank">https://analogdevicesinc.github.io/hdl/user_guide/porting_project.html</a></p>
 </div>
 <p>In general, a given reference design for an FMC board is deployed to just a few carriers, although several <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/common" target="_blank">FPGA boards</a> are supported in ADI’s HDL repository. The simple reason behind this practice is that it would create a tremendous maintenance workload, that would require a lot of human resources, and would increase the required time for testing. The general rule of thumb is to support a given project with a fairly popular carrier (e.g. ZC706 or A10SoC), which is powerful enough to showcase the board features and maximum performance.</p>
-<p>All the HDL projects were designed to maximize source code reuse, minimize maintainability and simplify portability. The result of these design goals is that porting a given project to another carrier is fairly simple if the user respects a couple of guidelines.</p>
-<p>The main scope of this wiki page is to discuss these guidelines and provide simple indications for users who wants to port a project to a non-supported carrier.</p>
+<p>All the HDL projects were designed to maximize source code reuse, minimize
+maintainability and simplify portability. The result of these design goals is
+that porting a given project to another carrier is fairly simple if the user
+respects a couple of guidelines.</p>
+<p>The main scope of this wiki page is to discuss these guidelines and provide
+simple indications for users who wants to port a project to a non-supported
+carrier.</p>
 <section id="quick-compatibility-check">
 <h2>Quick Compatibility Check<a class="headerlink" href="#quick-compatibility-check" title="Link to this heading"></a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>All ADI’s FPGA Mezzanine Cards (FMC) are designed to respect all the specifications and requirements defined in the ANSI/VITA 57.1 FPGA Mezzanine Card Standard (if not otherwise stated on board’s wiki page). If the new FPGA carrier is fully compliant with this standard, there will be no obstacles preventing the user to port the project to the required carrier card.</p>
+<p>All ADI’s FPGA Mezzanine Cards (FMC) are designed to respect all the
+specifications and requirements defined in the ANSI/VITA 57.1 FPGA Mezzanine
+Card Standard (if not otherwise stated on board’s wiki page). If the new FPGA
+carrier is fully compliant with this standard, there will be no obstacles
+preventing the user to port the project to the required carrier card.</p>
 </div>
-<p>There are two types of FMC connectors: LPC (Low Pin Count) and HPC (High Pin Count). In general, an FMC board is using the FMC connector type that has enough pins for the required interfaces between the I/O devices and FPGA. A carrier with an FMC HPC connector can host FMC boards with an LPC or HPC connector, but a carrier with an FMC LPC can host a board just with an FMC LPC connector.</p>
+<p>There are two types of FMC connectors: LPC (Low Pin Count) and HPC (High Pin
+Count). In general, an FMC board is using the FMC connector type that has enough
+pins for the required interfaces between the I/O devices and FPGA. A carrier
+with an FMC HPC connector can host FMC boards with an LPC or HPC connector, but
+a carrier with an FMC LPC can host a board just with an FMC LPC connector.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>First, always check out the already available <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/common" target="_blank">base designs</a>. If your board is present among our supported base designs, you do not need to verify the following things and you can jump to the Project creation section</p>
 </div>
-<p>The most important things to check before porting are related to the ANSI/VITA 57.1 standard (the list is not necessarily exhaustive):</p>
+<p>The most important things to check before porting are related to the ANSI/VITA
+57.1 standard (the list is not necessarily exhaustive):</p>
 <ul class="simple">
 <li><p>Power and ground lines - 3P3V/3P3VAUX/12P0V/GND</p></li>
 <li><p>VADJ - adjustable voltage level power from the carrier, each board has a specific requirement for VADJ</p></li>
@@ -626,11 +640,15 @@ Content on this topic
 </ul>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>To check all the requirements, please refer to the ANSI/VITA 57.1 standard. The above few hints do not cover all the FMC standards and you may miss something that can prevent the porting of the project.</p>
+<p>To check all the requirements, please refer to the ANSI/VITA 57.1 standard.
+The above few hints do not cover all the FMC standards and you may miss
+something that can prevent the porting of the project.</p>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>Make sure that you have reviewed all the documentation and design files in order to know the electrical specifications and/or requirements of the FMC board. If you’re not sure, ask!</p>
+<p>Make sure that you have reviewed all the documentation and design files in
+order to know the electrical specifications and/or requirements of the FMC
+board. If you’re not sure, ask!</p>
 </div>
 </section>
 <section id="base-design-files">
@@ -642,8 +660,10 @@ Content on this topic
 </div>
 <section id="example-with-a-xilinx-board">
 <h3>Example with a Xilinx board<a class="headerlink" href="#example-with-a-xilinx-board" title="Link to this heading"></a></h3>
-<p>In this section, we are presenting all the necessary steps to create a base design for the Xilinx ZCU102 development board.</p>
-<p>First, you need to create a new directory in <em>~/projects/common</em> with the name of the carrier.</p>
+<p>In this section, we are presenting all the necessary steps to create a base
+design for the Xilinx ZCU102 development board.</p>
+<p>First, you need to create a new directory in <em>~/projects/common</em> with the name
+of the carrier.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">~/</span><span class="n">hdl</span><span class="p">]</span><span class="n">cd</span> <span class="n">projects</span><span class="o">/</span><span class="n">common</span>
 <span class="p">[</span><span class="o">~/</span><span class="n">hdl</span><span class="p">]</span><span class="n">mkdir</span> <span class="n">zcu102</span>
 </pre></div>
@@ -665,7 +685,9 @@ Content on this topic
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>The valid board parts and parts can be retrieved by running the following commands in Tcl console: get_parts and get_board_parts. Run the commands like join [get_parts] \n, so each part name will be listed on a separate line.</p>
+<p>The valid board parts and parts can be retrieved by running the following
+commands in Tcl console: get_parts and get_board_parts. Run the commands like
+join [get_parts] \n, so each part name will be listed on a separate line.</p>
 </div>
 <p>The <strong>sys_zynq</strong> constant variable should be set in the following way:</p>
 <ul class="simple">
@@ -676,7 +698,8 @@ Content on this topic
 </section>
 <section id="example-with-an-intel-board">
 <h3>Example with an Intel board<a class="headerlink" href="#example-with-an-intel-board" title="Link to this heading"></a></h3>
-<p>To create a new base design for a given Intel FPGA carrier board, the following steps should be taken (the A10SoC carrier was used as an example).</p>
+<p>To create a new base design for a given Intel FPGA carrier board, the following
+steps should be taken (the A10SoC carrier was used as an example).</p>
 <p>The following files should be created or copied into the directory:</p>
 <ul class="simple">
 <li><p><strong>a10soc_system_assign.tcl</strong> - global and I/O assignments of the base design</p></li>
@@ -696,7 +719,10 @@ Content on this topic
 <h2>Project files<a class="headerlink" href="#project-files" title="Link to this heading"></a></h2>
 <section id="project-files-for-xilinx-boards">
 <h3>Project files for Xilinx boards<a class="headerlink" href="#project-files-for-xilinx-boards" title="Link to this heading"></a></h3>
-<p>To follow the project framework as much as possible, the easiest way is to copy all the projects files from an already existing project and modifying those files to support the new carrier. A project for a Xilinx FPGA board should contain the following files:</p>
+<p>To follow the project framework as much as possible, the easiest way is to copy
+all the projects files from an already existing project and modifying those
+files to support the new carrier. A project for a Xilinx FPGA board should
+contain the following files:</p>
 <ul class="simple">
 <li><p><strong>system_project.tcl</strong> - This script is creating the actual Vivado project and runs the synthesis/implementation of the design. The name of the carrier from inside the file, must be updated.</p></li>
 <li><p><strong>system_bd.tcl</strong> - In this file is sourced the <em>base</em> design’s Tcl script and the <em>board</em> design’s Tcl script. Again, the name of the carrier must be updated.</p></li>
@@ -707,7 +733,10 @@ Content on this topic
 </section>
 <section id="project-files-for-intel-boards">
 <h3>Project files for Intel boards<a class="headerlink" href="#project-files-for-intel-boards" title="Link to this heading"></a></h3>
-<p>To follow the project framework as much as possible the easiest way is to copy all the projects file from an already existing project and modifying those files to support the new carrier. A project for an Intel FPGA board should contain the following files:</p>
+<p>To follow the project framework as much as possible the easiest way is to copy
+all the projects file from an already existing project and modifying those files
+to support the new carrier. A project for an Intel FPGA board should contain the
+following files:</p>
 <ul class="simple">
 <li><p><strong>system_project.tcl</strong> - This script is creating the actual Quartus project and runs the synthesis/implementation of the design. It also contains the I/O definitions for the interfaces between the FMC board and FPGA. The carrier name and all the I/O pin names inside the file, must be updated.</p></li>
 <li><p><strong>system_qsys.tcl</strong> - In this file is sourced the <em>base</em> design’s Tcl script and the <em>board</em> design’s Tcl script. Again, the name of the carrier must be updated.</p></li>
@@ -738,7 +767,8 @@ Content on this topic
 <li><p><strong>tclsh ../../scripts/adi_fmc_constr_generator.tcl fmc0</strong> (the project uses only one FMC port at a time)</p></li>
 <li><p><strong>tclsh ../../scripts/adi_fmc_constr_generator.tcl fmc0 fmc1</strong> (the project uses two FMC ports at a time)</p></li>
 </ul>
-<p>If sourced without argument(s) then you can simply call gen_fmc_constr &lt;fmc_port&gt;.</p>
+<p>If sourced without argument(s) then you can simply call gen_fmc_constr
+&lt;fmc_port&gt;.</p>
 <p>For example:</p>
 <ul class="simple">
 <li><p><strong>gen_fmc_constr fmc0</strong> (the project uses only one FMC port at a time)</p></li>

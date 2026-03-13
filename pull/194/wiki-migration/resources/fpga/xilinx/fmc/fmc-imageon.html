@@ -786,7 +786,8 @@ Content on this topic
 <h3>Required Hardware<a class="headerlink" href="#required-hardware" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>One of the supported carrier and FMC-IMAGEON boards.</p></li>
-<li><p>HDMI Monitor (should be capable of supporting 1080p and/or 720p for the demo files).</p></li>
+<li><p>HDMI Monitor (should be capable of supporting 1080p and/or 720p for the demo
+files).</p></li>
 </ul>
 </section>
 <section id="required-software">
@@ -803,34 +804,69 @@ Content on this topic
 <h3>Functional description<a class="headerlink" href="#functional-description" title="Link to this heading"></a></h3>
 <section id="xilinx-block-diagram">
 <h4>Xilinx block diagram<a class="headerlink" href="#xilinx-block-diagram" title="Link to this heading"></a></h4>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/imageon_xilinx.svg"><img alt="HDL Block Diagram" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/imageon_xilinx.svg" style="width: 800px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/imageon_xilinx.svg"><img alt="HDL Block Diagram" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/imageon_xilinx.svg" width="800" />
 </a>
 </section>
 <section id="fmc-imageon-block-diagram">
 <h4>FMC-IMAGEON block diagram<a class="headerlink" href="#fmc-imageon-block-diagram" title="Link to this heading"></a></h4>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/imageon_fmc_1.svg"><img alt="HDL Block Diagram" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/imageon_fmc_1.svg" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/imageon_fmc_1.svg"><img alt="HDL Block Diagram" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/imageon_fmc_1.svg" width="600" />
 </a>
 <p>The reference design consists of two independent IP modules.</p>
-<p>The video part consists of an AXI DMAC interface and the ADV7511/ADV7611 video interface. The video interface consists of a 16bit YCbCr 422 with embedded synchronization signals.</p>
+<p>The video part consists of an AXI DMAC interface and the ADV7511/ADV7611 video
+interface. The video interface consists of a 16bit YCbCr 422 with embedded
+synchronization signals.</p>
 </section>
 </section>
 <section id="video-transmit-dma-to-hdmi">
 <h3>Video Transmit (DMA to HDMI)<a class="headerlink" href="#video-transmit-dma-to-hdmi" title="Link to this heading"></a></h3>
-<p>In the transmit direction, the DMA streams frame data to this core. The internal buffers of this IP are small (1k) and do NOT buffer any frames as such. Additional resources may cause loss of synchronization due to DDR bandwidth requirements. The video core is capable of supporting any formats through a set of parameter registers (given below). The pixel clock is generated internal to the device and must be configured for the correct pixel frequency. It also allows a programmable color pattern for debug purposes. A zero to one transition on the enable bits trigger the corresponding action for HDMI enable and color pattern enable.</p>
-<p>The reference design defaults to the 1080p video mode. Users may change the video settings by programming the video size registers. The core requires a corresponding pixel clock to generate the video. This clock must be generated externally.</p>
+<p>In the transmit direction, the DMA streams frame data to this core. The internal
+buffers of this IP are small (1k) and do NOT buffer any frames as such.
+Additional resources may cause loss of synchronization due to DDR bandwidth
+requirements. The video core is capable of supporting any formats through a set
+of parameter registers (given below). The pixel clock is generated internal to
+the device and must be configured for the correct pixel frequency. It also
+allows a programmable color pattern for debug purposes. A zero to one transition
+on the enable bits trigger the corresponding action for HDMI enable and color
+pattern enable.</p>
+<p>The reference design defaults to the 1080p video mode. Users may change the
+video settings by programming the video size registers. The core requires a
+corresponding pixel clock to generate the video. This clock must be generated
+externally.</p>
 <p>Note that the pixel frequency for 1080p is 148.5MHz.</p>
-<p>The reference design reads 24bits of RGB data from DDR and performs color space conversion (RGB to YCbCr) and down sampling (444 to 422). If bypassed, the lower 16bits of DDR data is passed to the HDMI interface as it is.</p>
-<p>A color pattern register provides a quick check of any RGB values on the monitor. If enabled, the register data is used as the pixel data for the entire frame.</p>
+<p>The reference design reads 24bits of RGB data from DDR and performs color space
+conversion (RGB to YCbCr) and down sampling (444 to 422). If bypassed, the lower
+16bits of DDR data is passed to the HDMI interface as it is.</p>
+<p>A color pattern register provides a quick check of any RGB values on the
+monitor. If enabled, the register data is used as the pixel data for the entire
+frame.</p>
 </section>
 <section id="video-receive-hdmi-to-dma">
 <h3>Video Receive (HDMI to DMA)<a class="headerlink" href="#video-receive-hdmi-to-dma" title="Link to this heading"></a></h3>
-<p>In the receive direction, the HDMI data is first decoded and the synchronization signals are generated. The core then streams video data to DMA. The internal buffers of this IP are small (1k) and do NOT buffer any frames as such. Additional resources may cause loss of synchronization due to DDR bandwidth requirements. The video core is capable of supporting any formats through a set of parameter registers (given below). The core runs at the pixel clock from ADV7611.</p>
-<p>The core decodes the active video size from the received data and compares it against an expected video size. If they do not match, the core will NOT stream data to DMA to avoid possible lock up conditions in the DMA core due to byte length mismatches. Also, the reference design performs color space conversion (YCbCr to RGB) and up sampling (422 to 444). If bypassed, the lower 16bits of DDR data is passed to the DMA interface as it is.</p>
-<p>Test pattern generators and monitors are provided at each interface and clock domain boundaries. The default configuration is in loop back mode with the HDMI interface acting as a direct pass through.</p>
+<p>In the receive direction, the HDMI data is first decoded and the synchronization
+signals are generated. The core then streams video data to DMA. The internal
+buffers of this IP are small (1k) and do NOT buffer any frames as such.
+Additional resources may cause loss of synchronization due to DDR bandwidth
+requirements. The video core is capable of supporting any formats through a set
+of parameter registers (given below). The core runs at the pixel clock from
+ADV7611.</p>
+<p>The core decodes the active video size from the received data and compares it
+against an expected video size. If they do not match, the core will NOT stream
+data to DMA to avoid possible lock up conditions in the DMA core due to byte
+length mismatches. Also, the reference design performs color space conversion
+(YCbCr to RGB) and up sampling (422 to 444). If bypassed, the lower 16bits of
+DDR data is passed to the DMA interface as it is.</p>
+<p>Test pattern generators and monitors are provided at each interface and clock
+domain boundaries. The default configuration is in loop back mode with the HDMI
+interface acting as a direct pass through.</p>
 </section>
 <section id="audio">
 <h3>Audio<a class="headerlink" href="#audio" title="Link to this heading"></a></h3>
-<p>The audio part consists of an AXI DMAC interface and the ADV7511 spdif audio interface. The audio clock is derived from the bus clock. A programmable register (see below) controls the division factor. The audio data is read from the DDR as two 16bit words for the left and right channels. It is then transmitted on the SPDIF frame. The sample frequency and format may be controlled using the registers below. The reference design defaults to 48KHz.</p>
+<p>The audio part consists of an AXI DMAC interface and the ADV7511 spdif audio
+interface. The audio clock is derived from the bus clock. A programmable
+register (see below) controls the division factor. The audio data is read from
+the DDR as two 16bit words for the left and right channels. It is then
+transmitted on the SPDIF frame. The sample frequency and format may be
+controlled using the registers below. The reference design defaults to 48KHz.</p>
 </section>
 <section id="registers">
 <h3>Registers<a class="headerlink" href="#registers" title="Link to this heading"></a></h3>
@@ -32562,12 +32598,17 @@ Valid for 64b66b encoder.</p></td>
 </section>
 <section id="using-the-adv7511-transmitter-library">
 <h2>Using the ADV7511 Transmitter Library<a class="headerlink" href="#using-the-adv7511-transmitter-library" title="Link to this heading"></a></h2>
-<p>The transmitter library is a collection of APIs that provide a consistent interface to ADV7511. The library is a software layer that sits between the application and the TX hardware. The library is intended to serve two purposes:</p>
+<p>The transmitter library is a collection of APIs that provide a consistent
+interface to ADV7511. The library is a software layer that sits between the
+application and the TX hardware. The library is intended to serve two purposes:</p>
 <ul class="simple">
 <li><p>Provide the application with a set of APIs that can be used to configure HDMI TX hardware without the need for low-level register access. This makes the application portable across different revisions of the hardware and even across different hardware modules.</p></li>
-<li><p>Provide basic services to aid the application in controlling the TX module, such as interrupt service routine, HDCP high-level control and status information.</p></li>
+<li><p>Provide basic services to aid the application in controlling the TX module,
+such as interrupt service routine, HDCP high-level control and status
+information.</p></li>
 </ul>
-<p>The Demo project uses the ADV7511 Transmitter Library. The project is an example of how to:</p>
+<p>The Demo project uses the ADV7511 Transmitter Library. The project is an example
+of how to:</p>
 <ul class="simple">
 <li><p>Initialize the ADV7511 High-Definition Multimedia Interface (HDMI®) transmitter.</p></li>
 <li><p>Check current AVR operating mode and depending on this result set the AV mute state.</p></li>
@@ -32581,38 +32622,38 @@ Valid for 64b66b encoder.</p></td>
 <li><p>Copy the <strong>SDK_Workspace</strong> folder on your PC. Make sure that the path where it is stored does not contain any spaces.</p></li>
 <li><p>Copy the library file to the <strong>SDK_Workspace/sw/lib</strong> folder.</p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/lib_files.png"><img alt="Library file" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/lib_files.png" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/lib_files.png"><img alt="Library file" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/lib_files.png" width="600" />
 </a>
 <ul class="simple">
 <li><p>Copy the library headers to the <strong>SDK_Workspace/sw/inc</strong> folder.</p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/inc_files.png"><img alt="Library headers" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/inc_files.png" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/inc_files.png"><img alt="Library headers" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/inc_files.png" width="600" />
 </a>
 <ul class="simple">
 <li><p>Copy the ADV7511 Transmitter Library Demo files to the <strong>SDK_Workspace/sw/src</strong> folder.</p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/src_files.png"><img alt="ADV7511 Transmitter Library Demo files" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/src_files.png" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/src_files.png"><img alt="ADV7511 Transmitter Library Demo files" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/src_files.png" width="600" />
 </a>
 <ul class="simple">
 <li><p>Open the Xilinx SDK. When the SDK starts it asks for a to provide a folder where to store the workspace. Any folder can be provided.</p></li>
 <li><p>In the SDK select the <strong>File-&gt;Import</strong> menu option to import the software projects into the workspace.</p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/file_import.png"><img alt="Import Projects" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/file_import.png" style="width: 300px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/file_import.png"><img alt="Import Projects" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/file_import.png" width="300" />
 </a>
 <ul class="simple">
 <li><p>In the <em>Import</em> window select the <strong>General-&gt;Existing Projects into Workspace</strong> option.</p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/existing_project_import.png"><img alt="Existing Projects Import" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/existing_project_import.png" style="width: 300px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/existing_project_import.png"><img alt="Existing Projects Import" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/existing_project_import.png" width="300" />
 </a>
 <ul class="simple">
 <li><p>In the <em>Import Projects</em> window select the <strong>SDK_Workspace</strong> folder as root directory. After the root directory is chosen the projects that reside in that directory will appear in the <em>Projects</em> list. Press <em>Finish</em> to finalize the import process.</p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/projects_import.png"><img alt="Projects Import" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/projects_import.png" style="width: 300px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/projects_import.png"><img alt="Projects Import" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/projects_import.png" width="300" />
 </a>
 <ul class="simple">
 <li><p>The <em>Project Explorer</em> window now shows the projects that exist in the workspace and the files for each project. The SDK should automatically build the projects and the <em>Console</em> window will display the result of the build. If the build is not done automatically select the <strong>Project-&gt;Build Automatically</strong> menu option.</p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/project_explorer.png"><img alt="Project Explorer" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/project_explorer.png" style="width: 300px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/project_explorer.png"><img alt="Project Explorer" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/project_explorer.png" width="300" />
 </a>
 </section>
 </section>

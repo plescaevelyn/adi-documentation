@@ -588,7 +588,8 @@ Content on this topic
   <section id="using-pre-configured-topology-files-in-the-bare-metal-framework">
 <h1>Using pre-configured topology files in the bare metal framework<a class="headerlink" href="#using-pre-configured-topology-files-in-the-bare-metal-framework" title="Link to this heading"></a></h1>
 <p>The bare metal framework provides configuration files to initialize various A2B topologies. Presently supported configurations – between distinct SHARC Audio Modules, and optionally a Class D amplifier board – are described below.</p>
-<p>Over time, additional configuration files will be made available to download on this page and import into the framework.</p>
+<p>Over time, additional configuration files will be made available to download on
+this page and import into the framework.</p>
 <section id="current-fixed-a2b-topology-configurations-available">
 <h2>Current fixed A2B topology configurations available<a class="headerlink" href="#current-fixed-a2b-topology-configurations-available" title="Link to this heading"></a></h2>
 <div class="table-wrapper docutils container">
@@ -613,7 +614,9 @@ Content on this topic
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>SigmaStudio® projects for the fixed A2B topologies can be found in the ..\extras\sigmastudio-projects folder of the SHARC Audio Module Bare Metal SDK 2.1.1</p>
+<p>SigmaStudio® projects for the fixed A2B topologies can be found in the
+..\extras\sigmastudio-projects folder of the SHARC Audio Module Bare Metal
+SDK 2.1.1</p>
 </div>
 </section>
 <hr class="docutils" />
@@ -622,7 +625,10 @@ Content on this topic
 <p>The SHARC Audio Module and the Class D board are equipped with two A2B connectors each: one labeled ‘Master’ and a second labeled ‘Slave’. The ‘Slave’ connector connects to A2B nodes further downstream. The ‘Master’ connector connects to A2B nodes further upstream. The SHARC Audio Module is typically the master. Thus to connect a SHARC Audio Module (master node) to a Class D board (slave node), connect the A2B cable to the <em>slave</em> port on the SHARC Audio Module (i.e. towards the slave) and to the <em>master</em> port on the Class D board (i.e. towards the master).</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>other boards with A2B connectivity may label the A2B ports as ‘A’ and ‘B’. In this case ‘A’ is the Master port (i.e. connects to upstream nodes, towards the master) and ‘B’ is the Slave port (i.e. connects downstream, towards downstream slave nodes).</p>
+<p>other boards with A2B connectivity may label the A2B ports as ‘A’ and ‘B’. In
+this case ‘A’ is the Master port (i.e. connects to upstream nodes, towards
+the master) and ‘B’ is the Slave port (i.e. connects downstream, towards
+downstream slave nodes).</p>
 </div>
 </section>
 <section id="selecting-an-a2b-network-configuration-in-audio-system-config-h">
@@ -655,16 +661,27 @@ Content on this topic
 </section>
 <section id="using-a-configuration-with-a-sharc-audio-module-as-a-slave-node">
 <h2>Using a configuration with a SHARC Audio Module as a slave node<a class="headerlink" href="#using-a-configuration-with-a-sharc-audio-module-as-a-slave-node" title="Link to this heading"></a></h2>
-<p>Two of the A2B configurations provided with the baremetal framework can use a second SHARC Audio Module as a slave node in the A2B network.</p>
-<p>If you want these nodes to simply pass audio, you can use the flash programming utility to program the boards as slave nodes. They will be set up to boot &amp; operate as A2B slave nodes.</p>
+<p>Two of the A2B configurations provided with the baremetal framework can use a
+second SHARC Audio Module as a slave node in the A2B network.</p>
+<p>If you want these nodes to simply pass audio, you can use the flash programming
+utility to program the boards as slave nodes. They will be set up to boot &amp;
+operate as A2B slave nodes.</p>
 <p>If you wish to run the baremetal framework and process audio on the <em>slave</em> SHARC Audio Module, set the <code class="docutils literal notranslate"><span class="pre">ENABLE_A2B</span></code> preprocessor macro mentioned above to <code class="docutils literal notranslate"><span class="pre">TRUE</span></code> and the <code class="docutils literal notranslate"><span class="pre">A2B_ROLE_MASTER</span></code> macro to <code class="docutils literal notranslate"><span class="pre">FALSE</span></code>. In this case, the SHARC Audio Module will not attempt to initialize the A2B bus but will still be capable of sending and receiving audio from the A2B bus.</p>
 </section>
 <section id="routing-audio-to-and-from-a2b-within-the-baremetal-framework">
 <h2>Routing audio to and from A2B within the baremetal framework<a class="headerlink" href="#routing-audio-to-and-from-a2b-within-the-baremetal-framework" title="Link to this heading"></a></h2>
-<p>As noted above, each A2B configuration describes a set of audio streams which may flow upstream (from slaves to master) and/or downstream (from master to slaves) over the A2B bus. The baremetal framework includes a set of A2B receive buffers (data arriving at the processor over the A2B bus) and A2B transmit buffers (data that will be sent over the A2B bus). Thus we read/write to the A2B bus by copying audio samples to/from these buffers in the audio callback.</p>
+<p>As noted above, each A2B configuration describes a set of audio streams which
+may flow upstream (from slaves to master) and/or downstream (from master to
+slaves) over the A2B bus. The baremetal framework includes a set of A2B receive
+buffers (data arriving at the processor over the A2B bus) and A2B transmit
+buffers (data that will be sent over the A2B bus). Thus we read/write to the A2B
+bus by copying audio samples to/from these buffers in the audio callback.</p>
 <p>Expand first SHARC core (Core 1) project and browse to <code class="docutils literal notranslate"><span class="pre">${Core_1_Project}/src/callback_audio_processing.cpp</span></code>. Scroll down to the <code class="docutils literal notranslate"><span class="pre">processaudio_output_routing()</span></code> function. This function routes output audio to the various peripherals.</p>
 <p>We can send audio into the A2B bus by writing to the <code class="docutils literal notranslate"><span class="pre">audiochannel_a2b_[N]_[Right/Left]_out</span></code> buffer. Similarly, we can read audio from the A2B bus by reading the corresponding <code class="docutils literal notranslate"><span class="pre">_in</span></code> buffers, e.g. within <code class="docutils literal notranslate"><span class="pre">processaudio_callback()</span></code>.</p>
-<p>To access the four channels on the Class D amp, use the first four buffers associated with Class D. These are by default configured to send out the first four output channels from Core 2 (which in turn mirror the first four output channels from Core 1).</p>
+<p>To access the four channels on the Class D amp, use the first four buffers
+associated with Class D. These are by default configured to send out the first
+four output channels from Core 2 (which in turn mirror the first four output
+channels from Core 1).</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">audiochannel_a2b_0_left_out</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">audiochannel_from_sharc_core2_0_left</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
 <span class="n">audiochannel_a2b_0_right_out</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">audiochannel_from_sharc_core2_0_right</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
 
@@ -679,7 +696,9 @@ Content on this topic
 <span class="n">audiochannel_a2b_1_right_out</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">audiochannel_from_sharc_core2_0_right</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
 </pre></div>
 </div>
-<p>As mentioned above, if we are using an A2B configuration that sends four channels of audio (two stereo pairs) from the SHARC Audio Module to the Class D board, these will always be the first four channels.</p>
+<p>As mentioned above, if we are using an A2B configuration that sends four
+channels of audio (two stereo pairs) from the SHARC Audio Module to the Class D
+board, these will always be the first four channels.</p>
 </section>
 </section>
 

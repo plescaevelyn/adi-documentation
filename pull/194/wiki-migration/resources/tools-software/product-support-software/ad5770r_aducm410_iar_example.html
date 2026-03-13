@@ -610,14 +610,19 @@ Content on this topic
 <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/AD5770R" target="_blank">AD5770R</a> is a 6-channel, 14-bit resolution, low noise, programmable current output digital-to-analog converter (DAC) for photonics control applications. This chip incorporates a 1.25 V on-chip voltage reference, a 2.5 kΩ precision resistor for reference current generation, die temperature, output monitoring functions, fault alarm, and reset functions.</p>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/AD5770R" target="_blank">AD5770R</a> contains five 14-bit resolution current sourcing DAC channels and one 14-bit resolution current sourcing/ sinking DAC channel.</p>
-<p>Channel 0 can be configured to sink up to 60 mA and source up to 300 mA. Channel 1 to Channel 5 have multiple, programmable output current sourcing ranges, set by register access. Each DAC can operate with a wide power supply rail from 0.8 V to AVDD − 0.4 V for optimizing power efficiency and thermal power dissipation.</p>
+<p>Channel 0 can be configured to sink up to 60 mA and source up to 300 mA. Channel
+1 to Channel 5 have multiple, programmable output current sourcing ranges, set
+by register access. Each DAC can operate with a wide power supply rail from
+0.8 V to AVDD − 0.4 V for optimizing power efficiency and thermal power
+dissipation.</p>
 <p>This page describes the AD5770R firmware example running on the <a class="icon adi reference external" href="https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/eval-aducm410.html" target="_blank">ADuCM410</a> controller board, interfacing with the AD5770R evaluation board. The firmware example comprises 3 layers of software, built on top of the Mbed OS.</p>
 <ul class="simple">
 <li><p>Console Application - uses the ADI console libraries to provide a basic terminal UI</p></li>
 <li><p>AD5770R No-OS Driver - AD5770R device C API</p></li>
-<li><p>Platform Drivers - Hardware Abstraction Layer (SPI, GPIO, …) to adapt No-OS driver to ADuCM410 drivers</p></li>
+<li><p>Platform Drivers - Hardware Abstraction Layer (SPI, GPIO, …) to adapt No-OS
+driver to ADuCM410 drivers</p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/product-support-software/ad5770r_m410_software_architecture.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/product-support-software/ad5770r_m410_software_architecture.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/product-support-software/ad5770r_m410_software_architecture.jpg" style="width: 400px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/product-support-software/ad5770r_m410_software_architecture.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/product-support-software/ad5770r_m410_software_architecture.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/product-support-software/ad5770r_m410_software_architecture.jpg" width="400" />
 </a>
 </section>
 </section>
@@ -634,12 +639,15 @@ Content on this topic
 <section id="hardware-setup">
 <h2>Hardware Setup<a class="headerlink" href="#hardware-setup" title="Link to this heading"></a></h2>
 <img alt="https://wiki.analog.com/_media/resources/tools-software/product-support-software/ad5770r_m410_hardware_connection.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/product-support-software/ad5770r_m410_hardware_connection.jpg" />
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/product-support-software/aducm410_jumper_settings.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/product-support-software/aducm410_jumper_settings.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/product-support-software/aducm410_jumper_settings.jpg" style="width: 500px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/product-support-software/aducm410_jumper_settings.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/product-support-software/aducm410_jumper_settings.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/product-support-software/aducm410_jumper_settings.jpg" width="500" />
 </a>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD5770R.html" target="_blank">AD5770R Evaluation Board</a> is connected to ADuCM410 using the <a class="icon adi reference external" href="https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/sdp-breakout-board.html#eb-overview" target="_blank">SDP-120 Breakout Board</a>. The evaluation board must be powered externally, typically using an external 3.3V DC supply connected to the AVDD input supply terminal, if using the default power supply jumper settings.</p>
-<p>The default jumper configuration of the evaluation board selects a diode dummy load on all of the output channels. Refer to the evaluation board user guide for the jumper configuration necessary to route the output current to the screw terminal.</p>
+<p>The default jumper configuration of the evaluation board selects a diode dummy
+load on all of the output channels. Refer to the evaluation board user guide for
+the jumper configuration necessary to route the output current to the screw
+terminal.</p>
 <p><a class="icon adi reference external" href="https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/eval-aducm410.html" target="_blank">ADuCM410</a> controller board is powered through USB connection from the computer. ADuCM410 controller board acts as a Serial device when connected to PC, which creates a COM Port to connect to serial console terminal using UART protocol. The COM port assigned to a device can be seen through the device manager for windows-based OS. Use 2nd port from list (Device B) for console terminal application communication.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/product-support-software/aducm410_com_port.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/product-support-software/aducm410_com_port.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/product-support-software/aducm410_com_port.jpg" style="width: 400px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/product-support-software/aducm410_com_port.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/product-support-software/aducm410_com_port.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/product-support-software/aducm410_com_port.jpg" width="400" />
 </a>
 </section>
 <section id="ad5770r-iar-firmware">
@@ -668,24 +676,41 @@ Content on this topic
 <ul class="simple">
 <li><p>Connect the AD5770R EVAL-board to the ADuCM410 controller board as mentioned in the “Hardware Setup” section and apply external 3.3V DC supply to Eval board through AVDD terminal.</p></li>
 <li><p>Connect the ADuCM410 controller board to your computer over USB cable (also acts as a power supply).</p></li>
-<li><p>Download the code from the software download link provided on this page and compile it using IAR compiler.</p></li>
+<li><p>Download the code from the software download link provided on this page and
+compile it using IAR compiler.</p></li>
 </ul>
-<p>The detailed guide to use IAR compiler and J-link mIDAS programmer is provided in ‘ADuCM410 Development Toolchain Guide’.</p>
+<p>The detailed guide to use IAR compiler and J-link mIDAS programmer is provided
+in ‘ADuCM410 Development Toolchain Guide’.</p>
 <section id="firmware-in-detail">
 <h2>Firmware in Detail<a class="headerlink" href="#firmware-in-detail" title="Link to this heading"></a></h2>
-<p>The example is menu driven, providing keyboard shortcuts to access/execute the menus items, and prompting for further inputs where necessary. When the example runs, it attempts to connect and initialize the AD5770R. The configuration used is defined in the ad5770r_user_config.h file, which can be modified as needs be to suit specific applications.</p>
+<p>The example is menu driven, providing keyboard shortcuts to access/execute the
+menus items, and prompting for further inputs where necessary. When the example
+runs, it attempts to connect and initialize the AD5770R. The configuration used
+is defined in the ad5770r_user_config.h file, which can be modified as needs be
+to suit specific applications.</p>
 <p><em>Note: While much of the functionality of the AD5770R No-OS driver is made available through the console UI, not all function are available. The additional AD5770R functionality can only be configured the ad5770r_user_config.c file.</em></p>
 <section id="main-menu">
 <h3>Main Menu<a class="headerlink" href="#main-menu" title="Link to this heading"></a></h3>
-<p>The AD5770R Console App main menu provides basic initialization/reset type functions, and access to several sub-menus that provide more detailed configuration and control settings. Like most menus in the firmware, the menu options are framed by a header and footer that display status information related to the functions on the menu.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/product-support-software/ad5770r/main_menu.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/product-support-software/ad5770r/main_menu.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/product-support-software/ad5770r/main_menu.jpg" style="width: 400px;" />
+<p>The AD5770R Console App main menu provides basic initialization/reset type
+functions, and access to several sub-menus that provide more detailed
+configuration and control settings. Like most menus in the firmware, the menu
+options are framed by a header and footer that display status information
+related to the functions on the menu.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/product-support-software/ad5770r/main_menu.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/product-support-software/ad5770r/main_menu.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/product-support-software/ad5770r/main_menu.jpg" width="400" />
 </a>
-<p>The value of the scratchpad register is displayed in both the header and the footer. After reading the scratchpad value for the header, the value is incremented and written back to the device, such that the scratchpad footer value should always be equal to the header value + 1. This can be useful a debug aid to confirm communications.</p>
+<p>The value of the scratchpad register is displayed in both the header and the
+footer. After reading the scratchpad value for the header, the value is
+incremented and written back to the device, such that the scratchpad footer
+value should always be equal to the header value + 1. This can be useful a debug
+aid to confirm communications.</p>
 </section>
 <section id="dac-operations">
 <h3>DAC Operations<a class="headerlink" href="#dac-operations" title="Link to this heading"></a></h3>
-<p>This menu provides the ability to set the Input and DAC register values, and control the update of the DAC using both the hardware and software LDAC functions. The ordering of menu items is intended to follow the order in which actions are typically performed by the user.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/product-support-software/ad5770r/dac_operations.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/product-support-software/ad5770r/dac_operations.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/product-support-software/ad5770r/dac_operations.jpg" style="width: 400px;" />
+<p>This menu provides the ability to set the Input and DAC register values, and
+control the update of the DAC using both the hardware and software LDAC
+functions. The ordering of menu items is intended to follow the order in which
+actions are typically performed by the user.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/product-support-software/ad5770r/dac_operations.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/product-support-software/ad5770r/dac_operations.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/product-support-software/ad5770r/dac_operations.jpg" width="400" />
 </a>
 <p>There are three ways in which the DAC output may be controlled using this menu.</p>
 <ul class="simple">
@@ -693,11 +718,16 @@ Content on this topic
 <li><p>Write to Input Channel(s), toggle hardware LDAC</p></li>
 <li><p>Write to DAC Channel to directly update DAC output</p></li>
 </ul>
-<p>Toggling a channel in the software LDAC shadow sets a bit corresponding to that channel in a mask. This SW LDAC Channel shadow value can then be written in a single transaction, transferring the input to the DAC value for all of the channels which are set in the shadow mask.</p>
-<p>The channels affected by the hardware LDAC pin toggling are set in the ad5770r_user_config.h file at compile time.</p>
+<p>Toggling a channel in the software LDAC shadow sets a bit corresponding to that
+channel in a mask. This SW LDAC Channel shadow value can then be written in a
+single transaction, transferring the input to the DAC value for all of the
+channels which are set in the shadow mask.</p>
+<p>The channels affected by the hardware LDAC pin toggling are set in the
+ad5770r_user_config.h file at compile time.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The toggling of the hardware LDAC is outside of the AD5770R No-OS driver, and as such the DAC values are not updated by this action.</p>
+<p>The toggling of the hardware LDAC is outside of the AD5770R No-OS driver, and
+as such the DAC values are not updated by this action.</p>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>

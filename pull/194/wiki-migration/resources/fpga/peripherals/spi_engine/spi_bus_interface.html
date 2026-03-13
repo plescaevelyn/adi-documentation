@@ -653,12 +653,17 @@ Content on this topic
 <section id="io-configuration">
 <h2>IO configuration<a class="headerlink" href="#io-configuration" title="Link to this heading"></a></h2>
 <img alt="https://wiki.analog.com/_media/resources/fpga/peripherals/spi_engine/spi_bus.png" class="align-right" src="https://wiki.analog.com/_media/resources/fpga/peripherals/spi_engine/spi_bus.png" />
-<p>The SPI bus interface only carries a logical representation of the low-level SPI bus signals. The top-level module in the FPGA design project is responsible for translating the signal to physical SPI bus signals by instantiating and connecting it to appropriate IO primitives.</p>
+<p>The SPI bus interface only carries a logical representation of the low-level SPI
+bus signals. The top-level module in the FPGA design project is responsible for
+translating the signal to physical SPI bus signals by instantiating and
+connecting it to appropriate IO primitives.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">sclk</span></code> and <code class="docutils literal notranslate"><span class="pre">cs</span></code> signals can typically be directly connected to a output buffer. <code class="docutils literal notranslate"><span class="pre">sdi</span></code> should be connected to a mux, that depending on the setting of the <code class="docutils literal notranslate"><span class="pre">three_wire</span></code> signal connects to a input buffer connected to the <code class="docutils literal notranslate"><span class="pre">miso</span></code> signal or to a input buffer connected to the <code class="docutils literal notranslate"><span class="pre">mosi</span></code> signal. The <code class="docutils literal notranslate"><span class="pre">sdo</span></code> signal should be connected to a output tri-state buffer with the <code class="docutils literal notranslate"><span class="pre">sdo_t</span></code> signal controlling the tri-state setting.</p>
 <p>In some configurations three-wire support may not be required and <code class="docutils literal notranslate"><span class="pre">sdi</span></code> can directly be connected to the input buffer for the <code class="docutils literal notranslate"><span class="pre">miso</span></code> signal. Similarly when <code class="docutils literal notranslate"><span class="pre">mosi</span></code> tri-stating is not required the <code class="docutils literal notranslate"><span class="pre">sdo</span></code> signal can be directly connected to the <code class="docutils literal notranslate"><span class="pre">mosi</span></code> signal leaving the <code class="docutils literal notranslate"><span class="pre">sdo_t</span></code> signal unconnected.</p>
 <section id="example-verilog-io-configuration">
 <h3>Example Verilog IO configuration<a class="headerlink" href="#example-verilog-io-configuration" title="Link to this heading"></a></h3>
-<p>The following example Verilog code shows the most generic IO configuration, which represents the diagram above. Depending on system requirements some simplification might be possible.</p>
+<p>The following example Verilog code shows the most generic IO configuration,
+which represents the diagram above. Depending on system requirements some
+simplification might be possible.</p>
 <p>Signals with <strong>phy</strong> prefix are assumed to be connected to the physical input/output pins and signals with the <strong>spi</strong> prefix are assumed to be connected SPI-Engine bus interface.</p>
 <div class="highlight-verilog notranslate"><div class="highlight"><pre><span></span><span class="k">assign</span><span class="w"> </span><span class="n">phy_sclk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spi_sclk</span><span class="p">;</span>
 <span class="k">assign</span><span class="w"> </span><span class="n">phy_cs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spi_cs</span><span class="p">;</span>

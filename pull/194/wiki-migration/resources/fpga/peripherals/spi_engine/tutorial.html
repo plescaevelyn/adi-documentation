@@ -744,12 +744,18 @@ Content on this topic
 </tbody>
 </table>
 </div>
-<p>The device with the most demanding timing specifications is the AD7984. It requires the highest amount of data (18 bit) to be read in the least amount of time (T_ACQ 250ns). The other devices will work with the same HDL by just using different “downgraded” configurations.</p>
+<p>The device with the most demanding timing specifications is the AD7984. It
+requires the highest amount of data (18 bit) to be read in the least amount of
+time (T_ACQ 250ns). The other devices will work with the same HDL by just using
+different “downgraded” configurations.</p>
 </section>
 <section id="spi-engine-hierarchy-instantiation">
 <h2>SPI Engine hierarchy instantiation<a class="headerlink" href="#spi-engine-hierarchy-instantiation" title="Link to this heading"></a></h2>
 <p>The SPI Engine can be implemented in two ways, either by placing and connecting each IP individually or by using the function provided by the spi_engine.tcl script <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/scripts/spi_engine.tcl" target="_blank">library/spi_engine/scripts/spi_engine.tcl</a></p>
-<p>Using the script ensures that the correct connections are being made and that the IP cores will receive the correct parameter configuration since certain parameters need to be set to the same value. The function takes the following argumets</p>
+<p>Using the script ensures that the correct connections are being made and that
+the IP cores will receive the correct parameter configuration since certain
+parameters need to be set to the same value. The function takes the following
+argumets</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proc</span> <span class="n">spi_engine_create</span> <span class="p">{{</span><span class="n">name</span> <span class="s2">&quot;spi_engine&quot;</span><span class="p">}</span> <span class="p">{</span><span class="n">data_width</span> <span class="mi">32</span><span class="p">}</span> <span class="p">{</span><span class="n">async_spi_clk</span> <span class="mi">1</span><span class="p">}</span> <span class="p">{</span><span class="n">num_cs</span> <span class="mi">1</span><span class="p">}</span> <span class="p">{</span><span class="n">num_sdi</span> <span class="mi">1</span><span class="p">}</span> <span class="p">{</span><span class="n">sdi_delay</span> <span class="mi">0</span><span class="p">}</span> <span class="p">{</span><span class="n">echo_sclk</span> <span class="mi">0</span><span class="p">}}</span>
 </pre></div>
 </div>
@@ -775,11 +781,16 @@ spi_engine_create $hier_spi_engine $data_width $async_spi_clk $num_cs $num_sdi $
 </section>
 <section id="spi-engine-reference-clock">
 <h2>SPI Engine reference clock<a class="headerlink" href="#spi-engine-reference-clock" title="Link to this heading"></a></h2>
-<p>There are 3 categories of devices depending on the SPI interface clock (SCLK): 80 MHz, 50MHz (one device) and 40MHz. SCLK will be derived from the spi_clk reference signal using an internal prescaler with this formula</p>
+<p>There are 3 categories of devices depending on the SPI interface clock (SCLK):
+80 MHz, 50MHz (one device) and 40MHz. SCLK will be derived from the spi_clk
+reference signal using an internal prescaler with this formula</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f_sclk</span> <span class="o">=</span> <span class="n">f_clk</span> <span class="o">/</span> <span class="p">((</span><span class="n">div</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Therefore a 160MHz reference clock will be needed for the 40 and 80MHz variants and 100MHz for the 50MHz SCLK. The axi_clkgen IP core will be used to obtain the 160MHz which will be the default value to ensure that the design bitstream meets timing. This IP can also be configured from software to output 100MHz.</p>
+<p>Therefore a 160MHz reference clock will be needed for the 40 and 80MHz variants
+and 100MHz for the 50MHz SCLK. The axi_clkgen IP core will be used to obtain the
+160MHz which will be the default value to ensure that the design bitstream meets
+timing. This IP can also be configured from software to output 100MHz.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ad_ip_instance</span> <span class="n">axi_clkgen</span> <span class="n">spi_clkgen</span>
 <span class="n">ad_ip_parameter</span> <span class="n">spi_clkgen</span> <span class="n">CONFIG</span><span class="o">.</span><span class="n">CLK0_DIV</span> <span class="mi">5</span>
 <span class="n">ad_ip_parameter</span> <span class="n">spi_clkgen</span> <span class="n">CONFIG</span><span class="o">.</span><span class="n">VCO_DIV</span> <span class="mi">1</span>
@@ -797,7 +808,8 @@ ad_connect spi_clk axi_pulsar_adc_dma/s_axis_aclk
 <section id="ad7984-timing-diagram">
 <h2>AD7984 Timing diagram<a class="headerlink" href="#ad7984-timing-diagram" title="Link to this heading"></a></h2>
 <img alt="https://wiki.analog.com/_media/resources/fpga/peripherals/spi_engine/ad7984_timing.png" class="align-right" src="https://wiki.analog.com/_media/resources/fpga/peripherals/spi_engine/ad7984_timing.png" />
-<p>The above image shows the wave forms for a particular operating mode supported by the device which will be implemented using the SPI Engine in offload mode.</p>
+<p>The above image shows the wave forms for a particular operating mode supported
+by the device which will be implemented using the SPI Engine in offload mode.</p>
 <p>Key timing characteristics</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">18</span> <span class="n">bit</span> <span class="n">transfers</span>
 <span class="mi">750</span> <span class="n">ns</span> <span class="n">T_CYC</span>
@@ -808,7 +820,11 @@ ad_connect spi_clk axi_pulsar_adc_dma/s_axis_aclk
 </div>
 <section id="sample-rate-control">
 <h3>Sample rate control<a class="headerlink" href="#sample-rate-control" title="Link to this heading"></a></h3>
-<p>The T_CYC parameter is the what sets the maximum sample rate (1/750 =&gt; 1333 KSPS). To achieve precise control over the the sample rate we will use a PWM generator (AXI PWM GEN) using the spi_clk as reference. The spi_clock is used to avoid clock domain crossing mechanisms which will introduce latency, decreasing the overall performance of the system.</p>
+<p>The T_CYC parameter is the what sets the maximum sample rate (1/750 =&gt; 1333
+KSPS). To achieve precise control over the the sample rate we will use a PWM
+generator (AXI PWM GEN) using the spi_clk as reference. The spi_clock is used to
+avoid clock domain crossing mechanisms which will introduce latency, decreasing
+the overall performance of the system.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ad_ip_instance axi_pwm_gen pulsar_adc_trigger_gen
 ad_ip_parameter pulsar_adc_trigger_gen CONFIG.PULSE_0_PERIOD 120
 ad_ip_parameter pulsar_adc_trigger_gen CONFIG.PULSE_0_WIDTH 1
@@ -819,11 +835,15 @@ ad_connect sys_cpu_resetn pulsar_adc_trigger_gen/s_axi_aresetn
 ad_connect pulsar_adc_trigger_gen/pwm_0  $hier_spi_engine/offload/trigger
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/peripherals/spi_engine/pwm_trigger_1.png"><img alt="https://wiki.analog.com/_media/resources/fpga/peripherals/spi_engine/pwm_trigger_1.png" class="align-right" src="https://wiki.analog.com/_media/resources/fpga/peripherals/spi_engine/pwm_trigger_1.png" style="width: 500px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/peripherals/spi_engine/pwm_trigger_1.png"><img alt="https://wiki.analog.com/_media/resources/fpga/peripherals/spi_engine/pwm_trigger_1.png" class="align-right" src="https://wiki.analog.com/_media/resources/fpga/peripherals/spi_engine/pwm_trigger_1.png" width="500" />
 </a>
-<p>Since the AXI PWM IP core is connected to the system with AXI4 Lite, the software will be able to change the frequency of its output at any time. The resolution of the PWM period is the reference clock period (spi_clk) providing a wide range of options.</p>
+<p>Since the AXI PWM IP core is connected to the system with AXI4 Lite, the
+software will be able to change the frequency of its output at any time. The
+resolution of the PWM period is the reference clock period (spi_clk) providing a
+wide range of options.</p>
 <p>The PWM output will be used as a trigger signal for the offload IP core.</p>
-<p>The CS signal will be used to drive CNV and will have the same frequency as the PWM-trgger signal.</p>
+<p>The CS signal will be used to drive CNV and will have the same frequency as the
+PWM-trgger signal.</p>
 </section>
 </section>
 <section id="dma-setup">
@@ -841,7 +861,8 @@ ad_ip_parameter axi_pulsar_adc_dma CONFIG.DMA_DATA_WIDTH_SRC $data_width //32
 ad_ip_parameter axi_pulsar_adc_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 </pre></div>
 </div>
-<p>The system clock is used as destination clock and the spi_clk is used as source clock</p>
+<p>The system clock is used as destination clock and the spi_clk is used as source
+clock</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ad_connect spi_clk axi_pulsar_adc_dma/s_axis_aclk
 ad_mem_hp1_interconnect $sys_cpu_clk axi_pulsar_adc_dma/m_dest_axi
 </pre></div>
@@ -849,11 +870,20 @@ ad_mem_hp1_interconnect $sys_cpu_clk axi_pulsar_adc_dma/m_dest_axi
 </section>
 <section id="system-top">
 <h2>System Top<a class="headerlink" href="#system-top" title="Link to this heading"></a></h2>
-<p>This is a layer on top of the system_wrapper generated by Vivado used to instantiate IO buffers, I/ODDRs or to create some custom connections which would be harder to do in the block design. It also alows for more consistency across projects. In this particular case we use it to place an IO buffer for the ADC power down signal (pulsar_adc_spi_pd).</p>
+<p>This is a layer on top of the system_wrapper generated by Vivado used to
+instantiate IO buffers, I/ODDRs or to create some custom connections which would
+be harder to do in the block design. It also alows for more consistency across
+projects. In this particular case we use it to place an IO buffer for the ADC
+power down signal (pulsar_adc_spi_pd).</p>
 </section>
 <section id="system-constraints">
 <h2>System Constraints<a class="headerlink" href="#system-constraints" title="Link to this heading"></a></h2>
-<p>The system_constr.xdc file inside the carrier folder (/coraz7s/system_constr.xdc) is used for defining the physical FPGA pins used by this particular project (in this case the AD7984 ADC), excluding the “common” design for the carrier board which has a separate constraints file (i.e. DDR pins, Ethernet, UART etc). It also contains some timing constraints specific to the SPI Engine.</p>
+<p>The system_constr.xdc file inside the carrier folder
+(/coraz7s/system_constr.xdc) is used for defining the physical FPGA pins used by
+this particular project (in this case the AD7984 ADC), excluding the “common”
+design for the carrier board which has a separate constraints file (i.e. DDR
+pins, Ethernet, UART etc). It also contains some timing constraints specific to
+the SPI Engine.</p>
 <p>create_generated_clock -name spi_clk -source [get_pins -filter name=~*CLKIN1 -of [get_cells -hier -filter name=~*spi_clkgen*i_mmcm]] -master_clock clk_fpga_0 [get_pins -filter name=~*CLKOUT0 -of [get_cells -hier -filter name=~*spi_clkgen*i_mmcm]]</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># relax the SDO path to help closing timing at high frequencies</span>
 <span class="n">set_multicycle_path</span> <span class="o">-</span><span class="n">setup</span> <span class="mi">8</span> <span class="o">-</span><span class="n">to</span> <span class="p">[</span><span class="n">get_cells</span> <span class="o">-</span><span class="n">hierarchical</span> <span class="o">-</span><span class="nb">filter</span> <span class="p">{</span><span class="n">NAME</span><span class="o">=~*/</span><span class="n">data_sdo_shift_reg</span><span class="p">[</span><span class="o">*</span><span class="p">]}]</span> <span class="o">-</span><span class="kn">from</span><span class="w"> </span><span class="p">[</span><span class="n">get_clocks</span> <span class="n">spi_clk</span><span class="p">]</span>
@@ -872,14 +902,18 @@ ad_mem_hp1_interconnect $sys_cpu_clk axi_pulsar_adc_dma/m_dest_axi
 </section>
 <section id="evaluating-the-result">
 <h2>Evaluating the result<a class="headerlink" href="#evaluating-the-result" title="Link to this heading"></a></h2>
-<p>Due to the limits of the SPI Engine cores, T_CYC needs to be increased slightly over the minimum value, to ensure that the design meets the T_CONV minimum. This will slightly lower the maximum sample rate of the design from 1.333 MSPS to 1.322 MSPS.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/peripherals/spi_engine/pulsar_hdl_timing_2.png"><img alt="pulsar_hdl_timing_2.png" class="align-right" src="https://wiki.analog.com/_media/resources/fpga/peripherals/spi_engine/pulsar_hdl_timing_2.png" style="width: 1000px;" />
+<p>Due to the limits of the SPI Engine cores, T_CYC needs to be increased slightly
+over the minimum value, to ensure that the design meets the T_CONV minimum. This
+will slightly lower the maximum sample rate of the design from 1.333 MSPS to
+1.322 MSPS.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/peripherals/spi_engine/pulsar_hdl_timing_2.png"><img alt="pulsar_hdl_timing_2.png" class="align-right" src="https://wiki.analog.com/_media/resources/fpga/peripherals/spi_engine/pulsar_hdl_timing_2.png" width="1000" />
 </a>
 <p>Holding CS high for 500ns ensures that we always meet T_CONV minimum.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/fpga/peripherals/spi_engine/pulsar_hdl_timing_3.png"><img alt="pulsar_hdl_timing_3.png" src="https://wiki.analog.com/_media/resources/fpga/peripherals/spi_engine/pulsar_hdl_timing_3.png" style="width: 1000px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/fpga/peripherals/spi_engine/pulsar_hdl_timing_3.png"><img alt="pulsar_hdl_timing_3.png" src="https://wiki.analog.com/_media/resources/fpga/peripherals/spi_engine/pulsar_hdl_timing_3.png" width="1000" /></a></p>
 <p>The 250ns minimum T_ACQ is alse met with a slightly higher value of 256.25ns.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/fpga/peripherals/spi_engine/pulsar_hdl_timing_4.png"><img alt="pulsar_hdl_timing_4.png" src="https://wiki.analog.com/_media/resources/fpga/peripherals/spi_engine/pulsar_hdl_timing_4.png" style="width: 1000px;" /></a></p>
-<p>Overall the project appears to be functional and ready for the next step in development, using software.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/fpga/peripherals/spi_engine/pulsar_hdl_timing_4.png"><img alt="pulsar_hdl_timing_4.png" src="https://wiki.analog.com/_media/resources/fpga/peripherals/spi_engine/pulsar_hdl_timing_4.png" width="1000" /></a></p>
+<p>Overall the project appears to be functional and ready for the next step in
+development, using software.</p>
 <section id="software-section">
 <h3>Software section<a class="headerlink" href="#software-section" title="Link to this heading"></a></h3>
 <div class="admonition important">

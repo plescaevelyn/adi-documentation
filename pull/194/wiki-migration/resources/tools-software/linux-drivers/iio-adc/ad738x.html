@@ -714,7 +714,9 @@ Content on this topic
 <span class="p">};</span>
 </pre></div>
 </div>
-<p>If the specific application has wiring that can’t handle the max SPI SCLK rate for the ADC chip, a lower max rate can be specified, otherwise use the max rate from the datasheet (which may be different for some chips).</p>
+<p>If the specific application has wiring that can’t handle the max SPI SCLK rate
+for the ADC chip, a lower max rate can be specified, otherwise use the max rate
+from the datasheet (which may be different for some chips).</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">spi-cpol</span></code> flags also need to be set to ensure the correct settings for the clock polarity.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">spi</span><span class="o">-</span><span class="nb">max</span><span class="o">-</span><span class="n">frequency</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mi">80000000</span><span class="o">&gt;</span><span class="p">;</span> <span class="o">/*</span> <span class="mf">12.5</span> <span class="n">ns</span> <span class="n">period</span> <span class="o">*/</span>
 <span class="n">spi</span><span class="o">-</span><span class="n">cpol</span><span class="p">;</span>
@@ -735,20 +737,24 @@ Content on this topic
 </section>
 <section id="reference-supplies">
 <h2>Reference supplies<a class="headerlink" href="#reference-supplies" title="Link to this heading"></a></h2>
-<p>The default of the evaluation boards is to use a 3.3V external reference wired to the REFIO pin. This is described with:</p>
+<p>The default of the evaluation boards is to use a 3.3V external reference wired
+to the REFIO pin. This is described with:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">refio</span><span class="o">-</span><span class="n">supply</span> <span class="o">=</span> <span class="o">&lt;&amp;</span><span class="n">eval_u3</span><span class="o">&gt;</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>To use the internal reference instead, omit this property.</p>
-<p>AD7380-4 and the ADAQ chips are an exception. They have an internal reference, but still requires an extra supply that is connected to the REFIN pin.</p>
+<p>AD7380-4 and the ADAQ chips are an exception. They have an internal reference,
+but still requires an extra supply that is connected to the REFIN pin.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">refin</span><span class="o">-</span><span class="n">supply</span> <span class="o">=</span> <span class="o">&lt;&amp;</span><span class="n">eval_u3</span><span class="o">&gt;</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>AD7389-4 is another exception. It only has an internal reference, so both properties are always omitted.</p>
+<p>AD7389-4 is another exception. It only has an internal reference, so both
+properties are always omitted.</p>
 </section>
 <section id="common-mode-supplies">
 <h2>Common mode supplies<a class="headerlink" href="#common-mode-supplies" title="Link to this heading"></a></h2>
-<p>Some chips in this series are pseudo-differential ADCs. In this case, a voltage supply is needed for each negative input on the chip.</p>
+<p>Some chips in this series are pseudo-differential ADCs. In this case, a voltage
+supply is needed for each negative input on the chip.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">aina</span><span class="o">-</span><span class="n">supply</span> <span class="o">=</span> <span class="o">&lt;&amp;</span><span class="n">signal_generator_1</span><span class="o">&gt;</span><span class="p">;</span>
 <span class="n">ainb</span><span class="o">-</span><span class="n">supply</span> <span class="o">=</span> <span class="o">&lt;&amp;</span><span class="n">signal_generator_2</span><span class="o">&gt;</span><span class="p">;</span>
 </pre></div>
@@ -835,7 +841,8 @@ Content on this topic
 <section id="spi-offload-trigger">
 <h3>SPI offload trigger<a class="headerlink" href="#spi-offload-trigger" title="Link to this heading"></a></h3>
 <p>When using this chip with a SPI controller with offload capabilities, there will be <code class="docutils literal notranslate"><span class="pre">in_voltage_sampling_frequency</span></code> and <code class="docutils literal notranslate"><span class="pre">in_voltage_sampling_frequency_available</span></code> attributes on the IIO device. The <code class="docutils literal notranslate"><span class="pre">in_voltage_sampling_frequency</span></code> attribute will control the frequency of the hardware trigger, e.g. a PWM output. The <code class="docutils literal notranslate"><span class="pre">in_voltage_sampling_frequency_available</span></code> can be used to obtain the maximum sample rate (datasheet value).</p>
-<p>No manual setup of the trigger is needed other than setting the desired sample rate.</p>
+<p>No manual setup of the trigger is needed other than setting the desired sample
+rate.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>There is a quirk with single-ended chips. Due to the MUX to switch between banks of inputs, the effective sample rate is 1/2 of the <code class="docutils literal notranslate"><span class="pre">in_voltage_sampling_frequency</span></code> value when all channels are enabled at the same time in a buffered read. If only 1/2 of the channels are enabled, the MUX doesn’t have to switch and the effective sample rate will match <code class="docutils literal notranslate"><span class="pre">in_voltage_sampling_frequency</span></code>.</p>
@@ -843,10 +850,18 @@ Content on this topic
 </section>
 <section id="conventional-iio-trigger">
 <h3>Conventional IIO trigger<a class="headerlink" href="#conventional-iio-trigger" title="Link to this heading"></a></h3>
-<p>If deviceX supports triggered sampling, it’s a so called trigger consumer and there will be an additional folder /sys/bus/iio/device/iio:deviceX/trigger. In this folder there is a file called current_trigger, allowing controlling and viewing the current trigger source connected to deviceX. Available trigger sources can be identified by reading the name file /sys/bus/iio/devices/triggerY/name. The same trigger source can connect to multiple devices, so a single trigger may initialize data capture or reading from a number of sensors, converters, etc.</p>
+<p>If deviceX supports triggered sampling, it’s a so called trigger consumer and
+there will be an additional folder /sys/bus/iio/device/iio:deviceX/trigger. In
+this folder there is a file called current_trigger, allowing controlling and
+viewing the current trigger source connected to deviceX. Available trigger
+sources can be identified by reading the name file
+/sys/bus/iio/devices/triggerY/name. The same trigger source can connect to
+multiple devices, so a single trigger may initialize data capture or reading
+from a number of sensors, converters, etc.</p>
 <p>This driver uses <strong>high resolution timers</strong> as interrupt source</p>
 <p><strong>Description:</strong> Hrtimer triggers creation and destruction</p>
-<p>Loading iio-trig-hrtimer module will register hrtimer trigger types allowing users to create hrtimer triggers:</p>
+<p>Loading iio-trig-hrtimer module will register hrtimer trigger types allowing
+users to create hrtimer triggers:</p>
 <div class="box bggreen docutils container">
 <p>This specifies any shell prompt running on the target</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">config</span><span class="o">/</span><span class="n">iio</span><span class="o">/</span><span class="n">triggers</span><span class="o">/</span><span class="n">hrtimer</span><span class="o">/&gt;</span> <span class="n">mkdir</span> <span class="n">trigger0</span>
@@ -910,12 +925,18 @@ Content on this topic
 </div>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>When using the driver with SPI offloading, all channels must be enabled for buffered reads, otherwise enabling the buffer will fail with an error.</p>
-<p>There is one exception to this for single-ended chips. Since there is a MUX, enabling 1/2 of the channels is also permitted as long as all of the enabled channels have the same MUX position (the first contiguous 1/2 or the last contiguous 1/2).</p>
+<p>When using the driver with SPI offloading, all channels must be enabled for
+buffered reads, otherwise enabling the buffer will fail with an error.</p>
+<p>There is one exception to this for single-ended chips. Since there is a MUX,
+enabling 1/2 of the channels is also permitted as long as all of the enabled
+channels have the same MUX position (the first contiguous 1/2 or the last
+contiguous 1/2).</p>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>When using SPI offloading, the software timestamp attributes will not be present. This is due to having a hardware trigger in this case vs. a software trigger.</p>
+<p>When using SPI offloading, the software timestamp attributes will not be
+present. This is due to having a hardware trigger in this case vs. a software
+trigger.</p>
 </div>
 <p><strong>in_voltageX_en / in_voltageX-voltageY_en / timestamp_en:</strong> Scan element control for triggered data capture. Writing 1 will enable the scan element, writing 0 will disable it</p>
 <p><strong>in_voltageX_type / in_voltageX-voltageY_type / timestamp_type:</strong> Description of the scan element data storage within the buffer and therefore in the form in which it is read from user-space. Form is [s|u]bits/storage-bits. s or u specifies if signed (2’s complement) or unsigned. bits is the number of bits of data and storage-bits is the space (after padding) that it occupies in the buffer. Note that some devices will have additional information in the unused bits so to get a clean value, the bits value must be used to mask the buffer output value appropriately. The storage-bits value also specifies the data alignment. So u12/16 will be a unsigned 12 bit integer stored in a 16 bit location aligned to a 16 bit boundary. For other storage combinations this attribute will be extended appropriately.</p>
@@ -924,7 +945,8 @@ Content on this topic
 <section id="oversampling">
 <h2>Oversampling<a class="headerlink" href="#oversampling" title="Link to this heading"></a></h2>
 <p>This family of chips has two types of oversampling/averaging built into the hardware, <em>Normal average oversampling</em> and <em>rolling average oversampling</em>.</p>
-<p>Using rolling average oversampling is not supported in the Linux driver. Instead the data read can be averaged in software to achieve the same result.</p>
+<p>Using rolling average oversampling is not supported in the Linux driver. Instead
+the data read can be averaged in software to achieve the same result.</p>
 <p>Normal averaging oversampling is supported via the <code class="docutils literal notranslate"><span class="pre">in_voltage_oversampling_ratio</span></code> and <code class="docutils literal notranslate"><span class="pre">in_voltage_oversampling_ratio_available</span></code> attributes.</p>
 <p>The latter can be read to get a list of supported values.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cat in_voltage_oversampling_ratio_available
@@ -932,7 +954,8 @@ Content on this topic
 </pre></div>
 </div>
 <p>Writing a value greater than 1 to <code class="docutils literal notranslate"><span class="pre">in_voltage_oversampling_ratio</span></code> will enable oversampling and writing <code class="docutils literal notranslate"><span class="pre">1</span></code> will disable oversampling.</p>
-<p>When oversampling is enabled, the resolution boost feature of the chip is also turned on.</p>
+<p>When oversampling is enabled, the resolution boost feature of the chip is also
+turned on.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>The resolution boost changes the <code class="docutils literal notranslate"><span class="pre">scan_type</span></code> for buffered reads. Older versions of <code class="docutils literal notranslate"><span class="pre">libiio</span></code> do not expect this to change. So you may need restart <code class="docutils literal notranslate"><span class="pre">iiod</span></code>, for example, in order for it to pick up the change after oversampling is enabled. Otherwise it could misinterpret the data it is reading thinking it has a different binary format.</p>
@@ -942,7 +965,8 @@ Content on this topic
 <h2>Alert output<a class="headerlink" href="#alert-output" title="Link to this heading"></a></h2>
 <p>The thresholds that drive the ALERT output on the chip are accessed via the <code class="docutils literal notranslate"><span class="pre">events/in_thresh_falling_value</span></code> (low) and <code class="docutils literal notranslate"><span class="pre">events/in_thresh_falling_value</span></code> (high) attributes.</p>
 <p>These values are in raw units, so to set a specific voltage, the values of the <code class="docutils literal notranslate"><span class="pre">scale</span></code> attribute (and <code class="docutils literal notranslate"><span class="pre">offset</span></code> if present) needs to be taken into account.</p>
-<p>For example, if the reference voltage is 3.3V, the scale will be 0.050354003 which makes the default rising threshold 32768 * 0.050354003 = 1650 mV.</p>
+<p>For example, if the reference voltage is 3.3V, the scale will be 0.050354003
+which makes the default rising threshold 32768 * 0.050354003 = 1650 mV.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">events/thresh_either_en</span></code> attribute is used to enable or disable the /ALERT output pin on the chip. (If all SDO lines are being used, this will have no effect.)</p>
 <p>Reading events via the <code class="docutils literal notranslate"><span class="pre">/dev/iio:deviceX</span></code> character device is not implemented in the driver.</p>
 </section>

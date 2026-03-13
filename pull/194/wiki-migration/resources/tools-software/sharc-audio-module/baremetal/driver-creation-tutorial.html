@@ -591,37 +591,55 @@ Content on this topic
             
   <section id="tutorial-creating-drivers-for-audio-components-using-sigmastudio">
 <h1>Tutorial: Creating drivers for audio components using SigmaStudio<a class="headerlink" href="#tutorial-creating-drivers-for-audio-components-using-sigmastudio" title="Link to this heading"></a></h1>
-<p>The bare metal framework is very extensible. In this tutorial, we’re going to explore adding new audio components (e.g. a codec, a MEMS microphone, etc.) to our system. Most audio components have both an I2S interface for audio and either an SPI or I2C interface for control.</p>
-<p>This tutorial will cover how to configure a new audio component, with SigmaStudio, and then use this configuration in the bare metal framework to initialize it.</p>
+<p>The bare metal framework is very extensible. In this tutorial, we’re going to
+explore adding new audio components (e.g. a codec, a MEMS microphone, etc.) to
+our system. Most audio components have both an I2S interface for audio and
+either an SPI or I2C interface for control.</p>
+<p>This tutorial will cover how to configure a new audio component, with
+SigmaStudio, and then use this configuration in the bare metal framework to
+initialize it.</p>
 </section>
 <section id="creating-drivers-for-audio-components">
 <h1>Creating Drivers for Audio Components<a class="headerlink" href="#creating-drivers-for-audio-components" title="Link to this heading"></a></h1>
 <section id="part-1-creating-and-initializing-the-audio-component-over-twi-i2c">
 <h2>Part 1: Creating and initializing the audio component over TWI/I2C<a class="headerlink" href="#part-1-creating-and-initializing-the-audio-component-over-twi-i2c" title="Link to this heading"></a></h2>
-<p>If you are using an audio component from Analog Devices, SigmaStudio can very likely be used to generate a set of configuration parameters with which the bare metal framework can initialize the component.</p>
+<p>If you are using an audio component from Analog Devices, SigmaStudio can very
+likely be used to generate a set of configuration parameters with which the bare
+metal framework can initialize the component.</p>
 <p>First, if you don’t already have SigmaStudio installed, get the latest version from <a class="icon link reference external" href="http://www.analog.com/sigmastudio" target="_blank">http://www.analog.com/sigmastudio</a>.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>It’s important to download and install SigmaStudio and not SigmaStudio for SHARC.</p>
+<p>It’s important to download and install SigmaStudio and not SigmaStudio for
+SHARC.</p>
 </div>
-<p>In this example, we will show how to configure and connect the ADI SSM3582 (a Class D amplifier) to our system over I2C.</p>
+<p>In this example, we will show how to configure and connect the ADI SSM3582 (a
+Class D amplifier) to our system over I2C.</p>
 <section id="step-1-create-and-configure-the-component-in-sigmastudio">
 <h3>Step 1: Create and configure the component in SigmaStudio<a class="headerlink" href="#step-1-create-and-configure-the-component-in-sigmastudio" title="Link to this heading"></a></h3>
-<p>Open up SigmaStudo. It will default to a blank project. If not, create a new project with File-&gt;New Project. We’re going to save our project within the framework so we can easily access the files that we export. Save your project into the following path:</p>
+<p>Open up SigmaStudo. It will default to a blank project. If not, create a new
+project with File-&gt;New Project. We’re going to save our project within the
+framework so we can easily access the files that we export. Save your project
+into the following path:</p>
 <p><code class="docutils literal notranslate"><span class="pre">C:\Analog</span> <span class="pre">Devices\SAM_BareMetal_SDK-Rel1.0.0\framework\drivers\bm_adau_driver\configurations\ss_schematics</span></code></p>
 <p>Let’s call our project <code class="docutils literal notranslate"><span class="pre">SSM3582_basic.dspproj</span></code>. You will see other projects in that directory, they correspond to preexisting drivers in the framework (more on this later).</p>
-<p>Look for the component we’re interested in within the table on the left hand side and drag an instance of that component into our hardware configuration tab. Once we’ve dragged it in, click on the grey text within the box (IC initially), and give the component a more descriptive name. Our exported files will use this stub so it will make it easier to keep track of things.</p>
+<p>Look for the component we’re interested in within the table on the left hand
+side and drag an instance of that component into our hardware configuration tab.
+Once we’ve dragged it in, click on the grey text within the box (IC initially),
+and give the component a more descriptive name. Our exported files will use this
+stub so it will make it easier to keep track of things.</p>
 <img alt="Adding a component" src="https://wiki.analog.com/_media/resources/tools-software/sharc-audio-module/baremetal/sigmastudio-1.png" />
 <p>Click on the configuration tab for this component at the bottom of the <strong>Hardware Configuration</strong> pane. Click on the <strong>Chip/SAI/DAC Control</strong> tab. You will see a graphical interface with a number of options. Note that there are several tabs across the top, each with more options.</p>
 <img alt="Configuring the component" src="https://wiki.analog.com/_media/resources/tools-software/sharc-audio-module/baremetal/sigmastudio-2.png" />
-<p>In our case, the default options are what is needed. So, without changing these settings, carry on reading through Step 2 to export the configuration files.</p>
+<p>In our case, the default options are what is needed. So, without changing these
+settings, carry on reading through Step 2 to export the configuration files.</p>
 </section>
 <section id="step-2-export-the-configuration">
 <h3>Step 2: Export the configuration<a class="headerlink" href="#step-2-export-the-configuration" title="Link to this heading"></a></h3>
 <p>In the Action menu, select <strong>Link Compile Download</strong>.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>It will appear that nothing has happened but SigmaStudio has indeed compiled the configuration options for this project.</p>
+<p>It will appear that nothing has happened but SigmaStudio has indeed compiled
+the configuration options for this project.</p>
 </div>
 <p>After this, select <strong>Export System Files</strong> (immediately below Link Compile Download).</p>
 <img alt="Link/Compile/Download" src="https://wiki.analog.com/_media/resources/tools-software/sharc-audio-module/baremetal/sigmastudio-lcd.png" />
@@ -634,7 +652,8 @@ Content on this topic
 <h3>Step 3: Connect the init files into the bare metal framework<a class="headerlink" href="#step-3-connect-the-init-files-into-the-bare-metal-framework" title="Link to this heading"></a></h3>
 <p>A set of intermediate files provide a C <code class="docutils literal notranslate"><span class="pre">struct</span></code> to access information held in the two <code class="docutils literal notranslate"><span class="pre">.dat</span></code> files generated at Step 2. This enables us to pass a pointer to this <code class="docutils literal notranslate"><span class="pre">struct</span></code> rather than managing links to the configuration files when we initialize our new driver.</p>
 <p>Import the bare metal framework projects in CCES (instructions <a class="reference internal" href="downloading-and-installing.html"><span class="doc">here</span></a>) and navigate to <code class="docutils literal notranslate"><span class="pre">${Core_0_Project}\src\drivers\bm_adau_driver\configurations</span></code>. You will find a number of <code class="docutils literal notranslate"><span class="pre">.c</span></code> files in this directory, each corresponding to a particular device. Notice that there is already a file for the <code class="docutils literal notranslate"><span class="pre">ssm3582_configuration.c</span></code>. Open it.</p>
-<p>Copy the “2ch_i2s_slave” configuration variables (shown below) and paste them again into the same file.</p>
+<p>Copy the “2ch_i2s_slave” configuration variables (shown below) and paste them
+again into the same file.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">ssm3582_2ch_i2s_slave_TxBuffer</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;drivers/bm_adau_driver/configurations/ss_schematics/Class_D_Fin/Exported_init_files/TxBuffer_SSM3582_1.dat&quot;</span>
 <span class="p">};</span>
@@ -650,7 +669,8 @@ Content on this topic
 </pre></div>
 </div>
 <p>Give new unique names to the copied configuration variables, and change the file paths to point to the <code class="docutils literal notranslate"><span class="pre">.dat</span></code> files generated at Step 2.</p>
-<p>The code snippet below shows an example of the copied configuration code, with new variable names:</p>
+<p>The code snippet below shows an example of the copied configuration code, with
+new variable names:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// My basic SSM3582 configuration</span>
 <span class="kt">uint8_t</span><span class="w"> </span><span class="n">SSM3582_basic_slave_TxBuffer</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;drivers/bm_adau_driver/configurations/ss_schematics/SSM3582-basic/Exported_init_files/TxBuffer_SSM3582.dat&quot;</span>

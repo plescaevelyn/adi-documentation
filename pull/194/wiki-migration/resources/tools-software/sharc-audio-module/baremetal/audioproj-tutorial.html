@@ -592,7 +592,7 @@ Content on this topic
   <section id="using-the-audio-project-fin-for-the-sharc-audio-module">
 <h1>Using the Audio Project Fin for the SHARC Audio Module<a class="headerlink" href="#using-the-audio-project-fin-for-the-sharc-audio-module" title="Link to this heading"></a></h1>
 <p>The <a class="reference internal" href="../hardware/audioproj-fin.html"><span class="doc">Audio Project Fin</span></a> is an extender board for the SHARC Audio Module that is designed to allow musicians and hobbyists to use the SHARC Audio Module in music and audio projects.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/sharc-audio-module/baremetal/diy.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/sharc-audio-module/baremetal/diy.jpg" src="https://wiki.analog.com/_media/resources/tools-software/sharc-audio-module/baremetal/diy.jpg" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/sharc-audio-module/baremetal/diy.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/sharc-audio-module/baremetal/diy.jpg" src="https://wiki.analog.com/_media/resources/tools-software/sharc-audio-module/baremetal/diy.jpg" width="600" />
 </a>
 <section id="audio-project-fin-features">
 <h2>Audio Project Fin Features<a class="headerlink" href="#audio-project-fin-features" title="Link to this heading"></a></h2>
@@ -604,7 +604,8 @@ Content on this topic
 <li><p>4 push buttons</p></li>
 <li><p>8 LEDS (one for each push button and four in a VU configuration)</p></li>
 <li><p>dedicated analog 5V and 9V supplies.</p></li>
-<li><p>circuit prototyping area with 100 mil headers for routing I/O to a panel or chassis</p>
+<li><p>circuit prototyping area with 100 mil headers for routing I/O to a panel or
+chassis</p>
 <ul>
 <li><p>4 additional LEDS</p></li>
 <li><p>HADC channels</p></li>
@@ -615,7 +616,8 @@ Content on this topic
 </ul>
 <section id="audio-project-support-in-the-baremetal-framework">
 <h3>Audio Project Support in the Baremetal Framework<a class="headerlink" href="#audio-project-support-in-the-baremetal-framework" title="Link to this heading"></a></h3>
-<p>The baremetal framework fully supports the various I/O features of the Audio Project Fin.</p>
+<p>The baremetal framework fully supports the various I/O features of the Audio
+Project Fin.</p>
 <p>To enable Audio Project Fin functionalities in the baremetal framework, open up <code class="docutils literal notranslate"><span class="pre">/common/audio_system_config.h</span></code> and define the <code class="docutils literal notranslate"><span class="pre">SAM_AUDIOPROJ_FIN_BOARD_PRESENT</span></code> macro as <code class="docutils literal notranslate"><span class="pre">TRUE</span></code>:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#define SAM_AUDIOPROJ_FIN_BOARD_PRESENT           TRUE</span>
 </pre></div>
@@ -625,9 +627,20 @@ Content on this topic
 </section>
 <section id="accessing-audio-on-the-1-4-stereo-jacks">
 <h2>Accessing Audio on the 1/4” Stereo Jacks<a class="headerlink" href="#accessing-audio-on-the-1-4-stereo-jacks" title="Link to this heading"></a></h2>
-<p>By default, the ADAU1761 is configured to mix together (in the mixing hardware upstream from the ADC) the audio from its primary and its AUX stereo inputs. The 1/4” input jack plug on the Audio Project Fin is connected to the AUX inputs of the ADAU1761. Thus, stereo signals from the Audio Project Fin 1/4” input jack and from the SHARC Audio Module 1/8” input jack are converted simultaneously in the same ADC channels.</p>
-<p>By default, the ADAU1761 is configured to route audio from its DAC to both its headphone (HP) and its primary stereo outputs. The 1/4” output jack plug on the Audio Project Fin is connected to the HP outputs of the ADAU1761. The 1/8” output jack plug on the SHARC Audio Module is connected to the primary outputs of the ADAU1761. Thus, stereo digital audio received by the ADAU1761 is output simultaneously to both the 1/4” jack plug on the Audio Project Fin and the 1/8” jack plug on the SHARC Audio Module board.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/sharc-audio-module/baremetal/tutorial-diy-adau1761.png"><img alt="ADAU1761 audio routing" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/sharc-audio-module/baremetal/tutorial-diy-adau1761.png" style="width: 600px;" />
+<p>By default, the ADAU1761 is configured to mix together (in the mixing hardware
+upstream from the ADC) the audio from its primary and its AUX stereo inputs. The
+1/4” input jack plug on the Audio Project Fin is connected to the AUX inputs of
+the ADAU1761. Thus, stereo signals from the Audio Project Fin 1/4” input jack
+and from the SHARC Audio Module 1/8” input jack are converted simultaneously in
+the same ADC channels.</p>
+<p>By default, the ADAU1761 is configured to route audio from its DAC to both its
+headphone (HP) and its primary stereo outputs. The 1/4” output jack plug on the
+Audio Project Fin is connected to the HP outputs of the ADAU1761. The 1/8”
+output jack plug on the SHARC Audio Module is connected to the primary outputs
+of the ADAU1761. Thus, stereo digital audio received by the ADAU1761 is output
+simultaneously to both the 1/4” jack plug on the Audio Project Fin and the 1/8”
+jack plug on the SHARC Audio Module board.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/sharc-audio-module/baremetal/tutorial-diy-adau1761.png"><img alt="ADAU1761 audio routing" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/sharc-audio-module/baremetal/tutorial-diy-adau1761.png" width="600" />
 </a>
 <p>For this reason, the same audio buffers are used for the 1/8” and the 1/4” audio jacks. Audio processing routines must be written in the SHARC Core 1 and 2 audio callback hooks, i.e. the <code class="docutils literal notranslate"><span class="pre">processaudio_callback()</span></code> function of <code class="docutils literal notranslate"><span class="pre">${Core_Project}/src/callback_audio_processing.cpp</span></code>. See the <a class="reference internal" href="../baremetal.html"><span class="doc">baremetal framework introduction</span></a> for more information.</p>
 <p>For example, you can write the following code snippet in either core’s <code class="docutils literal notranslate"><span class="pre">processaudio_callback()</span></code> to increase the gain of the analog input signal, coming from the ADCs, by 50% before routing it out to the DACs:</p>
@@ -638,13 +651,16 @@ Content on this topic
 </div>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>You may need to comment out other portions of the function to apply your changes successfully.</p>
+<p>You may need to comment out other portions of the function to apply your
+changes successfully.</p>
 </div>
 </section>
 <section id="accessing-the-pots-and-aux-hadc-control-inputs">
 <h2>Accessing the POTs and Aux HADC/control inputs<a class="headerlink" href="#accessing-the-pots-and-aux-hadc-control-inputs" title="Link to this heading"></a></h2>
 <p>The HADC channels connected to the POTs and the auxiliary HADC inputs are polled by the ARM core 1,000 times per second. The results of these measurements are converted to floats and normalized to range between 0.0 and 1.0. These values are then stored in the multicore memory structure (a shared C struct that all three cores can access) found in <code class="docutils literal notranslate"><span class="pre">/src/common/multicore_shared_memory.h</span></code>. So you can read the value of a POT or an auxiliary HADC channel, in the code of any of the three cores, from the respective field in the multicore memory structure (multicore_data).</p>
-<p>For example, you can write the following code snippet in either core’s processaudio_callback() to use the first POT as a volume knob for the stereo audio flowing to and from the ADAU1761:</p>
+<p>For example, you can write the following code snippet in either core’s
+processaudio_callback() to use the first POT as a volume knob for the stereo
+audio flowing to and from the ADAU1761:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Change gain by value of the first POT (which varies between 0.0 and 1.0)</span>
 <span class="kt">float</span><span class="w"> </span><span class="n">pot0_val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">multicore_data</span><span class="o">-&gt;</span><span class="n">audioproj_fin_pot_hadc0</span><span class="p">;</span>
 
@@ -665,11 +681,13 @@ Content on this topic
 <span class="n">multicore_data</span><span class="o">-&gt;</span><span class="n">DIY_Aux_HADC6</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>The Aux HADC channels are buffered through a simple op-amp circuit and filtered through a low-pass circuit (≈ 1 KHz cutoff) on the Audio Project Fin.</p>
+<p>The Aux HADC channels are buffered through a simple op-amp circuit and filtered
+through a low-pass circuit (≈ 1 KHz cutoff) on the Audio Project Fin.</p>
 </section>
 <section id="accessing-the-leds">
 <h2>Accessing the LEDs<a class="headerlink" href="#accessing-the-leds" title="Link to this heading"></a></h2>
-<p>The Audio Project Fin has a number of LEDs that can be accessed through the GPIO simple driver.</p>
+<p>The Audio Project Fin has a number of LEDs that can be accessed through the GPIO
+simple driver.</p>
 <p>Are number of pre-processor macros are defined for LEDs and GPIO pins access in <code class="docutils literal notranslate"><span class="pre">/src/common/helper_functions.h</span></code> (source shared between cores). These definitions are shown below.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// LEDs by PCB designator</span>
 <span class="cp">#define    GPIO_AUDIOPROJ_FIN_LED_3       GPIO_PINPORT(ADI_GPIO_PORT_E, 0)</span>
@@ -711,7 +729,8 @@ Content on this topic
 <span class="cp">#define    GPIO_AUDIOPROJ_FIN_PB_4        GPIO_PINPORT(ADI_GPIO_PORT_E, 12)</span>
 </pre></div>
 </div>
-<p>There are also similar definitions for the LEDs and push-buttons in the SHARC Audio Module source code.</p>
+<p>There are also similar definitions for the LEDs and push-buttons in the SHARC
+Audio Module source code.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// LEDs on SHARC Audio Module</span>
 <span class="cp">#define    GPIO_SHARC_SAM_LED10        GPIO_PINPORT(ADI_GPIO_PORT_D, 1)</span>
 <span class="cp">#define    GPIO_SHARC_SAM_LED11        GPIO_PINPORT(ADI_GPIO_PORT_D, 2)</span>
@@ -734,7 +753,10 @@ Content on this topic
 </section>
 <section id="accessing-the-push-buttons">
 <h2>Accessing the Push Buttons<a class="headerlink" href="#accessing-the-push-buttons" title="Link to this heading"></a></h2>
-<p>The push buttons are routed to GPIO pins and can be used to trigger interrupts on any of the three cores. By default, the push button interrupts are handled by the ARM core. The ARM core sets a boolean variable of the multicore memory structure to true. This enables SHARC cores to poll for push button events.</p>
+<p>The push buttons are routed to GPIO pins and can be used to trigger interrupts
+on any of the three cores. By default, the push button interrupts are handled by
+the ARM core. The ARM core sets a boolean variable of the multicore memory
+structure to true. This enables SHARC cores to poll for push button events.</p>
 <p>The interrupt handlers for these push buttons can be found in the ARM core project, at <code class="docutils literal notranslate"><span class="pre">${Core_0_Project}/src/Callback_Pushbuttons.cpp</span></code>. A comment indicates where custom code can be added safely.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Call back for PB1 on SHARC Audio Module Audio Project Fin</span>
 <span class="kt">void</span><span class="w"> </span><span class="nf">pushbutton_callback_external_1</span><span class="p">(</span><span class="w"> </span><span class="kt">void</span><span class="w">  </span><span class="o">*</span><span class="w"> </span><span class="n">data_object</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -759,7 +781,8 @@ Content on this topic
 </pre></div>
 </div>
 <p>Each handler sets a specific boolean value in the multicore memory structure. <strong>Note that once a polling SHARC core has read a ‘true’ value, it is responsible for setting the variable back to ‘false’ itself.</strong></p>
-<p>The code snippet below shows an example of how to handle a push button event from SHARC core 1.</p>
+<p>The code snippet below shows an example of how to handle a push button event
+from SHARC core 1.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Check to see if a push button event has been registered to toggle</span>
 <span class="c1">// an audio effect</span>
 <span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">multicore_data</span><span class="o">-&gt;</span><span class="n">audioproj_fin_sw_1_core1_pressed</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -775,7 +798,8 @@ Content on this topic
 </section>
 <section id="accessing-midi">
 <h2>Accessing MIDI<a class="headerlink" href="#accessing-midi" title="Link to this heading"></a></h2>
-<p>MIDI is enabled when the framework is set to work with a Audio Project Fin and MIDI events are handled by the ARM core.</p>
+<p>MIDI is enabled when the framework is set to work with a Audio Project Fin and
+MIDI events are handled by the ARM core.</p>
 <p>A MIDI-processing callback hook for can be found in the ARM core project, at <code class="docutils literal notranslate"><span class="pre">${Core_0_Project}/src/Callback_MIDI_Message.cpp</span></code>. This hook is called each time a new MIDI note arrives. By default, it writes the MIDI note back to the MIDI out interface as shown below. The MIDI driver uses the <code class="docutils literal notranslate"><span class="pre">simple_uart</span> <span class="pre">driver</span></code> so MIDI notes are read and written with calls to this UART driver.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Create a struct for our MIDI UART driver instance</span>
 <span class="n">BM_UART</span><span class="w"> </span><span class="n">midi_uart_arm</span><span class="p">;</span>

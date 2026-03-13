@@ -599,14 +599,21 @@ Content on this topic
             
   <section id="tutorial-using-micropython-in-conjunction-with-bare-metal-framework">
 <h1>Tutorial: Using MicroPython in Conjunction with Bare Metal Framework<a class="headerlink" href="#tutorial-using-micropython-in-conjunction-with-bare-metal-framework" title="Link to this heading"></a></h1>
-<p>MicroPython is only running on the ARM core, the code for the SHARC core needs to be built separately. This page discusses how to use the MicroPython in conjunction with SHARC Audio Module Bare Metal Framework to build a simple reverb effect processor and control the parameters from MicroPython.</p>
+<p>MicroPython is only running on the ARM core, the code for the SHARC core needs
+to be built separately. This page discusses how to use the MicroPython in
+conjunction with SHARC Audio Module Bare Metal Framework to build a simple
+reverb effect processor and control the parameters from MicroPython.</p>
 <p>This tutorial is based on the example from <a class="reference internal" href="../baremetal/delay-effect-tutorial.html"><span class="doc">Tutorial: Implementing a Basic Delay Effect</span></a>. This tutorial assumes you have read and understand that tutorial. However, the Audio Project Fin is not required to complete this tutorial.</p>
 <section id="bare-metal-framework">
 <h2>Bare Metal Framework<a class="headerlink" href="#bare-metal-framework" title="Link to this heading"></a></h2>
-<p>Normally, the bare metal framework runs on all three cores. If it needs to be used with MicroPython, some modification needs to be done to make it run on SHARC cores only.</p>
+<p>Normally, the bare metal framework runs on all three cores. If it needs to be
+used with MicroPython, some modification needs to be done to make it run on
+SHARC cores only.</p>
 <section id="sharc-only-version">
 <h3>SHARC only version<a class="headerlink" href="#sharc-only-version" title="Link to this heading"></a></h3>
-<p>In the current release of the SAM Bare Metal Framework (2.0.0), the SHARC only option does not exist. This page documents the process of modifying the framework to work on the SHARC core only.</p>
+<p>In the current release of the SAM Bare Metal Framework (2.0.0), the SHARC only
+option does not exist. This page documents the process of modifying the
+framework to work on the SHARC core only.</p>
 <p>This tutorial assumes:</p>
 <ul class="simple">
 <li><p>The board being used is the SHARC Audio Module main board, either without any expansion fin, or with the Audio Project Fin.</p></li>
@@ -617,7 +624,8 @@ Content on this topic
 </ul>
 <section id="framework-initialization">
 <h4>Framework initialization<a class="headerlink" href="#framework-initialization" title="Link to this heading"></a></h4>
-<p>Normally, codec initialization is done in the ARM core, now they need to be done by the SHARC core.</p>
+<p>Normally, codec initialization is done in the ARM core, now they need to be done
+by the SHARC core.</p>
 <ul class="simple">
 <li><p>Copy the file <code class="docutils literal notranslate"><span class="pre">audio_framework_8ch_sam_and_audioproj_fin_arm.c</span></code> from <code class="docutils literal notranslate"><span class="pre">core0/src/audio_frameworks</span></code> to <code class="docutils literal notranslate"><span class="pre">core1/src/audio_frameworks</span></code>. This file should show up in the core1 project in the CCES window. If not, try refreshing the project (F12).</p></li>
 <li><p>Open the the file that has just been copied. Make sure you open the copy in the core1 project.</p></li>
@@ -651,17 +659,21 @@ Content on this topic
 </section>
 <section id="push-button-callback">
 <h4>Push button callback<a class="headerlink" href="#push-button-callback" title="Link to this heading"></a></h4>
-<p>Push button callback is normally handled by the ARM core, and need to be moved to the SHARC core. (Note this might not be necessary if user want to use the push button on the ARM side, outside of the BM framework.)</p>
+<p>Push button callback is normally handled by the ARM core, and need to be moved
+to the SHARC core. (Note this might not be necessary if user want to use the
+push button on the ARM side, outside of the BM framework.)</p>
 <p>To move it to the sharc core, simply copy <code class="docutils literal notranslate"><span class="pre">callback_pushbuttons.cpp</span></code> and <code class="docutils literal notranslate"><span class="pre">callback_pushbuttons.h</span></code> from core0/src to core1/src. Make sure the CCES detected the new file.</p>
 </section>
 <section id="disable-logging-support">
 <h4>Disable logging support<a class="headerlink" href="#disable-logging-support" title="Link to this heading"></a></h4>
-<p>Since ARM will have the control of the UART0, logging via UART will no longer be possible. Logging support need to be disabled.</p>
+<p>Since ARM will have the control of the UART0, logging via UART will no longer be
+possible. Logging support need to be disabled.</p>
 <p>In the <code class="docutils literal notranslate"><span class="pre">drivers/bm_event_logging_driver.c</span></code>, comment out (or delete) content inside log_event function(line 549), <code class="docutils literal notranslate"><span class="pre">event_logging_initialize_sharc_core</span></code> function (line 586), and <code class="docutils literal notranslate"><span class="pre">event_logging_process_queue_sharc_core</span></code> function (line 611). Codes that are specific to ARM core doesn’t need to be touched, as they will not be compiled.</p>
 </section>
 <section id="add-missing-driver-to-core1">
 <h4>Add missing driver to Core1<a class="headerlink" href="#add-missing-driver-to-core1" title="Link to this heading"></a></h4>
-<p>Normally, only a selection of BM drivers are included in core1 the source tree. Interface drivers like TWI has been omitted. They need to be added back.</p>
+<p>Normally, only a selection of BM drivers are included in core1 the source tree.
+Interface drivers like TWI has been omitted. They need to be added back.</p>
 <ul class="simple">
 <li><p>Remove the drivers folder inside the src folder in the core1 project: right click on the drivers folder, select “Delete” in the popup menu. Click OK to confirm. (It will warning the files will be deleted from the file system, it is fine as it is an empty folder in the file system.)</p></li>
 <li><p>Add the link to the real drivers folder into the src folder: right click on the src folder, select “New → Folder.”</p></li>
@@ -669,11 +681,13 @@ Content on this topic
 <li><p>Select “Link to alternate location (Linked Folder)”, and type in <code class="docutils literal notranslate"><span class="pre">PROJECT_LOC/../drivers</span></code>, the “Folder name” should be automatically filled with “drivers”</p></li>
 <li><p>Click finish</p></li>
 </ul>
-<p>This should add all available drivers to the core1 project. This need to be done for core 1 only.</p>
+<p>This should add all available drivers to the core1 project. This need to be done
+for core 1 only.</p>
 </section>
 <section id="core1-start-up-process">
 <h4>Core1 start-up process<a class="headerlink" href="#core1-start-up-process" title="Link to this heading"></a></h4>
-<p>Now everything should be moved to core1, some modification to the core 1 startup process is required.</p>
+<p>Now everything should be moved to core1, some modification to the core 1 startup
+process is required.</p>
 <ul class="simple">
 <li><p>Open <code class="docutils literal notranslate"><span class="pre">startup_code_core1.cpp</span></code></p></li>
 <li><p>Change both falsies in line 87 and 88 to true. (Now, core 1 will initialize the system clocks and control the HADC.)</p></li>
@@ -716,7 +730,8 @@ Content on this topic
 <p>After making the changes, follow the tutorial at <a class="reference internal" href="../baremetal/delay-effect-tutorial.html"><span class="doc">Tutorial: Implementing a Basic Delay Effect</span></a> to create a reverb effect in the SHARC only version of framework.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>It’s a good idea to test if the effect is working or not using the debugger first.</p>
+<p>It’s a good idea to test if the effect is working or not using the debugger
+first.</p>
 </div>
 </section>
 <section id="export-variables">
@@ -729,7 +744,12 @@ Content on this topic
 <span class="kt">float</span><span class="w"> </span><span class="n">delay_length</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>Unfortunately, as this file would not be seen by the Python, the Python would have no idea where each variable will be located exactly. So it is necessary to count the offset address of these three variables and write them in the Python environment later. (Though it should not be hard to write a Python script to actually parse this file.) All float and uint32_t variable occupy 4 bytes, and the first variable starts at offset 0. So for example, in the code below:</p>
+<p>Unfortunately, as this file would not be seen by the Python, the Python would
+have no idea where each variable will be located exactly. So it is necessary to
+count the offset address of these three variables and write them in the Python
+environment later. (Though it should not be hard to write a Python script to
+actually parse this file.) All float and uint32_t variable occupy 4 bytes, and
+the first variable starts at offset 0. So for example, in the code below:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span>
 <span class="p">{</span>
 
@@ -740,8 +760,12 @@ Content on this topic
 </pre></div>
 </div>
 <p>These three variable will have offset of 0, 4, and 8 bytes respectively.</p>
-<p>Currently, if you are using the Rel 2.0.0 version of SDK and put the variable at the exact place described before, variables that control the reverb effect should be at offset 172, 176, and 180 respectively. Note this should not change whether the audio project fin support is enabled or not.</p>
-<p>Next step would be modify the audio callback function to make it read the parameters from the shared variable, rather than potentiometer.</p>
+<p>Currently, if you are using the Rel 2.0.0 version of SDK and put the variable at
+the exact place described before, variables that control the reverb effect
+should be at offset 172, 176, and 180 respectively. Note this should not change
+whether the audio project fin support is enabled or not.</p>
+<p>Next step would be modify the audio callback function to make it read the
+parameters from the shared variable, rather than potentiometer.</p>
 <p>Open <code class="docutils literal notranslate"><span class="pre">callback_audio_processing.cpp</span></code>, add the following code to the end of <code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">processaudio_callback(void)</span></code> function:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">abs</span><span class="p">(</span><span class="n">multicore_data</span><span class="o">-&gt;</span><span class="n">delay_length</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">delay_len_seconds</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.04</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">delay_len_seconds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">multicore_data</span><span class="o">-&gt;</span><span class="n">delay_length</span><span class="p">;</span>
@@ -753,13 +777,17 @@ Content on this topic
 <span class="n">delay_feedback</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">multicore_data</span><span class="o">-&gt;</span><span class="n">delay_feedback</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>Now build the project into a binary LDR file. (refer to the SHARC only version section) Put the LDR file on a SD card formatted to FAT or FAT32 filesystem.</p>
+<p>Now build the project into a binary LDR file. (refer to the SHARC only version
+section) Put the LDR file on a SD card formatted to FAT or FAT32 filesystem.</p>
 </section>
 </section>
 <section id="python-side">
 <h2>Python side<a class="headerlink" href="#python-side" title="Link to this heading"></a></h2>
-<p>At the Python side, we need to first load the LDR file, use that to bootstrap the SHARC core, and second setting up the environment to allow read and write shared variables.</p>
-<p>Assume the LDR file is called reverb.ldr and is in the SD card’s root directory, write a Python script with the content below:</p>
+<p>At the Python side, we need to first load the LDR file, use that to bootstrap
+the SHARC core, and second setting up the environment to allow read and write
+shared variables.</p>
+<p>Assume the LDR file is called reverb.ldr and is in the SD card’s root directory,
+write a Python script with the content below:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sharc</span>
 
 <span class="c1"># load the sharc program to run</span>
@@ -772,7 +800,8 @@ Content on this topic
 </pre></div>
 </div>
 <p>These code would open the loader file and bootstrap the SHARC core.</p>
-<p>Then we need to tell the Python where is the shared variables. Add the code blow to the script:</p>
+<p>Then we need to tell the Python where is the shared variables. Add the code blow
+to the script:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">uctypes</span>
 
 <span class="c1"># initialize the parameters</span>
@@ -796,13 +825,15 @@ Content on this topic
 </pre></div>
 </div>
 <p>Note how the offset we counted before is defined here. For more information, please read MicroPython’s documentation about uctypes: <a class="icon link reference external" href="https://docs.micropython.org/en/latest/library/uctypes.html" target="_blank">https://docs.micropython.org/en/latest/library/uctypes.html</a></p>
-<p>Save the script as delay_setup.py, and put it at the root directory of the SD card.</p>
+<p>Save the script as delay_setup.py, and put it at the root directory of the SD
+card.</p>
 <p>Inside the MicroPython REPL (console), type in:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">execfile</span><span class="p">(</span><span class="s1">&#39;delay.py&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>It should boot up the SHARC core and setup the variable mapping. Try use <code class="docutils literal notranslate"><span class="pre">print(sharc_data.core1_load)</span></code> to view the load, and use <code class="docutils literal notranslate"><span class="pre">sharc_data.delay_mix</span> <span class="pre">=</span> <span class="pre">0.8</span></code> to change the parameters.</p>
-<p>It is also easy to write a simple user interface to control the parameter with arrow keys within python like this example:</p>
+<p>It is also easy to write a simple user interface to control the parameter with
+arrow keys within python like this example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 
 <span class="n">current_selection</span> <span class="o">=</span> <span class="mi">0</span>

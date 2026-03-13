@@ -613,20 +613,33 @@ Content on this topic
 <section id="functional-overview">
 <h2>Functional Overview<a class="headerlink" href="#functional-overview" title="Link to this heading"></a></h2>
 <p>The HDL reference design is an embedded system built around a processor core either ARM, NIOS-II or Microblaze. A functional block diagram of the system is shown below. The high speed digital interface of the converters is handled by the <a class="reference internal" href="../../../fpga/peripherals/jesd204.html"><span class="doc">JESD204B framework</span></a>. Due to the system’s memory interface bandwidth limitation, there are intermediary buffers in the both TX and RX data paths, in order to save and push data using high data rates. In case of the ZC706 carrier board, the RX buffer depth is 1Gbyte, and TX buffer depth is 1Mbyte. This depths can be swapped if required.</p>
-<p>By default the AD9162 is configured in complex mode with 8 lanes (see Table 16. in data sheet), and the AD9625 is configured in generic operation mode with 8 lanes (see Table 16. in data sheet). Both JESD204 interfaces run in Subclass 0.</p>
-<p>Other configurations can be used too, but the user needs to make sure that all the parties (clock chip, converters and FPGA JESD204 IPs) of the interface are reconfigured accordingly.</p>
+<p>By default the AD9162 is configured in complex mode with 8 lanes (see Table 16.
+in data sheet), and the AD9625 is configured in generic operation mode with 8
+lanes (see Table 16. in data sheet). Both JESD204 interfaces run in Subclass 0.</p>
+<p>Other configurations can be used too, but the user needs to make sure that all
+the parties (clock chip, converters and FPGA JESD204 IPs) of the interface are
+reconfigured accordingly.</p>
 <img alt="fmcomms11_bd.svg" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/docs/fmcomms11_bd.svg" />
 </section>
 <section id="reference-design-for-xilinx-carriers">
 <h2>Reference design for Xilinx carriers<a class="headerlink" href="#reference-design-for-xilinx-carriers" title="Link to this heading"></a></h2>
-<p>The reference design is a processor based embedded system. The sources are split into three different folders:</p>
+<p>The reference design is a processor based embedded system. The sources are split
+into three different folders:</p>
 <ul class="simple">
 <li><p>Base design for the carrier board (e.g. <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/common/zc706" target="_blank">/projects/common/zc706</a>) where all generic peripherals are instantiated. Here we do most of the PS configuration, add SPI, I2C and GPIOs. In some cases, we have scripts to instantiate also the PL DDR as ADC offload memory or DAC offload memory.</p></li>
 <li><p>Base design for the evaluation board (<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/fmcomms11/common" target="_blank">/projects/fmcomms11/common</a>), where all the IPs to control the FMCOMMS11 evaluation board and to capture or send data are instantiated. The data paths defined in this block design are common across multiple carrier platforms.</p></li>
 <li><p>Specific design for the project, in our case for ZC706 (<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/fmcomms11/common" target="_blank">/projects/fmcomms11/zc706</a>). Here, we source the carrier board configuration, then the evaluation board configuration and then we do some specific parameter modification, if required. In this folder, the constraints and system_top.v are also defined.</p></li>
 </ul>
-<p>The reference design is a processor based (ARM or Microblaze) embedded system. A functional block diagram of the system is given above. The data path consist of the shared transceivers, then are followed by the individual JESD204B link and transport layer IP cores. The cores are programmable through an AXI-lite interface.</p>
-<p>The digital interface consists of 8 transmit and 8 receive lanes running at 9.8304Gbps and 4.9152 respectively, by default. The transceivers interface the DAC/ADC cores at <a class="reference external" href="mailto:256bits&#37;&#52;&#48;245&#46;76MHz">256bits<span>&#64;</span>245<span>&#46;</span>76MHz</a> and <a class="reference external" href="mailto:256bit&#37;&#52;&#48;122&#46;88MHz">256bit<span>&#64;</span>122<span>&#46;</span>88MHz</a> respectively. The data is sent or received based on the configuration of separate transmit and receive chains.</p>
+<p>The reference design is a processor based (ARM or Microblaze) embedded system. A
+functional block diagram of the system is given above. The data path consist of
+the shared transceivers, then are followed by the individual JESD204B link and
+transport layer IP cores. The cores are programmable through an AXI-lite
+interface.</p>
+<p>The digital interface consists of 8 transmit and 8 receive lanes running at
+9.8304Gbps and 4.9152 respectively, by default. The transceivers interface the
+DAC/ADC cores at <a class="reference external" href="mailto:256bits&#37;&#52;&#48;245&#46;76MHz">256bits<span>&#64;</span>245<span>&#46;</span>76MHz</a> and <a class="reference external" href="mailto:256bit&#37;&#52;&#48;122&#46;88MHz">256bit<span>&#64;</span>122<span>&#46;</span>88MHz</a> respectively. The data
+is sent or received based on the configuration of separate transmit and receive
+chains.</p>
 </section>
 <section id="project-flow">
 <h2>Project Flow<a class="headerlink" href="#project-flow" title="Link to this heading"></a></h2>
@@ -658,12 +671,16 @@ Content on this topic
 <span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span><span class="o">/</span>projects<span class="o">/</span>common<span class="o">/</span>xilinx<span class="o">/</span>dacfifo_bd.tcl
 </pre></div>
 </div>
-<p>If the user wants to swap the resources allocated to the FIFO, the following scripts should be sourced instead:</p>
+<p>If the user wants to swap the resources allocated to the FIFO, the following
+scripts should be sourced instead:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span><span class="o">/</span>projects<span class="o">/</span>common<span class="o">/</span>zc706<span class="o">/</span>zc706_plddr3_dacfifo_bd.tcl
 <span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span><span class="o">/</span>projects<span class="o">/</span>common<span class="o">/</span>xilinx<span class="o">/</span>adcfifo_bd.tcl
 </pre></div>
 </div>
-<p>The following parameters will define the FIFO’s depth. Note, if the FIFO is using the PL side DDR interface, the address width parameter can be ignored, and the FIFO will have an equal depth with the DDR memory. (e.g. in case of the ZC706 board is 1Gbyte)</p>
+<p>The following parameters will define the FIFO’s depth. Note, if the FIFO is
+using the PL side DDR interface, the address width parameter can be ignored, and
+the FIFO will have an equal depth with the DDR memory. (e.g. in case of the
+ZC706 board is 1Gbyte)</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="c"># the DAC FIFO has a 500KSMP depth - 1 Mbyte</span>
 <span class="k">set</span><span class="w"> </span>dac_fifo_address_width<span class="w"> </span><span class="mi">15</span>
 
@@ -678,11 +695,14 @@ Content on this topic
 </section>
 <section id="fmcomms11-design">
 <h2>FMCOMMS11 Design<a class="headerlink" href="#fmcomms11-design" title="Link to this heading"></a></h2>
-<p>When using the JESD204 Framework we need to source the JESD204 support script. In this script several procedures which simplify the design are defined:</p>
+<p>When using the JESD204 Framework we need to source the JESD204 support script.
+In this script several procedures which simplify the design are defined:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span><span class="o">/</span>library<span class="o">/</span>jesd204<span class="o">/</span>scripts<span class="o">/</span>jesd204.tcl
 </pre></div>
 </div>
-<p>The main JESD204 configuration parameters are defined. These parameters are essential and need to respect the device side configuration in order to have a successful link bring up.</p>
+<p>The main JESD204 configuration parameters are defined. These parameters are
+essential and need to respect the device side configuration in order to have a
+successful link bring up.</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="c"># JESD204 TX parameters</span>
 <span class="k">set</span><span class="w"> </span>TX_NUM_OF_LANES<span class="w"> </span><span class="mi">8</span><span class="w">      </span><span class="k">;</span><span class="w"> </span><span class="c"># L</span>
 <span class="k">set</span><span class="w"> </span>TX_NUM_OF_CONVERTERS<span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="k">;</span><span class="w"> </span><span class="c"># M</span>
@@ -701,7 +721,15 @@ Content on this topic
 </div>
 <section id="physical-layer">
 <h3>Physical Layer<a class="headerlink" href="#physical-layer" title="Link to this heading"></a></h3>
-<p>The physical layer is responsible for instantiating and configuring the high speed serial transceivers in the FPGA. The physical layer is implemented with the use of two modules: AXI_ADXCVR and UTIL_ADXCVR. AXI_ADXCVR provides an AXI interface for performing DRP reads and writes to the transceivers, allowing for dynamic reconfiguration. Given that the hardware implements 8 data lines, that’s how we’ll configure the NUM_OF_LANES parameter. QPLL_ENABLE parameter gives control to this IP of the QPLL reconfiguration for the Transceiver QUAD. If the QUAD is shared with other RX IPs (as it is in this design), the second ADXCVR IP will need to have QPLL_ENABLE set to 0.</p>
+<p>The physical layer is responsible for instantiating and configuring the high
+speed serial transceivers in the FPGA. The physical layer is implemented with
+the use of two modules: AXI_ADXCVR and UTIL_ADXCVR. AXI_ADXCVR provides an AXI
+interface for performing DRP reads and writes to the transceivers, allowing for
+dynamic reconfiguration. Given that the hardware implements 8 data lines, that’s
+how we’ll configure the NUM_OF_LANES parameter. QPLL_ENABLE parameter gives
+control to this IP of the QPLL reconfiguration for the Transceiver QUAD. If the
+QUAD is shared with other RX IPs (as it is in this design), the second ADXCVR IP
+will need to have QPLL_ENABLE set to 0.</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">ad_ip_instance</span><span class="w"> </span>axi_adxcvr<span class="w"> </span>axi_ad9162_xcvr<span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="err">\</span>
 <span class="w">  </span><span class="nv">NUM_OF_LANES</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="err">\</span>
 <span class="w">  </span><span class="nv">QPLL_ENABLE</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="err">\</span>
@@ -709,7 +737,8 @@ Content on this topic
 <span class="k">]</span>
 </pre></div>
 </div>
-<p>Instantiation of the ADC transceiver controller. For this IP, QPLL_ENABLE is set to 0.</p>
+<p>Instantiation of the ADC transceiver controller. For this IP, QPLL_ENABLE is set
+to 0.</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">ad_ip_instance</span><span class="w"> </span>axi_adxcvr<span class="w"> </span>axi_ad9625_xcvr<span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="err">\</span>
 <span class="w">  </span><span class="nv">NUM_OF_LANES</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="err">\</span>
 <span class="w">  </span><span class="nv">QPLL_ENABLE</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="err">\</span>
@@ -717,7 +746,9 @@ Content on this topic
 <span class="k">]</span>
 </pre></div>
 </div>
-<p>Given that the IP uses the same QUAD as the DAC, performing channel reconfiguration may affect the DAC and vice versa. When using the JESD204B framework, this is taken into consideration by software.</p>
+<p>Given that the IP uses the same QUAD as the DAC, performing channel
+reconfiguration may affect the DAC and vice versa. When using the JESD204B
+framework, this is taken into consideration by software.</p>
 <p>The actual transceiver blocks are instantiated in UTIL_ADXCVR.</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">ad_ip_instance</span><span class="w"> </span>util_adxcvr<span class="w"> </span>util_fmcomms11_xcvr<span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="err">\</span>
 <span class="w">  </span><span class="nv">QPLL_FBDIV</span><span class="w"> </span><span class="mh">0x120</span><span class="w"> </span><span class="err">\</span>
@@ -731,10 +762,16 @@ Content on this topic
 <span class="k">]</span>
 </pre></div>
 </div>
-<p>Xilinx JESD204-PHY IP can be used as an alternative to implementing the physical layer, as it’s part of Vivado without additional licensing. We don’t currently provide software support for the Xilinx IP. The drawback when using the Xilinx IP is that it doesn’t provide Eyescan functionality.</p>
+<p>Xilinx JESD204-PHY IP can be used as an alternative to implementing the physical
+layer, as it’s part of Vivado without additional licensing. We don’t currently
+provide software support for the Xilinx IP. The drawback when using the Xilinx
+IP is that it doesn’t provide Eyescan functionality.</p>
 <section id="clocking">
 <h4>Clocking<a class="headerlink" href="#clocking" title="Link to this heading"></a></h4>
-<p>Reference clocks are needed to be feed to the QPLL/CPLL. In this design, we are using a shared reference clock for both receive and transmit channels. What is important to note is that the reference clocks for the transceiver QUAD must be connected to the MGTREFCLK pins either for the QUAD or an adjacent QUAD.</p>
+<p>Reference clocks are needed to be feed to the QPLL/CPLL. In this design, we are
+using a shared reference clock for both receive and transmit channels. What is
+important to note is that the reference clocks for the transceiver QUAD must be
+connected to the MGTREFCLK pins either for the QUAD or an adjacent QUAD.</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">create_bd_port</span><span class="w"> </span><span class="o">-</span>dir<span class="w"> </span>I<span class="w"> </span>tx_ref_clk_0
 <span class="nv">create_bd_port</span><span class="w"> </span><span class="o">-</span>dir<span class="w"> </span>I<span class="w"> </span>rx_ref_clk_0
 <span class="nv">ad_xcvrpll</span><span class="w">  </span>tx_ref_clk_0<span class="w"> </span>util_fmcomms11_xcvr<span class="o">/</span>qpll_ref_clk_<span class="o">*</span>
@@ -747,14 +784,22 @@ Content on this topic
 </section>
 <section id="data-link-layer">
 <h3>Data Link Layer<a class="headerlink" href="#data-link-layer" title="Link to this heading"></a></h3>
-<p>The JESD204 data link layer is instantiated in the next lines, for both TX and RX type of peripheral paths. The ADI AD-IP-JESD204 implements the data link layer, supporting subclass 0 and run time reconfiguration through an AXI memory mapped interface.</p>
+<p>The JESD204 data link layer is instantiated in the next lines, for both TX and
+RX type of peripheral paths. The ADI AD-IP-JESD204 implements the data link
+layer, supporting subclass 0 and run time reconfiguration through an AXI memory
+mapped interface.</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">adi_axi_jesd204_tx_create</span><span class="w"> </span>axi_ad9162_jesd<span class="w"> </span><span class="mi">8</span>
 
 <span class="nv">adi_axi_jesd204_rx_create</span><span class="w"> </span>axi_ad9625_jesd<span class="w"> </span><span class="mi">8</span>
 </pre></div>
 </div>
 <p>The IP is equivalent with the Xilinx licensed JESD204 IP.</p>
-<p>To relax the constraints for PCB design, the n-th physical lane it’s not connected to the n-th logical lane, therefor there is a remapping scheme between the physical and link layer to reorder the data streams. In case of the FMCOMMS11 board, both ADC and DAC side using the same remapping scheme. With the following remapping scheme: {0 1 2 3 7 4 6 5}, where the n-th logical lane is mapped to the “list[n]” physical lane.</p>
+<p>To relax the constraints for PCB design, the n-th physical lane it’s not
+connected to the n-th logical lane, therefor there is a remapping scheme between
+the physical and link layer to reorder the data streams. In case of the
+FMCOMMS11 board, both ADC and DAC side using the same remapping scheme. With the
+following remapping scheme: {0 1 2 3 7 4 6 5}, where the n-th logical lane is
+mapped to the “list[n]” physical lane.</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">ad_xcvrcon</span><span class="w">  </span>util_fmcomms11_xcvr<span class="w"> </span>axi_ad9162_xcvr<span class="w"> </span>axi_ad9162_jesd<span class="w"> </span><span class="k">{</span><span class="nv">0</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="mi">5</span><span class="k">}</span>
 <span class="nv">ad_xcvrcon</span><span class="w">  </span>util_fmcomms11_xcvr<span class="w"> </span>axi_ad9625_xcvr<span class="w"> </span>axi_ad9625_jesd<span class="w"> </span><span class="k">{</span><span class="nv">0</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="mi">5</span><span class="k">}</span>
 </pre></div>
@@ -762,7 +807,9 @@ Content on this topic
 </section>
 <section id="transport-layer">
 <h3>Transport Layer<a class="headerlink" href="#transport-layer" title="Link to this heading"></a></h3>
-<p>The transport layer peripherals are responsible for converter specific data framing and de-framing and provide a generic FIFO interface to the rest of the system.</p>
+<p>The transport layer peripherals are responsible for converter specific data
+framing and de-framing and provide a generic FIFO interface to the rest of the
+system.</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">adi_tpl_jesd204_tx_create</span><span class="w"> </span>axi_ad9162_core<span class="w"> </span><span class="nv">$TX_NUM_OF_LANES</span><span class="w"> </span><span class="err">\</span>
 <span class="w">                                          </span><span class="nv">$TX_NUM_OF_CONVERTERS</span><span class="w"> </span><span class="err">\</span>
 <span class="w">                                          </span><span class="nv">$TX_SAMPLES_PER_FRAME</span><span class="w"> </span><span class="err">\</span>
@@ -777,7 +824,10 @@ Content on this topic
 </section>
 <section id="jesd204-connections">
 <h3>JESD204 Connections<a class="headerlink" href="#jesd204-connections" title="Link to this heading"></a></h3>
-<p>When UTIL_ADXCVR is instantiated, the channel inside of the IP may be different than the hardware pin connection to lessen the layout burden. Because of this, the UTIL_ADXCVR IP will rearrange the inside channels so that they correspond to the outside pin connection for the RX path, keeping a common transport layer.</p>
+<p>When UTIL_ADXCVR is instantiated, the channel inside of the IP may be different
+than the hardware pin connection to lessen the layout burden. Because of this,
+the UTIL_ADXCVR IP will rearrange the inside channels so that they correspond to
+the outside pin connection for the RX path, keeping a common transport layer.</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">ad_xcvrcon</span><span class="w">  </span>util_fmcomms11_xcvr<span class="w"> </span>axi_ad9162_xcvr<span class="w"> </span>axi_ad9162_jesd
 <span class="nv">ad_xcvrcon</span><span class="w">  </span>util_fmcomms11_xcvr<span class="w"> </span>axi_ad9625_xcvr<span class="w"> </span>axi_ad9625_jesd
 </pre></div>
@@ -785,7 +835,13 @@ Content on this topic
 </section>
 <section id="additional-ips">
 <h3>Additional IPs<a class="headerlink" href="#additional-ips" title="Link to this heading"></a></h3>
-<p>For a complete system, we use additional modules to transfer data. The transport layer transfers data continuously from/to the ADC/DAC. In the TX data path UPACK will only send the enabled channels to the DMA which in turn will transfer it to the system memory. Depending on system specifics, data offload FIFOs may be inserted between upack/cpack and the DMA. When a FIFO is used, the DMA connection to the DDR can run at a lower speed, as data capture cannot be done continuously.</p>
+<p>For a complete system, we use additional modules to transfer data. The transport
+layer transfers data continuously from/to the ADC/DAC. In the TX data path UPACK
+will only send the enabled channels to the DMA which in turn will transfer it to
+the system memory. Depending on system specifics, data offload FIFOs may be
+inserted between upack/cpack and the DMA. When a FIFO is used, the DMA
+connection to the DDR can run at a lower speed, as data capture cannot be done
+continuously.</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">ad_ip_instance</span><span class="w"> </span>util_upack2<span class="w"> </span>util_ad9162_upack<span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="err">\</span>
 <span class="w">  </span><span class="nv">NUM_OF_CHANNELS</span><span class="w"> </span><span class="nv">$TX_NUM_OF_CONVERTERS</span><span class="w"> </span><span class="err">\</span>
 <span class="w">  </span><span class="nv">SAMPLES_PER_CHANNEL</span><span class="w"> </span><span class="nv">$TX_SAMPLES_PER_CHANNEL</span><span class="w"> </span><span class="err">\</span>
@@ -872,7 +928,8 @@ Content on this topic
 </section>
 <section id="cpu-address-allocation">
 <h3>CPU Address Allocation<a class="headerlink" href="#cpu-address-allocation" title="Link to this heading"></a></h3>
-<p>The below instructions assign addresses to all AXI modules in the design. These will be used when generating the device tree in linux.</p>
+<p>The below instructions assign addresses to all AXI modules in the design. These
+will be used when generating the device tree in linux.</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">ad_cpu_interconnect</span><span class="w"> </span><span class="mh">0x44A60000</span><span class="w"> </span>axi_ad9162_xcvr
 <span class="nv">ad_cpu_interconnect</span><span class="w"> </span><span class="mh">0x44A00000</span><span class="w"> </span>axi_ad9162_core
 <span class="nv">ad_cpu_interconnect</span><span class="w"> </span><span class="mh">0x44A90000</span><span class="w"> </span>axi_ad9162_jesd
@@ -886,7 +943,10 @@ Content on this topic
 </section>
 <section id="high-performance-port-connections">
 <h3>High Performance Port Connections<a class="headerlink" href="#high-performance-port-connections" title="Link to this heading"></a></h3>
-<p>The below instructions assign an HP port to all AXI masters, through an interconnect. If there is a single master per interconnect, it will be bypassed in the interconnect. The HP3 connections allow the physical layer to transmit eyescan data to memory, without software interference.</p>
+<p>The below instructions assign an HP port to all AXI masters, through an
+interconnect. If there is a single master per interconnect, it will be bypassed
+in the interconnect. The HP3 connections allow the physical layer to transmit
+eyescan data to memory, without software interference.</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="c"># gt uses hp3, and 100MHz clock for both DRP and AXI4</span>
 
 <span class="nv">ad_mem_hp3_interconnect</span><span class="w"> </span>sys_cpu_clk<span class="w"> </span>sys_ps7<span class="o">/</span>S_AXI_HP3
@@ -961,7 +1021,10 @@ Content on this topic
 <span class="nv">set_property</span><span class="w">  </span><span class="o">-</span>dict<span class="w"> </span><span class="k">{</span><span class="nv">PACKAGE_PIN</span><span class="w">  </span>AD1<span class="w"> </span><span class="k">}</span><span class="w"> </span><span class="k">[</span><span class="nv">get_ports</span><span class="w"> </span>tx_data_n<span class="k">[</span><span class="nv">7</span><span class="k">]]</span><span class="w">  </span><span class="k">;</span><span class="w"> </span><span class="c">## B33  FMC_HPC_DP7_C2M_N</span>
 </pre></div>
 </div>
-<p>In default configuration the reference clocks run at 122.88 MHz, the RX core clock at 122.88MHz and TX core clock at 245.76MHz. See the block diagram above for detailed clock tree. The clock are slightly over constraint to 125 MHz and 250 MHz.</p>
+<p>In default configuration the reference clocks run at 122.88 MHz, the RX core
+clock at 122.88MHz and TX core clock at 245.76MHz. See the block diagram above
+for detailed clock tree. The clock are slightly over constraint to 125 MHz and
+250 MHz.</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">create_clock</span><span class="w"> </span><span class="o">-</span>name<span class="w"> </span>rx_ref_clk<span class="w">   </span><span class="o">-</span>period<span class="w">  </span><span class="mi">8</span><span class="w"> </span><span class="k">[</span><span class="nv">get_ports</span><span class="w"> </span>trx_ref_clk_p<span class="k">]</span>
 <span class="nv">create_clock</span><span class="w"> </span><span class="o">-</span>name<span class="w"> </span>tx_div_clk<span class="w">   </span><span class="o">-</span>period<span class="w">  </span><span class="mi">4</span><span class="w"> </span><span class="k">[</span><span class="nv">get_pins</span><span class="w"> </span>i_system_wrapper<span class="o">/</span>system_i<span class="o">/</span>util_fmcomms11_xcvr<span class="o">/</span>inst<span class="o">/</span>i_xch_0<span class="o">/</span>i_gtxe2_channel<span class="o">/</span>TXOUTCLK<span class="k">]</span>
 <span class="nv">create_clock</span><span class="w"> </span><span class="o">-</span>name<span class="w"> </span>rx_div_clk<span class="w">   </span><span class="o">-</span>period<span class="w">  </span><span class="mi">8</span><span class="w"> </span><span class="k">[</span><span class="nv">get_pins</span><span class="w"> </span>i_system_wrapper<span class="o">/</span>system_i<span class="o">/</span>util_fmcomms11_xcvr<span class="o">/</span>inst<span class="o">/</span>i_xch_0<span class="o">/</span>i_gtxe2_channel<span class="o">/</span>RXOUTCLK<span class="k">]</span>

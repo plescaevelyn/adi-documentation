@@ -590,9 +590,17 @@ Content on this topic
 <h1>Configuring Peripherals for the ADSP-SC5xx When Using Linux and SHARC Applications<a class="headerlink" href="#configuring-peripherals-for-the-adsp-sc5xx-when-using-linux-and-sharc-applications" title="Link to this heading"></a></h1>
 <section id="default-peripheral-allocation-between-sharcs-and-arm">
 <h2>Default Peripheral allocation between SHARCs and ARM<a class="headerlink" href="#default-peripheral-allocation-between-sharcs-and-arm" title="Link to this heading"></a></h2>
-<p>By default all peripherals are allocated to the ARM. In order to access a peripheral it is necessary for the pinmux for the peripheral to be configured correctly. The pinmux should only be configured by a single core and by default this is handled by the ARM, which is the booting core.</p>
-<p>Peripheral allocation is controlled by the device tree source file. The device tree source files are located in the Linux source repo in the /arch/arm/boot/dts folder. For the SC594 EZKIT there are two devicetree source files, a generic one for the device family named sc59x.dtsi and a board specific one named sc594-som-ezkit.dts.</p>
-<p>For Linkport0 for example there will be an entry in both files. The sc594.dtsi file contains:</p>
+<p>By default all peripherals are allocated to the ARM. In order to access a
+peripheral it is necessary for the pinmux for the peripheral to be configured
+correctly. The pinmux should only be configured by a single core and by default
+this is handled by the ARM, which is the booting core.</p>
+<p>Peripheral allocation is controlled by the device tree source file. The device
+tree source files are located in the Linux source repo in the /arch/arm/boot/dts
+folder. For the SC594 EZKIT there are two devicetree source files, a generic one
+for the device family named sc59x.dtsi and a board specific one named
+sc594-som-ezkit.dts.</p>
+<p>For Linkport0 for example there will be an entry in both files. The sc594.dtsi
+file contains:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lp0</span><span class="p">:</span> <span class="n">linkport</span><span class="o">@</span><span class="mi">0</span> <span class="p">{</span>
     <span class="n">compatible</span> <span class="o">=</span> <span class="s2">&quot;linkport0&quot;</span><span class="p">;</span>
     <span class="n">interrupt</span><span class="o">-</span><span class="n">parent</span> <span class="o">=</span> <span class="o">&lt;&amp;</span><span class="n">gic</span><span class="o">&gt;</span><span class="p">;</span>
@@ -603,7 +611,8 @@ Content on this topic
 <span class="p">};</span>
 </pre></div>
 </div>
-<p>The sc594-som-ezkit.dts contains the following entry which overrides the above status and enables the linkport:</p>
+<p>The sc594-som-ezkit.dts contains the following entry which overrides the above
+status and enables the linkport:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&amp;</span><span class="n">lp0</span> <span class="p">{</span>
     <span class="n">pinctrl</span><span class="o">-</span><span class="n">names</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">;</span>
     <span class="n">pinctrl</span><span class="o">-</span><span class="mi">0</span> <span class="o">=</span> <span class="o">&lt;&amp;</span><span class="n">lp0_default</span><span class="o">&gt;</span><span class="p">;</span>
@@ -614,7 +623,11 @@ Content on this topic
 </section>
 <section id="allocating-a-peripheral-to-sharc">
 <h2>Allocating a peripheral to SHARC<a class="headerlink" href="#allocating-a-peripheral-to-sharc" title="Link to this heading"></a></h2>
-<p>Allocating a peripheral to SHARC requires changes to the devicetree source file specific to the board. The ARM core is still required to configure the pinmux but should otherwise not interact with the peripheral. For example allocating Linkport0 to the SHARC requires the following changes to sc594-som-ezkit.dts file. First disable Linkport0 in the devicetree:</p>
+<p>Allocating a peripheral to SHARC requires changes to the devicetree source file
+specific to the board. The ARM core is still required to configure the pinmux
+but should otherwise not interact with the peripheral. For example allocating
+Linkport0 to the SHARC requires the following changes to sc594-som-ezkit.dts
+file. First disable Linkport0 in the devicetree:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&amp;</span><span class="n">lp0</span> <span class="p">{</span>
     <span class="n">pinctrl</span><span class="o">-</span><span class="n">names</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">;</span>
     <span class="n">pinctrl</span><span class="o">-</span><span class="mi">0</span> <span class="o">=</span> <span class="o">&lt;&amp;</span><span class="n">lp0_default</span><span class="o">&gt;</span><span class="p">;</span>
@@ -622,7 +635,8 @@ Content on this topic
 <span class="p">};</span>
 </pre></div>
 </div>
-<p>Next it is necessary to specify the required pinmux for Linkport0. For any peripherals not used by linux this is handled by the icc driver.:</p>
+<p>Next it is necessary to specify the required pinmux for Linkport0. For any
+peripherals not used by linux this is handled by the icc driver.:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&amp;</span><span class="n">pinctrl0</span> <span class="p">{</span>
     <span class="n">icc</span> <span class="p">{</span>
         <span class="n">icc_default</span><span class="p">:</span> <span class="n">icc0</span><span class="o">@</span><span class="mi">0</span> <span class="p">{</span>
@@ -633,7 +647,10 @@ Content on this topic
 <span class="p">};</span>
 </pre></div>
 </div>
-<p>Lastly the the pincontrol just created needs to be passed into the icc which will then set up the pinmux for Linkport0 use and ensure the pins are reserved. The driver does not interact with the peripheral itself thereby reserving it for the SHARC:</p>
+<p>Lastly the the pincontrol just created needs to be passed into the icc which
+will then set up the pinmux for Linkport0 use and ensure the pins are reserved.
+The driver does not interact with the peripheral itself thereby reserving it for
+the SHARC:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&amp;</span><span class="n">icc0</span> <span class="p">{</span>
     <span class="n">pinctrl</span><span class="o">-</span><span class="n">names</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">;</span>
     <span class="n">pinctrl</span><span class="o">-</span><span class="mi">0</span> <span class="o">=</span> <span class="o">&lt;&amp;</span><span class="n">icc_default</span><span class="o">&gt;</span><span class="p">;</span>
@@ -641,7 +658,9 @@ Content on this topic
 <span class="p">};</span>
 </pre></div>
 </div>
-<p>The pinmux for Linkport0 is then configured at boot by Linux and can be used by a SHARC core without Linux accessing the device or the pins for any other purpose.</p>
+<p>The pinmux for Linkport0 is then configured at boot by Linux and can be used by
+a SHARC core without Linux accessing the device or the pins for any other
+purpose.</p>
 </section>
 </section>
 

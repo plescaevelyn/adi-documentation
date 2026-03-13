@@ -638,7 +638,21 @@ Content on this topic
 <section id="description">
 <h2>Description<a class="headerlink" href="#description" title="Link to this heading"></a></h2>
 <img alt="ad5593r_bd.png" class="align-right" src="https://wiki.analog.com/_media/software/driver/linux/ad5593r_bd.png" />
-<p>The AD5593R have eight I/Ox pins (I/O0 to I/O7) that can be independently configured as digital-to-analog converter (DAC) outputs, analog-to-digital converter (ADC) inputs, digital outputs, or digital inputs. When an I/Ox pin is configured as an analog output, it is driven by a 12-bit DAC. The output range of the DAC is 0 V to VREF or 0 V to 2 × VREF. When an I/Ox pin is configured as an analog input, it is connected to a 12-bit ADC via an analog multiplexer. The input range of the ADC is 0 V to VREF or 0 V to 2 × VREF. The ADC has a total throughput rate of 400 kSPS. The I/Ox pins can also be configured as digital, general-purpose input or output (GPIO) pins. The state of the GPIO pins can be set or read back by accessing the GPIO write data register or the GPIO read configuration register, respectively, via an I2C write or read operation. The AD5593R have an integrated 2.5 V, 25 ppm/°C reference, which is turned off by default, and an integrated temperature indicator, which gives an indication of the die temperature. The temperature value is read back as part of an ADC read sequence.</p>
+<p>The AD5593R have eight I/Ox pins (I/O0 to I/O7) that can be independently
+configured as digital-to-analog converter (DAC) outputs, analog-to-digital
+converter (ADC) inputs, digital outputs, or digital inputs. When an I/Ox pin is
+configured as an analog output, it is driven by a 12-bit DAC. The output range
+of the DAC is 0 V to VREF or 0 V to 2 × VREF. When an I/Ox pin is configured as
+an analog input, it is connected to a 12-bit ADC via an analog multiplexer. The
+input range of the ADC is 0 V to VREF or 0 V to 2 × VREF. The ADC has a total
+throughput rate of 400 kSPS. The I/Ox pins can also be configured as digital,
+general-purpose input or output (GPIO) pins. The state of the GPIO pins can be
+set or read back by accessing the GPIO write data register or the GPIO read
+configuration register, respectively, via an I2C write or read operation. The
+AD5593R have an integrated 2.5 V, 25 ppm/°C reference, which is turned off by
+default, and an integrated temperature indicator, which gives an indication of
+the die temperature. The temperature value is read back as part of an ADC read
+sequence.</p>
 </section>
 </section>
 <section id="source-code">
@@ -692,14 +706,15 @@ Content on this topic
 </section>
 <section id="hardware-configuration">
 <h1>Hardware configuration<a class="headerlink" href="#hardware-configuration" title="Link to this heading"></a></h1>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/software/driver/linux/ad5592r_eval.jpg"><img alt="ad5592r_eval.jpg" src="https://wiki.analog.com/_media/software/driver/linux/ad5592r_eval.jpg" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/software/driver/linux/ad5592r_eval.jpg"><img alt="ad5592r_eval.jpg" src="https://wiki.analog.com/_media/software/driver/linux/ad5592r_eval.jpg" width="600" />
 </a>
 </section>
 <section id="adding-linux-driver-support">
 <h1>Adding Linux driver support<a class="headerlink" href="#adding-linux-driver-support" title="Link to this heading"></a></h1>
 <section id="enabling-the-driver">
 <h2>Enabling the driver<a class="headerlink" href="#enabling-the-driver" title="Link to this heading"></a></h2>
-<p>Configure kernel with “make menuconfig” (alternatively use “make xconfig” or “make qconfig”)</p>
+<p>Configure kernel with “make menuconfig” (alternatively use “make xconfig” or
+“make qconfig”)</p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <p>The AD5593R Driver depends on CONFIG_I2C</p>
@@ -770,7 +785,13 @@ Content on this topic
 </section>
 <section id="device-tree-example">
 <h3>Device tree example<a class="headerlink" href="#device-tree-example" title="Link to this heading"></a></h3>
-<p>The following example instanciates the ad5593r driver for a AD5593R device connected on a I2C bus. It sets the I/O0 port as a DAC, the I/O1 port as ADC. I/O2 and I/O3 are configured for primary function DAC the additional ADC can measure the voltage being provided by the DAC. This feature can monitor the output voltage to detect short circuits or overload conditions. I/O4 is connected to the ground with a pull-down resistor. The other I/Os are registered with the Linux GPIO subsystem.</p>
+<p>The following example instanciates the ad5593r driver for a AD5593R device
+connected on a I2C bus. It sets the I/O0 port as a DAC, the I/O1 port as ADC.
+I/O2 and I/O3 are configured for primary function DAC the additional ADC can
+measure the voltage being provided by the DAC. This feature can monitor the
+output voltage to detect short circuits or overload conditions. I/O4 is
+connected to the ground with a pull-down resistor. The other I/Os are registered
+with the Linux GPIO subsystem.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="c1">#include &lt;dt-bindings/iio/adi,ad5592r.h&gt;</span>
 
     <span class="n">vref</span><span class="p">:</span> <span class="n">regulator</span><span class="o">-</span><span class="n">vref</span> <span class="p">{</span>
@@ -826,7 +847,8 @@ Content on this topic
 </section>
 <section id="driver-testing">
 <h1>Driver testing<a class="headerlink" href="#driver-testing" title="Link to this heading"></a></h1>
-<p>If the driver correctly detected the device, the “iio_info” program should inform us about the available channels:</p>
+<p>If the driver correctly detected the device, the “iio_info” program should
+inform us about the available channels:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@linaro</span><span class="o">-</span><span class="n">ubuntu</span><span class="o">-</span><span class="n">desktop</span><span class="p">:</span><span class="o">~</span><span class="c1"># iio_info</span>
 <span class="n">IIO</span> <span class="n">context</span> <span class="n">created</span><span class="p">:</span> <span class="n">local</span>
 <span class="n">IIO</span> <span class="n">context</span> <span class="n">has</span> <span class="mi">3</span> <span class="n">devices</span><span class="p">:</span>
@@ -1004,7 +1026,12 @@ Content on this topic
 </section>
 <section id="gpio-testing">
 <h2>GPIO Testing<a class="headerlink" href="#gpio-testing" title="Link to this heading"></a></h2>
-<p>The GPIO sysfs interface allows users to manipulate any GPIO from userspace. Userspace utilizes a sysfs control interface to dynamically request and release individual GPIOs. Once a GPIO has been requested, writing to the newly created path allows you to control the direction and the data while reading from it returns the GPIO data (which usually corresponds to a 0 or 1 which represents the signal level).</p>
+<p>The GPIO sysfs interface allows users to manipulate any GPIO from userspace.
+Userspace utilizes a sysfs control interface to dynamically request and release
+individual GPIOs. Once a GPIO has been requested, writing to the newly created
+path allows you to control the direction and the data while reading from it
+returns the GPIO data (which usually corresponds to a 0 or 1 which represents
+the signal level).</p>
 <p>For more information see also here: <a class="icon link reference external" href="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/gpio/sysfs.txt" target="_blank">GPIO Kernel Documentation</a></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@linaro</span><span class="o">-</span><span class="n">ubuntu</span><span class="o">-</span><span class="n">desktop</span><span class="p">:</span><span class="o">~</span><span class="c1"># cd /sys/class/gpio/</span>
 <span class="n">root</span><span class="nd">@linaro</span><span class="o">-</span><span class="n">ubuntu</span><span class="o">-</span><span class="n">desktop</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">class</span><span class="o">/</span><span class="n">gpio</span><span class="c1"># ls</span>
@@ -1028,7 +1055,6 @@ Content on this topic
 <span class="n">base</span><span class="p">:</span><span class="mi">890</span>
 <span class="n">label</span><span class="p">:</span><span class="mi">0</span><span class="o">-</span><span class="mi">0010</span>
 <span class="n">ngpio</span><span class="p">:</span><span class="mi">8</span>
-
 
 <span class="n">root</span><span class="nd">@linaro</span><span class="o">-</span><span class="n">ubuntu</span><span class="o">-</span><span class="n">desktop</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">class</span><span class="o">/</span><span class="n">gpio</span><span class="o">/</span><span class="n">gpiochip890</span><span class="c1"># cd ..</span>
 <span class="n">root</span><span class="nd">@linaro</span><span class="o">-</span><span class="n">ubuntu</span><span class="o">-</span><span class="n">desktop</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">class</span><span class="o">/</span><span class="n">gpio</span><span class="c1"># echo 897 &gt; export</span>

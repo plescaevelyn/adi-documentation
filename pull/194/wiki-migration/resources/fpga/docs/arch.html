@@ -656,7 +656,9 @@ source ../common/fmcomms2_bd.tcl
 <hr class="docutils" />
 <section id="base-design">
 <h3>Base Design<a class="headerlink" href="#base-design" title="Link to this heading"></a></h3>
-<p>The base design contains all the I/O peripheral and memory interfaces and processing components, which are necessary for a fully functional Linux system. The majority of these components are Intel and Xilinx IP cores.</p>
+<p>The base design contains all the I/O peripheral and memory interfaces and
+processing components, which are necessary for a fully functional Linux system.
+The majority of these components are Intel and Xilinx IP cores.</p>
 <p>Typically, this contains:</p>
 <ul class="simple">
 <li><p>Microprocessor</p></li>
@@ -701,8 +703,13 @@ source ../common/fmcomms2_bd.tcl
 </section>
 <section id="memory-interface-controller">
 <h4>Memory Interface Controller<a class="headerlink" href="#memory-interface-controller" title="Link to this heading"></a></h4>
-<p>In almost all cases, the carrier board is not made and designed by Analog Devices, so the external memory solution of the system is given. Meaning we can not support, modify or alter this important part of the system, in several cases we even have system limitations because of it (e.g. the memory interface is not fast enough to handle the required data throughput).</p>
-<p>Under the two links below the user can find the landing page of the available memory solutions for both Altera and Xilinx:</p>
+<p>In almost all cases, the carrier board is not made and designed by Analog
+Devices, so the external memory solution of the system is given. Meaning we can
+not support, modify or alter this important part of the system, in several cases
+we even have system limitations because of it (e.g. the memory interface is not
+fast enough to handle the required data throughput).</p>
+<p>Under the two links below the user can find the landing page of the available
+memory solutions for both Altera and Xilinx:</p>
 <ul class="simple">
 <li><p>Intel’s memory interfaces: <a class="icon link reference external" href="https://www.intel.com/content/www/us/en/programmable/support/support-resources/external-memory.html" target="_blank">https://www.intel.com/content/www/us/en/programmable/support/support-resources/external-memory.html</a></p></li>
 <li><p>Xilinx’s memory interfaces: <a class="icon link reference external" href="https://www.xilinx.com/products/intellectual-property/mig.html#documentation" target="_blank">https://www.xilinx.com/products/intellectual-property/mig.html#documentation</a></p></li>
@@ -710,14 +717,22 @@ source ../common/fmcomms2_bd.tcl
 </section>
 <section id="peripheral-interfaces">
 <h4>Peripheral Interfaces<a class="headerlink" href="#peripheral-interfaces" title="Link to this heading"></a></h4>
-<p>These interfaces are used to control external peripherals located on the prototyping board or the FMC IO board. In HDL, these ports are named slightly different than how they’re in the documentations. Thus, to make it easier for beginners, here you have the naming of the ports depending on the microprocessor used.</p>
+<p>These interfaces are used to control external peripherals located on the
+prototyping board or the FMC IO board. In HDL, these ports are named slightly
+different than how they’re in the documentations. Thus, to make it easier for
+beginners, here you have the naming of the ports depending on the microprocessor
+used.</p>
 <section id="spi">
 <h5>SPI<a class="headerlink" href="#spi" title="Link to this heading"></a></h5>
 <p>In general, the base system has two Serial Peripheral Interfaces, which are used as a control interface for FMC/HSMC devices. These SPI interfaces are controlled by the integrated SPI controller of the <strong>Hard Processor System</strong> (HPS) or <strong>Processing System 7/8</strong> (PS7/8) or an Intel or Xilinx SPI controller core.</p>
 </section>
 <section id="i2c-i2s-spdif">
 <h5>I2C/I2S/SPDIF<a class="headerlink" href="#i2c-i2s-spdif" title="Link to this heading"></a></h5>
-<p>A couple of carrier boards require these standard interfaces for different purposes, for example, a configuration interface for an audio peripheral device. These peripherals do not necessarily have vital roles in the reference design, it’s more like a generic goal to support all the provided peripherals of the carrier board.</p>
+<p>A couple of carrier boards require these standard interfaces for different
+purposes, for example, a configuration interface for an audio peripheral device.
+These peripherals do not necessarily have vital roles in the reference design,
+it’s more like a generic goal to support all the provided peripherals of the
+carrier board.</p>
 </section>
 <section id="hdmi">
 <h5>HDMI<a class="headerlink" href="#hdmi" title="Link to this heading"></a></h5>
@@ -728,10 +743,14 @@ source ../common/fmcomms2_bd.tcl
 <p>The general rule of thumb is to define 64 GPIO pins for the base design:</p>
 <ul class="simple">
 <li><p>bits [31: 0] always belong to the carrier board;</p></li>
-<li><p>bits [63:32] will be assigned to switches, buttons and/or LEDs, which can be found on the FMC board.</p></li>
+<li><p>bits [63:32] will be assigned to switches, buttons and/or LEDs, which can be
+found on the FMC board.</p></li>
 </ul>
-<p>When some of these GPIOs are not used, the input pins should have the output pins driven to them, so that Vivado will not complain about inputs not being assigned to.</p>
-<p>Depending on the processor type, add these values to the GPIO number from the HDL project to obtain the final number used in software:</p>
+<p>When some of these GPIOs are not used, the input pins should have the output
+pins driven to them, so that Vivado will not complain about inputs not being
+assigned to.</p>
+<p>Depending on the processor type, add these values to the GPIO number from the
+HDL project to obtain the final number used in software:</p>
 <ul class="simple">
 <li><p>PS7 EMIO offset = 54</p></li>
 <li><p>PS8 EMIO offset = 78</p></li>
@@ -743,13 +762,17 @@ source ../common/fmcomms2_bd.tcl
 <li><p>Ethernet</p></li>
 <li><p>USB OTG</p></li>
 </ul>
-<p>These interfaces designs are borrowed from the golden reference design of the board.</p>
+<p>These interfaces designs are borrowed from the golden reference design of the
+board.</p>
 </section>
 </section>
 <section id="interrupts">
 <h4>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading"></a></h4>
-<p>When developing the Linux software parts for an HDL project, the interrupts number to the PS have a different number in the software side.</p>
-<p>Not a rule, but in our designs we preffer to use firstly the interrupts from 15 and to go down to 0. Be careful when assigning one, because it might be used in the base design of the carrier!</p>
+<p>When developing the Linux software parts for an HDL project, the interrupts
+number to the PS have a different number in the software side.</p>
+<p>Not a rule, but in our designs we preffer to use firstly the interrupts from 15
+and to go down to 0. Be careful when assigning one, because it might be used in
+the base design of the carrier!</p>
 <p>Always check which are used (in <em>/projects/common/:math:`carrier/`carrier_system_bd.tcl</em>)</p>
 <p>++++ Click here to see the interrupts table |</p>
 <div class="table-wrapper docutils container">
@@ -1142,7 +1165,8 @@ source ../common/fmcomms2_bd.tcl
 <ul>
 <li><p>the I/O ports of this module are declared in either <em>system_bd.tcl</em> or in the <strong>board</strong> design file</p></li>
 <li><p>this can be visualized in Vivado at the Block Design section</p></li>
-<li><p>the base design, board design and system_bd.tcl describe this module, making the connections between the instantiated IPs</p></li>
+<li><p>the base design, board design and system_bd.tcl describe this module,
+making the connections between the instantiated IPs</p></li>
 </ul>
 </li>
 </ul>
@@ -1164,7 +1188,8 @@ source ../common/fmcomms2_bd.tcl
 </section>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
-<p>Some carriers have a different name for these files, for example A10SoC has constraints file for both PL side and PS side:</p>
+<p>Some carriers have a different name for these files, for example A10SoC has
+constraints file for both PL side and PS side:</p>
 <ul class="simple">
 <li><p>a10soc_plddr4_assign.tcl — constraints file for the PL</p></li>
 <li><p>a10soc_system_assign.tcl — constraints file for the PS</p></li>

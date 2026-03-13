@@ -708,14 +708,18 @@ Content on this topic
 <span class="p">};</span>
 </pre></div>
 </div>
-<p>If the specific application has wiring that can’t handle the max SPI SCLK rate for the ADC chip, a lower max rate can be specified, otherwise use the max rate from the datasheet (which may be different for some chips).</p>
+<p>If the specific application has wiring that can’t handle the max SPI SCLK rate
+for the ADC chip, a lower max rate can be specified, otherwise use the max rate
+from the datasheet (which may be different for some chips).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">spi</span><span class="o">-</span><span class="nb">max</span><span class="o">-</span><span class="n">frequency</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mi">111111111</span><span class="o">&gt;</span><span class="p">;</span> <span class="o">/*</span> <span class="mi">9</span> <span class="n">ns</span> <span class="n">period</span> <span class="o">*/</span>
 </pre></div>
 </div>
 <p>There are multiple ways that the chip can be wired to the SPI bus. The datasheet calls these “3-wire mode”, “4-wire mode” and “daisy chain mode”. Set <code class="docutils literal notranslate"><span class="pre">adi,spi-mode</span></code> accordingly. <strong>Note:</strong> “3-wire mode” is required to achieve the maximum sample rate.</p>
 <section id="wire-mode">
 <h3>3-wire mode<a class="headerlink" href="#wire-mode" title="Link to this heading"></a></h3>
-<p>In this mode, the CS line of the SPI controller is connected to the CNV pin of the ADC. The SDI line of the SPI controller is connected to the SDO pin of the ADC. The SDI pin of the ADC is hard-wired high.</p>
+<p>In this mode, the CS line of the SPI controller is connected to the CNV pin of
+the ADC. The SDI line of the SPI controller is connected to the SDO pin of the
+ADC. The SDI pin of the ADC is hard-wired high.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">adi</span><span class="p">,</span><span class="n">spi</span><span class="o">-</span><span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;single&quot;</span><span class="p">;</span>
 </pre></div>
 </div>
@@ -733,7 +737,9 @@ Content on this topic
 </section>
 <section id="id2">
 <h3>4-wire mode<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
-<p>In this mode, the CS line on the SPI controller is connected to the SDI pin on the ADC. The SDI line on the SPI controller is connected to the SDO pin on the ADC. A GPIO on the Linux host is connected to the CNV pin on the ADC.</p>
+<p>In this mode, the CS line on the SPI controller is connected to the SDI pin on
+the ADC. The SDI line on the SPI controller is connected to the SDO pin on the
+ADC. A GPIO on the Linux host is connected to the CNV pin on the ADC.</p>
 <p>This is the default mode, so in this case, the <code class="docutils literal notranslate"><span class="pre">adi,spi-mode</span></code> property is omitted, but GPIO connected to the CNV pin needs to be specified.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cnv</span><span class="o">-</span><span class="n">gpios</span> <span class="o">=</span> <span class="o">&lt;&amp;</span><span class="n">gpio0</span> <span class="mi">88</span> <span class="n">GPIO_ACTIVE_HIGH</span><span class="o">&gt;</span><span class="p">;</span>
 </pre></div>
@@ -742,7 +748,10 @@ Content on this topic
 </section>
 <section id="daisy-chain-mode">
 <h3>Daisy chain mode<a class="headerlink" href="#daisy-chain-mode" title="Link to this heading"></a></h3>
-<p>In this mode, the CS line of the SPI controller is connected to the CNV pin of all of the ADCs. The SDI line of the SPI controller is connected to the SDO pin of the ADC. The SDI pin of the ADC is connected to the SDO pin of the next ADC in the chain. The SDI pin of the last ADC in the chain is hard-wired low.</p>
+<p>In this mode, the CS line of the SPI controller is connected to the CNV pin of
+all of the ADCs. The SDI line of the SPI controller is connected to the SDO pin
+of the ADC. The SDI pin of the ADC is connected to the SDO pin of the next ADC
+in the chain. The SDI pin of the last ADC in the chain is hard-wired low.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">adi</span><span class="p">,</span><span class="n">spi</span><span class="o">-</span><span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;chain&quot;</span><span class="p">;</span>
 <span class="c1">#daisy-chained-devices = &lt;1&gt;;</span>
 </pre></div>
@@ -773,7 +782,8 @@ Content on this topic
 </section>
 <section id="reference-supplies">
 <h2>Reference supplies<a class="headerlink" href="#reference-supplies" title="Link to this heading"></a></h2>
-<p>There are 3 ways to supply a reference voltage. The default of the evaluation boards is to use a 5V external reference.</p>
+<p>There are 3 ways to supply a reference voltage. The default of the evaluation
+boards is to use a 5V external reference.</p>
 <section id="internal-reference">
 <h3>Internal reference<a class="headerlink" href="#internal-reference" title="Link to this heading"></a></h3>
 <p>If using the internal reference of the ADC chip (PDREF pin is wired low, REF and REFIN pins act as outputs) omit both the <code class="docutils literal notranslate"><span class="pre">ref-supply</span></code> and <code class="docutils literal notranslate"><span class="pre">refin-supply</span></code> properties.</p>
@@ -791,7 +801,8 @@ Content on this topic
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ref</span><span class="o">-</span><span class="n">supply</span> <span class="o">=</span> <span class="o">&lt;&amp;</span><span class="n">eval_u5</span><span class="o">&gt;</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>In this case, is important that this indicates the voltage level that is being supplied.</p>
+<p>In this case, is important that this indicates the voltage level that is being
+supplied.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span> <span class="p">{</span>
     <span class="n">eval_u5</span><span class="p">:</span> <span class="nb">eval</span><span class="o">-</span><span class="n">board</span><span class="o">-</span><span class="n">u5</span><span class="o">-</span><span class="n">regulator</span> <span class="p">{</span>
         <span class="n">compatible</span> <span class="o">=</span> <span class="s2">&quot;regulator-fixed&quot;</span><span class="p">;</span>
@@ -807,8 +818,10 @@ Content on this topic
 </section>
 <section id="turbo-pin">
 <h2>Turbo pin<a class="headerlink" href="#turbo-pin" title="Link to this heading"></a></h2>
-<p>In order to achieve the max sample rate, TURBO has to be enabled. Disabling TURBO can save power.</p>
-<p>If the TURBO pin is connected to a GPIO, it must be specified. This is the default of the Pulsar ADC HDL project.</p>
+<p>In order to achieve the max sample rate, TURBO has to be enabled. Disabling
+TURBO can save power.</p>
+<p>If the TURBO pin is connected to a GPIO, it must be specified. This is the
+default of the Pulsar ADC HDL project.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">turbo</span><span class="o">-</span><span class="n">gpios</span> <span class="o">=</span> <span class="o">&lt;&amp;</span><span class="n">gpio0</span> <span class="mi">87</span> <span class="n">GPIO_ACTIVE_HIGH</span><span class="o">&gt;</span><span class="p">;</span>
 </pre></div>
 </div>
@@ -847,7 +860,8 @@ Content on this topic
 </section>
 <section id="sysfs-attributes">
 <h3>Sysfs attributes<a class="headerlink" href="#sysfs-attributes" title="Link to this heading"></a></h3>
-<p>The sysfs attributes are used to get information about the device and also configure the device.</p>
+<p>The sysfs attributes are used to get information about the device and also
+configure the device.</p>
 <section id="informational">
 <h4>Informational<a class="headerlink" href="#informational" title="Link to this heading"></a></h4>
 <p>As seen above, reading the <code class="docutils literal notranslate"><span class="pre">name</span></code> attribute will return the name of the chip.</p>
@@ -875,13 +889,15 @@ Content on this topic
 </section>
 <section id="sampling-frequency">
 <h4>Sampling frequency<a class="headerlink" href="#sampling-frequency" title="Link to this heading"></a></h4>
-<p>When using a SPI controller with SPI offload support, there is also an additional attribute for controlling the sample rate.</p>
+<p>When using a SPI controller with SPI offload support, there is also an
+additional attribute for controlling the sample rate.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@analog</span><span class="p">:</span><span class="o">~</span><span class="c1"># echo 1000000 &gt; /sys/bus/iio/devices/iio\:device1/in_voltage0_sampling_frequency</span>
 <span class="n">root</span><span class="nd">@analog</span><span class="p">:</span><span class="o">~</span><span class="c1"># cat /sys/bus/iio/devices/iio\:device1/in_voltage0_sampling_frequency</span>
 <span class="mi">1000000</span>
 </pre></div>
 </div>
-<p>Reading returns the current sampling frequency in Hz and writing will set the value.</p>
+<p>Reading returns the current sampling frequency in Hz and writing will set the
+value.</p>
 <p><code class="docutils literal notranslate"><span class="pre">in_voltage0_sampling_frequency_available</span></code> will give the max sample rate for the chip, e.g. 2.5 MHz for AD7944.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@analog</span><span class="p">:</span><span class="o">~</span><span class="c1"># cat /sys/bus/iio/devices/iio\:device1/in_voltage0_sampling_frequency_available</span>
 <span class="p">[</span><span class="mi">1</span> <span class="mi">1</span> <span class="mi">2500000</span><span class="p">]</span>
@@ -908,7 +924,8 @@ Content on this topic
 <p class="admonition-title">Tip</p>
 <p>General information on these attributes can be found in the <a class="icon link reference external" href="https://www.kernel.org/doc/html/latest/iio/iio_devbuf.html" target="_blank">Linux kernel documentation</a>.</p>
 </div>
-<p>Using the buffer will be slightly different depending on if using a SPI offload or not.</p>
+<p>Using the buffer will be slightly different depending on if using a SPI offload
+or not.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -929,7 +946,8 @@ Content on this topic
 </tbody>
 </table>
 </div>
-<p>Here is an example of how to read a few values at a low sample rate for testing using a Linux host with SPI offload support:</p>
+<p>Here is an example of how to read a few values at a low sample rate for testing
+using a Linux host with SPI offload support:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># set sample rate to 1kHz</span>
 <span class="n">root</span><span class="nd">@analog</span><span class="p">:</span><span class="o">~</span><span class="c1"># echo 1000 &gt; /sys/bus/iio/devices/iio\:device1/in_voltage0_sampling_frequency</span>
 <span class="c1"># set buffer to receive 8 samples at a time</span>
@@ -976,7 +994,7 @@ Content on this topic
 <h3>Typical hardware setup<a class="headerlink" href="#typical-hardware-setup" title="Link to this heading"></a></h3>
 <p>A typical test setup consists of one of the evaluation boards from above connected to a <a class="icon link reference external" href="https://www.avnet.com/wps/portal/us/products/avnet-boards/avnet-board-families/zedboard/" target="_blank">ZedBoard</a>.</p>
 <p>A <a class="icon adi reference external" href="https://www.analog.com/ADALM2000" target="_blank">ADALM2000</a> (also known as M2K) can be used to to generate a signal. This will also require coax cable with SMA connectors and appropriate adapters to adapt the coax to individual wires on the signal generator.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad7944/zedboard-eval-ad7985fmcz-m2k.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad7944/zedboard-eval-ad7985fmcz-m2k.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad7944/zedboard-eval-ad7985fmcz-m2k.jpg" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad7944/zedboard-eval-ad7985fmcz-m2k.jpg"><img alt="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad7944/zedboard-eval-ad7985fmcz-m2k.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad7944/zedboard-eval-ad7985fmcz-m2k.jpg" width="600" />
 </a>
 </section>
 <section id="typical-zedboard-software-setup">
@@ -988,7 +1006,8 @@ Content on this topic
 </section>
 <section id="typical-test-application-software">
 <h3>Typical test application software<a class="headerlink" href="#typical-test-application-software" title="Link to this heading"></a></h3>
-<p>ADI provides several open source tools to make it easy to get started with using Linux IIO drivers.</p>
+<p>ADI provides several open source tools to make it easy to get started with using
+Linux IIO drivers.</p>
 <section id="iio-oscilloscope">
 <h4>IIO Oscilloscope<a class="headerlink" href="#iio-oscilloscope" title="Link to this heading"></a></h4>
 <p>This section only describes the bits specific to these chips. For instructions on how to obtain IIO Oscilloscope and it’s basic usage, please see the <a class="reference internal" href="../../linux-software/iio_oscilloscope.html"><span class="doc">iio_oscilloscope</span></a> page.</p>
@@ -999,13 +1018,17 @@ Content on this topic
 </section>
 <section id="examples">
 <h4>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h4>
-<p>Here are a couple of example of how to use these tools together to test an ADC on an evaluation board connected to a development board running Linux.</p>
+<p>Here are a couple of example of how to use these tools together to test an ADC
+on an evaluation board connected to a development board running Linux.</p>
 <section id="measure-constant-voltage">
 <h5>Measure constant voltage<a class="headerlink" href="#measure-constant-voltage" title="Link to this heading"></a></h5>
-<p>A quick way check if the ADC is working correctly is to generate a constant voltage on the input and measure it using the DMM feature of the IIO Oscilloscope. For example, if you generate a constant 3 V DC signal, you should see something like this:</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad7944/scopy-constant-3v-0v.png"><img alt="M2K is set up to generate 3 V constant signal." class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad7944/scopy-constant-3v-0v.png" style="width: 800px;" />
+<p>A quick way check if the ADC is working correctly is to generate a constant
+voltage on the input and measure it using the DMM feature of the IIO
+Oscilloscope. For example, if you generate a constant 3 V DC signal, you should
+see something like this:</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad7944/scopy-constant-3v-0v.png"><img alt="M2K is set up to generate 3 V constant signal." class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad7944/scopy-constant-3v-0v.png" width="800" />
 </a>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad7944/iio-osc-ad7985-dmm-voltage0-3v.png"><img alt="Linux driver is measuring something very close to 3 V." class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad7944/iio-osc-ad7985-dmm-voltage0-3v.png" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad7944/iio-osc-ad7985-dmm-voltage0-3v.png"><img alt="Linux driver is measuring something very close to 3 V." class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad7944/iio-osc-ad7985-dmm-voltage0-3v.png" width="600" />
 </a>
 </section>
 <section id="capture-many-samples-for-analysis">
@@ -1016,17 +1039,27 @@ Content on this topic
 <p class="admonition-title">Note</p>
 <p>If you are using a setup without SPI offload support, a trigger source must be set up manually and can’t be controlled via the <em>IIO Oscilloscope</em> app. See <a class="reference internal" href="ad738x.html"><span class="doc">example</span></a>.</p>
 </div>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad7944/iio-osc-ad7985-debug-voltage0-samp-freq-1mhz.png"><img alt="Capturing 4000 samples at 1MSPS" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad7944/iio-osc-ad7985-debug-voltage0-samp-freq-1mhz.png" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad7944/iio-osc-ad7985-debug-voltage0-samp-freq-1mhz.png"><img alt="Capturing 4000 samples at 1MSPS" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad7944/iio-osc-ad7985-debug-voltage0-samp-freq-1mhz.png" width="600" />
 </a>
-<p>Then you will need to set up a signal generator to generate an appropriate signal. This family of chips has unipolar inputs (voltage can’t go below 0V) so an offset will need to be configured in the signal generator. The maximum allowable voltage is the same as the reference voltage. The default on the evaluation boards is 5V. Typically, the offset will be configured to 1/2 of the reference voltage, in this case, 2.5 V. A 1 kHz sine wave with peak-to-peak voltage of something a bit smaller than the full measurable range is a reasonable place to start.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad7944/scopy-sine-4v-p-p-2.5v-offset-1khz-const-0v.png"><img alt="Generating 4V peak-to-peak signal with 2.5 V offset at 1 kHz" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad7944/scopy-sine-4v-p-p-2.5v-offset-1khz-const-0v.png" style="width: 800px;" />
+<p>Then you will need to set up a signal generator to generate an appropriate
+signal. This family of chips has unipolar inputs (voltage can’t go below 0V) so
+an offset will need to be configured in the signal generator. The maximum
+allowable voltage is the same as the reference voltage. The default on the
+evaluation boards is 5V. Typically, the offset will be configured to 1/2 of the
+reference voltage, in this case, 2.5 V. A 1 kHz sine wave with peak-to-peak
+voltage of something a bit smaller than the full measurable range is a
+reasonable place to start.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad7944/scopy-sine-4v-p-p-2.5v-offset-1khz-const-0v.png"><img alt="Generating 4V peak-to-peak signal with 2.5 V offset at 1 kHz" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad7944/scopy-sine-4v-p-p-2.5v-offset-1khz-const-0v.png" width="800" />
 </a>
 <p>Once the trigger and signal generator are configured correctly, open a new <em>Plot</em> window, enable all channels, enter the number of samples required and perform a capture. Save the data to a <code class="docutils literal notranslate"><span class="pre">.csv</span></code> file if you need to perform additional analysis.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>When using SPI offloading for high-speed data capture, the first sample will always contain stale sample data and should be discarded. For example, a “bad” datapoint can be see at the start of the plot below. This is normal and can’t be avoided for technical reasons when doing high-speed data capture.</p>
+<p>When using SPI offloading for high-speed data capture, the first sample will
+always contain stale sample data and should be discarded. For example, a
+“bad” datapoint can be see at the start of the plot below. This is normal and
+can’t be avoided for technical reasons when doing high-speed data capture.</p>
 </div>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad7944/iio-osc-ad7985-capture-voltage0-1msps-4000s.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad7944/iio-osc-ad7985-capture-voltage0-1msps-4000s.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad7944/iio-osc-ad7985-capture-voltage0-1msps-4000s.png" style="width: 800px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad7944/iio-osc-ad7985-capture-voltage0-1msps-4000s.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad7944/iio-osc-ad7985-capture-voltage0-1msps-4000s.png" class="align-center" src="https://wiki.analog.com/_media/resources/tools-software/linux-drivers/iio-adc/ad7944/iio-osc-ad7985-capture-voltage0-1msps-4000s.png" width="800" />
 </a>
 </section>
 </section>

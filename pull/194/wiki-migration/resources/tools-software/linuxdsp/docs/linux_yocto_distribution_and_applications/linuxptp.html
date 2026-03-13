@@ -606,15 +606,25 @@ Content on this topic
 <h2>PTP Introduction<a class="headerlink" href="#ptp-introduction" title="Link to this heading"></a></h2>
 <section id="precision-time-protocol-ptp">
 <h3>Precision Time Protocol(PTP)<a class="headerlink" href="#precision-time-protocol-ptp" title="Link to this heading"></a></h3>
-<p>The Precision Time Protocol (PTP) is a high-precision time synchronization protocol for networked measurement and control systems. It is defined in the IEEE 1588 standard, which is designed for local systems requiring very high accuracies - beyond those attainable using NTP (Network Time Protocol). PTP makes it possible to synchronize distributed clocks with sub-microsecond accuracy via Ethernet networks, with relatively low demands on the local clocks and the network and computing capacity.</p>
-<p>ADSP-SC573, SC584 and SC589 all support PTP. But only EMAC0 (the 10/100/1000 Mbps port) supports PTP, EMAC1 (the 10/100 Mbps port) is not capable of PTP operation.</p>
+<p>The Precision Time Protocol (PTP) is a high-precision time synchronization
+protocol for networked measurement and control systems. It is defined in the
+IEEE 1588 standard, which is designed for local systems requiring very high
+accuracies - beyond those attainable using NTP (Network Time Protocol). PTP
+makes it possible to synchronize distributed clocks with sub-microsecond
+accuracy via Ethernet networks, with relatively low demands on the local clocks
+and the network and computing capacity.</p>
+<p>ADSP-SC573, SC584 and SC589 all support PTP. But only EMAC0 (the 10/100/1000
+Mbps port) supports PTP, EMAC1 (the 10/100 Mbps port) is not capable of PTP
+operation.</p>
 </section>
 </section>
 <section id="ptp-software-configuration">
 <h2>PTP Software Configuration<a class="headerlink" href="#ptp-software-configuration" title="Link to this heading"></a></h2>
 <section id="package-configuration">
 <h3>Package configuration<a class="headerlink" href="#package-configuration" title="Link to this heading"></a></h3>
-<p>You should also enable the linuxptp test program to assist with testing. Add the linuxptp program in the filesystem images, it’s enabled in adsp-sc5xx-full image by default.</p>
+<p>You should also enable the linuxptp test program to assist with testing. Add the
+linuxptp program in the filesystem images, it’s enabled in adsp-sc5xx-full image
+by default.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vim</span> <span class="n">build</span><span class="o">/</span><span class="n">conf</span><span class="o">/</span><span class="n">local</span><span class="o">.</span><span class="n">conf</span>
 <span class="n">IMAGE_INSTALL_append</span> <span class="o">=</span> <span class="s2">&quot; linuxptp&quot;</span>
 </pre></div>
@@ -647,11 +657,16 @@ Device Drivers  ---&gt;
 </section>
 <section id="device-tree-configuration">
 <h3>Device tree configuration<a class="headerlink" href="#device-tree-configuration" title="Link to this heading"></a></h3>
-<p>The timestamps that are the basis of PTP can be acquired with greater accuracy when they are captured by the ethernet PHY hardware. The PHY interface can support hardware timestamps, the default phy-mode is RGMII.</p>
-<p>The phy-mode also can be changed to “rmii” in the device tree header in the linux kernel source arch/arm/boot/dts/sc589-ezkit.dts and other board specific sc5xx.dts files.</p>
+<p>The timestamps that are the basis of PTP can be acquired with greater accuracy
+when they are captured by the ethernet PHY hardware. The PHY interface can
+support hardware timestamps, the default phy-mode is RGMII.</p>
+<p>The phy-mode also can be changed to “rmii” in the device tree header in the
+linux kernel source arch/arm/boot/dts/sc589-ezkit.dts and other board specific
+sc5xx.dts files.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>… : ellipsis, means other properties in EMAC0 node stay the same - : minus, means delete this property + : plus, means add this property</p>
+<p>… : ellipsis, means other properties in EMAC0 node stay the same - : minus,
+means delete this property + : plus, means add this property</p>
 </div>
 <p>Run “<strong>bitbake linux-adi -c devshell</strong>” to enter into linux kernel source code and then change the dts file.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ vim arch/arm/boot/dts/sc589-ezkit.dts
@@ -672,9 +687,12 @@ Device Drivers  ---&gt;
 <section id="preliminary-work">
 <h3>Preliminary work<a class="headerlink" href="#preliminary-work" title="Link to this heading"></a></h3>
 <p><strong>1) Hardware Setup</strong></p>
-<p>Two ADSP-SC5xx boards are required. One board act as a master, and the other act as a slave. The two boards are connected by their respective EMAC0 ports using a standard crossover network cable.</p>
+<p>Two ADSP-SC5xx boards are required. One board act as a master, and the other act
+as a slave. The two boards are connected by their respective EMAC0 ports using a
+standard crossover network cable.</p>
 <p><strong>2) Master’s MAC address must be different from slave’s</strong></p>
-<p>In order to make the master’s and the slave’s MAC address different, change the slave’s address in U-Boot.</p>
+<p>In order to make the master’s and the slave’s MAC address different, change the
+slave’s address in U-Boot.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ set ethaddr 00:20:22:fe:85:29
 </pre></div>
 </div>

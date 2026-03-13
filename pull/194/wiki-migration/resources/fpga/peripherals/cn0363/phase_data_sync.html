@@ -669,10 +669,27 @@ Content on this topic
 </section>
 <section id="theory-of-operation">
 <h2>Theory of Operation<a class="headerlink" href="#theory-of-operation" title="Link to this heading"></a></h2>
-<p>The CN0363 Phase Data Sync FPGA Peripheral takes the raw ADC sample data read by a SPI controller from the ADC on the S_AXIS_SAMPLE stream. The data is assembled into 24-bit word and converted from offset binary to two’s complement signed.</p>
-<p>When a rising edge is detected on the conv_done signal the core takes a snapshot of the phase input signal. This data will be assumed to the phase that belongs to the next incoming data sample on the S_AXIS_SAMPLE. The data is aligned with the corresponding phase data and both are send out on the M_AXIS_SAMPLE and M_AXIS_PHASE stream.</p>
-<p>If the sample_has_stat signal is asserted the core will receive 32-bit instead of 24-bit per sample on the S_AXIS_SAMPLE stream. The last 8-bit are assumed to contain the STAT register of the ADC, which among other things contains the information about which channel the ADC result belongs to. This information can be used to detect and fix channel swaps. If sample_has_stat is not asserted the core assumes that no channel swaps happen and the whole pipeline is always running fast enough to accept a sample before the next one is ready.</p>
-<p>If processing_resetn is asserted the processing pipeline is assumed to be in reset and incapable of accepting new samples and when a new sample arrives at the S_AXIS_SAMPLE port a overflow condition is generated. The signal also resets the channel swap detection logic and makes sure that the next sample that is inserted into the processing pipeline after the reset belongs to the first channel.</p>
+<p>The CN0363 Phase Data Sync FPGA Peripheral takes the raw ADC sample data read by
+a SPI controller from the ADC on the S_AXIS_SAMPLE stream. The data is assembled
+into 24-bit word and converted from offset binary to two’s complement signed.</p>
+<p>When a rising edge is detected on the conv_done signal the core takes a snapshot
+of the phase input signal. This data will be assumed to the phase that belongs
+to the next incoming data sample on the S_AXIS_SAMPLE. The data is aligned with
+the corresponding phase data and both are send out on the M_AXIS_SAMPLE and
+M_AXIS_PHASE stream.</p>
+<p>If the sample_has_stat signal is asserted the core will receive 32-bit instead
+of 24-bit per sample on the S_AXIS_SAMPLE stream. The last 8-bit are assumed to
+contain the STAT register of the ADC, which among other things contains the
+information about which channel the ADC result belongs to. This information can
+be used to detect and fix channel swaps. If sample_has_stat is not asserted the
+core assumes that no channel swaps happen and the whole pipeline is always
+running fast enough to accept a sample before the next one is ready.</p>
+<p>If processing_resetn is asserted the processing pipeline is assumed to be in
+reset and incapable of accepting new samples and when a new sample arrives at
+the S_AXIS_SAMPLE port a overflow condition is generated. The signal also resets
+the channel swap detection logic and makes sure that the next sample that is
+inserted into the processing pipeline after the reset belongs to the first
+channel.</p>
 </section>
 <section id="more-information">
 <h2>More Information<a class="headerlink" href="#more-information" title="Link to this heading"></a></h2>

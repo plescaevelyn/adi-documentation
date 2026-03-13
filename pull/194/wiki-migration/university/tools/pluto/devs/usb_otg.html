@@ -600,8 +600,10 @@ Content on this topic
 <li><p><code class="docutils literal notranslate"><span class="pre">runme[0-9]</span></code> which it will run as a binary file.</p></li>
 </ul>
 <p>For those interested, it will do that via the automounter script in <code class="docutils literal notranslate"><span class="pre">/lib/mdev/automounter.sh</span></code> which is maintained <a class="icon link reference external" href="https://github.com/analogdevicesinc/buildroot/blob/pluto/board/pluto/automounter.sh" target="_blank">here</a>.</p>
-<p>Note 1 : if you’re editing the runme.sh file from windows, make sure you use ‘LF’ as file line ending.</p>
-<p>Note 2 : The power supply (and USB cable quality) of the ADALM-PLUTO have an influence on the otg storage device plug detection.</p>
+<p>Note 1 : if you’re editing the runme.sh file from windows, make sure you use
+‘LF’ as file line ending.</p>
+<p>Note 2 : The power supply (and USB cable quality) of the ADALM-PLUTO have an
+influence on the otg storage device plug detection.</p>
 <section id="basic-example">
 <h3>Basic Example<a class="headerlink" href="#basic-example" title="Link to this heading"></a></h3>
 <p>For those who just want to do something, create a <code class="docutils literal notranslate"><span class="pre">runme0.sh</span></code> file on a thumb drive (FAT32 is fine) which looks like a normal unix <a class="icon link reference external" href="https://en.wikipedia.org/wiki/Shell_script" target="_blank">shell script</a>. To debug your shell script, try your commands via ssh before putting them in the script. This example requires at least firmware v0.22.</p>
@@ -618,13 +620,18 @@ Content on this topic
 </pre></div>
 </div>
 <p>and insert the USB thumb drive in to Pluto.</p>
-<p>The LED should stop blinking, and you have run your application. To safely unmount the drive, you should press the button, which will cause the drive to by sync’ed, file systems caches flushed, and properly unmount the drive.</p>
+<p>The LED should stop blinking, and you have run your application. To safely
+unmount the drive, you should press the button, which will cause the drive to by
+sync’ed, file systems caches flushed, and properly unmount the drive.</p>
 </section>
 <section id="advanced-examples">
 <h3>Advanced examples<a class="headerlink" href="#advanced-examples" title="Link to this heading"></a></h3>
 <section id="send-a-tone">
 <h4>Send a tone<a class="headerlink" href="#send-a-tone" title="Link to this heading"></a></h4>
-<p>The code below sets up a tone, and plays it out via the DDS (the AD9361’s test mode). It then unmounts the drive it is running on, so you can unplug the USB drive. All that is necessary is to boot while the uSB drive is plugged in, and that is it. This example requires at least firmware v0.22.</p>
+<p>The code below sets up a tone, and plays it out via the DDS (the AD9361’s test
+mode). It then unmounts the drive it is running on, so you can unplug the USB
+drive. All that is necessary is to boot while the uSB drive is plugged in, and
+that is it. This example requires at least firmware v0.22.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
 
 <span class="c1"># the default directory the script runs in is /dev, so change to the drive</span>
@@ -656,7 +663,9 @@ touch<span class="w"> </span>foobar.txt
 </section>
 <section id="re-purposing-the-button">
 <h4>Re purposing the button<a class="headerlink" href="#re-purposing-the-button" title="Link to this heading"></a></h4>
-<p>The below script will change the function of the button. Rather than unmounting things, it pressing the button will run a script. Holding the button for longer than 5 seconds will unmount things.</p>
+<p>The below script will change the function of the button. Rather than unmounting
+things, it pressing the button will run a script. Holding the button for longer
+than 5 seconds will unmount things.</p>
 <p>This requires a few different scripts, and modification of a configuration file.</p>
 <p>To manage the button, pluto uses the <a class="icon link reference external" href="https://github.com/gandro/input-event-daemon" target="_blank">input event daemon</a> (<a class="icon link reference external" href="https://htmlpreview.github.io/?https://github.com/gandro/input-event-daemon/blob/master/docs/input-event-daemon.html" target="_blank">doc</a>). The default configuration file can be found at <a class="icon link reference external" href="https://github.com/analogdevicesinc/buildroot/blob/pluto/board/pluto/input-event-daemon.conf" target="_blank">here</a>, and simply calls the automounter (unmounter), when you press the button. Our script kills that, and re-starts things with different configuration file (our our mass storage device).</p>
 </section>

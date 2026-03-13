@@ -645,8 +645,15 @@ Content on this topic
 <h1>Serial Communication Classification Protocol (SCCP) with the LTC4296-1<a class="headerlink" href="#serial-communication-classification-protocol-sccp-with-the-ltc4296-1" title="Link to this heading"></a></h1>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
-<p>Serial Communication Classification Protocol (SCCP) allows for an IEEE 802.3cg, Single-pair Power over Ethernet (SPoE) compliant Power Sourcing Equipment (PSE) to classify a compliant Powered Device (PD) before power is applied to a cable. Through SCCP, information on device class, type, pd_faulted, and Cable resistance measurements enabled/disabled can be obtained.</p>
-<p>This Wiki provides an application circuitry overview, SCCP transactions overview, sample C code SCCP implementation, evaluation guidance and reference material for class and type. The sample C code may be used as a starting point for integrating SPoE power management into a system host microcontroller.</p>
+<p>Serial Communication Classification Protocol (SCCP) allows for an IEEE 802.3cg,
+Single-pair Power over Ethernet (SPoE) compliant Power Sourcing Equipment (PSE)
+to classify a compliant Powered Device (PD) before power is applied to a cable.
+Through SCCP, information on device class, type, pd_faulted, and Cable
+resistance measurements enabled/disabled can be obtained.</p>
+<p>This Wiki provides an application circuitry overview, SCCP transactions
+overview, sample C code SCCP implementation, evaluation guidance and reference
+material for class and type. The sample C code may be used as a starting point
+for integrating SPoE power management into a system host microcontroller.</p>
 <section id="useful-references">
 <h3>Useful References<a class="headerlink" href="#useful-references" title="Link to this heading"></a></h3>
 <ul class="simple">
@@ -658,8 +665,20 @@ Content on this topic
 </section>
 <section id="sccp-application-circuitry">
 <h2>SCCP APPLICATION CIRCUITRY<a class="headerlink" href="#sccp-application-circuitry" title="Link to this heading"></a></h2>
-<p>The SCCP was derived from the 1-Wire® protocol and utilizes a half-duplex, bi-directional open-drain bus where the PSE or PD can pull-down. Figure 1 illustrates an SPoE system featuring the LTC4296-1 PSE, the LTC9111 PD, an application host microcontroller, and ADIN1100 10BASE-T1L PHYs. Only one of five LTC4296-1 ports is shown, and the “x” suffix denotes pin names as a function of port number.</p>
-<p>The LTC4296-1 SCCP related components include pulldown MOSFET M3, line sense NPN BJT transistor Q1, snubber disconnect MOSFET M2, the LTC4296-1 SWx pin, and the host microcontroller GPOx and GPIx pins. The microcontroller’s GPOx pin drives M3 to pulldown the line voltage while Q1 limits the maximum voltage sensed at the GPIx pin. Snubber R3/C4 is provided for loop stability during inrush and current limit of high-side MOSFET M1 and is disconnected during PD detection and SCCP. Secondary snubber R5/C5 prevents excess ringing at the OUTPx pin when snubber R3/C4 is disconnected.</p>
+<p>The SCCP was derived from the 1-Wire® protocol and utilizes a half-duplex,
+bi-directional open-drain bus where the PSE or PD can pull-down. Figure 1
+illustrates an SPoE system featuring the LTC4296-1 PSE, the LTC9111 PD, an
+application host microcontroller, and ADIN1100 10BASE-T1L PHYs. Only one of five
+LTC4296-1 ports is shown, and the “x” suffix denotes pin names as a function of
+port number.</p>
+<p>The LTC4296-1 SCCP related components include pulldown MOSFET M3, line sense NPN
+BJT transistor Q1, snubber disconnect MOSFET M2, the LTC4296-1 SWx pin, and the
+host microcontroller GPOx and GPIx pins. The microcontroller’s GPOx pin drives
+M3 to pulldown the line voltage while Q1 limits the maximum voltage sensed at
+the GPIx pin. Snubber R3/C4 is provided for loop stability during inrush and
+current limit of high-side MOSFET M1 and is disconnected during PD detection and
+SCCP. Secondary snubber R5/C5 prevents excess ringing at the OUTPx pin when
+snubber R3/C4 is disconnected.</p>
 <p>Microcontroller requirements for implementing SCCP are:</p>
 <ul class="simple">
 <li><p>Per port GPO pin (SCCPOx)</p></li>
@@ -667,7 +686,11 @@ Content on this topic
 <li><p>A timer with resolution of at least 1us</p></li>
 </ul>
 <p>At the PSE, the LTC4296-1 is set up for the classification state by the microcontroller. Classification is configured by setting the software PSE ready bit (PxCFG0, Bit6, SW_PSE_READY) and the classification mode bit (PXCFG0, Bit 13, SET_CLASSIFICATION_MODE) before entering the detection state. If the microcontroller determines a valid PD with a compatible class is present, the port can proceed to the power-up state by setting the port software power available bit (Register PxCFG0, Bit 5, SW_POWER_AVAILABLE) and the end classification bit (Register PxCFG0, Bit 14, END_CLASSIFICATION). Further description of port states can be found in the <a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/data-sheets/ltc4296-1.pdf" target="_blank">LTC4296-1 Datasheet</a>.</p>
-<p>On the PD side, the LTC9111 detects the SCCP logic states on the lines through SNS1 and SNS2 and uses external MOSFETs (M13/M14) to pull-down the port voltage during classification in order to transmit a logic low. The use of two external MOSFETs allows successful classification regardless of input connector polarity configuration.</p>
+<p>On the PD side, the LTC9111 detects the SCCP logic states on the lines through
+SNS1 and SNS2 and uses external MOSFETs (M13/M14) to pull-down the port voltage
+during classification in order to transmit a logic low. The use of two external
+MOSFETs allows successful classification regardless of input connector polarity
+configuration.</p>
 <p><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/spoe_system.png" /></p>
 <div class="centeralign docutils container">
 <p><em>Figure 1. SPoE System</em></p>
@@ -675,7 +698,12 @@ Content on this topic
 </section>
 <section id="sccp-transactions-overview">
 <h2>SCCP Transactions Overview<a class="headerlink" href="#sccp-transactions-overview" title="Link to this heading"></a></h2>
-<p>SCCP transactions are comprised of initialization, write slot, and read slot protocols. The PSE initiates all protocols by pulling down the bus. The PSE also provides a voltage limited pull-up current to restore the bus voltage to a logic high. The PD uses the rectified voltage from the PSE pull-up to retain state during pull-down events. Table 1 summarizes the basic SCCP protocols, and Figure 2-4 illustrates the corresponding waveforms.</p>
+<p>SCCP transactions are comprised of initialization, write slot, and read slot
+protocols. The PSE initiates all protocols by pulling down the bus. The PSE also
+provides a voltage limited pull-up current to restore the bus voltage to a logic
+high. The PD uses the rectified voltage from the PSE pull-up to retain state
+during pull-down events. Table 1 summarizes the basic SCCP protocols, and Figure
+2-4 illustrates the corresponding waveforms.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -744,33 +772,44 @@ Content on this topic
 <li><p>Ch2: Voltage at LTC9111’s SCCP pin relative to GND_PD</p></li>
 </ul>
 <p>Note SCCP data is read/written LSB first, low byte first.</p>
-<p>The basic SCCP transaction is comprised of: i. Initialization ii. Write Broadcast Address (0xCC)</p>
+<p>The basic SCCP transaction is comprised of: i. Initialization ii. Write
+Broadcast Address (0xCC)</p>
 <ul class="simple">
-<li><p>Following the Initialization Sequence, the PSE proceeds with a Broadcast Address write operation. During this operation, the PSE transmits 0xCC to the PD. This is used to address a PD on the bus without sending out a unique address code information.</p></li>
+<li><p>Following the Initialization Sequence, the PSE proceeds with a Broadcast
+Address write operation. During this operation, the PSE transmits 0xCC to the
+PD. This is used to address a PD on the bus without sending out a unique
+address code information.</p></li>
 </ul>
 <ol class="lowerroman simple" start="3">
 <li><p>Write Read_Scratchpad Command (0xAA)</p></li>
 </ol>
 <ul class="simple">
-<li><p>Subsequent to the Broadcast Address write operation, the PSE sends a Read-Scratchpad Command (0xAA). This command configures the PD for subsequent two-byte CLASS_TYPE_INFO read plus CRC byte read operation.</p></li>
+<li><p>Subsequent to the Broadcast Address write operation, the PSE sends a
+Read-Scratchpad Command (0xAA). This command configures the PD for subsequent
+two-byte CLASS_TYPE_INFO read plus CRC byte read operation.</p></li>
 </ul>
 <ol class="lowerroman simple" start="4">
 <li><p>Read PD CLASS_TYPE_INFO Low Byte</p></li>
 </ol>
 <ul class="simple">
-<li><p>Following the Read_Scratchpad Command, the PD sends the Low Byte of its CLASS_TYPE_INFO to the PSE.</p></li>
+<li><p>Following the Read_Scratchpad Command, the PD sends the Low Byte of its
+CLASS_TYPE_INFO to the PSE.</p></li>
 </ul>
 <ol class="loweralpha simple" start="22">
 <li><p>Read PD CLASS_TYPE_INFO High Byte</p></li>
 </ol>
 <ul class="simple">
-<li><p>After the Low Byte of the CLASS_TYPE_INFO is transmitted the PD sends the High Byte of the ClASS_TYPE_INFO to the PSE. Interpretation of CLASS_TYPE_INFO is located in Table 7 &amp; 9 located in the Appendix section of this Wiki.</p></li>
+<li><p>After the Low Byte of the CLASS_TYPE_INFO is transmitted the PD sends the
+High Byte of the ClASS_TYPE_INFO to the PSE. Interpretation of
+CLASS_TYPE_INFO is located in Table 7 &amp; 9 located in the Appendix section of
+this Wiki.</p></li>
 </ul>
 <ol class="lowerroman simple" start="6">
 <li><p>Read PD CRC Byte</p></li>
 </ol>
 <ul class="simple">
-<li><p>In the final step, the PSE reads the cyclic redundancy check (CRC) value of the PD. This value is derived from the received scratchpad class info word.</p></li>
+<li><p>In the final step, the PSE reads the cyclic redundancy check (CRC) value of
+the PD. This value is derived from the received scratchpad class info word.</p></li>
 </ul>
 <img alt="https://wiki.analog.com/_media/resources/eval/spoe_basic_sccp_transaction.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_basic_sccp_transaction.png" />
 <div class="centeralign docutils container">
@@ -779,8 +818,9 @@ Content on this topic
 </section>
 <section id="class-type-info-registers">
 <h3>CLASS_TYPE_INFO Registers<a class="headerlink" href="#class-type-info-registers" title="Link to this heading"></a></h3>
-<p>Table 2 shows the bit information from the CLASS_TYPE_INFO register bytes. Refer to the Appendix for Class and Type listing tables.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_class_type_info_table.png"><img alt="image5" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_class_type_info_table.png" style="width: 600px;" /></a></p>
+<p>Table 2 shows the bit information from the CLASS_TYPE_INFO register bytes. Refer
+to the Appendix for Class and Type listing tables.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_class_type_info_table.png"><img alt="image5" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_class_type_info_table.png" width="600" /></a></p>
 <div class="centeralign docutils container">
 <p><em>Table 2. CLASS_TYPE_INFO Register Bytes Table</em></p>
 </div>
@@ -949,7 +989,8 @@ if(!bit) /* if bit was a 0, need to wait for release of line then allow for */
 </section>
 <section id="interpreting-class-type-info">
 <h3>Interpreting CLASS_TYPE_INFO<a class="headerlink" href="#interpreting-class-type-info" title="Link to this heading"></a></h3>
-<p>The example code in Figure 9 defines Class and Type codes as well as the PSE/PD class compatibility matrix for interpreting the CLASS_TYPE_INFO word.</p>
+<p>The example code in Figure 9 defines Class and Type codes as well as the PSE/PD
+class compatibility matrix for interpreting the CLASS_TYPE_INFO word.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/*************************
 Copyright © 2023 by Analog Devices, Inc. All rights reserved. This software is proprietary to Analog Devices, Inc.
 and its licensors. This software is provided on an &quot;as is&quot; basis without any representations, warranties,
@@ -1048,7 +1089,9 @@ const uint8_t sccp_types[5] = { 0xE, 0xD, 0xB, 0x7, 0xC };
 <h3>SCCP Byte Level Functions<a class="headerlink" href="#sccp-byte-level-functions" title="Link to this heading"></a></h3>
 <section id="transmit-byte">
 <h4>Transmit Byte<a class="headerlink" href="#transmit-byte" title="Link to this heading"></a></h4>
-<p>Figure 10 shows example code for transmit_byte(). The transmit_byte() function accepts a byte and uses the write_bit() protocol function to transmit the passed tx_byte to the PD.</p>
+<p>Figure 10 shows example code for transmit_byte(). The transmit_byte() function
+accepts a byte and uses the write_bit() protocol function to transmit the passed
+tx_byte to the PD.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/*************************
 Copyright © 2023 by Analog Devices, Inc. All rights reserved. This software is proprietary to Analog Devices, Inc.
 and its licensors. This software is provided on an &quot;as is&quot; basis without any representations, warranties,
@@ -1089,7 +1132,8 @@ License (https://spdx.org/licenses/BSD-3-Clause-Clear.html).
 </div>
 <ul class="simple">
 <li><p>Function: void receive_response(uint8_t* buf)</p></li>
-<li><p>Utilizes ‘uint8_t read_bit()’ to receive 2 bytes of data plus CRC byte from the PD</p></li>
+<li><p>Utilizes ‘uint8_t read_bit()’ to receive 2 bytes of data plus CRC byte from
+the PD</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span>
 <span class="o">**************************/</span>
@@ -1132,7 +1176,8 @@ License (https://spdx.org/licenses/BSD-3-Clause-Clear.html).
 </div>
 <ul class="simple">
 <li><p>Function: uint8_t sccp_read_register(uint8_t cmd, uint8_t* buf)</p></li>
-<li><p>This function sends the required bytes of SCCP to the PD and receives the response</p></li>
+<li><p>This function sends the required bytes of SCCP to the PD and receives the
+response</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>*
 **************************/
@@ -1211,7 +1256,9 @@ License (https://spdx.org/licenses/BSD-3-Clause-Clear.html).
 </section>
 <section id="example-detection-classification-and-power-up-implementation">
 <h3>Example Detection, Classification, and Power-up Implementation<a class="headerlink" href="#example-detection-classification-and-power-up-implementation" title="Link to this heading"></a></h3>
-<p>Figure 14 provides example code sccp_do_class() for implementing detection, SCCP, and then power-up one or more ports when the PSE and PD and PSE classes are compatible. The code assumes intialization of the following peripherals:</p>
+<p>Figure 14 provides example code sccp_do_class() for implementing detection,
+SCCP, and then power-up one or more ports when the PSE and PD and PSE classes
+are compatible. The code assumes intialization of the following peripherals:</p>
 <ul class="simple">
 <li><p>Timer Initialization</p></li>
 <li><p>SPI peripheral for communicating with LTC4296-1</p></li>
@@ -1225,7 +1272,9 @@ License (https://spdx.org/licenses/BSD-3-Clause-Clear.html).
 <ul class="simple">
 <li><p>Check if port_supports_class[x] is True</p>
 <ul>
-<li><p>Confirm LTC4296-1 port has not already powered-up with read of port status {pxst.pse_status != (PSE_STATUS_DELIVERING or PSE_STATUS_SLEEPING or PSE_STATUS_UNKNOWN)}</p>
+<li><p>Confirm LTC4296-1 port has not already powered-up with read of port
+status {pxst.pse_status != (PSE_STATUS_DELIVERING or
+PSE_STATUS_SLEEPING or PSE_STATUS_UNKNOWN)}</p>
 <ul>
 <li><p>Go to next port if either a or b are false, otherwise go to 2.</p></li>
 </ul>
@@ -1238,9 +1287,8 @@ License (https://spdx.org/licenses/BSD-3-Clause-Clear.html).
 <li><p>Read LTC4296-1 port configuration register 0 (pxcfg0) and save into ‘pxcfg0_old’ variable</p></li>
 </ol>
 </li>
-<li><ol class="arabic simple" start="3">
-<li><p>Disable LTC4296-1 write protection, and write the following bits to the pxcfg0 register:</p></li>
-</ol>
+<li><p>3. Disable LTC4296-1 write protection, and write the following bits to the
+pxcfg0 register:</p>
 <ul class="simple">
 <li><p>pxcfg0.sw_en = 1</p>
 <ul>
@@ -1258,17 +1306,18 @@ License (https://spdx.org/licenses/BSD-3-Clause-Clear.html).
 <li><p>If pxst.pse_status fails to go to searching (011b) after 4ms, restore pxcfg0 register contents and go to next port, else proceed to 5.</p></li>
 </ol>
 </li>
-<li><ol class="arabic simple" start="5">
-<li><p>Check PD detection signature (required by IEEE 802.3bu/cg before going to SCCP):</p></li>
-</ol>
+<li><p>5. Check PD detection signature (required by IEEE 802.3bu/cg before going to
+SCCP):</p>
 <ul class="simple">
 <li><p>initialize t_det_start from timer</p>
 <ul>
 <li><p>While time elapsed since t_det_start is less than 3.1ms:</p>
 <ul>
-<li><p>If pxst.det_vlow = 0 &amp; pxst.det_vhi = 0 (valid PD signature voltage), increment t_hold timer, else reset t_hold</p>
+<li><p>If pxst.det_vlow = 0 &amp; pxst.det_vhi = 0 (valid PD signature
+voltage), increment t_hold timer, else reset t_hold</p>
 <ul>
-<li><p>If elapsed time since t_det_start &gt; 3.1ms and t_hold &lt; 1ms set valid_signature = 0, elseif t_hold &gt; 1ms set valid_signature = 1</p></li>
+<li><p>If elapsed time since t_det_start &gt; 3.1ms and t_hold &lt; 1ms set
+valid_signature = 0, elseif t_hold &gt; 1ms set valid_signature = 1</p></li>
 </ul>
 </li>
 </ul>
@@ -1277,15 +1326,18 @@ License (https://spdx.org/licenses/BSD-3-Clause-Clear.html).
 </li>
 </ul>
 </li>
-<li><ol class="arabic simple" start="6">
-<li><p>Do SCCP (note IEEE 802.3bu/cg allows a PSE to power up w/out SCCP if valid_signature == 1):</p></li>
-</ol>
+<li><p>6. Do SCCP (note IEEE 802.3bu/cg allows a PSE to power up w/out SCCP if
+valid_signature == 1):</p>
 <ul class="simple">
 <li><p>Call sccp_read_register() function and pass Read_Scratchpad command byte</p>
 <ul>
-<li><p>If no PD presence pulse was detected, restore pxcfg0 register contents with pxcfg0.sw_power_available=0 and go to next port.</p>
+<li><p>If no PD presence pulse was detected, restore pxcfg0 register contents
+with pxcfg0.sw_power_available=0 and go to next port.</p>
 <ul>
-<li><p>If PSE class and PD class are compatible (class_compatibility matrix), power up port by restoring old pxcfg0 register with pxcfg0.sw_power_available = 1, pxcfg0.sw_pse_ready = 1, and pxcfg0.sw_en = 1.</p>
+<li><p>If PSE class and PD class are compatible (class_compatibility
+matrix), power up port by restoring old pxcfg0 register with
+pxcfg0.sw_power_available = 1, pxcfg0.sw_pse_ready = 1, and
+pxcfg0.sw_en = 1.</p>
 <ul>
 <li><p>If PSE class and PD class are incompatible, set pxcfg0.sw_en = 0</p></li>
 </ul>
@@ -1485,12 +1537,17 @@ LTC4296_writeRegister(REG_P0CFG0 + 0x10\*port, pncfg0_old | (1&lt;&lt;14));
 <li><p>EVAL-10BT1L-SMC-AZ: Media Converters for PSE and PD motherboards</p></li>
 <li><p>EVAL-LTC9111-AZ: PD controller LTC9111 motherboard</p></li>
 </ul>
-<p>SCCP transaction can be evaluated with the EVAL-SPoE-KIT-AZ and the LTC4296-1 GUI. In the drop down menu, boxed in Figure 15, select the maximum PSE class and select Type E. Select classify if classification without power is desired or select power up for classification and subsequent powering up of the PD if it is equal to or less than the maximum PSE class. Once successful power up of the PD has occurred Power Good indicator should light up green as shown in Figure 16.</p>
+<p>SCCP transaction can be evaluated with the EVAL-SPoE-KIT-AZ and the LTC4296-1
+GUI. In the drop down menu, boxed in Figure 15, select the maximum PSE class and
+select Type E. Select classify if classification without power is desired or
+select power up for classification and subsequent powering up of the PD if it is
+equal to or less than the maximum PSE class. Once successful power up of the PD
+has occurred Power Good indicator should light up green as shown in Figure 16.</p>
 <p>Refer to <a class="reference internal" href="user-guides/eval-spoe-kit-az-wiki-user-guide.html"><span class="doc">EVAL-SPoE-KIT-AZ Evaluation Kit User Guide</span></a> for EVAL-kit setup.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_gui_part_1.png"><img alt="image6" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_gui_part_1.png" style="width: 200px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_gui_part_1.png"><img alt="image6" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_gui_part_1.png" width="200" /></a></p>
 <div class="centeralign docutils container">
 <p><em>Figure 15. SCCP Enable Configurations through evaluation GUI</em></p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_gui_part_2.png"><img alt="image7" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_gui_part_2.png" style="width: 200px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_gui_part_2.png"><img alt="image7" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_gui_part_2.png" width="200" /></a></p>
 </div>
 <div class="centeralign docutils container">
 <p><em>Figure 16. Successful Port Turn On GUI Port Status</em></p>
@@ -1499,21 +1556,22 @@ LTC4296_writeRegister(REG_P0CFG0 + 0x10\*port, pncfg0_old | (1&lt;&lt;14));
 </section>
 <section id="sccp-example-waveforms">
 <h2>SCCP Example Waveforms<a class="headerlink" href="#sccp-example-waveforms" title="Link to this heading"></a></h2>
-<p>Below are detailed descriptions of the SCCP transactions, parts i-vi. With waveforms captured using the setup in Figure 17.</p>
+<p>Below are detailed descriptions of the SCCP transactions, parts i-vi. With
+waveforms captured using the setup in Figure 17.</p>
 <p><img alt="image8" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_waveform_key4.png" /></p>
 <div class="centeralign docutils container">
 <p><em>Figure 17. Proceeding Waveform Probe Location</em></p>
 </div>
 <section id="i-initialization">
 <h3>(i) Initialization<a class="headerlink" href="#i-initialization" title="Link to this heading"></a></h3>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_initialization_sequence3.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_initialization_sequence3.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_initialization_sequence3.png" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_initialization_sequence3.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_initialization_sequence3.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_initialization_sequence3.png" width="600" />
 </a>
 <div class="centeralign docutils container">
 <p><em>Figure 18. Initialization Sequence</em></p>
 </div>
 <section id="reset-pulse">
 <h4>Reset Pulse<a class="headerlink" href="#reset-pulse" title="Link to this heading"></a></h4>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_reset_pulse3.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_reset_pulse3.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_reset_pulse3.png" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_reset_pulse3.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_reset_pulse3.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_reset_pulse3.png" width="600" />
 </a>
 <div class="centeralign docutils container">
 <p><em>Figure 19. Initialization Sequence Reset Pulse</em></p>
@@ -1521,7 +1579,7 @@ LTC4296_writeRegister(REG_P0CFG0 + 0x10\*port, pncfg0_old | (1&lt;&lt;14));
 </section>
 <section id="presence-detect-high-time">
 <h4>Presence-Detect High Time<a class="headerlink" href="#presence-detect-high-time" title="Link to this heading"></a></h4>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_presence_detect_high3.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_presence_detect_high3.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_presence_detect_high3.png" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_presence_detect_high3.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_presence_detect_high3.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_presence_detect_high3.png" width="600" />
 </a>
 <div class="centeralign docutils container">
 <p><em>Figure 20. Initialization Sequence Presence-Detect High Time</em></p>
@@ -1529,7 +1587,7 @@ LTC4296_writeRegister(REG_P0CFG0 + 0x10\*port, pncfg0_old | (1&lt;&lt;14));
 </section>
 <section id="presence-detect-low-time">
 <h4>Presence-Detect Low Time<a class="headerlink" href="#presence-detect-low-time" title="Link to this heading"></a></h4>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_presence_detect_low3.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_presence_detect_low3.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_presence_detect_low3.png" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_presence_detect_low3.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_presence_detect_low3.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_presence_detect_low3.png" width="600" />
 </a>
 <div class="centeralign docutils container">
 <p><em>Figure 21. Initialization Sequence Presence Detect Low Time</em></p>
@@ -1537,7 +1595,7 @@ LTC4296_writeRegister(REG_P0CFG0 + 0x10\*port, pncfg0_old | (1&lt;&lt;14));
 </section>
 <section id="recovery-time">
 <h4>Recovery Time<a class="headerlink" href="#recovery-time" title="Link to this heading"></a></h4>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_recovery_time_initializtion3.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_recovery_time_initializtion3.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_recovery_time_initializtion3.png" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_recovery_time_initializtion3.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_recovery_time_initializtion3.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_recovery_time_initializtion3.png" width="600" />
 </a>
 <div class="centeralign docutils container">
 <p><em>Figure 22. Initialization Sequence Recovery Time</em></p>
@@ -1545,7 +1603,7 @@ LTC4296_writeRegister(REG_P0CFG0 + 0x10\*port, pncfg0_old | (1&lt;&lt;14));
 </section>
 <section id="pd-reservoir-capacitor-recharge-time">
 <h4>PD Reservoir Capacitor Recharge Time<a class="headerlink" href="#pd-reservoir-capacitor-recharge-time" title="Link to this heading"></a></h4>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_chrg_initialization.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_chrg_initialization.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_chrg_initialization.png" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_chrg_initialization.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_chrg_initialization.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_chrg_initialization.png" width="600" />
 </a>
 <div class="centeralign docutils container">
 <p><em>Figure 23. Initialization Sequence PD Reservoir Capacitor Recharge Time</em></p>
@@ -1553,11 +1611,11 @@ LTC4296_writeRegister(REG_P0CFG0 + 0x10\*port, pncfg0_old | (1&lt;&lt;14));
 </section>
 <section id="rise-fall-time">
 <h4>Rise/Fall Time<a class="headerlink" href="#rise-fall-time" title="Link to this heading"></a></h4>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_rise_time2.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_rise_time2.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_rise_time2.png" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_rise_time2.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_rise_time2.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_rise_time2.png" width="600" />
 </a>
 <div class="centeralign docutils container">
 <p><em>Figure 24. Initialization Sequence Rise Time</em></p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_fall_time2.png"><img alt="image9" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_fall_time2.png" style="width: 600px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_fall_time2.png"><img alt="image9" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_fall_time2.png" width="600" /></a></p>
 </div>
 <div class="centeralign docutils container">
 <p><em>Figure 25. Initialization Sequence Fall Time</em></p>
@@ -1566,11 +1624,11 @@ LTC4296_writeRegister(REG_P0CFG0 + 0x10\*port, pncfg0_old | (1&lt;&lt;14));
 </section>
 <section id="id2">
 <h3>Write Time Slot<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_write_time_slot_03.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_write_time_slot_03.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_write_time_slot_03.png" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_write_time_slot_03.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_write_time_slot_03.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_write_time_slot_03.png" width="600" />
 </a>
 <div class="centeralign docutils container">
 <p><em>Figure 26. PSE Writes 0 Time Slot</em></p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_writeslot_1_2.png"><img alt="image10" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_writeslot_1_2.png" style="width: 600px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_writeslot_1_2.png"><img alt="image10" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_writeslot_1_2.png" width="600" /></a></p>
 </div>
 <div class="centeralign docutils container">
 <p><em>Figure 27. PSE Writes 1 Time Slot</em></p>
@@ -1578,7 +1636,7 @@ LTC4296_writeRegister(REG_P0CFG0 + 0x10\*port, pncfg0_old | (1&lt;&lt;14));
 </section>
 <section id="ii-broadcast-address">
 <h3>(ii) Broadcast Address<a class="headerlink" href="#ii-broadcast-address" title="Link to this heading"></a></h3>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_broadcast_address3.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_broadcast_address3.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_broadcast_address3.png" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_broadcast_address3.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_broadcast_address3.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_broadcast_address3.png" width="600" />
 </a>
 <div class="centeralign docutils container">
 <p><em>Figure 28. PSE Broadcast (0xCC)</em></p>
@@ -1586,7 +1644,7 @@ LTC4296_writeRegister(REG_P0CFG0 + 0x10\*port, pncfg0_old | (1&lt;&lt;14));
 </section>
 <section id="iii-read-scratchpad-command">
 <h3>(iii) Read_Scratchpad Command<a class="headerlink" href="#iii-read-scratchpad-command" title="Link to this heading"></a></h3>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_read_scratchpad3.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_read_scratchpad3.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_read_scratchpad3.png" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_read_scratchpad3.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_read_scratchpad3.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_read_scratchpad3.png" width="600" />
 </a>
 <div class="centeralign docutils container">
 <p><em>Figure 29. PSE Read-Scratchpad Command (0xAA)</em></p>
@@ -1701,11 +1759,11 @@ LTC4296_writeRegister(REG_P0CFG0 + 0x10\*port, pncfg0_old | (1&lt;&lt;14));
 </section>
 <section id="id3">
 <h3>Read Time Slot<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_read_time_slot_03.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_read_time_slot_03.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_read_time_slot_03.png" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_read_time_slot_03.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_read_time_slot_03.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_read_time_slot_03.png" width="600" />
 </a>
 <div class="centeralign docutils container">
 <p><em>Figure 30. PSE Read 0 Time Slot</em></p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_read_time_slot_13.png"><img alt="image11" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_read_time_slot_13.png" style="width: 600px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_read_time_slot_13.png"><img alt="image11" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_read_time_slot_13.png" width="600" /></a></p>
 </div>
 <div class="centeralign docutils container">
 <p><em>Figure 31. PSE Read 1 Time Slot</em></p>
@@ -1713,7 +1771,7 @@ LTC4296_writeRegister(REG_P0CFG0 + 0x10\*port, pncfg0_old | (1&lt;&lt;14));
 </section>
 <section id="iv-read-class-type-info-low-byte">
 <h3>(iv) Read CLASS_TYPE_INFO low byte<a class="headerlink" href="#iv-read-class-type-info-low-byte" title="Link to this heading"></a></h3>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_class_type_info_low_byte_updated.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_class_type_info_low_byte_updated.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_class_type_info_low_byte_updated.png" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_class_type_info_low_byte_updated.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_class_type_info_low_byte_updated.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_class_type_info_low_byte_updated.png" width="600" />
 </a>
 <div class="centeralign docutils container">
 <p><em>Figure 32. Read CLASS_TYPE_INFO low byte</em></p>
@@ -1721,7 +1779,7 @@ LTC4296_writeRegister(REG_P0CFG0 + 0x10\*port, pncfg0_old | (1&lt;&lt;14));
 </section>
 <section id="v-read-class-type-info-high-byte">
 <h3>(v) Read CLASS_TYPE_INFO high byte<a class="headerlink" href="#v-read-class-type-info-high-byte" title="Link to this heading"></a></h3>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_class_type_info_high_byte_updated.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_class_type_info_high_byte_updated.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_class_type_info_high_byte_updated.png" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_class_type_info_high_byte_updated.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_class_type_info_high_byte_updated.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_class_type_info_high_byte_updated.png" width="600" />
 </a>
 <div class="centeralign docutils container">
 <p><em>Figure 33. Read CLASS_TYPE_INFO high byte</em></p>
@@ -1729,7 +1787,7 @@ LTC4296_writeRegister(REG_P0CFG0 + 0x10\*port, pncfg0_old | (1&lt;&lt;14));
 </section>
 <section id="vi-read-crc-byte">
 <h3>(vi) Read CRC byte<a class="headerlink" href="#vi-read-crc-byte" title="Link to this heading"></a></h3>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_pd_crc_updated.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_pd_crc_updated.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_pd_crc_updated.png" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/spoe_sccp_pd_crc_updated.png"><img alt="https://wiki.analog.com/_media/resources/eval/spoe_sccp_pd_crc_updated.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/spoe_sccp_pd_crc_updated.png" width="600" />
 </a>
 <div class="centeralign docutils container">
 <p><em>Figure 34. PD CRC</em></p>
@@ -1741,7 +1799,9 @@ LTC4296_writeRegister(REG_P0CFG0 + 0x10\*port, pncfg0_old | (1&lt;&lt;14));
 <h1>Appendix<a class="headerlink" href="#appendix" title="Link to this heading"></a></h1>
 <section id="device-class">
 <h2>Device Class<a class="headerlink" href="#device-class" title="Link to this heading"></a></h2>
-<p>IEEE 802.3bu defines Class 0-9 and 802.3cg extends these power classes to Class 10-15. The LTC4296-1 is intended to be used in Class 10-15 systems. Table 7 lists the corresponding Class data for CLASS_TYPE_INFO b[9:0].</p>
+<p>IEEE 802.3bu defines Class 0-9 and 802.3cg extends these power classes to Class
+10-15. The LTC4296-1 is intended to be used in Class 10-15 systems. Table 7
+lists the corresponding Class data for CLASS_TYPE_INFO b[9:0].</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -1885,7 +1945,9 @@ LTC4296_writeRegister(REG_P0CFG0 + 0x10\*port, pncfg0_old | (1&lt;&lt;14));
 </section>
 <section id="device-type">
 <h2>Device Type<a class="headerlink" href="#device-type" title="Link to this heading"></a></h2>
-<p>IEEE 802.3cg describes Types A-E device types. For 10Base-T1L both PSE and PD must be Type E. Table 9 lists the corresponding Type data for CLASS_TYPE_INFO b[15:12].</p>
+<p>IEEE 802.3cg describes Types A-E device types. For 10Base-T1L both PSE and PD
+must be Type E. Table 9 lists the corresponding Type data for CLASS_TYPE_INFO
+b[15:12].</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>

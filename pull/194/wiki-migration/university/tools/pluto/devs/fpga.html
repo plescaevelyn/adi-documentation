@@ -584,21 +584,28 @@ Content on this topic
             
   <section id="accessing-pluto-s-fpga-over-jtag">
 <h1>Accessing Pluto’s FPGA Over JTAG<a class="headerlink" href="#accessing-pluto-s-fpga-over-jtag" title="Link to this heading"></a></h1>
-<p>Connecting to Pluto over JTAG requires a standard JTAG programmer from Xilinx or a simplier solution like the JTAG-HS3+JTAGUART programmer. We will be using the JTAG-HS3+JTAGUART in this guide.</p>
-<p>First, open up PlutoSDR’s case and locate the JTAG_BOOT connector holes on the bottom left portion of the PCB. Using an 8 pin ribbon cable from your JTAG programmer connect to those pins as shown in the figure below.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/tools/pluto/devs/thumbnail_image2.jpg"><img alt="https://wiki.analog.com/_media/university/tools/pluto/devs/thumbnail_image2.jpg" class="align-center" src="https://wiki.analog.com/_media/university/tools/pluto/devs/thumbnail_image2.jpg" style="width: 400px;" />
+<p>Connecting to Pluto over JTAG requires a standard JTAG programmer from Xilinx or
+a simplier solution like the JTAG-HS3+JTAGUART programmer. We will be using the
+JTAG-HS3+JTAGUART in this guide.</p>
+<p>First, open up PlutoSDR’s case and locate the JTAG_BOOT connector holes on the
+bottom left portion of the PCB. Using an 8 pin ribbon cable from your JTAG
+programmer connect to those pins as shown in the figure below.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/tools/pluto/devs/thumbnail_image2.jpg"><img alt="https://wiki.analog.com/_media/university/tools/pluto/devs/thumbnail_image2.jpg" class="align-center" src="https://wiki.analog.com/_media/university/tools/pluto/devs/thumbnail_image2.jpg" width="400" />
 </a>
-<p>After the JTAG programmer is connected, provide power to PlutoSDR using either of its USB connectors. Once powered the D5 led should illuminate to signal the JTAG connection to the programmer is alive. This will appear like the figure below.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/tools/pluto/devs/thumbnail_image1.jpg"><img alt="https://wiki.analog.com/_media/university/tools/pluto/devs/thumbnail_image1.jpg" class="align-center" src="https://wiki.analog.com/_media/university/tools/pluto/devs/thumbnail_image1.jpg" style="width: 400px;" />
+<p>After the JTAG programmer is connected, provide power to PlutoSDR using either
+of its USB connectors. Once powered the D5 led should illuminate to signal the
+JTAG connection to the programmer is alive. This will appear like the figure
+below.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/tools/pluto/devs/thumbnail_image1.jpg"><img alt="https://wiki.analog.com/_media/university/tools/pluto/devs/thumbnail_image1.jpg" class="align-center" src="https://wiki.analog.com/_media/university/tools/pluto/devs/thumbnail_image1.jpg" width="400" />
 </a>
-<p>Next we can go into vivado and check the hardware manager for connectivity. This can be done with xsct as follows:</p>
+<p>Next we can go into vivado and check the hardware manager for connectivity. This
+can be done with xsct as follows:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>tcollins@winston:/tmp$ xsct
 rlwrap: warning: your $TERM is &#39;xterm&#39; but rlwrap couldn&#39;t find it in the terminfo database. Expect some problems.
 
 * Xilinx Software Commandline Tool (XSCT) v2017.4.1
   *** Build date : Jan 30 2018-15:42:35
     ** Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
-
 
 xsct% connect -host localhost -port 3121
 tcfchan#0
@@ -611,7 +618,7 @@ xsct%
 </pre></div>
 </div>
 <p>Alternatively in the GUI, PlutoSDR should appear as so:</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/tools/pluto/devs/plutohardwareserver.png"><img alt="image1" src="https://wiki.analog.com/_media/university/tools/pluto/devs/plutohardwareserver.png" style="width: 400px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/tools/pluto/devs/plutohardwareserver.png"><img alt="image1" src="https://wiki.analog.com/_media/university/tools/pluto/devs/plutohardwareserver.png" width="400" /></a></p>
 <section id="udev-rules">
 <h2>udev Rules<a class="headerlink" href="#udev-rules" title="Link to this heading"></a></h2>
 <p>udev rules may be required to access the USB device.</p>
@@ -637,11 +644,16 @@ Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
 <span class="n">sudo</span> <span class="n">udevadm</span> <span class="n">trigger</span>
 </pre></div>
 </div>
-<p>Ensure that you are in the group plugdev. Run the command ‘groups’. If not, add yourself to the plugdev group and logout and back in afterwards.</p>
+<p>Ensure that you are in the group plugdev. Run the command ‘groups’. If not, add
+yourself to the plugdev group and logout and back in afterwards.</p>
 </section>
 <section id="unbricking-plutosdr">
 <h2>Unbricking PlutoSDR<a class="headerlink" href="#unbricking-plutosdr" title="Link to this heading"></a></h2>
-<p>If for some reason PlutoSDR does not boot, if the firmware update failed for example, the device will appear in DFU mode (1 solid LED and no blinking LED) but not actually boot into DFU. This happens when u-boot or the FSBL is corrupted. This is unlikely but can happen. To fix this you can leverage the JTAG bootstrap zip part of each release. To do so perform the following:</p>
+<p>If for some reason PlutoSDR does not boot, if the firmware update failed for
+example, the device will appear in DFU mode (1 solid LED and no blinking LED)
+but not actually boot into DFU. This happens when u-boot or the FSBL is
+corrupted. This is unlikely but can happen. To fix this you can leverage the
+JTAG bootstrap zip part of each release. To do so perform the following:</p>
 <ul class="simple">
 <li><p>Plug in JTAG as documented above into Pluto and verify you can connect with Vivado</p></li>
 <li><p>Download the JTAG bootstrap zip from the firmware release page (plutosdr-jtag-bootstrap-&lt;Firmware Version&gt;.zip)</p></li>

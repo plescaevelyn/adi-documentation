@@ -666,7 +666,9 @@ Content on this topic
   <section id="high-speed-dma-controller-peripheral">
 <h1>High-Speed DMA Controller Peripheral<a class="headerlink" href="#high-speed-dma-controller-peripheral" title="Link to this heading"></a></h1>
 <img alt="migrated&gt;hdl/library/axi_dmac/index.html" src="https://wiki.analog.com/_media/resources/fpga/docs/migrated&gt;hdl/library/axi_dmac/index.html" />
-<p>The AXI DMAC is a high-speed, high-throughput, general purpose DMA controller intended to be used to transfer data between system memory and other peripherals like high-speed converters.</p>
+<p>The AXI DMAC is a high-speed, high-throughput, general purpose DMA controller
+intended to be used to transfer data between system memory and other peripherals
+like high-speed converters.</p>
 <section id="features">
 <h2>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
 <ul class="simple">
@@ -11575,12 +11577,22 @@ Valid for 64b66b encoder.</p></td>
 <h3>HDL Synthesis Settings<a class="headerlink" href="#hdl-synthesis-settings" title="Link to this heading"></a></h3>
 <section id="sizing-of-the-internal-store-and-forward-data-buffer">
 <h4>Sizing of the internal store-and-forward data buffer<a class="headerlink" href="#sizing-of-the-internal-store-and-forward-data-buffer" title="Link to this heading"></a></h4>
-<p>An internal buffer is used to store data from the source interface before it is forwarded to the destination once that can accept it. The purpose of the buffer is to even out the rate mismatches between the source and destination. e.g if the destination is a FIFO interface with a fixed data rate and the source is a MM interface, the intent is to keep the buffer as full as possible so in case of the MM interface is not ready data can be still provided to the destination without risking an underflow. Similarly in case the destination is a MM interface and the source a FIFO interface with a fixed data rate, the intent is to keep the buffer as empty as possible so in case the MM interface is not ready data can be still accepted from the source without risking an overflow.</p>
+<p>An internal buffer is used to store data from the source interface before it is
+forwarded to the destination once that can accept it. The purpose of the buffer
+is to even out the rate mismatches between the source and destination. e.g if
+the destination is a FIFO interface with a fixed data rate and the source is a
+MM interface, the intent is to keep the buffer as full as possible so in case of
+the MM interface is not ready data can be still provided to the destination
+without risking an underflow. Similarly in case the destination is a MM
+interface and the source a FIFO interface with a fixed data rate, the intent is
+to keep the buffer as empty as possible so in case the MM interface is not ready
+data can be still accepted from the source without risking an overflow.</p>
 <p>The size of the buffer in bytes is determined by the synthesis parameters of the module and it is equal to <code class="docutils literal notranslate"><span class="pre">FIFO_SIZE</span></code> * <code class="docutils literal notranslate"><span class="pre">MAX_BYTES_PER_BURST</span></code></p>
 <div><div class="collapsible docutils container">
-<input class="collapsible_input" id="41b3499d65a5f4488dbfe403ce1c43026dfed7d4" name="41b3499d65a5f4488dbfe403ce1c43026dfed7d4" type="checkbox"></input><label for="41b3499d65a5f4488dbfe403ce1c43026dfed7d4"><p>Buffer dimensions</p>
+<input class="collapsible_input" id="f89972bfa0d5aef9e352abf0b1cf3235521eaac8" name="f89972bfa0d5aef9e352abf0b1cf3235521eaac8" type="checkbox"></input><label for="f89972bfa0d5aef9e352abf0b1cf3235521eaac8"><p>Buffer dimensions</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
-<p>The width of the buffer is sized to be the largest width from the source and destination interfaces.</p>
+<p>The width of the buffer is sized to be the largest width from the source and
+destination interfaces.</p>
 <ul class="simple">
 <li><p>BUFFER_WIDTH_IN_BYTES = MAX(<code class="docutils literal notranslate"><span class="pre">DMA_DATA_WIDTH_SRC</span></code>,<code class="docutils literal notranslate"><span class="pre">DMA_DATA_WIDTH_DEST</span></code>)/8</p></li>
 <li><p>BUFFER_DEPTH = <code class="docutils literal notranslate"><span class="pre">FIFO_SIZE</span></code>*<code class="docutils literal notranslate"><span class="pre">MAX_BYTES_PER_BURST</span></code> / BUFFER_WIDTH_IN_BYTES</p></li>
@@ -11617,10 +11629,15 @@ Valid for 64b66b encoder.</p></td>
 </section>
 <section id="interrupt-handling">
 <h4>Interrupt Handling<a class="headerlink" href="#interrupt-handling" title="Link to this heading"></a></h4>
-<p>Interrupt processing is handled by three closely related registers. All three registers follow the same layout, each bit in the register corresponds to one particular interrupt.</p>
+<p>Interrupt processing is handled by three closely related registers. All three
+registers follow the same layout, each bit in the register corresponds to one
+particular interrupt.</p>
 <p>When an interrupt event occurs it is recorded in the <code class="docutils literal notranslate"><span class="pre">IRQ_SOURCE</span></code> (<code class="docutils literal notranslate"><span class="pre">0x088</span></code>) register. For a recorded interrupt event the corresponding bit is set to 1. If an interrupt event occurs while the bit is already set to 1 it will stay set to 1.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">IRQ_MASK</span></code> (<code class="docutils literal notranslate"><span class="pre">0x080</span></code>) register controls how recorded interrupt events propagate. An interrupt is considered to be enabled if the corresponding bit in the <code class="docutils literal notranslate"><span class="pre">IRQ_MASK</span></code> register is set to 0, it is considered to be disabled if the bit is set to 1.</p>
-<p>Disabling an interrupt will not prevent it from being recorded, but only its propagation. This means if an interrupt event was previously recorded while the interrupt was disabled and the interrupt is being enabled the interrupt event will then propagate.</p>
+<p>Disabling an interrupt will not prevent it from being recorded, but only its
+propagation. This means if an interrupt event was previously recorded while the
+interrupt was disabled and the interrupt is being enabled the interrupt event
+will then propagate.</p>
 <p>An interrupt event that has been recorded and is enabled propagates to the <code class="docutils literal notranslate"><span class="pre">IRQ_PENDING</span></code> (<code class="docutils literal notranslate"><span class="pre">0x084</span></code>) register. The corresponding bit for such an interrupt will read as 1. Disabled or interrupts for which no events have been recorded will read as 0. Also if at least one interrupt has been recorded and is enabled the external <code class="docutils literal notranslate"><span class="pre">irq</span></code> signal will be asserted to signal the IRQ event to the upstream IRQ controller.</p>
 <p>A recorded interrupt event can be cleared (or acknowledged) by writing a 1 to the corresponding bit to either the <code class="docutils literal notranslate"><span class="pre">IRQ_SOURCE</span></code> or <code class="docutils literal notranslate"><span class="pre">IRQ_PENDING</span></code> register. It is possible to clear multiple interrupt events at the same time by setting multiple bits in a single write operation.</p>
 <p>For more details regarding interrupt operation see the <a class="icon link reference external" href="https://wiki.analog.com/" target="_blank">interrupts section</a> of this document.</p>
@@ -11665,38 +11682,58 @@ Valid for 64b66b encoder.</p></td>
 </section>
 <section id="interrupts">
 <h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading"></a></h3>
-<p>The DMA controller supports interrupts to allow asynchronous notification of certain events to the CPU. This can be used as an alternative to busy-polling the status registers. Two types of interrupt events are implemented by the DMA controller.</p>
+<p>The DMA controller supports interrupts to allow asynchronous notification of
+certain events to the CPU. This can be used as an alternative to busy-polling
+the status registers. Two types of interrupt events are implemented by the DMA
+controller.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">TRANSFER_QUEUED</span></code> interrupt is asserted when a transfer is moved from the register map to the internal transfer queue. This is equivalent to the <code class="docutils literal notranslate"><span class="pre">TRANSFER_SUBMIT</span></code> register transitioning from 1 to 0. Software can use this interrupt as an indication that the next transfer can be submitted.</p>
-<p>Note that a transfer being queued does not mean that it has been started yet. If other transfers are already queued those will be processed first.</p>
+<p>Note that a transfer being queued does not mean that it has been started yet. If
+other transfers are already queued those will be processed first.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">TRANSFER_COMPLETED</span></code> interrupt is asserted when a previously submitted transfer has been completed. To find out which transfer has been completed the <code class="docutils literal notranslate"><span class="pre">TRANSFER_DONE</span></code> register should be checked.</p>
-<p>Note that depending on the transfer size and interrupt latency it is possible for multiple transfers to complete before the interrupt handler runs. In that case the interrupt handler will only run once. Software should always check all submitted transfers for completion.</p>
+<p>Note that depending on the transfer size and interrupt latency it is possible
+for multiple transfers to complete before the interrupt handler runs. In that
+case the interrupt handler will only run once. Software should always check all
+submitted transfers for completion.</p>
 </section>
 <section id="d-transfers">
 <h3>2D Transfers<a class="headerlink" href="#d-transfers" title="Link to this heading"></a></h3>
 <p>If the <code class="docutils literal notranslate"><span class="pre">DMA_2D_TRANSFER</span></code> HDL synthesis configuration parameter is set the DMA controller has support for 2D transfers.</p>
-<p>A 2D transfer is composed of a number of rows with each row containing a certain number of bytes. Between each row there might be a certain amount of padding bytes that are skipped by the DMA.</p>
+<p>A 2D transfer is composed of a number of rows with each row containing a certain
+number of bytes. Between each row there might be a certain amount of padding
+bytes that are skipped by the DMA.</p>
 <p>For 2D transfers the <code class="docutils literal notranslate"><span class="pre">X_LENGTH</span></code> register configures the number of bytes per row and the <code class="docutils literal notranslate"><span class="pre">Y_LENGTH</span></code> register configures the number of rows. The <code class="docutils literal notranslate"><span class="pre">SRC_STRIDE</span></code> and <code class="docutils literal notranslate"><span class="pre">DEST_STRIDE</span></code> registers configure the number of bytes in between start of two rows.</p>
-<p>E.g. the first row will start at the configured source or destination address, the second row will start at the configured source or destination address plus the stride and so on.</p>
-<p>ROW_SRC_ADDRESS = SRC_ADDRESS + SRC_STRIDE * N ROW_DEST_ADDRESS = DEST_ADDRESS + DEST_STRIDE * N</p>
-<p>If support for 2D transfers is disabled only the X_LENGTH register is considered and the number of rows per transfer is fixed to 1.</p>
+<p>E.g. the first row will start at the configured source or destination address,
+the second row will start at the configured source or destination address plus
+the stride and so on.</p>
+<p>ROW_SRC_ADDRESS = SRC_ADDRESS + SRC_STRIDE * N ROW_DEST_ADDRESS = DEST_ADDRESS
++ DEST_STRIDE * N</p>
+<p>If support for 2D transfers is disabled only the X_LENGTH register is considered
+and the number of rows per transfer is fixed to 1.</p>
 </section>
 <section id="cyclic-transfers">
 <h3>Cyclic Transfers<a class="headerlink" href="#cyclic-transfers" title="Link to this heading"></a></h3>
 <p>If the <code class="docutils literal notranslate"><span class="pre">CYCLIC</span></code> HDL synthesis configuration parameter is set the DMA controller has support for cyclic transfers.</p>
-<p>A cyclic transfer once completed will restart automatically with the same configuration. The behavior of cyclic transfer is equivalent to submitting the same transfer over and over again, but generates less software management overhead.</p>
+<p>A cyclic transfer once completed will restart automatically with the same
+configuration. The behavior of cyclic transfer is equivalent to submitting the
+same transfer over and over again, but generates less software management
+overhead.</p>
 <p>A transfer is cyclic if the <code class="docutils literal notranslate"><span class="pre">CYCLIC</span></code> (<code class="docutils literal notranslate"><span class="pre">[0]</span></code>) bit of the <code class="docutils literal notranslate"><span class="pre">FLAGS</span></code> (<code class="docutils literal notranslate"><span class="pre">0x40C</span></code>) is set to 1 during transfer submission.</p>
-<p>For cyclic transfers no end-of-transfer interrupts will be generated. To stop a cyclic transfer the DMA channel must be disabled.</p>
-<p>Any additional transfers that are submitted after the submission of a cyclic transfer (and before stopping the cyclic transfer) will never be executed.</p>
+<p>For cyclic transfers no end-of-transfer interrupts will be generated. To stop a
+cyclic transfer the DMA channel must be disabled.</p>
+<p>Any additional transfers that are submitted after the submission of a cyclic
+transfer (and before stopping the cyclic transfer) will never be executed.</p>
 </section>
 <section id="scatter-gather-transfers">
 <h3>Scatter-Gather Transfers<a class="headerlink" href="#scatter-gather-transfers" title="Link to this heading"></a></h3>
 <p>If the <code class="docutils literal notranslate"><span class="pre">DMA_SG_TRANSFER</span></code> HDL synthesis configuration parameter is set the DMA controller has support for scatter-gather transfers.</p>
-<p>The scatter-gather optional feature allows the DMA to access noncontiguous areas of memory within a single transfer.</p>
+<p>The scatter-gather optional feature allows the DMA to access noncontiguous areas
+of memory within a single transfer.</p>
 <p>The DMA can read from or write to different memory addresses in one transaction by using a list of vectors called <em>descriptors</em>. Each descriptor provides the starting address and the length of the current memory block to be accessed, as well as the next address of the following descriptor to be processed. By chaining these descriptors, the DMA can <em>gather</em> the data into a contiguous transfer from the <em>scattered</em> memory data from multiple addresses.</p>
 <p>The scatter-gather has its own dedicated AXI3/4 memory mapped interface <code class="docutils literal notranslate"><span class="pre">m_sg_axi</span></code> through which it receives the descriptor data.</p>
 <section id="descriptor-structure">
 <h4>Descriptor Structure<a class="headerlink" href="#descriptor-structure" title="Link to this heading"></a></h4>
-<p>The scatter-gather interface fetches the descriptor information from memory in the following order:</p>
+<p>The scatter-gather interface fetches the descriptor information from memory in
+the following order:</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -11755,13 +11792,22 @@ Valid for 64b66b encoder.</p></td>
 <p>To start a scatter-gather transfer, the address of the first DMA descriptor must be written to the register pair [<code class="docutils literal notranslate"><span class="pre">SG_ADDRESS_HIGH</span></code>(<code class="docutils literal notranslate"><span class="pre">0x4BC</span></code>), <code class="docutils literal notranslate"><span class="pre">SG_ADDRESS</span></code>(<code class="docutils literal notranslate"><span class="pre">0x47C</span></code>)].</p>
 <p>To end a scatter-gather transfer, the last descriptor of the transfer must have the <code class="docutils literal notranslate"><span class="pre">flags</span></code>[0] bit set.</p>
 <p>The scatter-gather transfer is queued in a similar way to the simple transfers, through the <code class="docutils literal notranslate"><span class="pre">TRANSFER_SUBMIT</span></code>. Software should always poll this bit to be 0 before setting it, otherwise the scatter-gather transfer will not be queued.</p>
-<p>The scatter-gather transfers support the generation of the same two types of interrupt events as the simple transfers. However, the scatter-gather transfers have the distinct advantage of generating fewer interrupts by treating the chained descriptor transfers as a single transfer, thus improving the performance of the application.</p>
+<p>The scatter-gather transfers support the generation of the same two types of
+interrupt events as the simple transfers. However, the scatter-gather transfers
+have the distinct advantage of generating fewer interrupts by treating the
+chained descriptor transfers as a single transfer, thus improving the
+performance of the application.</p>
 </section>
 </section>
 <section id="transfer-start-synchronization">
 <h3>Transfer Start Synchronization<a class="headerlink" href="#transfer-start-synchronization" title="Link to this heading"></a></h3>
-<p>If the transfer start synchronization feature of the DMA controller is enabled the start of a transfer is synchronized to a flag in the data stream. This is primarily useful if the data stream does not have any back-pressure and one unit of data spans multiple beats (e.g. packetized data). This ensures that the data is properly aligned to the beginning of the memory buffer.</p>
-<p>Data that is received before the synchronization flag is asserted will be ignored by the DMA controller.</p>
+<p>If the transfer start synchronization feature of the DMA controller is enabled
+the start of a transfer is synchronized to a flag in the data stream. This is
+primarily useful if the data stream does not have any back-pressure and one unit
+of data spans multiple beats (e.g. packetized data). This ensures that the data
+is properly aligned to the beginning of the memory buffer.</p>
+<p>Data that is received before the synchronization flag is asserted will be
+ignored by the DMA controller.</p>
 <p>For the FIFO write interface the <code class="docutils literal notranslate"><span class="pre">fifo_wr_sync</span></code> signal is the synchronization flag signal. For the AXI-Streaming interface the synchronization flag is carried in <code class="docutils literal notranslate"><span class="pre">s_axis_user[0]</span></code>. In both cases the synchronization flag is qualified by the same control signal as the data.</p>
 </section>
 <section id="diagnostics-interface">
@@ -11794,13 +11840,19 @@ Valid for 64b66b encoder.</p></td>
 <ul class="simple">
 <li><p>(<code class="docutils literal notranslate"><span class="pre">X_LENGTH</span></code>+1) MOD MAX(<code class="docutils literal notranslate"><span class="pre">DMA_DATA_WIDTH_SRC</span></code>, <code class="docutils literal notranslate"><span class="pre">DMA_DATA_WIDTH_DEST</span></code>)/8 == 0</p></li>
 </ul>
-<p>This restriction can be relaxed for the memory mapped interfaces. This is done by partially ignoring data of a beat from/to the MM interface:</p>
+<p>This restriction can be relaxed for the memory mapped interfaces. This is done
+by partially ignoring data of a beat from/to the MM interface:</p>
 <ul class="simple">
 <li><p>For write access the strobe bits are used to mask out bytes that do not contain valid data.</p></li>
-<li><p>For read access a full beat is read but part of the data is discarded. This works fine as long as the read access is side effect free. I.e. this method should not be used to access data from memory mapped peripherals like a FIFO.</p></li>
+<li><p>For read access a full beat is read but part of the data is discarded. This
+works fine as long as the read access is side effect free. I.e. this method
+should not be used to access data from memory mapped peripherals like a FIFO.</p></li>
 </ul>
-<p>E.g. the length alignment requirement of a DMA configured for a 64-bit memory mapped interface and a 16-bit streaming interface is only 2 bytes instead of 8 bytes.</p>
-<p>Note that the address alignment requirement is not affected by this. The address still needs to be aligned to the width of the MM interface that it belongs to.</p>
+<p>E.g. the length alignment requirement of a DMA configured for a 64-bit memory
+mapped interface and a 16-bit streaming interface is only 2 bytes instead of 8
+bytes.</p>
+<p>Note that the address alignment requirement is not affected by this. The address
+still needs to be aligned to the width of the MM interface that it belongs to.</p>
 </section>
 <section id="scatter-gather-datapath-width">
 <h4>Scatter-Gather Datapath Width<a class="headerlink" href="#scatter-gather-datapath-width" title="Link to this heading"></a></h4>
@@ -11818,7 +11870,9 @@ Valid for 64b66b encoder.</p></td>
 <section id="known-issues">
 <h2>Known Issues<a class="headerlink" href="#known-issues" title="Link to this heading"></a></h2>
 <ol class="arabic simple">
-<li><p>When max bytes per burst matches the data width of destination interface an erroneous extra beat is inserted after every valid beat on the destination side. Example configuration:</p></li>
+<li><p>When max bytes per burst matches the data width of destination interface an
+erroneous extra beat is inserted after every valid beat on the destination
+side. Example configuration:</p></li>
 </ol>
 <ul class="simple">
 <li><p>axi mm -&gt; axi stream</p></li>

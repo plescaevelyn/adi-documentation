@@ -648,10 +648,12 @@ Content on this topic
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>If on Linux you would need Wine or similar compatibility layers for Windows to install the library.</p>
+<p>If on Linux you would need Wine or similar compatibility layers for Windows
+to install the library.</p>
 </div>
-<p>If programming was successful, you should be seeing messages appear on the terminal as shown in figure below.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/adv7511_lib_test.png"><img alt="Terminal" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/adv7511_lib_test.png" style="width: 400px;" />
+<p>If programming was successful, you should be seeing messages appear on the
+terminal as shown in figure below.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/adv7511_lib_test.png"><img alt="Terminal" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/adv7511_lib_test.png" width="400" />
 </a>
 <p>The reference design contains an example of how to:</p>
 <ul class="simple">
@@ -667,22 +669,44 @@ Content on this topic
 <h3>Functional description<a class="headerlink" href="#functional-description" title="Link to this heading"></a></h3>
 <section id="xilinx-block-diagram">
 <h4>Xilinx block diagram<a class="headerlink" href="#xilinx-block-diagram" title="Link to this heading"></a></h4>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/adv7511_zynq_2.svg"><img alt="HDL Block Diagram" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/adv7511_zynq_2.svg" style="width: 800px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/adv7511_zynq_2.svg"><img alt="HDL Block Diagram" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/adv7511_zynq_2.svg" width="800" />
 </a>
 </section>
 <section id="adv7511-block-diagram">
 <h4>ADV7511 block diagram<a class="headerlink" href="#adv7511-block-diagram" title="Link to this heading"></a></h4>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/adv7511_proc_1.svg"><img alt="HDL Block Diagram" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/adv7511_proc_1.svg" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/adv7511_proc_1.svg"><img alt="HDL Block Diagram" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/adv7511_proc_1.svg" width="600" />
 </a>
 <p>The reference design consists of two independent pcore modules.</p>
-<p>The video part consists of an AXI DMAC interface and the ADV7511 video interface. The ADV7511 interface consists of a 16bit YCbCr 422 with separate synchroinzation signals. The DMA streams frame data to this core. The internal buffers of this pcore are small (1k) and do NOT buffer any frames as such. Additional resources may cause loss of synchronization due to DDR bandwidth requirements. The video core is capable of supporting any formats through a set of parameter registers (given below). The pixel clock is generated internal to the device and must be configured for the correct pixel frequency. It also allows a programmable color pattern for debug purposes. A zero to one transition on the enable bits trigger the corresponding action for HDMI enable and color pattern enable.</p>
-<p>The reference design defaults to the 1080p video mode. Users may change the video settings by programming the following registers. The core requires a corresponding pixel clock to generate the video. This clock must be generated externally.</p>
+<p>The video part consists of an AXI DMAC interface and the ADV7511 video
+interface. The ADV7511 interface consists of a 16bit YCbCr 422 with separate
+synchroinzation signals. The DMA streams frame data to this core. The internal
+buffers of this pcore are small (1k) and do NOT buffer any frames as such.
+Additional resources may cause loss of synchronization due to DDR bandwidth
+requirements. The video core is capable of supporting any formats through a set
+of parameter registers (given below). The pixel clock is generated internal to
+the device and must be configured for the correct pixel frequency. It also
+allows a programmable color pattern for debug purposes. A zero to one transition
+on the enable bits trigger the corresponding action for HDMI enable and color
+pattern enable.</p>
+<p>The reference design defaults to the 1080p video mode. Users may change the
+video settings by programming the following registers. The core requires a
+corresponding pixel clock to generate the video. This clock must be generated
+externally.</p>
 <p><strong>HSYNC count</strong>: is the total horizontal pixel clocks of the video, for 1080p this is 2200. <strong>HSYNC width</strong>: is the pulse width in pixel clocks, for 1080p this is 44. <strong>HSYNC DE Minimum</strong>: is the number of pixel clocks for the start of active video and is the sum of horizontal sync width and back porch, for 1080p this is 192 (44 + 148). <strong>HSYNC DE Maximum</strong>: is the number of pixel clocks for the end of active video and is the sum of horizontal sync width, back porch and the active video count, for 1080p this is 2112 (44 + 148 + 1920).</p>
 <p><strong>VSYNC count</strong>: is the total vertical pixel clocks of the video, for 1080p this is 1125. <strong>VSYNC width</strong>: is the pulse width in pixel clocks, for 1080p this is 5. <strong>VSYNC DE Minimum</strong>: is the number of pixel clocks for the start of active video and is the sum of vertical sync width and back porch, for 1080p this is 41 (5 + 36). <strong>VSYNC DE Maximum</strong>: is the number of pixel clocks for the end of active video and is the sum of vertical sync width, back porch and the active video count, for 1080p this is 1121 (5 + 36 + 1080).</p>
 <p>Note that the pixel frequency for 1080p is 148.5MHz.</p>
-<p>The reference design reads 24bits of RGB data from DDR and performs color space conversion (RGB to YCbCr) and down sampling (444 to 422). If bypassed, the lower 16bits of DDR data is passed to the HDMI interface as it is.</p>
-<p>A color pattern register provides a quick check of any RGB values on the monitor. If enabled, the register data is used as the pixel data for the entire frame.</p>
-<p>The audio part consists of an AXI DMAC interface and the ADV7511 spdif audio interface. The audio clock is derived from the bus clock. A programmable register (see below) controls the division factor. The audio data is read from the DDR as two 16bit words for the left and right channels. It is then transmitted on the SPDIF frame. The sample frequency and format may be controlled using the registers below. The reference design defaults to 48KHz.</p>
+<p>The reference design reads 24bits of RGB data from DDR and performs color space
+conversion (RGB to YCbCr) and down sampling (444 to 422). If bypassed, the lower
+16bits of DDR data is passed to the HDMI interface as it is.</p>
+<p>A color pattern register provides a quick check of any RGB values on the
+monitor. If enabled, the register data is used as the pixel data for the entire
+frame.</p>
+<p>The audio part consists of an AXI DMAC interface and the ADV7511 spdif audio
+interface. The audio clock is derived from the bus clock. A programmable
+register (see below) controls the division factor. The audio data is read from
+the DDR as two 16bit words for the left and right channels. It is then
+transmitted on the SPDIF frame. The sample frequency and format may be
+controlled using the registers below. The reference design defaults to 48KHz.</p>
 </section>
 </section>
 <section id="registers">
@@ -775,7 +799,9 @@ Content on this topic
 <p>The Software Reference Design uses the <strong>ADV7511 Transmitter Library</strong> which is a collection of APIs that provide a consistent interface to ADV7511. The library is a software layer that sits between the application and the TX hardware and it is intended to serve two purposes:</p>
 <ul class="simple">
 <li><p>Provide the application with a set of APIs that can be used to configure HDMI TX hardware without the need for low-level register access. This makes the application portable across different revisions of the hardware and even across different hardware modules.</p></li>
-<li><p>Provide basic services to aid the application in controlling the TX module, such as interrupt service routine, HDCP high-level control and status information.</p></li>
+<li><p>Provide basic services to aid the application in controlling the TX module,
+such as interrupt service routine, HDCP high-level control and status
+information.</p></li>
 </ul>
 <p>The documentation for the library’s API can be accessed here: <a class="reference internal" href="../adv7511.html"><span class="doc">ADV7511 Transmitter API Documentation</span></a></p>
 <p>The project contains 2 components: the Reference Design files and the ADV7511 Transmitter Library. All the components have to be downloaded from the links provided in the <strong>Downloads</strong> section.</p>
@@ -792,9 +818,11 @@ Content on this topic
 </li>
 <li><p>This is what is transmitted through UART:</p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/adv7511_uart.png"><img alt="UART" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/adv7511_uart.png" style="width: 400px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/adv7511_uart.png"><img alt="UART" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/fmc-imageon/adv7511_uart.png" width="400" />
 </a>
-<p>As an alternative an UART terminal can be used to capture the output of the example program. The number of used UART port depends on the computer’s configuration. The following settings must be used in the UART terminal:</p>
+<p>As an alternative an UART terminal can be used to capture the output of the
+example program. The number of used UART port depends on the computer’s
+configuration. The following settings must be used in the UART terminal:</p>
 <ul class="simple">
 <li><p>Baud Rate: 115200bps</p></li>
 <li><p>Data: 8 bit</p></li>
@@ -806,7 +834,8 @@ Content on this topic
 </section>
 <section id="downloads">
 <h2>Downloads<a class="headerlink" href="#downloads" title="Link to this heading"></a></h2>
-<p>The HDL Reference Designs and the no-OS Software can be downloaded from the Analog Devices Github.</p>
+<p>The HDL Reference Designs and the no-OS Software can be downloaded from the
+Analog Devices Github.</p>
 <p><strong>HDL Reference Designs:</strong></p>
 <div class="download admonition">
 <p class="admonition-title">Download</p>

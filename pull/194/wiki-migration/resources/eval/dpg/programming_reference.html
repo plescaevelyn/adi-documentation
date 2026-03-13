@@ -635,43 +635,62 @@ Content on this topic
             
   <section id="programming-reference">
 <h1>Programming Reference<a class="headerlink" href="#programming-reference" title="Link to this heading"></a></h1>
-<p>All the functions of a DPG can be accessed through a set of Dynamic-Link Library (DLL) functions. These functions can be accessed via two different Windows® software interface standards:</p>
+<p>All the functions of a DPG can be accessed through a set of Dynamic-Link Library
+(DLL) functions. These functions can be accessed via two different Windows®
+software interface standards:</p>
 <ul class="simple">
 <li><p>Component Object Model (COM)</p></li>
 <li><p>.NET Framework</p></li>
 </ul>
-<p>When possible, the .NET version should be used instead of the COM version. It provides a more efficient and robust interface.</p>
+<p>When possible, the .NET version should be used instead of the COM version. It
+provides a more efficient and robust interface.</p>
 <section id="class-organization">
 <h2>Class Organization<a class="headerlink" href="#class-organization" title="Link to this heading"></a></h2>
 <p>The following chart describes the organization of the various interfaces and classes used. A Hardware Interface (sometimes referred to as a “driver”) implements the code required to communicate with a specific model of hardware. The Interface which describes what functions these drivers will implement is the <a class="icon link reference external" href="https://wiki.analog.com/" target="_blank">#ihardwareinterface</a> interface. For each device that is currently connected, a Hardware Device object is created. This object is used to communicate with a specific, physical device. All of these Hardware Device objects abide by the <a class="icon link reference external" href="https://wiki.analog.com/" target="_blank">#ihardwaredevice</a> interface.</p>
 <img alt="https://wiki.analog.com/_media/resources/eval/dpg/class_diagram.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/dpg/class_diagram.png" />
-<p>To connect to a DPG, an instance of the correct Hardware Interface must be created. This instance will provide an array of IHardwareDevice’s corresponding to all the attached devices.</p>
+<p>To connect to a DPG, an instance of the correct Hardware Interface must be
+created. This instance will provide an array of IHardwareDevice’s corresponding
+to all the attached devices.</p>
 </section>
 <section id="getting-started-with-com">
 <h2>Getting Started with COM<a class="headerlink" href="#getting-started-with-com" title="Link to this heading"></a></h2>
-<p>Unlike the .NET interface, you must connect directly to the appropriate Hardware Interface for the type of hardware you are connecting to. The individual hardware interfaces are registered with COM when the DAC Software Suite is installed. The ProgID of each interface is in the form “AnalogDevices.x”, where x is the name of the hardware type. For example, the DPG2 Hardware Interface is registered with COM as AnalogDevices.DPG2.</p>
+<p>Unlike the .NET interface, you must connect directly to the appropriate Hardware
+Interface for the type of hardware you are connecting to. The individual
+hardware interfaces are registered with COM when the DAC Software Suite is
+installed. The ProgID of each interface is in the form “AnalogDevices.x”, where
+x is the name of the hardware type. For example, the DPG2 Hardware Interface is
+registered with COM as AnalogDevices.DPG2.</p>
 <p>Once the hardware interface is opened, all the functions listed in the <a class="icon link reference external" href="https://wiki.analog.com/" target="_blank">#ihardwareinterface</a> interface can be used, as well as the functions in <a class="icon link reference external" href="https://wiki.analog.com/" target="_blank">#ihardwaredevice</a> for any devices returned by the interface. Additional functions specific to the current hardware may also be available. Using these functions will limit the application to the current device type.</p>
 </section>
 <section id="getting-started-with-net">
 <h2>Getting Started with .NET<a class="headerlink" href="#getting-started-with-net" title="Link to this heading"></a></h2>
-<p>The AnalogDevices.DPG.Interfaces assembly provides the starting point for communicating with a DPG. This assembly exposes a number of interfaces, as well as the AnalogDevices.DPG.PluginFinder namespace.</p>
+<p>The AnalogDevices.DPG.Interfaces assembly provides the starting point for
+communicating with a DPG. This assembly exposes a number of interfaces, as well
+as the AnalogDevices.DPG.PluginFinder namespace.</p>
 <section id="the-analogdevices-dpg-pluginfinder-namespace">
 <h3>The AnalogDevices.DPG.PluginFinder Namespace<a class="headerlink" href="#the-analogdevices-dpg-pluginfinder-namespace" title="Link to this heading"></a></h3>
-<p>This namespace provides a mechanism for locating the various hardware drivers that might be present on a user’s PC. It should generally be used instead of a direct link to the hardware driver, to allow for future expansion.</p>
+<p>This namespace provides a mechanism for locating the various hardware drivers
+that might be present on a user’s PC. It should generally be used instead of a
+direct link to the hardware driver, to allow for future expansion.</p>
 <p>Two methods are exposed, which both search for hardware drivers:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="n">IHardwareInterface</span><span class="p">[]</span><span class="w"> </span><span class="nf">FindPlugins</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>This will return an array of all the available Hardware Interfaces (drivers) on the current PC.</p>
+<p>This will return an array of all the available Hardware Interfaces (drivers) on
+the current PC.</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="n">IHardwareInterface</span><span class="p">[]</span><span class="w"> </span><span class="nf">FindPluginsFiltered</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">filter</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This function returns a list of the available Hardware Interfaces whose name matches the filter. For example, to search for only the DPG2 driver, the filter would be set to “DPG2”. Using this function with a filter of “*” is identical to just calling FindPlugins().</p>
+<p>This function returns a list of the available Hardware Interfaces whose name
+matches the filter. For example, to search for only the DPG2 driver, the filter
+would be set to “DPG2”. Using this function with a filter of “*” is identical
+to just calling FindPlugins().</p>
 </section>
 </section>
 <section id="id3">
 <h2>IHardwareInterface<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
-<p>This interface defines the properties and methods that a particular hardware driver will support.</p>
+<p>This interface defines the properties and methods that a particular hardware
+driver will support.</p>
 <p>COM Guid:C18A8C19-4DE7-4b2f-9A7F-91AF8BE9C2BD</p>
 <section id="properties">
 <h3>Properties<a class="headerlink" href="#properties" title="Link to this heading"></a></h3>
@@ -687,7 +706,8 @@ Content on this topic
 </section>
 <section id="id4">
 <h2>IHardwareDevice<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
-<p>This interface describes the basic functions that all Hardware Device drivers will support.</p>
+<p>This interface describes the basic functions that all Hardware Device drivers
+will support.</p>
 <p>COM Guid:108DE7EA-B745-4b45-A90C-0533998CACBD</p>
 <section id="id5">
 <h3>Properties<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
@@ -781,7 +801,8 @@ Content on this topic
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="n">IndividualUnitControl</span><span class="w"> </span><span class="nf">UnitControl</span><span class="p">(</span><span class="k">void</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Returns a GUI control which can control all aspects of the DPG. This is the same as what is displayed in DPGDownloader.</p>
+<p>Returns a GUI control which can control all aspects of the DPG. This is the same
+as what is displayed in DPGDownloader.</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="kt">bool</span><span class="w"> </span><span class="nf">DownloadConfiguration</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">config</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -896,7 +917,8 @@ Content on this topic
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="n">DownloadConfigurationStatusUpdate</span>
 </pre></div>
 </div>
-<p>This event is fired when the status (percent complete) of an asynchronous configuration download changes.</p>
+<p>This event is fired when the status (percent complete) of an asynchronous
+configuration download changes.</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="n">DownloadDataVectorAsyncCompleted</span>
 </pre></div>
 </div>
@@ -904,7 +926,8 @@ Content on this topic
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="n">DownloadDataVectorStatusUpdate</span>
 </pre></div>
 </div>
-<p>This event is fired when the status (percent complete) of an asynchronous data vector download changes.</p>
+<p>This event is fired when the status (percent complete) of an asynchronous data
+vector download changes.</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="n">DownloadDataVectorError</span>
 </pre></div>
 </div>
@@ -913,7 +936,8 @@ Content on this topic
 </section>
 <section id="ihardwareidlepattern">
 <h2>IHardwareIdlePattern<a class="headerlink" href="#ihardwareidlepattern" title="Link to this heading"></a></h2>
-<p>This interface describes the properties and methods used to read, alter, and enable the Idle Pattern feature of the DPG.</p>
+<p>This interface describes the properties and methods used to read, alter, and
+enable the Idle Pattern feature of the DPG.</p>
 <p>COM Guid: 2EB6E57E-DCC1-4f48-B0CC-4FDD8E28759A</p>
 <section id="id6">
 <h3>Properties<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
@@ -931,11 +955,13 @@ Content on this topic
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">void</span><span class="w"> </span><span class="nf">SetPatternInt1D</span><span class="p">(</span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">pattern</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This method is identical to setting the property Pattern. It is provided for use in applications which cannot set array properties.</p>
+<p>This method is identical to setting the property Pattern. It is provided for use
+in applications which cannot set array properties.</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">void</span><span class="w"> </span><span class="nf">SetPatternInt2D</span><span class="p">(</span><span class="kt">int</span><span class="p">[,]</span><span class="w"> </span><span class="n">pattern</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This method is identical to setting the property Pattern. It is provided for use in applications which cannot set array properties.</p>
+<p>This method is identical to setting the property Pattern. It is provided for use
+in applications which cannot set array properties.</p>
 </section>
 </section>
 <section id="jesd204interface">
@@ -950,15 +976,18 @@ Content on this topic
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="n">JESD204Framer</span><span class="p">[]</span><span class="w"> </span><span class="n">Framers</span>
 </pre></div>
 </div>
-<p>Returns an array of JESD204Framer objects, which is the primary interface to the hardware framers inside the DPG.</p>
+<p>Returns an array of JESD204Framer objects, which is the primary interface to the
+hardware framers inside the DPG.</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="n">LaneCount</span>
 </pre></div>
 </div>
-<p>Gets or sets the maximum number of lanes that can be utilized in this setup across all framers.</p>
+<p>Gets or sets the maximum number of lanes that can be utilized in this setup
+across all framers.</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="n">JESD204Lane</span><span class="p">[]</span><span class="w"> </span><span class="n">Lanes</span>
 </pre></div>
 </div>
-<p>Returns an array of JESD204Lane objects, which provides access to individual lane features.</p>
+<p>Returns an array of JESD204Lane objects, which provides access to individual
+lane features.</p>
 </section>
 </section>
 <section id="jesd204framer">
@@ -1067,11 +1096,16 @@ Content on this topic
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">void</span><span class="w"> </span><span class="nf">DownloadDataAsync</span><span class="p">(</span><span class="n">UInt16</span><span class="p">[][]</span><span class="w"> </span><span class="n">DataVectors</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">ShowProgress</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Downloads data asynchronously to the memory in the pattern generator for playback to the framer. The first dimension of DataVectors should be M long. ShowProgress indicates if a status bar should be displayed during the download process.</p>
+<p>Downloads data asynchronously to the memory in the pattern generator for
+playback to the framer. The first dimension of DataVectors should be M long.
+ShowProgress indicates if a status bar should be displayed during the download
+process.</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">void</span><span class="w"> </span><span class="nf">DownloadData</span><span class="p">(</span><span class="n">UInt16</span><span class="p">[][]</span><span class="w"> </span><span class="n">DataVectors</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">ShowProgress</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Downloads data synchronously to the memory in the pattern generator for playback to the framer. The first dimension of DataVectors should be M long. ShowProgress indicates if a status bar should be displayed during the download process.</p>
+<p>Downloads data synchronously to the memory in the pattern generator for playback
+to the framer. The first dimension of DataVectors should be M long. ShowProgress
+indicates if a status bar should be displayed during the download process.</p>
 </section>
 </section>
 <section id="jesd204lane">
@@ -1299,7 +1333,8 @@ Content on this topic
 <h2>DPG3-Specific Features<a class="headerlink" href="#dpg3-specific-features" title="Link to this heading"></a></h2>
 <section id="qbf-implementation-of-jesd204framer">
 <h3>QBF (Implementation of JESD204Framer)<a class="headerlink" href="#qbf-implementation-of-jesd204framer" title="Link to this heading"></a></h3>
-<p>In addition to the base implementation of JESD204Framer, this class also exposes:</p>
+<p>In addition to the base implementation of JESD204Framer, this class also
+exposes:</p>
 <section id="id15">
 <h4>Enumerations<a class="headerlink" href="#id15" title="Link to this heading"></a></h4>
 <div class="table-wrapper docutils container">

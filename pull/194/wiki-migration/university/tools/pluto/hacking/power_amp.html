@@ -592,7 +592,8 @@ Content on this topic
   <section id="controlling-external-devices-on-the-adalm-pluto">
 <h1>Controlling External Devices on the ADALM-PLUTO<a class="headerlink" href="#controlling-external-devices-on-the-adalm-pluto" title="Link to this heading"></a></h1>
 <p>While this was requested to better understand how to control external power amplifiers for various software to implement <a class="icon link reference external" href="https://en.wikipedia.org/wiki/Push-to-talk" target="_blank">push to talk</a> (PTT), and ensure the PA was off during the Rx portion, this is good practice for any application which is just doing Rx or just doing Tx for best performance. Even you you are not concerned about controlling external devices, this may be a good read for some (just skip the GPO discussions).</p>
-<p>There are two ways to implement General Purpose Output (GPO), Automatically (the easy way), or Software Controlled (which is handled later).</p>
+<p>There are two ways to implement General Purpose Output (GPO), Automatically (the
+easy way), or Software Controlled (which is handled later).</p>
 <section id="background">
 <h2>Background<a class="headerlink" href="#background" title="Link to this heading"></a></h2>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/AD9363" target="_blank">AD9363</a> transceiver inside the ADALM-PLUTO includes an Enable State Machine (ENSM) that allows real time control over the current state of the device. The device can be placed in several different states during normal operation, including:</p>
@@ -604,8 +605,20 @@ Content on this topic
 <li><p>Frequency Division Duplex (FDD) — Tx and Rx signal chains enabled, where both Tx and Rx can be used simultaneously at different frequencies.</p></li>
 <li><p>Alert — synthesizers enabled</p></li>
 </ul>
-<p>In this document, we will mainly focus on the Frequency Division Duplex (FDD) mode and the Time Division Duplex (TDD) Tx &amp; Rx modes.</p>
-<p>While the default settings are FDD mode (where Tx and Rx signal chains are always enabled), there are many use cases where TDD (Time Division Duplex) mode is beneficial. The ENSM has two control modes (1) SPI control and (2) pin control. If the TDD is a slotted system, where μsecond timing requirements must be met, pin control from a FPGA based state machine is normally used. When the TDD system is random, or push to talk, SPI control is possible. In SPI control mode, the ENSM is controlled asynchronously by writing to SPI registers to advance the current state to the next state. SPI control is considered asynchronous to the device or sample clock because the SPI clock can be derived from a different clock reference and can still function properly. The SPI control ENSM mode is recommended when real-time control of the synthesizers is not necessary.</p>
+<p>In this document, we will mainly focus on the Frequency Division Duplex (FDD)
+mode and the Time Division Duplex (TDD) Tx &amp; Rx modes.</p>
+<p>While the default settings are FDD mode (where Tx and Rx signal chains are
+always enabled), there are many use cases where TDD (Time Division Duplex) mode
+is beneficial. The ENSM has two control modes (1) SPI control and (2) pin
+control. If the TDD is a slotted system, where μsecond timing requirements must
+be met, pin control from a FPGA based state machine is normally used. When the
+TDD system is random, or push to talk, SPI control is possible. In SPI control
+mode, the ENSM is controlled asynchronously by writing to SPI registers to
+advance the current state to the next state. SPI control is considered
+asynchronous to the device or sample clock because the SPI clock can be derived
+from a different clock reference and can still function properly. The SPI
+control ENSM mode is recommended when real-time control of the synthesizers is
+not necessary.</p>
 <p>The AD9363 also include 4 <code class="docutils literal notranslate"><span class="pre">GPO_[0:3]</span></code> General-Purpose Output pins. These are general-purpose logic output pins. These pins are designed to control other peripheral devices such as regulatorsswitches via the SPI bus, or they function as slaves for the internal AD9363 state machine. They can be configured to assert when the the Rx or Tx is active.</p>
 <p>More information about the <a class="icon adi reference external" href="https://www.analog.com/AD9363" target="_blank">AD9363</a> can be found on the product page.</p>
 </section>
@@ -619,7 +632,7 @@ Content on this topic
 <section id="pinout">
 <h3>Pinout<a class="headerlink" href="#pinout" title="Link to this heading"></a></h3>
 <p>The <a class="reference internal" href="hardware.html"><span class="doc">schematic</span></a> connects the <code class="docutils literal notranslate"><span class="pre">GPO_[0:3]</span></code> pins to <code class="docutils literal notranslate"><span class="pre">GPO[0:3]</span></code> nets and test points.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/tools/pluto/hacking/pluto_gpo_pins.png"><img alt="https://wiki.analog.com/_media/university/tools/pluto/hacking/pluto_gpo_pins.png" class="align-center" src="https://wiki.analog.com/_media/university/tools/pluto/hacking/pluto_gpo_pins.png" style="width: 400px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/tools/pluto/hacking/pluto_gpo_pins.png"><img alt="https://wiki.analog.com/_media/university/tools/pluto/hacking/pluto_gpo_pins.png" class="align-center" src="https://wiki.analog.com/_media/university/tools/pluto/hacking/pluto_gpo_pins.png" width="400" />
 </a>
 <p>Just connect these <code class="docutils literal notranslate"><span class="pre">GPO[0:3]</span></code> pins to whatever you need to control.</p>
 </section>
@@ -638,10 +651,13 @@ Content on this topic
 <li><p>To set the part into Receive only mode:<code class="docutils literal notranslate"><span class="pre">iio_attr</span> <span class="pre">-a</span> <span class="pre">-d</span> <span class="pre">ad9361-phy</span> <span class="pre">ensm_mode</span> <span class="pre">rx</span></code></p></li>
 <li><p>To set the part into Tx only mode:<code class="docutils literal notranslate"><span class="pre">iio_attr</span> <span class="pre">-a</span> <span class="pre">-d</span> <span class="pre">ad9361-phy</span> <span class="pre">ensm_mode</span> <span class="pre">tx</span></code></p></li>
 </ul>
-<p>When you change from Rx mode to Tx mode, any of the four pins will assert/de-assert.</p>
+<p>When you change from Rx mode to Tx mode, any of the four pins will
+assert/de-assert.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>It should be noted that trying to capture a buffer (ie Rx) while in Tx mode will pause/hang until timed out. And sending a buffer (Tx) while in Rx mode will also pause/hang. Cancelling things will return.</p>
+<p>It should be noted that trying to capture a buffer (ie Rx) while in Tx mode
+will pause/hang until timed out. And sending a buffer (Tx) while in Rx mode
+will also pause/hang. Cancelling things will return.</p>
 </div>
 <p>There is a short bash script that shows how to use pin control from userspace: <a class="icon link reference external" href="https://github.com/linux_image_ADI-scripts?master/test_ensm_pinctrl.sh" target="_blank">on GitHub</a></p>
 </section>
@@ -664,19 +680,25 @@ Content on this topic
 <span class="n">done</span>
 </pre></div>
 </div>
-<p>by placing a scope on the GPO0 and GPO1 pins, you can see the levels switch, as the Pluto transitions between Receive and Transmit.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/tools/pluto/hacking/gpo_rx_tx.png"><img alt="image1" src="https://wiki.analog.com/_media/university/tools/pluto/hacking/gpo_rx_tx.png" style="width: 600px;" /></a></p>
+<p>by placing a scope on the GPO0 and GPO1 pins, you can see the levels switch, as
+the Pluto transitions between Receive and Transmit.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/tools/pluto/hacking/gpo_rx_tx.png"><img alt="image1" src="https://wiki.analog.com/_media/university/tools/pluto/hacking/gpo_rx_tx.png" width="600" /></a></p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
-<p>While this shows the Rx/Tx switching in 30-35ms or so, this is based on software control over SPI, running in an interpreted bash shell. Doing things in a C application, would make things faster, and doing things via pin control (via a state machine in the FPGA) can make things sub ~30 μs between Rx and Tx swaps to handle slotted specifications like LTE. IF you need things to go faster - just ask.</p>
+<p>While this shows the Rx/Tx switching in 30-35ms or so, this is based on
+software control over SPI, running in an interpreted bash shell. Doing things
+in a C application, would make things faster, and doing things via pin
+control (via a state machine in the FPGA) can make things sub ~30 μs between
+Rx and Tx swaps to handle slotted specifications like LTE. IF you need things
+to go faster - just ask.</p>
 </div>
-<p>OK, someone asked for the C code - it’s pretty trivial, just longer. You will need to change the uri, and put in proper error checking.</p>
+<p>OK, someone asked for the C code - it’s pretty trivial, just longer. You will
+need to change the uri, and put in proper error checking.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>#include &lt;stdio.h&gt;
 #include &lt;iio.h&gt;
 #include &lt;unistd.h&gt;
 #include &lt;stdio.h&gt;
 #include &lt;signal.h&gt;
-
 
 volatile sig_atomic_t stop = 0;
 
@@ -755,7 +777,8 @@ int main(int argc, char **argv)
 </tbody>
 </table>
 </div>
-<p>Again, these are representative numbers for software control, faster is possible with pin control.</p>
+<p>Again, these are representative numbers for software control, faster is possible
+with pin control.</p>
 </section>
 </section>
 <section id="testing-in-iio-oscilloscope">

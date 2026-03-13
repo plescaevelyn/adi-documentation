@@ -601,13 +601,26 @@ Content on this topic
 </li>
 </ul>
 </li>
-<li><p>System Root of the firmware used on PlutoSDR itself (this will be downloaded in the example). This includes the libraries (binaries, so you can statically link to things if you want), and headers for those libraries. It’s important that the compiler be told where things are, so it can find the headers and libraries for the Pluto. This can either be done on the command line, or by replacing the default sysroot that the compiler comes with. If you are only compiling things for Pluto - this is a convenient solution, but will eventually will cause problems when you forget, and try to compile something else with this same toolchain.</p></li>
+<li><p>System Root of the firmware used on PlutoSDR itself (this will be downloaded
+in the example). This includes the libraries (binaries, so you can statically
+link to things if you want), and headers for those libraries. It’s important
+that the compiler be told where things are, so it can find the headers and
+libraries for the Pluto. This can either be done on the command line, or by
+replacing the default sysroot that the compiler comes with. If you are only
+compiling things for Pluto - this is a convenient solution, but will
+eventually will cause problems when you forget, and try to compile something
+else with this same toolchain.</p></li>
 </ul>
-<p>Once you have the necessary tools we can start to build an application. This example will be done using Linux since it is by far the simplest to set up. We will use v0.30 of the firmware, which is assumed running on the PlutoSDR. If you change the firmware you will likely have to recompile your applications since the compiler or libraries running on the Pluto can change over time.</p>
+<p>Once you have the necessary tools we can start to build an application. This
+example will be done using Linux since it is by far the simplest to set up. We
+will use v0.30 of the firmware, which is assumed running on the PlutoSDR. If you
+change the firmware you will likely have to recompile your applications since
+the compiler or libraries running on the Pluto can change over time.</p>
 <section id="set-up-your-linux-host">
 <h2>Set up your Linux Host<a class="headerlink" href="#set-up-your-linux-host" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p>make sure to use either the Xilinx or the Linaro toolchain (you only need one)</p>
+<li><p>make sure to use either the Xilinx or the Linaro toolchain (you only need
+one)</p>
 <ul>
 <li><p>Assuming you have the Xilinx SDK installed in <code class="docutils literal notranslate"><span class="pre">/opt/Xilinx</span></code>, add the necessary tools to your path: <code class="docutils literal notranslate"><span class="pre">tcollins&#64;winston:</span> <span class="pre">**source</span> <span class="pre">/opt/Xilinx/Vivado/2018.2/settings64.sh**</span></code></p>
 <ul>
@@ -635,7 +648,9 @@ Content on this topic
 </section>
 <section id="using-the-linaro-toolchain-on-arm-hosts">
 <h2>Using the Linaro Toolchain on ARM hosts<a class="headerlink" href="#using-the-linaro-toolchain-on-arm-hosts" title="Link to this heading"></a></h2>
-<p>This is a little easier, since the compiler is already for ARM. You can follow the instructions for the i686 devices, but do not install a different compiler. And when compiling, just call gcc:</p>
+<p>This is a little easier, since the compiler is already for ARM. You can follow
+the instructions for the i686 devices, but do not install a different compiler.
+And when compiling, just call gcc:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>tcollins@rasberian: gcc -mfloat-abi=hard  --sysroot=$HOME/pluto-0.30.sysroot -std=gnu99 -g -o pluto_stream ad9361-iiostream.c -lpthread -liio -lm -Wall -Wextra
 </pre></div>
 </div>
@@ -673,7 +688,8 @@ root@192.168.2.1&#39;s password: analog
 </div>
 <section id="other-standard-applications">
 <h3>Other standard applications<a class="headerlink" href="#other-standard-applications" title="Link to this heading"></a></h3>
-<p>Depending on the project you are doing - you may need to include something like this in a Makefile project (with the appropriate path changes),</p>
+<p>Depending on the project you are doing - you may need to include something like
+this in a Makefile project (with the appropriate path changes),</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>SYSROOT = /home/rgetz/github/pluto/staging/
 PKG_CONFIG_PATH=${SYSROOT}/usr/lib/pkgconfig
 CC=arm-linux-gnueabihf-gcc

@@ -603,10 +603,10 @@ Content on this topic
 <h2>General Description/Overview<a class="headerlink" href="#general-description-overview" title="Link to this heading"></a></h2>
 <p>The <strong>ADuCM360_demo_cn0411</strong> project uses the <a class="icon adi reference external" href="https://www.analog.com/en/design-center/reference-designs/hardware-reference-design/circuits-from-the-lab/cn0411" target="_blank">EVAL-CN0411-ARDZ shield</a> which is a single supply, low power, high precision complete solution for Total Dissolved Solids measurements, including temperature compensation. The circuit is optimized for conductivity measurements used to determine the TDS values, using conductivity cells with BNC plug.</p>
 <p>The circuit is divided into three independent measurement front ends: TDS, conductivity and temperature. After signal conditioning, the three channels share an <a class="icon adi reference external" href="https://www.analog.com/ad7124-8" target="_blank">ad7124-8</a>, 24-bit sigma-delta (Σ-Δ) ADC. The <a class="icon adi reference external" href="https://www.analog.com/ad7124-8" target="_blank">ad7124-8</a>, is a low power, low noise, completely integrated analog front end for high precision measurement applications.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0411_demo_4.jpg"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0411_demo_4.jpg" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0411_demo_4.jpg" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0411_demo_4.jpg"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0411_demo_4.jpg" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0411_demo_4.jpg" width="600" />
 </a>
 <p>For temperature compensation can be used an RTD PT100 sensor, 2-wire. The ADuCM360_demo_cn0411 application processes ADC outputs for all 5 channels (RTD, Vpeak+ and Vpeak-, VDAC, VR20S, VR200S), calculates conductivity and TDS values using as input RTD temperature value and the peak-to-peak voltage. Those data are sent to serial interface, using <strong>UART</strong> communication (<strong>115200</strong> baud rate and <strong>8-bits</strong> data length). The <strong>24-bits</strong> ADC data are received using <strong>SPI</strong> interface of the EVAL-ADICUP360 board.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0411_demo_1.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0411_demo_1.png" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0411_demo_1.png" style="width: 400px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0411_demo_1.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0411_demo_1.png" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0411_demo_1.png" width="400" />
 </a>
 <p>The <strong>temperature</strong> value is calculated based on the <strong>RTD resistance</strong>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Rrtd</span> <span class="o">=</span> <span class="p">(</span><span class="n">CODE</span><span class="o">*</span> <span class="n">Rref</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span><span class="o">^</span><span class="mi">24</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>                         <span class="n">Rref</span> <span class="o">-</span> <span class="n">Reference</span> <span class="n">resistor</span> <span class="p">(</span><span class="mf">4.02</span><span class="n">kΩ</span><span class="p">)</span>
@@ -614,12 +614,15 @@ Content on this topic
 </pre></div>
 </div>
 <p><strong>1. RTD resistance &gt; 100Ω</strong></p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0398/cn0398_demo_1.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0398/cn0398_demo_1.png" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0398/cn0398_demo_1.png" style="width: 800px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0398/cn0398_demo_1.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0398/cn0398_demo_1.png" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0398/cn0398_demo_1.png" width="800" />
 </a>
 <p><strong>2. RTD resistance ≤ 100Ω</strong></p>
 <img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0398/cn0398_demo_2.png" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0398/cn0398_demo_2.png" />
 <p>In order to compute the <strong>total dissolved solids</strong> parameter a premeasurement procedure is run in the first place that aims to select the proper gain resistance for the measurement.</p>
-<p>The multiplexer is set to the highest gain resistance (20MΩ) and the DAC output to a value set by the user (initially set to 400mV). Then, the positive and negative input voltage are captured via ADC channel 1 and 2. If the following formula is met:</p>
+<p>The multiplexer is set to the highest gain resistance (20MΩ) and the DAC output
+to a value set by the user (initially set to 400mV). Then, the positive and
+negative input voltage are captured via ADC channel 1 and 2. If the following
+formula is met:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                                         <span class="n">Vp</span> <span class="o">=</span> <span class="n">positive</span> <span class="nb">input</span> <span class="n">voltage</span>
 <span class="n">Vp</span> <span class="o">+</span> <span class="n">Vn</span> <span class="o">&gt;</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">Vexc</span>                 <span class="n">Vn</span> <span class="o">=</span> <span class="n">negative</span> <span class="nb">input</span> <span class="n">voltage</span>
                                          <span class="n">Vexc</span> <span class="o">=</span> <span class="n">DAC</span> <span class="n">output</span> <span class="n">voltage</span>
@@ -629,7 +632,8 @@ Content on this topic
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Vexc</span> <span class="o">=</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="n">Vexc</span> <span class="o">/</span> <span class="p">(</span><span class="n">Vp</span> <span class="o">+</span> <span class="n">Vn</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Otherwise, the gain resistor is dropped by 1 decade and the premeasurement process is repeated.</p>
+<p>Otherwise, the gain resistor is dropped by 1 decade and the premeasurement
+process is repeated.</p>
 <p>After the process is finished, the peak-to-peak voltage is measured again an the <strong>peak-to-peak current</strong> is computed:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                                           <span class="n">Ipp</span> <span class="o">=</span> <span class="n">peak</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">peak</span> <span class="n">current</span>
 <span class="n">Ipp</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">Vexc</span> <span class="o">-</span> <span class="p">(</span><span class="n">Vp</span> <span class="o">+</span> <span class="n">Vn</span><span class="p">))</span> <span class="o">/</span> <span class="n">Rgain</span>       <span class="n">Vexc</span> <span class="o">=</span> <span class="n">excitation</span> <span class="n">voltage</span> <span class="n">computed</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">premeasurement</span> <span class="n">procedure</span>
@@ -689,27 +693,34 @@ s_cal = s / (1 + temp_coeff * (temp - t_cal))      temp = measured temperature
 <section id="setting-up-the-hardware">
 <h2>Setting up the Hardware<a class="headerlink" href="#setting-up-the-hardware" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p>To program the base board, set the jumpers/switches as shown in the next figure. The important jumpers/switches are highlighted in red.</p></li>
+<li><p>To program the base board, set the jumpers/switches as shown in the next
+figure. The important jumpers/switches are highlighted in red.</p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0398/adicup360_hardware.jpg"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0398/adicup360_hardware.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0398/adicup360_hardware.jpg" style="width: 650px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0398/adicup360_hardware.jpg"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0398/adicup360_hardware.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0398/adicup360_hardware.jpg" width="650" />
 </a>
 <ul class="simple">
 <li><p>Connect the <strong>EVAL-CN0411-ARDZ Shield</strong> to the Arduino connectors <strong>P2, P5, P6, P7, P8</strong> of the <strong>EVAL-ADICUP360</strong> board.</p></li>
 <li><p>Connect the conductivity cell to the <strong>J1</strong> connector of the EVAL-CN0411-ARDZ.</p></li>
 <li><p>Connect the RTD sensor to the <strong>P3</strong> connector of the EVAL-CN0411-ARDZ.</p></li>
 <li><p>Connect <strong>PIN1</strong> and <strong>PIN2</strong> on <strong>P5</strong> connector and <strong>PIN1</strong> and <strong>PIN2</strong> on <strong>P6</strong> connector to read data from the conductivity cell.</p></li>
-<li><p>Plug in the USB cable from the PC to the EVAL-ADICUP360 base board via the Debug USB.(P14)</p></li>
+<li><p>Plug in the USB cable from the PC to the EVAL-ADICUP360 base board via the
+Debug USB.(P14)</p></li>
 </ul>
 </section>
 <section id="obtaining-the-source-code">
 <h2>Obtaining the Source Code<a class="headerlink" href="#obtaining-the-source-code" title="Link to this heading"></a></h2>
-<p>There are two basic ways to program the ADICUP360 with the software for the CN0411.</p>
+<p>There are two basic ways to program the ADICUP360 with the software for the
+CN0411.</p>
 <ul class="simple">
 <li><p>Dragging and Dropping the .Bin to the MBED drive</p></li>
 <li><p>Building, Compiling, and Debugging using CCES</p></li>
 </ul>
-<p>Using the drag and drop method, the software is going to be a version that Analog Devices creates for testing and evaluation purposes. This is the EASIEST way to get started with the reference design.</p>
-<p>Importing the project into CrossCore is going to allow you to change parameters and customize the software to fit your needs, but will be a bit more advanced and will require you to download the CrossCore toolchain.</p>
+<p>Using the drag and drop method, the software is going to be a version that
+Analog Devices creates for testing and evaluation purposes. This is the EASIEST
+way to get started with the reference design.</p>
+<p>Importing the project into CrossCore is going to allow you to change parameters
+and customize the software to fit your needs, but will be a bit more advanced
+and will require you to download the CrossCore toolchain.</p>
 <p>The software for the <strong>ADuCM360_demo_cn0411</strong> demo can be found here:</p>
 <div class="download admonition">
 <p class="admonition-title">Download</p>
@@ -878,9 +889,12 @@ s_cal = s / (1 + temp_coeff * (temp - t_cal))      temp = measured temperature
 <section id="project-structure">
 <h2>Project Structure<a class="headerlink" href="#project-structure" title="Link to this heading"></a></h2>
 <p>The <strong>ADuCM360_demo_cn0411</strong> is a C++ project that uses ADuCM36x C/C++ Project structure.</p>
-<p>This project contains: system initialization part - disabling watchdog, setting system clock, enabling clock for peripherals; port configuration for ADC, SPI read/write; for configuring and reading from AD7124, UART via P0.6/P0.7; UART read/write functions; for calibration and displaying the results.</p>
+<p>This project contains: system initialization part - disabling watchdog, setting
+system clock, enabling clock for peripherals; port configuration for ADC, SPI
+read/write; for configuring and reading from AD7124, UART via P0.6/P0.7; UART
+read/write functions; for calibration and displaying the results.</p>
 <p>In the <strong>src</strong> and <strong>include</strong> folders you will find the source and header files related to CN0411 software application. The <em>Communication.c</em> files contain <strong>SPI</strong> and <strong>UART</strong> specific data, meanwhile the <em>CN0411.c</em> files contain the calculation part, the <em>AD7124.c</em> files contain ADC channels handling. The default parameters are set at the run time, after initialization in the terminal window will appear information messages about the initial setup.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0411_demo_3.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0411_demo_3.png" class="align-left" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0411_demo_3.png" style="width: 240px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0411_demo_3.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0411_demo_3.png" class="align-left" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0411_demo_3.png" width="240" />
 </a>
 <p>The <strong>RTE</strong> folder contains device and system related files:</p>
 <ul class="simple">

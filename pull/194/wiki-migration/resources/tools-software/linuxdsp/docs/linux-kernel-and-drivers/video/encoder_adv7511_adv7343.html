@@ -602,18 +602,21 @@ Content on this topic
 <p>The Video Encoder EI3 Extender Board is a separately daughter board that plugs onto the EI3 of an EZ-KIT LITE/EZ-Board, it extends the capabilities of the EZ-KIT LITE/EZ-Board by providing a connection between the enhanced parallel peripheral interface (EPPI) of the processor and the <strong>ADV7511</strong> and <a href="#id1"><span class="problematic" id="id2">**</span></a>ADV7341 ** video encoder. For more information about the ADV7511, ADV7341 or Video Encoder EI3 Extender Board, go to www.analog.com and search for ADV7511 or ADV7341 or Video Encoder EI3 Extender Board.</p>
 <section id="hardware-connection">
 <h2>Hardware Connection<a class="headerlink" href="#hardware-connection" title="Link to this heading"></a></h2>
-<p>Connect the Video Encoder EI3 Extender Board board to the P1A connector on the ADSP-SC5XX EZ-Board.</p>
+<p>Connect the Video Encoder EI3 Extender Board board to the P1A connector on the
+ADSP-SC5XX EZ-Board.</p>
 <p>Only HD format is supported for <strong>ADV7511</strong>, so connect an HDMI cable to a TV to display captured HD yuv file (720p).</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/video/encoder.jpg"><img alt="image1" src="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/video/encoder.jpg" style="width: 600px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/video/encoder.jpg"><img alt="image1" src="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/video/encoder.jpg" width="600" /></a></p>
 <p><strong>ADV7341</strong> supports NTSC and PAL format video. Connect the Composite port on the adapter board to TV video port using 3RCA cable.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/video/cable.jpg"><img alt="image2" src="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/video/cable.jpg" style="width: 600px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/video/cable.jpg"><img alt="image2" src="https://wiki.analog.com/_media/resources/tools-software/linuxdsp/docs/linux-kernel-and-drivers/video/cable.jpg" width="600" /></a></p>
 </section>
 <section id="software-configuration">
 <h2>Software Configuration<a class="headerlink" href="#software-configuration" title="Link to this heading"></a></h2>
-<p>The following configuration should be done on top of the sc589-ezkit/sc573-ezkit default configuration.</p>
+<p>The following configuration should be done on top of the sc589-ezkit/sc573-ezkit
+default configuration.</p>
 <section id="package-configuration">
 <h3>Package Configuration<a class="headerlink" href="#package-configuration" title="Link to this heading"></a></h3>
-<p>Add the v4l2-video-test package in the filesystem, it’s enabled in adsp-sc5xx-full image by default.</p>
+<p>Add the v4l2-video-test package in the filesystem, it’s enabled in
+adsp-sc5xx-full image by default.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vim</span> <span class="n">build</span><span class="o">/</span><span class="n">conf</span><span class="o">/</span><span class="n">local</span><span class="o">.</span><span class="n">conf</span>
 <span class="n">IMAGE_INSTALL_append</span> <span class="o">=</span> <span class="s2">&quot;v4l2-video-test&quot;</span>
 </pre></div>
@@ -682,7 +685,9 @@ Content on this topic
 <ul class="simple">
 <li><p><strong>Device node for soft switch on Video Encoder EI3 Extender Board</strong></p></li>
 </ul>
-<p>Please add following child node ssw2 to i2c0 master node in the device tree(sc589-ezkit.dts/sc573-ezkit.dts). We need to setup soft switch before we start display streaming.</p>
+<p>Please add following child node ssw2 to i2c0 master node in the device
+tree(sc589-ezkit.dts/sc573-ezkit.dts). We need to setup soft switch before we
+start display streaming.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ vim arch/arm/boot/dts/sc589-ezkit.dts
 i2c0: twi@31001400 {
 ...
@@ -708,7 +713,13 @@ adau1979@0x11 {
 </section>
 <section id="adv7511-hdmi-transmitter-test">
 <h2>ADV7511 HDMI Transmitter Test<a class="headerlink" href="#adv7511-hdmi-transmitter-test" title="Link to this heading"></a></h2>
-<p>One thing to note here is that the ADSP-SC573 can support up to 56.25MHz ppi clock when transmitting data or frame sync, however, ADSP-SC589 can support up to 75MHz ppi clock, and there are two different ppi clock generators on Video Encoder EI3 Extender Board: 27MHz and 74MHz, so we can enable 27MHz clock both for ADSP-SC573 EZ-Board and ADSP-SC589 EZ-Board, and 74MHz clock only for ADSP-SC589 EZ-Board. For more information, please refer to the data sheets of ADSP-SC573/ADSP-SC589 and the Video Encoder EI3 Extender Board Manual.</p>
+<p>One thing to note here is that the ADSP-SC573 can support up to 56.25MHz ppi
+clock when transmitting data or frame sync, however, ADSP-SC589 can support up
+to 75MHz ppi clock, and there are two different ppi clock generators on Video
+Encoder EI3 Extender Board: 27MHz and 74MHz, so we can enable 27MHz clock both
+for ADSP-SC573 EZ-Board and ADSP-SC589 EZ-Board, and 74MHz clock only for
+ADSP-SC589 EZ-Board. For more information, please refer to the data sheets of
+ADSP-SC573/ADSP-SC589 and the Video Encoder EI3 Extender Board Manual.</p>
 <section id="setup-soft-switch">
 <h3>Setup Soft Switch<a class="headerlink" href="#setup-soft-switch" title="Link to this heading"></a></h3>
 <p>The state of pins from IO expander is “uncertain” after we enable Soft Switch on the ADSP-SC573 EZ-Board, some pins are also the OE pins (active low) of modules, as the PPI signal pins are reused by many modules, you should disable related modules by setting Soft Switch first, otherwise the signals from ppi will be interfered. So extra configuration only for <strong>ADSP-SC573 EZ-Board</strong>:</p>
@@ -742,7 +753,9 @@ adau1979@0x11 {
 </section>
 <section id="display-video-images">
 <h3>Display Video Images<a class="headerlink" href="#display-video-images" title="Link to this heading"></a></h3>
-<p>You can use “v4l2_video_display” provided to play HD yuv file and output the HD signal via ADV7511, the HD signal will be transmitted to TV, then you will see the image on TV.</p>
+<p>You can use “v4l2_video_display” provided to play HD yuv file and output the HD
+signal via ADV7511, the HD signal will be transmitted to TV, then you will see
+the image on TV.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># v4l2_video_display -F 720p60.yuv</span>
 </pre></div>
 </div>
@@ -772,7 +785,9 @@ adau1979@0x11 {
 </section>
 <section id="id4">
 <h3>Display Video Images<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
-<p>You can use “v4l2_video_display” provided to play pal yuv file and output the component analog signal via ADV7341, the analog signal will be transmitted to TV by 3RCA cable, then you will see the image on TV.</p>
+<p>You can use “v4l2_video_display” provided to play pal yuv file and output
+the component analog signal via ADV7341, the analog signal will be transmitted
+to TV by 3RCA cable, then you will see the image on TV.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># v4l2_video_display -F pal.yuv</span>
 </pre></div>
 </div>

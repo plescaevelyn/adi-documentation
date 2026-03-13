@@ -602,40 +602,44 @@ Content on this topic
 <h2>General Description/Overview<a class="headerlink" href="#general-description-overview" title="Link to this heading"></a></h2>
 <p>This project is a good example for how to use <strong>EVAL-ADICUP3029</strong> in different combinations with pmod boards. It expand the list of possible applications that can be done with the base board.</p>
 <p>The <strong>ADuCM3029_demo_cn0326</strong> project uses the <a class="icon adi reference external" href="https://www.analog.com/en/design-center/reference-designs/hardware-reference-design/circuits-from-the-lab/cn0326" target="_blank">EVAL-CN0326-PMDZ pmod</a> which is a pH sensor signal conditioner and digitizer with automatic temperature compensation.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup3029/reference_designs/adicup3029_front_cn0326_attached.jpg"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup3029/reference_designs/adicup3029_front_cn0326_attached.jpg" style="width: 600px;" /></a></p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup3029/reference_designs/adicup3029_front_cn0326_attached.jpg"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup3029/reference_designs/adicup3029_front_cn0326_attached.jpg" width="600" /></a></p>
 <p>The CN0326 circuit provides a complete solution for pH sensors with internal resistance between <strong>1 MΩ</strong> and several <strong>GΩ</strong>. It consist of <strong>pH probe</strong> buffer, <strong>Pt1000 RTD</strong> for temperature compensation and <strong>24-bits ADC</strong> with 3 differential analog inputs.</p>
 <p>The pH probe consists of a glass measuring electrode and a reference electrode, which is analogous to a battery. When the probe is place in a solution, the measuring electrode generates a voltage depending on the hydrogen activity of the solution, which is compared to the potential of the reference electrode. As the solution becomes more <strong>acidic</strong> (pH &lt; 7) the potential of the glass electrode becomes more positive (<strong>+mV</strong>) in comparison to the reference electrode; and as the solution becomes more <strong>alkaline</strong> (pH &gt; 7) the potential of the glass electrode becomes more negative (<strong>−mV</strong>) in comparison to the reference electrode.</p>
 <p>The change in temperature of the solution changes the activity of its hydrogen ions. When the solution is heated, the hydrogen ions move faster which result in an increase in potential difference across the two electrodes. In addition, when the solution is cooled, the hydrogen activity decreases causing a decrease in the potential difference. Electrodes are designed ideally to produce a zero volt (<strong>0 V</strong>) potential when placed in a buffer solution with a pH of 7 (<strong>neutral</strong> pH).</p>
 <p>The <strong>EVAL-CN0326-PMDZ</strong> comes with an evaluation software which can help you to test and to calibrate your pmod before you use it.</p>
-<p>The potential changes are outputted as ADC 24-bits value which is received via SPI interface of the EVAL-ADICUP3039 board. The ADC analog differential channels are:</p>
+<p>The potential changes are outputted as ADC 24-bits value which is received via
+SPI interface of the EVAL-ADICUP3039 board. The ADC analog differential channels
+are:</p>
 <ul class="simple">
 <li><p><strong>AIN1(+)/AIN1(-)</strong> - pH probe (voltage full range: ±414 mV at 25°C to ±490 mV at 80°C)</p></li>
 <li><p><strong>AIN2(+)/AIN2(-)</strong> - Pt1000 RTD (voltage full range: 210 mV to 290 mV with 210 μA excitation current)</p></li>
 <li><p><strong>AIN3(+)/AIN3(-)</strong> - Bias current (used to minimized tne voltage errors)</p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0326_demo_2.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0326_demo_2.png" class="align-right" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0326_demo_2.png" style="width: 549px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0326_demo_2.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0326_demo_2.png" class="align-right" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0326_demo_2.png" width="549" />
 </a>
 <p>The <strong>ADuCM3029_demo_cn0326</strong> application purchase ADC outputs from input channels, calculates voltage, temperature and pH values. You can choose to use internal excitation current of the ADC (IOUT2) or calculate bias current of the circuit (see <em>USE_IOUT2</em> parameter).</p>
 <p>A UART interface (9600 baud rate and 8-bits data length) is used, as a command line interpreter, to send the results to terminal window: <strong>temperature</strong> and <strong>ph</strong> values. Beside this two the interpreter process other three commands: <strong>help</strong>, <strong>calibrate</strong> channel/channels and ADC <strong>reset</strong>.</p>
-<p>To start the command line interpreter you need to press ENTER key (CR) from the keyboard and after that just type in &lt;help&gt; to see available commands. The output data are send via UART using semihosting.</p>
+<p>To start the command line interpreter you need to press ENTER key (CR) from the
+keyboard and after that just type in &lt;help&gt; to see available commands. The
+output data are send via UART using semihosting.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The calibrate command perform an internal zero and full scale calibration of the selected channel/channels (<a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/data-sheets/AD7792_7793.pdf" target="_blank">AD7793 Datasheet</a>).</p>
 </div>
 <p>The project uses below formula to determine output <strong>ADC code</strong> for an input voltage on either channel:</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0326_demo_2_1.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0326_demo_2_1.png" class="align-left" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0326_demo_2_1.png" style="width: 250px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0326_demo_2_1.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0326_demo_2_1.png" class="align-left" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0326_demo_2_1.png" width="250" />
 </a>
 <p><strong>AIN</strong> - analog input voltage</p>
 <p><strong>GAIN</strong> - gain value in the in-amp setting</p>
 <p><strong>N</strong> - ADC resolution (24)</p>
 <p>The <strong>temperature</strong> value is calculated using RTD resistance value and it varies from 0°C (1000 Ω) to 100°C (1385 Ω):</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0326_demo_2_2.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0326_demo_2_2.png" class="align-left" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0326_demo_2_2.png" style="width: 240px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0326_demo_2_2.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0326_demo_2_2.png" class="align-left" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0326_demo_2_2.png" width="240" />
 </a>
 <p><strong>Rrtd</strong> - RTD resistance at T°C</p>
 <p><strong>Rmin</strong> - RTD resistance at 0°C</p>
 <p><strong>α</strong> - temperature coefficient (0.00385 Ω/Ω/°C)</p>
 <p>To calculate <strong>pH</strong> value is used Nernst equation:</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0326_demo_2_3.png"><img alt="image2" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0326_demo_2_3.png" style="width: 361px;" /></a> <strong>E</strong> - voltage of the hydrogen electrode with unknown activity</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0326_demo_2_3.png"><img alt="image2" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0326_demo_2_3.png" width="361" /></a> <strong>E</strong> - voltage of the hydrogen electrode with unknown activity</p>
 <p><strong>α</strong> - zero point tolerance (±30 mV)</p>
 <p><strong>T</strong> - ambient temperature in °C</p>
 <p><strong>n</strong> - valence, number of charges on ion (1 at 25 °C)</p>
@@ -677,7 +681,7 @@ Content on this topic
 <ul class="simple">
 <li><p>Make sure the switches are in the position indicated in the picture(<strong>S2</strong> in position <strong>1(USB)</strong>)</p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup3029/hardware/adicup3029_front_refrence_s2_position_for_usb.jpg"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup3029/hardware/adicup3029_front_refrence_s2_position_for_usb.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup3029/hardware/adicup3029_front_refrence_s2_position_for_usb.jpg" style="width: 800px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup3029/hardware/adicup3029_front_refrence_s2_position_for_usb.jpg"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup3029/hardware/adicup3029_front_refrence_s2_position_for_usb.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup3029/hardware/adicup3029_front_refrence_s2_position_for_usb.jpg" width="800" />
 </a>
 <ul class="simple">
 <li><p>Connect the EVAL-CN0326-PMDZ to the SPI PMOD connector <strong>P8</strong> of the <strong>EVAL-ADICUP3029</strong> board.</p></li>
@@ -686,13 +690,18 @@ Content on this topic
 </section>
 <section id="obtaining-the-software">
 <h2>Obtaining the Software<a class="headerlink" href="#obtaining-the-software" title="Link to this heading"></a></h2>
-<p>There are two basic ways to program the ADICUP3029 with the software for the CN0326.</p>
+<p>There are two basic ways to program the ADICUP3029 with the software for the
+CN0326.</p>
 <ul class="simple">
 <li><p>Dragging and Dropping the .Hex to the Daplink drive</p></li>
 <li><p>Building, Compiling, and Debugging using CCES</p></li>
 </ul>
-<p>Using the drag and drop method, the software is going to be a version that Analog Devices creates for testing and evaluation purposes. This is the EASIEST way to get started with the reference design</p>
-<p>Importing the project into CrossCore is going to allow you to change parameters and customize the software to fit your needs, but will be a bit more advanced and will require you to download the CrossCore toolchain.</p>
+<p>Using the drag and drop method, the software is going to be a version that
+Analog Devices creates for testing and evaluation purposes. This is the EASIEST
+way to get started with the reference design</p>
+<p>Importing the project into CrossCore is going to allow you to change parameters
+and customize the software to fit your needs, but will be a bit more advanced
+and will require you to download the CrossCore toolchain.</p>
 <p>The software for the <strong>ADuCM3029_demo_cn0326</strong> can be found here:</p>
 <div class="download admonition">
 <p class="admonition-title">Download</p>
@@ -783,7 +792,7 @@ Content on this topic
 </tbody>
 </table>
 </div>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0326_demo_2.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0326_demo_2.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0326_demo_2.png" style="width: 549px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0326_demo_2.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0326_demo_2.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/reference_designs/cn0326_demo_2.png" width="549" />
 </a>
 </section>
 </section>

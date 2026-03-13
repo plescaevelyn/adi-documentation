@@ -627,7 +627,8 @@ Content on this topic
 </section>
 <section id="dma-transfer">
 <h2>DMA Transfer<a class="headerlink" href="#dma-transfer" title="Link to this heading"></a></h2>
-<p>A structure that specifies the DMA transfer characteristics is required for sending/receiving data.</p>
+<p>A structure that specifies the DMA transfer characteristics is required for
+sending/receiving data.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">axi_dma_transfer</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="cm">/* Transfer size */</span>
 <span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">size</span><span class="p">;</span>
@@ -642,7 +643,8 @@ Content on this topic
 <span class="p">};</span>
 </pre></div>
 </div>
-<p>The following examples show the three types of DMA transfers possible: memory to device (e.g., DAC), device (e.g., ADC) to memory, and memory to memory.</p>
+<p>The following examples show the three types of DMA transfers possible: memory to
+device (e.g., DAC), device (e.g., ADC) to memory, and memory to memory.</p>
 <section id="memory-to-device-transfer">
 <h3>Memory to device transfer<a class="headerlink" href="#memory-to-device-transfer" title="Link to this heading"></a></h3>
 <p>The code snippet below transfers in a loop an array named <code class="docutils literal notranslate"><span class="pre">sine_lut_iq</span></code>, witten at address <code class="docutils literal notranslate"><span class="pre">dac_buffer</span></code>, to a DAC.</p>
@@ -666,7 +668,8 @@ Content on this topic
 <section id="note">
 <h4>Note<a class="headerlink" href="#note" title="Link to this heading"></a></h4>
 <ul class="simple">
-<li><p>After each DMA transfer, the program has to invalidate the cache for the associated data.</p></li>
+<li><p>After each DMA transfer, the program has to invalidate the cache for the
+associated data.</p></li>
 </ul>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/* Invalidate cache data. Example for a Xilinx platform. */</span>
 <span class="n">Xil_DCacheInvalidateRange</span><span class="p">((</span><span class="kt">uintptr_t</span><span class="p">)</span><span class="n">dac_buffer</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">sine_lut_iq</span><span class="p">));</span>
@@ -674,7 +677,12 @@ Content on this topic
 </div>
 <ul class="simple">
 <li><p>Only a memory to device transfer can be CYCLIC.</p></li>
-<li><p>A CYCLIC transfer uses the hardware feature of the DMAC IP Core that automatically disables interrupts for the corresponding instance and cyclically sends the data if this does not exceed the maximum transfer size specified in the HDL. If the CYCLIC flag is set and the transfer exceeds the maximum size for one transmission, then the cyclic sending of the data is solved by the driver through the use of interrupts.</p></li>
+<li><p>A CYCLIC transfer uses the hardware feature of the DMAC IP Core that
+automatically disables interrupts for the corresponding instance and
+cyclically sends the data if this does not exceed the maximum transfer size
+specified in the HDL. If the CYCLIC flag is set and the transfer exceeds the
+maximum size for one transmission, then the cyclic sending of the data is
+solved by the driver through the use of interrupts.</p></li>
 </ul>
 </section>
 </section>
@@ -706,20 +714,26 @@ Content on this topic
 <section id="id1">
 <h4>Note<a class="headerlink" href="#id1" title="Link to this heading"></a></h4>
 <ul class="simple">
-<li><p>After each DMA transfer, the program has to invalidate the cache for the associated data.</p></li>
+<li><p>After each DMA transfer, the program has to invalidate the cache for the
+associated data.</p></li>
 </ul>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/* Invalidate cache data. Example for a Xilinx platform. */</span>
 <span class="n">Xil_DCacheInvalidateRange</span><span class="p">((</span><span class="kt">uintptr_t</span><span class="p">)</span><span class="n">adc_buffer</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">adc_buffer</span><span class="p">));</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><p>If the size exceeds the maximum transfer size specified in the HDL and if interrupts are enabled for the DMAC instance, then all the data is retrieved. If interrupts are disabled, only a transfer with the maximum size is performed and the application has to manage the reading of the entire amount of data.</p></li>
+<li><p>If the size exceeds the maximum transfer size specified in the HDL and if
+interrupts are enabled for the DMAC instance, then all the data is retrieved.
+If interrupts are disabled, only a transfer with the maximum size is
+performed and the application has to manage the reading of the entire amount
+of data.</p></li>
 </ul>
 </section>
 </section>
 <section id="memory-to-memory-transfer">
 <h3>Memory to memory transfer<a class="headerlink" href="#memory-to-memory-transfer" title="Link to this heading"></a></h3>
-<p>A memory to memory transfer sends the specified amount of data from the source address to the destination.</p>
+<p>A memory to memory transfer sends the specified amount of data from the source
+address to the destination.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">axi_dma_transfer</span><span class="w"> </span><span class="n">mem_transfer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// Number of bytes to write/read</span>
 <span class="w">    </span><span class="n">no_of_bytes</span><span class="p">,</span>
@@ -746,7 +760,8 @@ Content on this topic
 <section id="id2">
 <h4>Note<a class="headerlink" href="#id2" title="Link to this heading"></a></h4>
 <ul class="simple">
-<li><p>After each DMA transfer, the program has to invalidate the cache for the associated data.</p></li>
+<li><p>After each DMA transfer, the program has to invalidate the cache for the
+associated data.</p></li>
 </ul>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/* Invalidate cache data. Example for a Xilinx platform. */</span>
 <span class="n">Xil_DCacheInvalidateRange</span><span class="p">((</span><span class="kt">uintptr_t</span><span class="p">)</span><span class="n">dest_address_mem</span><span class="p">,</span><span class="w"> </span><span class="n">no_of_bytes</span><span class="p">);</span>
@@ -757,7 +772,8 @@ Content on this topic
 </section>
 <section id="code-documentation">
 <h2>Code Documentation<a class="headerlink" href="#code-documentation" title="Link to this heading"></a></h2>
-<p>Source code documentation for the driver is automatically generated using the Doxygen tool and it is available at:</p>
+<p>Source code documentation for the driver is automatically generated using the
+Doxygen tool and it is available at:</p>
 <ul class="simple">
 <li><p><a class="icon link reference external" href="http://analogdevicesinc.github.io/no-OS/axi__dmac_8h.html" target="_blank">AXI DMAC IP Core Header file</a></p></li>
 <li><p><a class="icon link reference external" href="http://analogdevicesinc.github.io/no-OS/axi__dmac_8c.html" target="_blank">AXI DMAC IP Core Source file</a></p></li>

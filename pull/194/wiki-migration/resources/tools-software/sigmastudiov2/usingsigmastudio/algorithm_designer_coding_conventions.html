@@ -604,7 +604,18 @@ Content on this topic
   <p><a class="reference internal" href="designermodule.html"><span class="doc">Return to the parent page</span></a></p>
 <section id="coding-conventions">
 <h1>Coding Conventions<a class="headerlink" href="#coding-conventions" title="Link to this heading"></a></h1>
-<p>SigmaStudio modules can be of two types: Modules supporting sample/stream processing and Modules supporting block processing. Algorithm Designer can generate both sample processing and block processing Plug-Ins, whereas Designer Control can be used only on block processing schematics and thus supports only block processing. Algorithm source used for implementing a Module using Algorithm Designer or for generating SigmaStudio Plug-Ins (*.dll) has to be either DLBs generated using CrossCore Embedded Studio or C source code directly entered in the source editor of Algorithm Designer or a combination of both DLB and source code. Direct insertion of C source code in the Algorithm Designer source editor is supported only for block processing Modules. This section gives the general rules, guidelines and conventions to be followed while implementing modules compatible with the Algorithm Designer.</p>
+<p>SigmaStudio modules can be of two types: Modules supporting sample/stream
+processing and Modules supporting block processing. Algorithm Designer can
+generate both sample processing and block processing Plug-Ins, whereas Designer
+Control can be used only on block processing schematics and thus supports only
+block processing. Algorithm source used for implementing a Module using
+Algorithm Designer or for generating SigmaStudio Plug-Ins (*.dll) has to be
+either DLBs generated using CrossCore Embedded Studio or C source code directly
+entered in the source editor of Algorithm Designer or a combination of both DLB
+and source code. Direct insertion of C source code in the Algorithm Designer
+source editor is supported only for block processing Modules. This section gives
+the general rules, guidelines and conventions to be followed while implementing
+modules compatible with the Algorithm Designer.</p>
 <section id="include-file">
 <h2>Include File<a class="headerlink" href="#include-file" title="Link to this heading"></a></h2>
 <p>Include file ‘adi_ss_extmod.h’ should be included by the source files.</p>
@@ -613,11 +624,19 @@ Content on this topic
 <h2>Function Prototype<a class="headerlink" href="#function-prototype" title="Link to this heading"></a></h2>
 <section id="sample-processing">
 <h3>Sample Processing<a class="headerlink" href="#sample-processing" title="Link to this heading"></a></h3>
-<p>The entry-point function must have a prefix ‘PROCESS_’ to indicate that it is a sample processing Plug-In function for SigmaStudio. Sub-functions in the source file which are referenced only from the main Plug-In function or other sub-functions need not follow any convention. The general prototype of any Plug-In entry-point function performing sample processing is shown below.</p>
+<p>The entry-point function must have a prefix ‘PROCESS_’ to indicate that it is a
+sample processing Plug-In function for SigmaStudio. Sub-functions in the source
+file which are referenced only from the main Plug-In function or other
+sub-functions need not follow any convention. The general prototype of any
+Plug-In entry-point function performing sample processing is shown below.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="n">PROCESS_</span><span class="o">&lt;</span><span class="n">algorithm_name</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">float</span> <span class="n">pInput</span><span class="p">[],</span> <span class="nb">float</span> <span class="n">pOutput</span><span class="p">[],</span> <span class="nb">float</span> <span class="n">pState</span><span class="p">[],</span> <span class="nb">float</span> <span class="n">pParameter</span><span class="p">[],</span> <span class="nb">int</span> <span class="n">nRepCount</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Assembly entry-point function names must have the ‘PROCESS’ prefix. The general template of any Plug-In sample processing assembly function should be as shown below. It is compulsory to end the function with ‘PROCESS_&lt;algorithm_name&gt;..end’ in case of byte addressed Plug-Ins and ‘_PROCESS_&lt;algorithm_name&gt;.end’ in case of word addressed Plug-Ins.</p>
+<p>Assembly entry-point function names must have the ‘PROCESS’ prefix. The general
+template of any Plug-In sample processing assembly function should be as shown
+below. It is compulsory to end the function with
+‘PROCESS_&lt;algorithm_name&gt;..end’ in case of byte addressed Plug-Ins and
+‘_PROCESS_&lt;algorithm_name&gt;.end’ in case of word addressed Plug-Ins.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">section</span><span class="o">/</span><span class="n">pm</span> <span class="n">seg_swco</span><span class="p">;</span>
 <span class="o">.</span><span class="k">global</span> <span class="n">PROCESS_</span><span class="o">&lt;</span><span class="n">algorithm_name</span><span class="o">&gt;.</span><span class="p">;</span>
 </pre></div>
@@ -660,16 +679,28 @@ Content on this topic
 <li><p>Inputs samples, output samples, state buffer and parameter buffer should be accessed only through the pointers in the function arguments.</p></li>
 <li><p>If there are multiple input or output channels for the Module, samples corresponding to these channels are interleaved within the input/output buffer.</p></li>
 <li><p>The parameter/state buffer pointer is of type float. This pointer should be type casted to an integer pointer for accessing integer parameters/state variables.</p></li>
-<li><p>The argument ‘nRepCount’ represents the growth count. Growth count is a common terminology used in SigmaStudio and each Module has a different interpretation of growth count. For example, in General Second Order Filter, the growth count represents the number of cascaded biquad filters, whereas in Mute Algorithm the growth count represents number of channels.</p></li>
+<li><p>The argument ‘nRepCount’ represents the growth count. Growth count is a
+common terminology used in SigmaStudio and each Module has a different
+interpretation of growth count. For example, in General Second Order Filter,
+the growth count represents the number of cascaded biquad filters, whereas in
+Mute Algorithm the growth count represents number of channels.</p></li>
 </ul>
 </section>
 <section id="block-processing">
 <h3>Block Processing<a class="headerlink" href="#block-processing" title="Link to this heading"></a></h3>
-<p>The entry-point function must have a prefix ‘BPROCESS_’ to indicate that it is a block processing Plug-In function for SigmaStudio. Sub-functions in the source file which are referenced only from the main Plug-In function or other sub-functions need not follow any convention. The general prototype of a block processing Plug-In entry-point function is as shown below.</p>
+<p>The entry-point function must have a prefix ‘BPROCESS_’ to indicate that it is
+a block processing Plug-In function for SigmaStudio. Sub-functions in the source
+file which are referenced only from the main Plug-In function or other
+sub-functions need not follow any convention. The general prototype of a block
+processing Plug-In entry-point function is as shown below.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="n">BPROCESS_</span><span class="o">&lt;</span><span class="n">algorithm_name</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">SSBlockAlgo</span><span class="o">*</span> <span class="n">pBlockAlgo</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Assembly entry-point function names must have the prefix ‘BPROCESS_’. The general template of any Plug-In block processing assembly function should be as shown below. It is compulsory to end the function with ‘BPROCESS_&lt;algorithm_name&gt;..end’ in case of byte addressed Plug-Ins and ‘_BPROCESS_&lt;algorithm_name&gt;.end’ in case of word addressed Plug-Ins.</p>
+<p>Assembly entry-point function names must have the prefix ‘BPROCESS_’. The
+general template of any Plug-In block processing assembly function should be as
+shown below. It is compulsory to end the function with
+‘BPROCESS_&lt;algorithm_name&gt;..end’ in case of byte addressed Plug-Ins and
+‘_BPROCESS_&lt;algorithm_name&gt;.end’ in case of word addressed Plug-Ins.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">section</span><span class="o">/</span><span class="n">pm</span> <span class="n">seg_swco</span><span class="p">;</span>
 <span class="o">.</span><span class="k">global</span> <span class="n">BPROCESS_</span><span class="o">&lt;</span><span class="n">algorithm_name</span><span class="o">&gt;.</span><span class="p">;</span>
 </pre></div>
@@ -688,7 +719,8 @@ Content on this topic
 <span class="n">BPROCESS_</span><span class="o">&lt;</span><span class="n">algorithm_name</span><span class="o">&gt;..</span><span class="n">end</span><span class="p">:</span>
 </pre></div>
 </div>
-<p>Same function when implemented in word addressed mode must follow the below template.</p>
+<p>Same function when implemented in word addressed mode must follow the below
+template.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">section</span><span class="o">/</span><span class="n">pm</span> <span class="n">seg_pmco</span><span class="p">;</span>
 <span class="o">.</span><span class="k">global</span> <span class="n">_BPROCESS_</span><span class="o">&lt;</span><span class="n">algorithm_name</span><span class="o">&gt;</span><span class="p">;</span>
 </pre></div>
@@ -707,11 +739,18 @@ Content on this topic
 <span class="n">_BPROCESS_</span><span class="o">&lt;</span><span class="n">algorithm_name</span><span class="o">&gt;.</span><span class="n">end</span><span class="p">:</span>
 </pre></div>
 </div>
-<p>In addition to the process function, block Algorithms can also have an initialization function. Initialization functions are used to initialize the Module in case of decoders and 3rd party post processing Modules. The function name must have the prefix ‘INIT_’ to indicate that it is the initialization function of the Module. The general prototype of a block processing Plug-In initialization function is as shown below.</p>
+<p>In addition to the process function, block Algorithms can also have an
+initialization function. Initialization functions are used to initialize the
+Module in case of decoders and 3rd party post processing Modules. The function
+name must have the prefix ‘INIT_’ to indicate that it is the initialization
+function of the Module. The general prototype of a block processing Plug-In
+initialization function is as shown below.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="n">INIT_</span><span class="o">&lt;</span><span class="n">algorithm_name</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">SSBlockAlgo</span><span class="o">*</span> <span class="n">pBlockAlgo</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>If a Module must process a specific number of samples that is different to what SigmaStudio passes in, then BPROCESS wrapper function should deal with it by internal buffering.</p>
+<p>If a Module must process a specific number of samples that is different to what
+SigmaStudio passes in, then BPROCESS wrapper function should deal with it by
+internal buffering.</p>
 </section>
 </section>
 <section id="interface-structures">
@@ -740,7 +779,8 @@ Content on this topic
 </pre></div>
 </div>
 <p><strong>Description</strong></p>
-<p>The structure SSBlockAlgo is used to pass Module properties as arguments to a block processing Plug-In.</p>
+<p>The structure SSBlockAlgo is used to pass Module properties as arguments to a
+block processing Plug-In.</p>
 <p><strong>Fields</strong></p>
 <ul class="simple">
 <li><p>nInputs - Number of input pins/channels.</p></li>
@@ -771,7 +811,8 @@ Content on this topic
 </pre></div>
 </div>
 <p><strong>Description</strong></p>
-<p>The structure Block is used to define the properties of each input/output channel.</p>
+<p>The structure Block is used to define the properties of each input/output
+channel.</p>
 <p><strong>Fields</strong></p>
 <ul class="simple">
 <li><p>pBlockProperties - Pointer to the block properties structure which defines the properties of the block input/output channel.</p></li>
@@ -792,7 +833,8 @@ Content on this topic
 </pre></div>
 </div>
 <p><strong>Description</strong></p>
-<p>The structure BlockProperties is used to define the properties of each memory block.</p>
+<p>The structure BlockProperties is used to define the properties of each memory
+block.</p>
 <p><strong>Fields</strong></p>
 <ul class="simple">
 <li><p>nSamplingRate - Sampling rate of the input channel expressed in Hz.</p></li>
@@ -804,22 +846,49 @@ Content on this topic
 </section>
 <section id="memory-types">
 <h2>Memory Types<a class="headerlink" href="#memory-types" title="Link to this heading"></a></h2>
-<p>Four different types of data memory are used in the externally coded Algorithm. They are explained below.</p>
+<p>Four different types of data memory are used in the externally coded Algorithm.
+They are explained below.</p>
 <section id="parameters">
 <h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h3>
-<p>Parameters are data generated based on the control data received from the Cell. Runtime Tuning is achieved by modifying the parameter data. Parameters are stored in the parameter buffer and memory is allocated per instance of the Module. Memory for storing parameters in the parameter buffer is allocated by SigmaStudio and the pointer to the memory is passed as an argument to the Plug-In function.</p>
+<p>Parameters are data generated based on the control data received from the Cell.
+Runtime Tuning is achieved by modifying the parameter data. Parameters are
+stored in the parameter buffer and memory is allocated per instance of the
+Module. Memory for storing parameters in the parameter buffer is allocated by
+SigmaStudio and the pointer to the memory is passed as an argument to the
+Plug-In function.</p>
 </section>
 <section id="state">
 <h3>State<a class="headerlink" href="#state" title="Link to this heading"></a></h3>
-<p>State memory is used to store the internal state of the Algorithm. Every instance of the function/Algorithm has dedicated state memory. This memory is allocated by SigmaStudio and the pointer to the memory is passed as an argument to the Plug-In function. The size of the state memory required by the Algorithm should be mentioned in the Algorithm Designer. Refer to section 7.4 for more details. The state memory is initialized with zeros by SigmaStudio every time before downloading a new Schematic. Four state buffers (pointers) are available for the Plug-In to use.</p>
+<p>State memory is used to store the internal state of the Algorithm. Every
+instance of the function/Algorithm has dedicated state memory. This memory is
+allocated by SigmaStudio and the pointer to the memory is passed as an argument
+to the Plug-In function. The size of the state memory required by the Algorithm
+should be mentioned in the Algorithm Designer. Refer to section 7.4 for more
+details. The state memory is initialized with zeros by SigmaStudio every time
+before downloading a new Schematic. Four state buffers (pointers) are available
+for the Plug-In to use.</p>
 </section>
 <section id="constant-tables">
 <h3>Constant Tables<a class="headerlink" href="#constant-tables" title="Link to this heading"></a></h3>
-<p>All global variables and global tables in the Module are treated as constant tables by SigmaStudio. In case of ADSP-SC5xx only one instance of this memory is allocated per schematic. This memory is mapped on to the parameter buffer. Note: Modification of this memory is allowed even though this is treated as constant table by SigmaStudio. This memory is shared across all modules in any given schematic.</p>
+<p>All global variables and global tables in the Module are treated as constant
+tables by SigmaStudio. In case of ADSP-SC5xx only one instance of this memory is
+allocated per schematic. This memory is mapped on to the parameter buffer. Note:
+Modification of this memory is allowed even though this is treated as constant
+table by SigmaStudio. This memory is shared across all modules in any given
+schematic.</p>
 </section>
 <section id="scratch">
 <h3>Scratch<a class="headerlink" href="#scratch" title="Link to this heading"></a></h3>
-<p>Temporary buffers or variables required by the Algorithm can be mapped to the scratch memory. This memory is shared by all the Modules in the Schematic. There are 2 types of Scratch memory; memory mapped to DM block and memory mapped to PM block. An Algorithm can choose to use either or both based on the requirement. Both scratch memories are allocated by SigmaStudio and the pointer to the memory is passed as a parameter to the Plug-In function. The size of the scratch memory required by the Algorithm should be specified in the Algorithm Designer. Scratch memory is available only for block processing Algorithms. Total amount of scratch Memory reserved by SigmaStudio is the maximum of scratch memory requirement by Modules that are part of the Schematic.</p>
+<p>Temporary buffers or variables required by the Algorithm can be mapped to the
+scratch memory. This memory is shared by all the Modules in the Schematic. There
+are 2 types of Scratch memory; memory mapped to DM block and memory mapped to PM
+block. An Algorithm can choose to use either or both based on the requirement.
+Both scratch memories are allocated by SigmaStudio and the pointer to the memory
+is passed as a parameter to the Plug-In function. The size of the scratch memory
+required by the Algorithm should be specified in the Algorithm Designer. Scratch
+memory is available only for block processing Algorithms. Total amount of
+scratch Memory reserved by SigmaStudio is the maximum of scratch memory
+requirement by Modules that are part of the Schematic.</p>
 </section>
 </section>
 <section id="general-guidelines">
@@ -830,12 +899,20 @@ Content on this topic
 <li><p>Only extended precision state memory is supported. Tables or parameters cannot be in extended precision.</p></li>
 <li><p>Extended precision access must be cleared at the beginning and restored before exiting if the Plug-In uses either State B or State C memory buffers. This is because Applications may place the 32-bit state memory buffers in the same block as the Extended Precision state memory buffer.</p></li>
 <li><p>Since the input buffers of a Plug-In can be reused by many subsequent Modules in a Schematic, care should be taken to preserve the input buffers and to avoid overwriting of these buffers.</p></li>
-<li><p>If there are 2 functions with the same name defined in a single file, the linker gives a “Multiply defined symbol” error when the schematic which uses the function is link-compile-downloaded. If the functions with same name are defined in different files, the linker doesn’t throw any error during the schematic compilation and linking. It uses whichever function definition it finds first during linking. Hence, it is advisable to use unique function names if it is not intended for the functions to be shared across modules or with the target application.</p></li>
+<li><p>If there are 2 functions with the same name defined in a single file, the
+linker gives a “Multiply defined symbol” error when the schematic which uses
+the function is link-compile-downloaded. If the functions with same name are
+defined in different files, the linker doesn’t throw any error during the
+schematic compilation and linking. It uses whichever function definition it
+finds first during linking. Hence, it is advisable to use unique function
+names if it is not intended for the functions to be shared across modules or
+with the target application.</p></li>
 </ul>
 </section>
 <section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h2>
-<p>The example code below shows a block processing implementation of a volume control function.</p>
+<p>The example code below shows a block processing implementation of a volume
+control function.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &quot;adi_ss_extmod.h&quot;</span>
 </pre></div>
 </div>
@@ -867,7 +944,8 @@ Content on this topic
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>The example code below shows a sample processing implementation of a volume control function.</p>
+<p>The example code below shows a sample processing implementation of a volume
+control function.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &quot;adi_ss_extmod.h&quot;</span>
 </pre></div>
 </div>

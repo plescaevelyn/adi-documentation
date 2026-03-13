@@ -612,25 +612,48 @@ Content on this topic
 <p><strong>Note:</strong> This is a work in progress.</p>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
-<p>The goal of this tutorial is to equip the reader with a collection of hardware and software tools for developing low-speed mixed-signal applications. ** Content Guide:** This tutorial includes complete written instructions, a video guide, and a slide deck that can be used for delivering as a hands-on workshop.</p>
-<p>What exactly does “Low Speed” mean? In the context of this tutorial, it means that timing is not very critical. Signals are either completely static or moving slowly such that it doesn’t matter if the instant that an ADC samples the signal wiggles around a bit relative to the previous sampling. While clock jitter is one source of this uncertainty, software delays (such as the time between a timer interrupt and the assertion of a “convert” edge) will likely be dominant. Important parameters in low-speed applications are offset, gain error, linearity, and temperature drift. “Noise” in a low-speed application is typically synonymous with resolution, and is typically measured by applying a noiseless input signal and taking a histogram of the output readings. AC performance metrics such as signal to noise ratio and total harmonic distortion extracted from a Fourier transform of the data will not be considered.</p>
+<p>The goal of this tutorial is to equip the reader with a collection of hardware
+and software tools for developing low-speed mixed-signal applications. **
+Content Guide:** This tutorial includes complete written instructions, a video
+guide, and a slide deck that can be used for delivering as a hands-on workshop.</p>
+<p>What exactly does “Low Speed” mean? In the context of this tutorial, it means
+that timing is not very critical. Signals are either completely static or moving
+slowly such that it doesn’t matter if the instant that an ADC samples the signal
+wiggles around a bit relative to the previous sampling. While clock jitter is
+one source of this uncertainty, software delays (such as the time between a
+timer interrupt and the assertion of a “convert” edge) will likely be dominant.
+Important parameters in low-speed applications are offset, gain error,
+linearity, and temperature drift. “Noise” in a low-speed application is
+typically synonymous with resolution, and is typically measured by applying a
+noiseless input signal and taking a histogram of the output readings. AC
+performance metrics such as signal to noise ratio and total harmonic distortion
+extracted from a Fourier transform of the data will not be considered.</p>
 <p><strong>In contrast</strong> - sample jitter is important in a “high speed” application. If you are measuring signal to noise ratio, the Signal to Noise ratio (SNR) can be no greater than:</p>
 <p><span class="math notranslate nohighlight">\(SNR &lt;= -20 \times log(2 \times \pi \times f_{IN} \times t_{j})\)</span> where: <span class="math notranslate nohighlight">\(f_{IN}\)</span> is the analog input frequency in Hz <span class="math notranslate nohighlight">\(t_{j}\)</span> is the RMS jitter in seconds RMS</p>
-<p>So that’s it. In this tutorial, we will set voltages and currents, read voltages and currents, do some basic math, but each reading will be treated independently, no correlation to previous or future readings. We will NOT be measuring AC Signal to Noise Ratio (SNR), Total Harmonic Distortion (THD), nor measuring steps, wiggles, or any other situation where precise timing is required. (Rest assured, there are lots of very interesting applications in this category.)</p>
-<p>Throughout the exercises we’ll be writing simple Python code to capture and analyze data, using the industry standard Industrial I/O (IIO) framework to interact with the ADC, and the popular NumPy and Matplotlib Python libraries. Thus this exercise also serves as a mini-tutorial on Python.</p>
+<p>So that’s it. In this tutorial, we will set voltages and currents, read voltages
+and currents, do some basic math, but each reading will be treated
+independently, no correlation to previous or future readings. We will NOT be
+measuring AC Signal to Noise Ratio (SNR), Total Harmonic Distortion (THD), nor
+measuring steps, wiggles, or any other situation where precise timing is
+required. (Rest assured, there are lots of very interesting applications in this
+category.)</p>
+<p>Throughout the exercises we’ll be writing simple Python code to capture and
+analyze data, using the industry standard Industrial I/O (IIO) framework to
+interact with the ADC, and the popular NumPy and Matplotlib Python libraries.
+Thus this exercise also serves as a mini-tutorial on Python.</p>
 </section>
 <section id="materials">
 <h2>Materials<a class="headerlink" href="#materials" title="Link to this heading"></a></h2>
-<ul class="simple">
+<ul>
 <li><p>Raspberry Pi 4; 2G, 4G, or 8G version. (3B, 3B Plus will work, but you will want the 4 :-) )</p></li>
 <li><p>5V USB-C wall adapter for Raspberry Pi (micro USB for model 3)</p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/eval-ad5592r-pmdz" target="_blank">eval-ad5592r-pmdz</a></p></li>
 <li><p>Electrical connection hardware (choose one):</p>
-<ul>
+<ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/pmd-rpi-intz" target="_blank">Raspberry Pi to PMOD/QuikEval™/LTpowerPlay® Adaptor HAT</a></p></li>
 </ul>
 </li>
-<li><dl class="simple">
+<li><dl>
 <dt>12x 15cm socket-to-socket jumpers such as <strong>`these from Schmartboard &lt;https://schmartboard.com/wire-jumpers/female-jumpers/5-inch/&gt;`_</strong></dt><dd><ul>
 <li><p>16GB (or larger) Class 10 (or faster) micro-SD card, with <strong>:doc:`Analog Devices Kuiper Linux &lt;/wiki-migration/resources/tools-software/linux-software/kuiper-linux&gt;`</strong> installed</p></li>
 <li><p>User interface setup (choose one):
@@ -643,7 +666,11 @@ Content on this topic
 <li><p>Breadboard or prototyping board, hookup wire</p></li>
 <li><p>Clone or download zip of the Python code for this tutorial</p></li>
 <li><p>Python files: <strong>:git-pyadi-iio:`AD5592r Pyadi-IIO examples &lt;examples/ad5592r_examples&gt;`</strong>
-* (Note that these are included in the pyadi-iio repo, consider cloning the entire thing:</p></li>
+* (Note that these are included in the pyadi-iio repo, consider cloning the</p>
+<blockquote>
+<div><p>entire thing:</p>
+</div></blockquote>
+</li>
 </ul>
 </dd>
 </dl>
@@ -666,12 +693,15 @@ Content on this topic
 </section>
 <section id="slide-deck-and-video">
 <h2>Slide Deck and Video<a class="headerlink" href="#slide-deck-and-video" title="Link to this heading"></a></h2>
-<p>Since this tutorial is also designed to be presented as a live, hands-on workshop, a slide deck is provided here:</p>
+<p>Since this tutorial is also designed to be presented as a live, hands-on
+workshop, a slide deck is provided here:</p>
 <div class="download admonition">
 <p class="admonition-title">Download</p>
 <p><a class="icon link reference external" href="https://wiki.analog.com/_media/university/labs/software/tools_for_low_speed_mix-sig_systems/tools_for_low_speed_ms_workshop.pptx" target="_blank">Tools for Low-Speed Mixed Signal System Design Slide Deck</a></p>
 </div>
-<p>A complete video run-through is also provided, either as a companion to following the tutorial yourself, or to practice before presenting as a hands-on workshop:</p>
+<p>A complete video run-through is also provided, either as a companion to
+following the tutorial yourself, or to practice before presenting as a hands-on
+workshop:</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This video is accurate, but will be re-done at some point:</p>
@@ -681,7 +711,8 @@ Content on this topic
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Finish Me (Translate slide deck and video into complete written instructions with photos, diagrams, etc.)</p>
+<p>Finish Me (Translate slide deck and video into complete written instructions
+with photos, diagrams, etc.)</p>
 </div>
 </section>
 <section id="preparation-a-few-resources-for-learning-python">
@@ -738,10 +769,16 @@ Content on this topic
 </section>
 <section id="next-steps-no-os-development-on-linux-you-bet">
 <h2>Next Steps: No-OS development on Linux? You bet!<a class="headerlink" href="#next-steps-no-os-development-on-linux-you-bet" title="Link to this heading"></a></h2>
-<p>…but I’m Confused… No-OS means no Operating System, but we’re using Kuiper Linux, and that’s an Operating System. What gives?</p>
+<p>…but I’m Confused… No-OS means no Operating System, but we’re using Kuiper
+Linux, and that’s an Operating System. What gives?</p>
 <p>Unlike the IIO drivers used in the previous tutorial , which <strong>require</strong> the Linux kernel and operating system to function, No-OS provides a portable software stack which can run on any platform that supports a C compiler. This could be bare metal microcontrollers, truly running without an operating system, up through full systems like our Kuiper Linux running on a Raspberry Pi. The No-OS repository includes existing support for the Linux OS, Real-Time Operating Systems Chibios, and mbed, Raspberry Pico, as well as hardware support for Maxim/ADI, STM32, Xilinx and Altera.</p>
-<p>But why? Well, bringing up a toolchain for a particular embedded processor has its own set of challenges - particularly if development will begin on a standard development platform, then be ported to a custom board. Runnin no-OS code on Linux provides a way to get started on the embedded code development, before actually embedding.</p>
-<p>A full treatment of this flow is beyond the scope of this tutorial, but will be documented in a future tutorial.</p>
+<p>But why? Well, bringing up a toolchain for a particular embedded processor has
+its own set of challenges - particularly if development will begin on a standard
+development platform, then be ported to a custom board. Runnin no-OS code on
+Linux provides a way to get started on the embedded code development, before
+actually embedding.</p>
+<p>A full treatment of this flow is beyond the scope of this tutorial, but will be
+documented in a future tutorial.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Port the Fred in the Shed curve tracer to no-OS on Linux.</p>

@@ -615,7 +615,12 @@ Content on this topic
 <section id="overview">
 <h3>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h3>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/ADuM7701" target="_blank">ADuM7701</a> is a high performance, second-order, Σ-Δ modulator that converts an analog input signal into a high speed, single-bit data stream, with on-chip digital isolation based on Analog Devices, Inc., iCoupler® technology. The device operates from a 4.5 V to 5.5 V power supply range (VDD1) and accepts a pseudo differential input signal of ±250 mV (±320 mV full-scale). The pseudo differential input is ideally suited to shunt voltage monitoring in high voltage applications where galvanic isolation is required.</p>
-<p>The analog input is continuously sampled by a high performance analog modulator and converted to a ones density digital output stream with a data rate of up to 21 MHz. The original information can be reconstructed with an appropriate sinc3 digital filter to achieve an 86 dB signal-to-noise ratio (SNR) at 78.1 kSPS with a 256 decimation rate and a 20 MHz master clock. The serial input and output operates from a 5 V or a 3 V supply (VDD2).</p>
+<p>The analog input is continuously sampled by a high performance analog modulator
+and converted to a ones density digital output stream with a data rate of up to
+21 MHz. The original information can be reconstructed with an appropriate sinc3
+digital filter to achieve an 86 dB signal-to-noise ratio (SNR) at 78.1 kSPS with
+a 256 decimation rate and a 20 MHz master clock. The serial input and output
+operates from a 5 V or a 3 V supply (VDD2).</p>
 <p>The serial interface is digitally isolated. High speed complementary metal-oxide semiconductor (CMOS) technology, combined with monolithic transformer technology, results in the on-chip isolation providing outstanding performance characteristics, superior to alternatives such as optocoupler devices. The <a class="icon adi reference external" href="https://www.analog.com/ADuM7701" target="_blank">ADuM7701</a> device is available in both a 16-lead and an 8-lead wide-body SOIC and has an operating temperature range of −40°C to +125°C.</p>
 </section>
 </section>
@@ -630,51 +635,58 @@ Content on this topic
 </ul>
 <section id="hdl-reference-design">
 <h3>HDL Reference Design<a class="headerlink" href="#hdl-reference-design" title="Link to this heading"></a></h3>
-<p>The provided HDL reference design support’s both the ADuM7701 and AD7405 devices. One of the main difference between thees two devices is the type of the digital data lines. In case of ADuM7701 it is a single ended lines, and in case of the AD7405 is differential.</p>
+<p>The provided HDL reference design support’s both the ADuM7701 and AD7405
+devices. One of the main difference between thees two devices is the type of the
+digital data lines. In case of ADuM7701 it is a single ended lines, and in case
+of the AD7405 is differential.</p>
 <p>User can configure the corresponding interface type, by setting the <strong>adc_port_type</strong> Tcl variable in the system_project.tcl file. Note that this variable should be set before generating any bit file.</p>
 <p>The output of the device is a continuous digital bit stream, to reconstruct the original input signal information, this output bit stream needs to be digitally filtered and decimated. A simple <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/util_dec256sinc24b.v" target="_blank">sinc filter</a> is recommended to reconstruct the original input signal information received from the ADuM7701. The following equation describes the transfer function of the sinc filter:</p>
 <p><span class="math notranslate nohighlight">\(\displaystyle H(z) = (1/DR \frac{1-Z^-DR}{1 - Z^-1})^N\)</span></p>
 <p>where <strong>DR</strong> is the decimation rate and <strong>N</strong> is the sinc filter order. The implemented filter is a 3rd order sinc filter.</p>
-<p>The output of the filter is connected to a DMA, which will handle the data transfer into the system memory. See the data path in block diagram bellow:</p>
+<p>The output of the filter is connected to a DMA, which will handle the data
+transfer into the system memory. See the data path in block diagram bellow:</p>
 <img alt="ADuM7701/AD7405 data path" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad7405_data_path_1.png" />
 <p>The external clock rate (MCLKIN) can be set in the system_bd.tcl file, by changing the value of the <strong>ext_clk_rate</strong> variable.</p>
 </section>
 <section id="create-the-project-with-sdk">
 <h3>Create the project with SDK<a class="headerlink" href="#create-the-project-with-sdk" title="Link to this heading"></a></h3>
 <ul class="simple">
-<li><p>Open Xilinx Software Development Kit (XSDK) and provide the workspace location.</p></li>
+<li><p>Open Xilinx Software Development Kit (XSDK) and provide the workspace
+location.</p></li>
 <li><p>Create a new Application Project: go to <strong>File -&gt; New -&gt; Application Project</strong></p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/new_app_project.png"><img alt="Creating a new application project" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/xilinx/new_app_project.png" style="width: 650px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/new_app_project.png"><img alt="Creating a new application project" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/xilinx/new_app_project.png" width="650" />
 </a>
 <ul class="simple">
 <li><p>Create a new Hardware Platform: click <strong>New</strong> from the <strong>Target Hardware</strong> section</p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/create_new_hardware.png"><img alt="Creating a new hardware platform" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/xilinx/create_new_hardware.png" style="width: 450px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/create_new_hardware.png"><img alt="Creating a new hardware platform" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/xilinx/create_new_hardware.png" width="450" />
 </a>
 <ul class="simple">
 <li><p>Specify the already generated Hardware Platform Specification File (more details about the generation: <a class="reference internal" href="../../fpga/docs/build.html"><span class="doc">Building HDL</span></a>): in the <strong>Target Hardware Specification</strong> section browse the desired file</p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/create_hw_project.png"><img alt="Import hardware description file" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/xilinx/create_hw_project.png" style="width: 450px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/create_hw_project.png"><img alt="Import hardware description file" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/xilinx/create_hw_project.png" width="450" />
 </a>
 <ul class="simple">
 <li><p>Give a name to the project and to the board support package and click <strong>Next</strong></p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/create_app_project.png"><img alt="Application project settings" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/xilinx/create_app_project.png" style="width: 450px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/create_app_project.png"><img alt="Application project settings" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/xilinx/create_app_project.png" width="450" />
 </a>
 <ul class="simple">
 <li><p>Select the <strong>Empty Application</strong> templeta and click <strong>Finish</strong></p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/project_templates.png"><img alt="Choose application template" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/xilinx/project_templates.png" style="width: 450px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/project_templates.png"><img alt="Choose application template" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/xilinx/project_templates.png" width="450" />
 </a>
 <ul class="simple">
 <li><p>The new <strong>Empty Application project</strong> should look like:</p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/empty_project.png"><img alt="Empty application project" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/xilinx/empty_project.png" style="width: 650px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/empty_project.png"><img alt="Empty application project" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/xilinx/empty_project.png" width="650" />
 </a>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>Some applications (e.g. FMCOMMSx), when a Microblaze processor is used, requires an increased HEAP size for dynamic memory allocation. Make sure the HEAP size is at least 0x100000.</p>
+<p>Some applications (e.g. FMCOMMSx), when a Microblaze processor is used,
+requires an increased HEAP size for dynamic memory allocation. Make sure the
+HEAP size is at least 0x100000.</p>
 <p><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms2-ebz/software/ad9361_no_os_microblaze_heap_size.png" /></p>
 </div>
 <ul class="simple">
@@ -692,22 +704,24 @@ Content on this topic
 <li><p>At this point the software project setup is complete, the FPGA can be programmed and the software can be downloaded into the system. You can program the FPGA by clicking on <strong>Xilinx Tools -&gt; Program FPGA</strong></p></li>
 <li><p>After the FPGA was programmed, we need to create a new Run configuration, by selecting <strong>Run</strong> -&gt; <strong>Run Configurations…</strong>, in the Run Configuration windows select the Xilinx C/C++ application (System Debugger) and click at the <strong>New Configuration</strong> button at the upper left corner.</p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/new_run_configurations.png"><img alt="Create new run configuration" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/xilinx/new_run_configurations.png" style="width: 650px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/new_run_configurations.png"><img alt="Create new run configuration" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/xilinx/new_run_configurations.png" width="650" />
 </a>
 <ul class="simple">
 <li><p>If your target carrier has a Zync SoC, make sure, that you specify the <strong>Initialization file</strong>, and select the <strong>Run ps7_init</strong> and <strong>Run ps7_post_config</strong> options.</p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/zynq_init_file.png"><img alt="Define Zynq initialization file" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/xilinx/zynq_init_file.png" style="width: 650px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/zynq_init_file.png"><img alt="Define Zynq initialization file" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/xilinx/zynq_init_file.png" width="650" />
 </a>
 <ul class="simple">
 <li><p>At the <strong>Application</strong> tab define your current project name and application executable. (.elf)</p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/elf_app.png"><img alt="Define Zynq initialization file" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/xilinx/elf_app.png" style="width: 650px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/elf_app.png"><img alt="Define Zynq initialization file" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/xilinx/elf_app.png" width="650" />
 </a>
 <ul class="simple">
-<li><p>The output of the example program can be viewed in the SDK console by enabling the Connect STDIO Console option and setting the baud rate of the UART port to 115200.</p></li>
+<li><p>The output of the example program can be viewed in the SDK console by
+enabling the Connect STDIO Console option and setting the baud rate of the
+UART port to 115200.</p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/stdio_config.png"><img alt="Define Zynq initialization file" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/xilinx/stdio_config.png" style="width: 650px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/xilinx/stdio_config.png"><img alt="Define Zynq initialization file" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/xilinx/stdio_config.png" width="650" />
 </a>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span> <span class="n">As</span> <span class="n">an</span> <span class="n">alternative</span> <span class="n">a</span> <span class="n">UART</span> <span class="n">terminal</span> <span class="n">can</span> <span class="n">be</span> <span class="n">used</span> <span class="n">to</span> <span class="n">capture</span> <span class="n">the</span> <span class="n">output</span> <span class="n">of</span> <span class="n">the</span> <span class="n">example</span> <span class="n">program</span><span class="o">.</span> <span class="n">The</span> <span class="n">number</span> <span class="n">of</span> <span class="n">used</span> <span class="n">UART</span> <span class="n">port</span> <span class="n">depends</span> <span class="n">on</span> <span class="n">the</span> <span class="n">computer</span><span class="s1">&#39;s configuration. The following settings must be used in the UART terminal:</span>
 <span class="n">Baud</span> <span class="n">Rate</span><span class="p">:</span> <span class="mi">115200</span><span class="n">bps</span>

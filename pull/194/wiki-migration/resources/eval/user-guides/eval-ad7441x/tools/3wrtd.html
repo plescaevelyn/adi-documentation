@@ -597,7 +597,16 @@ Content on this topic
 <h1>3-Wire RTD Measurements with AD74413R<a class="headerlink" href="#wire-rtd-measurements-with-ad74413r" title="Link to this heading"></a></h1>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
-<p>The AD74413R, software configure I/O IC is designed to interface with industrial, process &amp; building control sensors and actuators. The IC comes with a range of programmable I/O capabilities, including analog output, analog input, digital input and temperature measurement. Temperature measurement is crucial in many industrial environments, with thermocouples and RTDs (Resistance Temperature Detectors) being the most commonly used temperature sensor types. The AD74413R has in-built thermocouple and 2-wire RTD measurement capability. 3-wire RTD measurements are not directly supported on chip but this Wiki page will show how to use the AD4413R to make 3-wire RTD measurements, while maintaining all of the existing functionality of the IC.</p>
+<p>The AD74413R, software configure I/O IC is designed to interface with
+industrial, process &amp; building control sensors and actuators. The IC comes with
+a range of programmable I/O capabilities, including analog output, analog input,
+digital input and temperature measurement. Temperature measurement is crucial in
+many industrial environments, with thermocouples and RTDs (Resistance
+Temperature Detectors) being the most commonly used temperature sensor types.
+The AD74413R has in-built thermocouple and 2-wire RTD measurement capability.
+3-wire RTD measurements are not directly supported on chip but this Wiki page
+will show how to use the AD4413R to make 3-wire RTD measurements, while
+maintaining all of the existing functionality of the IC.</p>
 </section>
 <section id="rtds">
 <h2>RTDs<a class="headerlink" href="#rtds" title="Link to this heading"></a></h2>
@@ -615,7 +624,17 @@ Content on this topic
 <div class="line">Refer to figure 1 for a high level block diagram of the standard configuration for the AD74413R. The recommended external components and connections ensure that all of the features of the AD74413R are supported on the two external screw terminals I/OP and I/ON. <img alt="74413R_ext_components.png" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-ad7441x/tools/74413r_ext_components.png" /></div>
 <div class="line">Figure 1: Standard configuration to support all Ad74413R I/O functions</div>
 </div>
-<p>A single switch should be added to the circuit to support 3-wire measurements. See Figure 2 for the updated circuit drawing, showing the placement of the switch. The switch is controlled using a AD74413R GPO - no additional data lines are needed from the host microcontroller. The recommended switch for this function is ADG5436F. The ADG5436F has two independently selectable single-pole, double-throw switches. The device is fault protected, with pins protected against voltages greater than the supply rails, up to +/-55V. This dual device will support the switching required for 2 channels of the AD74413R. Two ADG5436Fs are required to support 3-wire RTD capability on all four channels of the AD74413R. Figure 2 also shows the additional third screw terminal, I/O AUX and the TVS recommended to protect this terminal.</p>
+<p>A single switch should be added to the circuit to support 3-wire measurements.
+See Figure 2 for the updated circuit drawing, showing the placement of the
+switch. The switch is controlled using a AD74413R GPO - no additional data lines
+are needed from the host microcontroller. The recommended switch for this
+function is ADG5436F. The ADG5436F has two independently selectable single-pole,
+double-throw switches. The device is fault protected, with pins protected
+against voltages greater than the supply rails, up to +/-55V. This dual device
+will support the switching required for 2 channels of the AD74413R. Two
+ADG5436Fs are required to support 3-wire RTD capability on all four channels of
+the AD74413R. Figure 2 also shows the additional third screw terminal, I/O AUX
+and the TVS recommended to protect this terminal.</p>
 <div class="line-block">
 <div class="line"><img alt="3w RTD extra components.png" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-ad7441x/tools/3w_rtd_extra_components.png" /></div>
 <div class="line">Figure 2: Additional components required to support 3-wire RTD measurements</div>
@@ -626,7 +645,9 @@ Content on this topic
 </section>
 <section id="implementation">
 <h2>Implementation<a class="headerlink" href="#implementation" title="Link to this heading"></a></h2>
-<p>Figure 3 shows the steps required to make a 3-wire RTD measurement. The process uses existing capabilities available on the AD74413R to source a current to the RTD and measure the corresponding voltages on the RTD sensor.</p>
+<p>Figure 3 shows the steps required to make a 3-wire RTD measurement. The process
+uses existing capabilities available on the AD74413R to source a current to the
+RTD and measure the corresponding voltages on the RTD sensor.</p>
 <div class="line-block">
 <div class="line"><img alt="3w RTD steps.png" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-ad7441x/tools/3w_rtd_steps.png" /></div>
 <div class="line">Figure 3: Steps required to make a 3-wire RTD measurement</div>
@@ -690,12 +711,20 @@ Content on this topic
 </section>
 <section id="conversion-rates">
 <h3>Conversion Rates<a class="headerlink" href="#conversion-rates" title="Link to this heading"></a></h3>
-<p>A choice of conversion rates is available for these measurements. See the AD74413R datasheet for the full range of conversion rates. To minimize the time taken for these measurements, it would be possible to only make one measurement continuously, as the RL resistance is not expected to change over time. The second measurement can be made less often to spot check that no significant changes have occurred to the RL value.</p>
+<p>A choice of conversion rates is available for these measurements. See the
+AD74413R datasheet for the full range of conversion rates. To minimize the time
+taken for these measurements, it would be possible to only make one measurement
+continuously, as the RL resistance is not expected to change over time. The
+second measurement can be made less often to spot check that no significant
+changes have occurred to the RL value.</p>
 </section>
 </section>
 <section id="register-writes">
 <h2>Register Writes<a class="headerlink" href="#register-writes" title="Link to this heading"></a></h2>
-<p>The following is an example set of register writes needed to make 3-wire RTD measurements on Channel A. The RTD used in this example is a Pt1000. The excitation current and voltage measurement range are set accordingly. The writes assume that the device is in a high impedance state, after power-up or reset.</p>
+<p>The following is an example set of register writes needed to make 3-wire RTD
+measurements on Channel A. The RTD used in this example is a Pt1000. The
+excitation current and voltage measurement range are set accordingly. The writes
+assume that the device is in a high impedance state, after power-up or reset.</p>
 <ul class="simple">
 <li><p>Configure Channel A in Current Output mode via the CH_FUNC_SETUP register. (Address: 0x01, Data: 0x0002)</p></li>
 <li><p>Set &amp; measure the excitation current</p></li>
@@ -724,7 +753,9 @@ Content on this topic
 </section>
 <section id="open-wire-detect">
 <h2>Open Wire Detect<a class="headerlink" href="#open-wire-detect" title="Link to this heading"></a></h2>
-<p>The IOUT open circuit fault is asserted when an open wire is present on either I/OP or I/ON screw terminals. This open circuit fault is indicated on the ALERT pin, which can be used as an interrupt to the host microcontroller.</p>
+<p>The IOUT open circuit fault is asserted when an open wire is present on either
+I/OP or I/ON screw terminals. This open circuit fault is indicated on the ALERT
+pin, which can be used as an interrupt to the host microcontroller.</p>
 <p><a class="reference internal" href="../../ad7441x.html"><span class="doc">Back to AD74412R/AD74413R Table of Contents</span></a></p>
 </section>
 </section>

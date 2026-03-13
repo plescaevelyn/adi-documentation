@@ -635,11 +635,17 @@ Content on this topic
 <h2>Host Processor Integration Guide<a class="headerlink" href="#host-processor-integration-guide" title="Link to this heading"></a></h2>
 <section id="software-system-overview">
 <h3>Software System Overview<a class="headerlink" href="#software-system-overview" title="Link to this heading"></a></h3>
-<p>ADSD3500 is a Depth Compute Image Signal Processor (ISP) for the ADI ToF CW CMOS imaging sensors. It converts the raw frame captures from the sensor to Depth data and Active Brightness (AB) image, along with a confidence frame. ADSD3500 shall support ADSD3100 and ADSD3030 imagers and future imaging sensors if the input data format is compatible with the current imaging sensors and up to a maximum resolution of 1MP.</p>
+<p>ADSD3500 is a Depth Compute Image Signal Processor (ISP) for the ADI ToF CW CMOS
+imaging sensors. It converts the raw frame captures from the sensor to Depth
+data and Active Brightness (AB) image, along with a confidence frame. ADSD3500
+shall support ADSD3100 and ADSD3030 imagers and future imaging sensors if the
+input data format is compatible with the current imaging sensors and up to a
+maximum resolution of 1MP.</p>
 </section>
 <section id="host-protocol-design-overview">
 <h3>Host Protocol Design Overview<a class="headerlink" href="#host-protocol-design-overview" title="Link to this heading"></a></h3>
-<p>Host Protocol is software module implemented in ADSD3500 Firmware to interact with Host. Through this module, Host can,</p>
+<p>Host Protocol is software module implemented in ADSD3500 Firmware to interact
+with Host. Through this module, Host can,</p>
 <ul class="simple">
 <li><p>Configure and control the ADSD3500 ISP</p></li>
 <li><p>Get the status of ADSD3500 ISP</p></li>
@@ -647,7 +653,10 @@ Content on this topic
 <li><p>Upgrade the Flash content on the Module (Imager Firmware, Calibration Data, ADSD3500 Firmware, Configuration Parameters</p></li>
 <li><p>Read the Debug/Diagnostic information stored in Flash</p></li>
 </ul>
-<p>Standard mode and Burst mode commands are implemented to achieve the above functionalities. Supported communication channels between Host and ADSD3500 are I2C, SPI and I3C. Host works as Master in the system. Bootstraps pins #0, #1 and #2 are used to select the communication channel as follows.</p>
+<p>Standard mode and Burst mode commands are implemented to achieve the above
+functionalities. Supported communication channels between Host and ADSD3500 are
+I2C, SPI and I3C. Host works as Master in the system. Bootstraps pins #0, #1 and
+#2 are used to select the communication channel as follows.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -690,7 +699,9 @@ Content on this topic
 </ul>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>It is recommended that for READ commands, a delay be inserted between the command write operation and the data read operation. This is more critical for I2C rates above 400KHz, where a delay of 1ms should be used.</p>
+<p>It is recommended that for READ commands, a delay be inserted between the
+command write operation and the data read operation. This is more critical
+for I2C rates above 400KHz, where a delay of 1ms should be used.</p>
 </div>
 </section>
 <section id="standard-mode-commands">
@@ -700,7 +711,8 @@ Content on this topic
 <ul class="simple">
 <li><p>Write: &lt;2-bytes for command ID&gt; &lt;2-bytes of data&gt;</p>
 <ul>
-<li><p>For example, to set the frame rate to 30 fps (represented as 0x1E), the host needs to send:</p>
+<li><p>For example, to set the frame rate to 30 fps (represented as 0x1E), the
+host needs to send:</p>
 <ul>
 <li><p>Command: 0x0022 and Data: 0x001E</p></li>
 <li><p>The complete host command becomes: W 00 22 00 1E</p></li>
@@ -712,7 +724,10 @@ Content on this topic
 <ul>
 <li><p>The way the command and data are interpreted depends on the byte order used by the host. If the host sends LSB first, it transmits 0x22 before 0x00. If it sends MSB first, it transmits 0x00 before 0x22.</p></li>
 <li><p>Regardless of the byte order, the ADSD3500 always places the first received byte into the lowest memory address. So, if the host sends 0x22 first, the ADSD3500 stores it at the lower address, resulting in the command being interpreted as 0x2200.</p></li>
-<li><p>The same logic applies to the data. If the host sends 0x1E first, the ADSD3500 stores it at the lower address, forming 0x1E00. Internally, the ADSD3500 swaps the bytes to interpret the actual value as 0x001E, which corresponds to 30 fps.</p></li>
+<li><p>The same logic applies to the data. If the host sends 0x1E first, the
+ADSD3500 stores it at the lower address, forming 0x1E00. Internally, the
+ADSD3500 swaps the bytes to interpret the actual value as 0x001E, which
+corresponds to 30 fps.</p></li>
 </ul>
 </li>
 </ul>
@@ -1993,8 +2008,10 @@ Where the maximum value of 0x0YYY is 0x0FFF (4095).</p></td>
 </table>
 </div>
 <p><strong>Name</strong>: Configure GPIO with feature <strong>Type</strong>: Write <strong>Description</strong>: Host command specific to the GPIO number has been added so that user can select the features which they would need.</p>
-<p>List of Features: SET_SOF_PROGRAMMABLE_DELAY = 1 1PPS_TIMER = 2 SECOND_INTERRUPT_SENSOR = 3</p>
-<p>List of GPIO Pins: I2C: 8, 10, 11, 14, 15, 18, 16, 17, 20, 21 SPI: 8, 10, 11, 14, 15, 18, 12, 19</p>
+<p>List of Features: SET_SOF_PROGRAMMABLE_DELAY = 1 1PPS_TIMER = 2
+SECOND_INTERRUPT_SENSOR = 3</p>
+<p>List of GPIO Pins: I2C: 8, 10, 11, 14, 15, 18, 16, 17, 20, 21 SPI: 8, 10, 11,
+14, 15, 18, 12, 19</p>
 <p>Example: Command to Configure GPIO8 with SET_SOF_PROGRAMMABLE_DELAY Feature. Write: W 00 B5 Data : 0xXX YY where ‘YY’ represents feature and ‘XX’ represents Enable /Disable. YY is 01 for SOF PROGRAMMABLE DELAY Feature, XX is 01 for Enabling the feature. W 00 B5 01 01 : ENABLE W 00 B5 00 01 : DISABLE <strong>Operations</strong>:</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -2051,8 +2068,10 @@ Where the maximum value of 0x0YYY is 0x0FFF (4095).</p></td>
 </table>
 </div>
 <p><strong>Name</strong>: Get Status of GPIO configured with feature <strong>Type</strong>: Read <strong>Description</strong>: Reads respective GPIO feature, along with Enable/Disable Status. Where Data represents: 0xXXYY: where ‘YY’ represents feature and ‘XX’ represents Enable/Disable</p>
-<p>List of Features: SET_SOF_PROGRAMMABLE_DELAY = 1 1PPS_TIMER = 2 SECOND_INTERRUPT_SENSOR = 3</p>
-<p>List of GPIO Pins: I2C: 8, 10, 11, 14, 15, 18, 16, 17, 20, 21 SPI: 8, 10, 11, 14, 15, 18, 12, 19</p>
+<p>List of Features: SET_SOF_PROGRAMMABLE_DELAY = 1 1PPS_TIMER = 2
+SECOND_INTERRUPT_SENSOR = 3</p>
+<p>List of GPIO Pins: I2C: 8, 10, 11, 14, 15, 18, 16, 17, 20, 21 SPI: 8, 10, 11,
+14, 15, 18, 12, 19</p>
 <p>Example: Command to read GPIO8 feature along with enable/disable status: R 00 F5 Value Returned: 01 01 -&gt; SET_SOF_PROGRAMMABLE_DELAY - Enabled Value Returned: 00 01 -&gt; SET_SOF_PROGRAMMABLE_DELAY - Disabled <strong>Operations</strong>:</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -2293,11 +2312,15 @@ Same as Get System Status Command 0x0020.</p></td>
 <h3>BURST MODE COMMANDS<a class="headerlink" href="#burst-mode-commands" title="Link to this heading"></a></h3>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>The ADSD3500 data format is little-endian. However, when the stock ADSD3500 Linux device driver is used, the payload size must be in big-endian and the checksum, the address and custom data are in little-endian.</p>
+<p>The ADSD3500 data format is little-endian. However, when the stock ADSD3500
+Linux device driver is used, the payload size must be in big-endian and the
+checksum, the address and custom data are in little-endian.</p>
 </div>
 <section id="get-camera-intrinsics">
 <h4>Get Camera Intrinsics<a class="headerlink" href="#get-camera-intrinsics" title="Link to this heading"></a></h4>
-<p>This is burst mode command to get the camera intrinsic structures from the ADSD3500 for a given Mode (Supported Modes are 0 to 10). This is the calibration data required for R-depth to Point Cloud conversion.</p>
+<p>This is burst mode command to get the camera intrinsic structures from the
+ADSD3500 for a given Mode (Supported Modes are 0 to 10). This is the calibration
+data required for R-depth to Point Cloud conversion.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -2340,7 +2363,8 @@ Same as Get System Status Command 0x0020.</p></td>
 </tbody>
 </table>
 </div>
-<p>Upon reception of this command, Firmware sends 56 Bytes CAMERA INSTRINSIC structure as follow:</p>
+<p>Upon reception of this command, Firmware sends 56 Bytes CAMERA INSTRINSIC
+structure as follow:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">typedef</span> <span class="n">struct</span> <span class="p">{</span>
   <span class="nb">float</span> <span class="n">fx</span><span class="p">;</span>
   <span class="nb">float</span> <span class="n">fy</span><span class="p">;</span>
@@ -2362,7 +2386,9 @@ Same as Get System Status Command 0x0020.</p></td>
 </section>
 <section id="get-dealias-parameters">
 <h4>Get Dealias Parameters<a class="headerlink" href="#get-dealias-parameters" title="Link to this heading"></a></h4>
-<p>This is BURST mode command to get the dealias parameters for a given mode (Supported Modes are 0 to 10). For getting the calibration data required for partial depth to full depth conversion</p>
+<p>This is BURST mode command to get the dealias parameters for a given mode
+(Supported Modes are 0 to 10). For getting the calibration data required for
+partial depth to full depth conversion</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -2391,7 +2417,8 @@ Same as Get System Status Command 0x0020.</p></td>
 </tbody>
 </table>
 </div>
-<p>Upon reception of this command, Firmware send 32-byte dealias parameter structure as follow:</p>
+<p>Upon reception of this command, Firmware send 32-byte dealias parameter
+structure as follow:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">typedef</span> <span class="n">struct</span> <span class="p">{</span>
   <span class="nb">int</span> <span class="n">n_rows</span><span class="p">;</span>
   <span class="nb">int</span> <span class="n">n_cols</span><span class="p">;</span>
@@ -2410,7 +2437,8 @@ Same as Get System Status Command 0x0020.</p></td>
 </section>
 <section id="firmware-upgrade-command">
 <h4>Firmware Upgrade Command<a class="headerlink" href="#firmware-upgrade-command" title="Link to this heading"></a></h4>
-<p>This is burst mode command to upgrade the ADSD3500 Current firmware stored in Flash memory.</p>
+<p>This is burst mode command to upgrade the ADSD3500 Current firmware stored in
+Flash memory.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -2439,13 +2467,21 @@ Same as Get System Status Command 0x0020.</p></td>
 </tbody>
 </table>
 </div>
-<p>Host first send this 16 byte header to ADSD3500. ADSD3500 will receive header and derives, One Chunk Size, total number of chunks (Total size / one chunk size), Expected CRC of the complete firmware.</p>
-<p>If firmware size is 16 KB and Flash page size is 512 Byte, then SIZE = 512 and Total size = 16384 (16 KB). ADSD3500 firmware shall expect 32 (16 KB/512) data chunk each of size 512 Byte.</p>
-<p>If the firmware size is not multiple of Page size, then Host shall pad the remaining byte with 0x00 to make it multiple of Page size. i.e. Firmware size = 16000 Byte. Size is 384 bytes short to 16 KB (16384), so Host shall send Total size = 16 KB and pad the last 384 bytes of last chuck with 0x00.</p>
+<p>Host first send this 16 byte header to ADSD3500. ADSD3500 will receive header
+and derives, One Chunk Size, total number of chunks (Total size / one chunk
+size), Expected CRC of the complete firmware.</p>
+<p>If firmware size is 16 KB and Flash page size is 512 Byte, then SIZE = 512 and
+Total size = 16384 (16 KB). ADSD3500 firmware shall expect 32 (16 KB/512) data
+chunk each of size 512 Byte.</p>
+<p>If the firmware size is not multiple of Page size, then Host shall pad the
+remaining byte with 0x00 to make it multiple of Page size. i.e. Firmware size =
+16000 Byte. Size is 384 bytes short to 16 KB (16384), so Host shall send Total
+size = 16 KB and pad the last 384 bytes of last chuck with 0x00.</p>
 </section>
 <section id="second-firmware-upgrade-command">
 <h4>Second Firmware Upgrade Command<a class="headerlink" href="#second-firmware-upgrade-command" title="Link to this heading"></a></h4>
-<p>This is burst mode command to upgrade the second ADSD3500 firmware stored in Flash memory.</p>
+<p>This is burst mode command to upgrade the second ADSD3500 firmware stored in
+Flash memory.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -2474,11 +2510,18 @@ Same as Get System Status Command 0x0020.</p></td>
 </tbody>
 </table>
 </div>
-<p>Host first send this 16 byte header to ADSD3500. ADSD3500 will receive header and derives, One Chunk Size, total number of chunks (Total size / one chunk size), Expected CRC of the complete firmware.</p>
+<p>Host first send this 16 byte header to ADSD3500. ADSD3500 will receive header
+and derives, One Chunk Size, total number of chunks (Total size / one chunk
+size), Expected CRC of the complete firmware.</p>
 </section>
 <section id="get-adsd3500-firmware-version-and-githash">
 <h4>Get ADSD3500 Firmware Version and GitHash<a class="headerlink" href="#get-adsd3500-firmware-version-and-githash" title="Link to this heading"></a></h4>
-<p>This is burst mode command to retrieve the ADSD3500 Firmware version and GIT HASH of the commit used to generate the Firmware binary. GIT HASH is computed using SHA-1 algorithm so it is 160 bits log (20 BYTES (40 hex characters, 40 bytes ASCII values) ). First 4 bytes of the Firmware binary are reserved for Firmware version. GIT HASH shall be appended at the END of the Firmware Binary while storing to Flash.</p>
+<p>This is burst mode command to retrieve the ADSD3500 Firmware version and GIT
+HASH of the commit used to generate the Firmware binary. GIT HASH is computed
+using SHA-1 algorithm so it is 160 bits log (20 BYTES (40 hex characters, 40
+bytes ASCII values) ). First 4 bytes of the Firmware binary are reserved for
+Firmware version. GIT HASH shall be appended at the END of the Firmware Binary
+while storing to Flash.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -2510,11 +2553,16 @@ Same as Get System Status Command 0x0020.</p></td>
 </tbody>
 </table>
 </div>
-<p>Upon reception of this command, upon reception of this command, Firmware retrieves the version and GIT Hash from the Firmware stored in Flash for a given Section (Current, Upgrade, Factory, Second ADSD3500 firmware if it is a Dual Setup) and sends 44 bytes (4 Byte version followed by 40 bytes Hash) to Host.</p>
+<p>Upon reception of this command, upon reception of this command, Firmware
+retrieves the version and GIT Hash from the Firmware stored in Flash for a given
+Section (Current, Upgrade, Factory, Second ADSD3500 firmware if it is a Dual
+Setup) and sends 44 bytes (4 Byte version followed by 40 bytes Hash) to Host.</p>
 </section>
 <section id="switch-to-standard-mode">
 <h4>Switch to Standard Mode<a class="headerlink" href="#switch-to-standard-mode" title="Link to this heading"></a></h4>
-<p>This command switches the protocol mode of the ADSD3500 Firmware from BURST MODE to STANDARD MODE. After this command, ADSD3500 supports only STANDARD MODE commands.</p>
+<p>This command switches the protocol mode of the ADSD3500 Firmware from BURST MODE
+to STANDARD MODE. After this command, ADSD3500 supports only STANDARD MODE
+commands.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -2673,7 +2721,11 @@ Same as Get System Status Command 0x0020.</p></td>
 </tbody>
 </table>
 </div>
-<p>Note: The fractional value to be set should be in Fixed Format. Since fractional values are in floating format, it must be converted to a 32-bit fixed format by multiplying the value with 2^32. E.g.: If the initial fractional value is to be set to 0.5s. Then the value in commands is 0.5 * (2^32), i.e., 2147483648u. In hex format, it would be 0x8000000 (0x00 0x00 0x00 0x80 in Address block)</p>
+<p>Note: The fractional value to be set should be in Fixed Format. Since fractional
+values are in floating format, it must be converted to a 32-bit fixed format by
+multiplying the value with 2^32. E.g.: If the initial fractional value is to be
+set to 0.5s. Then the value in commands is 0.5 * (2^32), i.e., 2147483648u. In
+hex format, it would be 0x8000000 (0x00 0x00 0x00 0x80 in Address block)</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>32-bit fractional value should be sent in little endian format.</p>
@@ -2713,7 +2765,8 @@ Same as Get System Status Command 0x0020.</p></td>
 </tbody>
 </table>
 </div>
-<p>Upon reception of this command, Firmware sends 168 Bytes Mode Map structure as follow:</p>
+<p>Upon reception of this command, Firmware sends 168 Bytes Mode Map structure as
+follow:</p>
 <p><strong>Note:</strong> For each default mode the, modemap table holds 24 bytes of data. ADSD3500 can stores 6 such modes. Hence total size of modemap table is 24*6 = 144 bytes(0x90)+24 empty bits(reserved).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">struct</span> <span class="n">MODEMAP_TABLE_ENTRY</span> <span class="p">{</span>
  <span class="n">uint8_t</span> <span class="n">UserDefinedMode</span><span class="p">;</span>
@@ -2739,7 +2792,8 @@ Same as Get System Status Command 0x0020.</p></td>
 </section>
 <section id="read-initable-from-adsd3500-for-particular-mode">
 <h5>Read IniTable from ADSD3500 for particular mode<a class="headerlink" href="#read-initable-from-adsd3500-for-particular-mode" title="Link to this heading"></a></h5>
-<p>This is burst mode command to get the INI table for default modes from the ADSD3500.</p>
+<p>This is burst mode command to get the INI table for default modes from the
+ADSD3500.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -2771,7 +2825,8 @@ Same as Get System Status Command 0x0020.</p></td>
 <p>** Example **</p>
 <p>To get INI table for mode 1, Command to be used is:</p>
 <p>** R AD 00 28 25 00 00 00 00 4D 00 00 00 01 00 00 00 **</p>
-<p>Upon reception of this command, Firmware sends 40 Bytes Mode Map structure as follow:</p>
+<p>Upon reception of this command, Firmware sends 40 Bytes Mode Map structure as
+follow:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">uint8_t</span> <span class="n">INIIndex</span><span class="p">;</span>
   <span class="n">uint8_t</span> <span class="n">rsvd</span><span class="p">;</span>                              <span class="o">//</span> <span class="k">for</span> <span class="n">byte</span> <span class="n">alignment</span> <span class="n">of</span> <span class="n">following</span> <span class="n">fields</span>
   <span class="n">uint16_t</span> <span class="n">abThreshMin</span><span class="p">;</span>
@@ -2825,7 +2880,8 @@ Same as Get System Status Command 0x0020.</p></td>
 </section>
 <section id="burst-mode-response">
 <h5>Burst Mode Response<a class="headerlink" href="#burst-mode-response" title="Link to this heading"></a></h5>
-<p>The response from the ADSD3500 will be: (To read the status of ADSD3500 in burst mode)</p>
+<p>The response from the ADSD3500 will be: (To read the status of ADSD3500 in burst
+mode)</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -2860,7 +2916,7 @@ Same as Get System Status Command 0x0020.</p></td>
 </section>
 <section id="example-flow">
 <h2>Example Flow<a class="headerlink" href="#example-flow" title="Link to this heading"></a></h2>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/adsd3500-host-commands-example-flow.png"><img alt="adsd3500-host-commands-example-flow.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/adsd3500-host-commands-example-flow.png" style="width: 400px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/adsd3500-host-commands-example-flow.png"><img alt="adsd3500-host-commands-example-flow.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/adsd3500-host-commands-example-flow.png" width="400" />
 </a>
 <section id="examples-that-work-on-the-adtf3175d-eval-kit">
 <h3>Examples that work on the ADTF3175D Eval Kit<a class="headerlink" href="#examples-that-work-on-the-adtf3175d-eval-kit" title="Link to this heading"></a></h3>
@@ -2874,7 +2930,9 @@ Same as Get System Status Command 0x0020.</p></td>
 </section>
 <section id="sample-code-c">
 <h3>Sample Code: C<a class="headerlink" href="#sample-code-c" title="Link to this heading"></a></h3>
-<p>The following code shows how to access ADSD3500 host commands via the ToF Linux device driver. The program executes from the command line on a Linux embedded host.</p>
+<p>The following code shows how to access ADSD3500 host commands via the ToF Linux
+device driver. The program executes from the command line on a Linux embedded
+host.</p>
 <p>This file ingests infile.txt. infile.txt contains the commands.</p>
 <p>Example 1:</p>
 <ul class="simple">
@@ -2978,7 +3036,6 @@ analog@aditof:~$ ./burst_ctrl
 
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
 <span class="p">}</span>
-
 
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="n">CTRL_SIZE</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>

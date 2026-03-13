@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="This page will educate a reader on essential Devicetree concepts and syntax   The device tree basics and format described here is applicable to embedded Linux and the popular Zephyr RTOS." name="description" />
+<meta content="This page will educate a reader on essential Devicetree concepts and syntax The device tree basics and format described here is applicable to embedded Linux and the popular Zephyr RTOS." name="description" />
 
     <title>Devicetree - Intro &#8212; System Level Documentation  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=8e8a900e" />
@@ -598,14 +598,26 @@ Content on this topic
             
   <section id="devicetree-intro">
 <h1>Devicetree - Intro<a class="headerlink" href="#devicetree-intro" title="Link to this heading"></a></h1>
-<p>This page will educate a reader on essential Devicetree concepts and syntax   The device tree basics and format described here is applicable to embedded Linux and the popular Zephyr RTOS.</p>
+<p>This page will educate a reader on essential Devicetree concepts and syntax
+The device tree basics and format described here is applicable to embedded Linux
+and the popular Zephyr RTOS.</p>
 <section id="devicetree-what-is-it-why-use-it">
 <h2>Devicetree: What Is It &amp; Why Use It?<a class="headerlink" href="#devicetree-what-is-it-why-use-it" title="Link to this heading"></a></h2>
-<p>The Devicetree is an abstract data structure. It’s purpose is to describe and configure the hardware connected to a system. The reason this is useful is that embedded developers usually spend a lot (too much) of their time wrestling with the configuration of hardware features, pin maps, and peripheral settings instead of approaching the actual processing of the target signals and data within an application. The devicetree creates a structure that can be pulled into application code to determine the connected hardware at compile time (Zephyr) or boot/runtime (Linux) so long as the device tree has the correct configuration. This means a couple things:</p>
+<p>The Devicetree is an abstract data structure. It’s purpose is to describe and
+configure the hardware connected to a system. The reason this is useful is that
+embedded developers usually spend a lot (too much) of their time wrestling with
+the configuration of hardware features, pin maps, and peripheral settings
+instead of approaching the actual processing of the target signals and data
+within an application. The devicetree creates a structure that can be pulled
+into application code to determine the connected hardware at compile time
+(Zephyr) or boot/runtime (Linux) so long as the device tree has the correct
+configuration. This means a couple things:</p>
 <ul class="simple">
 <li><p>Application code can be much more portable between multiple hardware boards, and multiple separate revisions. This is because the driver C code is abstracted a layer above the hardware by the device tree.</p></li>
 <li><p>Hardware configuration no longer needs to happen in C code. It instead happens in the Devicetree.</p></li>
-<li><p>Peripheral boards can be slotted in via overlay files which attach to an existing Devicetree, so they too can be slotted in without much additional driver code configuration.</p></li>
+<li><p>Peripheral boards can be slotted in via overlay files which attach to an
+existing Devicetree, so they too can be slotted in without much additional
+driver code configuration.</p></li>
 </ul>
 </section>
 <section id="how-do-i-read-this">
@@ -613,7 +625,9 @@ Content on this topic
 <p>Devicetree has its own syntax…this can be a little tough to read at first, but the main thing to remember is <em>it’s just a hierarchical description of hardware</em>. Device tree files are written in a syntax called <em>dts</em> or “<strong>d</strong>evice <strong>t</strong>ree <strong>s</strong>ource”. Thus, one configures the devicetree in “.dts” or “dtsi” (<strong>d</strong>evice <strong>t</strong>ree <strong>s</strong>ource <strong>i</strong>nclude) files. A .dts file consists of a few things:</p>
 <section id="the-root-node">
 <h3>The Root Node<a class="headerlink" href="#the-root-node" title="Link to this heading"></a></h3>
-<p>The Devicetree is comprised of one or more nodes, delimited by brackets {}. Every Devicetree file must at the very least have a root node, named with a forward slash (“/”).</p>
+<p>The Devicetree is comprised of one or more nodes, delimited by brackets {}.
+Every Devicetree file must at the very least have a root node, named with a
+forward slash (“/”).</p>
 <p><strong>Devicetree Root Node</strong></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span> <span class="p">{</span>
 <span class="p">};</span>
@@ -623,7 +637,8 @@ Content on this topic
 </section>
 <section id="nodes-subnodes">
 <h3>Nodes &amp; Subnodes<a class="headerlink" href="#nodes-subnodes" title="Link to this heading"></a></h3>
-<p>Subnodes are similarly delimited in a hierarchy starting from the root. Here’s an example device tree source file:</p>
+<p>Subnodes are similarly delimited in a hierarchy starting from the root. Here’s
+an example device tree source file:</p>
 <p><strong>Devicetree Source Example</strong></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span> <span class="p">{</span>
     <span class="n">example_node</span> <span class="p">{</span>
@@ -649,7 +664,9 @@ Content on this topic
 <p>If we look closer at the example subnode, we’ll notice it has a <strong>label</strong> and a <strong>property</strong>.</p>
 <ul class="simple">
 <li><p>A label is a simple shorthand name that can be used to refer to a node elsewhere in the device tree, Any node may have 0, 1, or more labels.</p></li>
-<li><p>A property is a name/value pair that is associated with a given node. A property can be an array of strings, numbers, bytes, or even a mixture of types.</p></li>
+<li><p>A property is a name/value pair that is associated with a given node. A
+property can be an array of strings, numbers, bytes, or even a mixture of
+types.</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span> <span class="n">A</span> <span class="n">boolean</span> <span class="nb">property</span> <span class="n">may</span> <span class="n">have</span> <span class="n">an</span> <span class="n">empty</span> <span class="n">value</span><span class="o">.</span> <span class="n">For</span> <span class="n">these</span><span class="p">,</span> <span class="n">the</span> <span class="n">simple</span> <span class="n">presence</span> <span class="ow">or</span> <span class="n">absence</span> <span class="n">of</span> <span class="n">the</span> <span class="nb">property</span> <span class="n">conveys</span> <span class="n">sufficient</span> <span class="n">information</span><span class="o">.</span>
 <span class="o">*</span> <span class="n">The</span> <span class="n">size</span> <span class="ow">and</span> <span class="nb">type</span> <span class="n">of</span> <span class="n">a</span> <span class="nb">property</span> <span class="ow">is</span> <span class="n">implied</span> <span class="n">by</span> <span class="n">the</span> <span class="n">enclosing</span> <span class="n">brackets</span> <span class="p">(</span><span class="s2">&quot;&lt;&gt;&quot;</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">case</span> <span class="n">of</span> <span class="n">the</span> <span class="n">integer</span> <span class="n">subnode_property</span> <span class="n">above</span><span class="p">)</span>
@@ -659,7 +676,10 @@ Content on this topic
 </section>
 <section id="aliases">
 <h3>Aliases<a class="headerlink" href="#aliases" title="Link to this heading"></a></h3>
-<p>One may see an “aliases” node contained within a device tree source file. The aliases node has properties whose names are aliases and values are references to a node in the device tree. A reference to a node can be given using the reference symbol “&amp;”. Here’s an example using the subnode label from earlier:</p>
+<p>One may see an “aliases” node contained within a device tree source file. The
+aliases node has properties whose names are aliases and values are references to
+a node in the device tree. A reference to a node can be given using the
+reference symbol “&amp;”. Here’s an example using the subnode label from earlier:</p>
 <p><strong>Aliases Node</strong></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span> <span class="p">{</span>
     <span class="n">aliases</span> <span class="p">{</span>
@@ -668,7 +688,10 @@ Content on this topic
 <span class="p">};</span>
 </pre></div>
 </div>
-<p>These aliases which can be referenced by C/C++ application code to make it more portable. For example, an “led0” alias may be used to identify a connected LED without having to directly reference it’s GPIO pin or otherwise tether the application code to a particular board.</p>
+<p>These aliases which can be referenced by C/C++ application code to make it more
+portable. For example, an “led0” alias may be used to identify a connected LED
+without having to directly reference it’s GPIO pin or otherwise tether the
+application code to a particular board.</p>
 <p><strong>A “Real” Aliases Node</strong></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span> <span class="p">{</span>
     <span class="n">aliases</span> <span class="p">{</span>
@@ -684,10 +707,20 @@ Content on this topic
 </section>
 <section id="devicetree-bindings">
 <h2>Devicetree Bindings<a class="headerlink" href="#devicetree-bindings" title="Link to this heading"></a></h2>
-<p>Devicetree bindings declare both the required and optional properties of a device. Devicetree bindings are required by Zephyr in order to compile the device tree, and are in the YAML file format. Linux also has a concept of devicetree bindings, which may be either YAML or free-text format.  However unlike Zephyr, Linux device tree bindings are not required, and are simply used as developer documentation.  It is not uncommon to find a device tree binding file missing for a driver in Linux.</p>
+<p>Devicetree bindings declare both the required and optional properties of a
+device. Devicetree bindings are required by Zephyr in order to compile the
+device tree, and are in the YAML file format. Linux also has a concept of
+devicetree bindings, which may be either YAML or free-text format.  However
+unlike Zephyr, Linux device tree bindings are not required, and are simply used
+as developer documentation.  It is not uncommon to find a device tree binding
+file missing for a driver in Linux.</p>
 <section id="compatible">
 <h3>“compatible”<a class="headerlink" href="#compatible" title="Link to this heading"></a></h3>
-<p>The “compatible” property binds a devicetree node to a group of requirements. If a node is contained in the devicetree containing a “compatible” property that matches one given in the devicetree bindings YAML files, it must have the required properties given in the YAML file or the devicetree will fail to compile.</p>
+<p>The “compatible” property binds a devicetree node to a group of requirements. If
+a node is contained in the devicetree containing a “compatible” property that
+matches one given in the devicetree bindings YAML files, it must have the
+required properties given in the YAML file or the devicetree will fail to
+compile.</p>
 <p><strong>Devicetree Bindings (YAML) : “compatible”</strong></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">compatible</span><span class="p">:</span> <span class="s2">&quot;adi,max32xxx&quot;</span>
 <span class="n">properties</span><span class="p">:</span>
@@ -703,7 +736,9 @@ Content on this topic
 <span class="p">};</span>
 </pre></div>
 </div>
-<p>In the above file, “node0” maps to the devicetree bindings via the “compatible” property. Therefore, it must contain the property “num-leds” or else the devicetree will fail to compile.</p>
+<p>In the above file, “node0” maps to the devicetree bindings via the “compatible”
+property. Therefore, it must contain the property “num-leds” or else the
+devicetree will fail to compile.</p>
 </section>
 </section>
 <section id="how-does-the-devicetree-get-used">
@@ -711,7 +746,8 @@ Content on this topic
 <p>Information can be extracted from the Devicetree to use in application code – that means device drivers now will have a component located in the Devicetree as well, and application C/C++ code will frequently reference the Devicetree to extract information about connected hardware. This adds an additional layer of complexity with the benefit of allowing hardware to be described at runtime rather than directly within the application firmware. This ultimately should mean that more application code is portable to more hardware variants given that the application code can afford to be more hardware-agnostic, provided the target hardware meets the minimum requirements of the application.</p>
 <section id="devicetree-in-embedded-linux">
 <h3>Devicetree in Embedded Linux<a class="headerlink" href="#devicetree-in-embedded-linux" title="Link to this heading"></a></h3>
-<p>For examples of how devicetree is used in the context of Embedded Linux, please view the following additional material:</p>
+<p>For examples of how devicetree is used in the context of Embedded Linux, please
+view the following additional material:</p>
 <ul class="simple">
 <li><p>Devicetree Overlays [Coming Soon]</p></li>
 <li><p>Devicetree-Overlay-MAX31855 [Coming Soon]</p></li>
@@ -719,10 +755,13 @@ Content on this topic
 </section>
 <section id="blinky-in-zephyr-using-the-devicetree">
 <h3>Blinky in Zephyr (Using the Devicetree)<a class="headerlink" href="#blinky-in-zephyr-using-the-devicetree" title="Link to this heading"></a></h3>
-<p>Below is the classic “Blinky” sample code given in Zephyr. It uses the Devicetree by grabbing “led0” from a Devicetree alias. The flow of the example is as follows:</p>
+<p>Below is the classic “Blinky” sample code given in Zephyr. It uses the
+Devicetree by grabbing “led0” from a Devicetree alias. The flow of the example
+is as follows:</p>
 <ul class="simple">
 <li><p>Include Zephyr kernel and GPIO driver API</p></li>
-<li><p>Extract the first connected LED from a devicetree alias. This could also be done using a Devicetree node label.</p>
+<li><p>Extract the first connected LED from a devicetree alias. This could also be
+done using a Devicetree node label.</p>
 <ul>
 <li><p>The LED is given the type “const struct <strong>gpio_dt_spec</strong>”, which is defined by the Zephyr GPIO API.</p></li>
 <li><p>Most objects extracted from the devicetree will be a type defined by an API or type “const struct device” (e.g. “const struct device *uart”)</p></li>
@@ -787,7 +826,8 @@ int main(void)
 <p>Next step – go read the specs!</p>
 <ul class="simple">
 <li><p>If you have to develop or modify devicetree beyond this level, it’s likely you need to read the Devicetree spec: <a class="icon link reference external" href="https://www.devicetree.org/" target="_blank">The Devicetree Project</a>.</p></li>
-<li><p>For Zephyr-specific devicetree APIs, pair the Devicetree spec (platform-independent) with the Zephyr Devicetree API Reference:</p>
+<li><p>For Zephyr-specific devicetree APIs, pair the Devicetree spec
+(platform-independent) with the Zephyr Devicetree API Reference:</p>
 <ul>
 <li><p><a class="icon link reference external" href="https://docs.zephyrproject.org/latest/build/dts/index" target="_blank">Devicetree — Zephyr Project Documentation</a></p>
 <ul>
@@ -797,7 +837,9 @@ int main(void)
 </ul>
 </li>
 </ul>
-<p>In addition, if you’re starting out with a Raspberry Pi for a project, it can help to read the README for the devicetree overlays available in the Raspbian kernel:</p>
+<p>In addition, if you’re starting out with a Raspberry Pi for a project, it can
+help to read the README for the devicetree overlays available in the Raspbian
+kernel:</p>
 <ul class="simple">
 <li><p><a class="icon link reference external" href="https://github.com/raspberrypi/firmware/blob/master/boot/overlays/README" target="_blank">RaspberryPi Github - firmware/boot/overlays/README</a></p></li>
 </ul>

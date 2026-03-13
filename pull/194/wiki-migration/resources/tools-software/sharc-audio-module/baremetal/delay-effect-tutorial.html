@@ -594,21 +594,25 @@ Content on this topic
             
   <section id="tutorial-implementing-a-basic-delay-effect">
 <h1>Tutorial: Implementing a Basic Delay Effect<a class="headerlink" href="#tutorial-implementing-a-basic-delay-effect" title="Link to this heading"></a></h1>
-<p>In this tutorial, we’ll use the bare metal framework to implement a basic echo / delay effect.</p>
+<p>In this tutorial, we’ll use the bare metal framework to implement a basic echo /
+delay effect.</p>
 <section id="bare-metal-project-wizard-setup">
 <h2>Bare Metal Project Wizard Setup<a class="headerlink" href="#bare-metal-project-wizard-setup" title="Link to this heading"></a></h2>
 <p>Using the <a class="reference internal" href="project-wizard.html"><span class="doc">bare metal project wizard</span></a>:</p>
 <ul class="simple">
 <li><p>Give the project a meaningful name, click Next</p></li>
-<li><p>Choose the Audio Project Fin on the Expansion Fin Selection Page because it is required for part of the tutorial, click Finish</p></li>
+<li><p>Choose the Audio Project Fin on the Expansion Fin Selection Page because it
+is required for part of the tutorial, click Finish</p></li>
 </ul>
 <p><strong>No other options need to be changed.</strong></p>
 </section>
 <section id="echo-effect-basics">
 <h2>Echo Effect Basics<a class="headerlink" href="#echo-effect-basics" title="Link to this heading"></a></h2>
-<p>An echo effect is based on a delay line, a number of adders, and gain elements as shown below.</p>
+<p>An echo effect is based on a delay line, a number of adders, and gain elements
+as shown below.</p>
 <img alt="Basic echo effect" src="https://wiki.analog.com/_media/resources/tools-software/sharc-audio-module/baremetal/echo_structure.gif" />
-<p>The light blue elements in the figure represent the typical adjustable parameters on an delay processor, namely:</p>
+<p>The light blue elements in the figure represent the typical adjustable
+parameters on an delay processor, namely:</p>
 <ul class="simple">
 <li><p><em>Feedback</em>: determines how much of the delayed signal is added back into the original signal. This effects how long the echo lasts.</p></li>
 <li><p><em>Delay</em>: determines the time between the original signal and the time-delayed signal, as a number of audio samples. A high value may sound like you’re in the mountains (hello hello hello hello) while a smaller value will sound more like a dry room or underneath a bridge.</p></li>
@@ -624,9 +628,14 @@ Content on this topic
 </section>
 <section id="step-2-declare-the-required-global-variables-including-the-delay-lines">
 <h2>Step 2: declare the required global variables, including the delay lines<a class="headerlink" href="#step-2-declare-the-required-global-variables-including-the-delay-lines" title="Link to this heading"></a></h2>
-<p>We’re going to build a stereo echo which means that we’ll process the left and right channel independently, each through an echo effect of its own.</p>
-<p>The SHARC Audio Module board has a very large amount of DDR SDRAM that is perfect to implement long delay lines.</p>
-<p>First, let’s declare two large floating point buffers (a stereo pair) and instruct the linker to place them in SDRAM. We will declare buffers large enough to hold 5 seconds of audio. The following formula can help us establish how big that is:</p>
+<p>We’re going to build a stereo echo which means that we’ll process the left and
+right channel independently, each through an echo effect of its own.</p>
+<p>The SHARC Audio Module board has a very large amount of DDR SDRAM that is
+perfect to implement long delay lines.</p>
+<p>First, let’s declare two large floating point buffers (a stereo pair) and
+instruct the linker to place them in SDRAM. We will declare buffers large enough
+to hold 5 seconds of audio. The following formula can help us establish how big
+that is:</p>
 <img alt="Delay formula" src="https://wiki.analog.com/_media/resources/tools-software/sharc-audio-module/baremetal/delay_formula.gif" />
 <p>For a maximum delay of 5 seconds between echos, in a project where the sampling rate is set to 48KHz, our delay lines must have a size of: <strong>48,000 Hz x 5 s = 240,000 samples</strong>.</p>
 <p>Place the following declarations immediately before the <code class="docutils literal notranslate"><span class="pre">processaudio_setup()</span></code> function in <code class="docutils literal notranslate"><span class="pre">callback_audio_processing.cpp</span></code></p>
@@ -714,14 +723,16 @@ Content on this topic
 </div>
 <p>Now compile, upload and run your code.</p>
 <p>Note that when running your code as part of a debug session, the IDDE will pause the execution automatically upon entering a core’s <code class="docutils literal notranslate"><span class="pre">main()</span></code> function. Press the Resume button (see below) for all three cores to allow them to run in order to hear audio.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/sharc-audio-module/baremetal/debugcores.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/sharc-audio-module/baremetal/debugcores.png" src="https://wiki.analog.com/_media/resources/tools-software/sharc-audio-module/baremetal/debugcores.png" style="width: 800px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/tools-software/sharc-audio-module/baremetal/debugcores.png"><img alt="https://wiki.analog.com/_media/resources/tools-software/sharc-audio-module/baremetal/debugcores.png" src="https://wiki.analog.com/_media/resources/tools-software/sharc-audio-module/baremetal/debugcores.png" width="800" />
 </a>
 </section>
 <section id="additional-things-to-try">
 <h2>Additional Things To Try<a class="headerlink" href="#additional-things-to-try" title="Link to this heading"></a></h2>
 <section id="routing-audio-to-from-other-peripherals">
 <h3>Routing audio to / from other peripherals<a class="headerlink" href="#routing-audio-to-from-other-peripherals" title="Link to this heading"></a></h3>
-<p>You can route audio to/from other peripherals by simply utilizing different buffers. For example, the following code snippet routes the output audio data to the S/PDIF transmitter instead of the DACs on the ADAU1761:</p>
+<p>You can route audio to/from other peripherals by simply utilizing different
+buffers. For example, the following code snippet routes the output audio data to
+the S/PDIF transmitter instead of the DACs on the ADAU1761:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">audiochannel_spdif_0_left_out</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">audiochannel_0_left_in</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">delay_dry_mix</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
 <span class="w">                                   </span><span class="p">(</span><span class="n">delayed_left</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">delay_wet_mix</span><span class="p">);</span>
 <span class="n">audiochannel_spdif_0_right_out</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">audiochannel_0_right_in</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">delay_dry_mix</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
@@ -737,8 +748,11 @@ Content on this topic
 </section>
 <section id="have-an-audio-project-fin-wire-in-the-pots-to-control-the-effect-in-real-time">
 <h3>Have an Audio Project Fin? Wire in the POTs to control the effect in real time<a class="headerlink" href="#have-an-audio-project-fin-wire-in-the-pots-to-control-the-effect-in-real-time" title="Link to this heading"></a></h3>
-<p>The Audio Project Fin is an expansion board that has 1/4” instrument jacks, 3 pots, push-buttons and a MIDI interface.</p>
-<p>The multicore memory structure contains the current value of each pot. We can overwrite the fixed delay length, feedback, and dry/wet values with values sensed dynamically from these pots.</p>
+<p>The Audio Project Fin is an expansion board that has 1/4” instrument jacks, 3
+pots, push-buttons and a MIDI interface.</p>
+<p>The multicore memory structure contains the current value of each pot. We can
+overwrite the fixed delay length, feedback, and dry/wet values with values
+sensed dynamically from these pots.</p>
 <p>First, let’s create two extra global variables to hold the new delay length:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">float</span><span class="w">    </span><span class="n">new_delay_len_seconds</span><span class="p">;</span>
 <span class="kt">uint32_t</span><span class="w"> </span><span class="n">new_delay_len_samples</span><span class="p">;</span>

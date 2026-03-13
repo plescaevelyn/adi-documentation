@@ -602,7 +602,8 @@ Content on this topic
 <section id="general-description-overview">
 <h2>General Description/Overview<a class="headerlink" href="#general-description-overview" title="Link to this heading"></a></h2>
 <p>The <strong>ADuCM_demo_cn0414</strong> project uses <strong>EVAL-CN0414-ARDZ</strong> to provide a complete, fully isolated and highly flexible, four channel analog input system. The <strong>EVAL-CN0414-ARDZ</strong> is suitable for programmable logic controllers (<strong>PLC</strong>) and distributed control system (<strong>DCS</strong>) applications that require multiple voltage inputs. It boasts <strong>open wire detection</strong> and has <strong>HART</strong>-compatible, 4 mA to 20 mA current inputs, all protected from transient overvoltage or overcurrent events, suitable for the most harsh industrial environments.</p>
-<p>The circuit can be divided into the following parts: the ADC, the input channels, the HART modem and the memory.</p>
+<p>The circuit can be divided into the following parts: the ADC, the input
+channels, the HART modem and the memory.</p>
 <p>The <strong>ADC</strong> is the core of the <strong>EVAL-CN0414-ARDZ</strong> shield. It is an <a class="icon adi reference external" href="https://www.analog.com/AD4111" target="_blank">AD4111</a> with 8 single or 4 differential voltage channels and 4 current channels. The input channels in this application are configured as 4 differential voltage channels and the current channels. The application maintains 8 internal registers, one for each channel, that are updated periodically, on a timer interrupt, with the latest conversion results. This way, on a single read, the user can have the data on a channel without waiting for a conversion. <img alt="Timer diagram" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup3029/reference_designs/cn0414_timer_diagram.png" /> Alternatively the user can request a burst read of up to 2000 samples returned at the ADC output data rate. The application uses the <strong>ADCs Open-Wire Detection</strong> capabilities for the voltage channels. When activated this option also tracks the state of the channel connection on every read and gives a warning when a channel is disconnected.</p>
 <p>The <strong>EVAL-CN0414-ARDZ</strong> is <strong>HART</strong> capable. When this option is activated the current channels can be used to transmit or receive <strong>HART</strong> messages or command zero and receive response. The system is capable of receiving messages asynchronously using a <strong>GPIO</strong> interrupt.</p>
 <p>The system also includes an EEPROM memory that communicates with the controller via <strong>I2C</strong> and can be used to store data or identification information for the board. The memory can be used to uniquely identify the board in a system of 4 similar boards (<strong>EVAL-CN0414-ARDZ</strong> or <strong>EVAL-CN0418-ARDZ</strong>) controlled by the same <strong>EVAL-ADICUP3029</strong>.</p>
@@ -639,11 +640,13 @@ Content on this topic
 <h2>Setting up the Hardware<a class="headerlink" href="#setting-up-the-hardware" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Connect <strong>EVAL-CN0414-ARDZ</strong> board to the <strong>EVAL-ADICUP3029</strong>.</p></li>
-<li><p>Set the jumpers into the position shown below. This is the standard position and only works for one board systems.</p></li>
+<li><p>Set the jumpers into the position shown below. This is the standard position
+and only works for one board systems.</p></li>
 </ul>
 <img alt="Standard jumper position" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup3029/reference_designs/cn0414_jumper_pos2.jpg" />
 <ul class="simple">
-<li><p>Connect a micro-USB cable to P10 connector of the EVAL-ADICUP3029 and connect it to a computer. The final setup should look similar to the picture below.</p></li>
+<li><p>Connect a micro-USB cable to P10 connector of the EVAL-ADICUP3029 and connect
+it to a computer. The final setup should look similar to the picture below.</p></li>
 </ul>
 <img alt="Hardware setup example" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup3029/reference_designs/eval_cn0414_ardz_hard_setup3.jpg" />
 </section>
@@ -864,13 +867,18 @@ If it is smaller than channel update rate multiplied by 80 can cause unpredictab
 </section>
 <section id="obtaining-the-software">
 <h2>Obtaining the Software<a class="headerlink" href="#obtaining-the-software" title="Link to this heading"></a></h2>
-<p>There are two basic ways to program the ADICUP3029 with the software for the CN0414.</p>
+<p>There are two basic ways to program the ADICUP3029 with the software for the
+CN0414.</p>
 <ul class="simple">
 <li><p>Dragging and Dropping the .Hex to the Daplink drive</p></li>
 <li><p>Building, Compiling, and Debugging using CCES</p></li>
 </ul>
-<p>Using the drag and drop method, the software is going to be a version that Analog Devices creates for testing and evaluation purposes. This is the EASIEST way to get started with the reference design</p>
-<p>Importing the project into CrossCore is going to allow you to change parameters and customize the software to fit your needs, but will be a bit more advanced and will require you to download the CrossCore toolchain.</p>
+<p>Using the drag and drop method, the software is going to be a version that
+Analog Devices creates for testing and evaluation purposes. This is the EASIEST
+way to get started with the reference design</p>
+<p>Importing the project into CrossCore is going to allow you to change parameters
+and customize the software to fit your needs, but will be a bit more advanced
+and will require you to download the CrossCore toolchain.</p>
 <p>The software for the <strong>ADuCM3029_demo_cn0414</strong> can be found here:</p>
 <div class="download admonition">
 <p class="admonition-title">Download</p>
@@ -907,7 +915,8 @@ If it is smaller than channel update rate multiplied by 80 can cause unpredictab
 <img alt="Board setup flow chart" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup3029/reference_designs/cn0414_board_setup_flow.png" />
 <p>The main process routine implements the <strong>CLI</strong> and calls the commands input by the user. This routine also checks the flags asserted in the asynchronous events (the update channel register flag, the HART received flag and the floating channel flags) and calls the appropriate handler methods. There is also a flag asserted by the channel register update rate and the <strong>ADC</strong> output data rate. If the update rate would be too close to the output data rate, the actual update rate might slow down to be possible for the program to maintain all functionality. The update rate may never be bigger or equal to the <strong>ADC</strong> output data rate divided by 8 (for 8 channels).</p>
 <img alt="Process flow chart" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup3029/reference_designs/cn0414_process_flow.png" />
-<p>The flow chart below represents the way the channel registers are updated. Only one channel is active at any one time (the channel that must be read).</p>
+<p>The flow chart below represents the way the channel registers are updated. Only
+one channel is active at any one time (the channel that must be read).</p>
 <img alt="Update channel flow chart" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup3029/reference_designs/cn0414_update_channel_flow.png" />
 <p><em>End of Document</em></p>
 </section>

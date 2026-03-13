@@ -637,7 +637,7 @@ Content on this topic
 <p>There is an example program for the SDP-K1 microcontroller that implements some functions to communicate with the ADMX2001B over the SPI interface. That code is available here: <a class="icon link reference external" href="https://os.mbed.com/teams/AnalogDevices/code/EVAL-ADMX2001/" target="_blank">MBED SPI library</a>.</p>
 <section id="spi-protocol-timing">
 <h2>SPI Protocol &amp; Timing<a class="headerlink" href="#spi-protocol-timing" title="Link to this heading"></a></h2>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/admx/eval-admx2001ebz/wildcat_spi_timing_56bit_frame_full.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/admx/eval-admx2001ebz/wildcat_spi_timing_56bit_frame_full.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/admx/eval-admx2001ebz/wildcat_spi_timing_56bit_frame_full.png" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/eval/user-guides/admx/eval-admx2001ebz/wildcat_spi_timing_56bit_frame_full.png"><img alt="https://wiki.analog.com/_media/resources/eval/user-guides/admx/eval-admx2001ebz/wildcat_spi_timing_56bit_frame_full.png" class="align-center" src="https://wiki.analog.com/_media/resources/eval/user-guides/admx/eval-admx2001ebz/wildcat_spi_timing_56bit_frame_full.png" width="600" />
 </a>
 <p><strong>SPI Interface Timing:</strong></p>
 <div class="table-wrapper docutils container">
@@ -1507,7 +1507,7 @@ Content on this topic
 <h3>Measure “Z” (0x0F)<a class="headerlink" href="#measure-z-0x0f" title="Link to this heading"></a></h3>
 <p>Initiates the measurement immediately and stores the result in the Measurement FIFO. Result will be in two IEEE-754 Double precision format. Since only 32-bit data format is supported during a <strong>Single Parameter Read</strong>, 64 bit double data is split as two 32 bit data and written into the FIFO. Commands that will affect the measurement are: output format, trigger count, sample count, offset, frequency, magnitude, voltage/current gain, sweep, measure delay, trigger delay.</p>
 <p>Note: Trigger mode command will be ignored by this command.</p>
-<p>The figure below shows how results are stored into the FIFO. <a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/admx/eval-admx2001ebz/measurement_fifo.png"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/user-guides/admx/eval-admx2001ebz/measurement_fifo.png" style="width: 400px;" /></a> The number of 32-bit data stored into the FIFO for each measurement can be calculated using the following equation,</p>
+<p>The figure below shows how results are stored into the FIFO. <a class="reference internal" href="https://wiki.analog.com/_media/resources/eval/user-guides/admx/eval-admx2001ebz/measurement_fifo.png"><img alt="image1" src="https://wiki.analog.com/_media/resources/eval/user-guides/admx/eval-admx2001ebz/measurement_fifo.png" width="400" /></a> The number of 32-bit data stored into the FIFO for each measurement can be calculated using the following equation,</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">No</span><span class="o">.</span> <span class="n">of</span> <span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="n">sample</span> <span class="n">count</span> <span class="o">*</span> <span class="n">trigger</span> <span class="n">count</span><span class="p">)</span> <span class="o">*</span> <span class="mi">4</span>
 </pre></div>
 </div>
@@ -1535,15 +1535,23 @@ Content on this topic
 </section>
 <section id="initiate-0x17">
 <h3>Initiate (0x17)<a class="headerlink" href="#initiate-0x17" title="Link to this heading"></a></h3>
-<p>Initiate command initializes device for measurement and waits for the external/software trigger. Once external trigger is received, the measurement will be done automatically if external trigger is enabled and result will be populated into the FIFO. In “wait for trigger” state trigger, parameter read command, abort and reset commands are supported; other commands are not supported. Do a Single Parameter Write with the initiate command.</p>
+<p>Initiate command initializes device for measurement and waits for the
+external/software trigger. Once external trigger is received, the measurement
+will be done automatically if external trigger is enabled and result will be
+populated into the FIFO. In “wait for trigger” state trigger, parameter read
+command, abort and reset commands are supported; other commands are not
+supported. Do a Single Parameter Write with the initiate command.</p>
 </section>
 <section id="trigger-0x18">
 <h3>Trigger (0x18)<a class="headerlink" href="#trigger-0x18" title="Link to this heading"></a></h3>
-<p>This command is treated as a software trigger for measuring the device under test. After measurement is completed, result will be stored into the FIFO. There are a few rules for using this command.</p>
+<p>This command is treated as a software trigger for measuring the device under
+test. After measurement is completed, result will be stored into the FIFO. There
+are a few rules for using this command.</p>
 <ul class="simple">
 <li><p>Should be provided only after providing initiate command i.e. when the device is in “wait for trigger” state.</p></li>
 <li><p>Should be provided when software trigger is required. Should not be sent when external trigger is enabled.</p></li>
-<li><p>Device will accept trigger command for trigger count times. For example, if trigger count is 2 only two triggers will be accepted.</p></li>
+<li><p>Device will accept trigger command for trigger count times. For example, if
+trigger count is 2 only two triggers will be accepted.</p></li>
 </ul>
 <p><strong>External Trigger Procedure</strong></p>
 <ul class="simple">
@@ -1843,7 +1851,8 @@ Content on this topic
 <section id="trigger-count-tcount-0x2d-0xad">
 <h3>Trigger Count TCOUNT (0x2D, 0xAD)<a class="headerlink" href="#trigger-count-tcount-0x2d-0xad" title="Link to this heading"></a></h3>
 <p>Number of time to trigger the sweep measurement. To configure or fetch data, do a <strong>Single Parameter Write</strong> or <strong>Single Parameter Read</strong>.</p>
-<p>Note: Only 256 measurement results can be stored in the measurement FIFO. If sample count * trigger count is greater than 256, readings will be lost.</p>
+<p>Note: Only 256 measurement results can be stored in the measurement FIFO. If
+sample count * trigger count is greater than 256, readings will be lost.</p>
 <p><strong>Trigger Count Command Format:</strong></p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -2086,7 +2095,8 @@ Offset: -2.5 to +2.5 (unit: V)</p></td>
 <section id="sample-count-0x42-0xc2">
 <h3>Sample Count (0x42, 0xC2)<a class="headerlink" href="#sample-count-0x42-0xc2" title="Link to this heading"></a></h3>
 <p>Set or get the number of readings to be taken in a sweep. To configure or fetch data, do a <strong>Single Parameter Write</strong> or <strong>Single Parameter Read</strong>.</p>
-<p>Note: Only 256 measurement results can be stored in the measurement FIFO. If sample count * trigger count is greater than 256, readings will be lost.</p>
+<p>Note: Only 256 measurement results can be stored in the measurement FIFO. If
+sample count * trigger count is greater than 256, readings will be lost.</p>
 <p><strong>Sample Count Command Format:</strong></p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -2121,7 +2131,8 @@ Offset: -2.5 to +2.5 (unit: V)</p></td>
 <section id="correction-mode-0x43-0xc3">
 <h3>Correction Mode (0x43, 0xC3)<a class="headerlink" href="#correction-mode-0x43-0xc3" title="Link to this heading"></a></h3>
 <p>Set or get the correction mode (0 = off, 1 = calibration, 2 = calibration + compensation). To configure or fetch data, do a <strong>Single Parameter Write</strong> or <strong>Single Parameter Read</strong>.</p>
-<p>Note: Compensation cannot be used without calibration being enabled. Calibration must be turned on before compensation can be turned on.</p>
+<p>Note: Compensation cannot be used without calibration being enabled. Calibration
+must be turned on before compensation can be turned on.</p>
 <p><strong>Correction Mode Command Format:</strong></p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -2190,7 +2201,9 @@ Offset: -2.5 to +2.5 (unit: V)</p></td>
 <section id="dc-mode-0x45-0xc5">
 <h3>DC Mode (0x45, 0xC5)<a class="headerlink" href="#dc-mode-0x45-0xc5" title="Link to this heading"></a></h3>
 <p>Set or get DC mode (1 = disable, 0 = enable). To configure or fetch data, do a <strong>Single Parameter Write</strong> or <strong>Single Parameter Read</strong>.</p>
-<p>Note: In order to do DC measurement, DC mode should be enabled (set parameter to 0) and frequency should be set to 0 Hz. Since the AC source is off in DC mode, the DC offset should be set to the desired value.</p>
+<p>Note: In order to do DC measurement, DC mode should be enabled (set parameter to
+0) and frequency should be set to 0 Hz. Since the AC source is off in DC mode,
+the DC offset should be set to the desired value.</p>
 <p><strong>DC Mode Command Format:</strong></p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -2225,8 +2238,10 @@ Offset: -2.5 to +2.5 (unit: V)</p></td>
 <section id="auto-range-0x46-0xc6">
 <h3>Auto Range (0x46, 0xC6)<a class="headerlink" href="#auto-range-0x46-0xc6" title="Link to this heading"></a></h3>
 <p>Set or get Auto ranging of voltage and current gain (0 = disable, 1 = enable). To configure or fetch data, do a <strong>Single Parameter Write</strong> or <strong>Single Parameter Read</strong>.</p>
-<p>Note1: When auto range is enabled, voltage gain &amp; current gain settings will be updated automatically.</p>
-<p>Note2: Auto range will be disabled during calibration, compensation and when sweep type is “frequency or offset or magnitude”</p>
+<p>Note1: When auto range is enabled, voltage gain &amp; current gain settings will be
+updated automatically.</p>
+<p>Note2: Auto range will be disabled during calibration, compensation and when
+sweep type is “frequency or offset or magnitude”</p>
 <p><strong>Auto Range Command Format:</strong></p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -2326,7 +2341,9 @@ Offset: -2.5 to +2.5 (unit: V)</p></td>
 <section id="self-test-0x51-0xd1">
 <h3>Self-Test (0x51, 0xD1)<a class="headerlink" href="#self-test-0x51-0xd1" title="Link to this heading"></a></h3>
 <p>Self-test runs after powering on the device. Self-test (0x51) command initiates the self-test routine and returns pass or fail in the <em>error code</em> field in the status register. Self-test (0xD1) reads the self-test status code in result register. To initiate self-test, do <strong>Single Parameter Write</strong> and to fetch status code, do a <strong>Single Parameter Read</strong>.</p>
-<p>Note: Before initiating self-test make sure test leads/test fixture is in the open configuration, otherwise the analog test will fail. The self-test does not need to pass on every boot for the board to function properly.</p>
+<p>Note: Before initiating self-test make sure test leads/test fixture is in the
+open configuration, otherwise the analog test will fail. The self-test does not
+need to pass on every boot for the board to function properly.</p>
 <p><strong>Self-Test Command Format:</strong></p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -2461,7 +2478,15 @@ Offset: -2.5 to +2.5 (unit: V)</p></td>
 </section>
 <section id="cal-0x04-comp-0x05">
 <h3>CAL (0x04) / COMP (0x05)<a class="headerlink" href="#cal-0x04-comp-0x05" title="Link to this heading"></a></h3>
-<p>CAL/COMP command is used to perform open, short and load calibration/compensation. The Rt and Xt values for load calibration/compensation are sent in the data field as a 32-bit floating point. For running open/short/load calibration or open/short/load compensation commands the data field is redundant. The result register will contain the appropriate error code if the calibration or compensation fails. Open and short calibration/compensation must be performed before load calibration/compensation to proceed. Refer to the Calibration and Compensation Commands table for details about the address and data fields.</p>
+<p>CAL/COMP command is used to perform open, short and load
+calibration/compensation. The Rt and Xt values for load calibration/compensation
+are sent in the data field as a 32-bit floating point. For running
+open/short/load calibration or open/short/load compensation commands the data
+field is redundant. The result register will contain the appropriate error code
+if the calibration or compensation fails. Open and short
+calibration/compensation must be performed before load calibration/compensation
+to proceed. Refer to the Calibration and Compensation Commands table for details
+about the address and data fields.</p>
 <p><strong>Open/Short/Load Calibration Command Mapping</strong></p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -2519,7 +2544,17 @@ Offset: -2.5 to +2.5 (unit: V)</p></td>
 </tbody>
 </table>
 </div>
-<p>Note the last row has an address field 0xFF. This command/address combination is for a new command called reload calibration (starting in firmware 1.2.2). To run this command, the address filed needs to be set as 0xFF. The reload command will load the nearest frequency calibration coefficients from the nonvolatile memory and store them in the RAM. This is especially useful when user wants to read calibration coefficients taken at different frequencies (i.e. calibration over frequency). Say a new frequency is set, user will need to run reload calibration first, then perform CAL_READ (0x06) to load calibration coefficients at that specific frequency from FLASH to RAM. Otherwise, calibration coefficients successfully read at previous set frequency will be misread for the new frequency.</p>
+<p>Note the last row has an address field 0xFF. This command/address combination is
+for a new command called reload calibration (starting in firmware 1.2.2). To run
+this command, the address filed needs to be set as 0xFF. The reload command will
+load the nearest frequency calibration coefficients from the nonvolatile memory
+and store them in the RAM. This is especially useful when user wants to read
+calibration coefficients taken at different frequencies (i.e. calibration over
+frequency). Say a new frequency is set, user will need to run reload calibration
+first, then perform CAL_READ (0x06) to load calibration coefficients at that
+specific frequency from FLASH to RAM. Otherwise, calibration coefficients
+successfully read at previous set frequency will be misread for the new
+frequency.</p>
 <p><strong>Open/Short/Load Compensation Command Mapping</strong></p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -2622,13 +2657,30 @@ Send char 11 of the password</p></td>
 </section>
 <section id="cal-read-0x06-comp-read-0x0c">
 <h3>CAL_READ (0x06) / COMP_READ (0x0C)<a class="headerlink" href="#cal-read-0x06-comp-read-0x0c" title="Link to this heading"></a></h3>
-<p>The CAL_READ command is used to read the calibration coefficients and data by setting specific calibration address in the command’s address field. COMP_READ functions similarity, which reads the compensation coefficients and data by setting the corresponding compensation address in the command’s address field. The calibration and compensation data is polled from result register. The distinction between coefficients and data is that coefficients refer to the 12 AC coefficients (calibration and compensation) and 2 DC coefficients (calibration only), while data refers to status (open/short/load calibration or compensation), frequency and temperature. For more details refer to Read Calibration/Compensation Command Mapping Table. Such address is access bitwise as follows:</p>
+<p>The CAL_READ command is used to read the calibration coefficients and data by
+setting specific calibration address in the command’s address field. COMP_READ
+functions similarity, which reads the compensation coefficients and data by
+setting the corresponding compensation address in the command’s address field.
+The calibration and compensation data is polled from result register. The
+distinction between coefficients and data is that coefficients refer to the 12
+AC coefficients (calibration and compensation) and 2 DC coefficients
+(calibration only), while data refers to status (open/short/load calibration or
+compensation), frequency and temperature. For more details refer to Read
+Calibration/Compensation Command Mapping Table. Such address is access bitwise
+as follows:</p>
 <ul class="simple">
 <li><p>The bit 3 to bit 0 of the address need to be set to the voltage and current gain for which the calibrations/compensation coefficients are to be read.</p></li>
 <li><p>The bit 8 to bit 4 of the address field are redundant.</p></li>
 <li><p>The bit 9 of the address can be used to toggle between two modes, <em>calibration/compensation data read mode</em> and <em>calibration/compensation coefficients read mode</em>. In case <em>calibration/compensation coefficients read mode</em> is used, the bit 14 is used to either read the MSB or the LSB of the 64-bit double valued calibration/compensation coefficient. The calibration/compensation coefficient is set by appropriately setting the bit 13 to bit 10. In case <em>calibration/compensation data read mode</em> is used, ignores bit 14 and can be used to read the calibration/compensation data in its respective formats.</p></li>
 </ul>
-<p>To send CAL_READ/COMP_READ commands, user can build a compound address using bitwise to the left operation to construct each sub-filed based on 2-bit voltage gain, 2-bit current gain, 1-bit mode type, 4-bit coefficient type, and (if relevant) 1-bit coefficients LSB/MSB. After writing the address and getting a successful status, the result register will contain the MSB/LSB of the calibration coefficient or the requested calibration data. The same applies to compensation read too. Refer to the Calibration Commands and Compensation Commands table for details about the address and data fields.</p>
+<p>To send CAL_READ/COMP_READ commands, user can build a compound address using
+bitwise to the left operation to construct each sub-filed based on 2-bit voltage
+gain, 2-bit current gain, 1-bit mode type, 4-bit coefficient type, and (if
+relevant) 1-bit coefficients LSB/MSB. After writing the address and getting a
+successful status, the result register will contain the MSB/LSB of the
+calibration coefficient or the requested calibration data. The same applies to
+compensation read too. Refer to the Calibration Commands and Compensation
+Commands table for details about the address and data fields.</p>
 <p><strong>Read Calibration Command Mapping</strong></p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -2747,8 +2799,15 @@ For compensation data:
 </tbody>
 </table>
 </div>
-<p>When reading the coefficients, there may be instances where they don’t exist for the user-specified frequency and voltage/current gain settings. When implementing the command in SPI, users need to provide a set of default coefficients if the CAL_READ or COMP_READ command triggers an error flag (flag_ERROR). The default values commonly used by the ADMX2001 are as follows.</p>
-<p>When reading calibration or compensation status (command 0x06 or 0x0C) by correctly accessing the address value 00001 for bit 13 to bit 9, following masks will return, each indicating a different type of calibration coefficients are received.</p>
+<p>When reading the coefficients, there may be instances where they don’t exist for
+the user-specified frequency and voltage/current gain settings. When
+implementing the command in SPI, users need to provide a set of default
+coefficients if the CAL_READ or COMP_READ command triggers an error flag
+(flag_ERROR). The default values commonly used by the ADMX2001 are as follows.</p>
+<p>When reading calibration or compensation status (command 0x06 or 0x0C) by
+correctly accessing the address value 00001 for bit 13 to bit 9, following masks
+will return, each indicating a different type of calibration coefficients are
+received.</p>
 <ul class="simple">
 <li><p>0x000F - indicates open calibration coefficients are received</p></li>
 <li><p>0x00F0 – indicates short calibration coefficients are received</p></li>
@@ -2908,7 +2967,12 @@ For compensation data:
 </section>
 <section id="resetcal-0x09">
 <h3>RESETCAL (0x09)<a class="headerlink" href="#resetcal-0x09" title="Link to this heading"></a></h3>
-<p>CAL_RESET command is used to reset the calibration coefficients. To clear calibration coefficients for a particular voltage and current gain setting, specify the first 4 address bits to the gain values. To clear all calibration coefficients, the address can be set to 0xFF. For running calibration reset commands the data field is redundant. Refer to the Reset Calibration Commands table for details about the address and data fields.</p>
+<p>CAL_RESET command is used to reset the calibration coefficients. To clear
+calibration coefficients for a particular voltage and current gain setting,
+specify the first 4 address bits to the gain values. To clear all calibration
+coefficients, the address can be set to 0xFF. For running calibration reset
+commands the data field is redundant. Refer to the Reset Calibration Commands
+table for details about the address and data fields.</p>
 <p><strong>Reset Calibration Command Mapping</strong></p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -2987,7 +3051,27 @@ Send char 11 of the password</p></td>
 </section>
 <section id="set-password-0x1c">
 <h3>SET_PASSWORD (0x1c)<a class="headerlink" href="#set-password-0x1c" title="Link to this heading"></a></h3>
-<p>SET_PASSWORD is used to set the commit password after performing a password check. The current password is written to the current password buffer as ASCII values of characters corresponding to the address locations 12-23. Upon completion, sending the address as 0xFE will have the current password buffer compared with the commit password. If it is a match, it enables setting the new password. The address locations 0-11 are reserved for writing the new password to the new password buffer. Each character of the new password is written in the same way as ASCII values of characters to the individual address. Sending 0xFF in the address field will set the new password if setting the password is enabled. Sending 0xFF will disable setting the password and clear the new password buffer if the password is set successfully. Example: the current commit password is “Analog123” (the default password); to change it to a new password “Admx2001pwd”, write the ASCII values of the characters to the current and new password buffers respectively, by sending the data along with the appropriate address (i.e. “Admx2001pwd” to address field 0 to 10, “Analog123” to address field 12 to 20). Once this is done, write 0xFE to verify the current commit password is correct. If this returns a success status, write 0xFF to set the new password. Refer to the Calibration Commands table for details about the address and data fields. Note max allowed password length is 12. If current password length is less than 12, it is ok to send the password that is less than 12 characters.</p>
+<p>SET_PASSWORD is used to set the commit password after performing a password
+check. The current password is written to the current password buffer as ASCII
+values of characters corresponding to the address locations 12-23. Upon
+completion, sending the address as 0xFE will have the current password buffer
+compared with the commit password. If it is a match, it enables setting the new
+password. The address locations 0-11 are reserved for writing the new password
+to the new password buffer. Each character of the new password is written in the
+same way as ASCII values of characters to the individual address. Sending 0xFF
+in the address field will set the new password if setting the password is
+enabled. Sending 0xFF will disable setting the password and clear the new
+password buffer if the password is set successfully. Example: the current commit
+password is “Analog123” (the default password); to change it to a new password
+“Admx2001pwd”, write the ASCII values of the characters to the current and new
+password buffers respectively, by sending the data along with the appropriate
+address (i.e. “Admx2001pwd” to address field 0 to 10, “Analog123” to address
+field 12 to 20). Once this is done, write 0xFE to verify the current commit
+password is correct. If this returns a success status, write 0xFF to set the new
+password. Refer to the Calibration Commands table for details about the address
+and data fields. Note max allowed password length is 12. If current password
+length is less than 12, it is ok to send the password that is less than 12
+characters.</p>
 <p><strong>Set Password Command Mapping</strong></p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -3068,7 +3152,14 @@ Any error will clear the new password bits</p></td>
 </section>
 <section id="cal-store-0x08">
 <h3>CAL_STORE (0x08)<a class="headerlink" href="#cal-store-0x08" title="Link to this heading"></a></h3>
-<p>CAL_STORE command is used to store the calibration addresses corresponding to the calibration coefficients. The first 4 bits of the address need to be set to the voltage and current gain for which the calibration coefficients are to be stored. The bit 14 is used to choose between the MSB and the LSB of the 64-bit double valued calibration coefficient to be stored. The calibration coefficient is set by appropriately setting the bit 13 to bit 10. Refer to the Store Calibration Coefficients Commands table for details about the address and data fields.</p>
+<p>CAL_STORE command is used to store the calibration addresses corresponding to
+the calibration coefficients. The first 4 bits of the address need to be set to
+the voltage and current gain for which the calibration coefficients are to be
+stored. The bit 14 is used to choose between the MSB and the LSB of the 64-bit
+double valued calibration coefficient to be stored. The calibration coefficient
+is set by appropriately setting the bit 13 to bit 10. Refer to the Store
+Calibration Coefficients Commands table for details about the address and data
+fields.</p>
 <p><strong>Store Calibration Coefficients Command Mapping</strong></p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -3167,7 +3258,15 @@ Any error will clear the new password bits</p></td>
 </section>
 <section id="comp-store-0x0d">
 <h3>COMP_STORE (0x0D)<a class="headerlink" href="#comp-store-0x0d" title="Link to this heading"></a></h3>
-<p>COMP_STORE command is used to store the compensation addresses corresponding to the compensation coefficients. The first 4 bits of the address should be set to 0, because the same compensation coefficients are used for all gain settings. The bit 14 is used to choose between the MSB or the LSB of the 64-bit double valued compensation coefficient to be stored. The compensation coefficient is set by appropriately setting the bit 13 to bit 10. Refer to the Store Compensation Commands table for details about the address and data fields Note: compensation feature is in development, the gain values in address bit 3 to bit 0 are defaulted to 0.</p>
+<p>COMP_STORE command is used to store the compensation addresses corresponding to
+the compensation coefficients. The first 4 bits of the address should be set to
+0, because the same compensation coefficients are used for all gain settings.
+The bit 14 is used to choose between the MSB or the LSB of the 64-bit double
+valued compensation coefficient to be stored. The compensation coefficient is
+set by appropriately setting the bit 13 to bit 10. Refer to the Store
+Compensation Commands table for details about the address and data fields Note:
+compensation feature is in development, the gain values in address bit 3 to bit
+0 are defaulted to 0.</p>
 <p><strong>Store Compensation Coefficients Command Mapping</strong></p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">

@@ -596,15 +596,29 @@ Content on this topic
             
   <section id="integrate-fir-filters-into-the-fmcomms2-hdl-design">
 <h1>Integrate FIR filters into the FMCOMMS2 HDL design<a class="headerlink" href="#integrate-fir-filters-into-the-fmcomms2-hdl-design" title="Link to this heading"></a></h1>
-<p>This wiki page describes how to add a custom processing module into the FMCOMMS2’s TX and/or RX data path. In this example, the custom modules are going to be some digital FIR filters, to decimate and interpolate the incoming and outcoming data stream.</p>
+<p>This wiki page describes how to add a custom processing module into the
+FMCOMMS2’s TX and/or RX data path. In this example, the custom modules are going
+to be some digital FIR filters, to decimate and interpolate the incoming and
+outcoming data stream.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>This example was build using <a class="icon link reference external" href="https://github.com/analogdevicesinc/hdl/releases/tag/eg_fmcomms2_fir_filter" target="_blank">fmcomms2_fir_filters</a> GitHub HDL branch, using Vivado 16.2 and 16.4 versions.</p>
 </div>
-<p>Let’s presume we want to transmit a sinewave with the AD9361 ADI Integrated RF transceiver, the sinewave frequency is below 6 MHz, for this, we can use a lower system data rate than the reference design. But, by simply lowering the data rate of the system we will increase the equalization error. To avoid this issue we can add some interpolation filters for transmitting. A similar problem is encountered on the ADC side when receiving a low-frequency signal. This can be solved with the use of decimation filters. In our example, these filters were already implemented in “util_fir_int” and “util_fir_dect” HDL IP core, which are wrappers for the FIR Compiler Xilinx IP. The wrappers are used to manage the data rates entering the filter and to facilitate the configuration of the filter parameters for a specific application (Tx/Rx).</p>
+<p>Let’s presume we want to transmit a sinewave with the AD9361 ADI Integrated RF
+transceiver, the sinewave frequency is below 6 MHz, for this, we can use a lower
+system data rate than the reference design. But, by simply lowering the data
+rate of the system we will increase the equalization error. To avoid this issue
+we can add some interpolation filters for transmitting. A similar problem is
+encountered on the ADC side when receiving a low-frequency signal. This can be
+solved with the use of decimation filters. In our example, these filters were
+already implemented in “util_fir_int” and “util_fir_dect” HDL IP core, which are
+wrappers for the FIR Compiler Xilinx IP. The wrappers are used to manage the
+data rates entering the filter and to facilitate the configuration of the filter
+parameters for a specific application (Tx/Rx).</p>
 <section id="choosing-filter-parameters-and-coefficients">
 <h2>Choosing filter parameters and coefficients<a class="headerlink" href="#choosing-filter-parameters-and-coefficients" title="Link to this heading"></a></h2>
-<p>The interpolation/decimation filters parameters and coefficients were calculated in MatLab.</p>
+<p>The interpolation/decimation filters parameters and coefficients were calculated
+in MatLab.</p>
 <p>Interpolation FIR filter:</p>
 <ul class="simple">
 <li><p>ast (normalize stopband attenuation) = 80.</p></li>
@@ -625,7 +639,7 @@ Content on this topic
 <span class="n">fvtool</span><span class="p">(</span><span class="n">hq</span><span class="p">);</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fir_interpolation.png"><img alt="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fir_interpolation.png" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fir_interpolation.png" style="width: 800px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fir_interpolation.png"><img alt="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fir_interpolation.png" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fir_interpolation.png" width="800" />
 </a>
 <p>Decimation FIR filter:</p>
 <ul class="simple">
@@ -649,19 +663,33 @@ Content on this topic
 <span class="n">fvtool</span><span class="p">(</span><span class="n">hf</span><span class="p">);</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fir_decimation.png"><img alt="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fir_decimation.png" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fir_decimation.png" style="width: 800px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fir_decimation.png"><img alt="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fir_decimation.png" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fir_decimation.png" width="800" />
 </a>
-<p>After running the above commands in MatLab you will obtain some “*.coe” files, that will be processed by the Xilinx FIR Compiler IP.</p>
+<p>After running the above commands in MatLab you will obtain some “*.coe” files,
+that will be processed by the Xilinx FIR Compiler IP.</p>
 </section>
 <section id="adding-the-filters-in-the-data-path">
 <h2>Adding the filters in the data path<a class="headerlink" href="#adding-the-filters-in-the-data-path" title="Link to this heading"></a></h2>
-<p>In the original fmcomms2 design the data comes from the DMA, goes to the util_upack core which transmits the individual channel data to a dac_fifo core, from which the ad9361 core reads the data and transmits it to the AD9361 CHIP. The util_upack core is used to split the 64-bit data containing 2 RF channels, each one having I/Q data. dac_fifo is used for clock domain crossing between the system clock and the AD9361 clock.</p>
-<p>The data processing is done at lower clock frequencies. This is the reason for placing the interpolation filters in front of the dac_fifo module. The required input data for the filter is I/Q data and the output is independent I and Q data. Because of this conditions, we still require the util_upack module, but we only need to split the DAC data into independent channel data, so we need one unpack module and two util_fir_int modules before the FIFO. The same approach is implemented on the receive path. For more information about the reference design visit:</p>
+<p>In the original fmcomms2 design the data comes from the DMA, goes to the
+util_upack core which transmits the individual channel data to a dac_fifo core,
+from which the ad9361 core reads the data and transmits it to the AD9361 CHIP.
+The util_upack core is used to split the 64-bit data containing 2 RF channels,
+each one having I/Q data. dac_fifo is used for clock domain crossing between the
+system clock and the AD9361 clock.</p>
+<p>The data processing is done at lower clock frequencies. This is the reason for
+placing the interpolation filters in front of the dac_fifo module. The required
+input data for the filter is I/Q data and the output is independent I and Q
+data. Because of this conditions, we still require the util_upack module, but we
+only need to split the DAC data into independent channel data, so we need one
+unpack module and two util_fir_int modules before the FIFO. The same approach is
+implemented on the receive path. For more information about the reference design
+visit:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="../../../eval/user-guides/ad-fmcomms2-ebz.html"><span class="doc">fmcomms2 user guide</span></a></p></li>
 <li><p><a class="reference internal" href="../hdl.html"><span class="doc">HDL user guide</span></a></p></li>
 </ul>
-<p>The modified reference design block diagram containing now Interpolation and Decimation filters is presented below.</p>
+<p>The modified reference design block diagram containing now Interpolation and
+Decimation filters is presented below.</p>
 <p><img alt="image1" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fmcomms2_fir_2.svg" /></p>
 <section id="understanding-fmcomms2-clock-routing">
 <h3>Understanding fmcomms2 clock routing<a class="headerlink" href="#understanding-fmcomms2-clock-routing" title="Link to this heading"></a></h3>
@@ -676,10 +704,14 @@ Content on this topic
 <span class="x">cd $project_dir</span>
 </pre></div>
 </div>
-<p>At this point fmcomms2 reference design’s TX data path has the following components:</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fmcomms2_vivado_ref_tx.png"><img alt="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fmcomms2_vivado_ref_tx.png" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fmcomms2_vivado_ref_tx.png" style="width: 800px;" />
+<p>At this point fmcomms2 reference design’s TX data path has the following
+components:</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fmcomms2_vivado_ref_tx.png"><img alt="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fmcomms2_vivado_ref_tx.png" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fmcomms2_vivado_ref_tx.png" width="800" />
 </a>
-<p>We need to remove the connections between util_upack and dac_fifo cores in order to add the FIR filter modules in the reference design. With the following commands, all the unwanted connections will be removed and new ones will be created.</p>
+<p>We need to remove the connections between util_upack and dac_fifo cores in order
+to add the FIR filter modules in the reference design. With the following
+commands, all the unwanted connections will be removed and new ones will be
+created.</p>
 <div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="x"># delete reference design connections</span>
 <span class="x">delete_bd_objs [get_bd_nets -of_objects \</span>
 <span class="x">   [find_bd_objs -relation connected_to [get_bd_pins util_ad9361_dac_upack/dac_valid_*]]]</span>
@@ -716,17 +748,25 @@ Content on this topic
 <div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="x">set decim_slice [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 decim_slice ]</span>
 </pre></div>
 </div>
-<p>The interpolation filter has a 32-bit (I+Q) input data bus. In the base design, the unpack module is configured to output 4 channels of 16-bit data. By changing the unpack number of channels to 2 and the width of the channels to 32-bit will not work because of how the independent I/Q channel data is arranged in the 64-bit data bus coming from the DMA see the figure below.</p>
+<p>The interpolation filter has a 32-bit (I+Q) input data bus. In the base design,
+the unpack module is configured to output 4 channels of 16-bit data. By changing
+the unpack number of channels to 2 and the width of the channels to 32-bit will
+not work because of how the independent I/Q channel data is arranged in the
+64-bit data bus coming from the DMA see the figure below.</p>
 <img alt="https://wiki.analog.com/_media/resources/fpga/docs/hdl/ad9361_dma_data.png" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/ad9361_dma_data.png" />
 <p>More information about the util_upack_core <a class="reference internal" href="../util_upack.html"><span class="doc">util_upack_core</span></a></p>
-<p>As a fact the data transmuted/received trough LVDS interface at DDR (Double Data Rate) is presented in the diagram below.</p>
+<p>As a fact the data transmuted/received trough LVDS interface at DDR (Double Data
+Rate) is presented in the diagram below.</p>
 <p><img alt="image2" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/ad9361_lvds_ddr_transmision.png" /></p>
 <p>At this point we have two options:</p>
 <ul class="simple">
 <li><p>delete the upack_core and split the data into some simple slices</p></li>
-<li><p>keep upack_core and the possibility to use half of the DMA bandwidth when one channel is not enabled.</p></li>
+<li><p>keep upack_core and the possibility to use half of the DMA bandwidth when one
+channel is not enabled.</p></li>
 </ul>
-<p>For this example, the upack_core was kept. The core’s proprieties remain unchanged, and a concatenate module was added, in order to merge the data coming out from the unpack module, then feed it into the interpolation filter.</p>
+<p>For this example, the upack_core was kept. The core’s proprieties remain
+unchanged, and a concatenate module was added, in order to merge the data coming
+out from the unpack module, then feed it into the interpolation filter.</p>
 <p>Adding concatenation modules.</p>
 <div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="x">set concat_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 concat_0 ]</span>
 <span class="x">set_property -dict [list CONFIG.IN1_WIDTH.VALUE_SRC USER CONFIG.IN0_WIDTH.VALUE_SRC USER] $concat_0</span>
@@ -737,7 +777,9 @@ Content on this topic
 <span class="x">set_property -dict [list CONFIG.IN0_WIDTH {16} CONFIG.IN1_WIDTH {16}] $concat_1</span>
 </pre></div>
 </div>
-<p>The same principle is applied to the RX path for the pack_core. The difference is that we need to split the data outputted by the decimation filters to obtain the independent I/Q channel data.</p>
+<p>The same principle is applied to the RX path for the pack_core. The difference
+is that we need to split the data outputted by the decimation filters to obtain
+the independent I/Q channel data.</p>
 <div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="x">set pack0_slice_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 pack0_slice_0 ]</span>
 <span class="x">set_property -dict [list CONFIG.DIN_FROM {15}] $pack0_slice_0</span>
 <span class="x">set_property -dict [list CONFIG.DIN_TO {0}] $pack0_slice_0</span>
@@ -796,13 +838,17 @@ Content on this topic
 <span class="n">ad_connect</span><span class="w"> </span><span class="n">fir_interpolator_1</span><span class="o">/</span><span class="n">interpolate</span><span class="w"> </span><span class="n">interp_slice</span><span class="o">/</span><span class="n">Dout</span>
 </pre></div>
 </div>
-<p>In this example, the TX data flow is controlled by the interpolation filter when interpolation is activated and by the axi_ad9361_core when interpolation is not active. In the reference design, the data flow is controlled by the ad9631_core.</p>
-<p>We must connect the unpack core’s dma_xfer_in port to VCC so that the unpack may transmit the valid and enable signals from one entity to another.</p>
+<p>In this example, the TX data flow is controlled by the interpolation filter when
+interpolation is activated and by the axi_ad9361_core when interpolation is not
+active. In the reference design, the data flow is controlled by the ad9631_core.</p>
+<p>We must connect the unpack core’s dma_xfer_in port to VCC so that the unpack may
+transmit the valid and enable signals from one entity to another.</p>
 <div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="x">ad_connect util_ad9361_dac_upack/dma_xfer_in VCC</span>
 </pre></div>
 </div>
-<p>At this moment the Interpolation filters are completely integrated into the design and the data path should look like the one in the figure below.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fmcomms2_vivado_interp_fir_tx.png"><img alt="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fmcomms2_vivado_interp_fir_tx.png" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fmcomms2_vivado_interp_fir_tx.png" style="width: 800px;" />
+<p>At this moment the Interpolation filters are completely integrated into the
+design and the data path should look like the one in the figure below.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fmcomms2_vivado_interp_fir_tx.png"><img alt="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fmcomms2_vivado_interp_fir_tx.png" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fmcomms2_vivado_interp_fir_tx.png" width="800" />
 </a>
 <p>Connecting the FIR decimation filters on the Rx side.</p>
 <div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="x"># fir decimator 0</span>
@@ -842,9 +888,14 @@ Content on this topic
 </section>
 <section id="generating-the-programing-files">
 <h3>Generating the programing files<a class="headerlink" href="#generating-the-programing-files" title="Link to this heading"></a></h3>
-<p>Depending if you did your changes in GUI, you can click on “Generate Bitstream”. After the bitstream generation is complete. Click on Files &gt; Export &gt; Export Hardware, select include bitstream option.</p>
-<p>If you did your changes directly in the Tcl files, you can use “make” to generate the bitstream and hdf file.</p>
-<p>Now depending if your system is based on a zynq architecture, you will have to generate the BOOT.BIN. If you have a MicroBlaze soft processor in your system booting the Linux will is simpler.</p>
+<p>Depending if you did your changes in GUI, you can click on “Generate Bitstream”.
+After the bitstream generation is complete. Click on Files &gt; Export &gt; Export
+Hardware, select include bitstream option.</p>
+<p>If you did your changes directly in the Tcl files, you can use “make” to
+generate the bitstream and hdf file.</p>
+<p>Now depending if your system is based on a zynq architecture, you will have to
+generate the BOOT.BIN. If you have a MicroBlaze soft processor in your system
+booting the Linux will is simpler.</p>
 <p>More info on:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="../build.html"><span class="doc">Building the ADI HDL</span></a></p></li>
@@ -853,14 +904,28 @@ Content on this topic
 </section>
 <section id="base-system-functionality">
 <h3>Base system functionality<a class="headerlink" href="#base-system-functionality" title="Link to this heading"></a></h3>
-<p>For simply testing the fmcomms2 with filter design we loop-back the data from TX to RX for each channel with a SMA to SMA cable.</p>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fmcomms2_txrx_loopback.jpg"><img alt="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fmcomms2_txrx_loopback.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fmcomms2_txrx_loopback.jpg" style="width: 500px;" />
+<p>For simply testing the fmcomms2 with filter design we loop-back the data from TX
+to RX for each channel with a SMA to SMA cable.</p>
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fmcomms2_txrx_loopback.jpg"><img alt="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fmcomms2_txrx_loopback.jpg" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fmcomms2_txrx_loopback.jpg" width="500" />
 </a>
-<p>When first booting up the design none of the filters will be active. For the beginning make sure you have the same LO frequency for RX and TX, as in the picture below. Configure the Transmit/DDS mode to DAC Buffer Output, and chose one of the .mat files there and press Load this will send data in the .mat file via DMA. This option was chosen because the DDS data does not pass through the FIR interpolation filters. On the decimation side, data will always pass through decimation filters.</p>
-<p>Below you can see the setting for fmcomms2 and the data plot in FFT and Time Domain for the “sinewave_0.6.mat”. As a functionality example, only one of the 2 channels will be enabled.</p>
+<p>When first booting up the design none of the filters will be active. For the
+beginning make sure you have the same LO frequency for RX and TX, as in the
+picture below. Configure the Transmit/DDS mode to DAC Buffer Output, and chose
+one of the .mat files there and press Load this will send data in the .mat file
+via DMA. This option was chosen because the DDS data does not pass through the
+FIR interpolation filters. On the decimation side, data will always pass through
+decimation filters.</p>
+<p>Below you can see the setting for fmcomms2 and the data plot in FFT and Time
+Domain for the “sinewave_0.6.mat”. As a functionality example, only one of the 2
+channels will be enabled.</p>
 <p>FFT Domain <img alt="image3" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fmcomms2_fir_setup_activate_dma_data_fft.png" /> Time Domain</p>
 <p><img alt="image4" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fmcomms2_fir_setup_activate_dma_data_waveform.png" /></p>
-<p>To better understand what is happening with the data inside the FPGA, 3 ILA (integrated logic analyzer) modules were added to the HDL design. The first ILA was connected to the control signals between the ad9361_core and the dac_fifo. Second ILA is monitoring the interpolation filters and the third ILA the decimation filters. As previously discussed above none of the filters are active and only one of the channels is enabled at this point.</p>
+<p>To better understand what is happening with the data inside the FPGA, 3 ILA
+(integrated logic analyzer) modules were added to the HDL design. The first ILA
+was connected to the control signals between the ad9361_core and the dac_fifo.
+Second ILA is monitoring the interpolation filters and the third ILA the
+decimation filters. As previously discussed above none of the filters are active
+and only one of the channels is enabled at this point.</p>
 <p>ad9361_core control signals</p>
 <p><img alt="image5" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fir_inactive_fifo_ch1_active.png" /></p>
 <p>Interpolation filters</p>
@@ -879,13 +944,16 @@ Content on this topic
 <ul class="simple">
 <li><p>At section Device selection chose “cf-ad9361-dds-core-lpc”</p></li>
 <li><p>In the Register Map settings, select the source to be AXI_CORE</p></li>
-<li><p>Read the 0xBC address then write 0x1 value at it, this will activate the filter.</p></li>
+<li><p>Read the 0xBC address then write 0x1 value at it, this will activate the
+filter.</p></li>
 </ul>
 <p>Activating TX interpolation filters</p>
 <p><img alt="image8" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/activate_tx_interpolation_filters_write.png" /></p>
-<p>After activating the interpolation you can see in FFT domain a 1/8 smaller fundamental frequency than before (filter interpolation factor is 8)</p>
+<p>After activating the interpolation you can see in FFT domain a 1/8 smaller
+fundamental frequency than before (filter interpolation factor is 8)</p>
 <p><img alt="image9" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fmcomms2_fir_tx_active_fft.png" /></p>
-<p>The data captured by the ILA connected to the interpolation filters shows the smaller frequency sine wave and the 1/8 valid/clock signals.</p>
+<p>The data captured by the ILA connected to the interpolation filters shows the
+smaller frequency sine wave and the 1/8 valid/clock signals.</p>
 <p><img alt="image10" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fir_active_interpolators_all_ch_active.png" /></p>
 </section>
 <section id="decimation-filters">
@@ -893,7 +961,8 @@ Content on this topic
 <p>At this point again all filters are disabled.</p>
 <p>Similar to interpolation, to activate the decimation we must go to the Debug, but this time select the “cf-ad9361-lpc”. Select the “Register Map Settings” source to be “AXI_CORE” and at the same address 0xBC <a class="reference internal" href="../axi_ad9361.html"><span class="doc">(axi_ad9361_core)</span></a> this time being the ADC side GPIO, write 0x1, as in the example below.</p>
 <img alt="https://wiki.analog.com/_media/resources/fpga/docs/hdl/activate_rx_interpolation_filters_write.png" class="align-center" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/activate_rx_interpolation_filters_write.png" />
-<p>You will see in the FFT domain a frequency 8 times bigger than the one when the filters were inactive (decimation factor is 8).</p>
+<p>You will see in the FFT domain a frequency 8 times bigger than the one when the
+filters were inactive (decimation factor is 8).</p>
 <p><img alt="image11" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fmcomms2_fir_rx_active_fft.png" /></p>
 <p>The signals captured by the ILA:</p>
 <p><img alt="image12" src="https://wiki.analog.com/_media/resources/fpga/docs/hdl/fir_inactive_decimators_ch1_active_int_activ.png" /></p>

@@ -590,9 +590,12 @@ Content on this topic
   <section id="configuring-the-framework">
 <h1>Configuring the Framework<a class="headerlink" href="#configuring-the-framework" title="Link to this heading"></a></h1>
 <img alt="youtube&gt;W7md5m9Zq_o" src="https://wiki.analog.com/_media/resources/tools-software/sharc-audio-module/baremetal/youtube&gt;w7md5m9zq_o" />
-<p>The framework options are configured via a single .h file that is shared between the three projects:</p>
+<p>The framework options are configured via a single .h file that is shared between
+the three projects:</p>
 <p><code class="docutils literal notranslate"><span class="pre">src/common/audio_system_config.h</span></code></p>
-<p>This file is broken up into a number of short sections which describe how the framework will operate. Here are some examples of the types of things you can configure:</p>
+<p>This file is broken up into a number of short sections which describe how the
+framework will operate. Here are some examples of the types of things you can
+configure:</p>
 <ul class="simple">
 <li><p>Presence of either the Audio Project or automotive Fin boards</p></li>
 <li><p>The audio block size</p></li>
@@ -605,7 +608,8 @@ Content on this topic
 <li><p>The A2B network topology (if SHARC Audio Module is an A2B master)</p></li>
 </ul>
 </li>
-<li><p>Whether or not to use the Faust audio engine for synthesis and audio effects (more on this below)</p></li>
+<li><p>Whether or not to use the Faust audio engine for synthesis and audio effects
+(more on this below)</p></li>
 </ul>
 <p>The <code class="docutils literal notranslate"><span class="pre">audio_system_config.h</span></code> file includes several checks within the pre-processor logic at the bottom of the file to ensure that the combination of configurations is valid. If an invalid configuration is detected, the compiler will generate a pre-processor error when compiling this file.</p>
 <div class="admonition important">
@@ -614,7 +618,10 @@ Content on this topic
 </div>
 <section id="selecting-a-daughter-board-aka-fin">
 <h2>1. Selecting a daughter board (aka “Fin”)<a class="headerlink" href="#selecting-a-daughter-board-aka-fin" title="Link to this heading"></a></h2>
-<p>If either the Audio Project Fin or the Automotive Fin are connected to the SHARC Audio Module, set the corresponding line below to TRUE. Only one Fin can be attached at a time so if both are set to TRUE, the compiler will generate an error.</p>
+<p>If either the Audio Project Fin or the Automotive Fin are connected to the SHARC
+Audio Module, set the corresponding line below to TRUE. Only one Fin can be
+attached at a time so if both are set to TRUE, the compiler will generate an
+error.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//****************</span>
 <span class="c1">// 1. Select which (if any) daughter boards are connected to the SHARC Audio Module</span>
 <span class="c1">//****************</span>
@@ -653,9 +660,13 @@ Content on this topic
 <p>The next section of the <code class="docutils literal notranslate"><span class="pre">audio_system_config.h</span></code> file deals with the audio processing configuration. <code class="docutils literal notranslate"><span class="pre">AUDIO_BLOCK_SIZE</span></code> is the number of audio samples per block of audio. In other words, the framework will buffer this many samples before generating an interrupt and calling the audio processing callback function. The <code class="docutils literal notranslate"><span class="pre">AUDIO_BLOCK_SIZE</span></code> is the number of samples per audio channel.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">AUDIO_SAMPLE_RATE</span></code> is the desired system sample rate in Hz. The audio sample rate is typically determined by a single external audio component in the system, such as an audio codec or an A2B controller. This value will be used to configure the external audio component which is responsible for providing the master I2S/TDM audio signals. In the case of the SHARC audio module, the ADAU1761 serves as the timing master unless the SHARC audio module is configured to operate as an A2B slave in which case the A2B controller (AD2425W) provides the master I2S/TDM audio signals.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">USE_BOTH_CORES_TO_PROCESS_AUDIO</span></code> variable determines if one SHARC core or both SHARC cores will be used to process audio.</p>
-<p>If this value is set to FALSE, audio will not be sent to core 2 after it has been processed by core 1. When the framework is configured for single-core processing, the processing flow works as such:</p>
+<p>If this value is set to FALSE, audio will not be sent to core 2 after it has
+been processed by core 1. When the framework is configured for single-core
+processing, the processing flow works as such:</p>
 <p><code class="docutils literal notranslate"><span class="pre">ADC</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">SHARC</span> <span class="pre">Core</span> <span class="pre">1</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">DACs</span></code></p>
-<p>If this value is set to TRUE, audio will be sent to core 2 after it has been processed by core 1. When the framework is configure for dual-core processing, SHARC Core 1 still manages the flow of audio data to and from the ADCs and DACs.</p>
+<p>If this value is set to TRUE, audio will be sent to core 2 after it has been
+processed by core 1. When the framework is configure for dual-core processing,
+SHARC Core 1 still manages the flow of audio data to and from the ADCs and DACs.</p>
 <p><code class="docutils literal notranslate"><span class="pre">ADC</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">SHARC</span> <span class="pre">Core</span> <span class="pre">1</span> <span class="pre">[processing]</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">SHARC</span> <span class="pre">Core</span> <span class="pre">2</span> <span class="pre">[processing]</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">SHARC</span> <span class="pre">Core</span> <span class="pre">1</span> <span class="pre">[final</span> <span class="pre">data</span> <span class="pre">transfer]</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">DACs</span></code></p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//****************</span>
 <span class="c1">// 2. Set audio processing parameters</span>
@@ -674,7 +685,8 @@ Content on this topic
 </section>
 <section id="selecting-an-audio-processing-framework">
 <h2>3. Selecting an Audio Processing Framework<a class="headerlink" href="#selecting-an-audio-processing-framework" title="Link to this heading"></a></h2>
-<p>The audio frameworks provide platform-specific code for different hardware configurations.</p>
+<p>The audio frameworks provide platform-specific code for different hardware
+configurations.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">FRAMEWORK_8CH_SINGLE_OR_DUAL_CORE_A2B</span></code> framework provides support for the audio components (audio codec and A2B) on the SHARC Audio Module and the Audio Project Fin.</p>
 <ul class="simple">
 <li><p>8 channels to/from the ADAU1761 audio codec (while the ADAU1761 contains a stereo codec, the SigmaDSP inside the ADAU1761 can be configured to provide additional audio processing - more information on this can be found in the Enhanced Driver section below)</p></li>
@@ -689,7 +701,9 @@ Content on this topic
 <li><p>16 channel audio bus between SHARC core 1 and SHARC core 2.</p></li>
 </ul>
 <p>The <code class="docutils literal notranslate"><span class="pre">FRAMEWORK_BYPASS_SC589_A2B</span></code> framework directly connects the ADAU1761 audio codec to the AD2425W controller and is used to bypass the ADSP-SC589 processor all together. This configuration allows the SHARC Audio Module to behave as a simple CODEC slave node on an A2B bus where the ADAU1761 codec is directly connected to the AD2425W A2B controller. The flexible signal routing unit (SRU) on the ADSP-SC589 makes this possible as it enables us to dynamically route/re-route the I2S/TDM audio signals on the SHARC audio module.</p>
-<p>If you’d like to use this framework on your own hardware configurations, you can create your own additional pre-processor variables here and select between the target hardware platform by simply setting one of these values to TRUE.</p>
+<p>If you’d like to use this framework on your own hardware configurations, you can
+create your own additional pre-processor variables here and select between the
+target hardware platform by simply setting one of these values to TRUE.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//****************</span>
 <span class="c1">// 3. Select an audio processing framework to use (only select one)</span>
 <span class="c1">//****************</span>
@@ -708,7 +722,10 @@ Content on this topic
 <section id="enabling-and-configuring-a2b-support">
 <h2>4. Enabling and Configuring A2B Support<a class="headerlink" href="#enabling-and-configuring-a2b-support" title="Link to this heading"></a></h2>
 <p>If you’d like the SHARC Audio Module to participate in an A2B bus, either as a master node or a slave node, set the <code class="docutils literal notranslate"><span class="pre">ENABLE_A2B</span></code> variable to <code class="docutils literal notranslate"><span class="pre">TRUE</span></code>. If the SHARC Audio Module will be the A2B bus master (typical), ensure <code class="docutils literal notranslate"><span class="pre">A2B_ROLE_MASTER</span></code> is set to <code class="docutils literal notranslate"><span class="pre">TRUE</span></code>. If the SHARC Audio Module will act as a slave node, set this variable to <code class="docutils literal notranslate"><span class="pre">FALSE</span></code>.</p>
-<p>If the SHARC Audio Module is the A2B bus master, there are a number of fixed network topologies that can be used. These network topologies are essentially A2B initialization sequences that will initialize the various I2C components on the slave nodes on the A2B bus. Only one A2B topology can be selected at a time.</p>
+<p>If the SHARC Audio Module is the A2B bus master, there are a number of fixed
+network topologies that can be used. These network topologies are essentially
+A2B initialization sequences that will initialize the various I2C components on
+the slave nodes on the A2B bus. Only one A2B topology can be selected at a time.</p>
 <p>If you’d like to create your own A2B topologies, see the <a class="reference internal" href="driver-creation-tutorial.html"><span class="doc">tutorial</span></a> on this topic.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//****************</span>
 <span class="c1">// 4. Select whether or not to enable A2B in the framework</span>
@@ -734,8 +751,6 @@ Content on this topic
 
 <span class="w">        </span><span class="c1">// Add your own pre-processor variables for custom A2B topologies here</span>
 
-
-
 <span class="w">    </span><span class="cp">#endif  </span><span class="c1">// A2B_ROLE_MASTER</span>
 
 <span class="cp">#endif  </span><span class="c1">// ENABLE_A2B</span>
@@ -744,8 +759,15 @@ Content on this topic
 </section>
 <section id="enabling-the-enhanced-adau1761-driver">
 <h2>5. Enabling the Enhanced ADAU1761 Driver<a class="headerlink" href="#enabling-the-enhanced-adau1761-driver" title="Link to this heading"></a></h2>
-<p>The ADAU1761 contains a stereo codec but it also contains a SigmaDSP processor, a light weight DSP engine. The ADSP-SC589 connects to the ADAU1761 via an 8 channel I2S/TDM interface. The first two of the eight TDM channels are used to move raw audio between the stereo ADCs and DACs on the ADAU1761. The remaining 6 channels are normally unused. The “enhanced” driver provides additional pre-processing and post-processing on the SigmaDSP core to using the remaining 6 channels.</p>
-<p>The functionality implemented in the SigmaDSP is described in the comments below.</p>
+<p>The ADAU1761 contains a stereo codec but it also contains a SigmaDSP processor,
+a light weight DSP engine. The ADSP-SC589 connects to the ADAU1761 via an 8
+channel I2S/TDM interface. The first two of the eight TDM channels are used to
+move raw audio between the stereo ADCs and DACs on the ADAU1761. The remaining 6
+channels are normally unused. The “enhanced” driver provides additional
+pre-processing and post-processing on the SigmaDSP core to using the remaining 6
+channels.</p>
+<p>The functionality implemented in the SigmaDSP is described in the comments
+below.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//****************</span>
 <span class="c1">// 5. Use enhanced ADAU1761 driver</span>
 <span class="c1">//****************</span>

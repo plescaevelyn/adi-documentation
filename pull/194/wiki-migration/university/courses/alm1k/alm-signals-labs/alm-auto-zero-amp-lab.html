@@ -603,7 +603,10 @@ Content on this topic
 <h1>Activity: Auto-Zeroing Amplifier<a class="headerlink" href="#activity-auto-zeroing-amplifier" title="Link to this heading"></a></h1>
 <section id="objective">
 <h2>Objective:<a class="headerlink" href="#objective" title="Link to this heading"></a></h2>
-<p>The objective of this lab activity is to explore switching or chopping techniques to auto-zero DC offsets from an amplifier stage. When the lowest offset and drift performance is a requirement, auto-zeroing (offset-cancelled) amplifiers may be the best solution.</p>
+<p>The objective of this lab activity is to explore switching or chopping
+techniques to auto-zero DC offsets from an amplifier stage. When the lowest
+offset and drift performance is a requirement, auto-zeroing (offset-cancelled)
+amplifiers may be the best solution.</p>
 </section>
 <section id="notes">
 <h2>Notes:<a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
@@ -611,27 +614,51 @@ Content on this topic
 </section>
 <section id="background">
 <h2>Background:<a class="headerlink" href="#background" title="Link to this heading"></a></h2>
-<p>For the lowest offset and drift performance, auto-zeroing (offset-cancelled) amplifiers may be the only solution. The best bipolar amplifiers offer offset voltages of 25 μV and 0.1 μV/ºC drift. Offset voltages less than 5 μV with practically no measurable offset drift are obtainable by using autp-zeroing, albeit with some penalties.</p>
+<p>For the lowest offset and drift performance, auto-zeroing (offset-cancelled)
+amplifiers may be the only solution. The best bipolar amplifiers offer offset
+voltages of 25 μV and 0.1 μV/ºC drift. Offset voltages less than 5 μV with
+practically no measurable offset drift are obtainable by using autp-zeroing,
+albeit with some penalties.</p>
 <p>A basic auto-zero amplifier circuit is shown in Figure 1. When the switches are in the “Z” (auto-zero) position, capacitors C2 and C3 are charged to the amplifier input and output offset voltage, respectively. When the switches are in the “S” (sample) position, V<sub>IN</sub> is connected to V<sub>OUT</sub> through the path comprised of R1, R2, C2, the amplifier stage, C3, and R3. The switching frequency is usually between a low of a few hundred Hz and a high of several kHz, and it should be noted that because this is a sampling system, the input frequency must be much less than one-half the switching (sampling) frequency in order to prevent errors due to aliasing.</p>
-<p>The circuit spends 50% of its time capturing its own offset-and-drift error, and 50% of its time subtracting the captured error from the amplified input. The output is a square wave that’s only related to the input half the time. There are three main ways to deal with the square-wave output:</p>
+<p>The circuit spends 50% of its time capturing its own offset-and-drift error, and
+50% of its time subtracting the captured error from the amplified input. The
+output is a square wave that’s only related to the input half the time. There
+are three main ways to deal with the square-wave output:</p>
 <ul class="simple">
 <li><p>You can filter it, but that loses the advantage of being able to run the amplifier at high speed i.e. close to the switching frequency. The R1-C1 combination serves as an antialiasing filter. It is also assumed that after a steady state condition is reached, there is only a minimal amount of charge transferred during the switching cycles. The output capacitor, C4, and the load, RL, must be chosen such that there is minimal V<sub>OUT</sub> droop during the auto-zero half of the cycle.</p></li>
 <li><p>You can add a track-and-hold circuit after the amplifier to capture output during the sample half of the cycle, and skip over the parts that drop to the common mode level (0V). However, the output is still only tracks the input half the time and you might introduce more offset and drift errors from the T/H stage.</p></li>
-<li><p>You can use two offset-cancelled amps running out of phase with each other. When one is zeroing out its own error, the other is producing a valid output. That is called a “ping-pong amplifier”, and provides a good mixture of offset error cancellation and less filtering on the output to remove switching frequency content. However, it is also more complex in that two complete amplifiers and switching network are needed.</p></li>
+<li><p>You can use two offset-cancelled amps running out of phase with each other.
+When one is zeroing out its own error, the other is producing a valid output.
+That is called a “ping-pong amplifier”, and provides a good mixture of offset
+error cancellation and less filtering on the output to remove switching
+frequency content. However, it is also more complex in that two complete
+amplifiers and switching network are needed.</p></li>
 </ul>
-<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/auto-zero-amplifier_fig1.png"><img alt="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/auto-zero-amplifier_fig1.png" class="align-center" src="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/auto-zero-amplifier_fig1.png" style="width: 600px;" />
+<a class="reference internal image-reference" href="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/auto-zero-amplifier_fig1.png"><img alt="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/auto-zero-amplifier_fig1.png" class="align-center" src="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/auto-zero-amplifier_fig1.png" width="600" />
 </a>
 <div class="centeralign docutils container">
 <p>Figure 1: Classic Chopper Amplifier</p>
 </div>
 <p>In this lab activity, a simple amplifier stage and a LTC1043 analog switch are used as elements of a auto-zero amplifier. A very simple amplifier stage with a large input to output offset that can be used to demonstrate the auto-zero concept is the <a class="reference internal" href="../alm-lab-11.html"><span class="doc">NPN emitter follower</span></a>.</p>
-<p>Referring to the simulation schematic shown in figure 2, the various functions of this circuit can be identified. The NPN emitter follower consisting of Q1, R1 and R2 is used as an AC coupled amplifier stage by capacitors C1 and C2. The LTC1043 analog switch contains an oscillator that drives the single pole double throw (SPDT) switches. Switches at pins S1A and S2A function as a SPDT switch, alternately connecting the AC coupled input (at C1) of the amplifier stage to the input (source Vin) and a common mode level (+2.5V from source V3) through pin Ca+.</p>
-<p>Switches pins S3A and S4A perform the same function alternately connecting the AC coupled output (at C2) of the amplifier stage to the output low pass filter (C3 and R3) and a common mode level (+2.5V) through pin Ca-.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/auto-zero-amplifier_fig2.png"><img alt="image1" src="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/auto-zero-amplifier_fig2.png" style="width: 600px;" /></a></p>
+<p>Referring to the simulation schematic shown in figure 2, the various functions
+of this circuit can be identified. The NPN emitter follower consisting of Q1, R1
+and R2 is used as an AC coupled amplifier stage by capacitors C1 and C2. The
+LTC1043 analog switch contains an oscillator that drives the single pole double
+throw (SPDT) switches. Switches at pins S1A and S2A function as a SPDT switch,
+alternately connecting the AC coupled input (at C1) of the amplifier stage to
+the input (source Vin) and a common mode level (+2.5V from source V3) through
+pin Ca+.</p>
+<p>Switches pins S3A and S4A perform the same function alternately connecting the
+AC coupled output (at C2) of the amplifier stage to the output low pass filter
+(C3 and R3) and a common mode level (+2.5V) through pin Ca-.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/auto-zero-amplifier_fig2.png"><img alt="image1" src="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/auto-zero-amplifier_fig2.png" width="600" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 2, Auto Zero amplifier simulation schematic</p>
 </div>
-<p>In operation, the input signal is modulated (shifted up to the switching frequency) by the input switches, amplified by the ac coupled amplifier stage, and then demodulated back down to DC by the output switches. The 20 kΩ, 2nF low pass filter minimizes the high frequency ripple in the output.</p>
+<p>In operation, the input signal is modulated (shifted up to the switching
+frequency) by the input switches, amplified by the ac coupled amplifier stage,
+and then demodulated back down to DC by the output switches. The 20 kΩ, 2nF low
+pass filter minimizes the high frequency ripple in the output.</p>
 <section id="for-further-study">
 <h3>For Further Study:<a class="headerlink" href="#for-further-study" title="Link to this heading"></a></h3>
 <p>ADI Mini Tutorial on <a class="icon link reference external" href="http://www.analog.com/static/imported-files/tutorials/MT-055.pdf" target="_blank">Chopper Amplifiers</a></p>
@@ -645,35 +672,70 @@ Content on this topic
 </section>
 <section id="directions">
 <h3>Directions:<a class="headerlink" href="#directions" title="Link to this heading"></a></h3>
-<p>Connect the components on your breadboard as indicated in figure 3 to build one auto-zero amplifier section. The listed resistor and capacitor values should provide working results but you may like to experiment with the values of certain component to see how changes can affect your results.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/auto-zero-amplifier_fig3.png"><img alt="image2" src="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/auto-zero-amplifier_fig3.png" style="width: 600px;" /></a></p>
+<p>Connect the components on your breadboard as indicated in figure 3 to build one
+auto-zero amplifier section. The listed resistor and capacitor values should
+provide working results but you may like to experiment with the values of
+certain component to see how changes can affect your results.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/auto-zero-amplifier_fig3.png"><img alt="image2" src="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/auto-zero-amplifier_fig3.png" width="600" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 3, NPN follower Auto-Zero Amplifier</p>
 </div>
-<p>The switching frequency is set by changing the frequency of the internal oscillator in the LTC1043. Capacitor C4 will lower the frequency. A range of frequencies should be tested, connecting one 100 pF capacitor as C4 or two 100 pF capacitors in series and parallel will produce a range of frequencies. The highest value should lower it to around 20 KHz.</p>
+<p>The switching frequency is set by changing the frequency of the internal
+oscillator in the LTC1043. Capacitor C4 will lower the frequency. A range of
+frequencies should be tested, connecting one 100 pF capacitor as C4 or two 100
+pF capacitors in series and parallel will produce a range of frequencies. The
+highest value should lower it to around 20 KHz.</p>
 <section id="auto-zero-amplifier-dc-transfer-characteristic">
 <h4>Auto-zero Amplifier DC Transfer Characteristic<a class="headerlink" href="#auto-zero-amplifier-dc-transfer-characteristic" title="Link to this heading"></a></h4>
-<p>Measure the transfer characteristic (DC gain) of the auto-zero amplifier by applying DC voltages between +1.5 V and +3.5 V to the input and measuring the output. This can be done manually using generator AWG1 with a DC wave shape and setting the Max value. Be sure to take sufficient data to determine the linear and nonlinear ranges of the transfer characteristic. To reduce data taking time, try using the waveform generator to provide a very low frequency (&lt;&lt; 100 Hz) triangle signal. For example, a 1.5V Min and 3.5V Max setting and 10 Hz frequency.</p>
+<p>Measure the transfer characteristic (DC gain) of the auto-zero amplifier by
+applying DC voltages between +1.5 V and +3.5 V to the input and measuring the
+output. This can be done manually using generator AWG1 with a DC wave shape and
+setting the Max value. Be sure to take sufficient data to determine the linear
+and nonlinear ranges of the transfer characteristic. To reduce data taking time,
+try using the waveform generator to provide a very low frequency (&lt;&lt; 100 Hz)
+triangle signal. For example, a 1.5V Min and 3.5V Max setting and 10 Hz
+frequency.</p>
 </section>
 <section id="chopper-amplifier-frequency-response">
 <h4>Chopper Amplifier Frequency Response<a class="headerlink" href="#chopper-amplifier-frequency-response" title="Link to this heading"></a></h4>
-<p>Apply a sinusoidal signal of 1.5 to 3.5 volt swing to the input and measure the gain of the entire system from 100 to 20 KHz. Use the Bode Plotting tool to plot gain and phase vs. frequency for the entire system, paying special attention to the 1000 Hz to 20 KHz range and the region near the frequency of the switching clock.</p>
+<p>Apply a sinusoidal signal of 1.5 to 3.5 volt swing to the input and measure the
+gain of the entire system from 100 to 20 KHz. Use the Bode Plotting tool to plot
+gain and phase vs. frequency for the entire system, paying special attention to
+the 1000 Hz to 20 KHz range and the region near the frequency of the switching
+clock.</p>
 </section>
 </section>
 </section>
 <section id="ping-pong-a-second-auto-zero-amplifier">
 <h2>Ping-Pong a second auto-zero amplifier<a class="headerlink" href="#ping-pong-a-second-auto-zero-amplifier" title="Link to this heading"></a></h2>
-<p>As was pointed out in the background section, two offset-cancelled amps running out of phase with each other can be used to reduce the filtering requirements at the output. When one is capturing its own error, the other is producing valid output. That’s called a ‘ping-pong amplifier’, and provides the best mix of offset cancellation and full-speed operation.</p>
-<p>Build the second auto-zero amplifier as shown in figure 4 on your breadboard. Note that the amplifier stage used in this case is a PNP emitter follower. We do this to help reinforce the idea that any offset in the amplifier is zeroed out no matter if it is positive or negative.</p>
-<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/auto-zero-amplifier_fig4.png"><img alt="image3" src="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/auto-zero-amplifier_fig4.png" style="width: 600px;" /></a></p>
+<p>As was pointed out in the background section, two offset-cancelled amps running
+out of phase with each other can be used to reduce the filtering requirements at
+the output. When one is capturing its own error, the other is producing valid
+output. That’s called a ‘ping-pong amplifier’, and provides the best mix of
+offset cancellation and full-speed operation.</p>
+<p>Build the second auto-zero amplifier as shown in figure 4 on your breadboard.
+Note that the amplifier stage used in this case is a PNP emitter follower. We do
+this to help reinforce the idea that any offset in the amplifier is zeroed out
+no matter if it is positive or negative.</p>
+<p><a class="reference internal" href="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/auto-zero-amplifier_fig4.png"><img alt="image3" src="https://wiki.analog.com/_media/university/courses/alm1k/alm-signals-labs/auto-zero-amplifier_fig4.png" width="600" /></a></p>
 <div class="centeralign docutils container">
 <p>Figure 4, PNP follower Auto-Zero Amplifier</p>
 </div>
-<p>Test the second amplifier DC and AC response as you did the first one. Once you are convinced that it is working properly, you can connect the two inputs together, Pins 5 and 7 and the two outputs together, Pins 13 and 15. Now test the combined ping-pong amplifier DC and AC response with and without the output low pass filter.</p>
+<p>Test the second amplifier DC and AC response as you did the first one. Once you
+are convinced that it is working properly, you can connect the two inputs
+together, Pins 5 and 7 and the two outputs together, Pins 13 and 15. Now test
+the combined ping-pong amplifier DC and AC response with and without the output
+low pass filter.</p>
 <section id="auto-zero-amplifier-results">
 <h3>Auto Zero Amplifier Results<a class="headerlink" href="#auto-zero-amplifier-results" title="Link to this heading"></a></h3>
-<p>Report the waveforms taken for the AC Amplifier in response to DC inputs. Discuss and explain the salient features of this response.</p>
-<p>Plot or present the DC transfer characteristic of the offset-cancelled amplifier. Discuss and explain the salient features of this characteristic. Was the output of the offset-cancelled amplifier what you expected? Include a Bode plot (gain/phase versus frequency) of the offset-cancelled Amplifier from the data taken above. Comment on the bandwidth of the amplifier and the gain near the switching frequency.</p>
+<p>Report the waveforms taken for the AC Amplifier in response to DC inputs.
+Discuss and explain the salient features of this response.</p>
+<p>Plot or present the DC transfer characteristic of the offset-cancelled
+amplifier. Discuss and explain the salient features of this characteristic. Was
+the output of the offset-cancelled amplifier what you expected? Include a Bode
+plot (gain/phase versus frequency) of the offset-cancelled Amplifier from the
+data taken above. Comment on the bandwidth of the amplifier and the gain near
+the switching frequency.</p>
 <p><strong>For Further Reading:</strong></p>
 <p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/data-sheets/1043fa.pdf" target="_blank">LTC1043 datasheet</a> <a class="icon link reference external" href="http://www.analog.com/media/en/training-seminars/tutorials/MT-088.pdf" target="_blank">MT-088: Analog Switches and Multiplexer Basics</a> <a class="icon adi reference external" href="https://www.analog.com/media/en/analog-dialogue/volume-34/number-1/articles/demystifying-auto-zero-amplifiers-part-1.pdf" target="_blank">Demystifying Auto-Zero Amplifiers—Part 1</a> <a class="icon adi reference external" href="https://www.analog.com/media/en/analog-dialogue/volume-34/number-1/articles/demystifying-auto-zero-amplifiers-part-2.pdf" target="_blank">Demystifying Auto-Zero Amplifiers—Part 2</a></p>
 <p><strong>Return to Lab Activity</strong> <a class="reference internal" href="../alm-signals-labs-list.html"><span class="doc">Table of Contents</span></a><strong>.</strong></p>
