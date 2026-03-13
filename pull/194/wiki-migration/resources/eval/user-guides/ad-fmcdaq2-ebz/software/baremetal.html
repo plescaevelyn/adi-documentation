@@ -117,38 +117,6 @@
 <li><a class="reference internal" href="#id24">Build Prerequisites</a></li>
 <li><a class="reference internal" href="#id35">Building a project</a></li>
 <li><a class="reference internal" href="#id36">Running/Debugging</a></li>
-<li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
-<li><a class="reference internal" href="#wsl2-users-one-time-xsdb-fix">WSL2 Users: One-Time xsdb Fix</a></li>
-<li><a class="reference internal" href="#per-project-setup-first-time-only">Per-Project Setup (First Time Only)</a><ul>
-<li><a class="reference internal" href="#step-1-build-project">Step 1: Build Project</a></li>
-<li><a class="reference internal" href="#step-2-open-vitis-ide">Step 2: Open Vitis IDE</a></li>
-<li><a class="reference internal" href="#step-3-verify-configuration-optional">Step 3: Verify Configuration (Optional)</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#debugging-your-project">Debugging Your Project</a><ul>
-<li><a class="reference internal" href="#hardware-setup">Hardware Setup</a></li>
-<li><a class="reference internal" href="#start-debugging">Start Debugging</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#daily-development-workflow">Daily Development Workflow</a></li>
-<li><a class="reference internal" href="#architecture-specific-notes">Architecture-Specific Notes</a></li>
-<li><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
-<li><a class="reference internal" href="#id41">Prerequisites</a></li>
-<li><a class="reference internal" href="#id42">WSL2 Users: One-Time xsdb Fix</a></li>
-<li><a class="reference internal" href="#id43">Per-Project Setup (First Time Only)</a><ul>
-<li><a class="reference internal" href="#id44">Step 1: Build Project</a></li>
-<li><a class="reference internal" href="#step-2-open-vitis-classic-eclipse-ide">Step 2: Open Vitis Classic Eclipse IDE</a></li>
-<li><a class="reference internal" href="#step-3-create-and-configure-debug-manual">Step 3: Create and Configure Debug (Manual)</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#id45">Debugging Your Project</a><ul>
-<li><a class="reference internal" href="#id46">Hardware Setup</a></li>
-<li><a class="reference internal" href="#id47">Start Debugging</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#id48">Daily Development Workflow</a></li>
-<li><a class="reference internal" href="#id49">Architecture-Specific Notes</a></li>
-<li><a class="reference internal" href="#id50">Troubleshooting</a></li>
 <li><a class="reference internal" href="#software-setup">Software setup</a></li>
 <li><a class="reference internal" href="#gui">GUI</a></li>
 </ul>
@@ -1145,15 +1113,17 @@ order to be able to debug graphically by clicking the debug button:</p>
 </pre></div>
 </div>
 <p>Fore more details about the available make rules, <a class="reference internal" href="../../../../no-os/make.html"><span class="doc">check out this page</span></a>.</p>
-<p>++++ Running/Debugging in WSL |</p>
+<div><div class="collapsible docutils container">
+<input class="collapsible_input" id="ce61181ac28e96a1a3a1d5c65a186bd5224c0b92" name="ce61181ac28e96a1a3a1d5c65a186bd5224c0b92" type="checkbox"></input><label for="ce61181ac28e96a1a3a1d5c65a186bd5224c0b92"><p>Running/Debugging in WSL</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
 <p>If you use WSL you can not test the boards on Linux because it does not support USB. If you will try to load the binary into the target with the command <strong>make run</strong>, you will encounter the following error:</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>no targets found with “name =~ “APU*” &amp;&amp; jtag_cable_name =~ “*<span class="math notranslate nohighlight">\(::jtagtarget*&quot;&quot;. available targets: none while executing &quot;error &quot;no targets found with \&quot;\)</span>params(filter)\”. available targets:$target_list””…</p>
 </div>
 <p>If you use WSL (Ubuntu) and want to connect to JTAG with a board, you have to
-switch the USB device from Windows to WSL. To do this, the following steps must
-be followed:</p>
+switch the USB device from Windows to WSL. To do this, the following steps
+must be followed:</p>
 <ul class="simple">
 <li><p>It is recommended to have a version of Windows 10 or 11.</p></li>
 <li><p>You must have all updates installed in WSL.</p></li>
@@ -1169,8 +1139,8 @@ Linux 5.15.90.1-microsoft-standard-WSL2 #1 SMP Fri Jan 27 02:56:13 UTC 2023 x86_
 WSL2.Testing was done on version 22.4 of Ubuntu.</p>
 <ul class="simple">
 <li><p>You need to install the <a class="icon link reference external" href="https://github.com/dorssel/usbipd-win/releases" target="_blank">usbipd-win</a> project. Installation can be done manually, with a few clicks.</p></li>
-<li><p>You need to install from WSL, the user space tools for USB/IP and a database
-of USB hardware identifiers:</p></li>
+<li><p>You need to install from WSL, the user space tools for USB/IP and a
+database of USB hardware identifiers:</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>:~$ sudo apt upgrade
 :~$ sudo apt update
@@ -1179,14 +1149,13 @@ of USB hardware identifiers:</p></li>
 </pre></div>
 </div>
 <p>If the last command does not work, try:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>:~$ sudo update-alternatives --install /usr/local/bin/usbip usbip `ls /usr/lib/linux-tools/*/usbip
-
-| tail -n1` 20
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>:~$ sudo update-alternatives --install /usr/local/bin/usbip usbip `ls /usr/lib/linux-tools/*/usbip | tail -n1` 20
 </pre></div>
 </div>
 <p>If there is a device connected to the USB port, it can be checked from the
 Device Manager. When connecting via JTAG, in Device Manager, the device will
-appear in the Universal serial Bus controllers section as USB Serial Converter.</p>
+appear in the Universal serial Bus controllers section as USB Serial
+Converter.</p>
 <p>To attach the JTAG (or any USB device) from Windows to WSL we must do the
 following:</p>
 <ul class="simple">
@@ -1220,7 +1189,8 @@ Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
 <p>A list of all attached USB devices will be displayed here. At this moment we
 will only see roots hubs.</p>
 <ul class="simple">
-<li><p>To attach a USB device to WSL enter the following command in Command Prompt:</p></li>
+<li><p>To attach a USB device to WSL enter the following command in Command
+Prompt:</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">usbipd</span> <span class="n">wsl</span> <span class="n">attach</span> <span class="o">-</span><span class="n">b</span> <span class="o">&lt;</span><span class="n">BUSID</span><span class="o">&gt;</span>
 </pre></div>
@@ -1244,9 +1214,9 @@ WSL.</p>
 <span class="mi">10</span><span class="o">-</span><span class="mi">5</span>   <span class="mi">413</span><span class="n">c</span><span class="p">:</span><span class="n">b06f</span>  <span class="n">USB</span> <span class="n">Input</span> <span class="n">Device</span>                                              <span class="n">Not</span> <span class="n">attached</span>
 </pre></div>
 </div>
-<p>After running usbipd wsl list, it can be seen that the JTAG is now attached in
-WSL.</p>
-<p>In WSL if you run: <strong>lsusb</strong> we have:</p>
+<p>After running usbipd wsl list, it can be seen that the JTAG is now attached
+in WSL.</p>
+<p>In WSL if you run: lsusb we have:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Bus</span> <span class="mi">002</span> <span class="n">Device</span> <span class="mi">001</span><span class="p">:</span> <span class="n">ID</span> <span class="mi">1</span><span class="n">d6b</span><span class="p">:</span><span class="mi">0003</span> <span class="n">Linux</span> <span class="n">Foundation</span> <span class="mf">3.0</span> <span class="n">root</span> <span class="n">hub</span>
 <span class="n">Bus</span> <span class="mi">001</span> <span class="n">Device</span> <span class="mi">005</span><span class="p">:</span> <span class="n">ID</span> <span class="mi">0403</span><span class="p">:</span><span class="mi">6014</span> <span class="n">Future</span> <span class="n">Technology</span> <span class="n">Devices</span> <span class="n">International</span><span class="p">,</span> <span class="n">Ltd</span> <span class="n">FT232H</span> <span class="n">Single</span> <span class="n">HS</span> <span class="n">USB</span><span class="o">-</span><span class="n">UART</span><span class="o">/</span><span class="n">FIFO</span> <span class="n">IC</span>
 <span class="n">Bus</span> <span class="mi">001</span> <span class="n">Device</span> <span class="mi">001</span><span class="p">:</span> <span class="n">ID</span> <span class="mi">1</span><span class="n">d6b</span><span class="p">:</span><span class="mi">0002</span> <span class="n">Linux</span> <span class="n">Foundation</span> <span class="mf">2.0</span> <span class="n">root</span> <span class="n">hub</span>\
@@ -1262,21 +1232,29 @@ the computer or in Command Prompt, run the following command:</p></li>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">usbipd</span> <span class="n">wsl</span> <span class="n">detach</span> <span class="o">-</span><span class="n">b</span> <span class="o">&lt;</span><span class="n">BUSID</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<p>For more information you can access the links: <a class="icon link reference external" href="https://devblogs.microsoft.com/commandline/connecting-usb-devices-to-wsl/" target="_blank">USB_devices_to_WSL</a> , <a class="icon link reference external" href="https://github.com/dorssel/usbipd-win/wiki/WSL-support#usbip-client-tools" target="_blank">USB/IP_client_tools</a> ++++</p>
-<p>++++ Running in Windows with PowerShell |</p>
+<p>For more information you can access the links: <a class="icon link reference external" href="https://devblogs.microsoft.com/commandline/connecting-usb-devices-to-wsl/" target="_blank">USB_devices_to_WSL</a> , <a class="icon link reference external" href="https://github.com/dorssel/usbipd-win/wiki/WSL-support#usbip-client-tools" target="_blank">USB/IP_client_tools</a></p>
+</div>
+</div>
+</div><div><div class="collapsible docutils container">
+<input class="collapsible_input" id="e8f909035289047d38391553c1f3f99c4d532df6" name="e8f909035289047d38391553c1f3f99c4d532df6" type="checkbox"></input><label for="e8f909035289047d38391553c1f3f99c4d532df6"><p>Running in Windows with PowerShell</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>This guide is to run built no-OS projects “as native as possible” under
 Windows.</p>
 </div>
-<div><div class="collapsible docutils container">
-<input class="collapsible_input" id="5d3159cae3bb7c51945d25e3cd53d3e510f73084" name="5d3159cae3bb7c51945d25e3cd53d3e510f73084" type="checkbox"></input><label for="5d3159cae3bb7c51945d25e3cd53d3e510f73084"><p>STM32 (Click to expand)</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils container">
+<input class="collapsible_input" id="9b5bb5c203e95bc5103a94a07d3a61e3c8fa5c76" name="9b5bb5c203e95bc5103a94a07d3a61e3c8fa5c76" type="checkbox"></input><label for="9b5bb5c203e95bc5103a94a07d3a61e3c8fa5c76"><p>STM32 (Click to expand)</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
-<ul class="simple">
-<li><p>Install <a class="icon link reference external" href="https://www.st.com/en/development-tools/stm32cubeide.html" target="_blank">stm32cubeide</a>.</p></li>
-<li><p>In PowerShell, set the variables below, correcting with the absolute paths
-of your stm32cubeide install:</p></li>
-</ul>
+<ul>
+<li><p>Install <a class="icon link reference external" href="https://www.st.com/en/development-tools/stm32cubeide.html" target="_blank">stm32cubeide</a>.
+-  In PowerShell, set the variables below, correcting with the absolute</p>
+<blockquote>
+<div><p>paths
+of your stm32cubeide install:</p>
+</div></blockquote>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  $stm32cubeide=&quot;C:\ST\STM32CubeIDE_1.16.1\STM32CubeIDE&quot;
 $openocd_bin=&quot;$stm32cubeide\plugins\com.st.stm32cube.ide.mcu.externaltools.openocd.win32_2.3.200.202404091248\tools\bin\openocd.exe&quot;
   $openocd_scripts=&quot;$stm32cubeide\plugins\com.st.stm32cube.ide.mcu.debug.openocd_2.2.100.202406131243\resources\openocd\st_scripts&quot;
@@ -1286,7 +1264,8 @@ $openocd_bin=&quot;$stm32cubeide\plugins\com.st.stm32cube.ide.mcu.externaltools.
 <li><p>Extract the pair of deliverables (e.g., some_project.elf.openocd,
 project.elf) in a folder.</p>
 <ul>
-<li><p>The .openocd will be the same regardless of the Makefile configuration.</p></li>
+<li><p>The .openocd will be the same regardless of the Makefile
+configuration.</p></li>
 </ul>
 </li>
 <li><p>Navigate to the folder in PowerShell</p></li>
@@ -1295,7 +1274,8 @@ project.elf) in a folder.</p>
 </pre></div>
 </div>
 <ul class="simple">
-<li><p>Set the &lt;project&gt;.elf.openocd &lt;project&gt;.elf (yes, the slashes are correct)</p></li>
+<li><p>Set the &lt;project&gt;.elf.openocd &lt;project&gt;.elf (yes, the slashes are
+correct)</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$openocd_cmd=&quot;.\some_project.elf.openocd&quot;
 $openocd_elf=&quot;./some_project.elf&quot;
@@ -1307,11 +1287,12 @@ $openocd_elf=&quot;./some_project.elf&quot;
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&amp;&quot;$openocd_bin&quot; -s &quot;$openocd_scripts&quot; -f $openocd_cmd -c &quot;program $openocd_elf verify reset exit&quot;
 </pre></div>
 </div>
+</li>
+</ul>
 </div>
 </div>
 </div></section>
 </section>
-<hr class="docutils" />
 <section id="id5">
 <h1>No-OS Build Guide<a class="headerlink" href="#id5" title="Link to this heading"></a></h1>
 <p>Clone NO-OS with the <code class="docutils literal notranslate"><span class="pre">--recursive</span></code> flag:</p>
@@ -1782,15 +1763,17 @@ order to be able to debug graphically by clicking the debug button:</p>
 </pre></div>
 </div>
 <p>Fore more details about the available make rules, <a class="reference internal" href="../../../../no-os/make.html"><span class="doc">check out this page</span></a>.</p>
-<p>++++ Running/Debugging in WSL |</p>
+<div><div class="collapsible docutils container">
+<input class="collapsible_input" id="ce61181ac28e96a1a3a1d5c65a186bd5224c0b92" name="ce61181ac28e96a1a3a1d5c65a186bd5224c0b92" type="checkbox"></input><label for="ce61181ac28e96a1a3a1d5c65a186bd5224c0b92"><p>Running/Debugging in WSL</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
 <p>If you use WSL you can not test the boards on Linux because it does not support USB. If you will try to load the binary into the target with the command <strong>make run</strong>, you will encounter the following error:</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>no targets found with “name =~ “APU*” &amp;&amp; jtag_cable_name =~ “*<span class="math notranslate nohighlight">\(::jtagtarget*&quot;&quot;. available targets: none while executing &quot;error &quot;no targets found with \&quot;\)</span>params(filter)\”. available targets:$target_list””…</p>
 </div>
 <p>If you use WSL (Ubuntu) and want to connect to JTAG with a board, you have to
-switch the USB device from Windows to WSL. To do this, the following steps must
-be followed:</p>
+switch the USB device from Windows to WSL. To do this, the following steps
+must be followed:</p>
 <ul class="simple">
 <li><p>It is recommended to have a version of Windows 10 or 11.</p></li>
 <li><p>You must have all updates installed in WSL.</p></li>
@@ -1806,8 +1789,8 @@ Linux 5.15.90.1-microsoft-standard-WSL2 #1 SMP Fri Jan 27 02:56:13 UTC 2023 x86_
 WSL2.Testing was done on version 22.4 of Ubuntu.</p>
 <ul class="simple">
 <li><p>You need to install the <a class="icon link reference external" href="https://github.com/dorssel/usbipd-win/releases" target="_blank">usbipd-win</a> project. Installation can be done manually, with a few clicks.</p></li>
-<li><p>You need to install from WSL, the user space tools for USB/IP and a database
-of USB hardware identifiers:</p></li>
+<li><p>You need to install from WSL, the user space tools for USB/IP and a
+database of USB hardware identifiers:</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>:~$ sudo apt upgrade
 :~$ sudo apt update
@@ -1816,14 +1799,13 @@ of USB hardware identifiers:</p></li>
 </pre></div>
 </div>
 <p>If the last command does not work, try:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>:~$ sudo update-alternatives --install /usr/local/bin/usbip usbip `ls /usr/lib/linux-tools/*/usbip
-
-| tail -n1` 20
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>:~$ sudo update-alternatives --install /usr/local/bin/usbip usbip `ls /usr/lib/linux-tools/*/usbip | tail -n1` 20
 </pre></div>
 </div>
 <p>If there is a device connected to the USB port, it can be checked from the
 Device Manager. When connecting via JTAG, in Device Manager, the device will
-appear in the Universal serial Bus controllers section as USB Serial Converter.</p>
+appear in the Universal serial Bus controllers section as USB Serial
+Converter.</p>
 <p>To attach the JTAG (or any USB device) from Windows to WSL we must do the
 following:</p>
 <ul class="simple">
@@ -1857,7 +1839,8 @@ Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
 <p>A list of all attached USB devices will be displayed here. At this moment we
 will only see roots hubs.</p>
 <ul class="simple">
-<li><p>To attach a USB device to WSL enter the following command in Command Prompt:</p></li>
+<li><p>To attach a USB device to WSL enter the following command in Command
+Prompt:</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">usbipd</span> <span class="n">wsl</span> <span class="n">attach</span> <span class="o">-</span><span class="n">b</span> <span class="o">&lt;</span><span class="n">BUSID</span><span class="o">&gt;</span>
 </pre></div>
@@ -1881,9 +1864,9 @@ WSL.</p>
 <span class="mi">10</span><span class="o">-</span><span class="mi">5</span>   <span class="mi">413</span><span class="n">c</span><span class="p">:</span><span class="n">b06f</span>  <span class="n">USB</span> <span class="n">Input</span> <span class="n">Device</span>                                              <span class="n">Not</span> <span class="n">attached</span>
 </pre></div>
 </div>
-<p>After running usbipd wsl list, it can be seen that the JTAG is now attached in
-WSL.</p>
-<p>In WSL if you run: <strong>lsusb</strong> we have:</p>
+<p>After running usbipd wsl list, it can be seen that the JTAG is now attached
+in WSL.</p>
+<p>In WSL if you run: lsusb we have:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Bus</span> <span class="mi">002</span> <span class="n">Device</span> <span class="mi">001</span><span class="p">:</span> <span class="n">ID</span> <span class="mi">1</span><span class="n">d6b</span><span class="p">:</span><span class="mi">0003</span> <span class="n">Linux</span> <span class="n">Foundation</span> <span class="mf">3.0</span> <span class="n">root</span> <span class="n">hub</span>
 <span class="n">Bus</span> <span class="mi">001</span> <span class="n">Device</span> <span class="mi">005</span><span class="p">:</span> <span class="n">ID</span> <span class="mi">0403</span><span class="p">:</span><span class="mi">6014</span> <span class="n">Future</span> <span class="n">Technology</span> <span class="n">Devices</span> <span class="n">International</span><span class="p">,</span> <span class="n">Ltd</span> <span class="n">FT232H</span> <span class="n">Single</span> <span class="n">HS</span> <span class="n">USB</span><span class="o">-</span><span class="n">UART</span><span class="o">/</span><span class="n">FIFO</span> <span class="n">IC</span>
 <span class="n">Bus</span> <span class="mi">001</span> <span class="n">Device</span> <span class="mi">001</span><span class="p">:</span> <span class="n">ID</span> <span class="mi">1</span><span class="n">d6b</span><span class="p">:</span><span class="mi">0002</span> <span class="n">Linux</span> <span class="n">Foundation</span> <span class="mf">2.0</span> <span class="n">root</span> <span class="n">hub</span>\
@@ -1899,21 +1882,29 @@ the computer or in Command Prompt, run the following command:</p></li>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">usbipd</span> <span class="n">wsl</span> <span class="n">detach</span> <span class="o">-</span><span class="n">b</span> <span class="o">&lt;</span><span class="n">BUSID</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<p>For more information you can access the links: <a class="icon link reference external" href="https://devblogs.microsoft.com/commandline/connecting-usb-devices-to-wsl/" target="_blank">USB_devices_to_WSL</a> , <a class="icon link reference external" href="https://github.com/dorssel/usbipd-win/wiki/WSL-support#usbip-client-tools" target="_blank">USB/IP_client_tools</a> ++++</p>
-<p>++++ Running in Windows with PowerShell |</p>
+<p>For more information you can access the links: <a class="icon link reference external" href="https://devblogs.microsoft.com/commandline/connecting-usb-devices-to-wsl/" target="_blank">USB_devices_to_WSL</a> , <a class="icon link reference external" href="https://github.com/dorssel/usbipd-win/wiki/WSL-support#usbip-client-tools" target="_blank">USB/IP_client_tools</a></p>
+</div>
+</div>
+</div><div><div class="collapsible docutils container">
+<input class="collapsible_input" id="e8f909035289047d38391553c1f3f99c4d532df6" name="e8f909035289047d38391553c1f3f99c4d532df6" type="checkbox"></input><label for="e8f909035289047d38391553c1f3f99c4d532df6"><p>Running in Windows with PowerShell</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>This guide is to run built no-OS projects “as native as possible” under
 Windows.</p>
 </div>
-<div><div class="collapsible docutils container">
-<input class="collapsible_input" id="5d3159cae3bb7c51945d25e3cd53d3e510f73084" name="5d3159cae3bb7c51945d25e3cd53d3e510f73084" type="checkbox"></input><label for="5d3159cae3bb7c51945d25e3cd53d3e510f73084"><p>STM32 (Click to expand)</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils container">
+<input class="collapsible_input" id="9b5bb5c203e95bc5103a94a07d3a61e3c8fa5c76" name="9b5bb5c203e95bc5103a94a07d3a61e3c8fa5c76" type="checkbox"></input><label for="9b5bb5c203e95bc5103a94a07d3a61e3c8fa5c76"><p>STM32 (Click to expand)</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
-<ul class="simple">
-<li><p>Install <a class="icon link reference external" href="https://www.st.com/en/development-tools/stm32cubeide.html" target="_blank">stm32cubeide</a>.</p></li>
-<li><p>In PowerShell, set the variables below, correcting with the absolute paths
-of your stm32cubeide install:</p></li>
-</ul>
+<ul>
+<li><p>Install <a class="icon link reference external" href="https://www.st.com/en/development-tools/stm32cubeide.html" target="_blank">stm32cubeide</a>.
+-  In PowerShell, set the variables below, correcting with the absolute</p>
+<blockquote>
+<div><p>paths
+of your stm32cubeide install:</p>
+</div></blockquote>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  $stm32cubeide=&quot;C:\ST\STM32CubeIDE_1.16.1\STM32CubeIDE&quot;
 $openocd_bin=&quot;$stm32cubeide\plugins\com.st.stm32cube.ide.mcu.externaltools.openocd.win32_2.3.200.202404091248\tools\bin\openocd.exe&quot;
   $openocd_scripts=&quot;$stm32cubeide\plugins\com.st.stm32cube.ide.mcu.debug.openocd_2.2.100.202406131243\resources\openocd\st_scripts&quot;
@@ -1923,7 +1914,8 @@ $openocd_bin=&quot;$stm32cubeide\plugins\com.st.stm32cube.ide.mcu.externaltools.
 <li><p>Extract the pair of deliverables (e.g., some_project.elf.openocd,
 project.elf) in a folder.</p>
 <ul>
-<li><p>The .openocd will be the same regardless of the Makefile configuration.</p></li>
+<li><p>The .openocd will be the same regardless of the Makefile
+configuration.</p></li>
 </ul>
 </li>
 <li><p>Navigate to the folder in PowerShell</p></li>
@@ -1932,7 +1924,8 @@ project.elf) in a folder.</p>
 </pre></div>
 </div>
 <ul class="simple">
-<li><p>Set the &lt;project&gt;.elf.openocd &lt;project&gt;.elf (yes, the slashes are correct)</p></li>
+<li><p>Set the &lt;project&gt;.elf.openocd &lt;project&gt;.elf (yes, the slashes are
+correct)</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$openocd_cmd=&quot;.\some_project.elf.openocd&quot;
 $openocd_elf=&quot;./some_project.elf&quot;
@@ -1944,11 +1937,12 @@ $openocd_elf=&quot;./some_project.elf&quot;
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&amp;&quot;$openocd_bin&quot; -s &quot;$openocd_scripts&quot; -f $openocd_cmd -c &quot;program $openocd_elf verify reset exit&quot;
 </pre></div>
 </div>
+</li>
+</ul>
 </div>
 </div>
 </div></section>
 </section>
-<hr class="docutils" />
 <section id="id23">
 <h1>No-OS Build Guide<a class="headerlink" href="#id23" title="Link to this heading"></a></h1>
 <p>Clone NO-OS with the <code class="docutils literal notranslate"><span class="pre">--recursive</span></code> flag:</p>
@@ -2419,15 +2413,17 @@ order to be able to debug graphically by clicking the debug button:</p>
 </pre></div>
 </div>
 <p>Fore more details about the available make rules, <a class="reference internal" href="../../../../no-os/make.html"><span class="doc">check out this page</span></a>.</p>
-<p>++++ Running/Debugging in WSL |</p>
+<div><div class="collapsible docutils container">
+<input class="collapsible_input" id="ce61181ac28e96a1a3a1d5c65a186bd5224c0b92" name="ce61181ac28e96a1a3a1d5c65a186bd5224c0b92" type="checkbox"></input><label for="ce61181ac28e96a1a3a1d5c65a186bd5224c0b92"><p>Running/Debugging in WSL</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
 <p>If you use WSL you can not test the boards on Linux because it does not support USB. If you will try to load the binary into the target with the command <strong>make run</strong>, you will encounter the following error:</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>no targets found with “name =~ “APU*” &amp;&amp; jtag_cable_name =~ “*<span class="math notranslate nohighlight">\(::jtagtarget*&quot;&quot;. available targets: none while executing &quot;error &quot;no targets found with \&quot;\)</span>params(filter)\”. available targets:$target_list””…</p>
 </div>
 <p>If you use WSL (Ubuntu) and want to connect to JTAG with a board, you have to
-switch the USB device from Windows to WSL. To do this, the following steps must
-be followed:</p>
+switch the USB device from Windows to WSL. To do this, the following steps
+must be followed:</p>
 <ul class="simple">
 <li><p>It is recommended to have a version of Windows 10 or 11.</p></li>
 <li><p>You must have all updates installed in WSL.</p></li>
@@ -2443,8 +2439,8 @@ Linux 5.15.90.1-microsoft-standard-WSL2 #1 SMP Fri Jan 27 02:56:13 UTC 2023 x86_
 WSL2.Testing was done on version 22.4 of Ubuntu.</p>
 <ul class="simple">
 <li><p>You need to install the <a class="icon link reference external" href="https://github.com/dorssel/usbipd-win/releases" target="_blank">usbipd-win</a> project. Installation can be done manually, with a few clicks.</p></li>
-<li><p>You need to install from WSL, the user space tools for USB/IP and a database
-of USB hardware identifiers:</p></li>
+<li><p>You need to install from WSL, the user space tools for USB/IP and a
+database of USB hardware identifiers:</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>:~$ sudo apt upgrade
 :~$ sudo apt update
@@ -2453,14 +2449,13 @@ of USB hardware identifiers:</p></li>
 </pre></div>
 </div>
 <p>If the last command does not work, try:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>:~$ sudo update-alternatives --install /usr/local/bin/usbip usbip `ls /usr/lib/linux-tools/*/usbip
-
-| tail -n1` 20
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>:~$ sudo update-alternatives --install /usr/local/bin/usbip usbip `ls /usr/lib/linux-tools/*/usbip | tail -n1` 20
 </pre></div>
 </div>
 <p>If there is a device connected to the USB port, it can be checked from the
 Device Manager. When connecting via JTAG, in Device Manager, the device will
-appear in the Universal serial Bus controllers section as USB Serial Converter.</p>
+appear in the Universal serial Bus controllers section as USB Serial
+Converter.</p>
 <p>To attach the JTAG (or any USB device) from Windows to WSL we must do the
 following:</p>
 <ul class="simple">
@@ -2494,7 +2489,8 @@ Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
 <p>A list of all attached USB devices will be displayed here. At this moment we
 will only see roots hubs.</p>
 <ul class="simple">
-<li><p>To attach a USB device to WSL enter the following command in Command Prompt:</p></li>
+<li><p>To attach a USB device to WSL enter the following command in Command
+Prompt:</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">usbipd</span> <span class="n">wsl</span> <span class="n">attach</span> <span class="o">-</span><span class="n">b</span> <span class="o">&lt;</span><span class="n">BUSID</span><span class="o">&gt;</span>
 </pre></div>
@@ -2518,9 +2514,9 @@ WSL.</p>
 <span class="mi">10</span><span class="o">-</span><span class="mi">5</span>   <span class="mi">413</span><span class="n">c</span><span class="p">:</span><span class="n">b06f</span>  <span class="n">USB</span> <span class="n">Input</span> <span class="n">Device</span>                                              <span class="n">Not</span> <span class="n">attached</span>
 </pre></div>
 </div>
-<p>After running usbipd wsl list, it can be seen that the JTAG is now attached in
-WSL.</p>
-<p>In WSL if you run: <strong>lsusb</strong> we have:</p>
+<p>After running usbipd wsl list, it can be seen that the JTAG is now attached
+in WSL.</p>
+<p>In WSL if you run: lsusb we have:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Bus</span> <span class="mi">002</span> <span class="n">Device</span> <span class="mi">001</span><span class="p">:</span> <span class="n">ID</span> <span class="mi">1</span><span class="n">d6b</span><span class="p">:</span><span class="mi">0003</span> <span class="n">Linux</span> <span class="n">Foundation</span> <span class="mf">3.0</span> <span class="n">root</span> <span class="n">hub</span>
 <span class="n">Bus</span> <span class="mi">001</span> <span class="n">Device</span> <span class="mi">005</span><span class="p">:</span> <span class="n">ID</span> <span class="mi">0403</span><span class="p">:</span><span class="mi">6014</span> <span class="n">Future</span> <span class="n">Technology</span> <span class="n">Devices</span> <span class="n">International</span><span class="p">,</span> <span class="n">Ltd</span> <span class="n">FT232H</span> <span class="n">Single</span> <span class="n">HS</span> <span class="n">USB</span><span class="o">-</span><span class="n">UART</span><span class="o">/</span><span class="n">FIFO</span> <span class="n">IC</span>
 <span class="n">Bus</span> <span class="mi">001</span> <span class="n">Device</span> <span class="mi">001</span><span class="p">:</span> <span class="n">ID</span> <span class="mi">1</span><span class="n">d6b</span><span class="p">:</span><span class="mi">0002</span> <span class="n">Linux</span> <span class="n">Foundation</span> <span class="mf">2.0</span> <span class="n">root</span> <span class="n">hub</span>\
@@ -2536,21 +2532,29 @@ the computer or in Command Prompt, run the following command:</p></li>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">usbipd</span> <span class="n">wsl</span> <span class="n">detach</span> <span class="o">-</span><span class="n">b</span> <span class="o">&lt;</span><span class="n">BUSID</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<p>For more information you can access the links: <a class="icon link reference external" href="https://devblogs.microsoft.com/commandline/connecting-usb-devices-to-wsl/" target="_blank">USB_devices_to_WSL</a> , <a class="icon link reference external" href="https://github.com/dorssel/usbipd-win/wiki/WSL-support#usbip-client-tools" target="_blank">USB/IP_client_tools</a> ++++</p>
-<p>++++ Running in Windows with PowerShell |</p>
+<p>For more information you can access the links: <a class="icon link reference external" href="https://devblogs.microsoft.com/commandline/connecting-usb-devices-to-wsl/" target="_blank">USB_devices_to_WSL</a> , <a class="icon link reference external" href="https://github.com/dorssel/usbipd-win/wiki/WSL-support#usbip-client-tools" target="_blank">USB/IP_client_tools</a></p>
+</div>
+</div>
+</div><div><div class="collapsible docutils container">
+<input class="collapsible_input" id="e8f909035289047d38391553c1f3f99c4d532df6" name="e8f909035289047d38391553c1f3f99c4d532df6" type="checkbox"></input><label for="e8f909035289047d38391553c1f3f99c4d532df6"><p>Running in Windows with PowerShell</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>This guide is to run built no-OS projects “as native as possible” under
 Windows.</p>
 </div>
-<div><div class="collapsible docutils container">
-<input class="collapsible_input" id="5d3159cae3bb7c51945d25e3cd53d3e510f73084" name="5d3159cae3bb7c51945d25e3cd53d3e510f73084" type="checkbox"></input><label for="5d3159cae3bb7c51945d25e3cd53d3e510f73084"><p>STM32 (Click to expand)</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils container">
+<input class="collapsible_input" id="9b5bb5c203e95bc5103a94a07d3a61e3c8fa5c76" name="9b5bb5c203e95bc5103a94a07d3a61e3c8fa5c76" type="checkbox"></input><label for="9b5bb5c203e95bc5103a94a07d3a61e3c8fa5c76"><p>STM32 (Click to expand)</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
-<ul class="simple">
-<li><p>Install <a class="icon link reference external" href="https://www.st.com/en/development-tools/stm32cubeide.html" target="_blank">stm32cubeide</a>.</p></li>
-<li><p>In PowerShell, set the variables below, correcting with the absolute paths
-of your stm32cubeide install:</p></li>
-</ul>
+<ul>
+<li><p>Install <a class="icon link reference external" href="https://www.st.com/en/development-tools/stm32cubeide.html" target="_blank">stm32cubeide</a>.
+-  In PowerShell, set the variables below, correcting with the absolute</p>
+<blockquote>
+<div><p>paths
+of your stm32cubeide install:</p>
+</div></blockquote>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  $stm32cubeide=&quot;C:\ST\STM32CubeIDE_1.16.1\STM32CubeIDE&quot;
 $openocd_bin=&quot;$stm32cubeide\plugins\com.st.stm32cube.ide.mcu.externaltools.openocd.win32_2.3.200.202404091248\tools\bin\openocd.exe&quot;
   $openocd_scripts=&quot;$stm32cubeide\plugins\com.st.stm32cube.ide.mcu.debug.openocd_2.2.100.202406131243\resources\openocd\st_scripts&quot;
@@ -2560,7 +2564,8 @@ $openocd_bin=&quot;$stm32cubeide\plugins\com.st.stm32cube.ide.mcu.externaltools.
 <li><p>Extract the pair of deliverables (e.g., some_project.elf.openocd,
 project.elf) in a folder.</p>
 <ul>
-<li><p>The .openocd will be the same regardless of the Makefile configuration.</p></li>
+<li><p>The .openocd will be the same regardless of the Makefile
+configuration.</p></li>
 </ul>
 </li>
 <li><p>Navigate to the folder in PowerShell</p></li>
@@ -2569,7 +2574,8 @@ project.elf) in a folder.</p>
 </pre></div>
 </div>
 <ul class="simple">
-<li><p>Set the &lt;project&gt;.elf.openocd &lt;project&gt;.elf (yes, the slashes are correct)</p></li>
+<li><p>Set the &lt;project&gt;.elf.openocd &lt;project&gt;.elf (yes, the slashes are
+correct)</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$openocd_cmd=&quot;.\some_project.elf.openocd&quot;
 $openocd_elf=&quot;./some_project.elf&quot;
@@ -2581,46 +2587,45 @@ $openocd_elf=&quot;./some_project.elf&quot;
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&amp;&quot;$openocd_bin&quot; -s &quot;$openocd_scripts&quot; -f $openocd_cmd -c &quot;program $openocd_elf verify reset exit&quot;
 </pre></div>
 </div>
+</li>
+</ul>
 </div>
 </div>
-</div><hr class="docutils" />
-<p>++++ Debugging with Vitis 2025.1 (Unified IDE) |</p>
+</div><div><div class="collapsible docutils container">
+<input class="collapsible_input" id="9771a10fcd19af5a491730c520d83c01f176a4fd" name="9771a10fcd19af5a491730c520d83c01f176a4fd" type="checkbox"></input><label for="9771a10fcd19af5a491730c520d83c01f176a4fd"><p>Debugging with Vitis 2025.1 (Unified IDE)</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>Starting with Vitis 2023.2, Xilinx transitioned from Eclipse to a Unified IDE
-architecture. Vitis 2025.1 now features automatic debug configuration - no
-manual setup required!</p>
+<p>Starting with Vitis 2023.2, Xilinx transitioned from Eclipse to a Unified
+IDE architecture. Vitis 2025.1 now features automatic debug configuration
+- no manual setup required!</p>
 </div>
-<p><strong>Key Changes in Vitis 2025.1:</strong></p>
+<p>Key Changes in Vitis 2025.1:</p>
 <ul class="simple">
-<li><p>Debug configuration <strong>automatically generated</strong> by build system</p></li>
-<li><p>Bitstream and initialization files <strong>auto-extracted</strong> from XSA</p></li>
-<li><p>Architecture-specific settings <strong>auto-configured</strong> (ZynqMP, Zynq, MicroBlaze, Versal)</p></li>
-<li><p>Just click <strong>FLOW → Debug</strong> to start debugging!</p></li>
+<li><p>Debug configuration automatically generated by build system</p></li>
+<li><p>Bitstream and initialization files auto-extracted from XSA</p></li>
+<li><p>Architecture-specific settings auto-configured (ZynqMP, Zynq, MicroBlaze, Versal)</p></li>
+<li><p>Just click FLOW → Debug to start debugging!</p></li>
 </ul>
-</section>
-<section id="prerequisites">
-<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h2>
+<p>Prerequisites</p>
 <ul class="simple">
 <li><p>Vitis 2025.1 installed</p></li>
 <li><p>Hardware design file (.xsa) in project directory</p></li>
 <li><p>JTAG and UART cables connected to target board</p></li>
 </ul>
-</section>
-<section id="wsl2-users-one-time-xsdb-fix">
-<h2>WSL2 Users: One-Time xsdb Fix<a class="headerlink" href="#wsl2-users-one-time-xsdb-fix" title="Link to this heading"></a></h2>
+<p>WSL2 Users: One-Time xsdb Fix</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>On WSL2, xsdb crashes with “Segmentation fault” due to rlwrap
 incompatibility. Apply this fix once per machine.</p>
 </div>
-<p><strong>If you’ve already applied this fix previously, skip this step.</strong></p>
-<p><strong>Automated Installation (Recommended):</strong></p>
+<p>If you’ve already applied this fix previously, skip this step.</p>
+<p>Automated Installation (Recommended):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">no</span><span class="o">-</span><span class="n">OS</span>
 <span class="n">sudo</span> <span class="n">tools</span><span class="o">/</span><span class="n">scripts</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">xilinx</span><span class="o">/</span><span class="n">install_xsdb_wsl2_fix</span><span class="o">.</span><span class="n">sh</span>
 </pre></div>
 </div>
-<p><strong>Manual Installation:</strong></p>
+<p>Manual Installation:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">no</span><span class="o">-</span><span class="n">OS</span>
 
 <span class="c1"># Backup original</span>
@@ -2631,12 +2636,9 @@ incompatibility. Apply this fix once per machine.</p>
 <span class="n">sudo</span> <span class="n">chmod</span> <span class="o">+</span><span class="n">x</span> <span class="o">/</span><span class="n">xilinx</span><span class="o">/</span><span class="mf">2025.1</span><span class="o">/</span><span class="n">Vitis</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">xsdb</span>
 </pre></div>
 </div>
-<p><strong>Note:</strong> This is a system-wide fix, only needs to be done once per machine.</p>
-</section>
-<section id="per-project-setup-first-time-only">
-<h2>Per-Project Setup (First Time Only)<a class="headerlink" href="#per-project-setup-first-time-only" title="Link to this heading"></a></h2>
-<section id="step-1-build-project">
-<h3>Step 1: Build Project<a class="headerlink" href="#step-1-build-project" title="Link to this heading"></a></h3>
+<p>Note: This is a system-wide fix, only needs to be done once per machine.</p>
+<p>Per-Project Setup (First Time Only)</p>
+<p>Step 1: Build Project</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>For optimal debugging, always build with <code class="docutils literal notranslate"><span class="pre">DEBUG=1</span></code>. This enables proper debug symbols and correct source path mapping.</p>
@@ -2647,7 +2649,7 @@ incompatibility. Apply this fix once per machine.</p>
 <span class="n">make</span> <span class="n">DEBUG</span><span class="o">=</span><span class="mi">1</span>
 </pre></div>
 </div>
-<p><strong>What happens:</strong></p>
+<p>What happens:</p>
 <ul class="simple">
 <li><p>Build runs with debug optimization (<code class="docutils literal notranslate"><span class="pre">‑O0</span></code>, no optimization)</p></li>
 <li><p>Full debug symbols added (<code class="docutils literal notranslate"><span class="pre">‑g3</span></code>)</p></li>
@@ -2664,26 +2666,24 @@ incompatibility. Apply this fix once per machine.</p>
 <li><p>Breakpoints may not hit expected lines</p></li>
 </ul>
 </div>
-</section>
-<section id="step-2-open-vitis-ide">
-<h3>Step 2: Open Vitis IDE<a class="headerlink" href="#step-2-open-vitis-ide" title="Link to this heading"></a></h3>
+<p>Step 2: Open Vitis IDE</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">sdkopen</span>
 </pre></div>
 </div>
-<p><strong>First time only:</strong> When Vitis opens, you’ll see “Update Workspace” dialog:</p>
+<p>First time only: When Vitis opens, you’ll see “Update Workspace” dialog:</p>
 <ul class="simple">
 <li><p>Message: “Vitis IDE cannot recognize the workspace version. Click ‘Update’ to initialize the workspace metadata.”</p></li>
-<li><p>Click <strong>“Update”</strong> button</p></li>
+<li><p>Click “Update” button</p></li>
 <li><p>This initializes the workspace (one-time setup)</p></li>
 </ul>
-<p><strong>What happens automatically:</strong></p>
+<p>What happens automatically:</p>
 <ul class="simple">
 <li><p>Vitis opens at project root</p></li>
 <li><p>Workspace metadata initialized</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">_ide/</span></code> directory created</p></li>
-<li><p><strong>Bitstream extracted</strong> from XSA to <code class="docutils literal notranslate"><span class="pre">_ide/system_top/system_top.bit</span></code></p></li>
-<li><p><strong>Initialization script extracted</strong> (<code class="docutils literal notranslate"><span class="pre">psu_init.tcl</span></code> or <code class="docutils literal notranslate"><span class="pre">ps_init.tcl</span></code>)</p></li>
-<li><p><strong>Debug configuration generated</strong> (<code class="docutils literal notranslate"><span class="pre">_ide/launch.json</span></code>) with:</p>
+<li><p>Bitstream extracted from XSA to <code class="docutils literal notranslate"><span class="pre">_ide/system_top/system_top.bit</span></code></p></li>
+<li><p>Initialization script extracted (<code class="docutils literal notranslate"><span class="pre">psu_init.tcl</span></code> or <code class="docutils literal notranslate"><span class="pre">ps_init.tcl</span></code>)</p></li>
+<li><p>Debug configuration generated (<code class="docutils literal notranslate"><span class="pre">_ide/launch.json</span></code>) with:</p>
 <ul>
 <li><p>Correct architecture settings (ZynqMP/Zynq/MicroBlaze/Versal)</p></li>
 <li><p>Hardware platform path (XSA file)</p></li>
@@ -2698,9 +2698,7 @@ incompatibility. Apply this fix once per machine.</p>
 <p>No manual configuration needed! The debug configuration is ready to use
 immediately.</p>
 </div>
-</section>
-<section id="step-3-verify-configuration-optional">
-<h3>Step 3: Verify Configuration (Optional)<a class="headerlink" href="#step-3-verify-configuration-optional" title="Link to this heading"></a></h3>
+<p>Step 3: Verify Configuration (Optional)</p>
 <p>If you want to verify or customize the auto-generated configuration:</p>
 <ul class="simple">
 <li><p>In Vitis Explorer, expand <code class="docutils literal notranslate"><span class="pre">_ide</span></code> folder</p></li>
@@ -2708,24 +2706,18 @@ immediately.</p>
 <li><p>Configuration named <code class="docutils literal notranslate"><span class="pre">&lt;project_name&gt;_app_hw_1</span></code> is ready to use</p></li>
 </ul>
 <p>The configuration is automatically regenerated each time you run <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">sdkopen</span></code>.</p>
-</section>
-</section>
-<section id="debugging-your-project">
-<h2>Debugging Your Project<a class="headerlink" href="#debugging-your-project" title="Link to this heading"></a></h2>
-<section id="hardware-setup">
-<h3>Hardware Setup<a class="headerlink" href="#hardware-setup" title="Link to this heading"></a></h3>
+<p>Debugging Your Project</p>
+<p>Hardware Setup</p>
 <ul class="simple">
 <li><p>Connect JTAG cable to your board</p></li>
 <li><p>Connect UART cable (for console output)</p></li>
 <li><p>Power on the board</p></li>
 </ul>
-</section>
-<section id="start-debugging">
-<h3>Start Debugging<a class="headerlink" href="#start-debugging" title="Link to this heading"></a></h3>
-<p><strong>In Vitis IDE:</strong></p>
+<p>Start Debugging</p>
+<p>In Vitis IDE:</p>
 <ul class="simple">
 <li><p>Make sure you’ve built with <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">DEBUG=1</span></code></p></li>
-<li><p>Click <strong>FLOW</strong> panel (left side) → Click <strong>“Debug”</strong></p></li>
+<li><p>Click FLOW panel (left side) → Click “Debug”</p></li>
 <li><p>Debug session starts immediately!</p></li>
 </ul>
 <div class="admonition warning">
@@ -2733,7 +2725,7 @@ immediately.</p>
 <p>The Start Debugging (F5) button in the Debug panel does not currently work
 for Vitis 2025.1. Always use FLOW → Debug button.</p>
 </div>
-<p><strong>What happens:</strong></p>
+<p>What happens:</p>
 <ul class="simple">
 <li><p>Vitis connects to board via JTAG</p></li>
 <li><p>Programs FPGA with bitstream</p></li>
@@ -2741,7 +2733,7 @@ for Vitis 2025.1. Always use FLOW → Debug button.</p>
 <li><p>Loads your application ELF</p></li>
 <li><p>Stops at entry point - ready to debug!</p></li>
 </ul>
-<p><strong>Debug Features:</strong></p>
+<p>Debug Features:</p>
 <ul class="simple">
 <li><p>Set breakpoints (click left margin in code)</p></li>
 <li><p>Step through code (F5=Step Into, F6=Step Over, F7=Step Return, F8=Resume)</p></li>
@@ -2749,10 +2741,7 @@ for Vitis 2025.1. Always use FLOW → Debug button.</p>
 <li><p>Watch expressions</p></li>
 <li><p>View memory and disassembly</p></li>
 </ul>
-</section>
-</section>
-<section id="daily-development-workflow">
-<h2>Daily Development Workflow<a class="headerlink" href="#daily-development-workflow" title="Link to this heading"></a></h2>
+<p>Daily Development Workflow</p>
 <p>After initial setup:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Edit code</span>
 
@@ -2769,90 +2758,85 @@ for Vitis 2025.1. Always use FLOW → Debug button.</p>
 <p class="admonition-title">Tip</p>
 <p>For production builds (no debugging), use <code class="docutils literal notranslate"><span class="pre">make</span></code> without <code class="docutils literal notranslate"><span class="pre">DEBUG=1</span></code> to get optimized code.</p>
 </div>
-</section>
-<section id="architecture-specific-notes">
-<h2>Architecture-Specific Notes<a class="headerlink" href="#architecture-specific-notes" title="Link to this heading"></a></h2>
-<p>The build system automatically detects your hardware architecture and configures
-debug settings appropriately.</p>
-<p><strong>ZynqMP (Cortex-A53/R5):</strong></p>
+<p>Architecture-Specific Notes</p>
+<p>The build system automatically detects your hardware architecture and
+configures debug settings appropriately.</p>
+<p>ZynqMP (Cortex-A53/R5):</p>
 <ul class="simple">
 <li><p>Processor: <code class="docutils literal notranslate"><span class="pre">psu_cortexa53_0</span></code> or <code class="docutils literal notranslate"><span class="pre">psu_cortexr5_0</span></code></p></li>
 <li><p>Debug Type: <code class="docutils literal notranslate"><span class="pre">baremetal-zu</span></code></p></li>
 <li><p>FSBL Required: Yes (auto-configured)</p></li>
 <li><p>Init Script: <code class="docutils literal notranslate"><span class="pre">psu_init.tcl</span></code></p></li>
 </ul>
-<p><strong>Zynq-7000 (Cortex-A9):</strong></p>
+<p>Zynq-7000 (Cortex-A9):</p>
 <ul class="simple">
 <li><p>Processor: <code class="docutils literal notranslate"><span class="pre">ps7_cortexa9_0</span></code></p></li>
 <li><p>Debug Type: <code class="docutils literal notranslate"><span class="pre">baremetal-zynq</span></code></p></li>
 <li><p>FSBL Required: Yes (auto-configured)</p></li>
 <li><p>Init Script: <code class="docutils literal notranslate"><span class="pre">ps_init.tcl</span></code></p></li>
 </ul>
-<p><strong>MicroBlaze:</strong></p>
+<p>MicroBlaze:</p>
 <ul class="simple">
 <li><p>Processor: <code class="docutils literal notranslate"><span class="pre">microblaze_0</span></code></p></li>
 <li><p>Debug Type: <code class="docutils literal notranslate"><span class="pre">baremetal-mb</span></code></p></li>
 <li><p>FSBL Required: No (auto-configured)</p></li>
 </ul>
-<p><strong>Versal (Cortex-A72):</strong></p>
+<p>Versal (Cortex-A72):</p>
 <ul class="simple">
 <li><p>Processor: <code class="docutils literal notranslate"><span class="pre">psv_cortexa72_0</span></code></p></li>
 <li><p>Debug Type: <code class="docutils literal notranslate"><span class="pre">baremetal-versal</span></code></p></li>
 <li><p>Uses PLM (Platform Loader Manager) instead of FSBL (auto-configured)</p></li>
 </ul>
-</section>
-<section id="troubleshooting">
-<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h2>
-<p><strong>“Segmentation fault” when debugging:</strong></p>
+<p>Troubleshooting</p>
+<p>“Segmentation fault” when debugging:</p>
 <ul class="simple">
 <li><p>Solution: Install xsdb WSL2 fix (see above)</p></li>
 </ul>
-<p><strong>Debug doesn’t start / “undefined” connection errors:</strong></p>
+<p>Debug doesn’t start / “undefined” connection errors:</p>
 <ul class="simple">
 <li><p>Make sure you clicked “Update” on first workspace open</p></li>
 <li><p>Verify <code class="docutils literal notranslate"><span class="pre">_ide/launch.json</span></code> exists</p></li>
 <li><p>Try <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">sdkopen</span></code> again to regenerate configuration</p></li>
 </ul>
-<p><strong>Stepping doesn’t work / variables optimized out:</strong></p>
+<p>Stepping doesn’t work / variables optimized out:</p>
 <ul class="simple">
 <li><p>Solution: Rebuild with <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">clean</span> <span class="pre">&amp;&amp;</span> <span class="pre">make</span> <span class="pre">DEBUG=1</span></code></p></li>
 </ul>
-<p><strong>For complete documentation, see:</strong> <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/doc/sphinx/source/build_guides/build_xilinx_vitis2025.rst" target="_blank">Xilinx Vitis Debugging Guide</a></p>
-<hr class="docutils" />
-<p>++++ Debugging with Vitis 2023.2-2024.x (Classic Eclipse IDE) |</p>
+<p>For complete documentation, see: <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/doc/sphinx/source/build_guides/build_xilinx_vitis2025.rst" target="_blank">Xilinx Vitis Debugging Guide</a></p>
+</div>
+</div>
+</div><div><div class="collapsible docutils container">
+<input class="collapsible_input" id="1ae6e60fbd2750377fe69f5fef0a33b90ec322b3" name="1ae6e60fbd2750377fe69f5fef0a33b90ec322b3" type="checkbox"></input><label for="1ae6e60fbd2750377fe69f5fef0a33b90ec322b3"><p>Debugging with Vitis 2023.2-2024.x (Classic Eclipse IDE)</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">sdkopen</span></code> command automatically detects Vitis 2023.2-2024.x and launches the Classic Eclipse IDE (using the <code class="docutils literal notranslate"><span class="pre">-classic</span></code> flag) instead of the Unified IDE. This provides better stability and complete debug configuration support for makefile-based projects.</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Manual debug configuration required for Classic Eclipse mode. For automatic
-configuration, upgrade to Vitis 2025.1+.</p>
+<p>Manual debug configuration required for Classic Eclipse mode. For
+automatic configuration, upgrade to Vitis 2025.1+.</p>
 </div>
-<p><strong>Why Classic Mode for Vitis 2023.2-2024.x?</strong></p>
+<p>Why Classic Mode for Vitis 2023.2-2024.x?</p>
 <ul class="simple">
 <li><p>Vitis 2023.2 introduced the Unified IDE, but the User Managed Mode (required for makefile-based projects) has incomplete debug configuration support</p></li>
 <li><p>The classic Eclipse mode provides a mature, fully-functional debugging
 experience</p></li>
 </ul>
-</section>
-<section id="id41">
-<h2>Prerequisites<a class="headerlink" href="#id41" title="Link to this heading"></a></h2>
+<p>Prerequisites</p>
 <ul class="simple">
 <li><p>Vitis 2023.2, 2023.2, 2024.1, or 2024.2 installed</p></li>
 <li><p>Hardware design file (.xsa) in project directory</p></li>
 <li><p>JTAG and UART cables connected to target board</p></li>
 </ul>
-</section>
-<section id="id42">
-<h2>WSL2 Users: One-Time xsdb Fix<a class="headerlink" href="#id42" title="Link to this heading"></a></h2>
+<p>WSL2 Users: One-Time xsdb Fix</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>On WSL2, xsdb crashes with “Segmentation fault” due to rlwrap
 incompatibility. Apply this fix once per machine.</p>
 </div>
-<p><strong>If you’ve already applied this fix previously, skip this step.</strong></p>
-<p><strong>Automated Installation (Recommended):</strong></p>
+<p>If you’ve already applied this fix previously, skip this step.</p>
+<p>Automated Installation (Recommended):</p>
 <p>For default Vitis installation (<code class="docutils literal notranslate"><span class="pre">/xilinx/&lt;version&gt;/Vitis</span></code>):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">no</span><span class="o">-</span><span class="n">OS</span>
 <span class="n">sudo</span> <span class="n">tools</span><span class="o">/</span><span class="n">scripts</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">xilinx</span><span class="o">/</span><span class="n">install_xsdb_wsl2_fix</span><span class="o">.</span><span class="n">sh</span>
@@ -2863,7 +2847,7 @@ incompatibility. Apply this fix once per machine.</p>
 <span class="n">sudo</span> <span class="n">tools</span><span class="o">/</span><span class="n">scripts</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">xilinx</span><span class="o">/</span><span class="n">install_xsdb_wsl2_fix</span><span class="o">.</span><span class="n">sh</span> <span class="o">/</span><span class="n">custom</span><span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">Vitis</span><span class="o">/</span><span class="nb">bin</span>
 </pre></div>
 </div>
-<p><strong>Examples:</strong></p>
+<p>Examples:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Vitis 2024.2 at default location</span>
 <span class="n">sudo</span> <span class="n">tools</span><span class="o">/</span><span class="n">scripts</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">xilinx</span><span class="o">/</span><span class="n">install_xsdb_wsl2_fix</span><span class="o">.</span><span class="n">sh</span> <span class="o">/</span><span class="n">xilinx</span><span class="o">/</span><span class="mf">2024.2</span><span class="o">/</span><span class="n">Vitis</span><span class="o">/</span><span class="nb">bin</span>
 
@@ -2874,12 +2858,9 @@ incompatibility. Apply this fix once per machine.</p>
 <span class="n">sudo</span> <span class="n">tools</span><span class="o">/</span><span class="n">scripts</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">xilinx</span><span class="o">/</span><span class="n">install_xsdb_wsl2_fix</span><span class="o">.</span><span class="n">sh</span> <span class="o">/</span><span class="n">mnt</span><span class="o">/</span><span class="n">c</span><span class="o">/</span><span class="n">Xilinx</span><span class="o">/</span><span class="n">Vitis</span><span class="o">/</span><span class="mf">2024.1</span><span class="o">/</span><span class="nb">bin</span>
 </pre></div>
 </div>
-<p><strong>Note:</strong> This is a system-wide fix, only needs to be done once per machine.</p>
-</section>
-<section id="id43">
-<h2>Per-Project Setup (First Time Only)<a class="headerlink" href="#id43" title="Link to this heading"></a></h2>
-<section id="id44">
-<h3>Step 1: Build Project<a class="headerlink" href="#id44" title="Link to this heading"></a></h3>
+<p>Note: This is a system-wide fix, only needs to be done once per machine.</p>
+<p>Per-Project Setup (First Time Only)</p>
+<p>Step 1: Build Project</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>For optimal debugging, always build with <code class="docutils literal notranslate"><span class="pre">DEBUG=1</span></code>. This enables proper debug symbols and correct source path mapping.</p>
@@ -2890,7 +2871,7 @@ incompatibility. Apply this fix once per machine.</p>
 <span class="n">make</span> <span class="n">DEBUG</span><span class="o">=</span><span class="mi">1</span>
 </pre></div>
 </div>
-<p><strong>What happens:</strong></p>
+<p>What happens:</p>
 <ul class="simple">
 <li><p>Build runs with debug optimization (<code class="docutils literal notranslate"><span class="pre">‑O0</span></code>, no optimization)</p></li>
 <li><p>Full debug symbols added (<code class="docutils literal notranslate"><span class="pre">‑g3</span></code>)</p></li>
@@ -2898,73 +2879,77 @@ incompatibility. Apply this fix once per machine.</p>
 <li><p>First build automatically runs <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">project</span></code> (generates BSP and FSBL)</p></li>
 <li><p>Creates <code class="docutils literal notranslate"><span class="pre">build/your_project.elf</span></code> with debug symbols</p></li>
 </ul>
-</section>
-<section id="step-2-open-vitis-classic-eclipse-ide">
-<h3>Step 2: Open Vitis Classic Eclipse IDE<a class="headerlink" href="#step-2-open-vitis-classic-eclipse-ide" title="Link to this heading"></a></h3>
+<p>Step 2: Open Vitis Classic Eclipse IDE</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">sdkopen</span>
 </pre></div>
 </div>
-<p><strong>What happens:</strong></p>
+<p>What happens:</p>
 <ul class="simple">
 <li><p>The command automatically detects Vitis 2023.2-2024.x</p></li>
-<li><p>Launches the <strong>Classic Eclipse IDE</strong> (not the Unified IDE)</p></li>
+<li><p>Launches the Classic Eclipse IDE (not the Unified IDE)</p></li>
 <li><p>Workspace opens at <code class="docutils literal notranslate"><span class="pre">build/</span></code> directory</p></li>
 <li><p>Standard Eclipse workspace with <code class="docutils literal notranslate"><span class="pre">.metadata/</span></code> directory</p></li>
 </ul>
-</section>
-<section id="step-3-create-and-configure-debug-manual">
-<h3>Step 3: Create and Configure Debug (Manual)<a class="headerlink" href="#step-3-create-and-configure-debug-manual" title="Link to this heading"></a></h3>
+<p>Step 3: Create and Configure Debug (Manual)</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Classic Eclipse requires manual debug configuration. This is a one-time setup
-per project.</p>
+<p>Classic Eclipse requires manual debug configuration. This is a one-time
+setup per project.</p>
 </div>
-<p><strong>A. Open Debug Configurations Dialog:</strong></p>
+<ol class="upperalpha simple">
+<li><p>Open Debug Configurations Dialog:</p></li>
+</ol>
 <p>In the Vitis IDE menu bar:</p>
 <ul class="simple">
-<li><p>Go to <strong>Run</strong> → <strong>Debug Configurations…</strong></p></li>
-<li><p>Or click the <strong>Debug</strong> toolbar button dropdown → <strong>Debug Configurations…</strong></p></li>
+<li><p>Go to Run → Debug Configurations…</p></li>
+<li><p>Or click the Debug toolbar button dropdown → Debug Configurations…</p></li>
 </ul>
 <p>The “Debug Configurations” dialog will open.</p>
-<p><strong>B. Create New Configuration:</strong></p>
+<ol class="upperalpha simple" start="2">
+<li><p>Create New Configuration:</p></li>
+</ol>
 <ul class="simple">
-<li><p>In the left panel, expand <strong>“Single Application Debug”</strong></p></li>
-<li><p>Click the <strong>“New Configuration”</strong> button (first icon in the toolbar - looks like a document with a star/plus)</p></li>
+<li><p>In the left panel, expand “Single Application Debug”</p></li>
+<li><p>Click the “New Configuration” button (first icon in the toolbar - looks like a document with a star/plus)</p></li>
 <li><p>A new configuration will be created (e.g., <code class="docutils literal notranslate"><span class="pre">Debugger_-Default</span></code>)</p></li>
 <li><p>You can rename it if desired (e.g., <code class="docutils literal notranslate"><span class="pre">adrv904x-debug</span></code>)</p></li>
 </ul>
-<p><strong>C. Configure Main Tab:</strong></p>
-<p>The <strong>“Main”</strong> tab should be selected by default.</p>
-<p><strong>Debug Type:</strong></p>
+<ol class="upperalpha simple" start="3">
+<li><p>Configure Main Tab:</p></li>
+</ol>
+<p>The “Main” tab should be selected by default.</p>
+<p>Debug Type:</p>
 <ul class="simple">
-<li><p>Select <strong>“Standalone Application Debug”</strong> from the dropdown</p></li>
+<li><p>Select “Standalone Application Debug” from the dropdown</p></li>
 <li><p>(Not “Attach to running target” - we want to reset and program the system)</p></li>
 </ul>
-<p><strong>Connection:</strong></p>
+<p>Connection:</p>
 <ul class="simple">
-<li><p>Leave as <strong>“Local”</strong> (debugging via local JTAG connection)</p></li>
+<li><p>Leave as “Local” (debugging via local JTAG connection)</p></li>
 </ul>
-<p><strong>D. Configure Target Setup Tab:</strong></p>
-<p>Click the <strong>“Target Setup”</strong> tab at the top.</p>
-<p><strong>Hardware Platform:</strong></p>
+<ol class="upperalpha simple" start="4">
+<li><p>Configure Target Setup Tab:</p></li>
+</ol>
+<p>Click the “Target Setup” tab at the top.</p>
+<p>Hardware Platform:</p>
 <ul class="simple">
 <li><p>Should auto-populate with the path to your <code class="docutils literal notranslate"><span class="pre">.xsa</span></code> file</p></li>
-<li><p>If empty, click <strong>“Browse…”</strong> and select <code class="docutils literal notranslate"><span class="pre">system_top.xsa</span></code> from your project root</p></li>
+<li><p>If empty, click “Browse…” and select <code class="docutils literal notranslate"><span class="pre">system_top.xsa</span></code> from your project root</p></li>
 </ul>
-<p><strong>Bitstream File:</strong></p>
+<p>Bitstream File:</p>
 <ul class="simple">
 <li><p>Auto-populated from the XSA file</p></li>
 <li><p>Path will be similar to: <code class="docutils literal notranslate"><span class="pre">.../projects/your_project/system_top.bit</span></code></p></li>
 </ul>
-<p><strong>FSBL Configuration</strong> (ZynqMP/Zynq-7000 only):</p>
+<p>FSBL Configuration (ZynqMP/Zynq-7000 only):</p>
 <p>Check these boxes:</p>
 <ul class="simple">
-<li><p>☑ <strong>Use FSBL flow for initialization</strong></p></li>
-<li><p>☑ <strong>Reset entire system</strong></p></li>
-<li><p>☑ <strong>Program FPGA</strong></p></li>
-<li><p>☑ <strong>Initialize using FSBL</strong></p></li>
+<li><p>☑ Use FSBL flow for initialization</p></li>
+<li><p>☑ Reset entire system</p></li>
+<li><p>☑ Program FPGA</p></li>
+<li><p>☑ Initialize using FSBL</p></li>
 </ul>
-<p><strong>FSBL File:</strong></p>
+<p>FSBL File:</p>
 <p>Browse to or enter the FSBL path:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">build</span><span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="n">hw0</span><span class="o">/</span><span class="n">export</span><span class="o">/</span><span class="n">hw0</span><span class="o">/</span><span class="n">sw</span><span class="o">/</span><span class="n">hw0</span><span class="o">/</span><span class="n">boot</span><span class="o">/</span><span class="n">fsbl</span><span class="o">.</span><span class="n">elf</span>
 </pre></div>
@@ -2974,7 +2959,7 @@ per project.</p>
 <p>For MicroBlaze: Uncheck “Use FSBL flow for initialization” - MicroBlaze
 doesn’t use FSBL</p>
 </div>
-<p><strong>Summary Panel:</strong></p>
+<p>Summary Panel:</p>
 <p>After configuration, the Summary panel on the right shows the debug sequence:</p>
 <ul class="simple">
 <li><p>Reset system and clear FPGA</p></li>
@@ -2982,60 +2967,58 @@ doesn’t use FSBL</p>
 <li><p>Initialize PS using FSBL</p></li>
 <li><p>Load application and suspend processors</p></li>
 </ul>
-<p><strong>E. Configure Application Tab:</strong></p>
-<p>Click the <strong>“Application”</strong> tab at the top.</p>
-<p><strong>Processor Selection:</strong></p>
+<ol class="upperalpha simple" start="5">
+<li><p>Configure Application Tab:</p></li>
+</ol>
+<p>Click the “Application” tab at the top.</p>
+<p>Processor Selection:</p>
 <p>The IDE shows a table with available processors. Check the box next to your
 target processor:</p>
 <ul class="simple">
-<li><p><strong>ZynqMP</strong>: <code class="docutils literal notranslate"><span class="pre">psu_cortexa53_0</span></code> (or <code class="docutils literal notranslate"><span class="pre">psu_cortexr5_0</span></code> for R5)</p></li>
-<li><p><strong>Zynq-7000</strong>: <code class="docutils literal notranslate"><span class="pre">ps7_cortexa9_0</span></code></p></li>
-<li><p><strong>MicroBlaze</strong>: <code class="docutils literal notranslate"><span class="pre">microblaze_0</span></code></p></li>
-<li><p><strong>Versal</strong>: <code class="docutils literal notranslate"><span class="pre">psv_cortexa72_0</span></code></p></li>
+<li><p>ZynqMP: <code class="docutils literal notranslate"><span class="pre">psu_cortexa53_0</span></code> (or <code class="docutils literal notranslate"><span class="pre">psu_cortexr5_0</span></code> for R5)</p></li>
+<li><p>Zynq-7000: <code class="docutils literal notranslate"><span class="pre">ps7_cortexa9_0</span></code></p></li>
+<li><p>MicroBlaze: <code class="docutils literal notranslate"><span class="pre">microblaze_0</span></code></p></li>
+<li><p>Versal: <code class="docutils literal notranslate"><span class="pre">psv_cortexa72_0</span></code></p></li>
 </ul>
-<p><strong>Project and Application:</strong></p>
+<p>Project and Application:</p>
 <p>The IDE typically auto-populates these fields:</p>
 <ul class="simple">
-<li><p><strong>Project</strong>: Should show your project name (e.g., <code class="docutils literal notranslate"><span class="pre">adrv904x</span></code>)</p></li>
-<li><p><strong>Application</strong>: Should point to your ELF file: <code class="docutils literal notranslate"><span class="pre">build/your_project.elf</span></code></p></li>
+<li><p>Project: Should show your project name (e.g., <code class="docutils literal notranslate"><span class="pre">adrv904x</span></code>)</p></li>
+<li><p>Application: Should point to your ELF file: <code class="docutils literal notranslate"><span class="pre">build/your_project.elf</span></code></p></li>
 </ul>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>If the Application field is empty, click “Search…” and browse to <code class="docutils literal notranslate"><span class="pre">build/your_project.elf</span></code></p>
 </div>
-<p><strong>Stop at ‘main’:</strong></p>
+<p>Stop at ‘main’:</p>
 <ul class="simple">
 <li><p>Check this box to have the debugger stop at the <code class="docutils literal notranslate"><span class="pre">main()</span></code> function (recommended)</p></li>
 </ul>
-<p><strong>F. Save and Apply:</strong></p>
+<ol class="upperalpha simple" start="6">
+<li><p>Save and Apply:</p></li>
+</ol>
 <ul class="simple">
-<li><p>Click <strong>“Apply”</strong> to save the configuration</p></li>
-<li><p>Click <strong>“Debug”</strong> to start debugging immediately, or <strong>“Close”</strong> to save for later</p></li>
+<li><p>Click “Apply” to save the configuration</p></li>
+<li><p>Click “Debug” to start debugging immediately, or “Close” to save for later</p></li>
 </ul>
 <p>The configuration is now saved and ready to use!</p>
-</section>
-</section>
-<section id="id45">
-<h2>Debugging Your Project<a class="headerlink" href="#id45" title="Link to this heading"></a></h2>
-<section id="id46">
-<h3>Hardware Setup<a class="headerlink" href="#id46" title="Link to this heading"></a></h3>
+<p>Debugging Your Project</p>
+<p>Hardware Setup</p>
 <ul class="simple">
 <li><p>Connect JTAG cable to your board</p></li>
 <li><p>Connect UART cable (for console output)</p></li>
 <li><p>Power on the board</p></li>
 </ul>
-</section>
-<section id="id47">
-<h3>Start Debugging<a class="headerlink" href="#id47" title="Link to this heading"></a></h3>
-<p><strong>In Vitis Classic Eclipse IDE:</strong></p>
+<p>Start Debugging</p>
+<p>In Vitis Classic Eclipse IDE:</p>
 <ul class="simple">
 <li><p>Make sure you’ve built with <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">DEBUG=1</span></code></p></li>
-<li><p>Go to <strong>Run</strong> → <strong>Debug Configurations…</strong></p></li>
+<li><p>Go to Run → Debug Configurations…</p></li>
 <li><p>Select your debug configuration (e.g., “adrv904x-debug”)</p></li>
-<li><p>Click <strong>“Debug”</strong> button</p></li>
+<li><p>Click “Debug” button</p></li>
 <li><p>The Debug perspective will open automatically</p></li>
 </ul>
-<p><strong>What happens:</strong></p>
+<p>What happens:</p>
 <ul class="simple">
 <li><p>Vitis connects to board via JTAG</p></li>
 <li><p>Programs FPGA with bitstream</p></li>
@@ -3043,7 +3026,7 @@ target processor:</p>
 <li><p>Loads your application ELF</p></li>
 <li><p>Stops at entry point (usually <code class="docutils literal notranslate"><span class="pre">main()</span></code>) - ready to debug!</p></li>
 </ul>
-<p><strong>Debug Features:</strong></p>
+<p>Debug Features:</p>
 <ul class="simple">
 <li><p>Set breakpoints (click left margin in code)</p></li>
 <li><p>Step through code (F5=Step Into, F6=Step Over, F7=Step Return, F8=Resume)</p></li>
@@ -3051,10 +3034,7 @@ target processor:</p>
 <li><p>Watch expressions</p></li>
 <li><p>View memory and disassembly</p></li>
 </ul>
-</section>
-</section>
-<section id="id48">
-<h2>Daily Development Workflow<a class="headerlink" href="#id48" title="Link to this heading"></a></h2>
+<p>Daily Development Workflow</p>
 <p>After initial setup:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Edit code</span>
 
@@ -3067,51 +3047,49 @@ target processor:</p>
 <span class="c1"># In Vitis Eclipse: Run → Debug Configurations → Select your config → Debug</span>
 </pre></div>
 </div>
-</section>
-<section id="id49">
-<h2>Architecture-Specific Notes<a class="headerlink" href="#id49" title="Link to this heading"></a></h2>
-<p><strong>ZynqMP (Cortex-A53/R5):</strong></p>
+<p>Architecture-Specific Notes</p>
+<p>ZynqMP (Cortex-A53/R5):</p>
 <ul class="simple">
 <li><p>Processor: <code class="docutils literal notranslate"><span class="pre">psu_cortexa53_0</span></code> or <code class="docutils literal notranslate"><span class="pre">psu_cortexr5_0</span></code></p></li>
 <li><p>FSBL Required: Yes</p></li>
 <li><p>FSBL Path: <code class="docutils literal notranslate"><span class="pre">build/tmp/output/hw0/export/hw0/sw/hw0/boot/fsbl.elf</span></code></p></li>
 </ul>
-<p><strong>Zynq-7000 (Cortex-A9):</strong></p>
+<p>Zynq-7000 (Cortex-A9):</p>
 <ul class="simple">
 <li><p>Processor: <code class="docutils literal notranslate"><span class="pre">ps7_cortexa9_0</span></code></p></li>
 <li><p>FSBL Required: Yes</p></li>
 <li><p>FSBL Path: Same as ZynqMP</p></li>
 </ul>
-<p><strong>MicroBlaze:</strong></p>
+<p>MicroBlaze:</p>
 <ul class="simple">
 <li><p>Processor: <code class="docutils literal notranslate"><span class="pre">microblaze_0</span></code></p></li>
 <li><p>FSBL Required: No (soft processor)</p></li>
 <li><p>In debug config: Uncheck “Use FSBL flow for initialization”</p></li>
 </ul>
-<p><strong>Versal (Cortex-A72):</strong></p>
+<p>Versal (Cortex-A72):</p>
 <ul class="simple">
 <li><p>Processor: <code class="docutils literal notranslate"><span class="pre">psv_cortexa72_0</span></code></p></li>
 <li><p>Uses PLM (Platform Loader Manager) instead of FSBL</p></li>
 </ul>
-</section>
-<section id="id50">
-<h2>Troubleshooting<a class="headerlink" href="#id50" title="Link to this heading"></a></h2>
-<p><strong>“Segmentation fault” when debugging:</strong></p>
+<p>Troubleshooting</p>
+<p>“Segmentation fault” when debugging:</p>
 <ul class="simple">
 <li><p>Solution: Install xsdb WSL2 fix (see above)</p></li>
 </ul>
-<p><strong>Stepping doesn’t work / variables optimized out:</strong></p>
+<p>Stepping doesn’t work / variables optimized out:</p>
 <ul class="simple">
 <li><p>Solution: Rebuild with <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">clean</span> <span class="pre">&amp;&amp;</span> <span class="pre">make</span> <span class="pre">DEBUG=1</span></code></p></li>
 </ul>
-<p><strong>IDE doesn’t open or wrong IDE opens:</strong></p>
+<p>IDE doesn’t open or wrong IDE opens:</p>
 <ul class="simple">
 <li><p>Verify you’re using Vitis 2023.2-2024.x</p></li>
 <li><p>The Classic Eclipse IDE should open (not the Unified IDE)</p></li>
 <li><p>If Unified IDE opens, the version detection may be incorrect</p></li>
 </ul>
-<p><strong>For complete documentation, see:</strong> <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/doc/sphinx/source/build_guides/build_xilinx_vitis2025.rst" target="_blank">Xilinx Vitis Debugging Guide</a></p>
-</section>
+<p>For complete documentation, see: <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/doc/sphinx/source/build_guides/build_xilinx_vitis2025.rst" target="_blank">Xilinx Vitis Debugging Guide</a></p>
+</div>
+</div>
+</div></section>
 <section id="software-setup">
 <h2>Software setup<a class="headerlink" href="#software-setup" title="Link to this heading"></a></h2>
 <div class="admonition note">
