@@ -8,8 +8,8 @@
 
     <title>gr-ofdmradar - OFDM Radar on MxFE Platforms using IIO &#8212; System Level Documentation  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/app.min.css?v=a525f648" />
-    <script async="async" src="../../../../../_static/app.umd.js?v=fcf3088a"></script>
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/app.min.css?v=5c8d5ce8" />
+    <script async="async" src="../../../../../_static/app.umd.js?v=f78f54ff"></script>
     <link rel="icon" href="../../../../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" />
@@ -66,7 +66,7 @@
         <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         
-        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Docs</label>
         
         <a id="logo" href="../../../../../index.html">
           <div>System Level</div>
@@ -1013,12 +1013,12 @@ offload and TDD driver, though obviously from the system perspective more than
 those two are involved.</p>
 <section id="data-offload">
 <h4>Data Offload<a class="headerlink" href="#data-offload" title="Link to this heading"></a></h4>
-<p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/misc/adi-axi-data-offload.c" target="_blank">master/drivers/misc/adi-axi-data-offload.c</a> is for the most part just configuring the data offload registers based on the values provided in the device tree, and also providing a debugfs interface to modify those registers at runtime. For more information on the device tree options see <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/Documentation/devicetree/bindings/misc/adi,axi-data-offload.yaml" target="_blank">master/Documentation/devicetree/bindings/misc/adi,axi-data-offload.yaml</a>.</p>
-<p>The second part of the driver is the integration into <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/frequency/cf_axi_dds.c" target="_blank">master/drivers/iio/frequency/cf_axi_dds.c</a>, which allows cyclic / oneshot operation to be handled by the data offload - this feature in particular is interesting when you’re sending the same radar waveform repeatedly, because if the data offload is set to cyclic mode and synchronization is enabled, it will wait for the sync signal before each iteration. Effectively this will allow you to replay a buffer on the transmit side as often as you’d like, while only ever loading it once.</p>
+<p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/drivers/misc/adi-axi-data-offload.c" target="_blank">master/drivers/misc/adi-axi-data-offload.c</a> is for the most part just configuring the data offload registers based on the values provided in the device tree, and also providing a debugfs interface to modify those registers at runtime. For more information on the device tree options see <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/Documentation/devicetree/bindings/misc/adi,axi-data-offload.yaml" target="_blank">master/Documentation/devicetree/bindings/misc/adi,axi-data-offload.yaml</a>.</p>
+<p>The second part of the driver is the integration into <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/drivers/iio/frequency/cf_axi_dds.c" target="_blank">master/drivers/iio/frequency/cf_axi_dds.c</a>, which allows cyclic / oneshot operation to be handled by the data offload - this feature in particular is interesting when you’re sending the same radar waveform repeatedly, because if the data offload is set to cyclic mode and synchronization is enabled, it will wait for the sync signal before each iteration. Effectively this will allow you to replay a buffer on the transmit side as often as you’d like, while only ever loading it once.</p>
 </section>
 <section id="tdd">
 <h4>TDD<a class="headerlink" href="#tdd" title="Link to this heading"></a></h4>
-<p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/adc/cf_axi_tdd.c" target="_blank">TDD driver</a> provides a couple device tree attributes which can be used for static configuration, but more importantly it provides an IIO device which can be used to control the tdd timing registers via the usual iio interface.</p>
+<p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/drivers/iio/adc/cf_axi_tdd.c" target="_blank">TDD driver</a> provides a couple device tree attributes which can be used for static configuration, but more importantly it provides an IIO device which can be used to control the tdd timing registers via the usual iio interface.</p>
 <p>&lt;code&gt; iio:device2: axi-core-tdd</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">4</span> <span class="n">channels</span> <span class="n">found</span><span class="p">:</span>
     <span class="n">data1</span><span class="p">:</span>  <span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">WARN</span><span class="p">:</span><span class="n">iio_channel_get_type</span><span class="p">()</span><span class="o">=</span><span class="n">UNKNOWN</span><span class="p">)</span>
