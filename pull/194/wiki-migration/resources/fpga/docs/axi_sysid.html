@@ -102,13 +102,6 @@
 <li><a class="reference internal" href="#register-map">Register Map</a><ul>
 <li><a class="reference internal" href="#base-common-to-all-cores">Base (common to all cores)</a></li>
 <li><a class="reference internal" href="#adc-common-axi-ad">ADC Common (axi_ad*)</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a class="reference internal" href="#adaq8092">ADAQ8092</a></li>
-<li><a class="reference internal" href="#ad4858">AD4858</a></li>
-<li><a class="reference internal" href="#ad7606x-pi">AD7606X_PI</a><ul>
 <li><a class="reference internal" href="#adc-channel-axi-ad">ADC Channel (axi_ad*)</a></li>
 <li><a class="reference internal" href="#io-delay-control-axi-ad">IO Delay Control (axi_ad*)</a></li>
 <li><a class="reference internal" href="#dac-common-axi-ad">DAC Common (axi_ad)</a></li>
@@ -129,6 +122,8 @@
 <li><a class="reference internal" href="#spi-engine-axi-spi-engine">SPI Engine (axi_spi_engine)</a></li>
 <li><a class="reference internal" href="#xilinx-xcvr-axi-xcvr-regmap">Xilinx XCVR (axi_xcvr) Regmap</a></li>
 <li><a class="reference internal" href="#pwm-generator-axi-pwm-gen">PWM Generator (axi_pwm_gen)</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#clocking">Clocking</a></li>
 <li><a class="reference internal" href="#theory-of-operation">Theory of Operation</a></li>
 <li><a class="reference internal" href="#data-format">Data format</a><ul>
@@ -1200,503 +1195,8 @@ Content on this topic
 </div>
 </div>
 </div></section>
-</section>
-</section>
-<section id="adaq8092">
-<h1>ADAQ8092<a class="headerlink" href="#adaq8092" title="Link to this heading"></a></h1>
-<div class="line-block">
-<div class="line">Select output format decode mode.</div>
-<div class="line">- bit [0] - enables digital output randomizer decode</div>
-<div class="line">- bit [1] - enables alternate bit polarity decode</div>
-</div>
-</section>
-<section id="ad4858">
-<h1>AD4858<a class="headerlink" href="#ad4858" title="Link to this heading"></a></h1>
-<div class="line-block">
-<div class="line">Select data format/oversampling</div>
-<div class="line">- bit [2] - enable oversampling</div>
-<div class="line">- bits [1:0] packet format selection:</div>
-</div>
-<ul class="simple">
-<li><p>0 = 20 bit</p></li>
-<li><p>1 = 24 bit</p></li>
-<li><p>2 = 32 bit</p></li>
-<li><p>3 = 32 bit</p></li>
-</ul>
-</section>
-<section id="ad7606x-pi">
-<h1>AD7606X_PI<a class="headerlink" href="#ad7606x-pi" title="Link to this heading"></a></h1>
-<div class="line-block">
-<div class="line">Select the parallel interface’s operation mode</div>
-<div class="line">- bit [2] - change mode with the selected one</div>
-<div class="line">- bits [1:0] - requested operation mode:</div>
-</div>
-<ul>
-<li><p>0 = SIMPLE</p></li>
-<li><p>1 = CRC_ENABLED</p></li>
-<li><p>2 = STATUS_HEADER</p></li>
-<li><p>3 = CRC_STATUS</p>
-<p>|</p>
-<div class="table-wrapper docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>0x0015</p></th>
-<th class="head"><p>0x0054</p></th>
-<th class="head"><p>REG_CLK_FREQ</p></th>
-<th class="head"></th>
-<th class="head"></th>
-<th class="head"></th>
-<th class="head"><p>ADC Interface Control &amp; Status</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td></td>
-<td></td>
-<td><p>[31:0]</p></td>
-<td><p>CLK_FREQ[31:0]</p></td>
-<td><p>RO</p></td>
-<td><p>0x0000</p></td>
-<td><p>Interface clock frequency. This is relative to the processor clock and in many cases is 100MHz. The number is represented as unsigned 16.16 format. Assuming a 100MHz processor clock the minimum is 1.523kHz and maximum is 6.554THz. The actual interface clock is CLK_FREQ * CLK_RATIO (see below). Note that the actual sampling clock may not be the same as the interface clock- software must consider device specific implementation parameters to calculate the final sampling clock.</p></td>
-</tr>
-<tr class="row-odd"><td><p>0x0016</p></td>
-<td><p>0x0058</p></td>
-<td><p>REG_CLK_RATIO</p></td>
-<td></td>
-<td></td>
-<td></td>
-<td><p>ADC Interface Control &amp; Status</p></td>
-</tr>
-<tr class="row-even"><td></td>
-<td></td>
-<td><p>[31:0]</p></td>
-<td><p>CLK_RATIO[31:0]</p></td>
-<td><p>RO</p></td>
-<td><p>0x0000</p></td>
-<td><p>Interface clock ratio - as a factor actual received clock. This is implementation specific and depends on any serial to parallel conversion and interface type (ddr/sdr/qdr).</p></td>
-</tr>
-<tr class="row-odd"><td><p>0x0017</p></td>
-<td><p>0x005c</p></td>
-<td><p>REG_STATUS</p></td>
-<td></td>
-<td></td>
-<td></td>
-<td><p>ADC Interface Control &amp; Status</p></td>
-</tr>
-<tr class="row-even"><td></td>
-<td></td>
-<td><p>[4]</p></td>
-<td><p>ADC_CTRL_STATUS</p></td>
-<td><p>RO</p></td>
-<td><p>0x0</p></td>
-<td><p>If set, indicates that the device’​s register data is available on the data bus.</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td></td>
-<td><p>[3]</p></td>
-<td><p>PN_ERR</p></td>
-<td><p>RO</p></td>
-<td><p>0x0</p></td>
-<td><p>If set, indicates pn error in one or more channels.</p></td>
-</tr>
-<tr class="row-even"><td></td>
-<td></td>
-<td><p>[2]</p></td>
-<td><p>PN_OOS</p></td>
-<td><p>RO</p></td>
-<td><p>0x0</p></td>
-<td><p>If set, indicates pn oos in one or more channels.</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td></td>
-<td><p>[1]</p></td>
-<td><p>OVER_RANGE</p></td>
-<td><p>RO</p></td>
-<td><p>0x0</p></td>
-<td><p>If set, indicates over range in one or more channels.</p></td>
-</tr>
-<tr class="row-even"><td></td>
-<td></td>
-<td><p>[0]</p></td>
-<td><p>STATUS</p></td>
-<td><p>RO</p></td>
-<td><p>0x0</p></td>
-<td><p>Interface status, if set indicates no errors. If not set, there are errors, software may try resetting the cores.</p></td>
-</tr>
-<tr class="row-odd"><td><p>0x0018</p></td>
-<td><p>0x0060</p></td>
-<td><p>REG_DELAY_CNTRL</p></td>
-<td></td>
-<td></td>
-<td></td>
-<td><p>ADC Interface Control &amp; Status(<code class="docutils literal notranslate"><span class="pre">Deprecated</span> <span class="pre">from</span> <span class="pre">version</span> <span class="pre">9</span></code>)</p></td>
-</tr>
-<tr class="row-even"><td></td>
-<td></td>
-<td><p>[17]</p></td>
-<td><p>DELAY_SEL</p></td>
-<td><p>RW</p></td>
-<td><p>0x0</p></td>
-<td><p>Delay select, a 0x0 to 0x1 transition in this register initiates a delay access controlled by the registers below.</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td></td>
-<td><p>[16]</p></td>
-<td><p>DELAY_RWN</p></td>
-<td><p>RW</p></td>
-<td><p>0x0</p></td>
-<td><p>Delay read (0x1) or write (0x0), the delay is accessed directly (no increment or decrement) with an address corresponding to each pin, and data corresponding to the total delay.</p></td>
-</tr>
-<tr class="row-even"><td></td>
-<td></td>
-<td><p>[15:8]</p></td>
-<td><p>DELAY_ADDRESS[7:0]</p></td>
-<td><p>RW</p></td>
-<td><p>0x00</p></td>
-<td><p>Delay address, the range depends on the interface pins, data pins are usually at the lower range.</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td></td>
-<td><p>[4:0]</p></td>
-<td><p>DELAY_WDATA[4:0]</p></td>
-<td><p>RW</p></td>
-<td><p>0x0</p></td>
-<td><p>Delay write data, a value of 1 corresponds to (1/200)ns for most devices.</p></td>
-</tr>
-<tr class="row-even"><td><p>0x0019</p></td>
-<td><p>0x0064</p></td>
-<td><p>REG_DELAY_STATUS</p></td>
-<td></td>
-<td></td>
-<td></td>
-<td><p>ADC Interface Control &amp; Status(<code class="docutils literal notranslate"><span class="pre">Deprecated</span> <span class="pre">from</span> <span class="pre">version</span> <span class="pre">9</span></code>)</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td></td>
-<td><p>[9]</p></td>
-<td><p>DELAY_LOCKED</p></td>
-<td><p>RO</p></td>
-<td><p>0x0</p></td>
-<td><p>Indicates delay locked (0x1) state. If this bit is read 0x0, delay control has failed to calibrate the elements.</p></td>
-</tr>
-<tr class="row-even"><td></td>
-<td></td>
-<td><p>[8]</p></td>
-<td><p>DELAY_STATUS</p></td>
-<td><p>RO</p></td>
-<td><p>0x0</p></td>
-<td><p>If set, indicates busy status (access pending). The read data may not be valid if this bit is set.</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td></td>
-<td><p>[4:0]</p></td>
-<td><p>DELAY_RDATA[4:0]</p></td>
-<td><p>RO</p></td>
-<td><p>0x0</p></td>
-<td><p>Delay read data, current delay value in the elements</p></td>
-</tr>
-<tr class="row-even"><td><p>0x001A</p></td>
-<td><p>0x0068</p></td>
-<td><p>REG_SYNC_STATUS</p></td>
-<td></td>
-<td></td>
-<td></td>
-<td><p>ADC Synchronization Status register</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td></td>
-<td><p>[0]</p></td>
-<td><p>ADC_SYNC</p></td>
-<td><p>RO</p></td>
-<td><p>0x0</p></td>
-<td><p>ADC synchronization status. Will be set to 1 after the synchronization has been completed or while waiting for the synchronization signal in JESD204 systems.</p></td>
-</tr>
-<tr class="row-even"><td><p>0x001C</p></td>
-<td><p>0x0070</p></td>
-<td><p>REG_DRP_CNTRL</p></td>
-<td></td>
-<td></td>
-<td></td>
-<td><p>ADC Interface Control &amp; Status</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td></td>
-<td><p>[28]</p></td>
-<td><p>DRP_RWN</p></td>
-<td><p>RW</p></td>
-<td><p>0x0</p></td>
-<td><p>DRP read (0x1) or write (0x0) select (does not include GTX lanes). NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p></td>
-</tr>
-<tr class="row-even"><td></td>
-<td></td>
-<td><p>[27:16]</p></td>
-<td><p>DRP_ADDRESS[11:0]</p></td>
-<td><p>RW</p></td>
-<td><p>0x00</p></td>
-<td><p>DRP address, designs that contain more than one DRP accessible primitives have selects based on the most significant bits (does not include GTX lanes). NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td></td>
-<td><p>[15:0]</p></td>
-<td><p>RESERVED[15:0]</p></td>
-<td><p>RO</p></td>
-<td><p>0x0000</p></td>
-<td><p>Reserved for backward compatibility.</p></td>
-</tr>
-<tr class="row-even"><td><p>0x001D</p></td>
-<td><p>0x0074</p></td>
-<td><p>REG_DRP_STATUS</p></td>
-<td></td>
-<td></td>
-<td></td>
-<td><p>ADC Interface Control &amp; Status</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td></td>
-<td><p>[17]</p></td>
-<td><p>DRP_LOCKED</p></td>
-<td><p>RO</p></td>
-<td><p>0x0</p></td>
-<td><p>If set indicates that the DRP has been locked.</p></td>
-</tr>
-<tr class="row-even"><td></td>
-<td></td>
-<td><p>[16]</p></td>
-<td><p>DRP_STATUS</p></td>
-<td><p>RO</p></td>
-<td><p>0x0</p></td>
-<td><p>If set indicates busy (access pending). The read data may not be valid if this bit is set (does not include GTX lanes). NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td></td>
-<td><p>[15:0]</p></td>
-<td><p>RESERVED[15:0]</p></td>
-<td><p>RO</p></td>
-<td><p>0x00</p></td>
-<td><p>Reserved for backward compatibility.</p></td>
-</tr>
-<tr class="row-even"><td><p>0x001E</p></td>
-<td><p>0x0078</p></td>
-<td><p>REG_DRP_WDATA</p></td>
-<td></td>
-<td></td>
-<td></td>
-<td><p>ADC DRP Write Data</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td></td>
-<td><p>[15:0]</p></td>
-<td><p>DRP_WDATA[15:0]</p></td>
-<td><p>RW</p></td>
-<td><p>0x00</p></td>
-<td><p>DRP write data (does not include GTX lanes). NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p></td>
-</tr>
-<tr class="row-even"><td><p>0x001F</p></td>
-<td><p>0x007c</p></td>
-<td><p>REG_DRP_RDATA</p></td>
-<td></td>
-<td></td>
-<td></td>
-<td><p>ADC DRP Read Data</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td></td>
-<td><p>[15:0]</p></td>
-<td><p>DRP_RDATA[15:0]</p></td>
-<td><p>RO</p></td>
-<td><p>0x00</p></td>
-<td><p>DRP read data (does not include GTX lanes).</p></td>
-</tr>
-<tr class="row-even"><td><p>0x0020</p></td>
-<td><p>0x0080</p></td>
-<td><p>REG_ADC_CONFIG_WR</p></td>
-<td></td>
-<td></td>
-<td></td>
-<td><p>ADC Write Configuration ​Data</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td></td>
-<td><p>[31:0]</p></td>
-<td><p>ADC_CONFIG_WR[31:0]</p></td>
-<td><p>RW</p></td>
-<td><p>0x0000</p></td>
-<td><p>Custom ​Write to the available registers.</p></td>
-</tr>
-<tr class="row-even"><td><p>0x0021</p></td>
-<td><p>0x0084</p></td>
-<td><p>REG_ADC_CONFIG_RD</p></td>
-<td></td>
-<td></td>
-<td></td>
-<td><p>ADC Read Configuration ​Data</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td></td>
-<td><p>[31:0]</p></td>
-<td><p>ADC_CONFIG_RD[31:0]</p></td>
-<td><p>RO</p></td>
-<td><p>0x0000</p></td>
-<td><p>Custom read of the available registers.</p></td>
-</tr>
-<tr class="row-even"><td><p>0x0022</p></td>
-<td><p>0x0088</p></td>
-<td><p>REG_UI_STATUS</p></td>
-<td></td>
-<td></td>
-<td></td>
-<td><p>User Interface Status</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td></td>
-<td><p>[2]</p></td>
-<td><p>UI_OVF</p></td>
-<td><p>RW1C</p></td>
-<td><p>0x0</p></td>
-<td><p>User Interface overflow. If set, indicates an overflow occurred during data transfer at the user interface (FIFO interface). Software must write a 0x1 to clear this register bit.</p></td>
-</tr>
-<tr class="row-even"><td></td>
-<td></td>
-<td><p>[1]</p></td>
-<td><p>UI_UNF</p></td>
-<td><p>RW1C</p></td>
-<td><p>0x0</p></td>
-<td><p>User Interface underflow. If set, indicates an underflow occurred during data transfer at the user interface (FIFO interface). Software must write a 0x1 to clear this register bit.</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td></td>
-<td><p>[0]</p></td>
-<td><p>UI_RESERVED</p></td>
-<td><p>RW1C</p></td>
-<td><p>0x0</p></td>
-<td><p>Reserved for backward compatibility.</p></td>
-</tr>
-<tr class="row-even"><td><p>0x0023</p></td>
-<td><p>0x008c</p></td>
-<td><p>REG_ADC_CONFIG_CTRL</p></td>
-<td></td>
-<td></td>
-<td></td>
-<td><p>ADC RD/WR configuration</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td></td>
-<td><p>[31:0]</p></td>
-<td><p>ADC_CONFIG_CTRL[31:​0]</p></td>
-<td><p>RW</p></td>
-<td><p>0x0000</p></td>
-<td><p>Control RD/WR requests to the device’​s register map: bit 1 - RD (‘b1) , WR (‘b0), bit 0 - enable WR/RD operation.</p></td>
-</tr>
-<tr class="row-even"><td><p>0x0028</p></td>
-<td><p>0x00a0</p></td>
-<td><p>REG_USR_CNTRL_1</p></td>
-<td></td>
-<td></td>
-<td></td>
-<td><p>ADC Interface Control &amp; Status</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td></td>
-<td><p>[7:0]</p></td>
-<td><p>USR_CHANMAX[7:0]</p></td>
-<td><p>RW</p></td>
-<td><p>0x00</p></td>
-<td><p>This indicates the maximum number of inputs for the channel data multiplexers. User may add different processing modules post data capture as another input to this common multiplexer. NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p></td>
-</tr>
-<tr class="row-even"><td><p>0x0029</p></td>
-<td><p>0x00a4</p></td>
-<td><p>REG_ADC_START_CODE</p></td>
-<td></td>
-<td></td>
-<td></td>
-<td><p>ADC Synchronization start word</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td></td>
-<td><p>[31:0]</p></td>
-<td><p>ADC_START_CODE[31:0]</p></td>
-<td><p>RW</p></td>
-<td><p>0x00000000</p></td>
-<td><p>This sets the startcode that is used by the ADCs for synchronization NOT-APPLICABLE if START_CODE_DISABLE is set (0x1).</p></td>
-</tr>
-<tr class="row-even"><td><p>0x002E</p></td>
-<td><p>0x00b8</p></td>
-<td><p>REG_ADC_GPIO_IN</p></td>
-<td></td>
-<td></td>
-<td></td>
-<td><p>ADC GPIO inputs</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td></td>
-<td><p>[31:0]</p></td>
-<td><p>ADC_GPIO_IN[31:0]</p></td>
-<td><p>RO</p></td>
-<td><p>0x00000000</p></td>
-<td><p>This reads auxiliary GPI pins of the ADC core</p></td>
-</tr>
-<tr class="row-even"><td><p>0x002F</p></td>
-<td><p>0x00bc</p></td>
-<td><p>REG_ADC_GPIO_OUT</p></td>
-<td></td>
-<td></td>
-<td></td>
-<td><p>ADC GPIO outputs</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td></td>
-<td><p>[31:0]</p></td>
-<td><p>ADC_GPIO_OUT[31:0]</p></td>
-<td><p>RW</p></td>
-<td><p>0x00000000</p></td>
-<td><p>This controls auxiliary GPO pins of the ADC core NOT-APPLICABLE if GPIO_DISABLE is set (0x1).</p></td>
-</tr>
-<tr class="row-even"><td><p>0x0030</p></td>
-<td><p>0x00c0</p></td>
-<td><p>REG_PPS_COUNTER</p></td>
-<td></td>
-<td></td>
-<td></td>
-<td><p>PPS Counter register</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td></td>
-<td><p>[31:0]</p></td>
-<td><p>PPS_COUNTER[31:0]</p></td>
-<td><p>RO</p></td>
-<td><p>0x00000000</p></td>
-<td><p>Counts the core clock cycles (can be a device clock or interface clock) between two 1PPS pulse.</p></td>
-</tr>
-<tr class="row-even"><td><p>0x0031</p></td>
-<td><p>0x00c4</p></td>
-<td><p>REG_PPS_STATUS</p></td>
-<td></td>
-<td></td>
-<td></td>
-<td><p>PPS Status register</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td></td>
-<td><p>[0]</p></td>
-<td><p>PPS_STATUS</p></td>
-<td><p>RO</p></td>
-<td><p>0x0</p></td>
-<td><p>If this bit is asserted there is no incomming 1PPS signal. Maybe the source is out of sync or it’s not active.</p></td>
-</tr>
-<tr class="row-even"><td><p>Fri Aug 11 18:29:53 2023</p></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</div>
-</li>
-</ul>
 <section id="adc-channel-axi-ad">
-<h2>ADC Channel (axi_ad*)<a class="headerlink" href="#adc-channel-axi-ad" title="Link to this heading"></a></h2>
+<h3>ADC Channel (axi_ad*)<a class="headerlink" href="#adc-channel-axi-ad" title="Link to this heading"></a></h3>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="0c60c27edb6641f2bea7cd7c8909cd2636b634e2" name="0c60c27edb6641f2bea7cd7c8909cd2636b634e2" type="checkbox"></input><label for="0c60c27edb6641f2bea7cd7c8909cd2636b634e2"><p>Click to expand regmap</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -2071,7 +1571,7 @@ Content on this topic
 </div>
 </div></section>
 <section id="io-delay-control-axi-ad">
-<h2>IO Delay Control (axi_ad*)<a class="headerlink" href="#io-delay-control-axi-ad" title="Link to this heading"></a></h2>
+<h3>IO Delay Control (axi_ad*)<a class="headerlink" href="#io-delay-control-axi-ad" title="Link to this heading"></a></h3>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="967ec1cc194d1e8e14cb9ce56ed1518603f22e5d" name="967ec1cc194d1e8e14cb9ce56ed1518603f22e5d" type="checkbox"></input><label for="967ec1cc194d1e8e14cb9ce56ed1518603f22e5d"><p>Click to expand regmap</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -2173,7 +1673,7 @@ Content on this topic
 </div>
 </div></section>
 <section id="dac-common-axi-ad">
-<h2>DAC Common (axi_ad)<a class="headerlink" href="#dac-common-axi-ad" title="Link to this heading"></a></h2>
+<h3>DAC Common (axi_ad)<a class="headerlink" href="#dac-common-axi-ad" title="Link to this heading"></a></h3>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="df142eb90c1385807b9762d0654c8aa133c4f589" name="df142eb90c1385807b9762d0654c8aa133c4f589" type="checkbox"></input><label for="df142eb90c1385807b9762d0654c8aa133c4f589"><p>Click to expand regmap</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -2699,7 +2199,7 @@ Content on this topic
 </div>
 </div></section>
 <section id="dac-channel-axi-ad">
-<h2>DAC Channel (axi_ad*)<a class="headerlink" href="#dac-channel-axi-ad" title="Link to this heading"></a></h2>
+<h3>DAC Channel (axi_ad*)<a class="headerlink" href="#dac-channel-axi-ad" title="Link to this heading"></a></h3>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="48f8e9105b4b3ea30778f8160f760edc621490ad" name="48f8e9105b4b3ea30778f8160f760edc621490ad" type="checkbox"></input><label for="48f8e9105b4b3ea30778f8160f760edc621490ad"><p>Click to expand regmap</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -3101,7 +2601,7 @@ Content on this topic
 </div>
 </div></section>
 <section id="generic-tdd-control-axi-tdd">
-<h2>Generic TDD Control (axi_tdd)<a class="headerlink" href="#generic-tdd-control-axi-tdd" title="Link to this heading"></a></h2>
+<h3>Generic TDD Control (axi_tdd)<a class="headerlink" href="#generic-tdd-control-axi-tdd" title="Link to this heading"></a></h3>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="1e55f0c474b3d692726e14952856a674b6da9eee" name="1e55f0c474b3d692726e14952856a674b6da9eee" type="checkbox"></input><label for="1e55f0c474b3d692726e14952856a674b6da9eee"><p>Click to expand regmap</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -4499,7 +3999,7 @@ Content on this topic
 </div>
 </div></section>
 <section id="transceiver-tdd-control-axi-ad">
-<h2>Transceiver TDD Control (axi_ad*)<a class="headerlink" href="#transceiver-tdd-control-axi-ad" title="Link to this heading"></a></h2>
+<h3>Transceiver TDD Control (axi_ad*)<a class="headerlink" href="#transceiver-tdd-control-axi-ad" title="Link to this heading"></a></h3>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="2bccbba629076324ff9bdf4dbe9ac532329f12aa" name="2bccbba629076324ff9bdf4dbe9ac532329f12aa" type="checkbox"></input><label for="2bccbba629076324ff9bdf4dbe9ac532329f12aa"><p>Click to expand regmap</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -5065,7 +4565,7 @@ Content on this topic
 </div>
 </div></section>
 <section id="jesd-tpl-up-tpl-common">
-<h2>JESD TPL (up_tpl_common)<a class="headerlink" href="#jesd-tpl-up-tpl-common" title="Link to this heading"></a></h2>
+<h3>JESD TPL (up_tpl_common)<a class="headerlink" href="#jesd-tpl-up-tpl-common" title="Link to this heading"></a></h3>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="f1781f83c730a764e84b2c2b2d5493cabc3988c5" name="f1781f83c730a764e84b2c2b2d5493cabc3988c5" type="checkbox"></input><label for="f1781f83c730a764e84b2c2b2d5493cabc3988c5"><p>Click to expand regmap</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -5215,7 +4715,7 @@ Content on this topic
 </div>
 </div></section>
 <section id="jesd204-rx-axi-jesd204-rx">
-<h2>JESD204 RX (axi_jesd204_rx)<a class="headerlink" href="#jesd204-rx-axi-jesd204-rx" title="Link to this heading"></a></h2>
+<h3>JESD204 RX (axi_jesd204_rx)<a class="headerlink" href="#jesd204-rx-axi-jesd204-rx" title="Link to this heading"></a></h3>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="fd083394ce4f959e4f33ee1039cc0fa9c26a8729" name="fd083394ce4f959e4f33ee1039cc0fa9c26a8729" type="checkbox"></input><label for="fd083394ce4f959e4f33ee1039cc0fa9c26a8729"><p>Click to expand regmap</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -6323,7 +5823,7 @@ Valid for 64b66b encoder.</p></td>
 </div>
 </div></section>
 <section id="jesd204-tx-axi-jesd204-tx">
-<h2>JESD204 TX (axi_jesd204_tx)<a class="headerlink" href="#jesd204-tx-axi-jesd204-tx" title="Link to this heading"></a></h2>
+<h3>JESD204 TX (axi_jesd204_tx)<a class="headerlink" href="#jesd204-tx-axi-jesd204-tx" title="Link to this heading"></a></h3>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="51fa5d2508f54564228337aba4590129384b75a7" name="51fa5d2508f54564228337aba4590129384b75a7" type="checkbox"></input><label for="51fa5d2508f54564228337aba4590129384b75a7"><p>Click to expand regmap</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -7250,7 +6750,7 @@ Valid for 64b66b encoder.</p></td>
 </div>
 </div></section>
 <section id="dma-controller-axi-dmac">
-<h2>DMA Controller (axi_dmac)<a class="headerlink" href="#dma-controller-axi-dmac" title="Link to this heading"></a></h2>
+<h3>DMA Controller (axi_dmac)<a class="headerlink" href="#dma-controller-axi-dmac" title="Link to this heading"></a></h3>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="b2277322dfe69fb7885db0654aa7dddf6393847a" name="b2277322dfe69fb7885db0654aa7dddf6393847a" type="checkbox"></input><label for="b2277322dfe69fb7885db0654aa7dddf6393847a"><p>Click to expand regmap</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -7955,7 +7455,7 @@ Valid for 64b66b encoder.</p></td>
 </div>
 </div></section>
 <section id="fan-controller-axi-fan-control">
-<h2>Fan Controller (axi_fan_control)<a class="headerlink" href="#fan-controller-axi-fan-control" title="Link to this heading"></a></h2>
+<h3>Fan Controller (axi_fan_control)<a class="headerlink" href="#fan-controller-axi-fan-control" title="Link to this heading"></a></h3>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="75fd787436e8e668cd87b4115b86babcef129781" name="75fd787436e8e668cd87b4115b86babcef129781" type="checkbox"></input><label for="75fd787436e8e668cd87b4115b86babcef129781"><p>Click to expand regmap</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -8585,7 +8085,7 @@ Valid for 64b66b encoder.</p></td>
 </div>
 </div></section>
 <section id="system-id-axi-system-id">
-<h2>System ID (axi_system_id)<a class="headerlink" href="#system-id-axi-system-id" title="Link to this heading"></a></h2>
+<h3>System ID (axi_system_id)<a class="headerlink" href="#system-id-axi-system-id" title="Link to this heading"></a></h3>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="a16f593245f434d917b8bcbc5bf2b472efeffc23" name="a16f593245f434d917b8bcbc5bf2b472efeffc23" type="checkbox"></input><label for="a16f593245f434d917b8bcbc5bf2b472efeffc23"><p>Click to expand regmap</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -8735,7 +8235,7 @@ Valid for 64b66b encoder.</p></td>
 </div>
 </div></section>
 <section id="clock-generator-axi-clkgen">
-<h2>Clock Generator (axi_clkgen)<a class="headerlink" href="#clock-generator-axi-clkgen" title="Link to this heading"></a></h2>
+<h3>Clock Generator (axi_clkgen)<a class="headerlink" href="#clock-generator-axi-clkgen" title="Link to this heading"></a></h3>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="479117191b81052820b612c94cb8eb6beec85bfa" name="479117191b81052820b612c94cb8eb6beec85bfa" type="checkbox"></input><label for="479117191b81052820b612c94cb8eb6beec85bfa"><p>Click to expand regmap</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -8909,7 +8409,7 @@ Valid for 64b66b encoder.</p></td>
 </div>
 </div></section>
 <section id="clock-monitor-axi-clock-monitor">
-<h2>Clock Monitor (axi_clock_monitor)<a class="headerlink" href="#clock-monitor-axi-clock-monitor" title="Link to this heading"></a></h2>
+<h3>Clock Monitor (axi_clock_monitor)<a class="headerlink" href="#clock-monitor-axi-clock-monitor" title="Link to this heading"></a></h3>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="e5d10c7d48540bbee47e41a787827294093b7b93" name="e5d10c7d48540bbee47e41a787827294093b7b93" type="checkbox"></input><label for="e5d10c7d48540bbee47e41a787827294093b7b93"><p>Click to expand regmap</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -9267,7 +8767,7 @@ Valid for 64b66b encoder.</p></td>
 </div>
 </div></section>
 <section id="hdmi-transmit-axi-hdmi-tx">
-<h2>HDMI Transmit (axi_hdmi_tx)<a class="headerlink" href="#hdmi-transmit-axi-hdmi-tx" title="Link to this heading"></a></h2>
+<h3>HDMI Transmit (axi_hdmi_tx)<a class="headerlink" href="#hdmi-transmit-axi-hdmi-tx" title="Link to this heading"></a></h3>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="14533fa9455f5df439a2fa6c92c63afd5f53161e" name="14533fa9455f5df439a2fa6c92c63afd5f53161e" type="checkbox"></input><label for="14533fa9455f5df439a2fa6c92c63afd5f53161e"><p>Click to expand regmap</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -9673,7 +9173,7 @@ Valid for 64b66b encoder.</p></td>
 </div>
 </div></section>
 <section id="hdmi-receive-axi-hdmi-rx">
-<h2>HDMI Receive (axi_hdmi_rx)<a class="headerlink" href="#hdmi-receive-axi-hdmi-rx" title="Link to this heading"></a></h2>
+<h3>HDMI Receive (axi_hdmi_rx)<a class="headerlink" href="#hdmi-receive-axi-hdmi-rx" title="Link to this heading"></a></h3>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="6e3784ef33029e94fdc958294be41d7c82ec3a81" name="6e3784ef33029e94fdc958294be41d7c82ec3a81" type="checkbox"></input><label for="6e3784ef33029e94fdc958294be41d7c82ec3a81"><p>Click to expand regmap</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -9927,7 +9427,7 @@ Valid for 64b66b encoder.</p></td>
 </div>
 </div></section>
 <section id="general-purpose-registers-axi-gpreg">
-<h2>General Purpose Registers (axi_gpreg)<a class="headerlink" href="#general-purpose-registers-axi-gpreg" title="Link to this heading"></a></h2>
+<h3>General Purpose Registers (axi_gpreg)<a class="headerlink" href="#general-purpose-registers-axi-gpreg" title="Link to this heading"></a></h3>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="560ff76c45071dcafadd51a070feff6b67693905" name="560ff76c45071dcafadd51a070feff6b67693905" type="checkbox"></input><label for="560ff76c45071dcafadd51a070feff6b67693905"><p>Click to expand regmap</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -10093,7 +9593,7 @@ Valid for 64b66b encoder.</p></td>
 </div>
 </div></section>
 <section id="spi-engine-axi-spi-engine">
-<h2>SPI Engine (axi_spi_engine)<a class="headerlink" href="#spi-engine-axi-spi-engine" title="Link to this heading"></a></h2>
+<h3>SPI Engine (axi_spi_engine)<a class="headerlink" href="#spi-engine-axi-spi-engine" title="Link to this heading"></a></h3>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="b6acdeea04e76b5e7e020d2d6e31f908810fb917" name="b6acdeea04e76b5e7e020d2d6e31f908810fb917" type="checkbox"></input><label for="b6acdeea04e76b5e7e020d2d6e31f908810fb917"><p>Click to expand regmap</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -10507,7 +10007,7 @@ Valid for 64b66b encoder.</p></td>
 </div>
 </div></section>
 <section id="xilinx-xcvr-axi-xcvr-regmap">
-<h2>Xilinx XCVR (axi_xcvr) Regmap<a class="headerlink" href="#xilinx-xcvr-axi-xcvr-regmap" title="Link to this heading"></a></h2>
+<h3>Xilinx XCVR (axi_xcvr) Regmap<a class="headerlink" href="#xilinx-xcvr-axi-xcvr-regmap" title="Link to this heading"></a></h3>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="78bcaebf99f85370719b55744986b16506eba98c" name="78bcaebf99f85370719b55744986b16506eba98c" type="checkbox"></input><label for="78bcaebf99f85370719b55744986b16506eba98c"><p>Click to expand regmap</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -11217,7 +10717,7 @@ Valid for 64b66b encoder.</p></td>
 </div>
 </div></section>
 <section id="pwm-generator-axi-pwm-gen">
-<h2>PWM Generator (axi_pwm_gen)<a class="headerlink" href="#pwm-generator-axi-pwm-gen" title="Link to this heading"></a></h2>
+<h3>PWM Generator (axi_pwm_gen)<a class="headerlink" href="#pwm-generator-axi-pwm-gen" title="Link to this heading"></a></h3>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="3bb99dedfe6c280ed6969515ab16fbf18e0ccfcf" name="3bb99dedfe6c280ed6969515ab16fbf18e0ccfcf" type="checkbox"></input><label for="3bb99dedfe6c280ed6969515ab16fbf18e0ccfcf"><p>Click to expand regmap</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -11402,6 +10902,7 @@ Valid for 64b66b encoder.</p></td>
 </div>
 </div>
 </div></section>
+</section>
 <section id="clocking">
 <h2>Clocking<a class="headerlink" href="#clocking" title="Link to this heading"></a></h2>
 <p>The IP core runs on the AXI clock and requires a frequency of 100MHz.</p>
