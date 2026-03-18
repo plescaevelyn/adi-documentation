@@ -35,17 +35,17 @@ Content
    #. :dokuwiki:`Running Scripts from USB drive <university/tools/m2k/devs/usb_otg>`
    #. :dokuwiki:`Creating compiled apps to run on-device <university/tools/m2k/devs/embedded_code>`
 
-#. :ref:`ADI Reference Designs HDL User Guide <fpga hdl>`
+#. :external+hdl:doc:`ADI Reference Designs HDL User Guide <index>`
 
    #. AD9361 HDL reference design
-   #. :ref:`AXI_AD9361 <fpga axi_ad9361>`
-   #. :ref:`High-Speed DMA Controller Peripheral <fpga axi_dmac>`
+   #. :external+hdl:ref:`axi_ad9361`
+   #. :external+hdl:ref:`axi_dmac`
 
 
-   #. :ref:`AD9361 Linux device driver <ad9361>`
-   #. :ref:`AXI ADC HDL Linux Driver <linux axi_adc_hdl>`
-   #. :ref:`AXI DAC HDL Linux Driver <linux axi_dac_hdl>`
-   #. :ref:`AXI-DMAC DMA Controller Linux Driver <linux axi_dmac>`
+   #. :external+linux:ref:`ad9361`
+   #. :external+linux:ref:`axi-adc-hdl`
+   #. :external+linux:ref:`axi-dac-dds-hdl`
+   #. :external+linux:ref:`axi-dmac`
    #. :adi:`ADM1177` Digital Power Monitor Linux Driver
    #. etc.
 
@@ -56,7 +56,7 @@ Content
 #. Accessing the AD9363 inside Pluto from userspace
 
    #. :git-libiio:`libiio local mode example <examples/ad9361-iiostream.c>`
-   #. :ref:`Linux driver <ad9361>`
+   #. :external+linux:ref:`ad9361`
 
 #. :dokuwiki:`Connecting the Pluto to the Internet <university/tools/m2k/devs/port_forwarding>`
 #. :ref:`Using U-Boot's DFU modes <pluto users firmware>`

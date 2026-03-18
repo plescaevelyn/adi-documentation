@@ -317,9 +317,9 @@ Like all things, PlutoSDR is a integration/copy/paste of previous known working
 platforms. There were a few different AD936x /Zynq platforms that were worked on
 that we borrowed things from:
 
--  :ref:`FMCOMMS3 FMC Card <ad-fmcomms3-ebz>`,
+-  :dokuwiki:`FMCOMMS3 FMC Card </resources/eval/user-guides/ad-fmcomms3-ebz>`,
    which includes the baluns/RF and connection back to the Zynq
--  :ref:`FMCOMMS5 FMC Card <ad-fmcomms5-ebz>`,
+-  :dokuwiki:`FMCOMMS5 FMC Card </resources/eval/user-guides/ad-fmcomms5-ebz>`,
    which is where we borrowed the (buggy) oscillator design, since the AD9363
    can not be used with a crystal.
 -  PicoZed SDR (which is were most of the Zynq and USB comes from).

@@ -63,7 +63,7 @@ engineers work with is historic.
    :align: right
 
 The radio inside the ADALM-PLUTO is the
-:ref:`AD9363 <ad9361>`, a high
+:external+linux:ref:`AD9363 <ad9361>`, a high
 performance, highly integrated RF agile transceiver, based on a direct
 conversion receiver.
 

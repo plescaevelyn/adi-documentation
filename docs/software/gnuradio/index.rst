@@ -321,19 +321,19 @@ Source Block
 .. image:: fmcomms234_source.png
 
 - **RF Bandwidth(MHz)**: Configures RX analog filters: RX TIA LPF and RX BB LPF.
-  :ref:`Read More <ad9361 rx_rf_bandwidth>`
+  :external+linux:ref:`Read More <ad9361>`
 - **Sample Rate(MSPS)**: Frequency at which the hardware will input/output
   samples.
-  :ref:`Read More <ad9361 sample_rate>`
+  :external+linux:ref:`Read More <ad9361>`
 - **LO Frequency(MHz)**: Selects the RX local oscillator frequency. Range 70MHz
   to 6GHz with 1Hz tuning granularity.
-  :ref:`Read More <ad9361 lo_control>`
+  :external+linux:ref:`Read More <ad9361>`
 - **RF Port Select**: Selects the RF port to be used. Can be either any of the
   inputs on the Rx input mux (in single ended or differential) or the Tx
   monitor input.
-  :ref:`Read More <ad9361 rf_port_selection>`
+  :external+linux:ref:`Read More <ad9361>`
 - **Tracking**
-  :ref:`Read More <ad9361 calibration_tracking_controls>`
+  :external+linux:ref:`Read More <ad9361>`
 
   - Quadrature
   - RF DC
@@ -341,13 +341,13 @@ Source Block
 
 - **Manual Gain(dB)**: Controls the RX gain only in Manual Gain Control Mode
   (MGC).
-  :ref:`Read More <ad9361 rx_gain_control>`
+  :external+linux:ref:`Read More <ad9361>`
 - **Gain Mode (RX1, RX2)**: Selects one of the available modes: manual,
   slow_attack, hybrid and fast_attack.
-  :ref:`Read More <ad9361 rx_gain_control_mode>`
+  :external+linux:ref:`Read More <ad9361>`
 - **RX1/RX2 Enabled**: Enables the receive data path
 - **Filter**: Allows a FIR filter configuration to be loaded from a file.
-  :ref:`Read More <ad9361 digital_fir_filter_controls>`
+  :external+linux:ref:`Read More <ad9361>`
 - **Filter auto** When enabled loads a default filter and thereby enables lower
   sampling / baseband rates.
 
@@ -358,18 +358,18 @@ Sink Block
 
 - **RF Bandwidth(MHz)**: Configures TX analog filters: TX BB LPF and TX
   Secondary LPF.
-  :ref:`Read More <ad9361 tx_rf_bandwidth>`
+  :external+linux:ref:`Read More <ad9361>`
 - **Sample Rate(MSPS)**: Frequency at which the hardware will input/output
   samples
-  :ref:`Read More <ad9361 sample_rate>`
+  :external+linux:ref:`Read More <ad9361>`
 - **LO Frequency(MHz)**: Selects the TX local oscillator frequency. Range 70MHz
   to 6GHz with 1Hz tuning granularity.
-  :ref:`Read More <ad9361 lo_control>`
+  :external+linux:ref:`Read More <ad9361>`
 - **RF Port Select**: Selects the RF port to be used.
-  :ref:`Read More <ad9361 rf_port_selection>`
+  :external+linux:ref:`Read More <ad9361>`
 - **Attenuation(RX1, RX2)(dB)**: Individually controlls attenuation for TX1 and
   TX2. The range is from 0 to -89.75 dB in 0.25dB steps.
-  :ref:`Read More <ad9361 tx_attenuation_control>`
+  :external+linux:ref:`Read More <ad9361>`
 - **Cyclic**: Set to 'true' if the 'cyclic' mode is desired. In this case, the
   first buffer of samples will be repeated on the enabled channels of the
   FMCOMMS-2 until the program is stopped. The FMCOMMS-2 IIO block will report
@@ -377,7 +377,7 @@ Sink Block
   won't execute anymore, but the rest of the flow graph will.
 - **TX1/TX2 Enabled**: Enables the transmit data path
 - **Filter**: Allows a FIR filter configuration to be loaded from a file.
-  :ref:`Read More <ad9361 digital_fir_filter_controls>`
+  :external+linux:ref:`Read More <ad9361>`
 - **Filter auto** When enabled loads a default filter and thereby enables lower
   sampling / baseband rates.
 
@@ -403,15 +403,15 @@ Source Block
 .. image:: plutosdr_source.png
 
 - **RF Bandwidth(MHz)**: Configures RX analog filters: RX TIA LPF and RX BB LPF.
-  :ref:`Read More <ad9361 rx_rf_bandwidth>`
+  :external+linux:ref:`Read More <ad9361>`
 - **Sample Rate(MSPS)**: Frequency at which the hardware will input/output
   samples.
-  :ref:`Read More <ad9361 sample_rate>`
+  :external+linux:ref:`Read More <ad9361>`
 - **LO Frequency(MHz)**: Selects the RX local oscillator frequency. Range 70MHz
   to 6GHz with 1Hz tuning granularity.
-  :ref:`Read More <ad9361 lo_control>`
+  :external+linux:ref:`Read More <ad9361>`
 - **Tracking**
-  :ref:`Read More <ad9361 calibration_tracking_controls>`
+  :external+linux:ref:`Read More <ad9361>`
 
   - Quadrature
   - RF DC
@@ -419,12 +419,12 @@ Source Block
 
 - **Manual Gain(dB)**: Controls the RX gain only in Manual Gain Control Mode
   (MGC).
-  :ref:`Read More <ad9361 rx_gain_control>`
+  :external+linux:ref:`Read More <ad9361>`
 - **Gain Mode**: Selects one of the available modes: manual, slow_attack, hybrid
   and fast_attack.
-  :ref:`Read More <ad9361 rx_gain_control_mode>`
+  :external+linux:ref:`Read More <ad9361>`
 - **Filter**: Allows a FIR filter configuration to be loaded from a file.
-  :ref:`Read More <ad9361 digital_fir_filter_controls>`
+  :external+linux:ref:`Read More <ad9361>`
 - **Filter auto** When enabled loads a default filter and thereby enables lower
   sampling / baseband rates.
 
@@ -435,25 +435,25 @@ Sink Block
 
 - **RF Bandwidth(MHz)**: Configures TX analog filters: TX BB LPF and TX
   Secondary LPF.
-  :ref:`Read More <ad9361 tx_rf_bandwidth>`
+  :external+linux:ref:`Read More <ad9361>`
 - **Sample Rate(MSPS)**: Frequency at which the hardware will input/output
   samples
-  :ref:`Read More <ad9361 sample_rate>`
+  :external+linux:ref:`Read More <ad9361>`
 - **LO Frequency(MHz)**: Selects the TX local oscillator frequency. Range 70MHz
   to 6GHz with 1Hz tuning granularity.
-  :ref:`Read More <ad9361 lo_control>`
+  :external+linux:ref:`Read More <ad9361>`
 - **RF Port Select**: Selects the RF port to be used.
-  :ref:`Read More <ad9361 rf_port_selection>`
+  :external+linux:ref:`Read More <ad9361>`
 - **Attenuation (dB)**: Individually controlls attenuation for TX1 and TX2. The
   range is from 0 to -89.75 dB in 0.25dB steps.
-  :ref:`Read More <ad9361 tx_attenuation_control>`
+  :external+linux:ref:`Read More <ad9361>`
 - **Cyclic**: Set to 'true' if the 'cyclic' mode is desired. In this case, the
   first buffer of samples will be repeated on the enabled channels of the
   FMCOMMS-2 until the program is stopped. The FMCOMMS-2 IIO block will report
   its processing as complete: the blocks connected to the PlutoSDR IIO block
   won't execute anymore, but the rest of the flow graph will.
 - **Filter**: Allows a FIR filter configuration to be loaded from a file.
-  :ref:`Read More <ad9361 digital_fir_filter_controls>`
+  :external+linux:ref:`Read More <ad9361>`
 - **Filter auto** When enabled loads a default filter and thereby enables lower
   sampling / baseband rates.
 
