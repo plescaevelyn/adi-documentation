@@ -35,15 +35,14 @@ Content
    #. :dokuwiki:`Running Scripts from USB drive <university/tools/m2k/devs/usb_otg>`
    #. :dokuwiki:`Creating compiled apps to run on-device <university/tools/m2k/devs/embedded_code>`
 
-#. :external+hdl:ref:`user_guide`
+#. :external+hdl:doc:`ADI Reference Designs HDL User Guide <index>`
 
-   #. :dokuwiki:`AD9361 HDL reference design </resources/eval/user-guides/ad-fmcomms2-ebz/reference_hdl>`
+   #. AD9361 HDL reference design
    #. :external+hdl:ref:`axi_ad9361`
    #. :external+hdl:ref:`axi_dmac`
 
 
-   #. `AD9361 high performance, highly integrated RF Agile Transceiver™ Linux
-      device driver </resources/tools-software/linux-drivers/iio-transceiver/ad9361>`__
+   #. :external+linux:ref:`ad9361`
    #. :external+linux:ref:`axi-adc-hdl`
    #. :external+linux:ref:`axi-dac-dds-hdl`
    #. :external+linux:ref:`axi-dmac`
