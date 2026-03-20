@@ -38,7 +38,7 @@ get the best measurement accuracy.
 -  The digital data and clock signals of the ADC travel the entire length of the drive and controller boards all the way to the FPGA. Since the analog signals were digitized close to the source and sent in a digital format to the FPGA there are no concerns related to the quality of the measurements.
 -  The formula for calculating Ia or Ib is:
 
-:math:`I = (counts - 32768) \times ADCrange / 2^{ADCbits-1} \times RS` where $delimlbracematrix{4}{1}\ |counts = ADC value } {RS = 6e-3} {ADCrange = 320e-3 } {ADCbits = 16| $
+:math:`I = (counts - 32768) \times ADCrange / 2^{ADCbits-1} \times RS` where $delimlbracematrix{4}{1}\  $
 
 **Case 2: The ADC is not placed in the proximity of the shunt resistor**
 
@@ -49,7 +49,7 @@ get the best measurement accuracy.
 -  On the controller board the analog signals coming from the drive board are transferred from the +/-2.5V input range to a +/-250mV range suited for the :adi:`AD7401` ΣΔ modulator. The attenuation is done using the :adi:`ADA4084-2` amplifier.
 -  The formula for calculating Ia or Ib is:
 
-:math:`I = (counts-32768) \times ADCrange/2^{ADCbits-1} \times CTRLgain / (RS \times DRVgain \times PGAgain)` where $\\displaystyle delimlbracematrix{7}{1}\ |counts = ADC value } {RS = 6e-3} {ADCrange = 320e-3} {ADCbits = 16} \\frac{CTRLgain = 1}{10}{DRVgain = 20}{PGAgain = 1, 2, 4 or 8| $
+:math:`I = (counts-32768) \times ADCrange/2^{ADCbits-1} \times CTRLgain / (RS \times DRVgain \times PGAgain)` where $\\displaystyle delimlbracematrix{7}{1}\  $
 
 .. image:: ../images/current_chain.png
    :width: 800
@@ -83,7 +83,7 @@ best measurement accuracy.
 -  The small differential voltage on the shunt resistor is measured directly with the :adi:`AD7401` isolated ΣΔ modulator without the need of extra interfacing and signal conditioning circuitry
 -  The formula for calculating It is:
 
-:math:`I = (32768-counts) \times ADCrange / 2^{ADCbits-1} \times RS` where $delimlbracematrix{4}{1}\ |counts = ADC value } {RS = 5e-3} {ADCrange = 320e-3 } {ADCbits = 16| $
+:math:`I = (32768-counts) \times ADCrange / 2^{ADCbits-1} \times RS` where $delimlbracematrix{4}{1}\  $
 
 **Case 2: The ADC is not placed in the proximity of the shunt resistor**
 
@@ -93,7 +93,7 @@ best measurement accuracy.
 -  On the controller board the analog signals coming from the drive board are transferred from the 0..5V input range to a 0..250mV range suited for the :adi:`AD7401` ΣΔ modulator. The attenuation is done using the :adi:`ADA4084-2` amplifier.
 -  The formula for calculating It is:
 
-:math:`I = (32768-counts) \times ADCrange/2^{ADCbits-1} \times CTRLgain / (RS \times DRVgain \times PGAgain)` where $\\displaystyle delimlbracematrix{7}{1}\ |counts = ADC value } {RS = 5e-3} {ADCrange = 320e-3} {ADCbits = 16} \\frac{CTRLgain = 1}{10}{DRVgain = 20}{PGAgain = 1, 2, 4 or 8| $
+:math:`I = (32768-counts) \times ADCrange/2^{ADCbits-1} \times CTRLgain / (RS \times DRVgain \times PGAgain)` where $\\displaystyle delimlbracematrix{7}{1}\  $
 
 .. image:: ../images/current_chain_it.png
    :width: 800
@@ -137,9 +137,9 @@ The Vbus XADC measurement chain utilizes the entire path of the regular measurem
 +---+
 +---+
 
-.. |counts = ADC value } {RS = 6e-3} {ADCrange = 320e-3 } {ADCbits = 16| image:: https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcmotcon1-ebz/hardware/counts_=_adc_value_}_{rs_=_6e-3}_{adcrange_=_320e-3_}_{adcbits_=_16
-.. |counts = ADC value } {RS = 6e-3} {ADCrange = 320e-3} {ADCbits = 16} \\frac{CTRLgain = 1}{10}{DRVgain = 20}{PGAgain = 1, 2, 4 or 8| image:: https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcmotcon1-ebz/hardware/counts_=_adc_value_}_{rs_=_6e-3}_{adcrange_=_320e-3}_{adcbits_=_16}_\frac{ctrlgain_=_1}{10}{drvgain_=_20}{pgagain_=_1,_2,_4_or_8
-.. |counts = ADC value } {RS = 5e-3} {ADCrange = 320e-3 } {ADCbits = 16| image:: https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcmotcon1-ebz/hardware/counts_=_adc_value_}_{rs_=_5e-3}_{adcrange_=_320e-3_}_{adcbits_=_16
-.. |counts = ADC value } {RS = 5e-3} {ADCrange = 320e-3} {ADCbits = 16} \\frac{CTRLgain = 1}{10}{DRVgain = 20}{PGAgain = 1, 2, 4 or 8| image:: https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcmotcon1-ebz/hardware/counts_=_adc_value_}_{rs_=_5e-3}_{adcrange_=_320e-3}_{adcbits_=_16}_\frac{ctrlgain_=_1}{10}{drvgain_=_20}{pgagain_=_1,_2,_4_or_8
+..  image:: https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcmotcon1-ebz/hardware/counts_=_adc_value_}_{rs_=_6e-3}_{adcrange_=_320e-3_}_{adcbits_=_16
+..  image:: https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcmotcon1-ebz/hardware/counts_=_adc_value_}_{rs_=_6e-3}_{adcrange_=_320e-3}_{adcbits_=_16}_\frac{ctrlgain_=_1}{10}{drvgain_=_20}{pgagain_=_1,_2,_4_or_8
+..  image:: https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcmotcon1-ebz/hardware/counts_=_adc_value_}_{rs_=_5e-3}_{adcrange_=_320e-3_}_{adcbits_=_16
+..  image:: https://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcmotcon1-ebz/hardware/counts_=_adc_value_}_{rs_=_5e-3}_{adcrange_=_320e-3}_{adcbits_=_16}_\frac{ctrlgain_=_1}{10}{drvgain_=_20}{pgagain_=_1,_2,_4_or_8
 .. |image1| image:: ../images/vbus_chain.png
    :width: 800
