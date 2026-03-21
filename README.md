@@ -47,12 +47,3 @@ The live server cli is able to generate Estobio pyproject.toml entry with (inclu
 ```
 adoc serve --esbonio --sparse docs/learning | tee pyproject.toml
 ```
-
-## Build all documentations
-
-It's possible to build all ADI's documentation at once in parallel.
-To generate it, considering Doctools is installed, do:
-```
-adoc aggregate -d docs_output
-```
-See [Doctools](https://github.com/analogdevicesinc/doctools) for more information.
