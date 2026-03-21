@@ -52,3 +52,8 @@ Assuming you followed the `--skip-smudge` instructions, you can use Git LFS On-D
 Get from
 [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=gastmaier.git-lfs-on-demand) or
 [Open VSX Registry](https://open-vsx.org/extension/gastmaier/git-lfs-on-demand)
+
+For word wrapping at the column 80, you can use Rewrap.
+Get from
+[Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=stkb.Rewrap-18980) or
+[Open VSX Registry](https://open-vsx.org/extension/stkb/rewrap)
