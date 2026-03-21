@@ -47,3 +47,8 @@ The live server cli is able to generate Estobio pyproject.toml entry with (inclu
 ```
 adoc serve --esbonio --sparse docs/learning | tee pyproject.toml
 ```
+
+Assuming you followed the `--skip-smudge` instructions, you can use Git LFS On-Demand to auto fetch the artifacts included in open files or open.
+Get from
+[Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=gastmaier.git-lfs-on-demand) or
+[Open VSX Registry](https://open-vsx.org/extension/gastmaier/git-lfs-on-demand)
