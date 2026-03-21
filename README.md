@@ -38,6 +38,16 @@ Or build the documentation with Sphinx.
 ```
 The generated documentation will be available at `docs/_build/html`.
 
+### VSCode support
+
+[Esbonio](https://docs.esbon.io/en/latest/index.html) is an extensively developed Language Server Protocol and Visual Studio Code extension for sphinx.
+Setup the virtual environment first before opening the text editor, to avoid triggering fallback behaviours.
+
+The live server cli is able to generate Estobio pyproject.toml entry with (including Sparse builds):
+```
+adoc serve --esbonio --sparse docs/learning | tee pyproject.toml
+```
+
 ## Build all documentations
 
 It's possible to build all ADI's documentation at once in parallel.
