@@ -24,6 +24,9 @@ communication protocols.
 Requirements
 ~~~~~~~~~~~~
 
+These exercises can be run either from a **PC** (Linux or Windows) or using a
+**Raspberry Pi 5** with a pre-built SD card image.
+
 **Hardware:**
 
 * **ADALM-Pluto SDR** (required for all exercises)
@@ -68,11 +71,13 @@ Requirements
 
             pip install pyadi-iio
 
-   .. tab-item:: Raspberry Pi (FTC Workshop)
+   .. tab-item:: Raspberry Pi 5
 
-      Flash your SD card with the FTC 2025 workshop image before starting.
-      This image contains all necessary software pre-installed, including Python, GNU Radio,
-      Thonny IDE, Scopy, and all required libraries.
+      Flash your SD card with the pre-built workshop image containing all necessary software
+      (Python, GNU Radio, Thonny IDE, Scopy, PyADI-IIO, and all required libraries).
+
+      .. TODO: Uncomment when image is available
+      .. :download:`Download SD Card Image <rpi5_sdr_workshop_image.img.xz>`
 
 .. note::
 
