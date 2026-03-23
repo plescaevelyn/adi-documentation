@@ -34,27 +34,34 @@ These exercises can be run either from a **PC** (Linux or Windows) or using a
 
    .. tab-item:: Linux
 
-      Install GNU Radio and dependencies from your package manager:
+      Install Python, pip, and GNU Radio from your package manager:
 
       .. code-block:: bash
 
          # Debian/Ubuntu
-         sudo apt install gnuradio python3-pip
+         sudo apt install python3 python3-pip gnuradio
 
-         # Install PyADI-IIO
+         # Install PyADI-IIO (use --break-system-packages on Debian 12+ / Ubuntu 23.04+)
+         pip install pyadi-iio
+
+         # Or use a virtual environment (recommended)
+         python3 -m venv ~/sdr-venv
+         source ~/sdr-venv/bin/activate
          pip install pyadi-iio
 
    .. tab-item:: Windows
 
-      Use `Radioconda <https://github.com/ryanvolz/radioconda>`__ to install GNU Radio:
+      #. Install `Python <https://www.python.org/downloads/>`__ (ensure "Add to PATH" is checked)
 
-      #. Download and install Radioconda from the
-         `releases page <https://github.com/ryanvolz/radioconda/releases>`__
-      #. Open the Radioconda Prompt and install GNU Radio and SDRangel:
+      #. Use `Radioconda <https://github.com/ryanvolz/radioconda>`__ to install GNU Radio:
 
-         .. code-block:: bash
+         * Download and install Radioconda from the
+           `releases page <https://github.com/ryanvolz/radioconda/releases>`__
+         * Open the Radioconda Prompt and install GNU Radio and SDRangel:
 
-            conda install gnuradio sdrangel
+           .. code-block:: bash
+
+              conda install gnuradio sdrangel
 
       #. Install PyADI-IIO:
 

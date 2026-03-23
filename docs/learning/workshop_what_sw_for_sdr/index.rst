@@ -411,16 +411,18 @@ The `gr-iio <https://github.com/analogdevicesinc/gr-iio>`_ package provides GNU 
 
       .. code-block:: bash
 
-         # Debian/Ubuntu
-         sudo apt install gnuradio gr-iio
+         # Debian/Ubuntu - install Python, pip, and GNU Radio
+         sudo apt install python3 python3-pip gnuradio gr-iio
 
    .. tab-item:: Windows
 
-      Use `Radioconda <https://github.com/ryanvolz/radioconda>`_:
+      #. Install `Python <https://www.python.org/downloads/>`__ (ensure "Add to PATH" is checked)
 
-      .. code-block:: bash
+      #. Use `Radioconda <https://github.com/ryanvolz/radioconda>`_ to install GNU Radio:
 
-         conda install gnuradio gnuradio-iio
+         .. code-block:: bash
+
+            conda install gnuradio gnuradio-iio
 
 GNU Radio is ideal for rapid prototyping of communication systems, educational demonstrations,
 and developing custom signal processing applications with ADI SDR hardware.
