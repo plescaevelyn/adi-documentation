@@ -16,24 +16,58 @@ allowing you to implement complex signal processing algorithms without custom ha
 Requirements
 ~~~~~~~~~~~~
 
-To follow these exercises, you will need:
+**Hardware:**
 
-* **Raspberry Pi 5** with power supply
-* **Keyboard and mouse** for the Raspberry Pi
-* **SD card** (16GB or larger recommended) flashed with the FTC 2025 workshop image
 * **ADALM-Pluto SDR** (required for all exercises)
-* **Micro USB cable** to connect the Pluto to the Raspberry Pi
+* **Micro USB cable** to connect the Pluto to your PC
   (see `Pluto Quick Start <https://wiki.analog.com/university/tools/pluto/users/quick_start>`__ for details)
 * **Jupiter or Talise SDR** (optional, for advanced platform exercises)
 * **SMA loopback cable** (for loopback exercises)
 * **Antennas**: 2.4 GHz or 915 MHz antennas for over-the-air exercises (Doppler radar, etc.)
 
+**Software:**
+
+.. tab-set::
+
+   .. tab-item:: Linux
+
+      Install GNU Radio and dependencies from your package manager:
+
+      .. code-block:: bash
+
+         # Debian/Ubuntu
+         sudo apt install gnuradio python3-pip
+
+         # Install PyADI-IIO
+         pip install pyadi-iio
+
+   .. tab-item:: Windows
+
+      Use `Radioconda <https://github.com/ryanvolz/radioconda>`__ to install GNU Radio:
+
+      #. Download and install Radioconda from the
+         `releases page <https://github.com/ryanvolz/radioconda/releases>`__
+      #. Open the Radioconda Prompt and install GNU Radio and SDRangel:
+
+         .. code-block:: bash
+
+            conda install gnuradio sdrangel
+
+      #. Install PyADI-IIO:
+
+         .. code-block:: bash
+
+            pip install pyadi-iio
+
+   .. tab-item:: Raspberry Pi (FTC Workshop)
+
+      Flash your SD card with the FTC 2025 workshop image before starting.
+      This image contains all necessary software pre-installed, including Python, GNU Radio,
+      Thonny IDE, and all required libraries.
+
 .. note::
 
-   Flash your SD card with the FTC 2025 workshop image before starting.
-   This image contains all necessary software pre-installed, including Python, GNU Radio, Thonny
-   IDE, and all required libraries.
-   Connect your SDR hardware (Pluto, Jupiter, or Talise) to the Raspberry Pi 5 before starting
+   Connect your SDR hardware (Pluto, Jupiter, or Talise) to your PC before starting
    the exercises.
 
 .. _sinewave-loopback:
