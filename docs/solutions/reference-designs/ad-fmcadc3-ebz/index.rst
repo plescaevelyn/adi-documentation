@@ -1,5 +1,5 @@
-AD-FMCADC3-EBZ FMC Board
-========================
+AD-FMCADC3-EBZ (OBSOLETE)
+=========================
 
 .. toctree::
    :titlesonly:
