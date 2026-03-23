@@ -1,0 +1,1901 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="The following hands-on exercises demonstrate advanced software-defined radio applications using ADI’s SDR platforms. These exercises build upon the fundamentals covered in the beginner exercises and explore more sophisticated signal processing techniques, multi-channel systems, and real-world communication protocols." name="description" />
+
+    <title>Advanced SDR Exercises &#8212; System Level Documentation  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/app.min.css?v=5c8d5ce8" />
+    <script async="async" src="../../../_static/app.umd.js?v=f78f54ff"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <link rel="icon" href="../../../_static/icon.svg"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="A Precision Converter FPGA Integration Journey" href="../../workshop_a_precision_converter_fpga_integration_journey/index.html" />
+    <link rel="prev" title="Beginner SDR Exercises" href="../beginner_sdr_exercises/index.html" />
+   
+  
+  
+  <meta name="repository" content="documentation">
+  <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head>
+  
+    <body>
+  
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
+        <div class="vertical-divider"></div>
+        
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Docs</label>
+        
+        <a id="logo" href="../../../index.html">
+          <div>System Level</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../../index.html" class="current">System Level</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div class="header localtoc-header">
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">Advanced SDR Exercises</a><ul>
+<li><a class="reference internal" href="#requirements">Requirements</a></li>
+<li><a class="reference internal" href="#first-steps-in-sdr-testing">First Steps in SDR Testing</a></li>
+<li><a class="reference internal" href="#debugging-and-tweaking-iio-attributes">Debugging and Tweaking IIO Attributes</a></li>
+<li><a class="reference internal" href="#digital-qam-modulation-pluto">Digital QAM Modulation (Pluto)</a></li>
+<li><a class="reference internal" href="#enabling-2nd-tx-and-rx-channels-pluto">Enabling 2nd TX and RX Channels (Pluto)</a></li>
+<li><a class="reference internal" href="#quadrature-phase-shift-keying-qpsk">Quadrature Phase Shift Keying (QPSK)</a><ul>
+<li><a class="reference internal" href="#symbol-sync-pluto">Symbol Sync (Pluto)</a></li>
+<li><a class="reference internal" href="#costas-loop-pluto">Costas Loop (Pluto)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../../../index.html">
+      System Level Documentation
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../../index.html" class="current">System Level</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <p class="caption" role="heading">
+  <span class="caption-text">Product Categories</span>
+</p>
+
+<ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../../../products/adsp/index.html">Digital Signal Processors (ADSP)</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../products/adsp/linux-support.html">Linux support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../products/adsp/setup.html">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../products/adsp/sc598-clock-tree.html">SC598 Clock Tree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../products/adsp/use-cases.html">Use cases</a></li>
+</ul>
+</li>
+</ul>
+
+<p class="caption" role="heading">
+  <span class="caption-text">Kuiper &amp; Linux Kernel</span>
+</p>
+
+<ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../../../linux/drivers/index.html">Linux drivers</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../../../linux/drivers/iio/index.html">Linux Industrial I/O Subsystem</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../linux/drivers/iio/iio-trig-sysfs.html">iio-trig-sysfs driver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../linux/drivers/iio/iio-trig-bfin-timer.html">iio-trig-bfin-timer driver</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../../../linux/kernel/index.html">Kernel and devicetrees</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../linux/kernel/zynq.html">Build Zynq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../linux/kernel/zynqmp.html">Build ZynqMP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../linux/kernel/microblaze.html">Build MicroBlaze</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3-1" id="toctree-collapse-3-1"/><div class="collapse"><a class="reference internal" href="../../../linux/kernel/petalinux.html">Build with Petalinux</a><label for="toctree-collapse-3-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3-1-1" id="toctree-collapse-3-1-1"/><div class="collapse"><a class="reference internal" href="../../../linux/kernel/petalinux-dts/index.html">Petalinux Device Trees</a><label for="toctree-collapse-3-1-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../linux/kernel/petalinux-dts/petalinux-custom-dts.html">Custom Device Trees with meta-adi</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../linux/kernel/petalinux-dts/petalinux-meta-adi-bypass.html">Custom Device Trees with DTG (meta-adi Bypass)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../linux/kernel/petalinux-dts/petalinux-system-user.html">Device Tree Modifications with system-user.dtsi</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../linux/kuiper/index.html">Kuiper</a></li>
+</ul>
+
+<p class="caption" role="heading">
+  <span class="caption-text">Software</span>
+</p>
+
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../software/ad9084-profile-generator/index.html">AD9084 (Apollo) Profile Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../software/analog-attach/index.html">Analog Attach</a></li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-4" id="toctree-collapse-4"/><div class="collapse"><a class="reference internal" href="../../../software/iio-oscilloscope/index.html">IIO Oscilloscope</a><label for="toctree-collapse-4"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-4-1" id="toctree-collapse-4-1"/><div class="collapse"><a class="reference internal" href="../../../software/iio-oscilloscope/adrv9009/index.html">ADRV9009</a><label for="toctree-collapse-4-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../software/iio-oscilloscope/adrv9009/plugin.html">Standard Plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../software/iio-oscilloscope/adrv9009/advanced-plugin.html">Advanced plugin</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/iio-oscilloscope/ad9084/index.html">AD9084</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-5" id="toctree-collapse-5"/><div class="collapse"><a class="reference internal" href="../../../software/libiio/index.html">Libiio</a><label for="toctree-collapse-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/libiio/internals.html">About libiio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/libiio/cli.html">Command line utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/libiio/tips-tricks.html">Tips &amp; Tricks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-6" id="toctree-collapse-6"/><div class="collapse"><a class="reference internal" href="../../../software/libm2k/index.html">Libm2k</a><label for="toctree-collapse-6"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/libm2k/calibration.html">Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/libm2k/digital_communication.html">Digital communication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/libm2k/m2kcli.html">Command line utility</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-7" id="toctree-collapse-7"/><div class="collapse"><a class="reference internal" href="../../../software/matlab/index.html">MATLAB &amp; Simulink Toolboxes</a><label for="toctree-collapse-7"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/matlab/hsx-toolbox/index.html">High Speed Converter Toolbox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/matlab/transceiver-toolbox/index.html">Transceiver Toolbox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/matlab/bsp-extend.html">Extending Device Interfaces</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../software/pyadi-iio/index.html">PyADI-IIO</a></li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-8" id="toctree-collapse-8"/><div class="collapse"><a class="reference internal" href="../../../software/zephyr/index.html">Zephyr RTOS</a><label for="toctree-collapse-8"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/zephyr/zephyr-devicetree.html">Intro to Devicetree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/zephyr/kconfig/zephyr-kconfig.html">Introduction to Kconfig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../software/zephyr/using-zephyr-codefusion-fs/zephyr_codefusion_fs.html">Using Zephyr &amp; Codefusion Studio to Partition a Flash Filesystem</a></li>
+</ul>
+</li>
+</ul>
+
+<p class="caption" role="heading">
+  <span class="caption-text">Devices</span>
+</p>
+
+<ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-9" id="toctree-collapse-9"/><div class="collapse"><a class="reference internal" href="../../../tools/m2k/index.html">ADALM2000</a><label for="toctree-collapse-9"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/m2k/devs/index.html">For Developers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/m2k/users/index.html">For End Users</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/m2k/help_support.html">Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/m2k/labview.html">Using With LabVIEW</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/m2k/matlab.html">Using with MATLAB</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-10" id="toctree-collapse-10"/><div class="collapse"><a class="reference internal" href="../../../tools/pluto-m2k/index.html">Common PLUTO&amp;M2K</a><label for="toctree-collapse-10"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/pluto-m2k/building_the_image.html">Building the Firmware Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/pluto-m2k/drivers.html">Installing Drivers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/pluto-m2k/firmware.html">Firmware Updates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/pluto-m2k/obtaining_the_sources.html">Obtaining the Build Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/pluto-m2k/reboot.html">Rebooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/pluto-m2k/usb_otg_host.html">USB OTG – HOST function Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-11" id="toctree-collapse-11"/><div class="collapse"><a class="reference internal" href="../../../tools/pluto/index.html">ADALM-PLUTO</a><label for="toctree-collapse-11"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-11-1" id="toctree-collapse-11-1"/><div class="collapse"><a class="reference internal" href="../../../tools/pluto/devs/index.html">For Developers</a><label for="toctree-collapse-11-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tools/pluto/devs/usb_otg.html">USB OTG</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-11-2" id="toctree-collapse-11-2"/><div class="collapse"><a class="reference internal" href="../../../tools/pluto/hacking/index.html">For Hackers</a><label for="toctree-collapse-11-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tools/pluto/hacking/hardware.html">ADALM-PLUTO Hardware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tools/pluto/hacking/listening_to_yourself.html">Self Reception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tools/pluto/hacking/power_amp.html">Controlling External Devices</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-11-3" id="toctree-collapse-11-3"/><div class="collapse"><a class="reference internal" href="../../../tools/pluto/users/index.html">For End Users</a><label for="toctree-collapse-11-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tools/pluto/users/antennas.html">Antennas</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/pluto/help_support.html">Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/pluto/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/pluto/transceiver_transferring_data.html">Controlling the transceiver and transferring data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tools/uartjtag/index.html">ADALM-UARTJTAG</a></li>
+</ul>
+
+<p class="caption" role="heading">
+  <span class="caption-text">Apps &amp; Solutions</span>
+</p>
+
+<ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-12" id="toctree-collapse-12"/><div class="collapse"><a class="reference internal" href="../../../solutions/application-software/index.html">Application Software</a><label for="toctree-collapse-12"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/application-software/lora-software/index.html">ADI Long Range Wireless Radio Software User Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13" id="toctree-collapse-13"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/index.html">Reference Designs</a><label for="toctree-collapse-13"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-1" id="toctree-collapse-13-1"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad-acevsecrdset-sl/index.html">AD-ACEVSECRDSET-SL</a><label for="toctree-collapse-13-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-acevsecrdset-sl/hardware-guide/index.html">Hardware User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-acevsecrdset-sl/software-guide/index.html">Software User Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-2" id="toctree-collapse-13-2"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad-apard32690-sl/index.html">AD-APARD32690-SL</a><label for="toctree-collapse-13-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-apard32690-sl/ad-apardpfwd-sl/index.html">AD-APARDPFW-SL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-apard32690-sl/ad-apardspoe-sl/index.html">AD-APARDSPOE-SL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-apard32690-sl/ad-t1lusb-ebz/index.html">AD-T1LUSB2.0-EBZ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-apard32690-sl/nina-w102/index.html">NINA-W102 Networking Support</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-3" id="toctree-collapse-13-3"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad-bmse2e3w-sl/index.html">AD-BMSE2E3W-SL</a><label for="toctree-collapse-13-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-bmse2e3w-sl/sample_application/index.html">Sample Application</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-bmse2e3w-sl/software_guide/index.html">Software User Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-4" id="toctree-collapse-13-4"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad-cellpackbm-sl/index.html">AD-CELLPACKBM-SL</a><label for="toctree-collapse-13-4"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-cellpackbm-sl/hardware_guide/index.html">Hardware User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-cellpackbm-sl/software_guide/index.html">Software User Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-5" id="toctree-collapse-13-5"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad-ethernetapldevice-sl/index.html">AD-ETHERNETAPLDEVICE-SL</a><label for="toctree-collapse-13-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-ethernetapldevice-sl/ethernet-apl/index.html">Ethernet-APL Considerations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-ethernetapldevice-sl/functional-safety/index.html">Functional Safety Ready Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-ethernetapldevice-sl/intrinsic-safety/index.html">Intrinsic Safety Design</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-ethernetapldevice-sl/power/index.html">Power Description</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-6" id="toctree-collapse-13-6"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad-fmcomms3-ebz/index.html">AD-FMCOMMS3-EBZ</a><label for="toctree-collapse-13-6"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-fmcomms3-ebz/hardware-guide/index.html">Hardware User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-fmcomms3-ebz/card-specifications/index.html">AD-FMCOMMS3-EBZ Specifications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-fmcomms3-ebz/hardware-guide/config-options/index.html">FMCOMMS3 Configuration Options</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/ad-gmsl-d-e-adp/index.html">AD-GMSL-D-E-ADP#</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-7" id="toctree-collapse-13-7"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad-gmsl522-sl/index.html">AD-GMSL522-SL</a><label for="toctree-collapse-13-7"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-gmsl522-sl/hardware-guide/index.html">Hardware Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-gmsl522-sl/software-guide/index.html">Software Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/ad-gmsl716mipi-evk/index.html">AD-GMSL716MIPI-EVK</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/ad-gmsl717mipi-evk/index.html">AD-GMSL717MIPI-EVK</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-8" id="toctree-collapse-13-8"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad-gmslcamrpi-adp/index.html">AD-GMSLCAMRPI-ADP#</a><label for="toctree-collapse-13-8"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-gmslcamrpi-adp/amd-kria/index.html">Using with AMD Kria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-gmslcamrpi-adp/nvidia-jetson/index.html">Using with Nvidia Jetson Orin Nano</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-gmslcamrpi-adp/raspberry-pi-user-guide/index.html">Using with Raspberry Pi</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-9" id="toctree-collapse-13-9"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad-jupiter-ebz/index.html">AD-JUPITER-EBZ</a><label for="toctree-collapse-13-9"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-jupiter-ebz/quickstart/index.html">Jupiter SDR Quick Start Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-jupiter-ebz/hardware-overview.html">Jupiter SDR Hardware Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-jupiter-ebz/mcs-setup.html">Jupiter_SDR MCS Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-jupiter-ebz/known-issues.html">Jupiter SDR - known issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-jupiter-ebz/reference-design.html">Jupiter SDR HDL Reference Design</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-jupiter-ebz/profile-generation.html">Profile generation flow using TES</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/ad-m2kbnc-ebz/index.html">AD-M2KBNC-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/ad-m2kcbl-ebz/index.html">AD-M2KCBL-EBZ</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-10" id="toctree-collapse-13-10"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad-max32lrwise-sl/index.html">AD-MAX32LRWISE-SL</a><label for="toctree-collapse-13-10"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-max32lrwise-sl/ev-cattletag-ardz/index.html">EV-CATTLETAG-ARDZ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-max32lrwise-sl/max32670-lr-ardz/index.html">MAX32670-LR-ARDZ</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-11" id="toctree-collapse-13-11"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad-max32sxwise-sl/index.html">AD-MAX32SXWISE-SL</a><label for="toctree-collapse-13-11"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-max32sxwise-sl/ev-flowmeter-ardz/index.html">EV-FLOWMETER-ARDZ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-max32sxwise-sl/ev-structural-ardz/index.html">EV-STRUCTURAL-ARDZ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-max32sxwise-sl/max32670-sx-ardz/index.html">MAX32670-SX-ARDZ</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-12" id="toctree-collapse-13-12"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad-paarray3552r-sl/index.html">AD-PAARRAY3552R-SL</a><label for="toctree-collapse-13-12"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-paarray3552r-sl/hardware-guide/index.html">Hardware User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-paarray3552r-sl/software-guide/index.html">Software User Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-13" id="toctree-collapse-13-13"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad-pqmon-sl/index.html">AD-PQMON-SL</a><label for="toctree-collapse-13-13"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-pqmon-sl/hardware-guide/index.html">Hardware User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-pqmon-sl/software-guide/index.html">Software User Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/ad-ps3803-rd/index.html">AD-PS3803-RD</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-14" id="toctree-collapse-13-14"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad-rpi-t1lpse-sl/index.html">AD-RPI-T1LPSE-SL</a><label for="toctree-collapse-13-14"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-rpi-t1lpse-sl/basic-sample-application/index.html">Basic Sample Application</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-15" id="toctree-collapse-13-15"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad-swiot1l-sl/index.html">AD-SWIOT1L-SL</a><label for="toctree-collapse-13-15"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-swiot1l-sl/hardware-guide/index.html">Hardware User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-swiot1l-sl/firmware-guide/index.html">Firmware User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad-swiot1l-sl/software-guide/index.html">Software User Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/ad-synchrona14-ebz/index.html">AD-SYNCHRONA14-EBZ</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-16" id="toctree-collapse-13-16"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad4052-ardz/index.html">EVAL-AD4050/AD4052-ARDZ</a><label for="toctree-collapse-13-16"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad4052-ardz/user-guide.html">Evaluating the device</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-17" id="toctree-collapse-13-17"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad4062-ardz/index.html">EVAL-AD4060/AD4062-ARDZ</a><label for="toctree-collapse-13-17"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad4062-ardz/user-guide/linux.html">Linux User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad4062-ardz/user-guide/no-os.html">No-OS User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad4062-ardz/tools.html">Libraries and GUI Tools</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-18" id="toctree-collapse-13-18"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad9084_ebz/index.html">AD9084-FMCA-EBZ (Apollo)</a><label for="toctree-collapse-13-18"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad9084_ebz/user-guide.html">User guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/ad9084_ebz/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-18-1" id="toctree-collapse-13-18-1"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/ad9084_ebz/quickstart/index.html">Quickstart</a><label for="toctree-collapse-13-18-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../solutions/reference-designs/ad9084_ebz/quickstart/microblaze.html">Virtex UltraScale+ VCU118/VCU128</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../solutions/reference-designs/ad9084_ebz/quickstart/versal.html">Versal ACAP VCK190/VPK180</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../solutions/reference-designs/ad9084_ebz/quickstart/agilex.html">Intel Agilex 7 I-Series</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../solutions/reference-designs/ad9084_ebz/quickstart/new_usecase.html">Running a new JESD mode on hardware</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/adalp2000/index.html">ADALP2000</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-19" id="toctree-collapse-13-19"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/admv96s-wgbe-ek1/index.html">ADMV96S-WGBE-EK1</a><label for="toctree-collapse-13-19"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/admv96s-wgbe-ek1/hardware-guide/index.html">Hardware User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/admv96s-wgbe-ek1/software-guide/index.html">Software User Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-20" id="toctree-collapse-13-20"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/adrd3161-01z/index.html">ADRD3161-01Z</a><label for="toctree-collapse-13-20"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/adrd3161-01z/hardware-guide.html">ADRD3161-01Z Hardware Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/adrd3161-01z/quick-start-guide.html">ADRD3161-01Z Quick Start Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/adrd3161-01z/production-guide.html">ADRD3161-01Z Production Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/adrd8012-01Z/index.html">ADRD8012-01Z</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/adxl355-pmdz/index.html">EVAL-ADXL355-PMDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-ad5592R-pmdz/index.html">EVAL-AD5592R-PMDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-ad5593r-pmdz/index.html">EVAL-AD5593R-PMDZ</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-21" id="toctree-collapse-13-21"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-ad7124-8-pmdz/index.html">EVAL-AD7124-8-PMDZ</a><label for="toctree-collapse-13-21"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-ad7124-8-pmdz/demo/index.html">EVAL-AD7124-8-PMDZ Demo Project</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-22" id="toctree-collapse-13-22"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-ad9081/index.html">AD9081 &amp; AD9082</a><label for="toctree-collapse-13-22"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-ad9081/user-guide.html">User guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-ad9081/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-22-1" id="toctree-collapse-13-22-1"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-ad9081/quickstart/index.html">Quick start guides</a><label for="toctree-collapse-13-22-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../solutions/reference-designs/eval-ad9081/quickstart/a10soc.html">On A10SoC</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../solutions/reference-designs/eval-ad9081/quickstart/vck190.html">On VCK190</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../solutions/reference-designs/eval-ad9081/quickstart/zc706.html">On ZC706</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../solutions/reference-designs/eval-ad9081/quickstart/vcu118.html">On VCU118</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../solutions/reference-designs/eval-ad9081/quickstart/zcu102.html">On ZCU102</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-23" id="toctree-collapse-13-23"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-adbms6830bmsw/index.html">EVAL-ADBMS6830BMSW</a><label for="toctree-collapse-13-23"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-adbms6830bmsw/software-guide/index.html">Software User Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-admx2501ebz/index.html">EVAL-AD-IMP2501-SL</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-24" id="toctree-collapse-13-24"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-adrv9009/index.html">ADRV9009 &amp; ADRV9008</a><label for="toctree-collapse-13-24"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-adrv9009/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-24-1" id="toctree-collapse-13-24-1"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-adrv9009/quickstart/index.html">Quickstart</a><label for="toctree-collapse-13-24-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../solutions/reference-designs/eval-adrv9009/quickstart/zynqmp.html">ZCU102</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-adrv9009/basic-iq-datafiles.html">Basic IQ Datafiles</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-25" id="toctree-collapse-13-25"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-adrv902x/index.html">EVAL-ADRV902X</a><label for="toctree-collapse-13-25"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-adrv902x/user-guide.html">User guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-adrv902x/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-25-1" id="toctree-collapse-13-25-1"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-adrv902x/quickstart/index.html">Quick start</a><label for="toctree-collapse-13-25-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../solutions/reference-designs/eval-adrv902x/quickstart/vck190.html">On VCK190</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../solutions/reference-designs/eval-adrv902x/quickstart/zcu102.html">On ZCU102</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-26" id="toctree-collapse-13-26"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-adrv9032/index.html">EVAL-ADRV9032</a><label for="toctree-collapse-13-26"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-adrv9032/user-guide.html">User guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-adrv9032/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-26-1" id="toctree-collapse-13-26-1"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-adrv9032/quickstart/index.html">Quick start</a><label for="toctree-collapse-13-26-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../solutions/reference-designs/eval-adrv9032/quickstart/zcu102.html">On ZCU102</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-27" id="toctree-collapse-13-27"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-adrv904x/index.html">EVAL-ADRV904x</a><label for="toctree-collapse-13-27"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-adrv904x/user-guide.html">User guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-adrv904x/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-27-1" id="toctree-collapse-13-27-1"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-adrv904x/quickstart/index.html">Quick start</a><label for="toctree-collapse-13-27-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../solutions/reference-designs/eval-adrv904x/quickstart/zcu102.html">On ZCU102</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0359-ebz/index.html">EVAL-CN0359-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0417-ebz/index.html">EVAL-CN0417-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0419-ebz/index.html">EVAL-CN0419-EBZ</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-28" id="toctree-collapse-13-28"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0503-ardz/index.html">EVAL-CN0503-ARDZ</a><label for="toctree-collapse-13-28"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0503-ardz/cn0503-software/index.html">Software User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0503-ardz/fluorescence-measurement/index.html">Fluorescence Measurement Demo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0503-ardz/nitrate-measurement/index.html">Nitrate Measurement Demo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0503-ardz/pH-measurement/index.html">pH Measurement Demo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0503-ardz/turbidity/index.html">Turbidity Measurement Demo</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0518-ebz/index.html">EVAL-CN0518-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0521-ebz/index.html">EVAL-CN0521-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0523-ebz/index.html">EVAL-CN0523-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0534-ebz/index.html">EVAL-CN0534-EBZ</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-29" id="toctree-collapse-13-29"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0540-ardz/index.html">EVAL-CN0540-ARDZ</a><label for="toctree-collapse-13-29"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0540-ardz/user-guide.html">User guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0540-ardz/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0540-ardz/iio-oscilloscope.html">Using the System with IIO Oscilloscope</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-29-1" id="toctree-collapse-13-29-1"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0540-ardz/quickstart/index.html">Quickstart</a><label for="toctree-collapse-13-29-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0540-ardz/quickstart/coraz7s.html">CoraZ7-07s</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0540-ardz/quickstart/de10nano.html">DE10-Nano</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0550-ebz/index.html">EVAL-CN0550-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0554-rpiz/index.html">EVAL-CN0554-RPIZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0555-ebz/index.html">EVAL-CN0555-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0556-ebz/index.html">EVAL-CN0556-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0565-ardz/index.html">EVAL-CN0565-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0575-rpiz/index.html">EVAL-CN0575-RPIZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0577-fmcz/index.html">EVAL-CN0577-FMCZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0579-ardz/index.html">EVAL-CN0579-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0581-ebz/index.html">EVAL-CN0581-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0582-usbz/index.html">EVAL-CN0582-USBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0583-som/index.html">EVAL-CN0583-SOM</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-30" id="toctree-collapse-13-30"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0584-ebz/index.html">EVAL-CN0584-EBZ</a><label for="toctree-collapse-13-30"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0584-ebz/digital-template/index.html">Digital Template Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0584-ebz/matlab-configuration/index.html">MATLAB Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-31" id="toctree-collapse-13-31"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0585-fmcz/index.html">EVAL-CN0585-FMCZ</a><label for="toctree-collapse-13-31"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0585-fmcz/power_tree.html">Power Tree</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-cn0588-ebz/index.html">EVAL-CN0588-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/eval-ess1-sys/index.html">EVAL-ESS1-SYS</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-32" id="toctree-collapse-13-32"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-isomax/index.html">EVAL-ISOMAX</a><label for="toctree-collapse-13-32"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-isomax/hardware_guide/index.html">Hardware User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-isomax/software_guide/index.html">Software User Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-13-33" id="toctree-collapse-13-33"/><div class="collapse"><a class="reference internal" href="../../../solutions/reference-designs/eval-ltpa-kit/index.html">EVAL-LTPA-KIT (LTpowerAnalyzer Kit)</a><label for="toctree-collapse-13-33"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-ltpa-kit/hardware_guide/index.html">EVAL-LTPA-KIT Hardware User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../solutions/reference-designs/eval-ltpa-kit/software_guide/index.html">EVAL-LTPA-KIT Software Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../solutions/reference-designs/fthr-pmd-intz/index.html">FTHR-PMD-INTZ</a></li>
+</ul>
+</li>
+</ul>
+
+<p class="caption" role="heading">
+  <span class="caption-text">University Program</span>
+</p>
+
+<ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14" id="toctree-collapse-14"/><div class="collapse"><a class="reference internal" href="../../../university/index.html">Engineering University Program</a><label for="toctree-collapse-14"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-1" id="toctree-collapse-14-1"/><div class="collapse"><a class="reference internal" href="../../../university/active_learning/index.html">Active Learning: Student-oriented Lab Exercises</a><label for="toctree-collapse-14-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../university/active_learning/wien_bridge_oscillator/index.html">Activity: The Wien Bridge Oscillator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../university/active_learning/efficiency_power_loss/index.html">Activity: Efficiency, Power Loss, and Thermal Management</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<p class="caption" role="heading">
+  <span class="caption-text">Learning</span>
+</p>
+
+<ul class="current">
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-15" id="toctree-collapse-15" checked=""/><div class="collapse"><a class="reference internal" href="../../index.html">Learning! Tutorials, Workshops, Etc</a><label for="toctree-collapse-15"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-15-1" id="toctree-collapse-15-1"/><div class="collapse"><a class="reference internal" href="../../demo_hp_analog_meets_ai/index.html">DEMO High-Performance Analog Meets AI</a><label for="toctree-collapse-15-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../demo_hp_analog_meets_ai/software/index.html">Software Configuration and Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial_prec_adc/index.html">Precision ADC Tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../converter_connectivity_tutorial/index.html">Converter Connectivity Tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../sw_infrastructure/index.html">Software Infrastructure for designing with ADCs, DACs, and Sensors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tools_for_ls/index.html">Tools for Low Speed Mixed Signal System Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tools_for_prec_wb/index.html">Tools for Precision Wideband Mixed Signal System Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tools_for_hs/index.html">Tools for High-Speed Mixed Signal System Design</a></li>
+<li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-15-2" id="toctree-collapse-15-2" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">What software do I need for my SDR?</a><label for="toctree-collapse-15-2"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../beginner_sdr_exercises/index.html">Beginner SDR Exercises</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Advanced SDR Exercises</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../workshop_a_precision_converter_fpga_integration_journey/index.html">A Precision Converter FPGA Integration Journey</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../workshop_kuiper/index.html">Customizing ADI Kuiper Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../workshops_software_defined_instrumentation/index.html">Software Defined Instrumentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../workshops_introduction_to_electronics/index.html">Introduction to Electronics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../workshops_embedded_baremetal/index.html">Embedded Baremetal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../workshops_embedded_linux/index.html">Embedded Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../workshops_applied_systems_control/index.html">Applied Systems Control Workshop</a></li>
+</ul>
+</li>
+</ul>
+
+<p class="caption" role="heading">
+  <span class="caption-text">Contributing and Guidelines</span>
+</p>
+
+<ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-16" id="toctree-collapse-16"/><div class="collapse"><a class="reference internal" href="../../../contributing/creating_new_pages.html">Creating new pages</a><label for="toctree-collapse-16"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing/template/eval.html">Evaluation Boards</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing/docs_guidelines.html">Documentation guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing/forking_publishing.html">Forking and publishing</a></li>
+</ul>
+
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+  <nav class="breadcrumb"><ol><li><a href="../../index.html">Learning! Tutorials, Workshops, Etc</a></li><li><a href="../index.html">What software do I need for my SDR?</a></li></ol></nav>
+</div>
+          <div class="body" role="main">
+            
+  <section id="advanced-sdr-exercises">
+<h1>Advanced SDR Exercises<a class="headerlink" href="#advanced-sdr-exercises" title="Link to this heading"></a></h1>
+<p>The following hands-on exercises demonstrate advanced software-defined radio applications
+using ADI’s SDR platforms.
+These exercises build upon the fundamentals covered in the beginner exercises and explore
+more sophisticated signal processing techniques, multi-channel systems, and real-world
+communication protocols.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Download the exercise files before starting:
+<a class="icon reference download external" download="" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/advanced_exercises.zip"><code class="xref download docutils literal notranslate"><span class="pre">advanced_exercises.zip</span></code></a></p>
+<p>Extract the archive to your Desktop to follow along with the exercises.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These advanced exercises require a solid understanding of SDR fundamentals.
+If you’re new to SDR, we recommend starting with the
+<a class="reference internal" href="../beginner_sdr_exercises/index.html"><span class="doc">Beginner SDR Exercises</span></a> before attempting
+these advanced topics.</p>
+</div>
+<section id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Link to this heading"></a></h2>
+<p>These exercises can be run either from a <strong>PC</strong> (Linux or Windows) or using a
+<strong>Raspberry Pi 5</strong> with a pre-built SD card image.</p>
+<p><strong>Hardware:</strong></p>
+<ul class="simple">
+<li><p><strong>ADALM-Pluto SDR</strong> (required for all exercises)</p></li>
+<li><p><strong>Micro USB cable</strong> to connect the Pluto to your PC
+(see <a class="icon link reference external" href="https://wiki.analog.com/university/tools/pluto/users/quick_start" target="_blank">Pluto Quick Start</a>
+for details)</p></li>
+<li><p><strong>Jupiter or Talise SDR</strong> (optional, for advanced platform exercises)</p></li>
+<li><p><strong>SMA loopback cable</strong> (for loopback exercises)</p></li>
+<li><p><strong>Antennas</strong>: 2.4 GHz or 915 MHz antennas for over-the-air exercises</p></li>
+</ul>
+<p><strong>Software:</strong></p>
+<div class="tab-set docutils"><input checked="checked" id="tab-item-f5c06bd6710b16552a9cd22ee591dfbe64288f99-0" name="tab-set-f5c06bd6710b16552a9cd22ee591dfbe64288f99" type="radio"></input><label class="tab-label" for="tab-item-f5c06bd6710b16552a9cd22ee591dfbe64288f99-0">Linux</label><div class="tab-content docutils"><p>Install Python, pip, and GNU Radio from your package manager:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Debian/Ubuntu</span>
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>python3<span class="w"> </span>python3-pip<span class="w"> </span>gnuradio
+
+<span class="c1"># Install PyADI-IIO (use --break-system-packages on Debian 12+ / Ubuntu 23.04+)</span>
+pip<span class="w"> </span>install<span class="w"> </span>pyadi-iio
+
+<span class="c1"># Or use a virtual environment (recommended)</span>
+python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>~/sdr-venv
+<span class="nb">source</span><span class="w"> </span>~/sdr-venv/bin/activate
+pip<span class="w"> </span>install<span class="w"> </span>pyadi-iio
+</pre></div>
+</div>
+</div><input id="tab-item-f5c06bd6710b16552a9cd22ee591dfbe64288f99-1" name="tab-set-f5c06bd6710b16552a9cd22ee591dfbe64288f99" type="radio"></input><label class="tab-label" for="tab-item-f5c06bd6710b16552a9cd22ee591dfbe64288f99-1">Windows</label><div class="tab-content docutils"><ol class="arabic">
+<li><p>Install <a class="icon link reference external" href="https://www.python.org/downloads/" target="_blank">Python</a> (ensure “Add to PATH” is checked)</p></li>
+<li><p>Use <a class="icon link reference external" href="https://github.com/ryanvolz/radioconda" target="_blank">Radioconda</a> to install GNU Radio:</p>
+<ul>
+<li><p>Download and install Radioconda from the
+<a class="icon link reference external" href="https://github.com/ryanvolz/radioconda/releases" target="_blank">releases page</a></p></li>
+<li><p>Open the Radioconda Prompt and install GNU Radio and SDRangel:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>gnuradio<span class="w"> </span>sdrangel
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p>Install PyADI-IIO:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>pyadi-iio
+</pre></div>
+</div>
+</li>
+</ol>
+</div><input id="tab-item-f5c06bd6710b16552a9cd22ee591dfbe64288f99-2" name="tab-set-f5c06bd6710b16552a9cd22ee591dfbe64288f99" type="radio"></input><label class="tab-label" for="tab-item-f5c06bd6710b16552a9cd22ee591dfbe64288f99-2">Raspberry Pi 5</label><div class="tab-content docutils"><p>Flash your SD card with the pre-built workshop image containing all necessary software
+(Python, GNU Radio, Thonny IDE, Scopy, PyADI-IIO, and all required libraries).</p>
+</div></div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Connect your SDR hardware (Pluto, Jupiter, or Talise) to your PC before starting
+the exercises.</p>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p><strong>Pluto USB Speed Limitation</strong>: USB 2.0 limits data transfer to 20.4 MiB/s,
+which translates to a maximum sample rate of <strong>5.347 MS/s</strong>.
+Keep this in mind when configuring sample rates for your experiments.</p>
+</div>
+<p><strong>What Separates Beginners from Advanced SDR Users:</strong></p>
+<p>Learning to <strong>test your SDR and find mistakes on your own</strong> is the critical step that
+differentiates a beginner from an advanced-level SDR user.
+While beginners focus on running predefined exercises and observing expected results,
+advanced users develop the skills to validate system performance, identify impairments,
+and troubleshoot issues independently.
+The following exercises build these advanced capabilities.</p>
+</section>
+<section id="first-steps-in-sdr-testing">
+<h2>First Steps in SDR Testing<a class="headerlink" href="#first-steps-in-sdr-testing" title="Link to this heading"></a></h2>
+<p>For the theoretical background on sinewave loopback testing, including complex sinusoids,
+Zero IF architecture, and key impairments (Image Rejection, LO Leakage, SNR), see the
+<a class="reference internal" href="../beginner_sdr_exercises/index.html#sinewave-loopback"><span class="std std-ref">Sinewave Loopback</span></a> section in the Beginner SDR Exercises.</p>
+</section>
+<section id="debugging-and-tweaking-iio-attributes">
+<h2>Debugging and Tweaking IIO Attributes<a class="headerlink" href="#debugging-and-tweaking-iio-attributes" title="Link to this heading"></a></h2>
+<p>This advanced exercise teaches you how to interact with the <strong>Industrial I/O (IIO) subsystem</strong> at a low level, giving you direct control over hardware attributes. Understanding IIO attributes is essential for debugging SDR issues, optimizing performance, and integrating SDR control into custom applications.</p>
+<p><strong>What are IIO Attributes?</strong></p>
+<p>IIO attributes are the low-level parameters that control every aspect of your SDR hardware:</p>
+<ul class="simple">
+<li><p><strong>Channel attributes</strong>: Per-channel settings like gain, frequency, sample rate</p></li>
+<li><p><strong>Device attributes</strong>: Global settings affecting the entire device</p></li>
+<li><p><strong>Debug attributes</strong>: Low-level register access for advanced debugging</p></li>
+</ul>
+<p>Every high-level API (PyADI-IIO, GNU Radio, MATLAB, Scopy) ultimately reads and writes these IIO attributes through the Linux kernel. By learning to manipulate them directly, you gain:</p>
+<ul class="simple">
+<li><p><strong>Debugging skills</strong>: Identify whether issues are in your application or the hardware layer</p></li>
+<li><p><strong>Fine-grained control</strong>: Access parameters not exposed by high-level APIs</p></li>
+<li><p><strong>Integration knowledge</strong>: Understand how to integrate SDR control into any application</p></li>
+<li><p><strong>Troubleshooting ability</strong>: Verify attribute values when behavior seems unexpected</p></li>
+</ul>
+<p><strong>Three Ways to Access IIO Attributes:</strong></p>
+<p>Today’s exercises will use:</p>
+<ol class="arabic simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/pyadi-iio" target="_blank">PyADI-IIO</a>: Python library for SDR control</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/libiio" target="_blank">libiio</a> utilities: Command-line tools (iio_attr)</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/scopy" target="_blank">Scopy</a>: Visual instrument and debugging interface</p></li>
+</ol>
+<p>See the official documentation for complete details. This exercise demonstrates all three approaches using the RX gain attribute as an example.</p>
+<p><strong>Using PyADI-IIO to Read/Write Attributes</strong></p>
+<p><strong>Why This Approach:</strong> Python scripts provide programmatic access to IIO attributes, making it easy to automate configuration, log values, and integrate SDR control into larger applications.</p>
+<p><strong>Steps:</strong></p>
+<ol class="arabic">
+<li><p>Navigate to the IIO context exercises folder:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/Desktop/advanced_exercises/1.<span class="se">\ </span>Debugging<span class="se">\ </span>and<span class="se">\ </span>Tweaking<span class="se">\ </span>IIO<span class="se">\ </span>Attributes
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
+<li><p>Open the IIO exploration script in Thonny IDE:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>thonny<span class="w"> </span>iio_explore_pyadi.py
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>Or right-click <code class="docutils literal notranslate"><span class="pre">iio_explore_pyadi.py</span></code> → Open with → <strong>Thonny</strong></p>
+</li>
+<li><p>Run the script by clicking the <strong>Run</strong> button (green arrow) in Thonny</p></li>
+</ol>
+<p><strong>What You’ll See:</strong></p>
+<p>The script demonstrates how to:</p>
+<ul class="simple">
+<li><p>Create an IIO context (connection to the SDR)</p></li>
+<li><p>Access device objects (ad9361-phy for Pluto’s RF transceiver)</p></li>
+<li><p>Read channel attributes (hardwaregain for RX gain)</p></li>
+<li><p>Write channel attributes (set new gain values)</p></li>
+<li><p>Verify changes by reading back the value</p></li>
+</ul>
+<div class="code-spaced highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span><span class="w"> </span><span class="nn">adi</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="c1"># Create IIO context - connects to Pluto SDR</span>
+<span class="linenos"> 4</span><span class="n">sdr</span> <span class="o">=</span> <span class="n">adi</span><span class="o">.</span><span class="n">Pluto</span><span class="p">(</span><span class="s2">&quot;ip:pluto.local&quot;</span><span class="p">)</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span><span class="c1"># Access RX channel object</span>
+<span class="linenos"> 7</span><span class="n">rx_channel</span> <span class="o">=</span> <span class="n">sdr</span><span class="o">.</span><span class="n">rx</span><span class="p">()</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span><span class="c1"># Read current RX gain</span>
+<span class="linenos">10</span><span class="n">current_gain</span> <span class="o">=</span> <span class="n">sdr</span><span class="o">.</span><span class="n">rx_hardwaregain_chan0</span>
+<span class="linenos">11</span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Current RX gain: </span><span class="si">{</span><span class="n">current_gain</span><span class="si">}</span><span class="s2"> dB&quot;</span><span class="p">)</span>
+<span class="linenos">12</span>
+<span class="linenos">13</span><span class="c1"># Set new RX gain value</span>
+<span class="linenos">14</span><span class="n">sdr</span><span class="o">.</span><span class="n">rx_hardwaregain_chan0</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># Set to 10 dB</span>
+<span class="linenos">15</span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Set RX gain to 10 dB&quot;</span><span class="p">)</span>
+<span class="linenos">16</span>
+<span class="linenos">17</span><span class="c1"># Read back to verify</span>
+<span class="linenos">18</span><span class="n">new_gain</span> <span class="o">=</span> <span class="n">sdr</span><span class="o">.</span><span class="n">rx_hardwaregain_chan0</span>
+<span class="linenos">19</span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;New RX gain: </span><span class="si">{</span><span class="n">new_gain</span><span class="si">}</span><span class="s2"> dB&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Expected Output:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Current RX gain: 0 dB
+Set RX gain to 10 dB
+New RX gain: 10 dB
+</pre></div>
+</div>
+<p><strong>Key Insight:</strong> PyADI-IIO provides a Python-friendly interface to IIO attributes. Under the hood, it’s reading and writing the same kernel attributes you’ll access with the other tools.</p>
+<p><strong>Using iio_attr Command-Line Utility</strong></p>
+<p><strong>Why This Approach:</strong> The <code class="docutils literal notranslate"><span class="pre">iio_attr</span></code> command-line tool provides immediate access to IIO attributes without writing code. It’s ideal for:</p>
+<ul class="simple">
+<li><p>Quick verification of settings</p></li>
+<li><p>Shell script automation</p></li>
+<li><p>Debugging when GUI tools aren’t available</p></li>
+<li><p>Understanding the raw IIO interface</p></li>
+</ul>
+<p><strong>Steps:</strong></p>
+<ol class="arabic">
+<li><p>Read the current RX gain value:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iio_attr<span class="w"> </span>-u<span class="w"> </span>ip:pluto.local<span class="w"> </span>-c<span class="w"> </span>-i<span class="w"> </span>ad9361-phy<span class="w"> </span><span class="s1">&#39;voltage0&#39;</span><span class="w"> </span>hardwaregain
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p><strong>What this command does:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-u</span> <span class="pre">ip:pluto.local</span></code>: Connect to Pluto via network (use <code class="docutils literal notranslate"><span class="pre">-u</span> <span class="pre">usb:</span></code> for USB connection)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-c</span></code>: Access channel-specific attributes</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-i</span> <span class="pre">ad9361-phy</span></code>: Target the AD9361 RF transceiver device</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'voltage0'</span></code>: Select RX1 channel (voltage0 = RX1, voltage1 = RX2)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hardwaregain</span></code>: The attribute name</p></li>
+</ul>
+<p><strong>Expected Output:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>10
+</pre></div>
+</div>
+<p>This shows the value you set in the previous PyADI-IIO exercise (10 dB).</p>
+</li>
+<li><p>Set RX gain to 5 dB:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iio_attr<span class="w"> </span>-u<span class="w"> </span>ip:pluto.local<span class="w"> </span>-c<span class="w"> </span>-i<span class="w"> </span>ad9361-phy<span class="w"> </span><span class="s1">&#39;voltage0&#39;</span><span class="w"> </span>hardwaregain<span class="w"> </span><span class="m">5</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p><strong>Expected Output:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>5
+</pre></div>
+</div>
+<p>The tool automatically reads back and displays the new value after writing it.</p>
+</li>
+<li><p>Experiment with other attributes:</p>
+<ul>
+<li><p>List all available devices:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iio_attr<span class="w"> </span>-u<span class="w"> </span>ip:pluto.local
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
+<li><p>List all attributes for ad9361-phy device:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iio_attr<span class="w"> </span>-u<span class="w"> </span>ip:pluto.local<span class="w"> </span>-d<span class="w"> </span>ad9361-phy
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
+<li><p>List all channel attributes for voltage0:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iio_attr<span class="w"> </span>-u<span class="w"> </span>ip:pluto.local<span class="w"> </span>-c<span class="w"> </span>-i<span class="w"> </span>ad9361-phy<span class="w"> </span><span class="s1">&#39;voltage0&#39;</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
+</ul>
+</li>
+</ol>
+<p><strong>Key Insight:</strong> The <code class="docutils literal notranslate"><span class="pre">iio_attr</span></code> utility exposes the raw IIO interface. Every attribute you see
+here can also be accessed through PyADI-IIO, GNU Radio, MATLAB, or Scopy - they all use the same
+underlying IIO layer.</p>
+<p><strong>Using iio_info to Explore the IIO Context</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">iio_info</span></code> command provides a quick overview of all devices, channels, and attributes
+available in an IIO context. This is useful for discovering what’s available on your SDR.</p>
+<p><strong>Steps:</strong></p>
+<ol class="arabic">
+<li><p>List all devices and their attributes:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iio_info<span class="w"> </span>-u<span class="w"> </span>ip:pluto.local
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>This command outputs the complete IIO context structure, including:</p>
+<ul class="simple">
+<li><p>All IIO devices (ad9361-phy, cf-ad9361-lpc, cf-ad9361-dds-core-lpc, etc.)</p></li>
+<li><p>All channels for each device</p></li>
+<li><p>All attributes for each channel and device</p></li>
+</ul>
+</li>
+<li><p>For a more compact view, you can filter the output:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iio_info<span class="w"> </span>-u<span class="w"> </span>ip:pluto.local<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;iio:device|Channel&quot;</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
+</ol>
+<p><strong>Using Direct Filesystem Access (sysfs)</strong></p>
+<p>IIO attributes are exposed through the Linux sysfs filesystem. You can read and write them
+directly using standard shell commands via SSH.</p>
+<p><strong>Steps:</strong></p>
+<ol class="arabic">
+<li><p>SSH into the Pluto SDR:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ssh<span class="w"> </span>root@pluto.local
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>Default password: <code class="docutils literal notranslate"><span class="pre">analog</span></code></p>
+</li>
+<li><p>Navigate to the IIO devices directory:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>root@root:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/sys/bus/iio/devices/
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
+<li><p>List available devices:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>root@root:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-la
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>You’ll see devices like <code class="docutils literal notranslate"><span class="pre">iio:device0</span></code>, <code class="docutils literal notranslate"><span class="pre">iio:device1</span></code>, etc.</p>
+</li>
+<li><p>Read an attribute value directly:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>root@root:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>/sys/bus/iio/devices/iio:device0/in_voltage0_hardwaregain
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
+<li><p>Write an attribute value:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>root@root:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="m">10</span><span class="w"> </span>&gt;<span class="w"> </span>/sys/bus/iio/devices/iio:device0/in_voltage0_hardwaregain
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
+<li><p>Verify the change:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>root@root:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>/sys/bus/iio/devices/iio:device0/in_voltage0_hardwaregain
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
+</ol>
+<p><strong>Key Insight:</strong> Direct filesystem access is useful for embedded applications, shell scripts,
+or when you need the lowest-level access to IIO attributes without any library overhead.</p>
+</section>
+<section id="digital-qam-modulation-pluto">
+<h2>Digital QAM Modulation (Pluto)<a class="headerlink" href="#digital-qam-modulation-pluto" title="Link to this heading"></a></h2>
+<p>This advanced exercise explores <strong>16-QAM (Quadrature Amplitude Modulation)</strong>, a higher-order
+modulation scheme that encodes 4 bits per symbol by varying both phase and amplitude.
+Unlike BPSK (1 bit/symbol) or QPSK (2 bits/symbol), 16QAM uses 16 distinct constellation points,
+achieving higher spectral efficiency at the cost of requiring better signal quality.</p>
+<p>QPSK is similar to BPSK but has more symbols. PSK with more than 4 symbols includes 8PSK,
+16PSK, and beyond.</p>
+<p><strong>GNU Radio Implementation:</strong></p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The GNU Radio <strong>Differential Encoder/Decoder blocks do NOT support 16QAM</strong>.
+You must manually rotate the constellation after demodulation to align it with the
+transmitted pattern. Use the slider to find the correct rotation of the constellation.</p>
+</div>
+<figure class="align-center" id="id1">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_gnuradio_schematic.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_gnuradio_schematic.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_gnuradio_schematic.png" style="width: 45em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 1 </span><span class="caption-text">16QAM Loopback flowgraph with EVM measurements - Transmitter and Receiver chains</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p><strong>Understanding the EVM Measurement Block:</strong></p>
+<p>The flowgraph uses the GNU Radio <strong>Measure EVM</strong> block to calculate Error Vector Magnitude.
+Here’s how the EVM calculation works step by step:</p>
+<p><strong>Step 1: Set of ideal constellation points</strong></p>
+<p>For 16QAM, the ideal constellation points are defined as:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[S_{\text{ideal}} = \{s_0, s_1, ..., s_{M-1}\}\]</div>
+</div>
+<p>where M=16 for 16QAM.</p>
+<p><strong>Step 2: Compute RMS amplitude of the constellation</strong></p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[A_{\text{RMS}} = \sqrt{\frac{1}{M} \sum_{k=0}^{M-1} |s_k|^2}\]</div>
+</div>
+<p>For 16QAM with M=16, this gives the reference amplitude for normalization.</p>
+<p><strong>Step 3: Set of noisy symbols received</strong></p>
+<figure class="align-center" id="id2">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_noisy_symbol_set.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_noisy_symbol_set.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_noisy_symbol_set.png" style="width: 45em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 2 </span><span class="caption-text">Noisy received symbols compared to ideal constellation points</span><a class="headerlink" href="#id2" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>The received symbols form a set:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[R = \{r_0, r_1, ..., r_{N-1}\}\]</div>
+</div>
+<p><strong>Step 4: Find the closest ideal symbol</strong></p>
+<p>For each received noisy symbol <span class="math notranslate nohighlight">\(r_i\)</span>, find the closest ideal symbol <span class="math notranslate nohighlight">\(s_{\text{nearest}}\)</span>.</p>
+<p><strong>Step 5: Compute error value</strong></p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[e_i = r_i - s_{\text{nearest},i}\]</div>
+</div>
+<p><strong>Step 6: Compute instantaneous EVM for one received symbol</strong></p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\text{EVM}_i = \frac{|e_i|}{A_{\text{RMS}}} \times 100\%\]</div>
+</div>
+<p>The open-source code for this block is available at:
+<a class="icon link reference external" href="https://github.com/gnuradio/gnuradio/blob/main/gr-digital/lib/meas_evm_cc_impl.cc" target="_blank">GNU Radio EVM Implementation</a></p>
+<p><strong>Setup:</strong></p>
+<ol class="arabic">
+<li><p>Connect the loopback cable between TX1 and RX1:</p>
+<figure class="align-center" id="id3">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/images/hw_setup/pluto_loopback_setup.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/images/hw_setup/pluto_loopback_setup.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/images/hw_setup/pluto_loopback_setup.png" style="width: 45em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 3 </span><span class="caption-text">Pluto SDR with loopback cable connecting TX to RX</span><a class="headerlink" href="#id3" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</li>
+<li><p>Open GNU Radio Companion:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gnuradio-companion
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
+<li><p>Load the 16QAM flowgraph:</p>
+<ul class="simple">
+<li><p>Click <strong>File</strong> → <strong>Open</strong></p></li>
+<li><p>Navigate to: <code class="docutils literal notranslate"><span class="pre">~/Desktop/advanced_exercises/2.</span> <span class="pre">Digital</span> <span class="pre">QAM</span> <span class="pre">Modulation</span></code></p></li>
+<li><p>Open: <code class="docutils literal notranslate"><span class="pre">16QAM_loopback_pluto.grc</span></code></p></li>
+</ul>
+</li>
+</ol>
+<p><strong>What You’ll See Before Running:</strong></p>
+<p>The flowgraph contains:</p>
+<ul class="simple">
+<li><p><strong>Transmitter chain</strong>:</p>
+<ul>
+<li><p>Random source → 16QAM modulator → Root Raised Cosine (RRC) filter → PlutoSDR Sink</p></li>
+</ul>
+</li>
+<li><p><strong>Receiver chain</strong>:</p>
+<ul>
+<li><p>PlutoSDR Source → RRC filter → 16QAM demodulator → Constellation sink</p></li>
+</ul>
+</li>
+<li><p><strong>EVM measurement blocks</strong>:</p>
+<ul>
+<li><p>Custom Python blocks that calculate Min, Max, and RMS EVM on 100-symbol windows</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>Steps:</strong></p>
+<ol class="arabic">
+<li><p>Run the flowgraph by clicking the <strong>Run</strong> button (green arrow) in the toolbar.</p></li>
+<li><p>Observe the output displays:</p>
+<figure class="align-center" id="id4">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_gnuradio_plot1.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_gnuradio_plot1.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_gnuradio_plot1.png" style="width: 45em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 4 </span><span class="caption-text">Same pattern of symbols at TX and demodulated RX. Green shows RX Spectrum after FLL block.</span><a class="headerlink" href="#id4" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<figure class="align-center" id="id5">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_gnuradio_plot2.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_gnuradio_plot2.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_gnuradio_plot2.png" style="width: 45em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 5 </span><span class="caption-text">Eye diagram after Costas loop of the RX. Use the slider to rotate the constellation
+in steps of 90° - observe that symbols received are the same due to Differential Decoding.</span><a class="headerlink" href="#id5" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</li>
+<li><p><strong>Observe EVM measurements:</strong></p>
+<figure class="align-center" id="id6">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_gnuradio_evm_measurement.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_gnuradio_evm_measurement.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_gnuradio_evm_measurement.png" style="width: 45em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 6 </span><span class="caption-text">EVM measurements: Instantaneous EVM (%) for each received symbol, Min/Max/RMS EVM over 100 symbols</span><a class="headerlink" href="#id6" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>The EVM display shows:</p>
+<ul class="simple">
+<li><p><strong>Instantaneous EVM (%)</strong>: EVM for each received symbol</p></li>
+<li><p><strong>Min EVM (%)</strong>: Minimum EVM in 100 symbols</p></li>
+<li><p><strong>RMS EVM (%)</strong>: Root-mean-square EVM for 100 symbols</p></li>
+<li><p><strong>Max EVM (%)</strong>: Maximum EVM for 100 symbols</p></li>
+<li><p><strong>Average EVM (%)</strong>: Running average</p></li>
+</ul>
+</li>
+<li><p><strong>Understanding the Python blocks:</strong></p>
+<figure class="align-center" id="id7">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_python_blocks.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_python_blocks.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/16qam_with_evm/psk_modulation_python_blocks.png" style="width: 45em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 7 </span><span class="caption-text">Python blocks for EVM calculation - EVM RMS is computed over 100-sample windows</span><a class="headerlink" href="#id7" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>EVM RMS is the RMS value for one window (100 samples) of instantaneous EVM points
+calculated by the EVM Measurement block.</p>
+</li>
+<li><p>Click the <strong>Stop</strong> button (red square) when finished.</p></li>
+</ol>
+</section>
+<section id="enabling-2nd-tx-and-rx-channels-pluto">
+<h2>Enabling 2nd TX and RX Channels (Pluto)<a class="headerlink" href="#enabling-2nd-tx-and-rx-channels-pluto" title="Link to this heading"></a></h2>
+<p>This exercise demonstrates how to enable and use both TX/RX channel pairs on the AD9361
+transceiver in Pluto. Using PyADI-IIO, you can reuse the code and run it on different SDRs
+like Pluto, Talise, Jupiter, ADSY1100 (Apollo SoM) and more.</p>
+<p><strong>Prerequisites:</strong></p>
+<ul class="simple">
+<li><p><strong>Pluto hack</strong>: <a class="icon link reference external" href="https://wiki.analog.com/university/tools/pluto/users/customizing" target="_blank">Customizing Pluto</a></p></li>
+<li><p><strong>Pluto firmware update</strong>: <a class="icon link reference external" href="https://wiki.analog.com/university/tools/pluto/users/firmware" target="_blank">Firmware Update Guide</a></p></li>
+</ul>
+<p><strong>Hardware Modification:</strong></p>
+<p>To access the 2nd TX and RX channels, you need to add U.FL to SMA cables on Rx2 and Tx2:</p>
+<figure class="align-center" id="id8">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/mimo/pluto_hardware_mod.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/mimo/pluto_hardware_mod.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/mimo/pluto_hardware_mod.png" style="width: 45em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 8 </span><span class="caption-text">Hardware modification: Add U.FL to SMA cables on Rx2 and Tx2</span><a class="headerlink" href="#id8" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p><strong>Cable Part Information:</strong></p>
+<ul class="simple">
+<li><p><strong>Manufacturer Part Number</strong>: CAB.011 (Taoglas)</p></li>
+<li><p><strong>DigiKey Link</strong>: <a class="icon link reference external" href="https://www.digikey.com/en/products/detail/taoglas-limited/CAB-011/2332725" target="_blank">CAB.011 on DigiKey</a></p></li>
+</ul>
+<p><strong>Steps:</strong></p>
+<ol class="arabic">
+<li><p>Open the Python script in Thonny IDE:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>thonny<span class="w"> </span>~/Desktop/advanced_exercises/3.<span class="se">\ </span>Enabling<span class="se">\ </span>2nd<span class="se">\ </span>TX<span class="se">\ </span>and<span class="se">\ </span>RX<span class="se">\ </span>Channels/python_loopback_sine_pluto_2rx_2tx.py
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
+<li><p><strong>Examine the code changes</strong> to enable Tx2 and Rx2.</p>
+<p>The key additions/changes to the code are:</p>
+<div class="code-spaced highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span><span class="w"> </span><span class="nn">adi</span>
+<span class="linenos"> 2</span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="linenos"> 3</span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="c1"># Create SDR object</span>
+<span class="linenos"> 6</span><span class="n">sdr</span> <span class="o">=</span> <span class="n">adi</span><span class="o">.</span><span class="n">Pluto</span><span class="p">(</span><span class="s2">&quot;ip:pluto.local&quot;</span><span class="p">)</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="c1"># Configure for 2×2 MIMO operation</span>
+<span class="linenos"> 9</span><span class="n">sdr</span><span class="o">.</span><span class="n">rx_enabled_channels</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>  <span class="c1"># Enable RX1 and RX2</span>
+<span class="linenos">10</span><span class="n">sdr</span><span class="o">.</span><span class="n">tx_enabled_channels</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>  <span class="c1"># Enable TX1 and TX2</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span><span class="c1"># Set sample rate (shared by all channels)</span>
+<span class="linenos">13</span><span class="n">sdr</span><span class="o">.</span><span class="n">sample_rate</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">3e6</span><span class="p">)</span>  <span class="c1"># 3 MSPS</span>
+<span class="linenos">14</span>
+<span class="linenos">15</span><span class="c1"># Set RX buffer size (samples per channel)</span>
+<span class="linenos">16</span><span class="n">sdr</span><span class="o">.</span><span class="n">rx_buffer_size</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="mi">14</span>  <span class="c1"># 16384 samples per channel</span>
+<span class="linenos">17</span>
+<span class="linenos">18</span><span class="c1"># Set LO frequency (shared by all channels - phase coherent)</span>
+<span class="linenos">19</span><span class="n">sdr</span><span class="o">.</span><span class="n">rx_lo</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">2.4e9</span><span class="p">)</span>  <span class="c1"># 2.4 GHz</span>
+<span class="linenos">20</span><span class="n">sdr</span><span class="o">.</span><span class="n">tx_lo</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">2.4e9</span><span class="p">)</span>  <span class="c1"># 2.4 GHz</span>
+<span class="linenos">21</span>
+<span class="linenos">22</span><span class="c1"># Set individual channel gains</span>
+<span class="linenos">23</span><span class="n">sdr</span><span class="o">.</span><span class="n">rx_hardwaregain_chan0</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># RX1 gain = 0 dB</span>
+<span class="linenos">24</span><span class="n">sdr</span><span class="o">.</span><span class="n">rx_hardwaregain_chan1</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># RX2 gain = 0 dB</span>
+<span class="linenos">25</span><span class="n">sdr</span><span class="o">.</span><span class="n">tx_hardwaregain_chan0</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span>  <span class="c1"># TX1 attenuation = -10 dB</span>
+<span class="linenos">26</span><span class="n">sdr</span><span class="o">.</span><span class="n">tx_hardwaregain_chan1</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span>  <span class="c1"># TX2 attenuation = -10 dB</span>
+<span class="linenos">27</span>
+<span class="linenos">28</span><span class="c1"># Generate different complex sinusoids for each TX channel</span>
+<span class="linenos">29</span><span class="n">N</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="mi">14</span>
+<span class="linenos">30</span><span class="n">fc0</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.02e6</span><span class="p">)</span>  <span class="c1"># TX1: 20 kHz tone</span>
+<span class="linenos">31</span><span class="n">fc1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.1e6</span><span class="p">)</span>   <span class="c1"># TX2: 100 kHz tone</span>
+<span class="linenos">32</span><span class="n">ts</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">sdr</span><span class="o">.</span><span class="n">sample_rate</span>
+<span class="linenos">33</span><span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span> <span class="o">*</span> <span class="n">ts</span><span class="p">,</span> <span class="n">ts</span><span class="p">)</span>
+<span class="linenos">34</span>
+<span class="linenos">35</span><span class="c1"># TX1 signal: 20 kHz complex sinusoid</span>
+<span class="linenos">36</span><span class="n">tx1_signal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">fc0</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.9</span>
+<span class="linenos">37</span>
+<span class="linenos">38</span><span class="c1"># TX2 signal: 100 kHz complex sinusoid</span>
+<span class="linenos">39</span><span class="n">tx2_signal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">fc1</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.9</span>
+<span class="linenos">40</span>
+<span class="linenos">41</span><span class="c1"># Interleave TX samples: [tx1[0], tx2[0], tx1[1], tx2[1], ...]</span>
+<span class="linenos">42</span><span class="n">tx_interleaved</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">N</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex64</span><span class="p">)</span>
+<span class="linenos">43</span><span class="n">tx_interleaved</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">tx1_signal</span>  <span class="c1"># Even indices = TX1</span>
+<span class="linenos">44</span><span class="n">tx_interleaved</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">tx2_signal</span>  <span class="c1"># Odd indices = TX2</span>
+<span class="linenos">45</span>
+<span class="linenos">46</span><span class="c1"># Transmit interleaved buffer</span>
+<span class="linenos">47</span><span class="n">sdr</span><span class="o">.</span><span class="n">tx</span><span class="p">(</span><span class="n">tx_interleaved</span><span class="p">)</span>
+<span class="linenos">48</span>
+<span class="linenos">49</span><span class="c1"># Receive samples (automatically interleaved)</span>
+<span class="linenos">50</span><span class="n">rx_interleaved</span> <span class="o">=</span> <span class="n">sdr</span><span class="o">.</span><span class="n">rx</span><span class="p">()</span>
+<span class="linenos">51</span>
+<span class="linenos">52</span><span class="c1"># De-interleave RX samples</span>
+<span class="linenos">53</span><span class="n">rx1_samples</span> <span class="o">=</span> <span class="n">rx_interleaved</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># Even indices = RX1</span>
+<span class="linenos">54</span><span class="n">rx2_samples</span> <span class="o">=</span> <span class="n">rx_interleaved</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># Odd indices = RX2</span>
+<span class="linenos">55</span>
+<span class="linenos">56</span><span class="c1"># Plot results</span>
+<span class="linenos">57</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="linenos">58</span>
+<span class="linenos">59</span><span class="c1"># RX1 spectrum (should show 20 kHz tone from TX1→RX1 loopback)</span>
+<span class="linenos">60</span><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="linenos">61</span><span class="n">plt</span><span class="o">.</span><span class="n">psd</span><span class="p">(</span><span class="n">rx1_samples</span><span class="p">,</span> <span class="n">NFFT</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">Fs</span><span class="o">=</span><span class="n">sdr</span><span class="o">.</span><span class="n">sample_rate</span> <span class="o">/</span> <span class="mf">1e6</span><span class="p">)</span>
+<span class="linenos">62</span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;RX1 Spectrum (TX1→RX1 Loopback)&quot;</span><span class="p">)</span>
+<span class="linenos">63</span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Frequency (MHz)&quot;</span><span class="p">)</span>
+<span class="linenos">64</span>
+<span class="linenos">65</span><span class="c1"># RX2 spectrum (should show 100 kHz tone from TX2→RX2 loopback)</span>
+<span class="linenos">66</span><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="linenos">67</span><span class="n">plt</span><span class="o">.</span><span class="n">psd</span><span class="p">(</span><span class="n">rx2_samples</span><span class="p">,</span> <span class="n">NFFT</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">Fs</span><span class="o">=</span><span class="n">sdr</span><span class="o">.</span><span class="n">sample_rate</span> <span class="o">/</span> <span class="mf">1e6</span><span class="p">)</span>
+<span class="linenos">68</span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;RX2 Spectrum (TX2→RX2 Loopback)&quot;</span><span class="p">)</span>
+<span class="linenos">69</span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Frequency (MHz)&quot;</span><span class="p">)</span>
+<span class="linenos">70</span>
+<span class="linenos">71</span><span class="c1"># RX1 time domain</span>
+<span class="linenos">72</span><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="linenos">73</span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">[:</span><span class="mi">100</span><span class="p">],</span> <span class="n">rx1_samples</span><span class="o">.</span><span class="n">real</span><span class="p">[:</span><span class="mi">100</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;I (real)&quot;</span><span class="p">)</span>
+<span class="linenos">74</span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">[:</span><span class="mi">100</span><span class="p">],</span> <span class="n">rx1_samples</span><span class="o">.</span><span class="n">imag</span><span class="p">[:</span><span class="mi">100</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Q (imag)&quot;</span><span class="p">)</span>
+<span class="linenos">75</span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;RX1 Time Domain&quot;</span><span class="p">)</span>
+<span class="linenos">76</span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time (s)&quot;</span><span class="p">)</span>
+<span class="linenos">77</span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="linenos">78</span>
+<span class="linenos">79</span><span class="c1"># RX2 time domain</span>
+<span class="linenos">80</span><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="linenos">81</span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">[:</span><span class="mi">100</span><span class="p">],</span> <span class="n">rx2_samples</span><span class="o">.</span><span class="n">real</span><span class="p">[:</span><span class="mi">100</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;I (real)&quot;</span><span class="p">)</span>
+<span class="linenos">82</span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">[:</span><span class="mi">100</span><span class="p">],</span> <span class="n">rx2_samples</span><span class="o">.</span><span class="n">imag</span><span class="p">[:</span><span class="mi">100</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Q (imag)&quot;</span><span class="p">)</span>
+<span class="linenos">83</span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;RX2 Time Domain&quot;</span><span class="p">)</span>
+<span class="linenos">84</span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time (s)&quot;</span><span class="p">)</span>
+<span class="linenos">85</span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="linenos">86</span>
+<span class="linenos">87</span><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="linenos">88</span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Key Code Patterns:</strong></p>
+<ul class="simple">
+<li><p><strong>Enable channels</strong>: <code class="docutils literal notranslate"><span class="pre">sdr.rx_enabled_channels</span> <span class="pre">=</span> <span class="pre">[0,</span> <span class="pre">1]</span></code></p></li>
+<li><p><strong>Individual gain control</strong>: <code class="docutils literal notranslate"><span class="pre">sdr.rx_hardwaregain_chan0</span></code> and <code class="docutils literal notranslate"><span class="pre">sdr.rx_hardwaregain_chan1</span></code></p></li>
+<li><p><strong>Sample interleaving</strong>: TX/RX buffers alternate between channels</p></li>
+<li><p><strong>De-interleaving</strong>: <code class="docutils literal notranslate"><span class="pre">rx1</span> <span class="pre">=</span> <span class="pre">rx_interleaved[0::2]</span></code> (even), <code class="docutils literal notranslate"><span class="pre">rx2</span> <span class="pre">=</span> <span class="pre">rx_interleaved[1::2]</span></code> (odd)</p></li>
+</ul>
+</li>
+<li><p>Run the script by clicking the <strong>Run</strong> button (green arrow) in Thonny.</p></li>
+<li><p>Observe the 2Rx 2Tx loopback results showing independent reception on both channels.</p></li>
+</ol>
+</section>
+<section id="quadrature-phase-shift-keying-qpsk">
+<h2>Quadrature Phase Shift Keying (QPSK)<a class="headerlink" href="#quadrature-phase-shift-keying-qpsk" title="Link to this heading"></a></h2>
+<p>These exercises build on the QPSK fundamentals covered in the
+<a class="reference internal" href="../beginner_sdr_exercises/index.html"><span class="doc">Beginner SDR Exercises</span></a>.
+Before starting these advanced QPSK exercises, complete the following beginner exercises:</p>
+<ul class="simple">
+<li><p><strong>QPSK GNU Radio Loopback Structure</strong> - Understanding the full DSP chain</p></li>
+<li><p><strong>QPSK Console Messaging</strong> - Packet-based transmission</p></li>
+<li><p><strong>QPSK Without Additional DSP</strong> - Raw QPSK loopback</p></li>
+<li><p><strong>QPSK Constellation Modulator</strong> - RRC pulse shaping</p></li>
+<li><p><strong>QPSK Frequency Locked Loop</strong> - Coarse frequency correction</p></li>
+</ul>
+<p>The following exercises isolate and explain the Symbol Sync and Costas Loop blocks
+in detail.</p>
+<section id="symbol-sync-pluto">
+<h3>Symbol Sync (Pluto)<a class="headerlink" href="#symbol-sync-pluto" title="Link to this heading"></a></h3>
+<p>This exercise isolates <strong>Symbol Synchronization</strong> (also called <strong>symbol timing recovery</strong>), a critical DSP block that aligns the receiver’s sampling clock with the transmitter’s symbol boundaries. Understanding symbol sync is essential for implementing any digital modulation scheme.</p>
+<p><strong>The Synchronization Problem:</strong></p>
+<p>When receiving a digital signal, the receiver faces several challenges:</p>
+<ol class="arabic simple">
+<li><p><strong>Frequency offset</strong>: TX and RX local oscillators don’t match exactly (handled by FLL)</p></li>
+<li><p><strong>Phase offset</strong>: Carrier phase is unknown (handled by Costas Loop)</p></li>
+<li><p><strong>Timing offset</strong>: Don’t know WHEN symbols start/end (handled by Symbol Sync)</p></li>
+<li><p><strong>Sample rate mismatch</strong>: TX and RX clocks drift over time</p></li>
+</ol>
+<p>This exercise focuses on <strong>timing synchronization</strong> - the problem of determining the optimal sampling instant for each symbol.</p>
+<p><strong>Why Symbol Sync Matters:</strong></p>
+<ul class="simple">
+<li><p><strong>Without symbol sync</strong>: Sampling at random times within symbol periods → high error rate</p></li>
+<li><p><strong>With symbol sync</strong>: Sampling at optimal decision points → maximum eye opening, minimal ISI</p></li>
+</ul>
+<p>We want to sample where the adjacent symbols cross 0:</p>
+<figure class="align-center" id="id9">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/cross0.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/cross0.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/cross0.png" style="width: 45em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 9 </span><span class="caption-text">Symbol timing recovery: sample where adjacent symbols cross zero</span><a class="headerlink" href="#id9" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p><strong>What Symbol Sync Does:</strong></p>
+<p>The Symbol Sync block:</p>
+<ol class="arabic simple">
+<li><p><strong>Estimates symbol timing</strong>: Finds when symbols start and end</p></li>
+<li><p><strong>Resamples the signal</strong>: Outputs exactly 1 sample per symbol (SPS = 1)</p></li>
+<li><p><strong>Tracks timing drift</strong>: Adapts to clock frequency differences between TX and RX</p></li>
+<li><p><strong>Applies matched filtering</strong>: Often includes RRC filter for optimal SNR</p></li>
+</ol>
+<p><strong>Key Parameters:</strong></p>
+<ul class="simple">
+<li><p><strong>Samples per symbol (SPS)</strong>: Input has multiple samples per symbol (e.g., 4 SPS), output has 1 SPS</p></li>
+<li><p><strong>Loop bandwidth</strong>: Controls how quickly timing adjusts (trade-off: fast acquisition vs noise immunity)</p></li>
+<li><p><strong>Damping factor</strong>: Controls oscillation behavior during lock acquisition</p></li>
+<li><p><strong>Timing error detector</strong>: Algorithm that estimates sampling phase error (Mueller-Müller, Gardner, etc.)</p></li>
+</ul>
+<p><strong>This Exercise’s Teaching Approach:</strong></p>
+<p>In beginner QPSK exercises, symbol sync was hidden inside a complete receiver chain. This advanced exercise:</p>
+<ul class="simple">
+<li><p><strong>Isolates symbol sync</strong>: Shows its effect in isolation</p></li>
+<li><p><strong>Visual comparison</strong>: Constellation with vs without proper symbol timing</p></li>
+<li><p><strong>Interactive tuning</strong>: Adjust loop parameters to see their impact</p></li>
+<li><p><strong>Foundation for custom receivers</strong>: Learn to implement symbol sync in your own DSP chains</p></li>
+</ul>
+<p><strong>Setup:</strong></p>
+<ol class="arabic">
+<li><p>Connect loopback cable between TX1 and RX1</p>
+<figure class="align-center" id="id10">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/images/hw_setup/pluto_loopback_setup.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/images/hw_setup/pluto_loopback_setup.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/images/hw_setup/pluto_loopback_setup.png" style="width: 45em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 10 </span><span class="caption-text">Pluto SDR with loopback cable connecting TX to RX</span><a class="headerlink" href="#id10" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</li>
+<li><p>Open GNU Radio Companion:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gnuradio-companion
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
+<li><p>Load the Symbol Sync flowgraph:</p>
+<ul class="simple">
+<li><p>Click <strong>File</strong> → <strong>Open</strong></p></li>
+<li><p>Navigate to: <code class="docutils literal notranslate"><span class="pre">~/Desktop/advanced_exercises/4.</span> <span class="pre">Quadrature</span> <span class="pre">Phase</span> <span class="pre">Shift</span> <span class="pre">Keying</span> <span class="pre">(QPSK)/Symbol</span> <span class="pre">Sync</span></code></p></li>
+<li><p>Open: <code class="docutils literal notranslate"><span class="pre">symbol_sync_loopback_pluto.grc</span></code></p></li>
+</ul>
+</li>
+</ol>
+<p><strong>Flowgraph Architecture:</strong></p>
+<figure class="align-center" id="id11">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_schematic.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_schematic.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_schematic.png" style="width: 45em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 11 </span><span class="caption-text">QPSK flowgraph with Symbol Sync block</span><a class="headerlink" href="#id11" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>The flowgraph contains:</p>
+<ul class="simple">
+<li><p><strong>Transmitter</strong>: Random bits → QPSK modulator → RRC pulse shaping → Pluto TX</p></li>
+<li><p><strong>Receiver path 1</strong> (without Symbol Sync): Pluto RX → Constellation plot</p></li>
+<li><p><strong>Receiver path 2</strong> (with Symbol Sync): Pluto RX → FLL → Symbol Sync → Constellation plot</p></li>
+</ul>
+<p>This side-by-side comparison shows the effect of proper symbol timing.</p>
+<p><strong>Steps:</strong></p>
+<ol class="arabic">
+<li><p>Run the flowgraph:</p>
+<ul class="simple">
+<li><p>Click the <strong>Run</strong> button (green arrow)</p></li>
+<li><p>Wait for constellation plots to appear</p></li>
+</ul>
+</li>
+<li><p><strong>Observe the constellation WITHOUT Symbol Sync:</strong></p>
+<p>The first constellation plot shows the received signal with:</p>
+<ul class="simple">
+<li><p><strong>FLL applied</strong>: Frequency offset corrected (spectrum centered at DC)</p></li>
+<li><p><strong>NO symbol sync</strong>: Still sampling at 4 samples per symbol (oversampled)</p></li>
+<li><p><strong>NO matched filter</strong>: RRC filter not yet applied</p></li>
+</ul>
+<figure class="align-center" id="id12">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result1.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result1.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result1.png" style="width: 45em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 12 </span><span class="caption-text">All symbols have same amplitude on constellation but I/Q still varying due to remaining frequency/phase offset</span><a class="headerlink" href="#id12" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p><strong>What you’ll see:</strong></p>
+<ul class="simple">
+<li><p><strong>4 samples per symbol</strong>: Each QPSK symbol appears as a cluster of 4 points</p></li>
+<li><p><strong>Trajectory lines</strong>: Can see the transitions between symbols (not just decision points)</p></li>
+<li><p><strong>Blurred constellation</strong>: Hard to identify the 4 QPSK decision regions</p></li>
+<li><p><strong>Variable amplitude</strong>: Symbol magnitudes are inconsistent</p></li>
+</ul>
+<p><strong>Why this happens:</strong></p>
+<ul class="simple">
+<li><p>Sampling at 4 SPS means you capture intermediate points during symbol transitions</p></li>
+<li><p>Haven’t identified the optimal sampling instant within each symbol</p></li>
+<li><p>Matched filter (RRC) hasn’t been applied yet</p></li>
+</ul>
+</li>
+<li><p><strong>Observe the constellation WITH Symbol Sync:</strong></p>
+<p>The second constellation plot shows the same signal after Symbol Sync:</p>
+<ul class="simple">
+<li><p><strong>1 sample per symbol</strong>: Downsampled to symbol rate</p></li>
+<li><p><strong>Matched filter applied</strong>: RRC filter provides optimal SNR</p></li>
+<li><p><strong>Optimal sampling instants</strong>: Only the decision points, not transitions</p></li>
+</ul>
+<figure class="align-center" id="id13">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result2.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result2.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result2.png" style="width: 45em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 13 </span><span class="caption-text">After symbol sync, constellation points have consistent amplitude</span><a class="headerlink" href="#id13" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<figure class="align-center" id="id14">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result_plot1.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result_plot1.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result_plot1.png" style="width: 45em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 14 </span><span class="caption-text">Symbol sync timing stays around 16 = sps setting</span><a class="headerlink" href="#id14" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<figure class="align-center" id="id15">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result_plot2.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result_plot2.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_symbol_sync/qpsk_symbol_sync_gnuradio_result_plot2.png" style="width: 45em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 15 </span><span class="caption-text">Symbol sync error stays around 0</span><a class="headerlink" href="#id15" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p><strong>What you’ll see:</strong></p>
+<ul class="simple">
+<li><p><strong>Tight symbol clusters</strong>: All symbols have the same magnitude</p></li>
+<li><p><strong>Four clear regions</strong>: QPSK constellation is clearly visible</p></li>
+<li><p><strong>No transition trails</strong>: Only sampling at optimal decision instants</p></li>
+<li><p><strong>Remaining rotation</strong>: Phase/frequency offset still present (needs Costas Loop)</p></li>
+</ul>
+<p><strong>What changed:</strong></p>
+<ul class="simple">
+<li><p>Symbol Sync found the optimal sampling phase within each symbol period</p></li>
+<li><p>Downsampled from 4 SPS to 1 SPS</p></li>
+<li><p>Applied matched filter (RRC) for maximum SNR</p></li>
+</ul>
+</li>
+<li><p><strong>Compare the two constellations side-by-side:</strong></p>
+<p><strong>Key differences:</strong></p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Aspect</strong></p></th>
+<th class="head"><p><strong>Without Symbol Sync</strong></p></th>
+<th class="head"><p><strong>With Symbol Sync</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Samples per symbol</strong></p></td>
+<td><p>4 SPS (oversampled)</p></td>
+<td><p>1 SPS (symbol rate)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Amplitude uniformity</strong></p></td>
+<td><p>Variable (transition samples)</p></td>
+<td><p>Constant (decision points only)</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Constellation clarity</strong></p></td>
+<td><p>Blurred, trajectory visible</p></td>
+<td><p>Clean, distinct symbol clusters</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Matched filter</strong></p></td>
+<td><p>Not applied</p></td>
+<td><p>Applied (optimal SNR)</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>ISI (Inter-Symbol
+Interference)</strong></p></td>
+<td><p>High (wrong sampling instants)</p></td>
+<td><p>Minimal (optimal sampling)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li><p><strong>Observe remaining impairments:</strong></p>
+<p>Even with Symbol Sync, you’ll notice:</p>
+<ul class="simple">
+<li><p><strong>Constellation rotation</strong>: The QPSK points may not align with ±1±j</p></li>
+<li><p><strong>Small residual frequency offset</strong>: FLL doesn’t correct perfectly</p></li>
+</ul>
+<p>These impairments will be addressed by the <strong>Costas Loop</strong> in the next exercise.</p>
+</li>
+<li><p>Stop the flowgraph:</p>
+<ul class="simple">
+<li><p>Click the <strong>Stop</strong> button</p></li>
+<li><p>Or middle-click on a plot → <strong>Stop</strong></p></li>
+</ul>
+</li>
+</ol>
+<p><strong>Understanding the Symbol Sync Block:</strong></p>
+<p>The GNU Radio <strong>Symbol Sync</strong> block (or <strong>Polyphase Clock Sync</strong>) implements:</p>
+<ol class="arabic simple">
+<li><p><strong>Timing error detector</strong>: Estimates whether sampling is early or late</p>
+<ul class="simple">
+<li><p><strong>Mueller-Müller algorithm</strong>: Common for PSK modulations</p></li>
+<li><p><strong>Gardner algorithm</strong>: Non-data-aided, works without knowing symbol values</p></li>
+<li><p><strong>Early-Late Gate</strong>: Simple but effective for pulse-shaped signals</p></li>
+</ul>
+</li>
+<li><p><strong>Loop filter</strong>: Smooths timing error estimates</p>
+<ul class="simple">
+<li><p>Low-pass filters noisy error signals</p></li>
+<li><p>Determines loop bandwidth and damping</p></li>
+</ul>
+</li>
+<li><p><strong>Interpolator</strong>: Resamples signal at optimal timing instants</p>
+<ul class="simple">
+<li><p><strong>Polyphase filterbank</strong>: Efficiently resamples with arbitrary fractional delay</p></li>
+<li><p>Includes matched filter (RRC) for optimal SNR</p></li>
+</ul>
+</li>
+<li><p><strong>Timing drift tracking</strong>: Continuously adapts to TX/RX clock frequency differences</p></li>
+</ol>
+<p><strong>Timing Error Detector Intuition:</strong></p>
+<p>The Mueller-Müller algorithm uses this insight:</p>
+<ul class="simple">
+<li><p><strong>At optimal sampling instant</strong>: Symbol transitions are abrupt</p></li>
+<li><p><strong>Early sampling</strong>: Still in previous symbol (transition not complete)</p></li>
+<li><p><strong>Late sampling</strong>: Already in next symbol (transition overshot)</p></li>
+</ul>
+<p>By analyzing consecutive samples and their differences, the algorithm estimates timing error and adjusts the sampling phase.</p>
+<p><strong>Loop Parameters:</strong></p>
+<ul class="simple">
+<li><p><strong>Loop bandwidth</strong>: Typically 0.01 to 0.1 rad/sample</p>
+<ul>
+<li><p><strong>Higher BW</strong>: Faster acquisition, more sensitive to noise</p></li>
+<li><p><strong>Lower BW</strong>: Slower acquisition, more robust to noise</p></li>
+</ul>
+</li>
+<li><p><strong>Damping factor</strong>: Typically 0.707 (critically damped)</p>
+<ul>
+<li><p><strong>Higher damping</strong>: Less overshoot, slower settling</p></li>
+<li><p><strong>Lower damping</strong>: Faster settling, more overshoot</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>Next Step:</strong></p>
+<p>The <strong>Costas Loop</strong> exercise (next) will address the remaining phase and frequency offsets, completing the QPSK receiver synchronization chain:</p>
+<ol class="arabic simple">
+<li><p><strong>FLL</strong>: Coarse frequency offset correction (covered in beginner exercises)</p></li>
+<li><p><strong>Symbol Sync</strong>: Timing synchronization + matched filtering (this exercise)</p></li>
+<li><p><strong>Costas Loop</strong>: Fine frequency and phase offset correction (next exercise)</p></li>
+</ol>
+<p>Together, these three blocks form the complete synchronization subsystem for QPSK demodulation.</p>
+<p><strong>Advanced Exploration:</strong></p>
+<p>Try modifying the flowgraph:</p>
+<ol class="arabic simple">
+<li><p>Remove FLL before Symbol Sync - observe how frequency offset affects timing recovery</p></li>
+<li><p>Change Symbol Sync loop bandwidth (0.01 vs 0.1) - observe acquisition speed vs noise sensitivity</p></li>
+<li><p>Add intentional sampling frequency offset (TX sample rate ≠ RX sample rate) - watch Symbol Sync track the drift</p></li>
+</ol>
+</section>
+<section id="costas-loop-pluto">
+<h3>Costas Loop (Pluto)<a class="headerlink" href="#costas-loop-pluto" title="Link to this heading"></a></h3>
+<p>This exercise isolates the <strong>Costas Loop</strong>, a phase-locked loop (PLL) that performs <strong>carrier synchronization</strong> by removing residual frequency and phase offsets. The Costas Loop is the final synchronization stage in a complete QPSK receiver, enabling accurate symbol demodulation.</p>
+<p><strong>The Carrier Synchronization Problem:</strong></p>
+<p>Even after FLL (coarse frequency correction) and Symbol Sync (timing recovery), the received constellation still has:</p>
+<ul class="simple">
+<li><p><strong>Residual frequency offset</strong>: FLL corrects to within ~100 Hz, but not perfectly</p></li>
+<li><p><strong>Phase offset</strong>: Unknown carrier phase (could be rotated 0°, 90°, 180°, or 270°)</p></li>
+<li><p><strong>Phase drift</strong>: TX and RX oscillators drift slowly over time</p></li>
+</ul>
+<p>Without carrier synchronization:</p>
+<ul class="simple">
+<li><p>Constellation rotates continuously (frequency offset)</p></li>
+<li><p>Constellation has fixed but unknown rotation (phase offset)</p></li>
+<li><p>Cannot make correct symbol decisions</p></li>
+</ul>
+<p><strong>What is a Costas Loop?</strong></p>
+<p>The Costas Loop is a <strong>carrier recovery circuit</strong> that:</p>
+<ol class="arabic simple">
+<li><p><strong>Estimates phase error</strong>: Computes how much the constellation is rotated</p></li>
+<li><p><strong>Generates correction</strong>: Produces a phase offset to counteract the rotation</p></li>
+<li><p><strong>Tracks phase drift</strong>: Continuously adapts to changing carrier phase</p></li>
+</ol>
+<p>It’s specifically designed for suppressed-carrier modulations (BPSK, QPSK, 8PSK) where there’s no pilot tone to lock onto.</p>
+<p><strong>Why “Costas” Loop?</strong></p>
+<p>Named after John P. Costas (1956), who invented this technique for <strong>carrier recovery without a pilot tone</strong>. Before Costas, receivers needed the transmitter to send a separate carrier reference signal. The Costas Loop extracts carrier phase information from the modulated signal itself.</p>
+<p><strong>Costas Loop Architecture:</strong></p>
+<p><strong>Key Components:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Phase error detector</strong>: Computes <code class="docutils literal notranslate"><span class="pre">error</span> <span class="pre">=</span> <span class="pre">I</span> <span class="pre">×</span> <span class="pre">Q</span></code> (for QPSK)</p>
+<ul class="simple">
+<li><p>When constellation is correctly aligned: <code class="docutils literal notranslate"><span class="pre">I</span> <span class="pre">×</span> <span class="pre">Q</span> <span class="pre">≈</span> <span class="pre">0</span></code></p></li>
+<li><p>When rotated: <code class="docutils literal notranslate"><span class="pre">I</span> <span class="pre">×</span> <span class="pre">Q</span> <span class="pre">≠</span> <span class="pre">0</span></code>, sign indicates direction</p></li>
+</ul>
+</li>
+<li><p><strong>Loop filter</strong>: Low-pass filters the error signal</p>
+<ul class="simple">
+<li><p>Smooths noisy error estimates</p></li>
+<li><p>Determines loop bandwidth (trade-off: acquisition speed vs jitter)</p></li>
+</ul>
+</li>
+<li><p><strong>NCO (Numerically Controlled Oscillator)</strong>: Generates phase correction</p>
+<ul class="simple">
+<li><p>Integrates filtered error to produce phase offset</p></li>
+<li><p>Rotates the constellation to cancel carrier offset</p></li>
+</ul>
+</li>
+<li><p><strong>Complex multiplier</strong>: Applies phase correction to input signal</p></li>
+</ol>
+<p><strong>Phase Error Detector for QPSK:</strong></p>
+<p>The classic Costas error function for QPSK is:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\text{error} = \text{sign}(I) \times Q - \text{sign}(Q) \times I\]</div>
+</div>
+<p>This is a <strong>decision-directed</strong> error detector:</p>
+<ul class="simple">
+<li><p>Uses hard decisions (sign) on in-phase component</p></li>
+<li><p>Measures error on quadrature component</p></li>
+<li><p>Minimized when constellation aligns with decision boundaries</p></li>
+</ul>
+<p><strong>This Exercise’s Teaching Approach:</strong></p>
+<p>Previous exercises used Costas Loop as part of a complete receiver. This advanced exercise:</p>
+<ul class="simple">
+<li><p><strong>Isolates Costas Loop effect</strong>: Shows constellation before vs after phase correction</p></li>
+<li><p><strong>Demonstrates phase tracking</strong>: Observe how loop locks and tracks drift</p></li>
+<li><p><strong>Visual understanding</strong>: See phase rotation disappear in real-time</p></li>
+<li><p><strong>Parameter exploration</strong>: Tune loop bandwidth to understand trade-offs</p></li>
+</ul>
+<p><strong>Setup:</strong></p>
+<ol class="arabic">
+<li><p>Connect loopback cable between TX1 and RX1</p></li>
+<li><p>Open GNU Radio Companion:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gnuradio-companion
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
+<li><p>Load the Costas Loop flowgraph:</p>
+<ul class="simple">
+<li><p>Click <strong>File</strong> → <strong>Open</strong></p></li>
+<li><p>Navigate to: <code class="docutils literal notranslate"><span class="pre">~/Desktop/advanced_exercises/4.</span> <span class="pre">Quadrature</span> <span class="pre">Phase</span> <span class="pre">Shift</span> <span class="pre">Keying</span> <span class="pre">(QPSK)/Costas</span> <span class="pre">Loop</span></code></p></li>
+<li><p>Open: <code class="docutils literal notranslate"><span class="pre">costas_loop_loopback_pluto.grc</span></code></p></li>
+</ul>
+</li>
+</ol>
+<p><strong>Flowgraph Architecture:</strong></p>
+<figure class="align-center" id="id16">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_costas_loop/qpsk_costas_loop_gnuradio_schematic.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_costas_loop/qpsk_costas_loop_gnuradio_schematic.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_costas_loop/qpsk_costas_loop_gnuradio_schematic.png" style="width: 45em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 16 </span><span class="caption-text">QPSK flowgraph with Costas Loop for fine frequency and phase correction</span><a class="headerlink" href="#id16" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>The flowgraph contains:</p>
+<ul class="simple">
+<li><p><strong>Transmitter</strong>: Random bits → QPSK modulator → RRC pulse shaping → Pluto TX</p></li>
+<li><p><strong>Receiver (before Costas)</strong>: Pluto RX → FLL → Symbol Sync → Constellation plot</p></li>
+<li><p><strong>Receiver (after Costas)</strong>: … → Costas Loop → Constellation plot</p></li>
+</ul>
+<p>This side-by-side comparison shows the Costas Loop’s effect on carrier synchronization.</p>
+<p><strong>Steps:</strong></p>
+<ol class="arabic">
+<li><p>Run the flowgraph:</p>
+<ul class="simple">
+<li><p>Click the <strong>Run</strong> button (green arrow)</p></li>
+<li><p>Wait for constellation plots to appear</p></li>
+</ul>
+</li>
+<li><p><strong>Observe the constellation BEFORE Costas Loop:</strong></p>
+<p>The first constellation plot shows the received signal after FLL and Symbol Sync but BEFORE Costas Loop:</p>
+<ul class="simple">
+<li><p><strong>Frequency mostly corrected</strong>: Spectrum centered near DC (FLL worked)</p></li>
+<li><p><strong>Timing synchronized</strong>: 1 sample per symbol, clean symbol clusters (Symbol Sync worked)</p></li>
+<li><p><strong>Residual rotation</strong>: Constellation slowly rotates or has fixed offset</p></li>
+<li><p><strong>Phase ambiguity</strong>: Might be rotated by 0°, 90°, 180°, or 270°</p></li>
+</ul>
+<figure class="align-center" id="id17">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_costas_loop/qpsk_costas_loop_example_result1.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_costas_loop/qpsk_costas_loop_example_result1.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_costas_loop/qpsk_costas_loop_example_result1.png" style="width: 45em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 17 </span><span class="caption-text">Symbols are now separated as expected, transitions in eye diagrams are less noisy</span><a class="headerlink" href="#id17" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p><strong>What you’ll see:</strong></p>
+<ul class="simple">
+<li><p><strong>Slow rotation</strong>: Constellation spins slowly (residual frequency offset ~10-100 Hz)</p></li>
+<li><p><strong>OR fixed rotation</strong>: Constellation locked at wrong angle (phase offset only)</p></li>
+<li><p><strong>Clear symbol clusters</strong>: Symbol Sync already gave us good sampling instants</p></li>
+<li><p><strong>Wrong decision regions</strong>: Symbols don’t align with ±1±j</p></li>
+</ul>
+<p><strong>Why this happens:</strong></p>
+<ul class="simple">
+<li><p>FLL corrects coarse frequency offset but leaves small residual</p></li>
+<li><p>No mechanism yet to track fine frequency drift or phase offset</p></li>
+<li><p>Symbol decisions would have high error rate (symbols near decision boundaries)</p></li>
+</ul>
+</li>
+<li><p><strong>Observe the constellation AFTER Costas Loop:</strong></p>
+<p>The second constellation plot shows the same signal after Costas Loop:</p>
+<ul class="simple">
+<li><p><strong>No rotation</strong>: Constellation is stationary</p></li>
+<li><p><strong>Aligned with decision regions</strong>: Symbols at ±1±j (or 90° multiples)</p></li>
+<li><p><strong>Stable phase</strong>: Tracking and correcting any remaining drift</p></li>
+</ul>
+<figure class="align-center" id="id18">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_costas_loop/qpsk_costas_loop_example_result2.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_costas_loop/qpsk_costas_loop_example_result2.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_costas_loop/qpsk_costas_loop_example_result2.png" style="width: 45em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 18 </span><span class="caption-text">Clean QPSK constellation after Costas Loop correction</span><a class="headerlink" href="#id18" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>You can tweak the bandwidth of the Costas Loop and see how it influences the error signal
+and the constellation plot. You can also add a phase shift in radians after Costas Loop.</p>
+<figure class="align-center" id="id19">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_costas_loop/qpsk_costas_loop_example_result_plot.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_costas_loop/qpsk_costas_loop_example_result_plot.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/sdr_workshop/docs/learning/workshop_what_sw_for_sdr/advanced_sdr_exercises/images/exercises/qpsk_costas_loop/qpsk_costas_loop_example_result_plot.png" style="width: 45em;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 19 </span><span class="caption-text">Error signal centered around 0, Phase Correction signal between 0 and 2π</span><a class="headerlink" href="#id19" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p><strong>What you’ll see:</strong></p>
+<ul class="simple">
+<li><p><strong>Stationary constellation</strong>: No rotation, even over long observations</p></li>
+<li><p><strong>Aligned symbols</strong>: Points cluster tightly around ±1±j (ideal QPSK positions)</p></li>
+<li><p><strong>Minimal phase jitter</strong>: Small random variations due to noise, but well-controlled</p></li>
+<li><p><strong>Ready for demodulation</strong>: Symbol decisions can now be made accurately</p></li>
+</ul>
+<p><strong>What the Costas Loop did:</strong></p>
+<ul class="simple">
+<li><p>Detected the phase error using the <code class="docutils literal notranslate"><span class="pre">I</span> <span class="pre">×</span> <span class="pre">Q</span></code> error function</p></li>
+<li><p>Generated a phase correction signal via the loop filter and NCO</p></li>
+<li><p>Applied correction by rotating the input signal</p></li>
+<li><p>Continuously tracked and corrected residual frequency drift</p></li>
+</ul>
+</li>
+<li><p><strong>Compare the two constellations side-by-side:</strong></p>
+<p><strong>Key differences:</strong></p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Aspect</strong></p></th>
+<th class="head"><p><strong>Before Costas Loop</strong></p></th>
+<th class="head"><p><strong>After Costas Loop</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Rotation</strong></p></td>
+<td><p>Slowly rotating or fixed offset</p></td>
+<td><p>Stationary (locked)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Phase alignment</strong></p></td>
+<td><p>Random (0°, 90°, 180°, 270°)</p></td>
+<td><p>Aligned with decision regions</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Frequency offset</strong></p></td>
+<td><p>Small residual (±100 Hz)</p></td>
+<td><p>Fully corrected (&lt;1 Hz)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Symbol decisions</strong></p></td>
+<td><p>High error rate</p></td>
+<td><p>Low error rate (near optimal)</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Demodulation ready</strong></p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li><p><strong>Observe phase ambiguity resolution:</strong></p>
+<p><strong>Important</strong>: The Costas Loop locks to one of <strong>four possible phase states</strong> (0°, 90°, 180°, 270°) because QPSK has 4-fold rotational symmetry.</p>
+<ul class="simple">
+<li><p>Run the flowgraph multiple times</p></li>
+<li><p>Notice the constellation may lock to different rotations</p></li>
+<li><p>All four rotations are valid Costas Loop lock points</p></li>
+</ul>
+<p><strong>Why this happens:</strong></p>
+<ul class="simple">
+<li><p>QPSK modulated signal has 90° rotational symmetry</p></li>
+<li><p>Costas Loop error function has the same symmetry</p></li>
+<li><p>Cannot distinguish between the four rotations without additional information</p></li>
+</ul>
+<p><strong>How production systems resolve this:</strong></p>
+<ul class="simple">
+<li><p><strong>Differential encoding</strong>: Encode information in phase transitions, not absolute phase</p></li>
+<li><p><strong>Pilot symbols</strong>: Send known symbols for absolute phase reference</p></li>
+<li><p><strong>Framing</strong>: Use frame headers with known patterns to detect rotation</p></li>
+</ul>
+<p>In this flowgraph, differential encoding is used, so the 90° phase ambiguity doesn’t affect data recovery.</p>
+</li>
+<li><p><strong>Experiment with loop bandwidth:</strong></p>
+<p>Locate the Costas Loop block parameters:</p>
+<ul class="simple">
+<li><p><strong>Loop bandwidth</strong>: Default ~0.01 to 0.05 rad/sample</p></li>
+</ul>
+<p>Try different values:</p>
+<ul class="simple">
+<li><p><strong>Higher bandwidth (0.1)</strong>: Faster lock, more phase jitter, less stable</p></li>
+<li><p><strong>Lower bandwidth (0.001)</strong>: Slower lock, less jitter, more stable</p></li>
+</ul>
+<p>Observe how acquisition time and noise sensitivity change.</p>
+</li>
+<li><p>Stop the flowgraph:</p>
+<ul class="simple">
+<li><p>Click the <strong>Stop</strong> button</p></li>
+<li><p>Or middle-click on a plot → <strong>Stop</strong></p></li>
+</ul>
+</li>
+</ol>
+<p><strong>Understanding Costas Loop Parameters:</strong></p>
+<p>The GNU Radio <strong>Costas Loop</strong> block has these key parameters:</p>
+<ul class="simple">
+<li><p><strong>Loop bandwidth</strong>: Controls how aggressively the loop tracks phase changes</p>
+<ul>
+<li><p><strong>High BW (&gt;0.05)</strong>: Fast acquisition, good for high dynamics, but more sensitive to noise</p></li>
+<li><p><strong>Low BW (&lt;0.01)</strong>: Slow acquisition, rejects noise well, but can’t track fast phase changes</p></li>
+</ul>
+</li>
+<li><p><strong>Order</strong>: QPSK uses order=4 (4-PSK)</p>
+<ul>
+<li><p>Order = number of constellation points with equal magnitude</p></li>
+<li><p>BPSK = 2, QPSK = 4, 8PSK = 8</p></li>
+</ul>
+</li>
+<li><p><strong>Maximum frequency deviation</strong>: How much frequency offset the loop can track</p></li>
+</ul>
+<p><strong>Costas Loop vs PLL:</strong></p>
+<ul class="simple">
+<li><p><strong>Traditional PLL</strong>: Needs a pilot tone (unmodulated carrier)</p></li>
+<li><p><strong>Costas Loop</strong>: Recovers carrier from modulated signal (no pilot needed)</p></li>
+</ul>
+<p>The Costas Loop is essentially a <strong>data-aided PLL</strong> that uses symbol structure to estimate phase error.</p>
+<p><strong>Phase Error Detector:</strong></p>
+<p>For QPSK, the error function is:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">error</span> <span class="o">=</span> <span class="n">I</span> <span class="o">*</span> <span class="n">sign</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span> <span class="o">-</span> <span class="n">Q</span> <span class="o">*</span> <span class="n">sign</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Intuition:</strong></p>
+<ul class="simple">
+<li><p>When constellation is aligned (I and Q at ±1): <code class="docutils literal notranslate"><span class="pre">error</span> <span class="pre">≈</span> <span class="pre">0</span></code></p></li>
+<li><p>When rotated clockwise: <code class="docutils literal notranslate"><span class="pre">error</span> <span class="pre">&gt;</span> <span class="pre">0</span></code> → NCO compensates counterclockwise</p></li>
+<li><p>When rotated counterclockwise: <code class="docutils literal notranslate"><span class="pre">error</span> <span class="pre">&lt;</span> <span class="pre">0</span></code> → NCO compensates clockwise</p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">sign()</span></code> function makes it <strong>decision-directed</strong>: it assumes symbols are near decision boundaries and uses that assumption to compute error.</p>
+<p><strong>Complete QPSK Receiver Synchronization Chain:</strong></p>
+<p>You’ve now studied all three synchronization stages:</p>
+<ol class="arabic simple">
+<li><p><strong>FLL (Frequency-Locked Loop)</strong>:</p>
+<ul class="simple">
+<li><p><strong>Function</strong>: Coarse frequency offset correction</p></li>
+<li><p><strong>Accuracy</strong>: ±100 Hz</p></li>
+<li><p><strong>Speed</strong>: Fast acquisition</p></li>
+</ul>
+</li>
+<li><p><strong>Symbol Sync</strong>:</p>
+<ul class="simple">
+<li><p><strong>Function</strong>: Timing recovery + matched filtering</p></li>
+<li><p><strong>Output</strong>: 1 sample per symbol at optimal decision instants</p></li>
+<li><p><strong>Adapts to</strong>: Sample clock differences between TX and RX</p></li>
+</ul>
+</li>
+<li><p><strong>Costas Loop</strong>:</p>
+<ul class="simple">
+<li><p><strong>Function</strong>: Fine frequency and phase correction</p></li>
+<li><p><strong>Accuracy</strong>: &lt;1 Hz frequency error, &lt;5° phase error</p></li>
+<li><p><strong>Resolves</strong>: Residual offsets and drift</p></li>
+</ul>
+</li>
+</ol>
+<p>Together, these blocks form a <strong>complete carrier and timing synchronization subsystem</strong> that enables reliable QPSK demodulation under realistic channel conditions.</p>
+<p><strong>Advanced Challenge:</strong></p>
+<p>Modify the flowgraph to:</p>
+<ol class="arabic simple">
+<li><p>Remove the FLL block before Costas Loop</p></li>
+<li><p>Add a large frequency offset (~50 kHz)</p></li>
+<li><p>Observe whether Costas Loop alone can acquire lock (hint: it usually cannot - FLL is essential)</p></li>
+<li><p>Restore FLL and observe two-stage frequency correction: FLL (coarse) → Costas (fine)</p></li>
+</ol>
+<p><strong>Real-World Applications:</strong></p>
+<p>Costas Loop and its variants are used in:</p>
+<ul class="simple">
+<li><p><strong>GPS receivers</strong>: Tracking carrier phase for position accuracy</p></li>
+<li><p><strong>Satellite communications</strong>: Maintaining lock on moving spacecraft</p></li>
+<li><p><strong>4G/5G</strong>: Carrier synchronization before OFDM symbol timing</p></li>
+<li><p><strong>Deep space communications</strong>: Extremely weak signals with high frequency uncertainty</p></li>
+</ul>
+<p>Understanding the Costas Loop gives you the foundation to implement robust digital receivers for any PSK modulation scheme.</p>
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="../beginner_sdr_exercises/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">Beginner SDR Exercises</a>
+    <a href="../../workshop_a_precision_converter_fpga_integration_journey/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">A Precision Converter FPGA Integration Journey</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2025, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>
