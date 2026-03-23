@@ -2299,7 +2299,7 @@ multiple AD-FMCADC3-EBZ boards together using characteristics of the JESD204B
 high speed serial interface between the AD9625 and FPGA.
 
 Clocking
-========
+~~~~~~~~
 
 The AD-FMCADC3-EBZ provides multiple options for clocking the AD9625. The
 default configuration of the board clocks the ADC using an on-board 2.5 GHz, low
@@ -2315,7 +2315,7 @@ both the CLK+ and CLK- inputs. Then referencing the schematic make the component
 changes to directly route the differential input bypassing the transformer.
 
 Front End
-=========
+~~~~~~~~~
 
 The AD-FMCADC3-EBZ uses a passive front end designed for very wide bandwidth. A
 single ended input needs to be provided to "Ain". A 1:2 impedance ratio
