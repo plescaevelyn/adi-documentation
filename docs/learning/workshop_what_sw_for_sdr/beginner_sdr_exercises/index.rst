@@ -1670,35 +1670,6 @@ Follow these steps:
 #. Click the **Stop** button (red square) when finished.
 
 
-Packet-Based File Storage (Pluto)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Same as Console Messaging, but saves decoded messages to a file instead of displaying on console.
-
-Follow these steps:
-
-#. Make the hardware setup using Pluto and connect it to your PC.
-
-#. Open the terminal and navigate to the Desktop directory, then launch GNU Radio Companion with elevated privileges:
-
-   .. shell::
-      :user: analog
-      :group: analog
-      :show-user:
-
-      $ cd /home/analog/Desktop
-      $ sudo ./start-grc.sh
-
-#. In GNU Radio Companion, open **FLL_loopback_pluto.grc** from
-   **beginner_exercises → 4. Quadrature Phase Shift Keying (QPSK) → Packet-Based File Storage**.
-
-#. Click the **Execute** button (green arrow) to run the flowgraph.
-
-#. Observe the received message in the GUI. The decoded message is saved to a file in the project directory.
-
-#. Click the **Stop** button (red square) when finished.
-
-
 Amplitude Shift Keying (ASK) in GNU Radio (Pluto, Jupiter)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1813,95 +1784,6 @@ Follow these steps:
    * **Decimated RX**: After keeping 1 in 100 samples, showing the recovered symbol sequence
 
 #. You can adjust the frequency offset slider to observe how the received signal changes in the spectrum display.
-
-#. Click the **Stop** button (red square) when finished.
-
-
-Frequency Shift Keying (FSK) in GNU Radio (Pluto, Jupiter)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-FSK encodes data by switching between different frequencies. This exercise uses 4-FSK.
-Receiver uses quadrature demodulation to convert frequency changes to amplitude, then decimates.
-
-FSK variants: GFSK (Bluetooth), Chirp Spread Spectrum (LoRa), OFDM subcarriers (Wi-Fi, LTE).
-
-**Pluto**
-
-Follow these steps:
-
-#. Make the loopback setup using Pluto with TX connected to RX via an SMA cable and connect it to your PC.
-
-   .. figure:: ../images/hw_setup/pluto_loopback_setup.png
-      :align: center
-      :width: 20em
-
-      Pluto SDR with loopback cable connecting TX to RX
-
-#. Open the terminal by pressing **Ctrl + Alt + T** and launch GNU Radio Companion:
-
-   .. shell::
-      :user: analog
-      :group: analog
-      :show-user:
-
-      $ gnuradio-companion
-
-#. In GNU Radio Companion, open **16QAM_loopback_pluto.grc** from
-   **beginner_exercises → 6. Frequency Shift Keying (FSK)**.
-
-#. Click the **Execute** button (green arrow) to run the flowgraph.
-
-#. Observe the output displays:
-
-   * **Transmitted Symbols**: Shows the repeated symbol values that control the VCO
-   * **Transmitted Spectrum**: Frequency-domain showing **4 distinct frequency peaks** for the 4 FSK tones
-   * **Received Spectrum**: Should match the transmitted spectrum
-   * **Waterfall Display**: Time-frequency representation showing frequency hopping pattern
-   * **Demodulated Output**: After quadrature demod and decimation, showing the recovered symbol sequence
-
-#. Adjust the frequency offset slider to observe the changes in the spectrum display.
-
-#. Click the **Stop** button (red square) when finished.
-
-
-**Jupiter**
-
-Follow these steps:
-
-#. Make the hardware setup using Jupiter SDR with TX1A connected to RX1A via loopback cable.
-
-   .. figure:: ../images/hw_setup/jupiter_loopback_setup.png
-      :alt: Jupiter SDR Hardware Setup for FSK
-      :align: center
-      :width: 40em
-
-      Jupiter SDR setup with TX1A connected to RX1A via loopback cable for FSK experiment
-
-#. Open the terminal and launch GNU Radio Companion:
-
-   .. shell::
-      :user: analog
-      :group: analog
-      :show-user:
-
-      $ cd /home/analog/Desktop
-      $ sudo ./start-grc.sh
-
-#. In GNU Radio Companion, open the FSK exercise file from
-   **beginner_exercises → 6. Frequency Shift Keying (FSK)**.
-
-#. Click the **Execute** button (green arrow) to run the flowgraph.
-
-#. Observe the output displays:
-
-   * **Transmitted Symbols**: Shows the repeated symbol values that control the VCO
-   * **Transmitted Spectrum**: Frequency-domain showing **4 distinct frequency peaks** for the 4 FSK tones
-   * **Waterfall Display**: Time-frequency representation showing frequency hopping pattern
-   * **Received Spectrum**: Should match the transmitted spectrum showing the 4 FSK tones
-   * **Received Time Domain**: I/Q waveform showing frequency transitions
-   * **Demodulated Output**: After quadrature demod and decimation, showing the recovered symbol sequence
-
-#. You can adjust the frequency deviation slider (if available) to observe how the spacing between frequency peaks changes.
 
 #. Click the **Stop** button (red square) when finished.
 
