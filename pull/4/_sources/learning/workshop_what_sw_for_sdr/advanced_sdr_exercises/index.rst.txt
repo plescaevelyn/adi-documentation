@@ -110,7 +110,7 @@ See the official documentation for complete details. This exercise demonstrates 
       :group: analog
       :show-user:
 
-      $ cd ~/Desktop/ftc_2025/iio_context_exercises
+      $ cd ~/Desktop/advanced_exercises/1.\ Debugging\ and\ Tweaking\ IIO\ Attributes
 
 #. Open the IIO exploration script in Thonny IDE:
 
@@ -458,7 +458,7 @@ The open-source code for this block is available at:
 #. Load the 16QAM flowgraph:
 
    * Click **File** → **Open**
-   * Navigate to: ``/home/analog/Desktop/ftc_2025/7_16QAM_loopback_gnuradio``
+   * Navigate to: ``~/Desktop/advanced_exercises/2. Digital QAM Modulation``
    * Open: ``16QAM_loopback_pluto.grc``
 
 **What You'll See Before Running:**
@@ -561,7 +561,7 @@ To access the 2nd TX and RX channels, you need to add U.FL to SMA cables on Rx2 
       :group: analog
       :show-user:
 
-      $ thonny /home/analog/Desktop/ftc_2025/9_sinewave_loopback_python_2rx_2tx/python_loopback_sine_pluto_2rx_2tx.py
+      $ thonny ~/Desktop/advanced_exercises/3.\ Enabling\ 2nd\ TX\ and\ RX\ Channels/python_loopback_sine_pluto_2rx_2tx.py
 
 #. **Examine the code changes** to enable Tx2 and Rx2.
 
@@ -764,7 +764,7 @@ In beginner QPSK exercises, symbol sync was hidden inside a complete receiver ch
 #. Load the Symbol Sync flowgraph:
 
    * Click **File** → **Open**
-   * Navigate to: ``/home/analog/Desktop/ftc_2025/13_symbol_sync_loopback_gnuradio``
+   * Navigate to: ``~/Desktop/advanced_exercises/4. Quadrature Phase Shift Keying (QPSK)/Symbol Sync``
    * Open: ``symbol_sync_loopback_pluto.grc``
 
 **Flowgraph Architecture:**
@@ -1044,7 +1044,7 @@ Previous exercises used Costas Loop as part of a complete receiver. This advance
 #. Load the Costas Loop flowgraph:
 
    * Click **File** → **Open**
-   * Navigate to: ``/home/analog/Desktop/ftc_2025/14_costas_loop_loopback_gnuradio``
+   * Navigate to: ``~/Desktop/advanced_exercises/4. Quadrature Phase Shift Keying (QPSK)/Costas Loop``
    * Open: ``costas_loop_loopback_pluto.grc``
 
 **Flowgraph Architecture:**

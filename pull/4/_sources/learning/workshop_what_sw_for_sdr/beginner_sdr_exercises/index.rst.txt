@@ -286,13 +286,11 @@ Follow the next steps:
 
       Pluto SDR with loopback cable connecting TX to RX
 
-#. Download the SDR Lab Source Code from the FTC2023 workshop link and unzip it on your desktop.
+#. Open the **beginner_exercises** folder on your desktop.
 
-#. Open **workshop_exercises** folder on your desktop.
+#. Go to **1. Sinewave loopback → Python** subfolder.
 
-#. Go to **python->sinewave_loopback** subfolder.
-
-#. Right click on **python_loopback_sine_pluto.py -> Open with Other Application** and
+#. Right click on **python_loopback_sine_pluto.py → Open with Other Application** and
    select **Thonny Python IDE** (or any other Python IDE you have installed) from the
    Recommended Applications list.
 
@@ -391,7 +389,7 @@ Follow these steps:
 
       Jupiter SDR with loopback cable connecting TX1A to RX1A
 
-#. Go to **Desktop → ftc_2024 → 3_sinewave_loopback_python** and open **python_loopback_sine_jupiter.py**
+#. Go to **beginner_exercises → 1. Sinewave loopback → Python** and open **python_loopback_sine_jupiter.py**
    using **Thonny Python IDE**.
 
 #. Observe the "Configure SDR" section for Jupiter using ``adi.adrv9002``:
@@ -442,7 +440,7 @@ Follow these steps:
 
 Follow these steps:
 
-#. Go to **workshop_exercises→python→sinewave_loopback** and open **python_loopback_sine_talise_zu11eg.py**
+#. Go to **beginner_exercises → 1. Sinewave loopback → Python** and open **python_loopback_sine_talise_zu11eg.py**
    using **Thonny Python IDE**.
 
 #. Make the following hardware setup with TX1A_P/N connected to RX1A_P/N via loopback cables.
@@ -512,7 +510,7 @@ Follow these steps:
       $ gnuradio-companion
 
 #. In GNU Radio Companion, open **sinewave_loopback_pluto.grc** from
-   **Desktop → ftc_2025 → 2_sinewave_loopback_gnuradio**.
+   **beginner_exercises → 1. Sinewave loopback → GNU Radio**.
 
    .. figure:: images/exercises/pluto_exercises/sinewave_loopback/gnuradio_sinewave_loopback.png
       :align: center
@@ -570,7 +568,7 @@ Follow these steps:
       $ cd /home/analog/Desktop
       $ sudo ./start-grc.sh
 
-#. In GNU Radio Companion, open **Desktop → ftc_2024 → 2_sinewave_loopback_gnuradio → sinewave_loopback_jupiter.grc**.
+#. In GNU Radio Companion, open **beginner_exercises → 1. Sinewave loopback → GNU Radio → sinewave_loopback_jupiter.grc**.
 
 #. Observe the flowgraph structure showing the transmitter and receiver chains:
 
@@ -617,7 +615,7 @@ Follow these steps:
 
       Jupiter SDR setup with double loopback: TX1A→RX1A and TX2A→RX2A
 
-#. Go to **Desktop → ftc_2024 → 3_sinewave_loopback_python** and open **python_loopback_sine_jupiter.py**
+#. Go to **beginner_exercises → 1. Sinewave loopback → Python** and open **python_loopback_sine_jupiter.py**
    using **Thonny Python IDE**.
 
 #. Observe that the script uses ``adi.adrv9002`` for Jupiter:
@@ -709,8 +707,8 @@ Follow these steps:
 
       $ gnuradio-companion
 
-#. In GNU Radio Companion, open **doppler_radar_pluto.grc** from
-   **Desktop → ftc_2025 → 5_doppler_radar_gnuradio**.
+#. In GNU Radio Companion, open **doppler_radar.grc** from
+   **beginner_exercises → 2. Doppler Radar**.
 
    .. figure:: images/exercises/pluto_exercises/doppler_radar/gnu_radio_doppler_schematic.png
       :alt: Doppler Radar GNU Radio Flowgraph
@@ -777,8 +775,8 @@ Follow these steps:
       $ cd /home/analog/Desktop
       $ sudo ./start-grc.sh
 
-#. In GNU Radio Companion, click **File → Open** and open from **Desktop → ftc_2024 → 5_doppler_radar_gnuradio**
-   the **doppler_radar_jupiter.grc** file.
+#. In GNU Radio Companion, click **File → Open** and open from **beginner_exercises → 2. Doppler Radar**
+   the **doppler_radar.grc** file.
 
    .. figure:: images/exercises/jupiter_exercises/doppler_radar/doppler_gnuradio_schematic.png
       :alt: Doppler Radar GNU Radio Flowgraph for Jupiter
@@ -1016,7 +1014,7 @@ Follow these steps to run the BPSK transmission and reception experiment:
 
       Pluto SDR with loopback cable connecting TX to RX
 
-#. Go to **workshop_exercises→python→bpsk_loopback** and open **bpsk_pluto_loopback_pluto.py**
+#. Go to **beginner_exercises → 3. Binary Phase Shit Keying (BPSK) → Python** and open **bpsk_loopback_pluto.py**
    using **Thonny Python IDE**.
 
 #. Run the script by pressing the green button in Thonny. Close all plot windows to stop.
@@ -1123,7 +1121,7 @@ Follow these steps:
 
       Jupiter SDR setup with TX1A connected to RX1A via loopback cable
 
-#. From **Desktop → ftc_2024 → 4_bpsk_loopback_python** subfolder, open **bpsk_jupiter_loopback.py**
+#. From **beginner_exercises → 3. Binary Phase Shit Keying (BPSK) → Python** subfolder, open **bpsk_loopback_jupiter.py**
    using **Thonny Python IDE**.
 
 #. Observe in the script that the configuration uses ``adi.adrv9002`` for Jupiter:
@@ -1235,7 +1233,7 @@ Follow these steps:
 
 Follow these steps:
 
-#. From **workshop_exercises→python→bpsk_loopback** subfolder, open **bpsk_talise_loopback_talise_zu11eg.py**
+#. From **beginner_exercises → 3. Binary Phase Shit Keying (BPSK) → Python** subfolder, open **bpsk_pluto_loopback_talise_zu11eg.py**
    using **Thonny Python IDE**.
 
 #. Observe the "Configure SDR" section for Talise:
@@ -1375,7 +1373,7 @@ Follow these steps:
       $ gnuradio-companion
 
 #. In GNU Radio Companion, open **console_message_receiver_pluto.grc** from
-   **Desktop → ftc_2025 → 1_console_message_point_to_point_gnuradio → receiver_pluto**.
+   **beginner_exercises → 4. Quadrature Phase Shift Keying (QPSK) → Console Messaging → Pluto → receiver_pluto**.
 
 #. Click the **Execute** button (green arrow) to run the flowgraph.
 
@@ -1424,7 +1422,7 @@ Follow these steps:
       $ sudo ./start-grc.sh
 
 #. In GNU Radio Companion, open **console_message_receiver_jupiter.grc** from
-   **Desktop → ftc_2024 → 1_console_message_point_to_point_gnuradio → receiver_jupiter**.
+   **beginner_exercises → 4. Quadrature Phase Shift Keying (QPSK) → Console Messaging → Jupiter → receiver_jupiter**.
 
 #. Click the **Execute** button (green arrow) to run the flowgraph.
 
@@ -1476,7 +1474,7 @@ Follow these steps:
       $ gnuradio-companion
 
 #. In GNU Radio Companion, open **QPSK_raw_loopback_pluto.grc** from
-   **Desktop → ftc_2025 → 10_qpsk_raw_loopback_gnuradio**.
+   **beginner_exercises → 4. Quadrature Phase Shift Keying (QPSK)**.
 
 #. Click the **Execute** button (green arrow) to run the flowgraph.
 
@@ -1548,7 +1546,7 @@ Follow these steps:
       $ gnuradio-companion
 
 #. In GNU Radio Companion, open **constellation_modulator_loopback_pluto.grc** from
-   **Desktop → ftc_2025 → 11_constellation_modulator_loopback_gnuradio**.
+   **beginner_exercises → 4. Quadrature Phase Shift Keying (QPSK) → Constellation Modulator**.
 
 #. Click the **Execute** button (green arrow) to run the flowgraph.
 
@@ -1604,7 +1602,7 @@ Follow these steps:
       $ gnuradio-companion
 
 #. In GNU Radio Companion, open **FLL_loopback_pluto.grc** from
-   **Desktop → ftc_2025 → 12_fll_loopback_gnuradio**.
+   **beginner_exercises → 4. Quadrature Phase Shift Keying (QPSK) → Frequency Locked Loop (FLL)**.
 
 #. Click the **Execute** button (green arrow) to run the flowgraph.
 
@@ -1645,7 +1643,8 @@ Follow these steps:
       $ cd /home/analog/Desktop
       $ sudo ./start-grc.sh
 
-#. In GNU Radio Companion, open **qpsk_point_to_point_rx_file.grc** from **workshop_exercises->gnuradio->qpsk_point_to_point_file**.
+#. In GNU Radio Companion, open **FLL_loopback_pluto.grc** from
+   **beginner_exercises → 4. Quadrature Phase Shift Keying (QPSK) → Packet-Based File Storage**.
 
 #. Click the **Execute** button (green arrow) to run the flowgraph.
 
@@ -1707,7 +1706,7 @@ Follow these steps:
       $ gnuradio-companion
 
 #. In GNU Radio Companion, open **ASK_loopback_pluto.grc** from
-   **Desktop → ftc_2025 → 6_ask_loopback_gnuradio**.
+   **beginner_exercises → 5. Amplitude Shift Keying (ASK)**.
 
 #. Click the **Execute** button (green arrow) to run the flowgraph.
 
@@ -1753,7 +1752,8 @@ Follow these steps:
       $ cd /home/analog/Desktop
       $ sudo ./start-grc.sh
 
-#. In GNU Radio Companion, open **ASK_loopback_jupiter.grc** from **Desktop → ftc_2024 → 8_ask_loopback_gnuradio**.
+#. In GNU Radio Companion, open **ASK_loopback_jupiter.grc** from
+   **beginner_exercises → 5. Amplitude Shift Keying (ASK)**.
 
 #. Click the **Execute** button (green arrow) to run the flowgraph.
 
@@ -1800,8 +1800,8 @@ Follow these steps:
 
       $ gnuradio-companion
 
-#. In GNU Radio Companion, open **FSK_loopback_pluto.grc** from
-   **Desktop → ftc_2025 → 7_fsk_loopback_gnuradio**.
+#. In GNU Radio Companion, open **16QAM_loopback_pluto.grc** from
+   **beginner_exercises → 6. Frequency Shift Keying (FSK)**.
 
 #. Click the **Execute** button (green arrow) to run the flowgraph.
 
@@ -1841,7 +1841,8 @@ Follow these steps:
       $ cd /home/analog/Desktop
       $ sudo ./start-grc.sh
 
-#. In GNU Radio Companion, open **FSK_loopback_jupiter.grc** from **Desktop → ftc_2024 → 9_fsk_loopback_gnuradio**.
+#. In GNU Radio Companion, open the FSK exercise file from
+   **beginner_exercises → 6. Frequency Shift Keying (FSK)**.
 
 #. Click the **Execute** button (green arrow) to run the flowgraph.
 
@@ -1902,7 +1903,8 @@ Follow these steps to create a spectrum painting:
 
       $ gnuradio-companion
 
-#. In GNU Radio Companion, open the **paint_tx.grc** file from **workshop_exercises->gnuradio->spectrum_paint**.
+#. In GNU Radio Companion, open the **paint_tx.grc** file from
+   **beginner_exercises → 7. Spectrum Paint**.
 
 #. Click the **Execute** button (green arrow) to run the flowgraph.
 
