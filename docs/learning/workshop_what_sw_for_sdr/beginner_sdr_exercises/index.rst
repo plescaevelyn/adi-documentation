@@ -1832,7 +1832,7 @@ Follow these steps to create a spectrum painting:
       $ gnuradio-companion
 
 #. In GNU Radio Companion, open the **paint_tx.grc** file from
-   **beginner_exercises → 7. Spectrum Paint**.
+   **beginner_exercises → 6. Spectrum Paint**.
 
 #. Click the **Execute** button (green arrow) to run the flowgraph.
 
