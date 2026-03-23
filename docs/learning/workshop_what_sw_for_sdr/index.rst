@@ -377,6 +377,117 @@ It's particularly useful for RF engineers working with:
 
 qIQ Receiver bridges the gap between generic oscilloscope tools and specialized protocol analyzers, making it easier to develop and debug wireless communication systems with ADI SDR platforms.
 
+GNU Radio
+~~~~~~~~~
+
+`GNU Radio <https://www.gnuradio.org/>`_ is a free and open-source software development toolkit that provides
+signal processing blocks to implement software-defined radios and signal processing systems.
+ADI provides the `gr-iio <https://github.com/analogdevicesinc/gr-iio>`_ block set for seamless integration
+with IIO-compatible hardware.
+
+**Key Features:**
+
+* **Visual flowgraph design**: GNU Radio Companion (GRC) provides a graphical interface for building
+  signal processing chains by connecting blocks
+* **Extensive block library**: Hundreds of pre-built blocks for filtering, modulation, demodulation,
+  synchronization, and more
+* **Real-time processing**: Stream data directly from SDR hardware for live signal processing
+* **Cross-platform**: Available on Linux, Windows (via Radioconda), and macOS
+* **Python integration**: Flowgraphs generate Python code, enabling scripting and automation
+
+**ADI Integration (gr-iio):**
+
+The `gr-iio <https://github.com/analogdevicesinc/gr-iio>`_ package provides GNU Radio blocks for:
+
+* **PlutoSDR Source/Sink**: Receive and transmit with ADALM-PLUTO
+* **FMCOMMS Source/Sink**: Support for FMComms and other AD936x-based platforms
+* **Generic IIO blocks**: Work with any IIO-compatible device
+
+**Installation:**
+
+.. tab-set::
+
+   .. tab-item:: Linux
+
+      .. code-block:: bash
+
+         # Debian/Ubuntu
+         sudo apt install gnuradio gr-iio
+
+   .. tab-item:: Windows
+
+      Use `Radioconda <https://github.com/ryanvolz/radioconda>`_:
+
+      .. code-block:: bash
+
+         conda install gnuradio gnuradio-iio
+
+GNU Radio is ideal for rapid prototyping of communication systems, educational demonstrations,
+and developing custom signal processing applications with ADI SDR hardware.
+
+MATLAB and Simulink Toolboxes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ADI provides official toolboxes for MATLAB and Simulink that enable hardware-in-the-loop development
+with ADI SDR platforms. These toolboxes integrate seamlessly with MathWorks' signal processing and
+communications workflows.
+
+**Available Toolboxes:**
+
+* `Analog Devices Transceiver Toolbox <https://github.com/analogdevicesinc/TransceiverToolbox>`_:
+  MATLAB/Simulink interface for ADI RF transceivers (AD936x, ADRV9009, etc.)
+* `Analog Devices High Speed Converter Toolbox <https://github.com/analogdevicesinc/HighSpeedConverterToolbox>`_:
+  Support for high-speed ADCs and DACs
+
+**Key Features:**
+
+* **System objects**: MATLAB System objects for streaming data to/from hardware
+* **Simulink blocks**: Drag-and-drop blocks for hardware integration in Simulink models
+* **Hardware-in-the-loop**: Develop and validate algorithms with real RF signals
+* **Code generation**: Generate deployable code from Simulink models
+* **Example library**: Pre-built examples for common SDR applications
+
+**Supported Hardware:**
+
+* ADALM-PLUTO (PlutoSDR)
+* FMCOMMS2/3/4/5 evaluation boards
+* ADRV9361-Z7035, ADRV9364-Z7020
+* ADRV9009, ADRV9008
+* Jupiter SDR
+
+**Installation:**
+
+#. Install MATLAB with the following toolboxes:
+
+   * Signal Processing Toolbox
+   * Communications Toolbox
+   * DSP System Toolbox (recommended)
+
+#. Install the ADI Transceiver Toolbox from
+   `MATLAB Add-Ons <https://www.mathworks.com/products/connections/product_detail/libiio.html>`_
+   or clone from `GitHub <https://github.com/analogdevicesinc/TransceiverToolbox>`_
+
+#. Install `libiio <https://github.com/analogdevicesinc/libiio>`_ MATLAB bindings
+
+**Example Usage:**
+
+.. code-block:: matlab
+
+   % Create PlutoSDR receiver object
+   rx = adi.AD9361.Rx;
+   rx.uri = 'ip:pluto.local';
+   rx.CenterFrequency = 2.4e9;
+   rx.SamplesPerFrame = 2^14;
+
+   % Receive samples
+   data = rx();
+
+   % Plot spectrum
+   pspectrum(data, rx.SamplingRate);
+
+The MATLAB toolboxes are ideal for engineers already working in the MathWorks ecosystem who need
+to integrate real hardware into their simulation and algorithm development workflows.
+
 
 SDR Solutions Provided by ADI
 ------------------------------
