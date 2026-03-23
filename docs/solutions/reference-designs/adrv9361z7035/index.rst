@@ -1,117 +1,144 @@
-ADRV9361-Z7035 System on Module (SOM) SDR
-=========================================
+.. _adrv9361z7035:
+
+ADRV9361-Z7035
+==============
 
 .. image:: http://picozed.org/sites/default/files/styles/product_slider/public/product/hand.png
    :alt: http://picozed.org/sites/default/files/styles/product_slider/public/product/hand.png
    :align: right
 
-The :adi:`ADRV9361-Z7035` is built on a portfolio of highly integrated System-On-Module (SOMs) based on the Xilinx Zynq®-7000 All Programmable (AP)SoC. Starting with the AD9361, it is schematically & HDL similar to the `ad-fmcomms3-ebz <https://wiki.analog.com/ad-fmcomms3-ebz>`_.
+The :adi:`ADRV9361-Z7035` is built on a portfolio of highly integrated
+System-On-Module (SOMs) based on the Xilinx Zynq®-7000 All Programmable (AP)SoC.
+Starting with the AD9361, it is schematically & HDL similar to the
+:external+hdl:ref:`AD-FMCOMMS3-EBZ <fmcomms2>`.
 
-The purpose of the :adi:`ADRV9361-Z7035` RF SOM is to provide an RF platform to software developers, system architects, product developers, etc, who want a single platform operating over a wide tuning range (70 MHz – 6 GHz) that is capable of being used for prototype, evaluation and reference design to help with production volume.
+The purpose of the :adi:`ADRV9361-Z7035` RF SOM is to provide an RF platform to
+software developers, system architects, product developers, etc, who want a
+single platform operating over a wide tuning range (70 MHz - 6 GHz) that is
+capable of being used for prototype, evaluation and reference design to help
+with production volume.
+
+.. toctree::
+   :hidden:
+
+   introduction
+   prerequisites
+   mechanical
+   electrical-specifications
+   performance
+   quickstart
+   revision-history
 
 Table of Contents
 -----------------
 
--  `Introduction to the AD9361. <https://wiki.analog.com/resources/eval/user-guides/ad9361>`_
--  `Introduction <https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/introduction>`_
--  `Tuning the system <https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/hardware/tuning>`_
--  `Introduction to Boards Based on the AD9361. <https://wiki.analog.com/resources/eval/user-guides/adrv9361-z7035/introduction>`_
--  ADRV9361-Z7035 Hardware
+- :dokuwiki:`Introduction to the AD9361. <resources/eval/user-guides/ad9361>`
+- :dokuwiki:`Introduction <resources/eval/user-guides/ad-fmcomms2-ebz/introduction>`
+- :dokuwiki:`Tuning the system <resources/eval/user-guides/ad-fmcomms2-ebz/hardware/tuning>`
+- ADRV9361-Z7035 Hardware
 
-   -  :doc:`Mechanical Design </solutions/reference-designs/adrv9361z7035/mechanical>`
-   -  :doc:`Electrical Specifications </solutions/reference-designs/adrv9361z7035/electrical-specifications>`
-   -  :doc:`Performance </solutions/reference-designs/adrv9361z7035/performance>`
+   -  :ref:`Introduction <adrv9361z7035 introduction>`
+   -  :ref:`Prerequisites <adrv9361z7035 prerequisites>`
+   -  :ref:`Quick Start <adrv9361z7035 quickstart>`
+   -  :ref:`Mechanical Design <adrv9361z7035 mechanical>`
+   -  :ref:`Electrical Specifications <adrv9361z7035 electrical_specifications>`
+   -  :ref:`Performance <adrv9361z7035 performance>`
 
-      -  `Power and Sequencing <https://wiki.analog.com/resources/eval/user-guides/pzsdr/power-and-sequencing>`_
+      -  :dokuwiki:`Power and Sequencing <resources/eval/user-guides/pzsdr/power-and-sequencing>`
 
-   -  :doc:`Revision History </solutions/reference-designs/adrv9361z7035/revision-history>`
+   -  :ref:`Revision History <adrv9361z7035 revision_history>`
 
       -  including schematics and BOM
 
    -  Carriers
 
-      -  `FMC Carrier (PZSDRCC-FMC) <https://wiki.analog.com/resources/eval/user-guides/pzsdr/carriers/fmc>`_
-      -  `Breakout Carrier (PZSDRCC-BRK) <https://wiki.analog.com/resources/eval/user-guides/pzsdr/carriers/brk>`_
-      -  `PCIe Carrier (PZSDRCC-PCIE) <https://wiki.analog.com/resources/eval/user-guides/pzsdr/carriers/pcie>`_
-      -  `PackRF Carrier (PZSDRCC-PackRF) <https://wiki.analog.com/resources/eval/user-guides/pzsdr/carriers/packrf>`_
+      -  :dokuwiki:`FMC Carrier (PZSDRCC-FMC) <resources/eval/user-guides/pzsdr/carriers/fmc>`
+      -  :dokuwiki:`Breakout Carrier (PZSDRCC-BRK) <resources/eval/user-guides/pzsdr/carriers/brk>`
+      -  :dokuwiki:`PCIe Carrier (PZSDRCC-PCIE) <resources/eval/user-guides/pzsdr/carriers/pcie>`
+      -  :dokuwiki:`PackRF Carrier (PZSDRCC-PackRF) <resources/eval/user-guides/pzsdr/carriers/packrf>`
 
--  Use the RF SOM Hardware to better understand the AD9361
+- Use the RF SOM Hardware to better understand the AD9361
 
-   -  `What you need to get started <https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/prerequisites>`_
-   -  `Quick Start Guides <https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/quickstart>`_
+   -  :dokuwiki:`What you need to get started <resources/eval/user-guides/ad-fmcomms2-ebz/prerequisites>`
+   -  :dokuwiki:`Quick Start Guides <resources/eval/user-guides/ad-fmcomms2-ebz/quickstart>`
 
-      -  `Linux on RF SOM <https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/quickstart/zynq>`_
-      -  `Configure a pre-existing SD-Card <https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux>`_
-      -  `Update the old card you received with your hardware <https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux>`_
+      -  :dokuwiki:`Linux on RF SOM <resources/eval/user-guides/ad-fmcomms2-ebz/quickstart/zynq>`
+      -  :dokuwiki:`Configure a pre-existing SD-Card <resources/tools-software/linux-software/kuiper-linux>`
+      -  :dokuwiki:`Update the old card you received with your hardware <resources/tools-software/linux-software/kuiper-linux>`
 
    -  Basic Applications
 
-      -  `IIO Scope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`_
-      -  `AD9361 Control IIO Scope Plugin <https://wiki.analog.com/resources/tools-software/linux-software/fmcomms2_plugin>`_
-      -  `AD9361 Advanced Control IIO Scope Plugin <https://wiki.analog.com/resources/tools-software/linux-software/fmcomms2_advanced_plugin>`_
-      -  `Command Line/Shell scripts <https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/software/linux/applications/shell_scripts>`_
+      -  :dokuwiki:`IIO Scope <resources/tools-software/linux-software/iio_oscilloscope>`
+      -  :dokuwiki:`AD9361 Control IIO Scope Plugin <resources/tools-software/linux-software/fmcomms2_plugin>`
+      -  :dokuwiki:`AD9361 Advanced Control IIO Scope Plugin <resources/tools-software/linux-software/fmcomms2_advanced_plugin>`
+      -  :dokuwiki:`Command Line/Shell scripts <resources/eval/user-guides/ad-fmcomms2-ebz/software/linux/applications/shell_scripts>`
 
    -  Push custom data into/out of the RF SOM SDR.
 
-      -  `Basic Data files and formats <https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/software/basic_iq_datafiles>`_
-      -  `Create and analyze data files in MATLAB <https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/software/datafiles>`_
-      -  `Stream data into/out of MATLAB <https://wiki.analog.com/resources/tools-software/linux-software/libiio/clients/matlab_simulink>`_
-      -  `AD9361 libiio streaming example <https://wiki.analog.com/resources/tools-software/linux-software/libiio>`_
+      -  :dokuwiki:`Basic Data files and formats <resources/eval/user-guides/ad-fmcomms2-ebz/software/basic_iq_datafiles>`
+      -  :dokuwiki:`Create and analyze data files in MATLAB <resources/eval/user-guides/ad-fmcomms2-ebz/software/datafiles>`
+      -  :dokuwiki:`Stream data into/out of MATLAB <resources/tools-software/linux-software/libiio/clients/matlab_simulink>`
+      -  :dokuwiki:`AD9361 libiio streaming example <resources/tools-software/linux-software/libiio>`
 
--  Design with the AD9361
+- Design with the AD9361
 
-   -  `Understanding the AD9361 <https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/ad9361>`_
+   -  :dokuwiki:`Understanding the AD9361 <resources/eval/user-guides/ad-fmcomms2-ebz/ad9361>`
 
       -  :adi:`AD9361 Product page <AD9361>`
       -  :adi:`Full Datasheet and chip design package <en/rfif-components/rfif-transceivers/products/AD9361-Integrated-RF-Agile-Transceiver-Design-Res/fca.html>`
-      -  `MATLAB Filter Design Wizard for AD9361 <https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/software/filters>`_
+      -  :dokuwiki:`MATLAB Filter Design Wizard for AD9361 <resources/eval/user-guides/ad-fmcomms2-ebz/software/filters>`
 
    -  Simulation
 
-      -  `MathWorks RF Blockset Models of the AD9361 <https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/software/simrf>`_
+      -  :dokuwiki:`MathWorks RF Blockset Models of the AD9361 <resources/eval/user-guides/ad-fmcomms2-ebz/software/simrf>`
 
    -  Hardware in the Loop / How to design your own custom BaseBand
 
       -  MATLAB/Simulink Examples
 
-         -  `Stream data into/out of MATLAB <https://wiki.analog.com/resources/tools-software/linux-software/libiio/clients/fmcomms2_3_simulink>`_
-         -  `Beacon Frame Receiver Example <https://wiki.analog.com/resources/tools-software/linux-software/libiio/clients/beacon_frame_receiver_simulink>`_
-         -  `QPSK Transmit and Receive Example <https://wiki.analog.com/resources/tools-software/linux-software/libiio/clients/qpsk_example>`_
-         -  `LTE Transmit and Receive Example <https://wiki.analog.com/resources/tools-software/linux-software/libiio/clients/lte_example>`_
-         -  `ADS-B Airplane Tracking Example <https://wiki.analog.com/resources/tools-software/linux-software/libiio/clients/adsb_example>`_
+         -  :dokuwiki:`Stream data into/out of MATLAB <resources/tools-software/linux-software/libiio/clients/fmcomms2_3_simulink>`
+         -  :dokuwiki:`Beacon Frame Receiver Example <resources/tools-software/linux-software/libiio/clients/beacon_frame_receiver_simulink>`
+         -  :dokuwiki:`QPSK Transmit and Receive Example <resources/tools-software/linux-software/libiio/clients/qpsk_example>`
+         -  :dokuwiki:`LTE Transmit and Receive Example <resources/tools-software/linux-software/libiio/clients/lte_example>`
+         -  :dokuwiki:`ADS-B Airplane Tracking Example <resources/tools-software/linux-software/libiio/clients/adsb_example>`
 
-      -  `GNU Radio <https://wiki.analog.com/resources/tools-software/linux-software/gnuradio>`_
-      -  `FM Radio/Tuner <https://wiki.analog.com/resources/tools-software/fm-radio>`_ (listen to FM signals on the HDMI monitor)
-      -  `C example <https://wiki.analog.com/resources/tools-software/linux-software/libiio>`_
+      -  :dokuwiki:`GNU Radio <resources/tools-software/linux-software/gnuradio>`
+      -  :dokuwiki:`FM Radio/Tuner <resources/tools-software/fm-radio>` (listen to FM signals on the HDMI monitor)
+      -  :dokuwiki:`C example <resources/tools-software/linux-software/libiio>`
 
    -  Targeting
 
-      -  `Analog Devices BSP for MathWorks HDL Workflow Advisor <https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/software/matlab_bsp>`_
+      -  :dokuwiki:`Analog Devices BSP for MathWorks HDL Workflow Advisor <resources/eval/user-guides/ad-fmcomms2-ebz/software/matlab_bsp>`
 
    -  Complete Workflow
 
-      -  `ADS-B Airplane Tracking Tutorial <https://wiki.analog.com/resources/eval/user-guides/picozed_sdr/tutorials/adsb>`_
-      -  `QPSK Modem Design Workflow <https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/software/matlab_bsp_modem>`_
+      -  :dokuwiki:`ADS-B Airplane Tracking Tutorial <resources/eval/user-guides/picozed_sdr/tutorials/adsb>`
+      -  :dokuwiki:`QPSK Modem Design Workflow <resources/eval/user-guides/ad-fmcomms2-ebz/software/matlab_bsp_modem>`
 
    -  Design a custom AD9361 based platform
 
-      -  `Linux software <https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/software/linux>`_
+      -  :dokuwiki:`Linux software <resources/eval/user-guides/ad-fmcomms2-ebz/software/linux>`
 
-         -  `Linux Device Driver <https://wiki.analog.com/resources/tools-software/linux-drivers/iio-transceiver/ad9361>`_
-         -  `Build the 2014_R2 Release Linux kernel from source <https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/software/linux/zynq_2014r2>`_
-         -  `Customizing the devicetree on the target <https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/software/linux/zynq_tips_tricks>`_
+         -  Linux resources:
 
-      -  `No-OS Driver <https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/software/baremetal>`_
-      -  `HDL Reference Design <https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/reference_hdl>`_ which you must use in your FPGA.
+            - :external+linux:ref:`Linux AD9361 Device Driver <ad9361>`
+            - :external+linux:ref:`Linux AD9361 Device Driver Customization <ad9361-customization>`
 
-         -  `Digital Interface Timing Validation <https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/interface_timing_validation>`_
+         -  :ref:`Building Zynq Linux kernel and devicetree <linux-kernel zynq>`
+         -  :dokuwiki:`Customizing the devicetree on the target <resources/eval/user-guides/ad-fmcomms2-ebz/software/linux/zynq_tips_tricks>`
 
--  Additional Documentation about SDR Signal Chains
+      -  :dokuwiki:`No-OS Driver <resources/eval/user-guides/ad-fmcomms2-ebz/software/baremetal>`
+      -  :external+hdl:ref:`HDL Reference Design <adrv9361z7035>` which you must
+         use in your FPGA.
 
-   -  `The math behind the RF <https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms1-ebz/math>`_
+         -  :dokuwiki:`Digital Interface Timing Validation <resources/eval/user-guides/ad-fmcomms2-ebz/interface_timing_validation>`
 
--  `Help and Support <https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/help_and_support>`_
--  Videos and Webinars
+- Additional Documentation about SDR Signal Chains
+
+   -  :dokuwiki:`The math behind the RF <resources/eval/user-guides/ad-fmcomms1-ebz/math>`
+
+- :dokuwiki:`Help and Support <resources/eval/user-guides/ad-fmcomms2-ebz/help_and_support>`
+- Videos and Webinars
 
    -  `Radio Deployment on SoC Platforms <https://www.mathworks.com/videos/radio-deployment-on-soc-platforms-1513346830203.html>`_
 
