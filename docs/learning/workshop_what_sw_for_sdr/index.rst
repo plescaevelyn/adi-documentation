@@ -197,6 +197,12 @@ It provides a plugin-based architecture where different modules can control spec
 **ADGenericIIOBoard Plugin** is a key plugin within ACE that enables interaction with any IIO-compatible device.
 This generic approach means you can use the same plugin to control different ADI evaluation boards without requiring board-specific software.
 
+**Installation:**
+
+Download ACE from the
+`ADI website <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-development-platforms/ace-software.html>`_.
+ACE is available for Windows only.
+
    .. figure:: images/analysis_control_eval/adgeneric_iio_board_plugin.png
       :alt: ADGenericIIOBoard Plugin Interface
       :align: center
@@ -217,6 +223,22 @@ It provides both time-domain and frequency-domain visualization along with devic
 * **Device configuration**: Modify hardware parameters in real-time
 * **Plugin architecture**: Extensible with generic and device-specific plugins
 * **Remote operation**: Can connect to IIO devices over network using iiod
+
+**Installation:**
+
+.. tab-set::
+
+   .. tab-item:: Linux
+
+      .. code-block:: bash
+
+         # Debian/Ubuntu
+         sudo apt install iio-oscilloscope
+
+   .. tab-item:: Windows
+
+      Download the installer from the
+      `IIO Oscilloscope releases <https://github.com/analogdevicesinc/iio-oscilloscope/releases>`_.
 
    .. figure:: images/analysis_control_eval/iio_scope.png
       :alt: IIO Oscilloscope Main Interface
@@ -290,6 +312,23 @@ These tools are particularly useful for:
 * Scripting complex measurement sequences
 * Quick parameter verification without GUI overhead
 
+**Installation:**
+
+.. tab-set::
+
+   .. tab-item:: Linux
+
+      .. code-block:: bash
+
+         # Debian/Ubuntu
+         sudo apt install libiio-utils
+
+   .. tab-item:: Windows
+
+      Download libiio from the
+      `libiio releases <https://github.com/analogdevicesinc/libiio/releases>`_.
+      The command-line tools are included in the installer.
+
 **iio_info**
 
 Displays information about all available IIO devices and their attributes, channels, and triggering capabilities.
@@ -348,6 +387,11 @@ capabilities and a more intuitive interface. It transforms your PC into a comple
 * **Generic IIO support**: Works with any IIO-compatible device, not just ADI hardware
 * **Export capabilities**: Save data, screenshots, and configurations for documentation
 
+**Installation:**
+
+Download Scopy from the `Scopy releases page <https://github.com/analogdevicesinc/scopy/releases>`_.
+Installers are available for Windows, Linux (AppImage, Flatpak), and macOS.
+
    .. figure:: images/analysis_control_eval/scopy_interface.png
       :alt: Scopy Main Interface
       :align: center
@@ -367,6 +411,11 @@ It's particularly useful for RF engineers working with:
 * **Constellation diagrams**: Real-time visualization of modulation quality
 * **Spectrum analysis**: Detailed frequency domain analysis
 * **Recording and playback**: Capture RF signals for offline analysis
+
+**Installation:**
+
+qIQ Receiver is available for Windows. Download from the
+`qIQ Receiver page <https://www.qorvo.com/design-hub/design-tools/qiq-receiver>`_.
 
    .. figure:: images/analysis_control_eval/qiq_receiver.png
       :alt: qIQ Receiver Interface
@@ -424,6 +473,13 @@ The `gr-iio <https://github.com/analogdevicesinc/gr-iio>`_ package provides GNU 
 
             conda install gnuradio gnuradio-iio
 
+.. figure:: images/analysis_control_eval/gnuradio_companion.png
+   :alt: GNU Radio Companion Interface
+   :align: center
+   :width: 40em
+
+   GNU Radio Companion flowgraph with PlutoSDR source and sink blocks
+
 GNU Radio is ideal for rapid prototyping of communication systems, educational demonstrations,
 and developing custom signal processing applications with ADI SDR hardware.
 
@@ -459,17 +515,41 @@ communications workflows.
 
 **Installation:**
 
-#. Install MATLAB with the following toolboxes:
+#. Install MATLAB (R2021a or later recommended) with the following toolboxes:
 
    * Signal Processing Toolbox
    * Communications Toolbox
    * DSP System Toolbox (recommended)
 
-#. Install the ADI Transceiver Toolbox from
-   `MATLAB Add-Ons <https://www.mathworks.com/products/connections/product_detail/libiio.html>`_
-   or clone from `GitHub <https://github.com/analogdevicesinc/TransceiverToolbox>`_
+#. Install libiio:
 
-#. Install `libiio <https://github.com/analogdevicesinc/libiio>`_ MATLAB bindings
+   .. tab-set::
+
+      .. tab-item:: Linux
+
+         .. code-block:: bash
+
+            sudo apt install libiio-dev
+
+      .. tab-item:: Windows
+
+         Download and install libiio from the
+         `libiio releases <https://github.com/analogdevicesinc/libiio/releases>`_.
+
+#. Clone and install the ADI Transceiver Toolbox:
+
+   .. code-block:: bash
+
+      git clone https://github.com/analogdevicesinc/TransceiverToolbox.git
+
+   Then in MATLAB, navigate to the cloned folder and run:
+
+   .. code-block:: matlab
+
+      cd TransceiverToolbox
+      startup_trx
+
+   Alternatively, install via MATLAB Add-Ons by searching for "Analog Devices Transceiver Toolbox".
 
 **Example Usage:**
 
@@ -486,6 +566,13 @@ communications workflows.
 
    % Plot spectrum
    pspectrum(data, rx.SamplingRate);
+
+.. figure:: images/analysis_control_eval/matlab_transceiver_toolbox.png
+   :alt: MATLAB Transceiver Toolbox
+   :align: center
+   :width: 40em
+
+   MATLAB Transceiver Toolbox streaming data from PlutoSDR
 
 The MATLAB toolboxes are ideal for engineers already working in the MathWorks ecosystem who need
 to integrate real hardware into their simulation and algorithm development workflows.
