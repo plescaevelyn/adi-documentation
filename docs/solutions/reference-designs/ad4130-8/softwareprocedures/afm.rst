@@ -232,7 +232,9 @@ settling of the digital filter.
    
    with 5 channels enabled:
    
-   *Throughput rate = 600/5 = 120 SPS How to Calculate the Throughput Rate using the Timing Tool
+   *Throughput rate = 600/5 = 120 SPS*
+
+How to Calculate the Throughput Rate using the Timing Tool
 
 The sequencer timing diagram in continuous conversion mode or duty cycling mode
 allows us to calculate our throughput rate.
