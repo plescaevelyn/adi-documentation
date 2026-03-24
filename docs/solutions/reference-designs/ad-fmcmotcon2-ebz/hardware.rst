@@ -73,17 +73,17 @@ Downloads
 
    **AD-FMCMOTCON2-EBZ**
 
-   
+
    -  `Schematics <resources/ad-fmcmotcon2-ebz_schematics.pdf>`_
    -  `Bill of Materials <resources/ad-fmcmotcon2-ebz_bom.zip>`_
    -  `Allegro Board File <resources/ad-fmcmotcon2-ebz_layout.zip>`_ (This file is `compressed <http://www.7-zip.org/7z.html>`_). Get the `Allegro FREE Physical Viewer <https://www.cadence.com/en_US/home/tools/pcb-design-and-analysis/allegro-downloads-start.html>`_ (You need 16.5 or higher).
-   
+
    **AD-DRVLV2-EBZ**
-   
+
    -  `Schematics <resources/ad-drvlv2-ebz_schematics.pdf>`_
    -  `Bill of Materials <resources/ad-drvlv2-ebz_bom.zip>`_
    -  `Allegro Board File <resources/ad-drvlv2-ebz_layout.zip>`_ (This file is `compressed <http://www.7-zip.org/7z.html>`_). Get the `Allegro FREE Physical Viewer <https://www.cadence.com/en_US/home/tools/pcb-design-and-analysis/allegro-downloads-start.html>`_ (You need 16.5 or higher).
-   
+
 
 Where to Buy
 ------------

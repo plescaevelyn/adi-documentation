@@ -17,7 +17,7 @@ Requirements
 Creating the SD Card
 --------------------
 
-`Create SD Image for Zynq Boards <https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux>`_
+:external+kuiper:doc:`Create SD Image for Zynq Boards <index>`
 
 Connecting the hardware together
 --------------------------------

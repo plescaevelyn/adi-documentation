@@ -13,7 +13,9 @@ Required hardware
 Prepare the SD card
 -------------------
 
-NOTE: Following instructions are valid if a Windows host is used. Instructions regarding other Operating Systems can be found here: `kuiper-linux <https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux>`_
+.. note::
+
+   Following instructions are valid if a Windows host is used. Instructions regarding other Operating Systems can be found in the :external+kuiper:doc:`Kuiper Linux documentation <index>`.
 
 -  Download the SD card image: `motcon2_2015_05_06.zip <../resources/motcon2_2015_05_06.zip>`_
 -  Extract motcon2.img from motcon2_2015_05_06.zip archive.
@@ -94,7 +96,7 @@ Test Procedure
    -  DS1, DS2, DS3 and DS4 on the Controller Board
    -  DS1 and DS2 on the Drive Board
 
--  In the Linux ADI IIO Oscilloscope go to the// Motor Control// tab and select
+-  In the Linux ADI IIO Oscilloscope go to the **Motor Control** tab and select
    the following configuration:
 
    -  **Motor 1**
@@ -115,7 +117,7 @@ Test Procedure
    :alt: Motor Control Tab
    :width: 400
 
--  In the Linux ADI IIO Oscilloscope-Capture1 go to the// Plot Channels// pane
+-  In the Linux ADI IIO Oscilloscope-Capture1 go to the **Plot Channels** pane
    and select the following configuration:
 
    -  **ad-mc-adc**

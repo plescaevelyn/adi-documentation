@@ -21,7 +21,7 @@ components of the motor control hardware:
 Vivado Design Generation
 ------------------------
 
-In order to build the project you need to follow the instructions from `ADI Reference Designs HDL User Guide <https://wiki.analog.com/resources/fpga/docs/hdl>`_
+In order to build the project you need to follow the instructions from the :external+hdl:doc:`ADI Reference Designs HDL User Guide <user_guide/index>`
 
 Downloads
 ---------
@@ -29,12 +29,10 @@ Downloads
 .. admonition:: Download
    :class: download
 
-   
+
    -  `Vivado ADI Libraries <https://github.com/analogdevicesinc/hdl/tree/hdl_2018_r2/library>`_
    -  `Vivado Motor Control 2 Reference Design <https://github.com/analogdevicesinc/hdl/tree/hdl_2018_r2/projects/motcon2_fmc>`_
-   
-   :
-   
+
 
 Setting up Linux
 ----------------
@@ -48,6 +46,6 @@ Support
 
 .. hint::
 
-   
+
    -  Questions? :ez:`Ask Help & Support <community/fpga>`.
-   
+
