@@ -42,11 +42,11 @@ Get Microblaze Little Endian Toolchain from Xilinx
 
    This specifies any shell prompt running on the target or development host
 
-   
-   ::
-   
 
-   
+   ::
+
+
+
       Dave@HAL9000:~/fmcomms1$ git clone git://git.xilinx.com/xldk/microblaze_v1.0_le.git
       Cloning into 'microblaze_v1.0_le'...
       remote: Counting objects: 4, done.
@@ -61,11 +61,11 @@ Untar Toolchain
 
    This specifies any shell prompt running on the target or development host
 
-   
-   ::
-   
 
-   
+   ::
+
+
+
       Dave@HAL9000:~/fmcomms1$ cd microblaze_v1.0_le/
       Dave@HAL9000:~/fmcomms1/microblaze_v1.0_le$ tar xzf microblazeel-unknown-linux-gnu.tar.gz
 
@@ -76,11 +76,11 @@ Get Linux kernel source
 
    This specifies any shell prompt running on the target or development host
 
-   
-   ::
-   
 
-   
+   ::
+
+
+
       Dave@HAL9000:~/fmcomms1$ git clone `linux <https://github.com/analogdevicesinc/linux>`_
       Cloning into 'linux'...
       remote: Counting objects: 2757163, done.
@@ -97,11 +97,11 @@ Checkout master branch
 
    This specifies any shell prompt running on the target or development host
 
-   
-   ::
-   
 
-   
+   ::
+
+
+
       Dave@HAL9000:~/fmcomms1$ cd linux/
       Dave@HAL9000:~/fmcomms1/linux$ git checkout origin/master
       Checking out files: 100% (16412/16412), done.
@@ -114,11 +114,11 @@ Set Environmental Variables
 
    This specifies any shell prompt running on the target or development host
 
-   
-   ::
-   
 
-   
+   ::
+
+
+
       Dave@HAL9000:~/fmcomms1/linux$ export PATH=~/fmcomms1/microblaze_v1.0_le/microblazeel-unknown-linux-gnu/bin/:$PATH
       Dave@HAL9000:~/fmcomms1/linux$ export ARCH=microblaze
       Dave@HAL9000:~/fmcomms1/linux$ export CROSS_COMPILE=microblazeel-unknown-linux-gnu-
@@ -130,11 +130,11 @@ Configure Kernel for ML605 XCOMM platform (aka FMCOMMS1)
 
    This specifies any shell prompt running on the target or development host
 
-   
-   ::
-   
 
-   
+   ::
+
+
+
       Dave@HAL9000:~/fmcomms1/linux$ make ml605_xcomm_defconfig
         HOSTCC  scripts/basic/fixdep
         HOSTCC  scripts/kconfig/conf.o
@@ -157,11 +157,11 @@ Get Root File-System
 
    This specifies any shell prompt running on the target or development host
 
-   
-   ::
-   
 
-   
+   ::
+
+
+
       Dave@HAL9000:~/fmcomms1/linux$ wget http://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/software/linux/rootfs.cpio.gz
       --2012-12-19 09:25:28--  http://wiki.analog.com/_media/resources/eval/user-guides/ad-fmcomms1-ebz/software/linux/rootfs.cpio.gz
       Resolving wiki.analog.com (wiki.analog.com)... 195.170.124.184
@@ -169,10 +169,10 @@ Get Root File-System
       HTTP request sent, awaiting response... 200 OK
       Length: 2958801 (2.8M) [application/octet-stream]
       Saving to: `rootfs.cpio.gz'
-   
+
       100%[=====================================================================================================
       =====================================================================>] 2,958,801   1.42M/s   in 2.0s
-   
+
       2012-12-19 09:25:30 (1.42 MB/s) - `rootfs.cpio.gz' saved [2958801/2958801]
       Dave@HAL9000:~/fmcomms1/linux$
 
@@ -183,11 +183,11 @@ Build kernel
 
    This specifies any shell prompt running on the target or development host
 
-   
-   ::
-   
 
-   
+   ::
+
+
+
       Dave@HAL9000:~/fmcomms1/linux$ make -j5 simpleImage.cf_xcomm_ml605
         CHK     include/linux/version.h
         UPD     include/linux/version.h
@@ -224,11 +224,11 @@ Create a directory and gather required files
 
    This specifies any shell prompt running on the target or development host
 
-   
-   ::
-   
 
-   
+   ::
+
+
+
       Dave@HAL9000:~/fmcomms1$ mkdir build
       Dave@HAL9000:~/fmcomms1$ cd build/
       Dave@HAL9000:~/fmcomms1/build$ cp ~/fpgahdl_xilinx/cf_xcomm/implementation/system.bit .
@@ -243,11 +243,11 @@ On Windows open a ISE Design Suite Command Prompt.
 
    This specifies any shell prompt running on the target or development host
 
-   
-   ::
-   
 
-   
+   ::
+
+
+
       Dave@HAL9000:~/fmcomms1/build$ source /opt/Xilinx/14.1/ISE_DS/settings64.sh
       . /opt/Xilinx/14.1/ISE_DS/common/.settings64.sh /opt/Xilinx/14.1/ISE_DS/common
       . /opt/Xilinx/14.1/ISE_DS/EDK/.settings64.sh /opt/Xilinx/14.1/ISE_DS/EDK
@@ -264,17 +264,17 @@ Run XMD genace tcl script
 
    This specifies any shell prompt running on the target or development host
 
-   
-   ::
-   
 
-   
+   ::
+
+
+
       Dave@HAL9000:~/fmcomms1/build$ xmd -tcl genace.tcl -hw system.bit -elf simpleImage.cf_xcomm_ml605 -ace linux.ace -board ml605 -target mdm
       Xilinx Microprocessor Debugger (XMD) Engine
       Xilinx EDK 14.1 Build EDK_P.15xf
       Copyright (c) 1995-2009 Xilinx, Inc.  All rights reserved.
       Executing xmd script : /opt/Xilinx/14.1/ISE_DS/EDK/data/xmd/genace.tcl
-   
+
       #######################################################################
       **XMD GenACE utility. Generate SystemACE File from bit/elf/data Files**
 
@@ -287,23 +287,23 @@ Run XMD genace tcl script
           HW File    : system.bit
           ACE File   : linux.ace
           nCPUs      : 1
-   
+
           Processor mdm_1 Information
               Debug opt : -debugdevice devicenr 1 cpunr 1
               ELF files : simpleImage.cf_xcomm_ml605
               Start PC Address : 0xc0000000
       Open SVF file
-   
+
       ############################################################
       Converting Bitstream 'system.bit' to SVF file 'system.svf'
-   
+
       [--snip--]
-   
+
       **RUNNING>**
 
       Converting SVF file 'linux.svf' to SystemACE file 'linux.ace'
       Executing 'impact -batch svf2ace.scr'
-   
+
       SystemACE file 'linux.ace' created
 
 The newly created System ACE file can now be transferred to an Compact Flash

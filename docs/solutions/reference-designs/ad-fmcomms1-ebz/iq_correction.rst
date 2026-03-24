@@ -74,7 +74,7 @@ Then according to the linear algebra, :math:`I(t)` and :math:`Q(t)` can be obtai
 
    :math:`[matrix21{I(t)} {Q(t)}] =[matrix22A 0 C D] [matrix21{I prime prime(t)} {Q prime prime(t)}]=[matrix22A 0 C D] [matrix21{I prime(t)-beta_I} {Q prime(t)-beta_Q}]` ,
 
-   
+
    where :math:`I prime(t)` and :math:`Q prime(t)` are observed signals, and :math:`A, C, D` are correction matrix parameters.
 
 Please refer to the S.W. Ellingson's paper [4]_ for the detailed procedures of
@@ -116,9 +116,9 @@ that all the averaging operations are implemented by FIR filter.
 
    You can download the Simulink model from below:
 
-   
+
    -  `iqcorrection.zip <resources/iqcorrection.zip>`_
-   
+
    Pay attention to the output data type of each block. It should be defined
    according to the range of the data value of your system. Otherwise, you will
    not get the correct result.
@@ -128,18 +128,18 @@ that all the averaging operations are implemented by FIR filter.
    In order to run this model, your MATLAB license needs to include the
    following components:
 
-   
+
    -  MATLAB
    -  Simulink
    -  Communications System Toolbox
    -  DSP System Toolbox
    -  Fixed-Point Designer
-   
+
    If you want to generate HDL code from this model, the following component is
    also required:
-   
+
    -  HDL Coder
-   
+
 
 HDL
 ~~~
@@ -175,9 +175,9 @@ circle centering in the origin.
 
 .. hint::
 
-   
+
    -  Questions? :ez:`Ask Help & Support <community/fpga>`.
-   
+
 
 .. [1]
    This imbalance mainly attributes to the mismatched components in the in-phase

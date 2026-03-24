@@ -29,9 +29,9 @@ When combined with the Xilinx ZYNQ® Software-Defined Radio Kit, :adi:`AD-FMCOMM
 
    The AD-FMCOMMS1-EBZ FMC Card is not fully ANSI/VITA 57.1 compatible:
 
-   
+
    -  does not meet the mechanical form factor (too tall, too long),
-   
+
    It was designed, and meets the needs of prototyping platforms, and will work
    with FPGA Development systems which include an FMC connector. It may not
    mechanically fit on other ANSI/VITA 57.1 carrier cards.

@@ -50,11 +50,11 @@ Get Linux kernel source
 
    This specifies any shell prompt running on the target or development host
 
-   
-   ::
-   
 
-   
+   ::
+
+
+
       Dave@HAL9000:~/fmcomms1$ git clone `linux <https://github.com/analogdevicesinc/linux>`_
       Cloning into 'linux'...
       remote: Counting objects: 2757163, done.
@@ -71,11 +71,11 @@ Checkout main branch
 
    This specifies any shell prompt running on the target or development host
 
-   
-   ::
-   
 
-   
+   ::
+
+
+
       Dave@HAL9000:~/fmcomms1$ cd linux/
       Dave@HAL9000:~/fmcomms1/linux$ git checkout main
       Checking out files: 100% (16412/16412), done.
@@ -90,11 +90,11 @@ Set Environmental Variables
 
    This specifies any shell prompt running on the target or development host
 
-   
-   ::
-   
 
-   
+   ::
+
+
+
       Dave@HAL9000:~/fmcomms1/linux$ export PATH=/opt/Xilinx/Vitis/2021.2/gnu/microblaze/linux_toolchain/lin64_le/bin:$PATH
       Dave@HAL9000:~/fmcomms1/linux$ export ARCH=microblaze
       Dave@HAL9000:~/fmcomms1/linux$ export CROSS_COMPILE=microblazeel-xilinx-linux-gnu-
@@ -106,11 +106,11 @@ Configure Kernel for KC705 XCOMM platform (aka FMCOMMS1)
 
    This specifies any shell prompt running on the target or development host
 
-   
-   ::
-   
 
-   
+   ::
+
+
+
       Dave@HAL9000:~/fmcomms1/linux$ make adi_mb_defconfig
         HOSTCC  scripts/basic/fixdep
         HOSTCC  scripts/kconfig/conf.o
@@ -133,11 +133,11 @@ Get Root File-System
 
    This specifies any shell prompt running on the target or development host
 
-   
-   ::
-   
 
-   
+   ::
+
+
+
       Dave@HAL9000:~/linux$ wget https://swdownloads.analog.com/cse/microblaze/rootfs/rootfs.cpio.gz
       --2014-11-21 14:27:54--  http://wiki.analog.com/_media/resources/tools-software/linux-drivers/platforms/rootfs.cpio.gz
       Resolving wiki.analog.com (wiki.analog.com)... 195.170.124.184
@@ -145,11 +145,11 @@ Get Root File-System
       HTTP request sent, awaiting response... 200 OK
       Length: 3006465 (2.9M) [application/octet-stream]
       Saving to: `rootfs.cpio.gz'
-   
+
       100%[===================================================================================================================================================================>] 3,006,465   75.1K/s   in 37s
-   
+
       2014-11-21 14:28:32 (79.2 KB/s) - `rootfs.cpio.gz' saved [3006465/3006465]
-   
+
       Dave@HAL9000:~/linux$
 
 Build kernel
@@ -180,11 +180,11 @@ combination exist type:
 
    This specifies any shell prompt running on the target or development host
 
-   
-   ::
-   
 
-   
+   ::
+
+
+
       Dave@HAL9000:~/fmcomms1/linux$ make -j5 simpleImage.kc705_fmcomms1
         CHK     include/linux/version.h
         UPD     include/linux/version.h

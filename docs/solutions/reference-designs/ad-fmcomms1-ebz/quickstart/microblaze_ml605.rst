@@ -120,11 +120,11 @@ be familiar with a few of the connectors as switches on the board:
 
    This specifies any shell prompt running on the target
 
-   
-   ::
-   
 
-   
+   ::
+
+
+
       Ramdisk addr 0x00000000,
       Compiled-in FDT at c029f4d8
       Linux version 3.13.0-68971-g879e3f3 (michael@mhenneri-D04) (gcc version 4.6.4 20120924 (prerelease) (crosstool-NG 1.15.3) ) #1210 Wed Mar 54

@@ -33,7 +33,7 @@ Bandwidth
 Determining overall channel bandwidth is a little complex, since many devices
 don't have a meaningful (in this aspect) bandwidth number.
 
-|AD9122 Spurs|\ |ADL5375 Bandwidth|\ |ADL5602 Gain Flatness over frequency|
+|AD9122 Spurs| |ADL5375 Bandwidth|\ |ADL5602 Gain Flatness over frequency|
 
 -  In the AD9122, the above figure shows an fDATA of 400MHz, creating a waveform over 350MHz.
 -  The ADL5375 does include a baseband bandwidth specification - depending on the flatness you require, could be 200MHz (+/- 0.1dB) or 500MHz (+/- 0.5dB).
@@ -224,11 +224,11 @@ picture will open it up in a larger window)
 |image67| |image68|
 
 And with a larger input - it looks similar. This is with an input of +6.0dBm,
-with the VGA set to 4.5dB.\|
+with the VGA set to 4.5dB.|
 
-|image69|\ |image70|
+|image69| |image70|
 
-The results are similar at different frequencies.\|
+The results are similar at different frequencies.|
 
 Signal to Noise
 ~~~~~~~~~~~~~~~

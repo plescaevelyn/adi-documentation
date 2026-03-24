@@ -31,7 +31,7 @@ on either:
 
 .. important::
 
-   
+
    The ML605 XPS project remain on this website only for legacy purposes. The
    support for XPS projects has been discontinued.
 
@@ -55,15 +55,15 @@ Downloads
 
    **no-OS Drivers:** :git-no-OS:`fmcomms1`
 
-   
+
    **ML605 HDL Reference Design for ISE:** :git-fpgahdl_xilinx:`cf_xcomm`
-   
+
    **Latest release for Vivado**
-   
+
    **AC701: :git-hdl:`projects/fmcomms1/ac701` KC705: :git-hdl:`projects/fmcomms1/kc705` VC707: :git-hdl:`projects/fmcomms1/vc707` ZC702: :git-hdl:`projects/fmcomms1/zc702` ZC706: :git-hdl:`projects/fmcomms1/zc706` ZED:** :git-hdl:`projects/fmcomms1/zed`
-   
+
    **Old releases for Vivado**
-   
+
    **For Vivado 2013.4 :**\ https://github.com/analogdevicesinc/hdl/tree/hdl_2014_r1/projects/fmcomms1
 
 Hardware Setup

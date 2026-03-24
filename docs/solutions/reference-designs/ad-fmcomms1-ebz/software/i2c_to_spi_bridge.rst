@@ -46,23 +46,30 @@ Transaction settings
 
 This must be done before a read or write:
 
-I2C Address (Write) \| 0x03 \| spi_settings[15:8] \| spi_settings[7:0] \|
-chip_select[15:8] \| chip_select[7:0] \|
++--------------------+------+------------------+-----------------+------------------+-----------------+
+| I2C Address (Write)| 0x03 | spi_settings[15:8]| spi_settings[7:0]| chip_select[15:8]| chip_select[7:0]|
++--------------------+------+------------------+-----------------+------------------+-----------------+
 
 Write data
 ----------
 
-I2C Address (Write)\| 0x04 \| data \| data \| data (up to 62 bytes at once)
++--------------------+------+------+------+------------------------------+
+| I2C Address (Write)| 0x04 | data | data | data (up to 62 bytes at once)|
++--------------------+------+------+------+------------------------------+
 
 Read data
 ---------
 
-I2C Address (Read) \| data \|data \| data (up to 62 bytes at once)
++-------------------+------+------+------------------------------+
+| I2C Address (Read)| data | data | data (up to 62 bytes at once)|
++-------------------+------+------+------------------------------+
 
 Read firmware version
 ---------------------
 
-I2C Address (Write) \| 0x01
++--------------------+------+
+| I2C Address (Write)| 0x01 |
++--------------------+------+
 
 After sending this command the PIC firmware version can be read by issuing an
 I2C read command for 32 bytes of data.
@@ -158,35 +165,35 @@ The microcontroller on the board is a `Microchip PIC18F24J50-I/ML <http://www.mi
    a simple matter to do (This assumes you are using the Linux design - there
    isn't way to do this for the no-OS infrastructure):
 
-   
+
    ::
-   
-   
+
+
       root@linaro-ubuntu-desktop:~# for eeprom in $(find /sys -name eeprom); do cat $eeprom > $(echo $eeprom | sed 's:/:_:g') ; done
 
    Check to make sure the files are there properly (they should be 256 bytes
    each):
-   
+
    ::
-   
-   
+
+
       root@linaro-ubuntu-desktop:~# ls -l _sys
       -rw-r--r-- 1 root root 256 Jan  1 00:04 _sys_devices_amba.1_41600000.i2c_i2c-1_1-0050_eeprom
       -rw-r--r-- 1 root root 256 Jan  1 00:04 _sys_devices_amba.1_41600000.i2c_i2c-1_1-0054_eeprom
 
    and then update, when done updating, just re-write the contents:
-   
+
    ::
-   
-   
+
+
       root@linaro-ubuntu-desktop:~# for eeprom in $(ls _sys*) ; do cat $eeprom > $(echo $eeprom | sed 's:_:/:g') ; done
 
    To make sure things are OK, try:
-   
-   ::
-   
 
-   
+   ::
+
+
+
       root@linaro-ubuntu-desktop:~# find /sys/ -name eeprom
       /sys/devices/amba.1/41600000.i2c/i2c-1/1-0050/eeprom
       /sys/devices/amba.1/41600000.i2c/i2c-1/1-0054/eeprom

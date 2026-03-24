@@ -54,7 +54,7 @@ Download the pre-build image for you device in question.
 
    Latest Build: 2024-03-26 - 2023_R2
 
-   
+
    | Linux branch: 2023_R2
    | Linux repository: `linux <https://github.com/analogdevicesinc/linux>`_
    | HDL branch: hdl_2023_r2
@@ -108,7 +108,7 @@ Download the pre-build image for you device in question.
 
    Latest Build: 2023-12-08 - 2022_R2
 
-   
+
    | Linux branch: 2022_R2
    | Linux repository: `linux <https://github.com/analogdevicesinc/linux>`_
    | HDL branch: hdl_2022_r2
@@ -158,7 +158,7 @@ Download the pre-build image for you device in question.
 
    Latest Build: 2023-04-02 - 2021_R2
 
-   
+
    | Linux branch: 2021_R2
    | Linux repository: `linux <https://github.com/analogdevicesinc/linux>`_
    | HDL branch: hdl_2021_r2
@@ -200,7 +200,7 @@ Download the pre-build image for you device in question.
 
    Latest Build: 2022_08_05 - 2021_R1
 
-   
+
    | Linux branch: 2021_R1
    | Linux repository: `linux <https://github.com/analogdevicesinc/linux>`_
    | HDL branch: hdl_2021_r1
@@ -232,7 +232,7 @@ Download the pre-build image for you device in question.
 
    Latest Build: 2021_07_27 - 2019_R2
 
-   
+
    | Linux branch: 2019_R2
    | Linux repository: `linux <https://github.com/analogdevicesinc/linux>`_
    | HDL branch: hdl_2019_r2
@@ -282,11 +282,11 @@ Download the pre-build image for you device in question.
 
    Latest Build: 2018_05_08 - 2018_R1
 
-   
-   | Linux branch:2018_R1
-   | Linux repository:`linux <https://github.com/analogdevicesinc/linux>`_
-   | Vivado branch:hdl_2018_r1
-   | Vivado repository:`hdl <https://github.com/analogdevicesinc/hdl>`_
+
+   | Linux branch: 2018_R1
+   | Linux repository: `linux <https://github.com/analogdevicesinc/linux>`_
+   | Vivado branch: hdl_2018_r1
+   | Vivado repository: `hdl <https://github.com/analogdevicesinc/hdl>`_
 
 +--------------+-------------+------------------------------------------------------------------------------------------------------------------------+
 | FPGA Carrier | FMC Card    | Download                                                                                                               |
@@ -326,8 +326,7 @@ Download the pre-build image for you device in question.
 | VC707        | FMCOMMS4    | `2018_r1_vc707_fmcomms4.zip <http://swdownloads.analog.com/cse/microblaze/2018_r1/2018_r1_vc707_fmcomms4.zip>`_        |
 +--------------+-------------+------------------------------------------------------------------------------------------------------------------------+
 
-.. image:: https://wiki.analog.com/_media/section>/resources/tools-software/linux-software/adi-kuiper_images/master#master_microblaze_images&
-   :alt: master#master_microblaze_images&
+`Master Microblaze images <https://swdownloads.analog.com/cse/microblaze/master/latest_microblaze_images.tar.gz>`_
 
 There are two ways of loading the design. One is using the XMD command line.
 Open a xmd command window/shell and enter the commands manually.
@@ -336,13 +335,13 @@ Below is just a example and the file-names may vary.
 
 .. container:: box bgblue
 
-   
+
    .. warning::
 
       Xilinx XMD command console
 
-   
-   
+
+
 
 .. collapsible:: Click to expand
 
@@ -355,7 +354,7 @@ Below is just a example and the file-names may vary.
            *** SW Build 932637 on Wed Jun 11 13:12:06 MDT 2014
              ** Copyright 1986-2014 Xilinx, Inc. All Rights Reserved.
 
-         XMD% fpga -f download.bit                                                                                                                                                                                    
+         XMD% fpga -f download.bit
          Configuring Device 1 (xcku040) with Bitstream -- download.bit
          ....10....20....30....40....50....60.....70....80....90....Done
          Successfully downloaded bit file.
@@ -365,7 +364,7 @@ Below is just a example and the file-names may vary.
           1       03822093           6        xcku040
 
          0
-         XMD% connect mb mdm                                                                                                                                                                                          
+         XMD% connect mb mdm
 
          JTAG chain configuration
          Device   ID Code        IR Length    Part Name
@@ -401,9 +400,9 @@ Below is just a example and the file-names may vary.
          Connected to "mb" target. id = 0
          Starting GDB server for "mb" target (id = 0) at TCP port no 1234
 
-         XMD% dow /home/dace/linux/arch/microblaze/boot/simpleImage.kcu105_ad_fmcdaq2_ebz                                                                                                   
+         XMD% dow /home/dace/linux/arch/microblaze/boot/simpleImage.kcu105_ad_fmcdaq2_ebz
          System Reset .... DONE
-         Downloading Program -- /home/michael/linux/arch/microblaze/boot/simpleImage.kcu105_ad_fmcdaq2_ebz                                                                                     
+         Downloading Program -- /home/michael/linux/arch/microblaze/boot/simpleImage.kcu105_ad_fmcdaq2_ebz
              section, .text: 0x80000000-0x8031cda7
              section, .init.text: 0x803fc000-0x804185eb
              section, .init.ivt: 0x8041afac-0x8041afd3
@@ -424,9 +423,9 @@ Below is just a example and the file-names may vary.
              section, .con_initcall.init: 0x8041b684-0x8041b68b
              section, .init.ramfs: 0x8041b68c-0x806f97b3
              section, .bss: 0x806fa000-0x8070f8db
-         Download Progress........10.......20.......30.......40.......50........60.......70.......80.......90........Done                                                                                             
+         Download Progress........10.......20.......30.......40.......50........60.......70.......80.......90........Done
          Setting PC with Program Start Address 0x80000000
-         XMD% con                                                                                                                                                                                                     
+         XMD% con
          Processor started. Type "stop" to stop processor
 
          RUNNING> XMD%
@@ -436,33 +435,33 @@ Software Command Line Tool...
 
 .. container:: box bgblue
 
-   
+
    .. warning::
 
       Xilinx XSCT command console
 
-   
-   ::
-   
 
-   
+   ::
+
+
+
       * Xilinx System Debugger (XSDB) v2021.1
         *** Build date : Jun 10 2021-20:11:58
           ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
-   
-   
+
+
       xsdb% connect
       attempting to launch hw_server
-   
+
       * Xilinx hw_server v2021.1
         *** Build date : Jun 10 2021 at 20:11:57
           ** Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
-   
+
       INFO: hw_server application started
       INFO: Use Ctrl-C to exit hw_server application
-   
+
       INFO: To connect to this hw_server instance use url: TCP:127.0.0.1:3121
-   
+
       tcfchan#0
       xsdb% fpga -f system_top.bit
       100%    4MB   1.7MB/s  00:02
@@ -510,34 +509,34 @@ Then run the tcl script:
 
 .. container:: box bgblue
 
-   
+
    .. warning::
 
       Vivado TCL shell or Linux console
 
-   
-   ::
-   
-   
 
-   
+   ::
+
+
+
+
       * Xilinx System Debugger (XSDB) v2021.1
         *** Build date : Jun 10 2021-20:11:58
           ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
-   
-   
+
+
       xsdb% source run.tcl
       attempting to launch hw_server
-   
+
       * Xilinx hw_server v2021.1
         *** Build date : Jun 10 2021 at 20:11:57
           ** Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
-   
+
       INFO: hw_server application started
       INFO: Use Ctrl-C to exit hw_server application
-   
+
       INFO: To connect to this hw_server instance use url: TCP:127.0.0.1:3121
-   
+
       100%    4MB   1.7MB/s  00:02
       Downloading Program -- /home/liacob/microblaze/simpleImage.kc705_fmcomms2-3/simpleImage.kc705_fmcomms2-3.strip
               section, .text: 0x80000000 - 0x804763ab
@@ -599,11 +598,11 @@ You should see the kernel start-up messages as follows:
 
    This specifies any shell prompt running on the target
 
-   
-   ::
-   
 
-   
+   ::
+
+
+
       Early console on uartlite at 0x40600000
       bootconsole [earlyser0] enabled
       Ramdisk addr 0x00000000,
@@ -741,15 +740,15 @@ You should see the kernel start-up messages as follows:
       random: ssh-keygen urandom read with 75 bits of entropy available
       Starting sshd: OK
       Starting IIO Server Daemon: OK
-   
-   
+
+
       Welcome to Buildroot
-   
+
       buildroot login: random: nonblocking pool is initialized
 IIO Oscilloscope Remote
 -----------------------
 
-Please see also here:`Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`_
+Please see also here: `Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`_
 
 The IIO Oscilloscope application can be used to connect to another platform that
 has a connected device in order to configure the device and read data from it.

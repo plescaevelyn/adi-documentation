@@ -39,14 +39,14 @@ Installation
 
    Latest releases (goto this page to download the file):
 
-   
+
    -  https://github.com/analogdevicesinc/iio-oscilloscope/releases
-   
+
 
 Linux
 ~~~~~
 
-For building on the target, we recommend using the `update scripts <https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux>`_. This is a tried/proven method that does everything in a quick script.
+For building on the target, we recommend using the :external+kuiper:doc:`update scripts <index>`. This is a tried/proven method that does everything in a quick script.
 
 To build on a host, do not use the script, you **must**:
 
@@ -116,11 +116,11 @@ in 3 different ways:
    This specifies any shell prompt running on the host or target - Run IIO
    Oscilloscope in remote mode
 
-   
-   ::
-   
 
-   
+   ::
+
+
+
       > export OSC_REMOTE=IP address of the remote platform (old)
       > export IIOD_REMOTE=IP address of the remote platform (new)
       > osc

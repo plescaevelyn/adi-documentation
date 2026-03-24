@@ -23,21 +23,21 @@ Shell Scripts for the FMC RF boards
 
    This specifies any shell prompt running on the target
 
-   
+
    ::
-   
-   
+
+
       rgetz@pinky ~ $ which sh
       /usr/bin/sh
       rgetz@pinky ~ $ ls -l /usr/bin/sh
       lrwxrwxrwx 1 root root 9 2009-05-13 20:39 /usr/bin/sh -> /bin/bash
 
    OR
-   
-   ::
-   
 
-   
+   ::
+
+
+
       rgetz@pinky ~ $ ps -p $$
         PID TTY          TIME CMD
        1321 pts/0    00:00:00 bash
