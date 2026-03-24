@@ -18,7 +18,7 @@ To learn about git LFS and use it as a pro, read :ref:`git-lfs`.
 Preparing your origin
 ---------------------
 
-There is three options to contribute:
+There are three options to contribute:
 
 * :ref:`forking-publishing branch`: with write access to *analogdevicesinc* organization (recommended).
 * :ref:`forking-publishing fork`: that want to use the GitHub flow.
@@ -104,8 +104,8 @@ Clone the repository:
    $ cd documentation
 
 
-Fetch the large files from *analogdevicesinc* that your are working on and push
-to your copy the large files binaries (and vice-versa):
+Fetch the large files from *analogdevicesinc* that you are working on and push
+to your copy the large files binaries (and vice versa):
 
 .. shell::
 
@@ -171,7 +171,7 @@ Push the working branch to your copy.
    ~/documentation
    $git push private main:main
 
-Fetch the large files from *analogdevicesinc* that your are working on and push
+Fetch the large files from *analogdevicesinc* that you are working on and push
 to your copy the large files binaries (and vice-versa):
 
 .. shell::
@@ -368,7 +368,7 @@ git repository, in an external server.
 
 When you do ``git clone/pull``, by default LFS will also download the binaries
 at the "smudge" step.
-But we **highly** recommend to change this behaviour to fetch the artifacts on
+But we **highly** recommend changing this behavior fetch the artifacts on
 demand by setting globally ``git lfs install --skip-smudge``.
 It is recommended because it saves a lot of bandwidth and (your precious) time.
 
@@ -452,16 +452,31 @@ And to fix is simple:
 Then, advise the committer to ensure he has git LFS enabled with
 ``git lfs install`` and to read this page.
 
+.. _git-lfs-ssl-issues:
+
+Failed to verify certificate
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you encounter SSL errors like:
+
+.. shell::
+
+   $ git push
+     LFS: Put "<url>" : tls failed to verify certificate: x509: certificate signed by unknown authority
+
+You are likely in a managed network that injects SSL certificates (e.g, Netskope),
+if it is the case, seek support from your network admin, this is not a git lfs issue.
+
 Checking out branches and commits
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Git LFS simply follows the rules on the :git-documentation:`.gitattributes` file.
-And some times you may encounter during checkout:
+And sometimes you may encounter during checkout:
 
 .. shell::
    :no-path:
 
-   $git checkout other_branch
+   $ git checkout other_branch
     error: Your local changes to the following files would be overwritten by checkout:
             path/to/file/that_should_be_a_pointer.pptx
     Please commit your changes or stash them before you switch branches.
@@ -473,7 +488,7 @@ If you don't care about this file at the moment, just ``--force`` your way out.
 .. shell::
    :no-path:
 
-   $git checkout other_branch -f
+   $ git checkout other_branch -f
 
 Pull request permission
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -485,7 +500,7 @@ LFS:
 .. shell::
    :no-path:
 
-   $git push contributor
+   $ git push contributor
     error: Authentication error: Authentication required: You must have push access to verify locks
     error: failed to push some refs to 'https://github.com/<contributor>/documentation.git'
 
@@ -493,7 +508,7 @@ If you **didn't** touch any LFS files, you can just skip the verification:
 
 .. shell::
 
-   $git push contributor --no-verify
+   $ git push contributor --no-verify
     Writing objects: 100% (8/8), 1.08 KiB | 1.08 MiB/s, done.
     Total 8 (delta 6), reused 0 (delta 0), pack-reused 0 (from 0)
     To https://github.com/contributor/documentation.git
@@ -503,7 +518,7 @@ But if you did add **new** or **modified** LFS artifacts, the push will fail:
 
 .. shell::
 
-   $git push contributor --no-verify
+   $ git push contributor --no-verify
     Writing objects: 100% (8/8), 1.08 KiB | 1.08 MiB/s, done.
     Total 8 (delta 6), reused 0 (delta 0), pack-reused 0 (from 0)
     remote: Resolving deltas: 100% (6/6), completed with 6 local objects.
@@ -528,17 +543,17 @@ disable lfs, work, push, and enable again:
 
 .. shell::
 
-   $git lfs uninstall
+   $ git lfs uninstall
     Hooks for this repository have been removed.
     Global Git LFS configuration has been removed.
    # Restore any smudged file to its pointer state, to make sure no miss touches
-   $git restore .
+   $ git restore .
    # Work, work, work...
-   $git rebase -i @~20
+   $ git rebase -i @~20
    # Push even to a contributor's fork with an open PR
    # Re-install lfs
-   $git lfs install --skip-smudge
-   $git push contributor --no-verify --force
+   $ git lfs install --skip-smudge
+   $ git push contributor --no-verify --force
     Writing objects: 100% (4/4), 768 bytes | 768.00 KiB/s, done.
     Total 16 (delta 10), reused 0 (delta 0), pack-reused 0 (from 0)
     To https://github.com/contributor/documentation.git
