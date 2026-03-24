@@ -63,8 +63,7 @@ specific development board and devices in the X-MW setup.
 Videos
 ------
 
-.. image:: https://wiki.analog.com/_media/resources/eval/user-guides/youtube>3mh8y6josee
-   :alt: youtube>3MH8Y6joSeE
+`AD-FMCXMWBR1-EBZ Video <https://www.youtube.com/watch?v=3MH8Y6joSeE>`_
 
 Production Testing Process
 --------------------------

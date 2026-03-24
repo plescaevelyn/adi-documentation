@@ -143,7 +143,7 @@ supplies are valid, leds DS1 and DS2 will be on, accordingly. The validity
 thresholds of the input supplies are listed in the table below:
 
 =========================== =================== ============
-Input power supply validity                     
+Input power supply validity
 =========================== =================== ============
 \                           **External supply** **FMC 12V0**
 **Channel**                 1 (**prioritized**) 2
@@ -279,9 +279,9 @@ Schematics and CAD files
 .. admonition:: Download
    :class: download
 
-   
+
    -  `AD-FMCBRIDGE1A BR-066232 Rev B Schematics <resources/02_066232b_top.pdf>`_
-   
+
 
 .. |image1| image:: images/ad-fmcxmwbr1-ebz_kit_set.jpg
    :width: 800

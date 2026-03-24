@@ -1,7 +1,7 @@
 AD-FMCXMWBR1-EBZ on ZynqMP ADRV9009-ZU11EG-ADRV2CRR-FMC
 =======================================================
 
-The image for the AD-FMCXMWBR1-EBZ FMC Card on the ADRV9009-ZU11EG-ADRV2CRR-FMC can be found, and created by following the directions `here <https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux>`_.
+The image for the AD-FMCXMWBR1-EBZ FMC Card on the ADRV9009-ZU11EG-ADRV2CRR-FMC can be found, and created by following the directions :external+kuiper:doc:`here <index>`.
 
 Building the ZynqMP / MPSoC Linux kernel and devicetrees from source
 ====================================================================
@@ -178,13 +178,13 @@ The script can be downloaded from here:
 
 .. tip::
 
-   \ NOTE: After downloading the script you need to make it executable
+   After downloading the script you need to make it executable
 
-   
+
    ::
-   
+
       $ chmod +x build_zynqmp_boot_bin.sh
-   
+
 
 Usage
 ~~~~~
@@ -215,12 +215,12 @@ Usage
 
 .. tip::
 
-   \ NOTE: u-boot.elf For those who don't want to build u-boot themselves. The u-boot.elf can be extracted from the project folder on the `SD Card image <https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux>`_, bootgen_sysfiles.tgz
+   u-boot.elf For those who don't want to build u-boot themselves. The u-boot.elf can be extracted from the project folder on the :external+kuiper:doc:`SD Card image <index>`, bootgen_sysfiles.tgz
 
-   
+
 
 AD-FMCXMWBR1-EBZ devicetree example
-===================================
+------------------------------------
 
 An example of device tree for the AD-FMCXMWBR1-EBZ SPI/I2C/GPIO connections to
 different ADI devices:

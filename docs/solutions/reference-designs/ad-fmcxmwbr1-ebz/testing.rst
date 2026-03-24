@@ -39,15 +39,15 @@ procedure installed. If there is no such SD card available, it can be created.
 
    \*\* Release february 2022 \*\*
 
-   
+
    -   `Actual file <https://swdownloads.analog.com/cse/prod_test_rel/fmcbridge_test/adrv9009zu11eg_fmcbridge_prod_test_2022.img.xz>`_
-   
+
 
 .. tip::
 
-   To write an image on a SD card you can follow the instructions `Zynq & Altera SoC Quick Start Guide <https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux>`_
+   To write an image on a SD card you can follow the instructions :external+kuiper:doc:`Zynq & Altera SoC Quick Start Guide <index>`
 
-   
+
 
 Required setup
 --------------
@@ -65,10 +65,6 @@ Required setup
 .. container:: centeralign
 
    Figure 1. AD-FMCXMWBR1-EBZ on carrier
-
-::
-
-   *
 
 .. important::
 
@@ -139,10 +135,10 @@ Schematics and CAD files
 .. admonition:: Download
    :class: download
 
-   
+
    -  `AD-FMCXMWBR1-EBZ test board Schematics <resources/fmc_bridge_testbrd_update.pdf>`_
    -  `AD-FMCXMWBR1-EBZ test board CAD files <resources/test_board_ad-fmcxmwbr1.7z>`_
-   
+
 
 .. |image1| image:: images/pot_adjustment.jpg
 .. |image2| image:: images/3_test_procedure.png

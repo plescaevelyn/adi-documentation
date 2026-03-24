@@ -23,7 +23,7 @@ In addition to this, the AD-FMCXMWBR1-EBZ has a RaspberryPi compatible pin
 header that allows connection to any RaspberryPi development system.
 
 Hardware Setup
-==============
+--------------
 
 FMC carrier
 -----------
