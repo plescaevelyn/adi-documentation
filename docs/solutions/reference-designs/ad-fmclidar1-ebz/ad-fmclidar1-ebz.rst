@@ -3,7 +3,7 @@ AD-FMCLIDAR1-EBZ
 
 .. warning::
 
-   \ NOTE: Support for the ad_fmclidar_ebz is discontinued on all supported carriers: Arria10 SOC, zc706 and zcu102. ad_fmclidar_ebz will not be supported in future releases, last release in which pre-build files can be found is 2021_r1. Check this `link <https://wiki.analog.com/resources/tools-software/linux-software/adi-kuiper_images/release_notes>`_ to see all available Kuiper Linux releases.
+   Support for the ad_fmclidar_ebz is discontinued on all supported carriers: Arria10 SOC, zc706 and zcu102. ad_fmclidar_ebz will not be supported in future releases, last release in which pre-build files can be found is 2021_r1. Check the :external+kuiper:doc:`Kuiper Linux release notes <release_notes>` to see all available Kuiper Linux releases.
 
 Introduction
 ------------
@@ -16,7 +16,7 @@ The :adi:`AD-FMCLIDAR1-EBZ <en/design-center/evaluation-hardware-and-software/ev
 -  Laser Transmitter Board
 -  AFE Receiver Board
 
-**Highlevel specification**
+**High-level specification**
 
 .. image:: images/lidar_system_1.jpg
    :alt: Complete system assembled including additional optics and FPGA board
@@ -25,7 +25,7 @@ The :adi:`AD-FMCLIDAR1-EBZ <en/design-center/evaluation-hardware-and-software/ev
 
 -  1D Non-Scanning LiDAR
 -  Horizontal resolution 16 pixels
--  Data sampling upto 1GSPS on 4 separate Channels
+-  Data sampling up to 1GSPS on 4 separate Channels
 -  Design is verified to comply with Class I Laser Safety
 -  Standardised FMC connector plugs into FPGA board of choice
 -  Out of box demo for target range measurement
@@ -36,9 +36,9 @@ The :adi:`AD-FMCLIDAR1-EBZ <en/design-center/evaluation-hardware-and-software/ev
 -  Platform development environment support includes Industry standard Linux Industrial I/O (IIO) Applications, MATLAB®, Simulink®, custom C/C+, Python, and C# applications
 -  HDL reference designs and drivers to allow zero day development
 
-::
+.. note::
 
-     * *Laser optics are not provided with the system but ADI has a proven demo detecting an object upto 60m range at approx. 1m x 1m. Optional optics to achieve this are provided below in the Example section.*
+   Laser optics are not provided with the system but ADI has a proven demo detecting an object up to 60m range at approx. 1m x 1m. Optional optics to achieve this are provided below in the Example section.
 
 .. image:: images/highlevel_blk_dig.png
    :align: right
@@ -130,9 +130,9 @@ Laser Safety
    2007. Only use Software and Firmware updates that are specifically provided
    for this solution.
 
-   
+
    `Laser Certification Report <resources/report_2223_fmclidar1_60825_classification.pdf>`_
-   
+
    `Additional values tested <resources/fmclidar1_additional_testing.pdf>`_
 
 --------------
@@ -157,12 +157,9 @@ x 1m in size at 60m range with 50% reflective characteristic.
 Videos & Articles
 -----------------
 
-|youtube>776jK4yPvjI| |youtube>uOehjnhe7Zc| |youtube>9-KRkB00VMQ|
-
-.. image:: https://wiki.analog.com/_media/resources/eval/user-guides/:adi:`-/media/images/analog-dialogue/en/volume-54/number-1/articles/open-source-lidar-prototyping-platform/open-source-lidar-prototyping-platform.jpg`
-   :alt: :adi:`-/media/images/analog-dialogue/en/volume-54/number-1/articles/open-source-lidar-prototyping-platform/open-source-lidar-prototyping-platform.jpg`
-   :align: left
-   :width: 200
+- `YouTube: 776jK4yPvjI <https://www.youtube.com/watch?v=776jK4yPvjI>`_
+- `YouTube: uOehjnhe7Zc <https://www.youtube.com/watch?v=uOehjnhe7Zc>`_
+- `YouTube: 9-KRkB00VMQ <https://www.youtube.com/watch?v=9-KRkB00VMQ>`_
 
 :adi:`Open-Source LIDAR Prototyping Platform <analog-dialogue/articles/open-source-lidar-prototyping-platform>`
 
@@ -177,7 +174,3 @@ Engineer Zone.
 .. hint::
 
    :ez:`EngineerZone Support Community <depth-perception-ranging-technologies/lidar-solutions>`
-
-.. |youtube>776jK4yPvjI| image:: https://wiki.analog.com/_media/resources/eval/user-guides/youtube>776jk4ypvji
-.. |youtube>uOehjnhe7Zc| image:: https://wiki.analog.com/_media/resources/eval/user-guides/youtube>uoehjnhe7zc
-.. |youtube>9-KRkB00VMQ| image:: https://wiki.analog.com/_media/resources/eval/user-guides/youtube>9-krkb00vmq

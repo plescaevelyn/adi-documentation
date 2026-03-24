@@ -13,7 +13,7 @@ The laser board generates the optical pulses with a wavelength of 905nm. It uses
 The drive signal can be fed back to the ADC for time of flight reference. However, it is single ended and must be converted to differential form. Thus, an :adi:`ADA4930-1 <en/products/ada4930-1.html>` is used, a very low noise, low distortion, high speed differential amplifier. The common mode voltage is set similarly to that of the ADA4950 on the TIA board.
 
 An external power supply is used to power the lasers. The kit comes with a 12V @
-4A supply. For safety reasons the power to the lasers is turned only only by
+4A supply. For safety reasons the power to the lasers is turned on only by
 pressing the S1 switch.
 
 --------------
@@ -21,7 +21,7 @@ pressing the S1 switch.
 .. admonition:: Download
    :class: download
 
-   `Rev B Design Files(Schematics, Layout, BOM) <https://wiki.analog.com/_media/resources/eval/user-guides/AD-FMCLIDAR1-EBZ/revb_laser.zip>`_
+   `Rev B Design Files(Schematics, Layout, BOM) <resources/revb_laser.zip>`_
 
 --------------
 

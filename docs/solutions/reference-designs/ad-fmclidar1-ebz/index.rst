@@ -1,5 +1,5 @@
-AD-FMCLIDAR1-EBZ
-================
+AD-FMCLIDAR1-EBZ (OBSOLETE)
+===========================
 
 .. toctree::
    :titlesonly:

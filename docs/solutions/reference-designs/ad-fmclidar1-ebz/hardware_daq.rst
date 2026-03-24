@@ -67,9 +67,9 @@ The DAQ board allows for an alternative use of the AD9528 where both its PLL sta
 .. admonition:: Download
    :class: download
 
-   `AD-FMCLIDAR1-EBZ FMC Connector Pinout <https://wiki.analog.com/_media/resources/eval/user-guides/AD-FMCLIDAR1-EBZ/fmclidar1_fmc_pinout.xlsx>`_
+   `AD-FMCLIDAR1-EBZ FMC Connector Pinout <resources/fmclidar1_fmc_pinout.xlsx>`_
 
 .. admonition:: Download
    :class: download
 
-   `Design Files(Schematics, Layout, BOM) <https://wiki.analog.com/_media/resources/eval/user-guides/AD-FMCLIDAR1-EBZ/revb_daq.zip>`_
+   `Design Files(Schematics, Layout, BOM) <resources/revb_daq.zip>`_

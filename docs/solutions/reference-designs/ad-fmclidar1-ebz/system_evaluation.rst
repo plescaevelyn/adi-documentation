@@ -3,7 +3,7 @@ Setting up the system
 
 .. warning::
 
-   \ NOTE: Support for the ad_fmclidar_ebz is discontinued on all supported carriers: Arria10 SOC, ZC706 and ZCU102. ad_fmclidar_ebz will not be supported in future releases, last release image in which pre-build files can be found is 2021_r1. (check this `link <https://wiki.analog.com/resources/tools-software/linux-software/adi-kuiper_images/release_notes>`_ to see all available Kuiper Linux releases).
+   Support for the ad_fmclidar_ebz is discontinued on all supported carriers: Arria10 SOC, ZC706 and ZCU102. ad_fmclidar_ebz will not be supported in future releases, last release image in which pre-build files can be found is 2021_r1. (check the :external+kuiper:doc:`Kuiper Linux release notes <release_notes>` to see all available Kuiper Linux releases).
 
 .. image:: images/lidar_system_1.jpg
    :alt: Complete system assembled including additional optics and FPGA board
@@ -35,11 +35,11 @@ To get the system up and running follow the steps below:
 
 .. note::
 
-   
-   -  See `these instructions <https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux>`_ on how to burn the Linux image on the SD card. This might be useful if the SD card is corrupted or a new image needs to be written to the SD card.
-   -  The SD card in the box might not have the latest software release. It is recommended to update the software when using the system for the first time by following `these instructions <https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux>`_
+
+   -  See the :external+kuiper:doc:`Kuiper Linux instructions <index>` on how to burn the Linux image on the SD card. This might be useful if the SD card is corrupted or a new image needs to be written to the SD card.
+   -  The SD card in the box might not have the latest software release. It is recommended to update the software when using the system for the first time by following the :external+kuiper:doc:`Kuiper Linux instructions <index>`
    -  To prevent the SD from getting corrupted at system power down it is recommended to run this command to safely power down the system: *sudo shutdown -h now*
-   
+
 
 --------------
 
