@@ -38,21 +38,17 @@ The FMC board includes the following products by Analog Devices:
 
    -  External Clock Synchronization
 
-.. image:: images/fmcadc7-top.jpg
+.. figure:: images/fmcadc7-top.jpg
    :align: center
    :width: 200
 
-::
+   Top View
 
-                                                    Top View
-
-.. image:: images/fmcadc7-bot.jpg
+.. figure:: images/fmcadc7-bot.jpg
    :align: center
    :width: 200
 
-::
-
-                                                    Bottom View
+   Bottom View
 
 Clocking
 ~~~~~~~~
@@ -85,10 +81,8 @@ Downloads (Hardware)
 .. admonition:: Download
    :class: download
 
-   
    Rev B:
-   
-   -  `20_040403b_artwork.zip <resources/20_040403b_artwork.zip>`_\ \| Gerber files}}
+
+   -  `Gerber files <resources/20_040403b_artwork.zip>`_
    -  `Schematic <resources/ad_fmcadcv7b.pdf>`_
    -  `Bill of Materials <images/ad-fmcadcv7b-ebz_bom-12142015-final.xls>`_
-   

@@ -32,4 +32,4 @@ switch settings for Linux or JTAG (no-OS) mode of your carrier of choice.
 Linux Quick Start Guide
 -----------------------
 
-All you need to do is build SD card or download the SD card image of the latest releases. The instructions are `here <https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux>`_.
+All you need to do is build SD card or download the SD card image of the latest releases. The instructions are :external+kuiper:doc:`here <index>`.
