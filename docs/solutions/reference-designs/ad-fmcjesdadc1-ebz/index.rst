@@ -1,5 +1,5 @@
-AD-FMCJESDADC1 FMC Board
-========================
+AD-FMCJESDADC1 (OBSOLETE)
+=========================
 
 .. toctree::
    :titlesonly:

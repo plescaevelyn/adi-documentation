@@ -44,7 +44,7 @@ Linux
 -  `AD9250 Linux driver <https://wiki.analog.com/resources/tools-software/linux-drivers/iio-adc/axi-adc-hdl>`_
 -  `JESD204B/C Receive Linux Driver <https://wiki.analog.com/resources/tools-software/linux-drivers/jesd204/axi_jesd204_rx>`_: Linux driver for the JESD204B receive core.
 -  `JESD204B/C AXI_ADXCVR Highspeed Transceivers Linux Driver <https://wiki.analog.com/resources/tools-software/linux-drivers/jesd204/axi_adxcvr>`_
--  `ZC706 Linux image <https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux>`_
+-  :external+kuiper:doc:`ZC706 Linux image <index>`
 -  :doc:`Linux on the KC705, VC707 </solutions/reference-designs/ad-fmcjesdadc1-ebz/quickstart/microblaze>`
 
 Specifications
@@ -60,7 +60,7 @@ size/power/performance are normally the things that Analog Devices tells its
 customers not to do to get maximum performance.
 
 Clocking
-========
+~~~~~~~~
 
 The AD-FMCJESDADC1-EBZ uses the :adi:`AD9517-0`. This is a small (7.0mm x 6.75mm), low power (~1.4W) multi-output clock distribution function with subpicosecond jitter performance, along with an on-chip PLL and VCO. It's driven by a single 30.72 MHz crystal, and generates the necessary clocks for the system (2.45760GHz, 245.760MHz, 30.72MHz).
 
@@ -92,7 +92,7 @@ tall).
 This is the key aspect of any good converter design - the clock source.
 
 Front End
-=========
+~~~~~~~~~
 
 The datasheet for the AD9250 and the golden evaluation board recommend a
 Differential Double Balun Input Configuration (figure 41 in the datasheet), with
@@ -100,11 +100,11 @@ this note:
 
 .. important::
 
-   \ From the AD9250 Datasheet: At input frequencies in the second Nyquist zone
+   From the AD9250 Datasheet: At input frequencies in the second Nyquist zone
    and above, the noise performance of most amplifiers is not adequate to
    achieve the true SNR performance of the AD9250. For applications where SNR is
    a key parameter, differential double balun coupling is the recommended input
-   configuration (see Figure 41).*
+   configuration (see Figure 41).
 
 The AD-FMCJESDADC1-EBZ card uses a single differential transformer (`Minicircuits TC4-1W <http://www.minicircuits.com/pdfs/TC4-1W.pdf>`_) - as shown in figure 40 of the datasheet - due to its smaller size (reduced footprint). The specific transformer used is specified from 3 to 800 MHz, but is only linear (in terms of insertion loss/input return loss) +/- 0.5dB, from 10 to 100MHz (limiting things to the first nyquist, before the converter sees massive losses on the input side.
 
@@ -113,26 +113,26 @@ Power (250mW of RF), with (Secondary/Primary) impedance (4:1) which operates in
 the first nyquist.
 
 Schematic/Layout
-================
+----------------
 
 Downloads
----------
+~~~~~~~~~
 
 .. admonition:: Download
    :class: download
 
-   
+
    -  `schematics <resources/ad-fmcjesdadc1_r1.1.pdf>`_
    -  We are not releasing the gerbers of this board - since the "golden" reference design is the AD9250 Evaluation board, which can be found at the :adi:`AD9250 <ad9250#product-evaluationkits>` page.
-   
+
 
 Support
-=======
+-------
 
 If you have any questions regarding the AD-FMCJESDADC1-EBZ board or are experiencing any problems while using the board or following the user guides feel free to ask us a question. Questions can be asked on our `EngineerZone support community <https://ez.analog.com/>`_. Calling on the phone, emailing someone directly, will only cause things to get answered in much slower manner.
 
 HDL / Hardware Questions
-------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 For questions regarding the AD-FMCJESDADC1-EBZ hardware or the HDL reference design please state them in the :ez:`FPGA Reference Designs <community/fpga>` sub-community. If you have questions about the tools, please go ask the tools vendors:
 
@@ -140,19 +140,19 @@ For questions regarding the AD-FMCJESDADC1-EBZ hardware or the HDL reference des
 -  `Altera Forums <http://www.alteraforums.com/>`_
 
 Linux Driver or Application Questions
--------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 For questions regarding the the ADI Linux distribution, the Linux drivers, or the device trees for the AD9250 based platforms, please use the :ez:`Linux Software Drivers <community/linux-device-drivers/linux-software-drivers>` sub-community.
 
 If you have generic userspace questions (*how do I use a standard linux tool*), we should suggest to use your favorite `search tool <http://www.google.com/>`_ to find that tool/utility/application support method (some use email, some use web). If you think you have found a bug specific to ARM, please `report this upstream <https://www.linaro.org/support/>`_.
 
 No-OS Questions
----------------
+~~~~~~~~~~~~~~~
 
 For questions regarding the no-OS drivers for AD9250, please use the :ez:`Microcontroller and No-OS Driver <community/linux-device-drivers/microcontroller-no-os-drivers>` sub-community.
 
 General AD9250 Questions
-------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 Questions about the AD9250, please use the :ez:`AD9250 <community/data_converters/high-speed_adcs>` sub-community.
 
