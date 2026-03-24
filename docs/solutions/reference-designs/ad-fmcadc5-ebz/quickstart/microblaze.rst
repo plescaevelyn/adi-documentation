@@ -3,7 +3,7 @@ AD-FMCADC5-EBZ Quick Start Guide
 
 .. warning::
 
-   \ NOTE: Support for the ad-fmcadc5-ebz was discontinued starting with 2022_R2 Kuiper Linux release and it is not supported in later releases. Last release in which pre-build files can be found is 2021_r2. Check this `link <https://wiki.analog.com/resources/tools-software/linux-software/adi-kuiper_images/release_notes>`_ to see all Kuiper releases. The HDL project source code can still be found on `hdl_2021_r2 <https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r2/projects/fmcadc5>`_ release branch.
+   Support for the ad-fmcadc5-ebz was discontinued starting with 2022_R2 Kuiper Linux release and it is not supported in later releases. Last release in which pre-build files can be found is 2021_r2. Check this `link <https://wiki.analog.com/resources/tools-software/linux-software/adi-kuiper_images/release_notes>`_ to see all Kuiper releases. The HDL project source code can still be found on `hdl_2021_r2 <https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r2/projects/fmcadc5>`_ release branch.
 
 This guide provides some quick instructions (still takes awhile to download, and
 set things up) on how to setup the AD-FMCADC5-EBZ on:
@@ -25,7 +25,7 @@ Required Hardware
 -  Micro / Mini-USB Cable
 
 Testing
-=======
+-------
 
 -  Connect the AD-FMCADC5-EBZ FMC board to the FPGA carrier, on the VC707: FMC1 & FMC2 connector.
 -  Connect USB JTAG (Micro USB) to your host PC.
@@ -270,10 +270,10 @@ Download the pre-build image for you device in question.
    Latest Build: 2018_05_08 - 2018_R1
 
    
-   | Linux branch:2018_R1
-   | Linux repository:`linux <https://github.com/analogdevicesinc/linux>`_
-   | Vivado branch:hdl_2018_r1
-   | Vivado repository:`hdl <https://github.com/analogdevicesinc/hdl>`_
+   | Linux branch: 2018_R1
+   | Linux repository: `linux <https://github.com/analogdevicesinc/linux>`_
+   | Vivado branch: hdl_2018_r1
+   | Vivado repository: `hdl <https://github.com/analogdevicesinc/hdl>`_
 
 +--------------+-------------+------------------------------------------------------------------------------------------------------------------------+
 | FPGA Carrier | FMC Card    | Download                                                                                                               |
@@ -313,8 +313,7 @@ Download the pre-build image for you device in question.
 | VC707        | FMCOMMS4    | `2018_r1_vc707_fmcomms4.zip <http://swdownloads.analog.com/cse/microblaze/2018_r1/2018_r1_vc707_fmcomms4.zip>`_        |
 +--------------+-------------+------------------------------------------------------------------------------------------------------------------------+
 
-.. image:: https://wiki.analog.com/_media/section>/resources/tools-software/linux-software/adi-kuiper_images/master#master_microblaze_images&
-   :alt: master#master_microblaze_images&
+`Master Microblaze images <https://swdownloads.analog.com/cse/microblaze/master/latest_microblaze_images.tar.gz>`_
 
 There are two ways of loading the design. One is using the XMD command line.
 Open a xmd command window/shell and enter the commands manually.
@@ -766,7 +765,7 @@ You should see the kernel start-up messages as follows:
 IIO Oscilloscope Remote
 -----------------------
 
-Please see also here:`Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`_
+Please see also here: `Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`_
 
 The IIO Oscilloscope application can be used to connect to another platform that
 has a connected device in order to configure the device and read data from it.

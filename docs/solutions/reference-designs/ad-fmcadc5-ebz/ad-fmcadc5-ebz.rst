@@ -3,11 +3,11 @@ AD-FMCADC5-EBZ FMC Board
 
 .. warning::
 
-   \ NOTE: Support for the ad-fmcadc5-ebz is discontinued starting with 2022_R2 Kuiper Linux release and it will not be supported in future releases. Last release in which pre-build files can be found is 2021_r2. Check this `link <https://wiki.analog.com/resources/tools-software/linux-software/adi-kuiper_images/release_notes>`_ to see all Kuiper releases.
+   Support for the ad-fmcadc5-ebz is discontinued starting with 2022_R2 Kuiper Linux release and it will not be supported in future releases. Last release in which pre-build files can be found is 2021_r2. Check this `link <https://wiki.analog.com/resources/tools-software/linux-software/adi-kuiper_images/release_notes>`_ to see all Kuiper releases.
 
 .. important::
 
-   The HDL project documentation can be found at https://analogdevicesinc.github.io/hdl/projects/fmcadc5/index.html\
+   The HDL project documentation can be found at https://analogdevicesinc.github.io/hdl/projects/fmcadc5/index.html
 
 Introduction
 ------------
@@ -67,8 +67,8 @@ figure out things on your own.
 
 -  Clone `No-OS <https://github.com/analogdevicesinc/no-OS>`_ repository
 -  **Checkout the latest release branch (git checkout 2018_R1)**
--  Change the directory to \`ad-fmcadc5-ebz/vc707\`.
--  Make the elf file by running \`make HDF-FILE=<HDL-REPO>/projects/fmcadc5/vc707/fmcadc5_vc707.sdk/system_top.hdf\`
+-  Change the directory to ``ad-fmcadc5-ebz/vc707``.
+-  Make the elf file by running ``make HDF-FILE=<HDL-REPO>/projects/fmcadc5/vc707/fmcadc5_vc707.sdk/system_top.hdf``
 
 The make will build the default 'hello-world', but we only need the bsp and I am
 no fan of eclipse, therefore this method. If you are more comfortable with the
