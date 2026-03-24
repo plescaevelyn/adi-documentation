@@ -174,11 +174,11 @@ Downloads
 
    **AD-DRVLV1-EBZ**
 
-   
+
    -  `Schematics <../resources/ad-drvlv1-ebz_schematics.pdf>`_
    -  `Bill of Materials <../resources/ad-drvlv1-ebz_bom.pdf>`_
    -  `Allegro Board File <../resources/ad-drvlv1-ebz_layout.zip>`_ (This file is `compressed <http://www.7-zip.org/7z.html>`_). Get the `Allegro FREE Physical Viewer <https://www.cadence.com/en_US/home/tools/pcb-design-and-analysis/allegro-downloads-start.html>`_ (You need 16.5 or higher).
-   
+
 
 .. |image1| image:: ../images/lv_block_diagram_simplified.png
    :width: 350

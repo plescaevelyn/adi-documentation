@@ -211,11 +211,11 @@ Downloads
 
    **AD-FMCMOTCON1-EBZ**
 
-   
+
    -  `Schematics <../resources/ad-fmcmotcon1-ebz_schematics.pdf>`_
    -  `Bill of Materials <../resources/ad-fmcmotcon1-ebz_bom.pdf>`_
    -  `Allegro Board File <../resources/ad-fmcmotcon1-ebz_layout.zip>`_ (This file is `compressed <http://www.7-zip.org/7z.html>`_). Get the `Allegro FREE Physical Viewer <https://www.cadence.com/en_US/home/tools/pcb-design-and-analysis/allegro-downloads-start.html>`_ (You need 16.5 or higher).
-   
+
 
 .. |Simplified Block Diagram| image:: ../images/controller_block_diagram_simplified.png
    :width: 350

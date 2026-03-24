@@ -47,6 +47,6 @@ Support
 
 .. hint::
 
-   
+
    -  Questions? :ez:`Ask Help & Support <fpga>`.
-   
+

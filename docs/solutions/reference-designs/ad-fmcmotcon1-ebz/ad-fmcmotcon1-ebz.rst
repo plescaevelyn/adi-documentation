@@ -72,11 +72,8 @@ Videos
 
 ADI/Avnet/MathWorks/Xilinx design seminar
 
-.. image:: https://wiki.analog.com/_media/resources/eval/user-guides/analogtv>3540825244001
-   :alt: analogTV>3540825244001
+`Watch on AnalogTV <https://www.analog.com/en/education/education-library/videos/3540825244001.html>`_
 
 From ADI's 2013 Design Conference
 
-|youtube>-7CscB5sUIw|
-
-.. |youtube>-7CscB5sUIw| image:: https://wiki.analog.com/_media/resources/eval/user-guides/youtube>-7cscb5suiw
+`YouTube: -7CscB5sUIw <https://www.youtube.com/watch?v=-7CscB5sUIw>`_

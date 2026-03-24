@@ -34,9 +34,9 @@ Downloads
 .. admonition:: Download
    :class: download
 
-   
+
    :git-fpgahdl_xilinx:`ISE Project <motor_control/adi_zed_ise_rev2>` :git-fpgahdl_xilinx:`Chipscope Project <motor_control/adi_zed_ise_rev2/Chipscope>`
-   
+
 
 System Setup
 ------------

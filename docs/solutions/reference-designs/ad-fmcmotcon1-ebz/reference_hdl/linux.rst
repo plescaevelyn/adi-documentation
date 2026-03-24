@@ -52,12 +52,12 @@ Downloads
 .. admonition:: Download
    :class: download
 
-   
+
    -  `Vivado ADI Libraries <https://github.com/analogdevicesinc/hdl/tree/hdl_2014_r1/library>`_
    -  `Vivado Motor Control Reference Design <https://github.com/analogdevicesinc/hdl/tree/hdl_2014_r1/projects/motor_control>`_
-   
+
    :
-   
+
 
 Setting up Linux
 ----------------
@@ -71,6 +71,6 @@ Support
 
 .. hint::
 
-   
+
    -  Questions? :ez:`Ask Help & Support <fpga>`.
-   
+
