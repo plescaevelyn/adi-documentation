@@ -1,4 +1,5 @@
-ADMX1001 and ADMX1002, Ultra-low Distortion, Low Noise Signal Generator and Acquisition Evaluation Modules
+ADMX1001 and ADMX1002, Ultra-low Distortion, Low Noise Signal Generator and
+Acquisition Evaluation Modules
 ==========================================================================================================
 
 Features
@@ -186,7 +187,7 @@ The recommended controller board to use with the EVAL-ADMX100X evaluation system
    connector. The SDP-H1 performs the same function and can be plugged into the
    FMC connector on the EVAL-ADMX100X-FMCZ.
 
-   
+
    There are additional connections to the FMC connector that are required for
    some features, including the ability to shift the VCM of the generated output
    using the GUI, as well as access an additional SPI bus to control the
@@ -202,9 +203,7 @@ Quick Start with the SDP_S/SDP_B and SDP_I_PMOD
 Refer to Figure 2 for the EVAL-ADMX100X-FMCZ Connector layout.
 
 -  Source/DAC SPI PMOD header: The SDP-S or SDP-B will communicate to the module via SPI through the Source/DAC SPI PMOD header (P2). The P2 bottom row pins 1-6 are "SS_MOSI_MISO_SCLK_GND\_+3.3V"
--  When using these controller boards, the output common-mode voltage can only
-   be adjusted by providing external VCM at pin 9 of P7. The P4 jumper should
-   also be inserted at 2-3 position as indicated in Table 2.
+-  When using these controller boards, the output common-mode voltage can only be adjusted by providing external VCM at pin 9 of P7. The P4 jumper should also be inserted at 2-3 position as indicated in Table 2.
 
 Equipment
 ~~~~~~~~~
@@ -239,7 +238,8 @@ following pieces of equipment are required for this controller board setup:
 
 .. container:: centeralign
 
-   *Figure 5. Evaluation Board Connection Using the SDP-I-PMD with Either the SDP-S or SDP-B Controller Boards*
+   *Figure 5. Evaluation Board Connection Using the SDP-I-PMD with Either the
+   SDP-S or SDP-B Controller Boards*
 
 Setup
 ~~~~~
@@ -248,8 +248,7 @@ Follow the steps below to set up the full evaluation board.
 
 -  Check that the Jumper & Switch settings match the desired configuration in Table 2.
 -  Connect the ADM1002 module to the module connector (P5) on the EVAL-ADMX100X-FMCZ evaluation board.
--  Connect the SDP-S or SDP-B controller boards to the SDP-I-PMD interposer
-   board.
+-  Connect the SDP-S or SDP-B controller boards to the SDP-I-PMD interposer board.
 
 ::
 
@@ -447,8 +446,7 @@ An overview of the SPI control mode features is as follows:
 -  A second method allows the user to merge the ready signal within the DOUT output stream, which allows a reduction in the number of lines across an isolation barrier.
 -  Reading back conversions can be performed by writing 8 bits to address the ADC register and reading back the result from the register.
 -  Continuous readback mode, which is enabled via an SPI write. There is no need to supply the 8 bits to address the ADC_DATA register (Register 0x2C). Data readback occurs on the application of SCLK. The DRDY pin indicates that a conversion result is complete and can be used to trigger a readback of the conversion result.
--  In continuous read-back mode, there is the option to append either the 8-bit
-   status header or an 8-bit CRC check, or both.
+-  In continuous read-back mode, there is the option to append either the 8-bit status header or an 8-bit CRC check, or both.
 
 Additional Features
 ~~~~~~~~~~~~~~~~~~~
@@ -606,8 +604,7 @@ The ADMX100X GUI in Figure 19 contains the following components:
 -  Captured Waveform: Time domain plot of the samples captured by the acquisition channel (ADMX1001 only).
 -  Spectrum Waveform: Frequency domain plot of the FFT of the samples captured by the acquisition channel (ADMX1001 only).
 -  Waveform Measurements: Time domain measurements are calculated using the samples captured by the acquisition channel (ADMX1001 only).
--  Spectral Measurements: Frequency domain measurements calculated using the FFT
-   of the samples captured by the acquisition channel (ADMX1001 only).
+-  Spectral Measurements: Frequency domain measurements calculated using the FFT of the samples captured by the acquisition channel (ADMX1001 only).
 
 ADMX100X GUI Message Panel
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -650,8 +647,7 @@ follows:
 -  Common Mode  [3]_: This field is used to set the common mode offset voltage of the signal to be generated.
 -  Save Waveform as Profile: Saves current waveform in the profile table.
 -  Profile Table: Displays all the saved profiles and their parameters.
--  Enable Sequencing  [4]_: Enables running a set of profiles in a user-selected
-   sequence.
+-  Enable Sequencing  [4]_: Enables running a set of profiles in a user-selected sequence.
 
 .. image:: images/gui_analog_output.png
    :align: center
@@ -693,11 +689,7 @@ elements:
 -  Captured waveform Graph: Displays the captured samples vs. time to show the captured waveform to the user.
 -  Spectrum waveform graph: Displays the frequency-domain plot of the acquired samples using signal-to-spectrum domain transforms.
 -  Waveform Graph control panel: This control panel can be used to scale the graph as needed.
--  Waveform Graph Axes: The Axes dropdown has two options “Auto” and “Fixed”. If
-   we use “Fixed” axes we can manually set the limits of the graph by clicking
-   on the numbers at the edge of the graph and typing in the required value of
-   the axis limit. The “Auto” setting will automatically scale the axes to fit
-   the waveform in the window.
+-  Waveform Graph Axes: The Axes dropdown has two options “Auto” and “Fixed”. If we use “Fixed” axes we can manually set the limits of the graph by clicking on the numbers at the edge of the graph and typing in the required value of the axis limit. The “Auto” setting will automatically scale the axes to fit the waveform in the window.
 
 .. image:: images/gui_captured_waveform.png
    :align: center
@@ -716,9 +708,7 @@ follows:
 -  Magnitude Units: Dropdown menu to decide the magnitude units of the spectral magnitude on the y-axis of the spectrum waveform.
 -  Window: Specifies the type of windowing to be used on the input time-domain signal before transforming it to the frequency-domain using FFT.
 -  Samples to average: Specifies the number of sets of samples to average for the spectrum calculation. Only applicable when the “Continuous acquisition” checkbox in the Analog Input Panel is checked, or else the value in this textbox is ignored.
--  Log frequency scale: The checkbox determines the scale of the Frequency axis
-   (X-Axis). If the checkbox is checked the frequency scale is logarithmic, if
-   the box is kept unchecked the frequency scale is linear.
+-  Log frequency scale: The checkbox determines the scale of the Frequency axis (X-Axis). If the checkbox is checked the frequency scale is logarithmic, if the box is kept unchecked the frequency scale is linear.
 
 .. image:: images/gui_spectrum_settings.png
    :align: center
@@ -759,11 +749,7 @@ Type” field to “SingleTone” as shown in Figure 26.
 
 -  Set the parameters of the waveform according to your requirements. For additional detail on each parameter hover over the input field to see the tooltip.
 -  The cycles parameter can be used to shift the signal generation between “Single-Shot” and “Continuous” (cycles = 0) mode.
--  Click on the "ENABLE" button to generate the signal. If the signal is in
-   “Single-Shot” mode, the enable button should be clickable right after signal
-   generation is completed. For a signal generation in “Continuous” mode, press
-   the "DISABLE" button, which will appear once the board is ready to start
-   generating the signal, to disable the waveform.
+-  Click on the "ENABLE" button to generate the signal. If the signal is in “Single-Shot” mode, the enable button should be clickable right after signal generation is completed. For a signal generation in “Continuous” mode, press the "DISABLE" button, which will appear once the board is ready to start generating the signal, to disable the waveform.
 
 .. image:: images/gui_singletone.png
    :align: center
@@ -783,10 +769,7 @@ To generate a single-tone waveform calibrated with the DPD algorithm, set the
 -  Click on the ‘Run DPD’ button, the status bar should show the message ‘Calibration is running’ and the ‘Run DPD’ button will appear greyed out.
 -  Wait for the “ENABLE” button to become clickable after the message “Calibration successful” displays in the status bar. This process may take up to 2 minutes. If the “Run DPD” button becomes clickable again and the status message shows “Calibration failed”, try to run the calibration again by clicking on “Run DPD”.
 -  Click on the “ENABLE” button to enable the calibrated signal generation.
--  Note that any change in parameters would require running calibration again.
-   Calibrated signals can be stored in a profile to eliminate having to run
-   calibration in the future for the same set of parameters, see the Storing
-   Profiles section for instructions.
+-  Note that any change in parameters would require running calibration again. Calibrated signals can be stored in a profile to eliminate having to run calibration in the future for the same set of parameters, see the Storing Profiles section for instructions.
 
 .. image:: images/gui_lowdistortion.png
    :align: center
@@ -880,8 +863,7 @@ Figure 32:
 -  Set the appropriate parameters of the selected waveform type.
 -  Click on any empty or non-empty profile in the profile table to select it. If selecting a non-empty profile, the previously saved profile table will be overwritten by the new profile.
 -  After selecting the profile ID and the waveform parameters, click on the “Save Waveform as profile” button. This might take up to 2 minutes for a "LowDistortion" waveform.
--  If the profile is saved successfully, you will be able to see it in the
-   profile table at the selected location.
+-  If the profile is saved successfully, you will be able to see it in the profile table at the selected location.
 
 .. image:: images/gui_storingprofile.png
    :align: center
@@ -963,7 +945,9 @@ flexibility of bin selection can help reduce the effect of spectral leakage,
 improving AC performance accuracy, particularly when analyzing noise and
 harmonic distortion.
 
-To do this, go to the GUI folder (C:\\Analog Devices\\Admx100xEvaluationSoftware-Rel2.3.0\\GUI), open **SpectrumSettings.json**, and adjust the number of bins as necessary.
+To do this, go to the GUI folder (C:\\Analog
+Devices\\Admx100xEvaluationSoftware-Rel2.3.0\\GUI), open
+**SpectrumSettings.json**, and adjust the number of bins as necessary.
 
 |image9|
 
@@ -1062,8 +1046,7 @@ by doing the following:
 
 -  Connect the SYNC_Mode pin to GND by inserting a jumper in the 2-3 position of P12.
 -  Connect the SYNC_IN pin to the SMA input by inserting a jumper in the 2-3 position of P13.
--  Apply a 100 MHz external clock to J7 to synchronize the generated signal to
-   the external clock.
+-  Apply a 100 MHz external clock to J7 to synchronize the generated signal to the external clock.
 
 Notes:
 
@@ -1071,9 +1054,7 @@ Notes:
 -  Take note of the logic level limits below for the SYNC_IN and SYNC_OUT pins.
 -  Trigger needs to be set high to start generating the signal.
 -  During Coherent Sampling, SYNC_IN must have a 100 MHz clock frequency with a 50% duty cycle.
--  Although less common, coherent sampling may also be performed by
-   synchronizing the analyzer from the clock generated from the module
-   (SYNC_OUT).
+-  Although less common, coherent sampling may also be performed by synchronizing the analyzer from the clock generated from the module (SYNC_OUT).
 
 **Table 4. SYNC_MODE Configuration Options**
 

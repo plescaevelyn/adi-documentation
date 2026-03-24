@@ -134,21 +134,21 @@ as boxes. TeraTerm supports these characters.
 3. Basic Hardware Setup
 -----------------------
 
-The following figure shows the basic connections required for evaluating the EVAL-ADMX2001. \ |image1|\ 
+The following figure shows the basic connections required for evaluating the EVAL-ADMX2001. \ |image1|\
 
 -  Insert the ADMX2001B module into the EVAL-ADMX2001EBZ board in the location shown above. The connectors are keyed, so they can only be inserted in the orientation shown
--  Set the load select switches to OPEN and GND, as shown below. This is required for the self-test to pass, indicated by the red/green LED on the underside of the ADMX2001B module\ |image2|\ 
+-  Set the load select switches to OPEN and GND, as shown below. This is required for the self-test to pass, indicated by the red/green LED on the underside of the ADMX2001B module\ |image2|\
 
 -  Connect the power adapter to the power jack and to the AC outlet
 -  Verify that the self-test light is green (light is on the bottom of the board, but is visible if viewed from the side where the oscillator and FPGA are mounted)
--  Connect the UART to USB cable to the UART terminals TX (orange)-->TX, RX (yellow)-->RX and GND (black)-->GND:\ |image3|\ 
+-  Connect the UART to USB cable to the UART terminals TX (orange)-->TX, RX (yellow)-->RX and GND (black)-->GND:\ |image3|\
 
 -  Ensure that the CLK_SEL jumper cap (located under the UART header) is set to INT (internal clock)
--  Set the load select switches to DUT and GND, as shown below:\ |image4|\ 
+-  Set the load select switches to DUT and GND, as shown below:\ |image4|\
 
 -  Use the test leads to connect to the device under test (DUT):
 
-\ |image5|\ 
+\ |image5|\
 
 The two BNC connectors from the red leads go to the HCUR/HPOT ports, the two BNC
 connectors from the black leads go to the LPOT/LCUR ports.
@@ -161,9 +161,9 @@ connectors from the black leads go to the LPOT/LCUR ports.
    the "open" configuration, each clip should clamp on its own small wire scrap
    to ensure both sides of the clip are electrically connected.
 
-An example of an unscrewed housing of a test clip: \ |image6|\ 
+An example of an unscrewed housing of a test clip: \ |image6|\
 
-An example of how to use the wire scrap in each of the test clips, when using them in the open configuration: \ |image7|\ 
+An example of how to use the wire scrap in each of the test clips, when using them in the open configuration: \ |image7|\
 
 Self-Test Functionality
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -224,7 +224,7 @@ delays are in milliseconds. The signal magnitude sets the Vpk value. The
 peak-to-peak value is twice the signal magnitude, centered around the offset
 voltage. The DC offset is in volts.
 
-The AC magnitude can be configured anywhere between 0.15V pk and 2.25V pk, but the actual magnitude across the DUT will be be dependent on the DUT impedance, due to the 100Ω source resistance; see `Selecting a Measurement Range <https://wiki.analog.com/eval-admx2001ebz>`_ for details.
+The AC magnitude can be configured anywhere between 0.15V pk and 2.25V pk, but the actual magnitude across the DUT will be be dependent on the DUT impedance, due to the 100Ω source resistance; see `Selecting a Measurement Range`_ for details.
 
 .. tip::
 
@@ -349,7 +349,7 @@ the frequency and magnitude of the test signal.
    device under test will change and could fall outside of the measurement range
    selected by the initial measurement conditions.
 
-   
+
    Additionally, the DC offset control is disabled when using the autorange.
    Manual gain setting must be employed when using the DC offset. The DC offset
    will be automatically set to -0.25V to allow the saturation detection to
@@ -811,7 +811,7 @@ saturate.
    frequency will be with DUTs of a similar impedance to the one used in
    calibration.
 
-   
+
    Resistors, capacitors or inductors can be used for calibration. High-quality
    resistors (e.g. thin film or metal film), air capacitors, and gas-filled
    capacitors tend to provide the best results. Alternatively, C0G/NP0 type
@@ -826,7 +826,7 @@ configuration changes. There are a total of 16 possible gain combinations based
 on the 4 gain and transimpedance ranges for channel 0 and channel 1
 respectively.
 
-The autorange will only choose between the 7 gain combinations that have a zero in at least one position. These are shown in the impedance measurement range table within the section `Selecting a Measurement Range <https://wiki.analog.com/eval-admx2001ebz>`_. If all measurements will be done with the autorange or with these gains, then the other gain settings do not need to be calibrated. In versions 1.2.0 and older, if the user calibrates at a specific gain and frequency, then changes the frequency and calibrates again, the user will overwrite the result of the first calibration. In version 1.2.2, support for calibration over frequency was added. See `Calibration Over Frequency <https://wiki.analog.com/eval-admx2001ebz>`_ for more details.
+The autorange will only choose between the 7 gain combinations that have a zero in at least one position. These are shown in the impedance measurement range table within the section `Selecting a Measurement Range`_. If all measurements will be done with the autorange or with these gains, then the other gain settings do not need to be calibrated. In versions 1.2.0 and older, if the user calibrates at a specific gain and frequency, then changes the frequency and calibrates again, the user will overwrite the result of the first calibration. In version 1.2.2, support for calibration over frequency was added. See `Calibration Over Frequency`_ for more details.
 
 .. important::
 
@@ -941,6 +941,7 @@ and the true reactance Xt was 0.822 Ohms.
    ADMX2001> z
    0,1.000021e+03,8.220137e-01
    ADMX2001>
+
 Reading and Writing Calibration Coefficients
 --------------------------------------------
 
@@ -1048,7 +1049,7 @@ EVAL-ADMX2001EBZ Terminal Description
 | Header P7 pins [1-6]  | Digital output 2-7                                                                                                        |
 +-----------------------+---------------------------------------------------------------------------------------------------------------------------+
 
-| 
+|
 
 SPI Interface
 -------------
@@ -1183,7 +1184,7 @@ ADMX2001B Pin Configuration and Function Descriptions
 | All other pins                            | NC          | Do not connect                                                                                |
 +-------------------------------------------+-------------+-----------------------------------------------------------------------------------------------+
 
-| 
+|
 | ----
 
 Firmware Updates
