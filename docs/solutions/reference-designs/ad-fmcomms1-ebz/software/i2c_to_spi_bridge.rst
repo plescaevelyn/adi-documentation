@@ -46,30 +46,47 @@ Transaction settings
 
 This must be done before a read or write:
 
-+--------------------+------+------------------+-----------------+------------------+-----------------+
-| I2C Address (Write)| 0x03 | spi_settings[15:8]| spi_settings[7:0]| chip_select[15:8]| chip_select[7:0]|
-+--------------------+------+------------------+-----------------+------------------+-----------------+
+.. list-table::
+   :header-rows: 0
+
+   * - I2C Address (Write)
+     - 0x03
+     - spi_settings[15:8]
+     - spi_settings[7:0]
+     - chip_select[15:8]
+     - chip_select[7:0]
 
 Write data
 ----------
 
-+--------------------+------+------+------+------------------------------+
-| I2C Address (Write)| 0x04 | data | data | data (up to 62 bytes at once)|
-+--------------------+------+------+------+------------------------------+
+.. list-table::
+   :header-rows: 0
+
+   * - I2C Address (Write)
+     - 0x04
+     - data
+     - data
+     - data (up to 62 bytes at once)
 
 Read data
 ---------
 
-+-------------------+------+------+------------------------------+
-| I2C Address (Read)| data | data | data (up to 62 bytes at once)|
-+-------------------+------+------+------------------------------+
+.. list-table::
+   :header-rows: 0
+
+   * - I2C Address (Read)
+     - data
+     - data
+     - data (up to 62 bytes at once)
 
 Read firmware version
 ---------------------
 
-+--------------------+------+
-| I2C Address (Write)| 0x01 |
-+--------------------+------+
+.. list-table::
+   :header-rows: 0
+
+   * - I2C Address (Write)
+     - 0x01
 
 After sending this command the PIC firmware version can be read by issuing an
 I2C read command for 32 bytes of data.
@@ -256,6 +273,7 @@ The microcontroller on the board is a `Microchip PIC18F24J50-I/ML <http://www.mi
 
       *
       00000100
+
 |FMComms1 programming header|\ |ADI DAC boards programming header|\ The FMComms1 board (left) uses a non-standard pinout for the PIC programming. It is on a 0.1 inch header with the configuration shown. This is almost the same as the program header found on the ADI DAC boards, shown on the right (if you have one of those cables, it's pretty easy to snip pin 4 out, and make it work). It's up to you to make sure the part is properly connected and programmed properly.
 
 .. |FMComms1 programming header| image:: ../images/programming_header.png

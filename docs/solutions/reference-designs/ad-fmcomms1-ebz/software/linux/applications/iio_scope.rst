@@ -51,8 +51,8 @@ For building on the target, we recommend using the :external+kuiper:doc:`update 
 To build on a host, do not use the script, you **must**:
 
 -  make sure the following libraries are installed. This list is maintained in the ``adi_update_tools.sh`` shell script, and can be copied/pasted to most Debian based distributions. For others - make sure they are installed, or the below steps will not work. If you are not sure how to do this - consult your distribution documentation. file: :git-linux_image_ADI-scripts:`adi_update_tools.sh` ``> **apt-get -y install libglib2.0-dev libgtk2.0-dev libgtkdatabox-dev libmatio-dev libfftw3-dev libxml2 libxml2-dev bison flex libavahi-common-dev libavahi-client-dev libcurl4-openssl-dev libjansson-dev cmake libaio-dev libserialport-dev**``
--  build **and install** the libiio library, by following these `instructions <https://wiki.analog.com/resources/tools-software/linux-software/libiio>`_. Make sure you do the final ``make install``.
--  build **and install** the libad9166-iio and libad9361-iio library, by following these `instructions <https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms5-ebz/multi-chip-sync>`_.
+-  build **and install** the libiio library, by following these `instructions <https://wiki.analog.com/resources/tools-software/linux-software/libiio>`__. Make sure you do the final ``make install``.
+-  build **and install** the libad9166-iio and libad9361-iio library, by following these `instructions <https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms5-ebz/multi-chip-sync>`__.
 -  download the source ``> **git clone `iio-oscilloscope <https://github.com/analogdevicesinc/iio-oscilloscope>`_.git**
    > **cd iio-oscilloscope**
    > **git checkout origin/master**``\ Or, `download a zip <https://github.com/analogdevicesinc/iio-oscilloscope/archive/master.zip>`_, and uncompress it:``rgetz@pinky:~$ **wget https://github.com/analogdevicesinc/iio-oscilloscope/archive/master.zip**

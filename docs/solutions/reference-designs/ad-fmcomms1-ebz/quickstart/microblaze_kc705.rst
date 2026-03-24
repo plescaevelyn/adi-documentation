@@ -38,7 +38,7 @@ Required Hardware
 -  Micro / Mini-USB Cable
 
 Testing
-=======
+-------
 
 -  Connect the AD-FMCOMMS1-EBZ FMC board to the FPGA carrier, on the KC705: FMC LPC or VC707: FMC2 connector.
 -  Connect USB JTAG (Micro USB) to your host PC.
@@ -429,6 +429,7 @@ Below is just a example and the file-names may vary.
          Processor started. Type "stop" to stop processor
 
          RUNNING> XMD%
+
 XMD has been replaced with XSCT/XSDB in newer releases of VIVADO. In windows,
 you can run the XSCT terminal from start menu -> Xilinx Design Tools -> Xilinx
 Software Command Line Tool...
@@ -500,6 +501,7 @@ Software Command Line Tool...
       xsdb% con
       Info: MicroBlaze #0 (target 3) Running
       xsdb%
+
 The second method is to run the tcl script which takes care of loading the bit
 file and the linux image. Run Vivado TCL Shell from Windows start menu -> Xilinx
 Design Suite -> Vivado -> Vivado TCL Shell. (In Linux, source the settings.sh
@@ -566,6 +568,7 @@ Then run the tcl script:
       Info: MicroBlaze #0 (target 3) Running
       xsdb% Info: tcfchan#0 closed
       xsdb%
+
 Messages
 --------
 
@@ -745,6 +748,7 @@ You should see the kernel start-up messages as follows:
       Welcome to Buildroot
 
       buildroot login: random: nonblocking pool is initialized
+
 IIO Oscilloscope Remote
 -----------------------
 

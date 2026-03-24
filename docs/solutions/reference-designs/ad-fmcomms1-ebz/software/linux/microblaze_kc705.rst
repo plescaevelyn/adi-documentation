@@ -24,7 +24,7 @@ Required Software
 
 -  Microblaze GNU Tools included as part of the `Vivado/Vitis <https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vitis.html>`_ you will have the cross compiler tools for Microblaze under: <Vivado/vitis_install_dir>/Vitis/<version>/gnu/microblaze/linux_toolchain/lin64_le/bin/microblazeel-xilinx-linux-gnu-gcc.
 -  :git-linux:`Linux Kernel Source <tree/main>`
--  `Root File-system (initramfs) <https://swdownloads.analog.com/cse/microblaze/rootfs/rootfs.cpio.gz>`_
+-  `Root File-system (initramfs) <https://swdownloads.analog.com/cse/microblaze/rootfs/rootfs.cpio.gz>`__
 -  `Xilinx ISE Design Suite <https://www.xilinx.com/ISE>`_
 
 .. tip::
