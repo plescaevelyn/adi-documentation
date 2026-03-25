@@ -24,8 +24,9 @@ jobs:
         pip install -r requirements.txt --upgrade
 
     - name: Build doc
-      working-directory: docs
       run: |
+        source .github/scripts/sphinx-build.sh
+
         export GIT_LFS_TO_LINKS="true"
         export GIT_ORG_REPOSITORY="${{ github.repository }}"
         [ "${{ github.event_name }}" = "pull_request" ] \
@@ -34,8 +35,7 @@ jobs:
 
         [[ "${{ runner.debug }}" != "1" ]] && j_="-jauto"
 
-        make html SPHINXOPTS="$j_ -W --keep-going"
-        rm -rf _build/html/_sources
+        sphinx_build
 
     - name: Store the generated doc
       uses: actions/upload-artifact@v4
