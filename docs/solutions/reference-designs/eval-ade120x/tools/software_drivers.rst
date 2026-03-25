@@ -18,8 +18,11 @@ For further details refer to `this link <https://confluence.analog.com/display/M
 Getting Started
 ---------------
 
--  To use the EVAl-SDP-K1 with the MBED online compiler a user account must be set up firstly. TO set up an account navigate to `MBED <https://www.mbed.com/en/>`_
--  Follow `this link <https://wiki.analog.com/resources/tools-software/mbed>`_ for instructions on setting up the SDP-K1 within the MBED environment.
+-  To use the EVAL-SDP-K1 with the MBED online compiler a user account must
+   be set up first. To set up an account navigate to
+   `MBED <https://www.mbed.com/en/>`_
+-  Follow `this link <https://wiki.analog.com/resources/tools-software/mbed>`_
+   for instructions on setting up the SDP-K1 within the MBED environment.
 -  The ADE1202 example application can be found `here <https://os.mbed.com/teams/AnalogDevices/code/EVAL-ADE120x/>`_
 -  To get started click on the Import Into Compiler button
 
@@ -27,7 +30,12 @@ Getting Started
    :align: center
    :width: 400
 
--  Once imported into the compiler the screen should look like the following: |image1| On the left hand side is the Program Workspace and will display any programs you have imported into the workspace.
+-  Once imported into the compiler the screen should look like the following:
+
+   |image1|
+
+   On the left hand side is the Program Workspace and will display any
+   programs you have imported into the workspace.
 -  Double click on the main.cpp file to open the main program code.
 
 .. |image1| image:: ../images/mbed_workspace.png

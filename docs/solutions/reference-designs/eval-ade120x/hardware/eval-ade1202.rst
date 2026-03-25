@@ -27,11 +27,11 @@ Schematics, PCB Layout, Bill of Materials
 .. admonition:: Download
    :class: download
 
-   
+
    EVAL-ADE1202EBZ Rev B Design Files
-   
+
    -  `Schematics (PDF) <../resources/02-050322-01-c.pdf>`_
    -  `Layout (PDF) <../resources/050322c_pcb_layout.pdf>`_
    -  `Bill of Materials (Excel) <../images/bom_05-050322-01-c.xlsx>`_
    -  `Fabrication Files (zip) <../resources/gerbers_09-050322-01c.zip>`_
-   
+
