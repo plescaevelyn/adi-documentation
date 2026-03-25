@@ -88,7 +88,7 @@ is rendering and not the CPU. With an NVIDIA GPU you can do the following.
    :width: 600
 
 ADIToFGUI Eval Kit 4.3.0 or earlier
-===================================
+------------------------------------
 
 This is a guide for the ToF module viewer. This page applies to the viewer for
 the following modules:

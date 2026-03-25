@@ -2,7 +2,6 @@ Data Collect, Eval Kit 6.0.0 or later
 =====================================
 
 Description
------------
 
 The Data Collect CLI can collect raw data from the depth module in .bin format. This be run through the `Depth Compute CLI <https://wiki.analog.com/resources/eval/user-guides/eval-adsd3100-nxz/depthcompute_cli>`_ to convert to Depth, IR/AB(Active brightness), and XYZ frames
 
@@ -17,7 +16,7 @@ used by the system. To change the values the following process can be used:
 
 Note, you can also use *my_params.json* in the GUI via *Tools->Load Configuration*.
 
-Here is an example of mode of in *my_params.json* file. <blockquote>
+Here is an example of mode of in *my_params.json* file:
 
 ::
 
@@ -49,20 +48,18 @@ Here is an example of mode of in *my_params.json* file. <blockquote>
          }
      },
 
-</blockquote>
-
 Data Collect, Eval Kit 5.0.0
-============================
+-----------------------------
 
 .. important::
 
-   \ Note: Camera IP is 10.43.0.1 if you are using SDK v5.0.0 or later.
+   Camera IP is 10.43.0.1 if you are using SDK v5.0.0 or later.
 
 .. important::
 
-   \ Note: In eval kit v5.0.0 --ft option is removed. The output of data collect
+   In eval kit v5.0.0 --ft option is removed. The output of data collect
    is a .bin file which contain Active brightness, depth, confidence and point
-   cloud. These frames can be visualized using ADIToFGUI.\
+   cloud. These frames can be visualized using ADIToFGUI.
 
 Description
 -----------
@@ -101,13 +98,9 @@ the static ip of the camera module
 .. image:: images/adi-tof-data_collect.png
    :width: 800
 
---------------
-
 Data Collect, Eval Kit 4.3.0 or earlier
-=======================================
 
 Description
------------
 
 The Data Collect CLI can collect raw data from the depth module in .bin format. This be run through the `Depth Compute CLI <https://wiki.analog.com/resources/eval/user-guides/eval-adsd3100-nxz/depthcompute_cli>`_ to convert to Depth, IR/AB(Active brightness), and XYZ frames
 
@@ -146,9 +139,6 @@ the static ip of the camera module
 
 .. important::
 
-   \ Note:
-
-   
    Version: for 4.3.0, data collect's default output is depth image. To get raw
    frame use --ft command line argument with 'RAW' option. Refer data_collect
    --h for mode command line options. The get ccb flag is only required for the
