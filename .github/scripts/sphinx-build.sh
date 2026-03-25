@@ -3,7 +3,7 @@
 _file() {
 	local f="$1"
 	f="${f#$PWD/}"
-	echo "docs/$f"
+	echo "$f"
 }
 
 sphinx_build() {
