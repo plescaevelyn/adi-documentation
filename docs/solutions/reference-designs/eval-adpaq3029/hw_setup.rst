@@ -27,7 +27,11 @@ The ADPAQ development module, allows us to build applications on :adi:`ADuCM3029
 
 The ADPAQ module is as shown in the figure below. It mainly consists of 3 evaluation headers namely P1, P2 and P3, a debug connector, an :adi:`ADT7410` IC (it is a temperature sensor) and a Moduware connector. The schematics of the ADPAQ module can be viewed from the `link <https://drive.google.com/open?id=1sXYZnyS9-nxBX6DQjFaG1EM6rq973gTW>`_. It gives more details about the hardware of the module.
 
-|image1| The pin description of the evaluation headers is as shown below: |image2|
+|image1|
+
+The pin description of the evaluation headers is as shown below:
+
+|image2|
 
 2. Moduware gateway (Mini-Dev board)
 ------------------------------------

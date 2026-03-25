@@ -6,12 +6,11 @@ EVAL-ADPAQ3029 - ADC demo
 .. admonition:: Download
    :class: download
 
-   \ `ADC Firmware <adc.zip>`_
+   `ADC Firmware <adc.zip>`_
 
-   
-   `Tile GUI application <moduware.tile.example-adc.zip>`_\
+   `Tile GUI application <moduware.tile.example-adc.zip>`_
 
--  Follow the same steps as given `here <https://wiki.analog.com/../first_app>`_
+-  Follow the same steps as given :doc:`here </solutions/reference-designs/eval-adpaq3029/first_app>`
 -  A potentiometer has been used in this project to modify the analog voltage
    values.
 
@@ -29,7 +28,6 @@ EVAL-ADPAQ3029 - ADC demo
 
 .. container:: round box
 
-   
    ================== ============== =================
    Potentiometer Pins GPIO port used ADPAQ Header Pins
    ================== ============== =================
@@ -37,7 +35,6 @@ EVAL-ADPAQ3029 - ADC demo
    B                  ADC0_Vin0      P1-ADC0_Vin0
    C                  GND            P1-GND_POWER
    ================== ============== =================
-   
 
 -  Build and run the project
 -  If the knob of the potentiometer is rotated, the ADC value should vary

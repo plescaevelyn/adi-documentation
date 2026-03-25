@@ -6,14 +6,13 @@ EVAL-ADPAQ3029 - UART(Arduino) demo
 .. admonition:: Download
    :class: download
 
-   \ `UART (Arduino) Firmware <uart.zip>`_
+   `UART (Arduino) Firmware <uart.zip>`_
 
-   
    `Tile GUI application <moduware.tile.example-uart.zip>`_
-   
-   `Arduino code <https://wiki.analog.com/_media/resources/eval/user-guides/eval-adpaq3029/Uart.ino.zip>`_\
 
--  Follow the same steps as given `here <https://wiki.analog.com/../first_app>`_
+   `Arduino code <uart.ino.zip>`_
+
+-  Follow the same steps as given :doc:`here </solutions/reference-designs/eval-adpaq3029/first_app>`
 -  In this project, an Arduino board has been used.
 
 .. image:: ../images/app11.png
@@ -26,7 +25,6 @@ EVAL-ADPAQ3029 - UART(Arduino) demo
 
 .. container:: round box
 
-   
    =================== ============== =================
    Arduino Pins        GPIO port used ADPAQ Header Pins
    =================== ============== =================
@@ -34,7 +32,6 @@ EVAL-ADPAQ3029 - UART(Arduino) demo
    Digital pin 11 (TX) UART0_RX       P2-3
    GND                 GND            P2-10
    =================== ============== =================
-   
 
 -  Apart from these connections, an led along with a 10k resistor has to be
    connected between the Digital pin 12 of Arduino and Ground.
@@ -46,7 +43,9 @@ EVAL-ADPAQ3029 - UART(Arduino) demo
 -  The tile has 2 buttons “On” and “Off” buttons. By clicking on those buttons,
    we can control the led that is connected to the pin 12 of Arduino.
 
-`image <../images/tile15.png>`_
+.. image:: ../images/tile15.png
+   :align: center
+   :width: 400
 
 |image1|
 

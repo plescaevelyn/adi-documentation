@@ -6,12 +6,11 @@ EVAL-ADPAQ3029 - Servo motor demo
 .. admonition:: Download
    :class: download
 
-   \ `Servo motor Firmware <servo.zip>`_
+   `Servo motor Firmware <servo.zip>`_
 
-   
-   `Tile GUI application <moduware.tile.example-servo.zip>`_\
+   `Tile GUI application <moduware.tile.example-servo.zip>`_
 
--  Follow the same steps as given `here <https://wiki.analog.com/../first_app>`_
+-  Follow the same steps as given :doc:`here </solutions/reference-designs/eval-adpaq3029/first_app>`
 -  In this project, a Servo motor is used.
 
 .. image:: ../images/app9.png
@@ -26,7 +25,6 @@ EVAL-ADPAQ3029 - Servo motor demo
 
 .. container:: round box
 
-   
    ================ ============== =================
    Servo motor Pins GPIO port used ADPAQ Header Pins
    ================ ============== =================
@@ -34,14 +32,15 @@ EVAL-ADPAQ3029 - Servo motor demo
    B                P0_1           P2-5
    C                GND            P2-10
    ================ ============== =================
-   
 
 -  Build and run the project
 -  The tile has a “Freq” button and an input value option. We can set the
    frequency of the servo any value between 0-100 and the servo motor rotates
    accordingly.
 
-`image <../images/tile13.png>`_
+.. image:: ../images/tile13.png
+   :align: center
+   :width: 400
 
 |image1|
 

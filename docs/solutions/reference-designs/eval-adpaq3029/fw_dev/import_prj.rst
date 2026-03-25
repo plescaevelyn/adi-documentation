@@ -1,7 +1,7 @@
 EVAL-ADPAQ3029 - Importing CCES project
 =======================================
 
-Please see the `resource <https://wiki.analog.com/../resources>`_ section to download source code.
+Please see the :doc:`resources </solutions/reference-designs/eval-adpaq3029/resources>` section to download source code.
 
 -  Launch the CCES IDE on your host & create a new workspace.
 -  Click on ``File`` -> ``Import..`` or click ``Import an existing CCES project`` from homepage as shown below.
@@ -30,9 +30,11 @@ Setup path variables
 -  In the properties tab, go to ``C/C++ Build`` -> ``Settings`` -> ``Cross Core GCC ARM Embedded C Linker``-> ``Libraries``.
 -  Click on ``add`` (at the top right section inside settings tab) and then ``File system``. Then search for the required files from the workspace and add them.
 
-`image <../images/sw12.png>`_
+.. image:: ../images/sw12.png
+   :align: center
+   :width: 600
 
--  Below image shows the paths to be added. Make sure that you add the path from the workspace. In the figure shown below,\ ``C:\Users\psirivan\Desktop`` is the path to the workspace, ``6Feb6`` is the name of the workspace.
+-  Below image shows the paths to be added. Make sure that you add the path from the workspace. In the figure shown below, ``C:\Users\psirivan\Desktop`` is the path to the workspace, ``6Feb6`` is the name of the workspace.
 -  Semihosting support should be ``nosys.specs``, as shown in the figure below.
 
 .. important::

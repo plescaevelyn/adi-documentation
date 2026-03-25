@@ -61,7 +61,7 @@ The following API's must be implemented by Application:
 The following API's can be optionally implemented by Application:
 
 -  ``void np_api_start(void);`` *Runs when operation starts*
--  ''void np_api_stop(void); '' *Runs when operation stops*
+-  ``void np_api_stop(void);`` *Runs when operation stops*
 
 Other API's available for application:
 
@@ -95,7 +95,9 @@ Building
 -  In the properties tab go to ``C/C++ Build`` -> ``Settings`` -> ``Cross Core GCC ARM Embedded C Linker``-> ``Libraries``.
 -  Select build steps. Type ``arm-none-eabi-objcopy -O binary ${ProjName} ${ProjName}.bin`` in the command of post build steps. Click on OK.
 
-`image <images/sw14.png>`_
+.. image:: images/sw14.png
+   :align: center
+   :width: 600
 
 -  Now, building the project again should generate the binary (\*.bin) file in
    the same directory as makefile
@@ -110,27 +112,37 @@ Debugging
 -  As shown in :doc:`hardware setup </solutions/reference-designs/eval-adpaq3029/hw_setup>` section, connect the debugger between PC and Dev Module.
 -  The debugger should show up as ``DAPLINK``.
 
-`image <images/deb3.png>`_
+.. image:: images/deb3.png
+   :align: center
+   :width: 600
 
 -  Go to Run -> Debug Configurations.
 
-`image <images/deb4.png>`_
+.. image:: images/deb4.png
+   :align: center
+   :width: 600
 
 -  In the Debug Configurations window, select Application with GDB and
    OpenOCD(Emulator) on the left.
 
-`image <images/deb5.png>`_
+.. image:: images/deb5.png
+   :align: center
+   :width: 600
 
 -  In the Target tab, set the Target (Processor) to Analog Devices ADuCM3029 and the Interface to ARM CMSIS-DAP complaint adapter and click ``Apply`` and then on ``Debug``.
 -  The debug perspective is opened. By default, the breakpoint will be inserted at the main function.
 -  To change the default breakpoint settings, goto ``Startup`` tab in the same window as target tab, change “Set breakpoint at” option. (Example, reset_handler).
 
-`image <images/deb6.png>`_
+.. image:: images/deb6.png
+   :align: center
+   :width: 600
 
 -  The execution halts when it hits the breakpoint. The execution can be resumed
    by clicking on the resume button as shown in the image.
 
-`image <images/deb7.png>`_
+.. image:: images/deb7.png
+   :align: center
+   :width: 600
 
 -  The breakpoints can be inserted (or removed) to (or from) any line of the
    code by double clicking on the beginning of the line. The “step into”
@@ -138,7 +150,9 @@ Debugging
    window->show view, the values associated with different expressions,
    registers, memory etc can be observed.
 
-`image <images/deb8.png>`_
+.. image:: images/deb8.png
+   :align: center
+   :width: 600
 
 Firmware deployment/flashing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -46,16 +46,22 @@ Installing Moduware App
 -  Once the application is installed, launch the application. The following GUI
    is displayed when the application is opened.
 
-`image <images/tile2.png>`_
+.. image:: images/tile2.png
+   :align: center
+   :width: 400
 
 -  Click on ``FIND MODUWARE`` option to scan the devices available near you. Select the right device (the mini-dev board) and pair it.
 
-`image <images/tile3.png>`_
+.. image:: images/tile3.png
+   :align: center
+   :width: 400
 
 -  Once the connection is established between phone and the gateway, the screen
    appears as shown in the image.
 
-`image <images/tile4.png>`_
+.. image:: images/tile4.png
+   :align: center
+   :width: 400
 
 -  Since the Moduware phone backpack supports up to 6 slots to connect 6
    different modules, the application shows 6 tiles. Since there is no firmware
@@ -80,8 +86,14 @@ Once Tile development is complete and ready to test/run on smartphone:
 -  Connect the module/gateway as explained previously.
 -  Now you should be able to see the new Tile GUI showing ``DevMod``.
 
-`image <images/tile5.png>`_
+.. image:: images/tile5.png
+   :align: center
+   :width: 400
 
 .. note::
 
-   Many a times, there may be a dummy tile being dispalyed on the ``Moduware`` app as seen in the image. In this case, just disconnect the power cable from the modules and connect them back again.\ `image <images/tile6.png>`_
+   Many a times, there may be a dummy tile being dispalyed on the ``Moduware`` app as seen in the image. In this case, just disconnect the power cable from the modules and connect them back again.\
+.. image:: images/tile6.png
+   :align: center
+   :width: 400
+

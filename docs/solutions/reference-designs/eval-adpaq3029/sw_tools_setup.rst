@@ -23,9 +23,8 @@ following features and many more:
 
    **Getting CCES**
 
-   
    `CCES 2.8.0 Windows Installer(Executable) <http://download.analog.com/tools/CrossCoreEmbeddedStudio/Releases/Release_2.8.0/ADI_CrossCoreEmbeddedStudio-Rel2.8.0.exe>`_
-   
+
    `CCES 2.8.0 Ubuntu Linux Installer(Debian) <http://download.analog.com/tools/CrossCoreEmbeddedStudio/Releases/Release_2.8.0/adi-CrossCoreEmbeddedStudio-linux-x86-2.8.0.deb>`_
 
 Installing on Windows:
@@ -54,7 +53,9 @@ CrossCore Embedded Studio can be installed and used on Ubuntu 14.04+ 32-bit and
 
 -  To install CrossCore Embedded Studio, run the command:
 
-<code> $> sudo dpkg -i adi-CrossCoreEmbeddedStudio-linux-x86-2.8.0.deb </code>
+::
+
+   $> sudo dpkg -i adi-CrossCoreEmbeddedStudio-linux-x86-2.8.0.deb
 
 The Ubuntu Linux Installer(Debian) installs all necessary components to local directory ``/opt/analog/``.
 
@@ -86,43 +87,64 @@ file pre-installed. Download the device family pack from the link below.
 
    Download ``ADuCM3029 IoT Device Family pack``
 
-   
    `ADuCM3029 IoT Device Family pack(PROD) – 1.0.0 R <https://starweb.ad.analog.com/default/IoT/latest/>`_
 
--  Open CCES and click on ``Window`` -> ``Perspective`` -> ``Open Perspective`` -> ``Other``, then select ``CMSIS Pack Manger``. `image1 <images/sw3.png>`_
+-  Open CCES and click on ``Window`` -> ``Perspective`` -> ``Open Perspective`` -> ``Other``, then select ``CMSIS Pack Manger``.
 
-`image2 <images/sw4.png>`_
+.. image:: images/sw3.png
+   :align: center
+   :width: 600
+
+.. image:: images/sw4.png
+   :align: center
+   :width: 600
 
 -  Now close the Welcome Window and click on ``Check for Updates on Web``.
 
-`image <images/sw5.png>`_
+.. image:: images/sw5.png
+   :align: center
+   :width: 600
 
 -  Now select ADuCM3029 from the Devices list.
 
-`image <images/sw6.png>`_
+.. image:: images/sw6.png
+   :align: center
+   :width: 600
 
 -  In ``Packs`` -> ``Generic`` folder, install ``ARM CMSIS version 5.0.1``.
 
-`image <images/sw7.png>`_
+.. image:: images/sw7.png
+   :align: center
+   :width: 600
 
 -  Now click on ``import existing packs`` and add the BSP and Device family packs downloaded from Starweb link provided above.
 
-`image <images/sw8.png>`_
+.. image:: images/sw8.png
+   :align: center
+   :width: 600
 
 -  Ensure that you delete the default ``DFP`` -> ``Analog Devices ADuCM302x_DFP version 2.0.0``.
 
-`image <images/sw9.png>`_
+.. image:: images/sw9.png
+   :align: center
+   :width: 600
 
 The CCES is now ready for ADPAQ firmware development which is explained :doc:`here </solutions/reference-designs/eval-adpaq3029/fw_dev>`.
 
 mbed Serial port driver
 -----------------------
 
-The CrossCore Embedded Studio installer will also install the mBed windows serial driver. Check by going to ``Device manager`` -> ``Ports (COM and LPT)``, ``mbed Serial Port`` should be visible under ``Ports``. `image <images/sw15.png>`_
+The CrossCore Embedded Studio installer will also install the mBed windows serial driver. Check by going to ``Device manager`` -> ``Ports (COM and LPT)``, ``mbed Serial Port`` should be visible under ``Ports``.
+
+.. image:: images/sw15.png
+   :align: center
+   :width: 600
 
 -  If not, it can be installed separately by going to - https://developer.mbed.org/handbook/Windows-serial-configuration
 
-`image <images/sw16.png>`_
+.. image:: images/sw16.png
+   :align: center
+   :width: 600
 
 -  open device manager to check mbed serial port is visible again.
 

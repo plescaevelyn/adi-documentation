@@ -6,12 +6,11 @@ EVAL-ADPAQ3029 - HC-SR04 demo
 .. admonition:: Download
    :class: download
 
-   \ `HC-SR04 Firmware <hc-sr04.zip>`_
+   `HC-SR04 Firmware <hc-sr04.zip>`_
 
-   
-   `Tile GUI application <moduware.tile.example-hcsr04.zip>`_\
+   `Tile GUI application <moduware.tile.example-hcsr04.zip>`_
 
--  Follow the same steps as given `here <https://wiki.analog.com/../first_app>`_
+-  Follow the same steps as given :doc:`here </solutions/reference-designs/eval-adpaq3029/first_app>`
 -  In this project, an Ultrasonic Sensor – HC-SR04 has been used.
 
 .. image:: ../images/app5.png
@@ -27,7 +26,6 @@ EVAL-ADPAQ3029 - HC-SR04 demo
 
 .. container:: round box
 
-   
    ============ ============== =================
    HC-SR04 Pins GPIO port used ADPAQ Header Pins
    ============ ============== =================
@@ -36,7 +34,6 @@ EVAL-ADPAQ3029 - HC-SR04 demo
    Echo         P2_1           P3-1
    Gnd          GND            P1-GND_POWER
    ============ ============== =================
-   
 
 -  Build and run the project
 -  The Ultrasonic Sensor measurement is displayed on tile in “cm”.

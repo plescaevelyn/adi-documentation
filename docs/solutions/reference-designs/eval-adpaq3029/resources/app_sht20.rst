@@ -6,12 +6,11 @@ EVAL-ADPAQ3029 - SHT20 [I2C] demo
 .. admonition:: Download
    :class: download
 
-   \ `SHT20 Firmware <sht20.zip>`_
+   `SHT20 Firmware <sht20.zip>`_
 
-   
-   `Tile GUI application <moduware.tile.example-i2c.zip>`_\
+   `Tile GUI application <moduware.tile.example-i2c.zip>`_
 
--  Follow the same steps as given `here <https://wiki.analog.com/../first_app>`_
+-  Follow the same steps as given :doc:`here </solutions/reference-designs/eval-adpaq3029/first_app>`
 -  In this project, SHT20 (Temperature and Humidity Sensor) is used.
 
 .. image:: ../images/app7.png
@@ -27,7 +26,6 @@ EVAL-ADPAQ3029 - SHT20 [I2C] demo
 
 .. container:: round box
 
-   
    ========== ============== =================
    SHT20 Pins GPIO port used ADPAQ Header Pins
    ========== ============== =================
@@ -36,12 +34,13 @@ EVAL-ADPAQ3029 - SHT20 [I2C] demo
    SDA        I2C_SDA        P2-8
    Gnd        GND            P1-10
    ========== ============== =================
-   
 
 -  Build and run the project
 -  The Sensor will give the Temperature value in ``degree celsius`` and Humidity in ``%RH``.
 
-`image <../images/tile11.png>`_
+.. image:: ../images/tile11.png
+   :align: center
+   :width: 400
 
 |image1|
 

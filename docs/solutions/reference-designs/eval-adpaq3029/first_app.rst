@@ -13,16 +13,14 @@ EVAL-ADPAQ3029 - First application [RGB LED]
 .. admonition:: Download
    :class: download
 
-   \ `RGB led Firmware <resources/ledapp.zip>`_
+   `RGB led Firmware <resources/ledapp.zip>`_
 
-   
-   `Tile GUI application <resources/moduware.tile.example-led-rgb.zip>`_\
+   `Tile GUI application <resources/moduware.tile.example-led-rgb.zip>`_
 
 -  The mapping of the RGB LED with the ADPAQ GPIOs is given below
 
 .. container:: round box
 
-   
    ========= ==============
    LED color GPIO port used
    ========= ==============
@@ -30,19 +28,22 @@ EVAL-ADPAQ3029 - First application [RGB LED]
    Green     P0_14
    Blue      P1_09
    ========= ==============
-   
 
 -  Launch the CCES IDE and import the first 3 projects into CCES as explained :doc:`here </solutions/reference-designs/eval-adpaq3029/fw_dev/import_prj>`.
 -  Build and flash the firmware binary (\*.bin) as explained :doc:`here </solutions/reference-designs/eval-adpaq3029/fw_dev>`
--  Deploy the tile application as explained\ :doc:`here </solutions/reference-designs/eval-adpaq3029/tile_dev>`
+-  Deploy the tile application as explained :doc:`here </solutions/reference-designs/eval-adpaq3029/tile_dev>`
 -  Launch the ``Moduware`` app and pair to the gateway (Mini Dev board)
 -  Now you should be able to see tile with ``DevMod``.
 
-`image <images/tile5.png>`_
+.. image:: images/tile5.png
+   :align: center
+   :width: 400
 
 -  Long Press on the ``DevMod`` Tile. Select the ``RGB LED`` tile.
 
-`image <images/app1.png>`_
+.. image:: images/app1.png
+   :align: center
+   :width: 400
 
 -  The tile of the RGBLED app which was uploaded earlier will appear as shown in
    the image.
