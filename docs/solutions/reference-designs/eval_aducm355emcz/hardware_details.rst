@@ -1,7 +1,7 @@
 Hardware Setup
 ==============
 
-HOW TO POWER THE BOARD
+How to Power the Board
 ----------------------
 
 P2 pin 1 should be connected to 3V. P2 pin 4 is Ground. There is LDO or power
@@ -11,14 +11,12 @@ connector, P1.
 .. image:: images/powersetuplayout.png
    :width: 400
 
-HOW TO Program the Board
+How to Program the Board
 ------------------------
 
 To program the board, the MIDAS-LINK (or JLINK) is plugged into the
 EVAL-ADuCM355EMCZ via the USB-SWD/UART adapter as shown below. Note, both the
 MIDAS-LINK and USB-SWD/UART needs separate USB connections to your PC.
 
-|image1|
-
-.. |image1| image:: images/power_debug_programmingsetup.jpg
+.. image:: images/power_debug_programmingsetup.jpg
    :width: 600

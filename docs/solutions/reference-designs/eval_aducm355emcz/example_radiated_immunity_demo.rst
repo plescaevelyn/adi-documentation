@@ -4,21 +4,23 @@ Where to find the example Code used in CN-0425
 After you have installed the evaluation software, the example firmware project
 used in CN-0425 is in the folder \\examples\\M355_RadiatedImmunity_Demo.
 
-|image1|
+.. image:: images/example_pathw.jpg
+   :width: 600
 
-Build, download and debug the example project to IAR via the Midas-Link:
+Build, download and debug the example project to IAR via the Midas-Link
 ------------------------------------------------------------------------
 
-|image2|.png?600\|}}
+.. image:: images/iar_debug1.png
+   :width: 600
 
 What the M355_RadiatedImmunity_Demo project code does
-=====================================================
+------------------------------------------------------
 
 The Project assumes a 3-lead EC sensor is connected to channel 0 of the LP
 Potentiostat loop - 0V bias between RE/WE with 1.1V common mode voltage.
 
-The code has 2x modes of operation:
------------------------------------
+The code has 2x modes of operation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -45,16 +47,10 @@ The code has 2x modes of operation:
                 Wait several seconds for the results to be transmitted - allowance for sensor to settle first
 
 Mode 1 - output to UART debug terminal
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In mode 1, debug text is sent periodically to the UART. When viewed in a
 terminal window like Realterm, it looks like this:
 
-|image3|
-
-.. |image1| image:: images/example_pathw.jpg
-   :width: 600
-.. |image2| image:: images/iar_debug1.png
-   :width: 600
-.. |image3| image:: images/capturemode.png
+.. image:: images/capturemode.png
    :width: 600

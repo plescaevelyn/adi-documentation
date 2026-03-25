@@ -1,8 +1,8 @@
 Introduction
 ============
 
-| The :adi:`EVAL-ADuCM355EMCZ` evaluation kit is designed for customers to evaluate the radiated immunity performance of the ADuCM355 with an external Sensor. It accompanies the circuit note, CN-0425. It may also be used to evaluate other functions of the ADuCM355 including Impedance Spectroscopy, Voltammetry, Chronoamperometric and Amperometric operations
-| This guide is structured as follows:
+The :adi:`EVAL-ADuCM355EMCZ` evaluation kit is designed for customers to evaluate the radiated immunity performance of the ADuCM355 with an external Sensor. It accompanies the circuit note, CN-0425. It may also be used to evaluate other functions of the ADuCM355 including Impedance Spectroscopy, Voltammetry, Chronoamperometric and Amperometric operations.
+This guide is structured as follows:
 
 -  :doc:`Tools and Driver Details </solutions/reference-designs/eval_aducm355emcz/tools>` - Provides all the necessary steps to download/install/use the ADuCM355 evaluation tools using IAR Embedded Workbench.
 -  Includes:

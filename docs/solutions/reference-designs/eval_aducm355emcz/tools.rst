@@ -9,7 +9,7 @@ installed, users should first download and install IAR's Embedded Workbench IDE
 for ARM cores.
 
 Drivers
-=======
+-------
 
 The MIDAS-LINK programming pod requires a USB driver to allow it interface to
 your PC. This is installed automatically with the evaluation software provided
@@ -22,7 +22,7 @@ automatically with the evaluation software provided with the ADuCM355 Evaluation
 kits - both the EVAL-ADuCM355EMCZ and the EVAL-ADuCM355QSPZ.
 
 Evaluation Software link
-========================
+------------------------
 
 The ADuCM355 evaluation software can be downloaded and installed from this FTP
 site:
