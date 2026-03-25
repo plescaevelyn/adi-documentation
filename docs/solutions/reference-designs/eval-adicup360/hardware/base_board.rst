@@ -14,12 +14,6 @@ and the layout.
 .. image:: ../images/hw_rev1_1_art.png
    :width: 600
 
-Getting Started Video
----------------------
-
-.. image:: https://wiki.analog.com/_media/resources/eval/user-guides/eval-adicup360/hardware/analogtv>4784514204001
-   :alt: analogTV>4784514204001
-
 Connectors
 ----------
 
@@ -28,29 +22,12 @@ The following connectors are populated on the base board:
 .. image:: ../images/hw_rev1_1_connectors.png
    :width: 600
 
-::
-
-     * DC Power Jack:    Core positive, accepts +7V to +12V DC supply voltage;
-
-::
-
-     * DEBUG USB:        Used for flash programming and debug interface;
-
-::
-
-     * USER USB:         Provides a Virtual serial port connection to ADuCM360 microcontroller;
-
-::
-
-     * PMOD_SPI:         12-pin SPI PMOD connector;
-
-::
-
-     * PMOD_I2C:         8-pin I2C PMOD connector;
-
-::
-
-     * Six Arduino connectors described in the table below.
+- DC Power Jack: Core positive, accepts +7V to +12V DC supply voltage
+- DEBUG USB: Used for flash programming and debug interface
+- USER USB: Provides a Virtual serial port connection to ADuCM360 microcontroller
+- PMOD_SPI: 12-pin SPI PMOD connector
+- PMOD_I2C: 8-pin I2C PMOD connector
+- Six Arduino connectors described in the table below
 
 +---------------+---------+----------+----------------------------------------------------+----------------------+
 | Connector     | Pin No. | Pin Name | ADuCM360 pin or other function                     | Arduino Due Pin Name |
@@ -337,8 +314,6 @@ Software examples
 -  :doc:`Blinking LEDs Example </solutions/reference-designs/eval-adicup360/reference_designs/demo_blink>`
 
 -  :doc:`CLI demo </solutions/reference-designs/eval-adicup360/reference_designs/demo_cli>`
-
-*End of Document*
 
 .. |image1| image:: ../images/p12_close.png
    :width: 32
