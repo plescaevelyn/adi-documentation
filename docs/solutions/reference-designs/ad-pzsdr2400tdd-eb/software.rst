@@ -4,7 +4,7 @@ Linux Software
 Configuring
 -----------
 
-When using this card on the :adi:`PicoZed SDR SOM Development Kit <adrv9361-z7035>`, a slightly different device tree must be used (zynq-picozed-sdr2-fmc-rfcard-tdd). Please see here for further details: `Preparing the Image <https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux>`_
+When using this card on the :adi:`PicoZed SDR SOM Development Kit <adrv9361-z7035>`, a slightly different device tree must be used (zynq-picozed-sdr2-fmc-rfcard-tdd). Please see here for further details: :external+kuiper:doc:`Preparing the Image <index>`
 
 +------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+
 | Function                                       | File                                                                                                                                                    |

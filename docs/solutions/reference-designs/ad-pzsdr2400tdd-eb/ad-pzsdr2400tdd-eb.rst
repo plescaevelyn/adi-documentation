@@ -29,9 +29,6 @@ People who follow the flow that is outlined, have a much better experience with 
 
 -  :doc:`Help and Support </solutions/reference-designs/ad-pzsdr2400tdd-eb/help_and_support>`
 
-.. image:: https://wiki.analog.com/_media/resources/eval/user-guides/analogtv>4840956066001
-   :alt: analogTV>4840956066001
-   :align: center
 
 Warning
 -------

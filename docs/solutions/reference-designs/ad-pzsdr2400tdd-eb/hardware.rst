@@ -7,20 +7,12 @@ Downloads
 .. admonition:: Download
    :class: download
 
-   
-   .. note::
-
-         
-
-   
-      ..
-
    -  `Rev C Schematics <resources/revc_schematic.pdf>`_
    -  `Rev B Gerbers <https://wiki.analog.com/_media/resources/eval/user-guides/ad-pzsdr2400tdd-ebz/revB_Gerbers.zip>`_ (This file is `compressed <http://www.7-zip.org/7z.html>`_)
    -  `Rev B Bill of materials <images/revb_bom.xlsx>`_
    -  `Rev B Allegro Board File <https://wiki.analog.com/_media/resources/eval/user-guides/ad-pzsdr2400tdd-ebz/revB_BoardFile.zip>`_
    -  Get the `Allegro FREE Physical Viewer <https://www.cadence.com/en_US/home/tools/pcb-design-and-analysis/allegro-downloads-start.html>`_ (You need 16.5 or higher).
-   
+
 
 Picture and Main components
 ---------------------------

@@ -32,30 +32,36 @@ or level mode.
 
 .. container:: centeralign
 
-   \ *Enable Pulse Mode (TDD)*\
+   *Enable Pulse Mode (TDD)*
 
    |image1|
 
 .. container:: centeralign
 
-   \ *Enable Level Mode (TDD)*\
+   *Enable Level Mode (TDD)*
 
 By default the ENABLE and TXNRX pins are controlled by GPIO's. This solution
 similarly to the SPI write ENSM control, can not provide a real time control of
 these pins.
 
-The **axi_ad9361** IP core has an integrated TDD controller, which gives the possibility to control the ENABLE/TXNRX pins in real time. The TDD controller consist of a counter, which counts on every positive edge of the FB_CLK, and a several software accessible registers, which defines the time when the ENABLE and TXNRX pins should be set or reset.
+The **axi_ad9361** IP core has an integrated TDD controller, which gives the
+possibility to control the ENABLE/TXNRX pins in real time. The TDD controller
+consist of a counter, which counts on every positive edge of the FB_CLK, and a
+several software accessible registers, which defines the time when the ENABLE
+and TXNRX pins should be set or reset.
 
 TDD Controller
 --------------
 
-In the block diagram bellow can be seen the **axi_ad9361** IP core with the integrated TDD controller modules inside. If the controller is enabled, all the data flow from or to the device will be controlled by this module.
+In the block diagram below can be seen the **axi_ad9361** IP core with the
+integrated TDD controller modules inside. If the controller is enabled, all the
+data flow from or to the device will be controlled by this module.
 
 |axi_ad9361 IP cores block diagram with the integrated TDD controller module|
 
 .. container:: centeralign
 
-   \ *axi_ad9361 IP block diagram*\
+   *axi_ad9361 IP block diagram*
 
 The AXI register map of the TDD controller, and the description of each reagisters can be found under the following link: `TDD REGISTER MAP <https://wiki.analog.com/resources/fpga/docs/hdl/regmap>`_
 
@@ -74,7 +80,8 @@ point will define a pointer:
 
 -  Enabling the RX synthesizer
 -  Enabling the RX RF path inside the device (ALERT to RX state transition)
--  Enabling the RX Data path inside the FPGA (the core starts to get valid data from the devices interface)
+-  Enabling the RX Data path inside the FPGA (the core starts to get valid
+   data from the devices interface)
 -  Disabling the RX Data path inside the FPGA
 -  Disabling the RX RF path inside the device (RX to ALERT state transition)
 -  Disabling the RX synthesizer
@@ -84,7 +91,8 @@ point will define a pointer:
 
 -  Enabling the TX synthesizer
 -  Enabling the TX RF path inside the device (ALERT to TX state transition)
--  Enabling the TX Data path inside the FPGA (the core starts to push valid data to the devices interface)
+-  Enabling the TX Data path inside the FPGA (the core starts to push valid
+   data to the devices interface)
 -  Disabling the TX Data path inside the FPGA
 -  Disabling the TX RF path inside the device (TX to ALERT state transition)
 -  Disabling the TX synthesizer
@@ -210,10 +218,10 @@ ADC Common (axi_ad\*)
    |         |        | [7:0]       | CUSTOM_CONTROL      | RW   | 0x00    |                                                                                                                                                                                                                                                                                                |
    +---------+--------+-------------+---------------------+------+---------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
-   
+
 .. note::
 
-   
+
    See `Regmap Adc Custom <https://wiki.analog.com/resources/fpga/docs/hdl/regmap_adc_custom>`_.
 
    \|
@@ -2901,7 +2909,8 @@ IO ports of util_tdd_sync
 | ``sync_out``  | Output | This pin is connected to the ``tdd_sync`` pin of the axi_ad9361 core                                                                                                                                                                      |
 +---------------+--------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
-To activate the sync pulse generator the software needs to set the ``REG_TDD_SYNC_TERMINAL_TYPE`` register to ``0x01``.
+To activate the sync pulse generator the software needs to set the
+``REG_TDD_SYNC_TERMINAL_TYPE`` register to ``0x01``.
 
 TDD_SYNC interface IO mapping
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2926,7 +2935,8 @@ instantiated via devicetree.
 Required devicetree properties:
 
 -  compatible: Should always be "adi,axi-tdd-1.00"
--  reg: Base address and register area size. This parameter expects a register range.
+-  reg: Base address and register area size. This parameter expects a register
+   range.
 -  adi,profile-config0: At least one (maximum 7) configuration profile should be
    defined. A profile contains the values of the registers: COUNTER_2 (0x8048),
    FRAME_LENGTH (0x804c), SYNC_TERM_TYPE (0x8050), VCO_RX_ON_1 (0x8080),
@@ -2962,11 +2972,11 @@ numbering is constant and may be known in advance.
 
    This specifies any shell prompt running on the target
 
-   
-   ::
-   
 
-   
+   ::
+
+
+
       root:/sys/bus/iio/devices/iio:device5> ls -l
       -rw-rw-rw- 1 root root 4096 Jan  1  1970 burst_count
       -rw-rw-rw- 1 root root 4096 Jan  1  1970 dev
@@ -2992,11 +3002,11 @@ Show device name
 
    This specifies any shell prompt running on the target
 
-   
-   ::
-   
 
-   
+   ::
+
+
+
       root:/sys/bus/iio/devices/iio:device5> cat name
       cf-ad9361-tdd-core-lpc
 
@@ -3007,11 +3017,11 @@ Enable the TDD controller
 
    This specifies any shell prompt running on the target
 
-   
-   ::
-   
 
-   
+   ::
+
+
+
       root:/sys/bus/iio/devices/iio:device5> echo 1 > enable
 
 Choose the desired configuration profile
@@ -3021,11 +3031,11 @@ Choose the desired configuration profile
 
    This specifies any shell prompt running on the target
 
-   
-   ::
-   
 
-   
+   ::
+
+
+
       root:/sys/bus/iio/devices/iio:device5> echo 1 > profile_config
 
 Configure the DMA gate
@@ -3035,11 +3045,11 @@ Configure the DMA gate
 
    This specifies any shell prompt running on the target
 
-   
-   ::
-   
 
-   
+   ::
+
+
+
       root:/sys/bus/iio/devices/iio:device5> cat dma_gateing_mode_available
       none rx_only tx_onlx rx_tx
       root:/sys/bus/iio/devices/iio:device5> echo none > dma_gateing_mode
@@ -3051,11 +3061,11 @@ Configure the RX/TX mode
 
    This specifies any shell prompt running on the target
 
-   
-   ::
-   
 
-   
+   ::
+
+
+
       root:/sys/bus/iio/devices/iio:device5> cat enable_mode_available
       rx_tx rx_only tx_onlx
       root:/sys/bus/iio/devices/iio:device5> echo rx_tx > enable_mode

@@ -8,7 +8,7 @@ The :adi:`ADL5324` has several passive components surrounding the IC which direc
    :width: 800
 
 The component spacing for tuning capacitors C1 and C2 is detailed in the
-][adi>ADL5324]] datasheet over a variety of frequencies. A table from the
+:adi:`ADL5324` datasheet over a variety of frequencies. A table from the
 datasheet, detailing this information, is listed below.
 
 .. image:: ../images/tuning_component_table.png
