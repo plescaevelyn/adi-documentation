@@ -4,7 +4,13 @@ Hardware Guide
 Device Description
 ------------------
 
-The :adi:`AD7173-8 <en/products/ad7173-8.html>` is a highly accurate, high resolution, multiplexed, 8-/16-channel (full/pseudo differential) Σ-Δ ADC. The :adi:`AD7173-8 <en/products/AD7173-8.html>` has a maximum channel-to-channel scan rate of 6.21 kSPS (161 µs) for fully settled data The output data rates range from 1.25 SPS to 31.25 kSPS. The device includes integrated analog input and reference buffers, an integrated precision 2.5 V reference, and an integrated oscillator.
+The :adi:`AD7173-8 <en/products/ad7173-8.html>` is a highly accurate, high
+resolution, multiplexed, 8-/16-channel (full/pseudo differential) Σ-Δ ADC.
+The :adi:`AD7173-8 <en/products/AD7173-8.html>` has a maximum
+channel-to-channel scan rate of 6.21 kSPS (161 µs) for fully settled data
+The output data rates range from 1.25 SPS to 31.25 kSPS. The device includes
+integrated analog input and reference buffers, an integrated precision 2.5 V
+reference, and an integrated oscillator.
 
 Set-up Procedures
 -----------------
@@ -19,7 +25,8 @@ section.
    EVAL-AD7173-8ARDZ and the EVAL-SDP-CK1Z board to the USB port of the PC to
    ensure that the PC correctly recognizes the evaluation system
 
-**Configuring the Evaluation and SDP Boards** Use the following procedure to configure the boards
+**Configuring the Evaluation and SDP Boards** Use the following procedure to
+configure the boards
 
 -  Connect the SDP-K1 to the Arduino headers of the evaluation board.
 -  If using the SDP-K1 board the Arduino headers can also be used to connect to the board
@@ -121,7 +128,7 @@ On Board Connections
 +-------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------+
 
 Power Supplies
-==============
+--------------
 
 The evaluation board receives power through the controller board when connected
 to the PC via 5V USB. Linear regulators generate the required power supply
@@ -147,7 +154,8 @@ AVDD1 and AVSS selection (S1)
       -  2.5V regulator supplies AVDD1
       -  -3V regulator -2.5V regulator supplies AVSS
 
-===AVDD1 and AVDD2 selection (LK1 and LK2)===
+AVDD1 and AVDD2 selection (LK1 and LK2)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  **5V supply (DEFAULT)**
 
@@ -181,7 +189,7 @@ AVDD1 and AVSS selection (S1)
 +-----------------+--------------------------------------------------------------------------+----------------+
 
 Serial Interface
-~~~~~~~~~~~~~~~~
+----------------
 
 There are four primary signals: CS, SCLK, MOSI/DIN, and MISO/DOUT (all are
 inputs, except for MISO/DOUT, which is an output). The EVAL-AD7175-8ARDZ
@@ -189,7 +197,7 @@ evaluation board connects to any microcontroller board that uses the Arduino
 standard headers. This can be developed user code in for a variety of platforms.
 
 Serial communication options
-----------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  Arduino connection using the SDP-K1
 -  PMOD connector
@@ -205,12 +213,18 @@ For an introduction to the Serial Peripheral Interface (SPI), click :adi:`here <
    :width: 600
 
 Analog Inputs
-=============
+-------------
 
-The :adi:`EVAL-AD7175-8ARDZ <en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD7175-8.html>` primary analog inputs can be applied on J15, J16, and J17 which are at the left side of the board. Differential analog inputs are applied on AIN0 and AIN1 when using the ADC driver (when using ADC driver, enable AIN+/- buffers). The :adi:`AD7173-8 <en/products/ad7173-8.html>` evaluation software is set up to analyze dc inputs to the ADC. The AD7175-8 input buffers work for dc input signals.
+The :adi:`EVAL-AD7175-8ARDZ <en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD7175-8.html>`
+primary analog inputs can be applied on J15, J16, and J17 which are at the
+left side of the board. Differential analog inputs are applied on AIN0 and
+AIN1 when using the ADC driver (when using ADC driver, enable AIN+/- buffers).
+The :adi:`AD7173-8 <en/products/ad7173-8.html>` evaluation software is set up
+to analyze dc inputs to the ADC. The AD7175-8 input buffers work for dc input
+signals.
 
 Reference Options
-=================
+-----------------
 
 -  :adi:`AD7175-8 <en/products/ad7175-8.html>` internal 2.5V reference.
 -  **DEFAULT** :adi:`ADR4550 <en/products/ADR4550.html>` on board external reference.
@@ -256,19 +270,19 @@ Hardware
 +--------------+------+------------------+----------------------------------------------------------------------------------------------------------------------+
 
 Schematic, PCB Layout, Bill of Materials
-========================================
+-----------------------------------------
 
 .. admonition:: Download
    :class: download
 
    EVAL-AD7173-8ARDZ Rev B Design and Integration Files
 
-   
-   -  `Schematic.pdf <https://wiki.analog.com/_media/resources/eval/user-guides/eval-ad7175-8ardz/Schematic.pdf>`_
-   
-   -  `Layout.pdf <https://wiki.analog.com/_media/resources/eval/user-guides/eval-ad7175-8ardz/Layout.pdf>`_
-   
-   -  `Bill of Materials.xlsx <https://wiki.analog.com/_media/resources/eval/user-guides/eval-ad7175-8ardz/Bill of Materials.xlsx>`_
-   
 
-:doc:`Continue to Software Guide </solutions/reference-designs/eval-ad7173-8ardz/software>` `Return to Homepage <https://wiki.analog.com/resources/eval/eval-ad7173-8ardz>`_
+   -  `Schematic.pdf <https://wiki.analog.com/_media/resources/eval/user-guides/eval-ad7175-8ardz/Schematic.pdf>`_
+
+   -  `Layout.pdf <https://wiki.analog.com/_media/resources/eval/user-guides/eval-ad7175-8ardz/Layout.pdf>`_
+
+   -  `Bill of Materials.xlsx <https://wiki.analog.com/_media/resources/eval/user-guides/eval-ad7175-8ardz/Bill of Materials.xlsx>`_
+
+
+:doc:`Continue to Software Guide </solutions/reference-designs/eval-ad7173-8ardz/software>`

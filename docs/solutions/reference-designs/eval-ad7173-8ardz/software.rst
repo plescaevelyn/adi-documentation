@@ -2,11 +2,13 @@ Software Guide
 ==============
 
 ACE Software
-============
+------------
 
 The ACE software is available :adi:`Here. <en/design-center/evaluation-hardware-and-software/evaluation-development-platforms/ace-software.html>`
 
-The quick start guide is available on the landing page here `(Quick Start Guide) <https://wiki.analog.com/resources/eval/eval-ad7173-8ardz>`_ or for the step by step install guide see the below.
+The quick start guide is available on the landing page here
+`(Quick Start Guide) <https://wiki.analog.com/resources/eval/eval-ad7173-8ardz>`_
+or for the step by step install guide see the below.
 
 Installation Guide
 ------------------
@@ -16,7 +18,7 @@ to be installed before using the EVAL-AD7173-8ARDZ evaluation board.
 
 .. important::
 
-   \ Warning: The evaluation software and drivers must be installed before
+   The evaluation software and drivers must be installed before
    connecting both the evaluation board and the SDP-K1 board to the PC. This
    ensures that the evaluations system is correctly recognized when it is
    connected to the PC.
@@ -69,7 +71,12 @@ steps to set up the SDP-K1 and evaluation board together.
 Software Operation
 ~~~~~~~~~~~~~~~~~~
 
-To start the ACE evaluation software, from the Windows Start menu, click Analog Devices > ACE. The software window opens (See Figure 5) until the software recognizes the AD7173-8 evaluation board. When the software recognizes the board, double-click on the icon in the **Start** view to open the main window seen in Figure 6. Make sure that you already have the AD717x-8 plugin in the plugin manager.
+To start the ACE evaluation software, from the Windows Start menu, click
+Analog Devices > ACE. The software window opens (See Figure 5) until the
+software recognizes the AD7173-8 evaluation board. When the software
+recognizes the board, double-click on the icon in the **Start** view to open
+the main window seen in Figure 6. Make sure that you already have the AD717x-8
+plugin in the plugin manager.
 
 By clicking on the part in the main ACE evaluation software window (See Figure
 6), the chip view will be opened (Figure 7).
@@ -93,7 +100,9 @@ elements on the Chip view of the software window.
 CONFIGURATION TAB
 ~~~~~~~~~~~~~~~~~
 
-The **Configuration tab** shows a block diagram of the AD7173-8. This tab allows the user to select inputs, set up the ADC, reset the ADC, and view errors present, as well as configure the device.
+The **Configuration tab** shows a block diagram of the AD7173-8. This tab
+allows the user to select inputs, set up the ADC, reset the ADC, and view
+errors present, as well as configure the device.
 
 Functional Block Diagram (1)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -143,7 +152,10 @@ Waveform Analysis Button (9)
 WAVEFORM TAB
 ~~~~~~~~~~~~
 
-The **Waveform tab** can display the different waveforms for voltage input, current input and select the channel. The waveform tab graph the conversions gathered and processes the data, calculating the peak-to-peak noise, rms noise, and resolution.
+The **Waveform tab** can display the different waveforms for voltage input,
+current input and select the channel. The waveform tab graph the conversions
+gathered and processes the data, calculating the peak-to-peak noise, rms
+noise, and resolution.
 
 Waveform Graph and Controls (10, 11)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -168,7 +180,13 @@ Serial Interface and Internal Reference (13)
 Run (14)
 ^^^^^^^^
 
--  Click **Run Once or Run Continuously** (Label 14 in Figure 8) to start gathering ADC results. If **Run Once** is clicked, the ADC returns the number of samples specified by the Samples control. If **Run Continuously**, the ADC continuously returns samples until stopped by the user. Samples specifies the amounts of samples to be shown on the data graph. This control is unrelated to the ADC mode. Results appear in the waveform graph (Label 10 in Figure 8).
+-  Click **Run Once or Run Continuously** (Label 14 in Figure 8) to start
+   gathering ADC results. If **Run Once** is clicked, the ADC returns the
+   number of samples specified by the Samples control. If **Run
+   Continuously**, the ADC continuously returns samples until stopped by the
+   user. Samples specifies the amounts of samples to be shown on the data
+   graph. This control is unrelated to the ADC mode. Results appear in the
+   waveform graph (Label 10 in Figure 8).
 
 Channel Selection (15)
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -187,7 +205,9 @@ Display Units and Axis Controls (16)
 Results Pane (17)
 ^^^^^^^^^^^^^^^^^
 
--  The **RESULTS** pane (Label 17 in Figure 8) displays parametric values for the selected display format. The bottom of the **RESULTS** pane also has buttons that allow the user to import or export sample data.
+-  The **RESULTS** pane (Label 17 in Figure 8) displays parametric values for
+   the selected display format. The bottom of the **RESULTS** pane also has
+   buttons that allow the user to import or export sample data.
 
 .. image:: images/slide2.jpg
    :align: center
@@ -260,7 +280,12 @@ Register and Bit Field Control (24, 25, 26, 27)
 Documentation (28)
 ^^^^^^^^^^^^^^^^^^
 
--  The Bitfield Documentation (Label 28 in Figure 10) contains the documentation for the register or the bit field selected. This field can be updated by selecting a register or bit field in the register tree or hovering over the register or bit field in the register tree or register control. This documentation will be displayed by clicking the |image2| button (Label 28 in Figure 10).
+-  The Bitfield Documentation (Label 28 in Figure 10) contains the
+   documentation for the register or the bit field selected. This field can be
+   updated by selecting a register or bit field in the register tree or
+   hovering over the register or bit field in the register tree or register
+   control. This documentation will be displayed by clicking the |image2|
+   button (Label 28 in Figure 10).
 
 Import and Export (29)
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -275,7 +300,7 @@ Import and Export (29)
 
 **Figure 10. Memory Map**
 
-:doc:`Return to Hardware Guide </solutions/reference-designs/eval-ad7173-8ardz/hardware_guide>` `Return to Homepage <https://wiki.analog.com/resources/eval/eval-ad7173-8ardz>`_
+:doc:`Return to Hardware Guide </solutions/reference-designs/eval-ad7173-8ardz/hardware_guide>`
 
 .. |image1| image:: images/libiio_drivers.png
    :width: 400
