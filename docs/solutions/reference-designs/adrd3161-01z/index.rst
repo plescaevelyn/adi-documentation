@@ -62,6 +62,7 @@ User Guides
    hardware-guide
    quick-start-guide
    production-guide
+   production-testing
 
 Help and Support
 ----------------
