@@ -30,7 +30,7 @@ Power Sequencer
 
 .. important::
 
-   :doc:`Sequencer programming steps </solutions/reference-designs/pzsdr/power-and-sequencing>`\
+   :doc:`Sequencer programming steps </solutions/reference-designs/pzsdr/power-and-sequencing>`
 
 Test image
 ----------
@@ -40,16 +40,16 @@ The production test software running on the target device is available as a preb
 .. admonition:: Download
    :class: download
 
-   \* \**22 June 2022 release**
+   - **22 June 2022 release**
 
    
    -  `Actual file for SOM2 Testing <https://swdownloads.analog.com/cse/prod_test_rel/adrv9361_bob/adrv9361_brk_production.zip>`_
    -  **22 January 2016 release**
-   -  `Actual file for SOM2 Testing <http://swdownloads.analog.com/cse/picozed/picozed-sdr2-brk-test-2016_01_05.img.xz>`_
+   -  `Actual file for SOM2 Testing <http://swdownloads.analog.com/cse/picozed/picozed-sdr2-brk-test-2016_01_05.img.xz>`__
    -  Checksum picozed-sdr2-brk-test-2016_01_05.img.xz ``f070bb467a23d42f3bebe25f70876ed2``
    -  Checksum picozed-sdr2-brk-test-2016_01_05.img ``9fefaa3910f3d6103704978b848fbfd6``
    -  **14 August 2020 release**
-   -  `Actual file for SOM2 Testing <https://swdownloads.analog.com/cse/prod_test_rel/picozed_test/picozed-sdr2-brk-test-2020_14_08.img.tar.xz>`_
+   -  `Actual file for SOM2 Testing <https://swdownloads.analog.com/cse/prod_test_rel/picozed_test/picozed-sdr2-brk-test-2020_14_08.img.tar.xz>`__
    
 
 .. important::
@@ -63,7 +63,7 @@ The production test software running on the target device is available as a preb
    -  **27 July 2022 release**
    -  `Actual file for SOM1 Testing <https://swdownloads.analog.com/cse/prod_test_rel/adrv9364_bob/adrv9364_bob_production.zip>`_
    -  **14 August 2020 release**
-   -  `Actual file for SOM1 Testing <https://swdownloads.analog.com/cse/prod_test_rel/picozed_test/picozed-sdr1-brk-test-2020_14_08.img.tar.xz>`_
+   -  `Actual file for SOM1 Testing <https://swdownloads.analog.com/cse/prod_test_rel/picozed_test/picozed-sdr1-brk-test-2020_14_08.img.tar.xz>`__
    
 
 .. admonition:: Download
@@ -258,7 +258,7 @@ Raspbian.
 
    
    -  **20 Dec 2021 release**
-   -   `Actual file <https://swdownloads.analog.com/cse/prod_test_rel/adrv1crr_test/adrv1crr_rpi_production_image.zip>`_
+   -   `Actual file <https://swdownloads.analog.com/cse/prod_test_rel/adrv1crr_test/adrv1crr_rpi_production_image.zip>`__
    -  Checksum ``d15c432f121141fc9cede87c0576e312``
    
 

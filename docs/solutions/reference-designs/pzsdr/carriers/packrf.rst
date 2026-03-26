@@ -1,7 +1,7 @@
 ADRV-PackRF
 ===========
 
-PackRF is a pair of software defined radios designed using the `ADRV9361-Z7035 <https://wiki.analog.com/resources/eval/user-guides/adrv936x_rfsom>`_\ system on module (SOM). The SOM is based on the\ :adi:`AD9361 <en/products/rf-microwave/integrated-transceivers-transmitters-receivers/wideband-transceivers-ic/ad9361.html>` RF Transceiver and the Xilinx Zynq®-7000 All Programmable (AP) SoC.
+PackRF is a pair of software defined radios designed using the `ADRV9361-Z7035 <https://wiki.analog.com/resources/eval/user-guides/adrv936x_rfsom>`_ system on module (SOM). The SOM is based on the\ :adi:`AD9361 <en/products/rf-microwave/integrated-transceivers-transmitters-receivers/wideband-transceivers-ic/ad9361.html>` RF Transceiver and the Xilinx Zynq®-7000 All Programmable (AP) SoC.
 
 See the :adi:`Analog Devices Product Home Page <en/design-center/reference-designs/circuits-from-the-lab/cn0412.html#rd-overview>` for information on price and options to purchase the system.
 

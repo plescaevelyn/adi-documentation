@@ -68,16 +68,16 @@ Nav Switch Installation
 
   |resources-eval-user-guides-pzsdr-carriers-adrv1cc-box-belly_plate_with_battery_on_side.jpg|
 
-   * `Battery CU-J479-V6: Molex 51065-0300 <https://www.batteryspace.com/Custom-Polymer-Li-Ion-battery-3.7V-3200mAh-11.8-Wh-with-Thermistor.aspx>`_ Installation.
-     * Clean the area between the two PCB's of dust or debris with a dry cloth.
-     * Cut a 1-inch to 1.25-inch piece of double sided tape.  Peel off the cover and place the tape firmly between the PCBs.
-     * Place the battery firmly onto the tape, with the yellow and white labels
-       facing away from the belly plate.
+- `Battery CU-J479-V6: Molex 51065-0300 <https://www.batteryspace.com/Custom-Polymer-Li-Ion-battery-3.7V-3200mAh-11.8-Wh-with-Thermistor.aspx>`_ Installation.
 
-       .. image:: ../../images/belly_plate_inside.jpg
+  - Clean the area between the two PCB's of dust or debris with a dry cloth.
+  - Cut a 1-inch to 1.25-inch piece of double sided tape.  Peel off the cover and place the tape firmly between the PCBs.
+  - Place the battery firmly onto the tape, with the yellow and white labels
+    facing away from the belly plate.
+  - This image doesn't have the ribbon cable oriented properly (pull it out
+    to the right, not the left).
 
-       * This image doesn't have the ribbon cable oriented properly (pull it out
-         to the right, not the left).
+    .. image:: ../../images/belly_plate_inside.jpg
 
 Preparing the ADRV936x PCB
 ~~~~~~~~~~~~~~~~~~~~~~~~~~

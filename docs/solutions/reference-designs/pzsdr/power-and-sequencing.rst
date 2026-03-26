@@ -32,7 +32,7 @@ setting '1.35V_EN' high. So on and so forth.
    :class: download
 
    
-   The timing diagram can be downloaded here.\ |image1| The tool used to generate this diagram is\ `Timing Diagram Editor <http://timingeditor.sourceforge.net/>`_
+   The timing diagram can be downloaded here: |image1| The tool used to generate this diagram is `Timing Diagram Editor <http://timingeditor.sourceforge.net/>`_
 
 State Diagram
 -------------
@@ -77,7 +77,7 @@ In the command line of your favorite terminal program, enter the following:
 
 ::
 
-   root@analog:~#git clone https:<nowiki>//</nowiki>github.com/analogdevicesinc/PicoZed-sdr.git
+   root@analog:~#git clone https://github.com/analogdevicesinc/PicoZed-sdr.git
    Cloning into 'PicoZed-sdr'...
    remote: Counting objects: 13, done.
    remote: Compressing objects: 100% (11/11), done.

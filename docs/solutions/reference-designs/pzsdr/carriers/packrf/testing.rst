@@ -178,7 +178,7 @@ Test Procedure
 .. |image1| image:: ../../images/packrf_test_jig.jpg
    :width: 600
 
-.. |guides-pzsdr-carriers-packrf-start_screen.jpg_2| image:: ../../images/start_screen.png
+.. |guides-pzsdr-carriers-packrf-start_screen.jpg| image:: ../../images/start_screen.png
    :width: 600
 
 .. |image2| image:: ../../images/pre_assemb_fail.jpg
@@ -193,4 +193,3 @@ Test Procedure
 .. |image5| image:: ../../images/rf_test.png
    :width: 600
 
-.. |guides-pzsdr-carriers-packrf-start_screen.jpg_2| image:: https://wiki.analog.com/_media/guides/pzsdr/carriers/packrf/start_screen.jpg

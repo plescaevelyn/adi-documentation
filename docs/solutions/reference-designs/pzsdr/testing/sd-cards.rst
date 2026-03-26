@@ -402,64 +402,69 @@ ADI image changes
 
 -  Run ``mount /dev/mmcblk0p1 /media/boot/``
 -  Run ``dtc -I dtb -O dts -o /media/boot/devicetree.dts /media/boot/devicetree.dtb`` to obtain the source file in text format (.dts) from binary blob (.dtb)
--  Remove all gpio_keys mappings from the device tree (``vim /media/boot/devicetree.dts``)\ ``gpio_keys {
-           compatible = "gpio-keys";
-           #address-cells = <0x1>;
-           #size-cells = <0x0>;
-           autorepeat;
+-  Remove all ``gpio_keys`` mappings from the device tree
+   (``vim /media/boot/devicetree.dts``):
 
-           pb0 {
-               label = "Left";
-               linux,code = <0x69>;
-               gpios = <0x6 0x36 0x0>;
-           };
+   .. code-block:: none
 
-           pb1 {
-               label = "Right";
-               linux,code = <0x6a>;
-               gpios = <0x6 0x37 0x0>;
-           };
+      gpio_keys {
+          compatible = "gpio-keys";
+          #address-cells = <0x1>;
+          #size-cells = <0x0>;
+          autorepeat;
 
-           pb2 {
-               label = "Up";
-               linux,code = <0x67>;
-               gpios = <0x6 0x38 0x0>;
-           };
+          pb0 {
+              label = "Left";
+              linux,code = <0x69>;
+              gpios = <0x6 0x36 0x0>;
+          };
 
-           pb3 {
-               label = "Down";
-               linux,code = <0x6c>;
-               gpios = <0x6 0x39 0x0>;
-           };
+          pb1 {
+              label = "Right";
+              linux,code = <0x6a>;
+              gpios = <0x6 0x37 0x0>;
+          };
 
-           sw0 {
-               label = "SW0";
-               linux,input-type = <0x5>;
-               linux,code = <0x0>;
-               gpios = <0x6 0x3e 0x0>;
-           };
+          pb2 {
+              label = "Up";
+              linux,code = <0x67>;
+              gpios = <0x6 0x38 0x0>;
+          };
 
-           sw1 {
-               label = "SW1";
-               linux,input-type = <0x5>;
-               linux,code = <0x1>;
-               gpios = <0x6 0x3f 0x0>;
-           };
+          pb3 {
+              label = "Down";
+              linux,code = <0x6c>;
+              gpios = <0x6 0x39 0x0>;
+          };
 
-           sw2 {
-               label = "SW2";
-               linux,input-type = <0x5>;
-               linux,code = <0x2>;
-               gpios = <0x6 0x40 0x0>;
-           };
+          sw0 {
+              label = "SW0";
+              linux,input-type = <0x5>;
+              linux,code = <0x0>;
+              gpios = <0x6 0x3e 0x0>;
+          };
 
-           sw3 {
-               label = "SW3";
-               linux,input-type = <0x5>;
-               linux,code = <0x3>;
-               gpios = <0x6 0x41 0x0>;
-           };
-       };``
+          sw1 {
+              label = "SW1";
+              linux,input-type = <0x5>;
+              linux,code = <0x1>;
+              gpios = <0x6 0x3f 0x0>;
+          };
+
+          sw2 {
+              label = "SW2";
+              linux,input-type = <0x5>;
+              linux,code = <0x2>;
+              gpios = <0x6 0x40 0x0>;
+          };
+
+          sw3 {
+              label = "SW3";
+              linux,input-type = <0x5>;
+              linux,code = <0x3>;
+              gpios = <0x6 0x41 0x0>;
+          };
+      };
 -  Run ``dtc -I dts -O dtb -o /media/boot/devicetree.dtb /media/boot/devicetree.dts`` to convert back the source file (.dts) in binary blob (.dtb)
 -  Copy ``runtests.sh`` to ``/root``
 -  Run ``chmod +x runtests.sh`` to make the script executable
