@@ -578,7 +578,7 @@ For more details about the available make rules, `check out this page <https://w
 
    .. important::
 
-      no targets found with "name =~ "APU\*" && jtag_cable_name =~ "\*::jtagtarget\*"". available targets: none while executing "error "no targets found with "`params(filter)". available targets:$target_list""...
+      no targets found with "name =~ "APU\*" && jtag_cable_name =~ "\*::jtagtarget\*"". available targets: none while executing "error "no targets found with "\`params(filter)". available targets:$target_list""...
 
    If you use WSL (Ubuntu) and want to connect to JTAG with a board, you have to
    switch the USB device from Windows to WSL. To do this, the following steps
@@ -725,8 +725,8 @@ For more details about the available make rules, `check out this page <https://w
 .. collapsible:: STM32 (Click to expand)
 
    -  Install `stm32cubeide <https://www.st.com/en/development-tools/stm32cubeide.html>`_.
-      -  In PowerShell, set the variables below, correcting with the absolute
-         paths of your stm32cubeide install:
+   -  In PowerShell, set the variables below, correcting with the absolute
+      paths of your stm32cubeide install:
 
       ::
 
