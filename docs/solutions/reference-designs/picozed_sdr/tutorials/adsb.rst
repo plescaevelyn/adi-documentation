@@ -3,10 +3,10 @@ ADS-B Airplane Tracking Tutorial
 
 .. warning::
 
-   This model is considered deprecated. See updated model here `HW/SW Co-Design Implementation of ADS-B Receiver Using Analog Devices AD9361/AD9364 <https://www.mathworks.com/help/supportpkg/xilinxzynqbasedradio/ug/hw-sw-co-design-implementation-of-ads-b-transmitter-receiver-using-analog-devices-ad9361-ad9364.html>`_\
+   This model is considered deprecated. See updated model here `HW/SW Co-Design Implementation of ADS-B Receiver Using Analog Devices AD9361/AD9364 <https://www.mathworks.com/help/supportpkg/xilinxzynqbasedradio/ug/hw-sw-co-design-implementation-of-ads-b-transmitter-receiver-using-analog-devices-ad9361-ad9364.html>`_
 
 Overview
-========
+--------
 
 Due to the complexity of the SDR systems nowadays, there is a significant gap
 between the concept of a SDR system and the realization of that working design.
@@ -35,7 +35,7 @@ tutorial:
    transceiver and FPGA
 
 Software and Hardware Requirements
-==================================
+----------------------------------
 
 Software Requirements
 ---------------------
@@ -72,7 +72,7 @@ Hardware Requirements
 -  In order to capture the real world ADS-B signals, a proper antenna is required on the Rx side, which is capable of covering the 1090 MHz band, such as an `ADS-B Double 1/2 Wave Mobile Antenna <http://www.dpdproductions.com/page_vhf_air.html#adsmobilehalf>`_.
 
 From Simulation to Production Workflow
-======================================
+--------------------------------------
 
 The following sections will follow the workflow shown in the figure below:
 
@@ -493,7 +493,7 @@ elaborate here. However, just a reminder - do not forget to set up SDK tools:
 
 .. tip::
 
-   \ SDK Tools Set Up
+   SDK Tools Set Up
 
    
    1. Within MATLAB®, use Add-Ons > Get Hardware Support Packages to download
@@ -588,7 +588,7 @@ The ADI Board Support Package (BSP) for the HDL Workflow Advisor, based upon the
 -  Automatically insert the generated IPs into the Analog Devices Vivado HDL
    reference designs.
 
-A general introduction to the ADI Board Support Package can be found `here <https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/software/matlab_bsp>`_. In this section, we will go through the steps to apply board support package towards ADS-B model.
+A general introduction to the ADI Board Support Package can be found `here <https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/software/matlab_bsp>`__. In this section, we will go through the steps to apply board support package towards ADS-B model.
 
 **Step 1: Download and install BSP**
 
@@ -830,7 +830,7 @@ behave on hardware. The following is a capture of the Correlators scope:
    :alt: Block diagram
 
 Reference
-=========
+---------
 
 “\ **Four Quick Steps to Production: Using Model-Based Design for Software-Defined Radio**\ ” Article Series
 
@@ -840,7 +840,7 @@ Reference
 -  Mike Donovan, Andrei Cozma, and Di Pu. "Part 4 - Rapid Prototyping using the Zynq SDR Kit and Simulink Code Generation Workflow". :adi:`Analog Dialogue, Volume 49, Number 4 <library/analogDialogue/archives/49-12/four-step-sdr-04.html>`.
 
 Support
-=======
+-------
 
 If you have any questions about PicoZed / AD9361 or ADI BSP workflow, please ask on the EngineerZone.\ :ez:`ADI Support <community/linux-device-drivers/microcontroller-no-os-drivers>`
 
