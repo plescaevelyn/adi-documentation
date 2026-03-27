@@ -15,7 +15,7 @@ they integrate.
 Introduction
 -------------------------------------------------------------------------------
 
-The ADI ecosystem supports three primary development workflows, each optimized
+The ADI ecosystem supports five development workflows, each optimized
 for different use cases:
 
 1. **FPGA + High-Speed Data Converter** - For high-performance applications
@@ -27,16 +27,22 @@ for different use cases:
 3. **Raspberry Pi + Evaluation Board** - For rapid prototyping, education,
    and demonstration systems
 
+4. **Remote Multi-Device Setup** - For centralized control of multiple
+   networked boards from a host PC via IIOD
+
+5. **Hardware-in-the-Loop Testing** - For automated testing, board bring-up,
+   and design verification using ADALM2000 and libm2k
+
 Understanding these workflows will help you choose the right approach for your
 project and see how the :doc:`technology stack components <components>` fit together.
 
 Technology Stack Deviations: Linux vs. no-OS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-System support will deviate at the driver layers for the same hardware depending
-on system use and popularity. For example, a high-speed data converter connected
-to an FPGA will typically support both Linux drivers and bare-metal projects.
-This is the case for AD9081, ADRV9009, and many other devices.
+Many ADI devices support both a Linux IIO driver and a no-OS bare-metal driver.
+The same hardware — for example an AD9081 MxFE connected to a Zynq FPGA — can
+be driven by either stack. The right choice depends on where you are in the
+development cycle, not just on the final deployment target.
 
 .. figure:: workflow-linux-noos.svg
    :align: center
@@ -44,14 +50,41 @@ This is the case for AD9081, ADRV9009, and many other devices.
 
    Linux vs. no-OS development paths: same hardware, different software stacks
 
-**Recommended Approach: Start with Linux**
+Why Start with Linux
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In these cases, it is always recommended to use the Linux drivers first, and
-then move to bare-metal projects if the use case requires it.
+The Linux IIO driver stack is the **recommended starting point** whenever both
+options exist. The reasons are practical rather than ideological:
+
+**Guardrails and error visibility**
+   Linux drivers validate register writes, check device states, and surface
+   errors through the kernel log (``dmesg``). A misconfigured clock rate or
+   an out-of-range gain setting produces an explicit error message rather
+   than silent misbehaviour. no-OS drivers are leaner and generally do less
+   checking — useful in production but harder to debug during bring-up.
+
+**Rich tooling out of the box**
+   With a Linux IIO driver loaded you immediately have access to ``iio_info``,
+   ``iio_readdev``, Scopy, IIO Oscilloscope, and pyadi-iio — all without
+   writing a line of application code. You can confirm the device initialises
+   correctly, check every register attribute, stream sample data, and plot
+   frequency spectra before your application logic exists.
+
+**Faster iteration**
+   Changing a device parameter under Linux is a file write or a Python one-liner.
+   Under no-OS, a configuration change requires editing source, rebuilding, and
+   reflashing firmware. During the exploratory phase of a project the Linux
+   iteration loop is dramatically faster.
+
+**Shared register maps and HDL designs**
+   The Linux driver and no-OS driver for the same device share the same device
+   register definitions and initialisation sequences — both are derived from the
+   same hardware specification. Work you do validating a configuration under
+   Linux transfers directly to the no-OS port.
 
 .. list-table:: Linux vs. no-OS Comparison
    :header-rows: 1
-   :widths: 15 42 43
+   :widths: 20 40 40
 
    * - Aspect
      - Linux
@@ -59,33 +92,75 @@ then move to bare-metal projects if the use case requires it.
    * - **Best For**
      - Prototyping, validation, algorithm development
      - Production deployment, resource-constrained systems
+   * - **Debuggability**
+     - | ``dmesg`` for driver errors
+       | ``iio_info`` / ``iio_readdev`` / Scopy
+       | ``gdb``, ``strace``, ``perf``
+       | Remote access via SSH + pyadi-iio
+     - | UART / SWD debug console
+       | JTAG step-through with IDE
+       | Logic analyser on SPI/I2C bus
+       | Limited compared to Linux
    * - **Strengths**
-     - | - More guardrails and error checking
-       | - Rich debugging (iio_info, oscilloscope, Scopy)
-       | - Direct MATLAB/Python/pyadi-iio connectivity
-       | - Faster iteration during development
+     - | - Explicit error messages and return codes
+       | - Parameter validation in driver layer
+       | - Direct MATLAB/Python/pyadi-iio access
+       | - Faster configuration iteration
+       | - Large community, extensive documentation
      - | - Minimal footprint, instant boot
        | - Deterministic real-time performance
        | - Lower power consumption
-       | - Production-ready, deployable firmware
+       | - No OS overhead or scheduling jitter
+       | - Production-ready, self-contained firmware
    * - **Weaknesses**
      - | - Higher resource usage (RAM, CPU, storage)
        | - Non-deterministic timing due to OS scheduling
        | - Longer boot time
+       | - Overkill for simple, standalone deployments
      - | - Steeper learning curve
-       | - Limited debugging tools
-       | - Manual integration with host applications
+       | - Limited runtime error checking
+       | - Rebuild-and-flash loop for each change
+       | - Manual host integration (TinyIIO or custom)
 
-**Transition Path**
+When to Transition to no-OS
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Once the use case is proven and the developer is comfortable with the device,
-they can move to bare-metal projects for a more optimized deployable solution.
-The typical workflow is:
+no-OS is the right choice for the **deployed product**, not the development
+process. Consider transitioning once:
 
-1. **Prototype with Linux** - Validate device functionality, develop algorithms,
-   and test signal chains using the rich Linux ecosystem
-2. **Port to no-OS** - Once requirements are locked, port the application logic
-   to bare-metal for deployment, reusing the same HDL design and device drivers
+- The device is fully characterised and the configuration is stable
+- Algorithms are validated and performance requirements are met
+- Boot time, power budget, or BOM cost make a full Linux system impractical
+- Hard real-time guarantees are required (deterministic interrupt latency,
+  precise sample timing)
+- The system must operate without a network connection or host PC
+
+The transition is deliberately low-friction. Because the Linux driver and
+no-OS driver share the same register definitions and HDL design, the device
+configuration you validated under Linux maps directly to the no-OS
+initialisation sequence.
+
+Recommended Transition Path
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+1. **Prototype with Linux** — Load the Linux IIO driver, use ``iio_info`` and
+   Scopy to confirm the device initialises correctly. Use pyadi-iio or MATLAB
+   to develop and validate your signal processing algorithms.
+
+2. **Lock the configuration** — Once the device settings (sample rate, gain,
+   filter coefficients, clock configuration) are finalised under Linux, record
+   them. These become the initialisation parameters for the no-OS project.
+
+3. **Port to no-OS** — Start from the matching no-OS reference project for
+   your device and platform. The device driver API mirrors the Linux driver
+   concepts. Swap in your validated configuration parameters.
+
+4. **Validate equivalence** — Run the same stimulus through both stacks and
+   compare outputs. The IIO framework's consistent data model makes this
+   straightforward.
+
+5. **Optimise for deployment** — With correctness established, tune the
+   no-OS firmware for your power, latency, and footprint targets.
 
 
 Workflow 1: FPGA + High-Speed Data Converter
@@ -585,53 +660,346 @@ Reference Documentation
 - **Arduino Shields:** :doc:`Evaluation Boards </solutions/reference-designs/index>`
 - **Tutorials:** :doc:`Learning Resources </learning/index>`
 
-Future Workflows (Coming Soon)
+Workflow 4: Remote Multi-Device Setup
 -------------------------------------------------------------------------------
 
-The following workflows are planned for future documentation updates:
+This workflow targets centralized control of multiple embedded boards from a
+host PC over a standard Ethernet network, using IIOD (IIO Daemon) as a
+network bridge.
 
-Workflow 4: Remote Multi-Device Setup
+Use Case Example: Multi-Board Lab Automation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-**Description:** Using IIOD (IIO Daemon) to network-enable multiple devices
-and control them from a central host. Ideal for distributed sensor networks,
-multi-channel acquisition, or lab automation.
+**Hardware:**
 
-**Components:**
+- Host workstation (Linux, macOS, or Windows) with libiio installed
+- Target 1: Zynq board running Kuiper Linux with AD9081 (high-speed SDR)
+- Target 2: Raspberry Pi running Kuiper Linux with precision ADC shields
+- Gigabit Ethernet switch
 
-- IIOD servers forwarding contexts over network
-- Central control PC accessing devices via ``ip:`` backend
-- Synchronized triggering across devices
+**Application:** Centralized control of physically remote or rack-mounted
+instrumentation, multi-channel data collection, or distributed sensor networks.
 
-**Use Cases:** Four-channel phased array demo (from workshop), distributed
-environmental monitoring, automated test equipment.
+.. figure:: workflow-remote.svg
+   :align: center
+   :width: 800px
 
-**Documentation:** See Appendix A of the :doc:`Software Infrastructure Tutorial </learning/sw_infrastructure/index>`
-for IIOD basics.
+   Workflow 4: Host PC accessing multiple embedded targets via IIOD over Ethernet
+
+Architecture
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**Layer 1 - Hardware:**
+Multiple ADI devices on separate embedded platforms:
+
+- AD9081 MxFE on Zynq board (RF transceiver, GSPS rates)
+- AD4080 / AD4052 precision ADCs on Raspberry Pi via SPI shields
+
+**Layer 2 - Hardware Interface:**
+Each embedded target runs independently — Zynq UltraScale+ MPSoC and
+Raspberry Pi 4 both running Linux. No direct hardware link between them.
+
+**Layer 3 - HDL/Firmware:**
+HDL project loaded on Zynq (standard Workflow 1 setup). Raspberry Pi uses
+direct SPI (standard Workflow 3 setup). Nothing changes at this layer.
+
+**Layer 4 - Linux IIO Drivers:**
+Standard IIO drivers on each target (same as Workflows 1 and 3). IIOD (IIO
+Daemon) runs on each embedded target, exposing the local IIO context over TCP
+port 30431:
+
+.. code-block:: bash
+
+   # IIOD is included in Kuiper Linux and starts automatically.
+   # On a custom Linux install:
+   sudo apt install iiod
+   sudo systemctl enable --now iiod
+
+**Layer 5 - libiio:**
+The host PC uses the ``ip:`` backend to connect to each remote IIOD server.
+No local IIO devices are needed on the host:
+
+.. code-block:: bash
+
+   # Discover devices on remote target
+   iio_info -u ip:192.168.1.10
+   iio_info -u ip:192.168.1.20
+
+**Layer 6 - pyadi-iio:**
+Each remote device is accessed with its ``ip:`` URI — the API is identical
+to a local connection:
+
+.. code-block:: python
+
+   import adi
+
+   # Connect to two different remote targets simultaneously
+   sdr = adi.ad9081(uri="ip:192.168.1.10")   # Zynq board
+   adc = adi.ad4080(uri="ip:192.168.1.20")   # Raspberry Pi
+
+   # Capture data from both — same API as local access
+   sdr_data = sdr.rx()
+   adc_data = adc.rx()
+
+**Layer 7 - Applications:**
+Centralized control application on the host PC: Python scripts, MATLAB, or
+Jupyter notebooks. Scopy on the host can connect to remote targets via the
+``ip:`` URI field.
+
+Development Steps
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. **Ensure targets are running IIOD:**
+
+   Kuiper Linux enables IIOD automatically. Verify it is active:
+
+   .. code-block:: bash
+
+      # On each embedded target
+      systemctl status iiod
+
+2. **Verify network connectivity from host:**
+
+   .. code-block:: bash
+
+      ping 192.168.1.10
+      iio_info -u ip:192.168.1.10   # Should list IIO devices
+
+3. **Develop application on host:**
+
+   Use pyadi-iio with ``ip:`` URIs. See the code example above.
+
+4. **Optional — use Scopy remotely:**
+
+   In Scopy's connection dialog, enter ``ip:192.168.1.10`` to connect to a
+   remote target.
+
+When to Use This Workflow
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Choose the remote workflow when you need:
+
+- **Multi-Board Control:** Coordinate data from several embedded platforms
+- **Physical Separation:** Boards are rack-mounted, in an anechoic chamber,
+  or otherwise inaccessible during operation
+- **Workstation Development:** Develop on a powerful host PC while the embedded
+  target runs headlessly
+- **Centralized Logging:** Aggregate data streams from multiple geographically
+  distributed nodes
+
+**Typical Applications:**
+
+- Multi-channel phased array demonstrations
+- Distributed environmental or structural monitoring
+- Automated test equipment (ATE) control
+- Lab automation with multiple instruments
+- Production-line test rigs
+
+**Trade-offs:**
+
+- Network latency (not suitable for tight real-time feedback loops)
+- Requires IP address management and network configuration
+- Firewall rules may need updating to allow TCP port 30431
+- Host PC is a single point of failure for the entire setup
+
+Reference Documentation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- **IIOD basics:** Appendix A of :doc:`Software Infrastructure Tutorial </learning/sw_infrastructure/index>`
+- **libiio ip: backend:** `libiio Documentation <https://analogdevicesinc.github.io/libiio/v0.26/index.html>`_
+- **Kuiper Linux (IIOD pre-installed):** :doc:`Kuiper Linux Guide </linux/kuiper/index>`
+- **Workflow 1 (FPGA target setup):** See Workflow 1 above
+- **Workflow 3 (RPi target setup):** See Workflow 3 above
 
 Workflow 5: Hardware-in-the-Loop Testing
+-------------------------------------------------------------------------------
+
+This workflow uses the ADALM2000 multi-function USB instrument with the libm2k
+library for automated hardware testing, board bring-up, and design verification.
+Unlike the other workflows where ADALM2000 is one of many connected devices,
+here it acts as the primary **test instrument** driving and measuring a
+device under test (DUT).
+
+Use Case Example: Automated Board Bring-Up with ADALM2000
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-**Description:** Using ADALM2000 and libm2k for automated hardware testing,
-characterization, and validation. Stimulus generation and response measurement
-in closed-loop scripts.
+**Hardware:**
 
-**Components:**
+- ADALM2000 (USB multi-function instrument):
 
-- ADALM2000 as signal generator and oscilloscope
-- libm2k Python/C++ API
-- Test automation frameworks (pytest, unittest)
+  - 2-channel oscilloscope (±25V, 100 MSPS)
+  - 2-channel arbitrary waveform generator (±5V, 150 MSPS)
+  - Adjustable power supplies (±5V)
+  - Logic analyzer (16 channels, 100 MSPS)
+  - Voltmeter
 
-**Use Cases:** Board bring-up testing, production test automation, design
-verification, educational lab experiments.
+- Device Under Test (DUT): ADI evaluation board or custom circuit
+- Host PC (Linux, macOS, or Windows) with libm2k installed
 
-**Documentation:** See :ref:`m2k` for device capabilities.
+**Application:** Scripted board bring-up verification, production test
+automation, analog circuit characterization, or educational lab experiments.
+
+.. figure:: workflow-hil.svg
+   :align: center
+   :width: 750px
+
+   Workflow 5: ADALM2000 as test instrument in a hardware-in-the-loop setup
+
+Architecture
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This workflow uses libm2k rather than libiio/pyadi-iio as the primary host
+library, though libm2k is itself built on libiio internally.
+
+**Layer 1 - Hardware:**
+ADALM2000 connected to the DUT via probes or custom wiring. The ADALM2000
+simultaneously generates stimulus signals and captures the DUT's response.
+
+**Layer 2 - Hardware Interface:**
+Host PC via USB 2.0. The ADALM2000 appears as a USB device; no FPGA or MCU
+is required.
+
+**Layer 3 - HDL/Firmware:**
+ADALM2000 runs its own onboard firmware (updated via Scopy or ``adalm2000-fw``).
+No user HDL or firmware is required.
+
+**Layer 4 - IIO Context:**
+The ADALM2000 exposes an IIO context over USB (``usb:`` backend). libm2k
+wraps this context and adds instrument-level abstractions (AnalogIn,
+AnalogOut, PowerSupply, LogicAnalyzer).
+
+**Layer 5 - libm2k:**
+libm2k provides the hardware abstraction layer:
+
+.. code-block:: bash
+
+   pip install libm2k
+
+**Layer 6 - libm2k Language Bindings:**
+Python is the most common choice; C++, C#, LabVIEW, and MATLAB bindings are
+also available:
+
+.. code-block:: python
+
+   import libm2k
+
+   ctx = libm2k.m2kOpen("usb:")
+   ctx.calibrate()
+
+   ain  = ctx.getAnalogIn()
+   aout = ctx.getAnalogOut()
+   ps   = ctx.getPowerSupply()
+
+   # Power the DUT
+   ps.enableChannel(0, True)
+   ps.pushChannel(0, 5.0)   # +5 V rail
+
+   # Generate a 10 kHz sine wave on channel 0
+   import math
+   N = 1024
+   sine = [math.sin(2 * math.pi * i / N) for i in range(N)]
+   aout.setSampleRate(0, 750000)
+   aout.push(0, sine)
+
+   # Capture DUT output on channel 0
+   ain.setSampleRate(1000000)
+   ain.setRange(0, libm2k.PLUS_MINUS_25)
+   samples = ain.getSamples(1024)
+
+   libm2k.contextClose(ctx)
+
+**Layer 7 - Test Framework:**
+Python's ``pytest`` or ``unittest`` are commonly used to structure pass/fail
+criteria, generate test reports, and integrate into CI pipelines.
+
+Development Steps
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. **Install libm2k:**
+
+   .. code-block:: bash
+
+      pip install libm2k
+      # Or build from source: https://github.com/analogdevicesinc/libm2k
+
+2. **Connect ADALM2000:**
+
+   Plug ADALM2000 into the host PC via USB. Wire the probes/cables to your DUT.
+
+3. **Verify connection:**
+
+   .. code-block:: bash
+
+      iio_info -u usb:           # Shows m2k IIO context
+      python -c "import libm2k; print(libm2k.m2kOpen('usb:'))"
+
+4. **Write and run a test script:**
+
+   Use the code example above as a starting point. Add pass/fail assertions
+   around the measurement results.
+
+5. **Integrate with pytest (optional):**
+
+   .. code-block:: python
+
+      # test_dut.py
+      import libm2k, pytest
+
+      @pytest.fixture(scope="session")
+      def m2k():
+          ctx = libm2k.m2kOpen("usb:")
+          ctx.calibrate()
+          yield ctx
+          libm2k.contextClose(ctx)
+
+      def test_output_voltage(m2k):
+          vm = m2k.getVoltmeter()
+          voltage = vm.getVoltage(0)
+          assert 4.9 < voltage < 5.1, f"Rail out of range: {voltage} V"
+
+When to Use This Workflow
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Choose hardware-in-the-loop testing when you need:
+
+- **Automated Bring-Up:** Scripted power-on verification without manual probing
+- **Stimulus + Measurement:** Generate known signals and measure DUT response
+  in the same script
+- **Regression Testing:** Catch analog regressions in CI before hardware ships
+- **Production Testing:** Repeatable pass/fail tests on every board
+
+**Typical Applications:**
+
+- Board bring-up and factory acceptance tests
+- Frequency response and distortion measurements
+- Power supply sequencing validation
+- Educational labs requiring signal injection
+- Design verification for ADI evaluation boards
+
+**Trade-offs:**
+
+- ADALM2000 bandwidth limited to 25 MHz (not suitable for RF; use ADALM-PLUTO instead)
+- USB bandwidth constrains continuous streaming rates
+- libm2k API differs from libiio/pyadi-iio (separate programming model)
+- Requires host PC — not a standalone embedded solution
+
+Reference Documentation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- **libm2k:** :doc:`libm2k Documentation </software/libm2k/index>`
+- **ADALM2000:** `ADALM2000 Wiki <https://wiki.analog.com/university/tools/m2k>`_
+- **libm2k GitHub:** `github.com/analogdevicesinc/libm2k <https://github.com/analogdevicesinc/libm2k>`_
+- **Scopy (GUI for ADALM2000):** :external+scopy:doc:`Scopy Documentation <index>`
 
 Choosing the Right Workflow
 -------------------------------------------------------------------------------
 
 Quick Decision Guide
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The table below compares the three **platform workflows** (1–3). Workflows 4
+(Remote) and 5 (HIL Testing) are complementary to any of these — see the note
+after the table.
 
 .. list-table::
    :header-rows: 1
@@ -678,6 +1046,12 @@ Quick Decision Guide
      - ⚠️ Moderate
      - ✅ Easy
 
+Workflows 4 and 5 are complementary to the three platform workflows above.
+**Workflow 4** (Remote) can be layered on top of Workflows 1–3: once a board
+is running Linux with IIOD, any libiio ``ip:`` client can talk to it.
+**Workflow 5** (HIL Testing) is independent — use it when you need automated
+stimulus and measurement, regardless of which primary workflow your DUT uses.
+
 Migration Paths
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -695,7 +1069,7 @@ libiio URI.
 
 **Development → Deployment:**
 
-- Develop on desktop with ``ip:`` backend (remote Zynq/RPi)
+- Develop on desktop with ``ip:`` backend (remote Zynq/RPi via Workflow 4)
 - Deploy same code on embedded Zynq with ``local:`` backend
 - No code changes needed beyond URI configuration
 
