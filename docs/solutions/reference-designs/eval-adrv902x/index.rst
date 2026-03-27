@@ -61,10 +61,10 @@ Applications:
 .. toctree::
    :hidden:
 
-   user-guide
+   adrv9026_osc_main
    prerequisites
    quickstart/index
-
+   user-guide
 Recommendations
 -------------------------------------------------------------------------------
 
