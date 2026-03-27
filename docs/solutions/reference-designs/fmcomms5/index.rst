@@ -141,6 +141,7 @@ Warning
 .. toctree::
    :hidden:
 
+   fmcomms5_plugin
    hardware
    hardware/configuration_options
    multi-chip-sync
