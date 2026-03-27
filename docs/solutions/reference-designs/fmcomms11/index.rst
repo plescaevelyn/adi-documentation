@@ -80,6 +80,7 @@ Warning
    :hidden:
 
    certification
+   fmcomms11_plugin
    hardware
    hardware/card_specification
    hardware/configuration_options
