@@ -65,8 +65,10 @@ LED Indicators
 | **SHUTDOWN LED (DS7)**      | left side of U19        | indicates status of shutdown logic/buffer, FDA, SW disable |
 +-----------------------------+-------------------------+------------------------------------------------------------+
 
-| 
-| ===== Secondary Side ===== |image1|
+Secondary Side
+--------------
+
+|image1|
 
 Current Source Jumper
 ---------------------
@@ -191,7 +193,7 @@ Hardware
 Software
 ~~~~~~~~
 
--  `ADI Kuiper Image <https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux>`_
+-  :external+kuiper:doc:`ADI Kuiper Image <index>`
 -  `IIO-Oscilloscope <https://github.com/analogdevicesinc/iio-oscilloscope/releases>`_
 
 Hardware Setup
@@ -221,7 +223,7 @@ Preparing the SD Card
 
 To prepare the SD card for the DE10-Nano board:
 
--  `Download ADI Kuiper Image <https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux>`_
+-  :external+kuiper:doc:`Download ADI Kuiper Image <index>`
 -  Validate, format, and flash the SD Card
 
    -  `Format and flash the SD Card using Windows <https://wiki.analog.com/resources/tools-software/linux-software/zynq_images/windows_hosts>`_
@@ -269,12 +271,10 @@ Hardware Setup
    :align: center
    :width: 600
 
-::
-
-   -Mount the EVAL-CN0579-ARDZ on the Cora Z7.
-   -Connect ethernet cable on the Cora Z7 and on your PC.
-   -Power up Cora Z7 by plugging its power supply or connecting microUSB.
-   -Wait for the system to boot up. Upon boot up, open command terminal or any similar applications like PuTTy to communicate with the board.
+-  Mount the EVAL-CN0579-ARDZ on the Cora Z7.
+-  Connect ethernet cable on the Cora Z7 and on your PC.
+-  Power up Cora Z7 by plugging its power supply or connecting microUSB.
+-  Wait for the system to boot up. Upon boot up, open command terminal or any similar applications like PuTTy to communicate with the board.
 
 Software Setup
 --------------
@@ -284,7 +284,7 @@ Preparing the SD Card
 
 To prepare the SD card for the DE10-Nano board:
 
--  `Download ADI Kuiper Image <https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux>`_
+-  :external+kuiper:doc:`Download ADI Kuiper Image <index>`
 -  Validate, format, and flash the SD Card
 
    -  `Format and flash the SD Card using Windows <https://wiki.analog.com/resources/tools-software/linux-software/zynq_images/windows_hosts>`_
@@ -294,7 +294,7 @@ To prepare the SD card for the DE10-Nano board:
 Download and Install IIO Oscilloscope
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Down the latest `IIO-Oscilloscope release <https://github.com/analogdevicesinc/iio-oscilloscope/releases>`_ from Github, and install it on your PC. (You may need to right-click the installer, and run as "Elevated" in order to get it to install.)
+-  Download the latest `IIO-Oscilloscope release <https://github.com/analogdevicesinc/iio-oscilloscope/releases>`_ from GitHub, and install it on your PC. (You may need to right-click the installer, and run as "Elevated" in order to get it to install.)
 -  Once the microSD card has been imaged, safely remove the hardware from the SD
    card writer, and insert the card directly into the microSD card slot on the
    DE10-Nano.
@@ -447,10 +447,10 @@ With input from :adi:`ADALM2000` (1 Vp-p, 1 kHz) on Channel 0:
 Reference Demos & Software
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  `pyADI-IIO <https://github.com/analogdevicesinc/pyadi-iio>`_
+-  `pyADI-IIO <https://github.com/analogdevicesinc/pyadi-iio>`__
 -  `PyADI-IIO Installation Guide <https://wiki.analog.com/resources/tools-software/linux-software/pyadi-iio>`_
 -  `IIO Oscilloscope Installation Guide <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`_
--  `Kuiper Images <https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux>`_
+-  :external+kuiper:doc:`Kuiper Images <index>`
 -  :git-hdl:`CN0579 HDL Reference Design <projects/cn0579>`
 
 More Information and Useful Links
