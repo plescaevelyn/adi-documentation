@@ -107,6 +107,7 @@ User guides
    hardware-guide/index
    firmware-guide/index
    software-guide/index
+   production-testing/index
 
 
 Help and Support
