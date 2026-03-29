@@ -1,642 +1,9 @@
 .. imported from: https://wiki.analog.com/resources/eval/user-guides/admx/eval-admx2501ebz
 
-.. _admx eval-admx2501ebz:
-
-EVAL-AD-IMP2501-SL
-==================
-
-OVERVIEW
---------
-
-The EVAL-AD-IMP2501-SL is an impedance analyzer demonstrator and technology
-evaluation system comprised of both the AD-IMP2501DBZ-SL and the
-AD-IMP2501EBZ-SL boards. The AD-IMP2501EBZ-SL is the carrier board that allows
-for simplified host PC communication interfacing, varying electrical load
-connections, and easier setup/debug. The AD-IMP2501DBZ-SL is the electrical
-impedance spectroscopy module, capable of tetrapolar impedance measurements up
-to 250 impedance samples per second. It integrates AC waveform signal generation
-from 0V - 2.4V at 1Hz up to 1.5MHz, differential voltage measurement, current
-return measurement, and full impedance processing with an arm cortex M4
-microprocessor. All in a 400mm square PCB.
-
-Features
-~~~~~~~~
-
-The **AD-IMP2501DBZ-SL** is a high-performance, impedance analyzer module.
-
-- Highly compact, 31.24mm x 12.83mm System-on-Module (SOM)
-- Impedance measurements from 0.1 Hz to 1.5 MHz
-- Current or Voltage drive application modes
-- 16-bit acquisition channels
-- Operates from a single 5V supply
-- UART interface
-  :red:`(additional BLE 5.2, USB, and SPI hardware support capable)`
-- Meets patient leakage requirements for IEC 60601-1*
-- 6 display mode formats in SI units
-- Command line, Graphical user interface, and Python API for easy system evaluation and data collection
-
-*\*Current hardware implementation is dependent on voltage drive levels. The
-hardware can be modified to limit the current depending on application
-specifications and voltage drive needs*
-
-The **AD-IMP2501EBZ-SL** is an easy to use evaluation and development board that
-enables convenient access to the functionality of the AD-IMP2501DBZ-SL Impedance
-Analyzer Measurement Module.
-
-- USB C connector provides power and serial communication to host PC
-- On board FTDI USB to UART conversion
-- DIN and SMA connectors and for interfacing with an external load
-- On board loads with jumper configurations for testing and evaluation without
-  external components or connections
-
-Applications
-~~~~~~~~~~~~
-
-- Surgical Tools
-- Surgical Tissue Sensing
-- Medical Diagnostics and Life Sciences Devices
-- Bio-Z and Vital Signs Applications
-- Electronics Testing Systems
-- Chemistry Systems
-- Laboratory Bench-top Sensing Applications
-- Research in Industry or Academia
-
-System Architecture
-~~~~~~~~~~~~~~~~~~~
-
-.. figure:: images/eval-ad-imp2501-sl_block_diagram.png
-   :width: 600px
-
-Specifications
-~~~~~~~~~~~~~~
-
-TBD from the characterization table what we want to include here:
-
-.. list-table::
-   :header-rows: 1
-
-   * - Parameter
-     - Min
-     - Typical
-     - Max
-     - Units
-   * - Vin
-     - 4.6
-     - 5
-     - 20
-     - V
-   * - Load Range
-     -
-     -
-     -
-     - V
-   * - Relative Accuracy
-     -
-     - 0.2
-     - 0.05
-     - %
-   * - Iout
-     -
-     -
-     -
-     - mA
-   * - Vout
-     - 0.1
-     -
-     - 2.4
-     - V
-   * - Samples/s
-     -
-     -
-     -
-     -
-   * - Frequency Range
-     - 0.1
-     -
-     - 1500000
-     - Hz
-   * - DC Offset
-     -
-     - 0
-     -
-     - V
-
-…
-
-AD-IMP2501EBZ-SL Package Contents
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-#. **AD-IMP2501EBZ-SL** Impedance Demonstration Board
-#. USB Cable
-
-AD-IMP2501DBZ-SL Package Contents
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-#. **AD-IMP2501DBZ-SL** Impedance Analyzer Measurement Module
-
-.. figure:: images/ad-imp2501dbz-sl.png
-   :width: 300px
-
-.. important::
-
-   It is critical to purchase **both** the the **AD-IMP2501DBZ-SL** Impedance
-   Analyzer Measurement Module and the **AD-IMP2501EBZ-SL** Impedance
-   Demonstration Board. These are sold separately.
-
-Quick Start
-~~~~~~~~~~~
-
-Follow these steps to start evaluating the AD-IMP2501DBZ-SL:
-
-#. Driver Installation
-#. Terminal Emulator/GUI Installation
-#. Hardware Setup
-#. Command Line or GUI Operation
-#. Performing Impedance Measurements
-
-These steps are explained in detail in the following sections.
-
-Hardware User Guide
--------------------
-
-The AD-IMP2501DBZ-SL and AD-IMP2501EBZ-SL are designed for evaluating impedance
-analysis technology in an application that requires a small form factor and wide
-frequency range. This platform is designed to get an impedance analysis
-evaluation set-up running quickly with only a provided USB cable and a computer.
-This hardware guide will walk the user through the basic setup, the varying
-jumper configurations for different measurement modes, and how to interface with
-an external load that is more specific to his or her application.
-
-Equipment Needed
-~~~~~~~~~~~~~~~~
-
-Required Equipment
-^^^^^^^^^^^^^^^^^^
-
-#. **AD-IMP2501DBZ-SL**
-#. **AD-IMP2501EBZ-SL**
-#. USB C Cable
-#. PC
-
-   USB drivers and terminal emulator required. Please see
-   :ref:`eval-admx2501ebz software-user-guide` for instructions to download and
-   install on your PC if not already installed.
-
-.. _eval-admx2501ebz optional-equipment:
-
-Optional Equipment
-^^^^^^^^^^^^^^^^^^
-
-#. Programming equipment for Firmware Updates
-
-   - :adi:`MAX32625PICO2 <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max32625pico2.html#eb-overview>`
-     with ribbon cable
-
-#. Impedance measurement accessories. Available from various test and
-   measurement manufacturers, for example:
-
-   - `Keysight's Impedance Measurement Accessories <https://www.keysight.com/en/pc-1000002552%3Aepsg%3Apgr/lcr-meter-impedance-measurement-product-accessories>`__
-   - `B+K Precision TL89S1 SMD Test Fixture <https://www.digikey.com/en/products/detail/b-k-precision/TL89S1/7915183>`__
-   - `B+K Precision TL89F1 4-Terminal Test Fixture for leaded components <https://www.digikey.com/en/products/detail/b-k-precision/TL89F2/6618989>`__
-   - `SMA Male Pin to BNC Jack <https://www.digikey.com/en/products/detail/pomona-electronics/4290/678700>`__
-
-#. Calibration Standards and Accessories
-
-   - `IET Labs <https://www.ietlabs.com/>`__ (former General Radio products)
-   - `Keysight 42090A Open Termination <https://www.keysight.com/en/pd-1000003831%3Aepsg%3Apro-pn-42090A/open-termination-4-terminal-pair>`__
-   - `Keysight 42091A Short Termination <https://www.keysight.com/en/pd-1000003830%3Aepsg%3Apro-pn-42091A/short-termination-4-terminal-pair>`__
-   - `Keysight 42030A Four Terminal Pair Standard Resistor Set <https://www.keysight.com/en/pd-1000003832%3Aepsg%3Apro-pn-42030A/four-terminal-pair-standard-resistor-set>`__
-   - `Keysight 16380A Standard Air Capacitor Set (1pF to 1000pF) <https://www.keysight.com/en/pd-1000003834%3Aepsg%3Apro-pn-16380A/standard-air-capacitor-set-1pf-to-1000pf>`__
-   - `Keysight 16380C Capacitance Standard Set (0.01uF to 10uF) <https://www.keysight.com/en/pd-1000003833%3Aepsg%3Apro-pn-16380C/capacitance-standard-set-001uf-to-10uf>`__
-
-#. LCR Meter for verification
-
-   - `Keysight E4980A Precision LCR Meter <https://www.keysight.com/en/pd-715495-pn-E4980A/precision-lcr-meter-20-hz-to-2-mhz>`__
-
-EVAL-ADMX2001EBZ Terminal Description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. figure:: images/eval-admx2001ebz_diagram_3.png
-   :width: 600px
-
-.. list-table::
-   :header-rows: 1
-
-   * - Terminal Name
-     - Description
-   * - H_CUR
-     - Signal source terminal. It generates the excitation required for
-       measurement. This terminal can source up to +/-5V @ 50mA
-   * - H_POT
-     - Voltage sense terminal. Connect to H_CUR at the device under test (DUT)
-   * - L_POT
-     - Voltage sense terminal. Connect to L_CUR at the device under test (DUT)
-   * - L_CUR
-     - Current sense terminal. Return path for the excitation signal. Connect to
-       the opposite end of the DUT as H_CUR
-   * - UART TX
-     - UART transmitter pin. Connect to TX pin on the UART to USB cable. Uses
-       3.3V logic
-   * - UART RX
-     - UART receiver pin. Connect to RX pin on the UART to USB cable. Uses 3.3V
-       logic
-   * - UART GND
-     - UART ground. Connect to ground pin on the UART to USB cable
-   * - CLK_SEL
-     - Jumper selection of internal or external clock. Set to internal for
-       default operation
-   * - TRIG_IN
-     - Trigger input. Use for hardware-timed acquisition only, otherwise leave
-       disconnected
-   * - TRIG_OUT
-     - Measurement complete trigger out
-   * - CLK_IN
-     - External clock input. Use a LVCMOS 50MHz clock signal and set CLK_SEL to
-       EXT position
-   * - CLK_OUT
-     - Clock output. These two terminals have a buffered replica of the 50MHz
-       main clock
-   * - PMOD
-     - Controller and Peripheral PMOD terminals for SPI port
-   * - Header P6 pins [9-10]
-     - Digital output 0-1
-   * - Header P7 pins [1-6]
-     - Digital output 2-7
-
-AD-IMP2501DBZ Pin Configuration and Descriptions
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. figure:: images/ad-imp2501ebz-sl_pinout.png
-   :width: 600px
-
-.. list-table::
-   :header-rows: 1
-
-   * - Pin Number
-     - Mnemonic
-     - Description
-   * - P1.1, P1.2, P1.7, P1.8, P1.17, P1.22, P1.28, P1.31, P1.32
-     - AGND
-     - Ground
-   * - P1.3
-     - L_CUR
-     - Low Current signal
-   * - P1.4
-     - L_POT
-     - Voltage measurement low potential terminal
-   * - P1.5
-     - H_CUR
-     - High Current or signal
-   * - P1.6
-     - H_POT
-     - Voltage measurement high potential terminal
-   * - P1.9
-     - SQWOUT
-     - Square-Wave Output
-   * - P1.10
-     - TX_OUT_SELECT
-     - Drive Mode Select
-   * - P1.11
-     - CAN0B_RX
-     - Controller Area Network Receive Input
-   * - P1.12, P1.15, P1.16, P1.18, P1.20, P1.21, P1.23, P1.24
-     - GPIO
-     - General purpose GPIO
-   * - P1.13
-     - CAN0B_TX
-     - Controller Area Network Transmit Output
-   * - P1.14
-     - OWM_IO
-     - 1-Wire Controller Data
-   * - P1.19
-     - OWM_PE
-     - 1-Wire Controller Pull-up Enable
-   * - P1.25
-     - ST_ENABLE
-     - Self-Test Enabled
-   * - P1.26
-     - OUTPUT_ENABLE
-     - Signal Output Enabled
-   * - P1.27
-     - ST_ENABLE_N
-     - Self-Test Not Enabled
-   * - P1.29
-     - MCU_RESET_N
-     - Active-Low. External System Reset Input
-   * - P1.30
-     - PDOWN
-     - Power-Down Output
-   * - P2.1
-     - I2C_SCL
-     - I2C Serial Clock
-   * - P2.2
-     - SPI2A_SCK
-     - SPI Clock
-   * - P2.3
-     - I2C_SDA
-     - I2C Serial Data
-   * - P2.4
-     - SPI2A_MISO
-     - SPI Controller In Target Out
-   * - P2.5
-     - POWER_GOOD
-     - Power Boot-up Verification Signal
-   * - P2.6
-     - SPI2A_SDIO2
-     - SPI Data 2
-   * - P2.7, P2.13, P2.14, P2.20, P2.21, P2.27, P2.28
-     - AGND
-     - Ground
-   * - P2.8
-     - SPI2A_MOSI
-     - SPI Controller Out Target In
-   * - P2.9
-     - UART_RX
-     - UART Receive
-   * - P2.10
-     - SPI2B_SDIO3
-     - SPI Data 3
-   * - P2.11
-     - UART_TX
-     - UART Transmit
-   * - P2.12
-     - SPI2A_SS0
-     - SPI Target Select 0
-   * - P2.15
-     - SPI2A_SS1
-     - SPI Target Select 1
-   * - P2.16
-     - SWDIO
-     - Serial Wire Debug I/O
-   * - P2.17
-     - USBC_DM
-     - USBC Differential pair D-
-   * - P2.18
-     - SWDCLK
-     - Serial Wire Debug Clock
-   * - P2.19
-     - USBC_DP
-     - USBC Differential pair D+
-   * - P2.22
-     - VDD_3P3_D
-     - +3.3V Digital Rail output from AD-IMP2501DBZ_SL
-   * - P2.23
-     - VDD_3P3_A
-     - +3.3V Analog Rail output from AD-IMP2501DBZ_SL
-   * - P2.24
-     - VDD_1P8
-     - +1.8V Rail output from AD-IMP2501DBZ_SL
-   * - P2.25
-     - VCC
-     - +5V Rail output from AD-IMP2501DBZ_SL
-   * - P2.26
-     - VEE
-     - -5V Rail output from AD-IMP2501DBZ_SL
-   * - P2.29
-     - FC_VPOWER_IN
-     - Input Power Supply for AD-IMP2501DBZ_SL (+5V nominal)
-   * - P2.30
-     - FC_VPOWER_IN
-     - Input Power Supply for AD-IMP2501DBZ_SL (+5V nominal)
-   * - All other pins
-     - NC
-     - Do not connect
-
-General Setup
-~~~~~~~~~~~~~
-
-The following figure shows the basic connections required for evaluating the
-ADMX2501B.
-
-.. figure:: images/fishercat_hardware_setup.png
-   :width: 800px
-
-- Insert the AD-IMP2501DBZ-SL module into the AD-IMP2501EBZ-SL board in the
-  location shown above. Use the small white triangle on both the module and the
-  carrier board to orient properly. The connectors are different sizes, so they
-  can only be inserted in one orientation shown, but excessive force in the
-  wrong orientation could damage the connectors.
-- Use the picture below and the following tables to install the correct jumpers
-  for your desired operation. The first table is for power and general
-  communication. The second table is for EIS on board measurements. The third
-  table is for EIS off board measurements.
-
-.. figure:: images/fishercat_jumper_positions.png
-   :width: 600px
-
-- Verify jumpers are installed in the locations designated by the following
-  table for power and communication.
-
-.. list-table::
-   :header-rows: 1
-
-   * - Jumper Designation
-     - Install Position
-     - Description
-   * - P4
-     - Not Installed
-     - Programming Header
-   * - P5
-     - Not Installed
-     - Debug UART TX
-   * - P6
-     - Not Installed
-     - Debug UART RX
-   * - P11
-     - Pins 1-2
-     - USB C Power Supply
-   * - P14
-     - Pins 1-2
-     - USB C DM
-   * - P15
-     - Pins 1-2
-     - USB C DP
-   * - P16
-     - Pins 1-2
-     - FTDI UART RX
-   * - P17
-     - Pins 1-2
-     - FTDI UART TX
-   * - P18
-     - Pins 1-2
-     - FTDI Power
-   * - P20
-     - Not Installed
-     - CAN Bus
-
-- For EIS on board measurements install jumpers according to the following
-  table. Note that to select an onboard load, both jumpers, corresponding to the
-  appropriate load, need to be installed. If the user selects their own
-  component in position 8, no jumpers should be installed on P21 or P22.
-
-.. list-table::
-   :header-rows: 1
-
-   * - Jumper Designation
-     - Install Position
-     - Description
-   * - P27
-     - Pins 1-2
-     - EIS HCUR
-   * - P28
-     - Pins 1-2
-     - EIS HPOT
-   * - P29
-     - Pins 1-2
-     - EIS LPOT
-   * - P30
-     - Pins 1-2
-     - EIS LCUR
-   * - P23
-     - Pins 1-2
-     - HCUR to HPOT connection
-   * - P24
-     - Pins 1-2
-     - LCUR to LPOT connection
-   * - P21
-     - Selectable:
-     -
-   * -
-     - Pins 1-2
-     - 10k ohms
-   * -
-     - Pins 3-4
-     - 1k ohms
-   * -
-     - Pins 5-6
-     - 100 ohms
-   * -
-     - Pins 7-8
-     - 10 ohms
-   * -
-     - Pins 9-10
-     - 0 ohms
-   * - P22
-     - Selectable:
-     -
-   * -
-     - Pins 1-2
-     - 10k ohms
-   * -
-     - Pins 3-4
-     - 1k ohms
-   * -
-     - Pins 5-6
-     - 100 ohms
-   * -
-     - Pins 7-8
-     - 10 ohms
-   * -
-     - Pins 9-10
-     - 0 ohms
-   * - P8
-     - Not Installed
-     - User selectable load
-   * - P12
-     - Pins 1-2
-     - EIS HCUR SMA
-   * -
-     - Pins 5-6
-     - EIS HPOT SMA
-   * -
-     - Pins 9-10
-     - EIS LPOT SMA
-   * -
-     - Pins 13-14
-     - EIS LCUR SMA
-
-- For EIS off board measurements using the SMA connectors, install jumpers
-  according to the following table. Connect SMA cables to J1-J4, and verify no
-  jumpers are installed on P8, P21, P22, P23, and P24.
-
-.. list-table::
-   :header-rows: 1
-
-   * - Jumper Designation
-     - Install Position
-     - Description
-   * - P27
-     - Pins 1-2
-     - EIS HCUR
-   * - P28
-     - Pins 1-2
-     - EIS HPOT
-   * - P29
-     - Pins 1-2
-     - EIS LPOT
-   * - P30
-     - Pins 1-2
-     - EIS LCUR
-   * - P23
-     - Pins 1-2
-     - HCUR to HPOT connection
-   * - P24
-     - Pins 1-2
-     - LCUR to LPOT connection
-   * - P21
-     - Not Installed
-     - 10k ohms
-   * -
-     -
-     - 1k ohms
-   * -
-     -
-     - 100 ohms
-   * -
-     -
-     - 10 ohms
-   * -
-     -
-     - 0 ohms
-   * - P22
-     - Not Installed
-     - 10k ohms
-   * -
-     -
-     - 1k ohms
-   * -
-     -
-     - 100 ohms
-   * -
-     -
-     - 10 ohms
-   * -
-     -
-     - 0 ohms
-   * - P8
-     - Not Installed
-     - User selectable load
-
-- For EIS off board measurements using the DIN connector, only change jumpers on
-  P12 according to the following table. Connect DIN cable to P7.
-
-.. list-table::
-   :header-rows: 1
-
-   * - Jumper Designation
-     - Install Position
-     - Description
-   * - P12
-     - Pins 3-4
-     - EIS HCUR SMA
-   * -
-     - Pins 7-8
-     - EIS HPOT SMA
-   * -
-     - Pins 11-12
-     - EIS LPOT SMA
-   * -
-     - Pins 15-16
-     - EIS LCUR SMA
-
-- Connect the USB C cable to P3 on AD-IMP2501EBZ-SL and the host PC.
-- An LED on the top side of the AD-IMP2501DBZ-SL should turn on, blink twice,
-  and turn off. It should now only turn on when data is being processed.
-
-.. _eval-admx2501ebz software-user-guide:
+.. _ad-imp2501-sl software-user-guide:
 
 Software User Guide
--------------------
+===================
 
 This software user guide will help the user navigate the settings and command
 set to properly evaluate the best impedance analysis set-up for his or her
@@ -644,7 +11,7 @@ application. The number of parameters makes it impossible to show every
 combination, but the user will understand how each parameter affects the
 measurement data.
 
-The **AD-IMP2501DBZ-SL** comes with pre-loaded with embedded firmware and can be
+The :adi:`AD-IMP2501DBZ-SL` comes with preloaded embedded firmware and can be
 used out of the box. This firmware handles communication with the host PC,
 setting user specified parameters, initiating signal generation, processing
 impedance measurement data, and reporting that information back to the user.
@@ -654,16 +21,16 @@ Some drivers and peripheral software is required for operation. Instructions on
 how to download and install all necessary software or firmware is provided
 below.
 
-.. _eval-admx2501ebz usb-driver-installation:
+.. _ad-imp2501-sl usb-driver-installation:
 
 USB Driver Installation
-~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------
 
 .. note::
 
    The default communication interface to the EVAL-AD-IMP250-SL is via its USB
    port. Using the USB Type C cable included with the evaluation board
-   (TTL-232R-RPI), FTDI"s Virtual COM Port (VCP) drivers must be downloaded from
+   (TTL-232R-RPI), FTDI's Virtual COM Port (VCP) drivers must be downloaded from
    their website located at https://www.ftdichip.com/Drivers/VCP.htm
 
 **Installation steps:**
@@ -679,27 +46,30 @@ USB Driver Installation
 - Open the Device Manager
 - In the Device Manager window, verify that the USB Serial Port is displayed
   under ``Ports (COM & LPT)`` and that a serial port identifier has been
-  assigned as shown below (the COM# may be different than shown here):
+  assigned as shown below (the COM# may be different from shown here):
 
 .. figure:: images/device_manager_com_port.png
    :width: 600px
 
 Embedded Software Update
-~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------
 
 If during development it becomes necessary to load new firmware onto the
 AD-IMP2501DBZ-SL, follow these steps using the
 :adi:`MAX32625PICO2 <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max32625pico2.html#eb-overview>`
 ``PICO`` Board
 
-.. _eval-admx2501ebz request-fw-sw:
+.. _ad-imp2501-sl request-fw-sw:
 
 Request and Download New Firmware or Software
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+---------------------------------------------
 
-Follow these instruction for downloading software/firmware from Analog Device"s
+Follow these instructions for downloading software/firmware from Analog Device's
 Secure Software Delivery (SSD) system. The example below is for requesting new
 firmware, but the process is the same for requesting software:
+
+Software/Firmware Request
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - A user must first make a myAnalog account by clicking ``Register with email``
   on my.analog.com. The email used to create an account will be needed in the
@@ -714,7 +84,7 @@ firmware, but the process is the same for requesting software:
    :width: 600px
 
 - View the software license agreement by selecting the hyperlink ``software
-  license agreement`` highlighted in blue, and hit the check box to indicate
+  license agreement`` highlighted in blue, and hit the checkbox to indicate
   that you have read and agree to the terms outlined in the license.
 
 .. figure:: images/adi_sw_download.png
@@ -724,7 +94,7 @@ firmware, but the process is the same for requesting software:
   containing a .hex file that can be flashed onto the AD-IMP2501DBZ-SL.
 
 Connect the PICO board
-^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~
 
 Using a USB micro cable connect the PICO board to your host PC. Connect the
 programming cable to the programming header on the PICO board and the
@@ -737,7 +107,7 @@ DAPLINK drive has been found by your PC. See below circled in red.
    :width: 400px
 
 Flash the ADI Provided Firmware File
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Locate the firmware file that was downloaded via ADI"s SSD system in the
 Installation Instruction section of this document. The file should be named with
@@ -771,7 +141,7 @@ AD-IMP2501DBZ-SL by removing the USB cables and then reconnecting them both.
 Attempt the download process again until successful.
 
 Application Software
-~~~~~~~~~~~~~~~~~~~~
+--------------------
 
 This platform utilizes multiple forms of application software. The most basic is
 direct communication with the **AD-IMP2501DBZ-SL** via the command line and a
@@ -786,10 +156,10 @@ for custom scripting. This script is offered for users who want to implement
 post processing of their data in real time or create their own visual
 representation of the impedance data.
 
-.. _eval-admx2501ebz ad-imp2501dbz-sl-available-commands:
+.. _ad-imp2501-sl ad-imp2501dbz-sl-available-commands:
 
 AD-IMP2501DBZ-SL Available Commands
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 All commands should be in lower case type and each command and input value
 should be separated by spaces. Only one command can be entered at a time. An
@@ -945,13 +315,13 @@ prompt the user for a new input.
    online.
 
 Command Line
-^^^^^^^^^^^^
+~~~~~~~~~~~~
 
 For command line operation and explanation of the system API, please continue
 here.
 
 Terminal Emulator Installation
-''''''''''''''''''''''''''''''
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To communicate with AD-IMP2501DBZ-SL via its command-line interface and UART, a
 terminal emulator like TeraTerm is recommended. Other user preferred terminal
@@ -972,19 +342,19 @@ instructions.
    the terminal may not work properly. TeraTerm supports these characters.
 
 Opening a Session via Teraterm
-''''''''''''''''''''''''''''''
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Verify the COM Port that your system is connected to in the PC"s Device
-Manager. Check the :ref:`eval-admx2501ebz usb-driver-installation` instructions
+Manager. Check the :ref:`ad-imp2501-sl usb-driver-installation` instructions
 if needed.
 
-If multiple ports are in use and you are unsure which is connected to the
+If multiple ports are in use, and you are unsure which is connected to the
 AD-IMP2501DBZ-SL board simply remove the USB from the computer and when the
 Device Manager window refreshes, note which Port is no longer in use. Plug the
 system USB back into your PC and that Port should again be listed.
 
 Continue with the system powered on via USB connection to the host PC, open the
-TeraTerm application and choose File -> New Connection, and choose the "Serial"
+TeraTerm application and choose File → New Connection, and choose the "Serial"
 radio button and select "OK".
 
 .. figure:: images/teraterm_new_conn.png
@@ -998,7 +368,7 @@ bits, Parity = none, Stop bits = 1 bits, Flow control = None. Then select "OK"
 .. figure:: images/teraterm_settings.png
    :width: 500px
 
-Optionally, choose "Setup" -> "Save setup…". Save the file to the default
+Optionally, choose "Setup" → "Save setup…". Save the file to the default
 directory. Now, when launching TeraTerm, it will automatically try to connect
 with those saved settings.
 
@@ -1016,11 +386,11 @@ Note that closing the TeraTerm window does not reset the AD-IMP2501DBZ-SL
 settings from the last session.
 
 Using the "help" Functionality in the Command-Line Interface
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The ``help`` command will display all the commands available to the user from
 the command-line interface (CLI). Use this command while operating for a quick
-refresher. See the :ref:`eval-admx2501ebz ad-imp2501dbz-sl-available-commands`
+refresher. See the :ref:`ad-imp2501-sl ad-imp2501dbz-sl-available-commands`
 section for more details on each command.
 
 .. figure:: images/fishercat_help_command_page1.png
@@ -1029,15 +399,9 @@ section for more details on each command.
 .. figure:: images/fishercat_help_command_page2.png
    :width: 700px
 
-.. _eval-admx2501ebz calibration-procedure:
-
-Calibration Procedure
-'''''''''''''''''''''
-
-TBD…
 
 Performing Basic Measurements via Command Line
-''''''''''''''''''''''''''''''''''''''''''''''
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Upon opening a session with TeraTerm, the AD-IMP2501DBZ-SL is ready to perform
 impedance measurements.
@@ -1046,8 +410,8 @@ impedance measurements.
 
    The measurements reported by the module may not be accurate unless it has
    been calibrated. For detailed instructions on how to calibrate the module,
-   please refer to the :ref:`eval-admx2501ebz calibration-procedure` section
-   in this user guide.
+   please refer to the :ref:`ad-imp2501-sl calibration-and-compensation`
+   section in this user guide.
 
 By default, the module is set to perform single-point impedance measurements in
 rectangular coordinates with a 300mV peak-to-peak signal (magnitude = 300) at
@@ -1069,14 +433,14 @@ The AC magnitude can be configured anywhere between approximately 10mV pk-pk and
 across the DUT will be be dependent on the DUT impedance, due to the onboard
 100Ω source resistance (for current limiting and patient protection, can be
 modified for different applications); see
-:ref:`eval-admx2501ebz selecting-a-measurement-range` for details.
+:ref:`ad-imp2501-sl selecting-a-measurement-range` for details.
 
 .. tip::
 
    The order in which the settings commands are entered is not important.
 
 Example
-'''''''
+^^^^^^^
 
 Perform a 100 ohm (Jumpers on P21.5-6 and P22.5-6 in the EIS on board
 measurement table above) resistive measurement at 100kHz with a 1V pk-pk
@@ -1125,7 +489,7 @@ both Magnitude and Phase of the previous measurement.
    selected as 0 (x1 Voltage Gain) and 0 (x50 Current Gain).
 
 Plotting Measurement Data
-'''''''''''''''''''''''''
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When acquiring multiple measurements or performing sweeps, it is useful to plot
 the results to observe trends or characteristics of the device under test.
@@ -1148,12 +512,12 @@ To plot the acquired data in Microsoft Excel, follow the steps below:
 #. Select the data to plot and insert a scatter plot to visualize the data
 
 Graphical User Interface
-^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 TBD…
 
 Python Script
-^^^^^^^^^^^^^
+~~~~~~~~~~~~~
 
 TBD…
 
@@ -1165,7 +529,7 @@ accesses the Serial port directly, and calling the library functions will
 execute the same commands that are normally typed into the terminal emulator.
 
 This Python library and project are currently accessible by request. Follow the
-instructions in the :ref:`eval-admx2501ebz request-fw-sw` section but request
+instructions in the :ref:`ad-imp2501-sl request-fw-sw` section but request
 the Python Application Software for the AD-IMP2501DBZ-SL.
 
 The Python script download includes an example measurement sweep script, which
@@ -1176,60 +540,42 @@ degree of error checking but is not complete. This library is for evaluation
 purposes only and is meant to be a starting point for a user to develop further.
 
 Operation
-~~~~~~~~~
+---------
 
 The sections below are filled with examples and techniques on the system
 operation, mostly using the command line interface. The goal here is to show how
 different parameters may affect measurement results.
 
 Measurement Display Modes
-^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The AD-IMP2501DBZ-SL returns a result in one of 7 different display modes, shown
 below. The result is always reported in the base SI unit. For instance,
 ``display mode 1`` (R, X) returns the impedance in rectangular form, both in
 ohms.
 
-.. list-table::
-   :header-rows: 1
++-----------------------+-------------------------------------------------+---------+------------------+
+| Display Mode Number   | Mode Name                                       | Form    | SI Unit          |
++=======================+=================================================+=========+==================+
+| 0                     | Display Off                                     | N/A     | None             |
++-----------------------+-------------------------------------------------+---------+------------------+
+| 1                     | Impedance in rectangular coordinates (default)  | R, X    | Ohms, Ohms       |
++-----------------------+-------------------------------------------------+---------+------------------+
+| 2                     | Impedance in magnitude and phase in degrees     | Z, deg  | Ohms, Degrees    |
++-----------------------+-------------------------------------------------+---------+------------------+
+| 3                     | Impedance in magnitude and phase in radians     | Z, rad  | Ohms, Radians    |
++-----------------------+-------------------------------------------------+---------+------------------+
+| 4                     | Admittance in rectangular coordinates           | G, B    | Siemens, Siemens |
++-----------------------+-------------------------------------------------+---------+------------------+
+| 5                     | Admittance in magnitude and phase in degrees    | Y, deg  | Siemens, Degrees |
++-----------------------+-------------------------------------------------+---------+------------------+
+| 6                     | Admittance in magnitude and phase in radians    | Y, rad  | Siemens, Radians |
++-----------------------+-------------------------------------------------+---------+------------------+
 
-   * - Display Mode Number
-     - Mode Name
-     - Form
-     - SI Unit
-   * - 0
-     - Display Off
-     - N/A
-     - None
-   * - 1
-     - Impedance in rectangular coordinates (default)
-     - R, X
-     - Ohms, Ohms
-   * - 2
-     - Impedance in magnitude and phase in degrees
-     - Z, deg
-     - Ohms, Degrees
-   * - 3
-     - Impedance in magnitude and phase in radians
-     - Z, rad
-     - Ohms, Radians
-   * - 4
-     - Admittance in rectangular coordinates
-     - G, B
-     - Siemens, Siemens
-   * - 5
-     - Admittance in magnitude and phase in degrees
-     - Y, deg
-     - Siemens, Degrees
-   * - 6
-     - Admittance in magnitude and phase in radians
-     - Y, rad
-     - Siemens, Radians
-
-.. _eval-admx2501ebz selecting-a-measurement-range:
+.. _ad-imp2501-sl selecting-a-measurement-range:
 
 Selecting a Measurement Range
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 By default, the AD-IMP2501DBZ-SL is not auto-ranging mode, and will use the
 default or previously set gain settings. Auto-range can be turned on which will
@@ -1258,50 +604,37 @@ and current gain parameters will retain the values set during the autogain
 measurement. If testing at multiple frequencies, note the gain settings for each
 measurement and verify the same gain settings were chosen by the autogain
 setting for each measurement. If the gain settings changed, the lowest gain
-settings should be chosen for an entire sweep so the system does not saturate.
+settings should be chosen for an entire sweep, so the system does not saturate.
 
 Available voltage gain values for channel 0 are listed below.
 
-.. list-table::
-   :header-rows: 1
-
-   * - Ch0 Gain
-     - Max Input Voltage Range
-     - Gain Factor
-   * - 0
-     - ±2.4V
-     - 1
-   * - 1
-     - ±1.2V
-     - 2
-   * - 2
-     - ±600mV
-     - 4
-   * - 3
-     - ±300mV
-     - 8
++------------+---------------------------+---------------+
+| Ch0 Gain   | Max Input Voltage Range   | Gain Factor   |
++============+===========================+===============+
+| 0          | +/-2.4V                   | 1             |
++------------+---------------------------+---------------+
+| 1          | +/-1.2V                   | 2             |
++------------+---------------------------+---------------+
+| 2          | +/-600mV                  | 4             |
++------------+---------------------------+---------------+
+| 3          | +/-300m                   | 8             |
++------------+---------------------------+---------------+
 
 Available current gain settings and the transimpedance values associated with
 them are listed below.
 
-.. list-table::
-   :header-rows: 1
-
-   * - Ch1 Gain
-     - Max Input Current
-     - Transimpedance
-   * - 0
-     - 24mA
-     - 49.9Ω
-   * - 1
-     - 2.4mA
-     - 499Ω
-   * - 2
-     - 240uA
-     - 4.99kΩ
++------------+------------------------+-----------------+
+| Ch1 Gain   | Max Input Current      | Transimpedance  |
++============+========================+=================+
+| 0          | 24mA                   | 49.9 Ohm        |
++------------+------------------------+-----------------+
+| 1          | 2.4mA                  | 499 Ohm         |
++------------+------------------------+-----------------+
+| 2          | 240uA                  | 4.99k Ohm       |
++------------+------------------------+-----------------+
 
 Estimating the Impedance and Admittance of Capacitive and Inductive Devices
-'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Impedance is defined as the opposition to the flow of alternating current.
 Admittance is the reciprocal of impedance, or how easy is for alternating
@@ -1362,7 +695,7 @@ properties, which is why the experimental and testing method utilizing the
 ``autogain`` feature is also recommended.
 
 Reducing Measurement Noise
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The ``avg`` command determines how many samples are averaged for each reading
 returned. Averaging reduces noise and is helpful in applications that require
@@ -1375,11 +708,11 @@ is small in comparison to the total impedance magnitude. The default is set to
    Averaging increases the time required to return a reading. So finding the
    compromise between improved noise and measurement speed will depend on the
    application. At some point there is a limited return as the average value
-   continues to increases. This threshold of limited return will depend on the
+   continues to increase. This threshold of limited return will depend on the
    application.
 
 Improving Measurement Precision
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To ensure precise and accurate measurements, impedance measurements should be
 performed with appropriate test fixtures. Measurement leads can introduce
@@ -1393,13 +726,13 @@ To test surface-mount components, fixtures like the
 or the
 `Keysight 16034G <https://www.keysight.com/en/pd-1000000474%3Aepsg%3Apro-pn-16034G/smd-test-fixture>`__
 are good examples. For a full list of recommended accessories, please refer to
-the :ref:`eval-admx2501ebz optional-equipment` section
+the :ref:`ad-imp2501-sl optional-equipment` section
 at the beginning of this user guide. These fixtures are not possible for all
 applications and some systems will require relative precision versus absolute
 precision.
 
 Performing Frequency Sweeps
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The AD-IMP2501DBZ-SL can automatically perform measurements that sweep the
 frequency parameter, enabling EIS (Electrical Impedance Spectroscopy)
@@ -1414,7 +747,7 @@ or logarithmic ``1`` sweep. The number of incremental points including the start
 and stop points is determined by the ``count`` parameter.
 
 Example
-'''''''
+^^^^^^^
 
 Perform an 11-point logarithmic frequency sweep from 1kHz to 1MHz.
 
@@ -1455,7 +788,7 @@ Perform an 11-point logarithmic frequency sweep from 1kHz to 1MHz.
    instead of index, followed by the measurement in the display format selected.
 
 Optimizing Measurement Timing
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This section describes what settings impact the measurement time and how. The
 measurement time is dependent on a number of factors. Command transmission time,
@@ -1465,7 +798,7 @@ frequency since the ADC needs to capture a minimum number of cycles of the
 waveform.
 
 Delay Usage and Measurement Sequencing
-''''''''''''''''''''''''''''''''''''''
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The commands ``measdelay`` (measurement delay) and ``trigdelay`` (trigger delay)
 can be used to control the settling time between measurements.
@@ -1485,7 +818,7 @@ can be used to control the settling time between measurements.
   trigger delay, but the AC source will only start after the delay for the data
   capture.
 
-To setup ``measdelay`` and ``trigdelay``, simply enter the command followed by a
+To set up ``measdelay`` and ``trigdelay``, simply enter the command followed by a
 value in milliseconds, up to a maximum of 60 seconds.
 
 Below is a demonstration on how each measurement time parameter fits in the
@@ -1498,7 +831,7 @@ resistor as the DUT.
    :width: 1000px
 
 Single Sample Measurement
-'''''''''''''''''''''''''
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When measuring one sample (one count), a ``measdelay`` is observed before each
 measurement where the single sample is captured.
@@ -1516,7 +849,7 @@ measurement where the single sample is captured.
    1.000000e+03, 1.022631e+02, -4.570409e-02
 
 Single Sample with Averaging
-''''''''''''''''''''''''''''
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When measuring with ``avg`` > 1, but ``count`` == 1, ``measdelay`` is observed
 only before the first sample, but not between internal averaged samples. The
@@ -1538,7 +871,7 @@ deviation of the second display unit.
    1.000000e+03, 5.502485e-01, 4.377977e-01
 
 Multiple Samples
-''''''''''''''''
+^^^^^^^^^^^^^^^^
 
 When measuring and displaying multiple samples (``count`` > 1), ``measdelay`` is
 observed before each measurement.
@@ -1558,7 +891,7 @@ observed before each measurement.
    2, 1.030360e+02, -3.661266e-01
 
 Multiple Triggers
-'''''''''''''''''
+^^^^^^^^^^^^^^^^^
 
 When ``trigger`` > 1, multiple measurement triggers (or measurement loops) are
 enabled. A single measurement loop setting (say ``count`` = 3, ``avg`` = 1),
@@ -1594,7 +927,7 @@ delay time between these trigger events.
    2, 1.025063e+02, -1.583959e-01
 
 Optimizing Single Point Measurements
-''''''''''''''''''''''''''''''''''''
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To achieve the fastest single-point measurement time, there are a few points to
 consider.
@@ -1644,282 +977,66 @@ there were multiple samples being averaged together or multiple samples being
 displayed as one measurement loop. The delta time is the comparison of a
 measurement to the same frequency under ideal parameters in the first few rows.
 
-.. list-table::
-   :header-rows: 1
++------------+-----------+--------+-----------------+----------+-----------+-----------+-----------+--------------+----------------+
+| Freq (Hz)  | # Samples | Avg    | Meas Delay (ms) | Display  | Cal/Comp  | Auto Gain | Time (s)  | Avg Time (s) | Delta Time (s) |
++============+===========+========+=================+==========+===========+===========+===========+==============+================+
+| 1000000    | 1         | 1      | 1               | R/X      | None      | Off       | 0.00544   | NA           | NA             |
++------------+-----------+--------+-----------------+----------+-----------+-----------+-----------+--------------+----------------+
+| 100000     | 1         | 1      | 1               | R/X      | None      | Off       | 0.00461   | NA           | NA             |
++------------+-----------+--------+-----------------+----------+-----------+-----------+-----------+--------------+----------------+
+| 10000      | 1         | 1      | 1               | R/X      | None      | Off       | 0.00445   | NA           | NA             |
++------------+-----------+--------+-----------------+----------+-----------+-----------+-----------+--------------+----------------+
+| 1000       | 1         | 1      | 1               | R/X      | None      | Off       | 0.00489   | NA           | NA             |
++------------+-----------+--------+-----------------+----------+-----------+-----------+-----------+--------------+----------------+
+| 100        | 1         | 1      | 1               | R/X      | None      | Off       | 0.01439   | NA           | NA             |
++------------+-----------+--------+-----------------+----------+-----------+-----------+-----------+--------------+----------------+
+| 10         | 1         | 1      | 1               | R/X      | None      | Off       | 0.10454   | NA           | NA             |
++------------+-----------+--------+-----------------+----------+-----------+-----------+-----------+--------------+----------------+
+| 1          | 1         | 1      | 1               | R/X      | None      | Off       | 1.014     | NA           | NA             |
++------------+-----------+--------+-----------------+----------+-----------+-----------+-----------+--------------+----------------+
+| 1000000    | 1         | 10     | 1               | R/X      | None      | Off       | 0.02333   | NA           | NA             |
++------------+-----------+--------+-----------------+----------+-----------+-----------+-----------+--------------+----------------+
+| 100000     | 1         | 10     | 1               | R/X      | None      | Off       | 0.01516   | NA           | NA             |
++------------+-----------+--------+-----------------+----------+-----------+-----------+-----------+--------------+----------------+
+| 10000      | 1         | 10     | 1               | R/X      | None      | Off       | 0.01354   | NA           | NA             |
++------------+-----------+--------+-----------------+----------+-----------+-----------+-----------+--------------+----------------+
+| 1000       | 1         | 10     | 1               | R/X      | None      | Off       | 0.01813   | NA           | NA             |
++------------+-----------+--------+-----------------+----------+-----------+-----------+-----------+--------------+----------------+
+| 100        | 1         | 10     | 1               | R/X      | None      | Off       | 0.10954   | NA           | NA             |
++------------+-----------+--------+-----------------+----------+-----------+-----------+-----------+--------------+----------------+
+| 10         | 1         | 10     | 1               | R/X      | None      | Off       | 1.015     | NA           | NA             |
++------------+-----------+--------+-----------------+----------+-----------+-----------+-----------+--------------+----------------+
+| 1          | 1         | 10     | 1               | R/X      | None      | Off       | 10.119    | NA           | NA             |
++------------+-----------+--------+-----------------+----------+-----------+-----------+-----------+--------------+----------------+
+| 10000      | 1         | 1      | 10              | R/X      | None      | Off       | 0.01345   | NA           | 0.009000       |
++------------+-----------+--------+-----------------+----------+-----------+-----------+-----------+--------------+----------------+
+| 1000       | 1         | 1      | 10              | R/X      | None      | Off       | 0.01393   | NA           | 0.009040       |
++------------+-----------+--------+-----------------+----------+-----------+-----------+-----------+--------------+----------------+
+| 10000      | 1         | 1      | 1               | Z/Deg    | None      | Off       | 0.00451   | NA           | 0.000060       |
++------------+-----------+--------+-----------------+----------+-----------+-----------+-----------+--------------+----------------+
+| 1000       | 1         | 1      | 1               | Z/Deg    | None      | Off       | 0.00496   | NA           | 0.000070       |
++------------+-----------+--------+-----------------+----------+-----------+-----------+-----------+--------------+----------------+
+| 10000      | 1         | 1      | 1               | R/X      | None      | On        | 0.03499   | NA           | 0.030540       |
++------------+-----------+--------+-----------------+----------+-----------+-----------+-----------+--------------+----------------+
+| 1000       | 1         | 1      | 1               | R/X      | None      | On        | 0.03803   | NA           | 0.033140       |
++------------+-----------+--------+-----------------+----------+-----------+-----------+-----------+--------------+----------------+
+| 10000      | 1         | 1      | 1               | R/X      | Cal       | Off       | 0.00449   | NA           | 0.000040       |
++------------+-----------+--------+-----------------+----------+-----------+-----------+-----------+--------------+----------------+
+| 1000       | 1         | 1      | 1               | R/X      | Cal       | Off       | 0.00489   | NA           | 0.000000       |
++------------+-----------+--------+-----------------+----------+-----------+-----------+-----------+--------------+----------------+
+| 10000      | 1         | 1      | 1               | R/X      | Cal/Comp  | Off       | 0.00456   | NA           | 0.000110       |
++------------+-----------+--------+-----------------+----------+-----------+-----------+-----------+--------------+----------------+
+| 1000       | 1         | 1      | 1               | R/X      | Cal/Comp  | Off       | 0.00502   | NA           | 0.000130       |
++------------+-----------+--------+-----------------+----------+-----------+-----------+-----------+--------------+----------------+
+| 10000      | 10        | 1      | 1               | R/X      | None      | Off       | 0.03904   | 0.003904     | -0.000546      |
++------------+-----------+--------+-----------------+----------+-----------+-----------+-----------+--------------+----------------+
+| 1000       | 10        | 1      | 1               | R/X      | None      | Off       | 0.04343   | 0.004343     | -0.000547      |
++------------+-----------+--------+-----------------+----------+-----------+-----------+-----------+--------------+----------------+
 
-   * - Freq (Hz)
-     - # Samples
-     - Avg
-     - Meas Delay (ms)
-     - Display
-     - Cal/Comp
-     - Auto Gain
-     - Time (s)
-     - Avg Time (s)
-     - Δ Time (s)
-   * - 1000000
-     - 1
-     - 1
-     - 1
-     - R/X
-     - None
-     - Off
-     - 0.00544
-     - NA
-     - NA
-   * - 100000
-     - 1
-     - 1
-     - 1
-     - R/X
-     - None
-     - Off
-     - 0.00461
-     - NA
-     - NA
-   * - 10000
-     - 1
-     - 1
-     - 1
-     - R/X
-     - None
-     - Off
-     - 0.00445
-     - NA
-     - NA
-   * - 1000
-     - 1
-     - 1
-     - 1
-     - R/X
-     - None
-     - Off
-     - 0.00489
-     - NA
-     - NA
-   * - 100
-     - 1
-     - 1
-     - 1
-     - R/X
-     - None
-     - Off
-     - 0.01439
-     - NA
-     - NA
-   * - 10
-     - 1
-     - 1
-     - 1
-     - R/X
-     - None
-     - Off
-     - 0.10454
-     - NA
-     - NA
-   * - 1
-     - 1
-     - 1
-     - 1
-     - R/X
-     - None
-     - Off
-     - 1.014
-     - NA
-     - NA
-   * - 1000000
-     - 1
-     - 10
-     - 1
-     - R/X
-     - None
-     - Off
-     - 0.02333
-     - 0.002333
-     - -0.003107
-   * - 100000
-     - 1
-     - 10
-     - 1
-     - R/X
-     - None
-     - Off
-     - 0.01516
-     - 0.001516
-     - -0.003094
-   * - 10000
-     - 1
-     - 10
-     - 1
-     - R/X
-     - None
-     - Off
-     - 0.01354
-     - 0.001354
-     - -0.003096
-   * - 1000
-     - 1
-     - 10
-     - 1
-     - R/X
-     - None
-     - Off
-     - 0.01813
-     - 0.001813
-     - -0.003077
-   * - 100
-     - 1
-     - 10
-     - 1
-     - R/X
-     - None
-     - Off
-     - 0.10954
-     - 0.010954
-     - -0.003436
-   * - 10
-     - 1
-     - 10
-     - 1
-     - R/X
-     - None
-     - Off
-     - 1.015
-     - 0.1015
-     - -0.003040
-   * - 1
-     - 1
-     - 10
-     - 1
-     - R/X
-     - None
-     - Off
-     - 10.119
-     - 1.0119
-     - -0.002100
-   * - 10000
-     - 1
-     - 1
-     - 10
-     - R/X
-     - None
-     - Off
-     - 0.01345
-     - NA
-     - 0.009000
-   * - 1000
-     - 1
-     - 1
-     - 10
-     - R/X
-     - None
-     - Off
-     - 0.01393
-     - NA
-     - 0.009040
-   * - 10000
-     - 1
-     - 1
-     - 1
-     - Z/Deg
-     - None
-     - Off
-     - 0.00451
-     - NA
-     - 0.000060
-   * - 1000
-     - 1
-     - 1
-     - 1
-     - Z/Deg
-     - None
-     - Off
-     - 0.00496
-     - NA
-     - 0.000070
-   * - 10000
-     - 1
-     - 1
-     - 1
-     - R/X
-     - None
-     - On
-     - 0.03499
-     - NA
-     - 0.030540
-   * - 1000
-     - 1
-     - 1
-     - 1
-     - R/X
-     - None
-     - On
-     - 0.03803
-     - NA
-     - 0.033140
-   * - 10000
-     - 1
-     - 1
-     - 1
-     - R/X
-     - Cal
-     - Off
-     - 0.00449
-     - NA
-     - 0.000040
-   * - 1000
-     - 1
-     - 1
-     - 1
-     - R/X
-     - Cal
-     - Off
-     - 0.00489
-     - NA
-     - 0.000000
-   * - 10000
-     - 1
-     - 1
-     - 1
-     - R/X
-     - Cal/Comp
-     - Off
-     - 0.00456
-     - NA
-     - 0.000110
-   * - 1000
-     - 1
-     - 1
-     - 1
-     - R/X
-     - Cal/Comp
-     - Off
-     - 0.00502
-     - NA
-     - 0.000130
-   * - 10000
-     - 10
-     - 1
-     - 1
-     - R/X
-     - None
-     - Off
-     - 0.03904
-     - 0.003904
-     - -0.000546
-   * - 1000
-     - 10
-     - 1
-     - 1
-     - R/X
-     - None
-     - Off
-     - 0.04343
-     - 0.004343
-     - -0.000547
+.. _ad-imp2501-sl calibration-and-compensation:
 
 Calibration and Compensation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A few milliseconds after power up, the AD-IMP2501DBZ-SL is ready to perform
 measurements. However, any readings and their units are scaled and assigned
@@ -1932,7 +1049,7 @@ can be used to validate.
 There are three basic calibration steps involved in calibrating the module: open
 calibration, short calibration, and load calibration. The first two correct the
 module and test lead parasitics. The latter provides traceability to an external
-source. The calibration steps must be performed in the order open->short->load.
+source. The calibration steps must be performed in the order open→short→load.
 Open and load calibration are the most important. Short calibration may need to
 be skipped in certain gain/load ranges where the current ADC would saturate.
 Open calibration may need to be skipped in gain/load ranges that the voltage ADC
@@ -1972,10 +1089,10 @@ again, the user will overwrite the result of the first calibration. Support for
 calibration over frequency is included and incorporates the entire 1Hz to 1.5MHz
 range.
 
-.. _eval-admx2501ebz calibration-steps:
+.. _ad-imp2501-sl calibration-steps:
 
 Calibration Steps
-'''''''''''''''''
+^^^^^^^^^^^^^^^^^
 
 To calibrate the module in a specific gain combination, follow the steps below:
 
@@ -1984,54 +1101,35 @@ To calibrate the module in a specific gain combination, follow the steps below:
   terminals together to form two separate connection pairs
 - If using the on board loads, apply the jumpers as designated below:
 
-.. list-table::
-   :header-rows: 1
-
-   * - Jumper Designation
-     - Install Position
-     - Description
-   * - P27
-     - Pins 1-2
-     - EIS HCUR
-   * - P28
-     - Pins 1-2
-     - EIS HPOT
-   * - P29
-     - Pins 1-2
-     - EIS LPOT
-   * - P30
-     - Pins 1-2
-     - EIS LCUR
-   * - P23
-     - Pins 1-2
-     - HCUR to HPOT connection
-   * - P24
-     - Pins 1-2
-     - LCUR to LPOT connection
-   * - P21
-     - Not Installed
-     - User Selectable Load
-   * - P22
-     - Not Installed
-     - User Selectable Load
-   * - P8
-     - Not Installed
-     - User Selectable Load
-   * - P12
-     - Pins 1-2
-     - EIS HCUR SMA
-   * -
-     - Pins 5-6
-     - EIS HPOT SMA
-   * -
-     - Pins 9-10
-     - EIS LPOT SMA
-   * -
-     - Pins 13-14
-     - EIS LCUR SMA
++-------------------------+--------------------+------------------------------------+
+| Jumper Designation      | Install Position   | Description                        |
++=========================+====================+====================================+
+| P27                     | Pins 1-2           | EIS HCUR                           |
++-------------------------+--------------------+------------------------------------+
+| P28                     | Pins 1-2           | EIS HPOT                           |
++-------------------------+--------------------+------------------------------------+
+| P29                     | Pins 1-2           | EIS LPOT                           |
++-------------------------+--------------------+------------------------------------+
+| P30                     | Pins 1-2           | EIS LCUR                           |
++-------------------------+--------------------+------------------------------------+
+| P23                     | Pins 1-2           | HCUR to HPOT connection            |
++-------------------------+--------------------+------------------------------------+
+| P24                     | Pins 1-2           | LCUR to LPOT connection            |
++-------------------------+--------------------+------------------------------------+
+| P21                     | Not Installed      | User Selectable Load               |
++-------------------------+--------------------+------------------------------------+
+| P22                     | Not Installed      | User Selectable Load               |
++-------------------------+--------------------+------------------------------------+
+| P8                      | Not Installed      | User Selectable Load               |
++-------------------------+--------------------+------------------------------------+
+| P12                     | Pins 1-2           | EIS HCUR SMA/Onboard               |
+|                         | Pins 5-6           | EIS HPOT SMA/Onboard               |
+|                         | Pins 9-10          | EIS LPOT SMA/Onboard               |
+|                         | Pins 13-14         | EIS LCUR SMA/Onboard               |
++-------------------------+--------------------+------------------------------------+
 
 - If using test clips or SMA cables that are tied together at the clip, remove
-  jumpers from P23 and P24. Place them so the clips are separated as close to
+  jumpers from P23 and P24. Place them, so the clips are separated as close to
   the same distance as they will be when the DUT is connected.
 
 .. note::
@@ -2055,7 +1153,7 @@ To calibrate the module in a specific gain combination, follow the steps below:
 
 - Run the ``calshort`` command, if possible, and follow the prompts when ready.
 - Connect a known impedance between the measurement leads or choose a connection
-  configuration from the on board resistors.
+  configuration from the onboard resistors.
 - Run the ``calload <value1> <value2>`` command where ``<value1>`` is the true
   resistive value of the component (Ohms) and ``<value 2>`` is the true reactive
   value of the component (Ohms) and follow the prompts when ready.
@@ -2094,7 +1192,7 @@ longer remove the stored calibration data.
    completed before committing all the data to non-volatile memory.
 
 Calibration Example
-'''''''''''''''''''
+^^^^^^^^^^^^^^^^^^^
 
 Calibrate the gain setting (0, 1) with a resistor of value 100 Ohms.
 :red:`The true resistance Rt from the E4980A at 100kHz was measured as 1000.019 Ohms, and the true reactance Xt was 0.822 Ohms.`
@@ -2202,7 +1300,7 @@ Calibrate the gain setting (0, 1) with a resistor of value 100 Ohms.
    >>
 
 Reading Calibration Coefficients
-''''''''''''''''''''''''''''''''
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Calibration coefficients for each gain can be read to the terminal. To read the
 currently loaded coefficients for a certain gain setting, run the command
@@ -2256,41 +1354,39 @@ must be saved using ``calcommit``; otherwise, they will be lost if the system
 reboots or loses power.
 
 Compensation Procedure
-''''''''''''''''''''''
+^^^^^^^^^^^^^^^^^^^^^^
 
 Compensation is an additional measurement adjustment function designed to
 account for changes in the test fixture or application setup that were not
-present during calibration. This feature is useable, but it is also reasonable
+present during calibration. This feature is usable, but it is also reasonable
 to recalibrate for each fixture/setup, and use the commands detailed in
-:ref:`eval-admx2501ebz calibration-steps` to save data for each config.
+:ref:`ad-imp2501-sl calibration-steps` to save data for each config.
 
 To configure compensation coefficients, run the same steps in the calibration
 procedure, but use the ``comp`` commands instead of the ``cal`` commands. Make
 sure the commands are run with the setup fully intact and all connections to the
 DUT in place. Refer to the help section on available commands for the specific
 list and associated names for compensation located at
-:ref:`eval-admx2501ebz ad-imp2501dbz-sl-available-commands`
+:ref:`ad-imp2501-sl ad-imp2501dbz-sl-available-commands`
 
 .. figure:: images/fishercat_compensation.png
    :width: 600px
 
 Firmware Release Highlights
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Currently available firmare versions and release highlights:
+Currently, available firmware versions and release highlights:
 
-.. list-table::
-   :header-rows: 1
-
-   * - Version
-     - Status
-     - Release Highlights
-   * - 4.3.1
-     - Stable
-     - First web release
++-----------------+------------+-------------------------------------------+
+| FW Version      | Status     | Release Highlights                        |
++=================+============+===========================================+
+| 4.3.1           | Stable     | First Web Release                         |
++-----------------+------------+-------------------------------------------+
+|                 |            |                                           |
++-----------------+------------+-------------------------------------------+
 
 Support
-~~~~~~~
+-------
 
 For support, general questions, or firmware update help, reach out to your local
 ADI support team or email imp2501-support@analog.com.
