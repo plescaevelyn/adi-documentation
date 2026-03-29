@@ -467,6 +467,33 @@ If you encounter SSL errors like:
 You are likely in a managed network that injects SSL certificates (e.g, Netskope),
 if it is the case, seek support from your network admin, this is not a git lfs issue.
 
+Permission denied
+~~~~~~~~~~~~~~~~~
+
+If you encounter SSL errors like:
+
+.. shell::
+
+   $ git pull -I path/to/file
+     batch request: me@github.com: Permission denied (publickey).: exit status 255
+
+Git lfs is not picking-up the correct credentials automatically, which is
+common for multi-remotes setups, you can set explicitely to resolve.
+
+If you use SSH, set the lfs url to:
+
+.. shell::
+
+   $ git config lfs.url "ssh://git@github.com/analogdevicesinc/documentation.git"
+
+If you use HTTPS, set:
+
+.. shell::
+
+   $ git config lfs.url "https://github.com/analogdevicesinc/documentation.git/info/lfs"
+
+If using a fork, change `analogdevicesinc` to your username.
+
 Checking out branches and commits
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
