@@ -3,8 +3,8 @@
 ADRV9361-Z7035
 ==============
 
-.. image:: http://picozed.org/sites/default/files/styles/product_slider/public/product/hand.png
-   :alt: http://picozed.org/sites/default/files/styles/product_slider/public/product/hand.png
+.. image:: images/picozed_hand.png
+   :alt: PicoZed hand comparison
    :align: right
 
 The :adi:`ADRV9361-Z7035` is built on a portfolio of highly integrated
