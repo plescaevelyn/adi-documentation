@@ -101,6 +101,19 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#software-guide">Software guide</a><ul>
+<li><a class="reference internal" href="#adi-iio-oscilloscope">ADI IIO Oscilloscope</a><ul>
+<li><a class="reference internal" href="#for-linux">For Linux</a><ul>
+<li><a class="reference internal" href="#remote-run-on-host">Remote run on host</a></li>
+<li><a class="reference internal" href="#locally-run-on-the-board">Locally run on the board</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#for-no-os">For no-OS</a></li>
+<li><a class="reference internal" href="#about-the-iio-devices">About the IIO devices</a></li>
+<li><a class="reference internal" href="#nls-profile-with-observation-receiver">NLS profile (with observation receiver)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#scopy">Scopy</a></li>
+<li><a class="reference internal" href="#linux-driver">Linux Driver</a></li>
 <li><a class="reference internal" href="#kernel-configuration">Kernel configuration</a></li>
 <li><a class="reference internal" href="#required-firmware-files">Required firmware files</a></li>
 <li><a class="reference internal" href="#device-variants">Device variants</a></li>
@@ -731,11 +744,121 @@ downloadable design files.</p>
 <p>The evaluation board is supported with the Libiio library. This library is
 cross-platform (Windows, Linux, Mac) with language bindings for C, C#, Python,
 MATLAB, and others. One easy to example that can be used with it is:</p>
+<section id="adi-iio-oscilloscope">
+<h3>ADI IIO Oscilloscope<a class="headerlink" href="#adi-iio-oscilloscope" title="Link to this heading"></a></h3>
+<p>The <a class="reference internal" href="../../../software/iio-oscilloscope/index.html#iio-oscilloscope"><span class="std std-ref">IIO Oscilloscope</span></a> is a cross-platform application for interfacing
+with IIO devices, enabling you to configure device parameters and visualize
+data.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Make sure to download/update to the latest version of
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/iio-oscilloscope/releases" target="_blank">IIO Oscilloscope</a>.</p>
+</div>
+<section id="for-linux">
+<h4>For Linux<a class="headerlink" href="#for-linux" title="Link to this heading"></a></h4>
+<section id="remote-run-on-host">
+<h5>Remote run on host<a class="headerlink" href="#remote-run-on-host" title="Link to this heading"></a></h5>
+<p>The <a class="reference internal" href="../../../software/iio-oscilloscope/index.html#iio-oscilloscope"><span class="std std-ref">IIO Oscilloscope</span></a> application can be used to connect to another
+platform that has a connected device, to configure the device and read data
+from it. This application is not for performance testing, but rather
+showcasing the basic features.</p>
+<p>Please see <a class="reference internal" href="../../../software/iio-oscilloscope/index.html#iio-oscilloscope"><span class="std std-ref">IIO Oscilloscope documentation</span></a> for
+installation steps and more details.</p>
+<p>Build and start <code class="docutils literal notranslate"><span class="pre">osc</span></code> on a network-enabled Linux host.
+For Windows computers, open the application from the start menu.</p>
+<p>Once the application is launched, go to Settings &gt; Connect &gt; URI and type
+“ip:” then the IP address of the target in the pop-up window. This IP can
+be found out with a command from the previous section of this documentation.</p>
+</section>
+<section id="locally-run-on-the-board">
+<h5>Locally run on the board<a class="headerlink" href="#locally-run-on-the-board" title="Link to this heading"></a></h5>
+<p>If you connected an HDMI monitor to your FPGA and a mouse and a keyboard
+(both on one dongle), you can navigate the ADI Kuiper Linux that is on the
+FPGA.</p>
+<p>Going to the top left corner icon (the menu icon), search for IIO
+Oscilloscope. Opening it will automatically connect to the setup and you
+can use the application.</p>
+</section>
+</section>
+<section id="for-no-os">
+<h4>For no-OS<a class="headerlink" href="#for-no-os" title="Link to this heading"></a></h4>
+<p>For connecting IIO Oscilloscope to no-OS applications, they need to be built
+with the IIOD=y flag. This way, the no-OS applications will run an IIO daemon
+that is awaiting connections from the IIO Oscilloscope.</p>
+</section>
+<section id="about-the-iio-devices">
+<h4>About the IIO devices<a class="headerlink" href="#about-the-iio-devices" title="Link to this heading"></a></h4>
+<p>Main receivers RX1 through RX8 are handled by the <code class="docutils literal notranslate"><span class="pre">axi-adrv904x-rx-hpc</span></code> IIO
+device.</p>
+<p>Channels:</p>
 <ul class="simple">
-<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope" target="_blank">IIO Oscilloscope</a></p></li>
+<li><p>IIO device channel: <code class="docutils literal notranslate"><span class="pre">axi-adrv904x-rx-hpc</span></code></p></li>
+<li><p>Receiver inputs:</p>
+<ul>
+<li><p>{<code class="docutils literal notranslate"><span class="pre">voltage0_i</span></code>, <code class="docutils literal notranslate"><span class="pre">voltage0_q</span></code>}: RX1</p></li>
+<li><p>{<code class="docutils literal notranslate"><span class="pre">voltage1_i</span></code>, <code class="docutils literal notranslate"><span class="pre">voltage1_q</span></code>}: RX2</p></li>
+<li><p>{<code class="docutils literal notranslate"><span class="pre">voltage2_i</span></code>, <code class="docutils literal notranslate"><span class="pre">voltage2_q</span></code>}: RX3</p></li>
+<li><p>{<code class="docutils literal notranslate"><span class="pre">voltage3_i</span></code>, <code class="docutils literal notranslate"><span class="pre">voltage3_q</span></code>}: RX4</p></li>
+<li><p>{<code class="docutils literal notranslate"><span class="pre">voltage4_i</span></code>, <code class="docutils literal notranslate"><span class="pre">voltage4_q</span></code>}: RX5</p></li>
+<li><p>{<code class="docutils literal notranslate"><span class="pre">voltage5_i</span></code>, <code class="docutils literal notranslate"><span class="pre">voltage5_q</span></code>}: RX6</p></li>
+<li><p>{<code class="docutils literal notranslate"><span class="pre">voltage6_i</span></code>, <code class="docutils literal notranslate"><span class="pre">voltage6_q</span></code>}: RX7</p></li>
+<li><p>{<code class="docutils literal notranslate"><span class="pre">voltage7_i</span></code>, <code class="docutils literal notranslate"><span class="pre">voltage7_q</span></code>}: RX8</p></li>
 </ul>
+</li>
+</ul>
+<p>Transmitters TX1 through TX8 are handled by the <code class="docutils literal notranslate"><span class="pre">axi-adrv904x-tx-hpc</span></code> IIO
+device.</p>
+<p>Channels:</p>
+<ul class="simple">
+<li><p>IIO device channel: <code class="docutils literal notranslate"><span class="pre">axi-adrv904x-tx-hpc</span></code></p></li>
+<li><p>Transmitter outputs:</p>
+<ul>
+<li><p>{<code class="docutils literal notranslate"><span class="pre">voltage0_i</span></code>, <code class="docutils literal notranslate"><span class="pre">voltage0_q</span></code>}: TX1</p></li>
+<li><p>{<code class="docutils literal notranslate"><span class="pre">voltage1_i</span></code>, <code class="docutils literal notranslate"><span class="pre">voltage1_q</span></code>}: TX2</p></li>
+<li><p>{<code class="docutils literal notranslate"><span class="pre">voltage2_i</span></code>, <code class="docutils literal notranslate"><span class="pre">voltage2_q</span></code>}: TX3</p></li>
+<li><p>{<code class="docutils literal notranslate"><span class="pre">voltage3_i</span></code>, <code class="docutils literal notranslate"><span class="pre">voltage3_q</span></code>}: TX4</p></li>
+<li><p>{<code class="docutils literal notranslate"><span class="pre">voltage4_i</span></code>, <code class="docutils literal notranslate"><span class="pre">voltage4_q</span></code>}: TX5</p></li>
+<li><p>{<code class="docutils literal notranslate"><span class="pre">voltage5_i</span></code>, <code class="docutils literal notranslate"><span class="pre">voltage5_q</span></code>}: TX6</p></li>
+<li><p>{<code class="docutils literal notranslate"><span class="pre">voltage6_i</span></code>, <code class="docutils literal notranslate"><span class="pre">voltage6_q</span></code>}: TX7</p></li>
+<li><p>{<code class="docutils literal notranslate"><span class="pre">voltage7_i</span></code>, <code class="docutils literal notranslate"><span class="pre">voltage7_q</span></code>}: TX8</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="nls-profile-with-observation-receiver">
+<h4>NLS profile (with observation receiver)<a class="headerlink" href="#nls-profile-with-observation-receiver" title="Link to this heading"></a></h4>
+<p>When using the NLS device tree (<code class="docutils literal notranslate"><span class="pre">zynqmp-zcu102-rev10-adrv904x-nls.dts</span></code>),
+the observation receiver path is enabled. The observation receiver IIO device
+appears as an additional device:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iio_info<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>iio:device
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>iio:device0: xilinx-ams
+iio:device1: adrv904x-phy
+iio:device2: axi-adrv904x-rx-hpc (buffer capable)
+iio:device3: axi-adrv904x-tx-hpc (buffer capable)
+iio:device4: axi-adrv904x-obs-hpc (buffer capable)
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>To use the NLS profile, copy <code class="docutils literal notranslate"><span class="pre">system.dtb</span></code> built from
+<code class="docutils literal notranslate"><span class="pre">zynqmp-zcu102-rev10-adrv904x-nls.dts</span></code> and <code class="docutils literal notranslate"><span class="pre">DeviceProfileTest_NLS.bin</span></code>
+renamed to <code class="docutils literal notranslate"><span class="pre">DeviceProfileTest.bin</span></code> to the SD card boot partition.</p>
+</section>
+</section>
+<section id="scopy">
+<h3>Scopy<a class="headerlink" href="#scopy" title="Link to this heading"></a></h3>
+<p><a class="icon link reference external" href="https://analogdevicesinc.github.io/scopy/index.html" target="_blank" title="(in Scopy main)"><span class="xref std std-doc">Scopy</span></a> is a cross-platform software toolbox for
+interfacing with ADI devices, enabling you to configure device parameters,
+visualize data, and perform advanced signal analysis.</p>
+</section>
+<section id="linux-driver">
+<h3>Linux Driver<a class="headerlink" href="#linux-driver" title="Link to this heading"></a></h3>
 <p>For details on how to customize the driver for a specific use case, see the
 <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-transceiver/adrv904x-customization" target="_blank">ADRV904x driver customization guide</a>.</p>
+</section>
 <section id="kernel-configuration">
 <h3>Kernel configuration<a class="headerlink" href="#kernel-configuration" title="Link to this heading"></a></h3>
 <p>To enable the ADRV904x driver when building the Linux kernel from source:</p>
