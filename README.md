@@ -38,15 +38,31 @@ Or build the documentation with Sphinx.
 ```
 The generated documentation will be available at `docs/_build/html`.
 
-### VSCode support
+### VSCode/VSCodium support
 
-[Esbonio](https://docs.esbon.io/en/latest/index.html) is an extensively developed Language Server Protocol and Visual Studio Code extension for sphinx.
+### Esbonio extension
+
+[Esbonio](https://docs.esbon.io/en/latest/index.html)
+([VSCode](https://marketplace.visualstudio.com/items?itemName=swyddfa.esbonio)
+/[VSCodium](https://open-vsx.org/extension/swyddfa/esbonio))
+
+is an extensively developed Language Server Protocol and Visual Studio Code extension for sphinx.
 Setup the virtual environment first before opening the text editor, to avoid triggering fallback behaviours.
 
 The live server cli is able to generate Estobio pyproject.toml entry with (including [Sparse builds](https://analogdevicesinc.github.io/doctools/cli.html#serve-sparse)):
 ```
 adoc serve --esbonio --sparse docs/learning | tee pyproject.toml
 ```
+
+### Doctools extension
+
+An experimental doctools extension is available for
+[VSCode](https://marketplace.visualstudio.com/items?itemName=gastmaier.adi-doctools)
+/[VSCodium](https://open-vsx.org/extension/gastmaier/adi-doctools).
+
+Quick start instructions are provided in the links above.
+
+### Git LFS On-Demand extension
 
 Assuming you followed the `--skip-smudge` instructions, you can use Git LFS On-Demand to auto fetch the artifacts included in open files or open.
 Get from
