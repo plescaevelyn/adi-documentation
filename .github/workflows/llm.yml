@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       ref:
-        description: The branch, tag, PR number, or SHA to checkout
+        description: The branch, tag, PR number, or SHA to checkout.
         required: false
         type: string
       run-id:
@@ -21,23 +21,13 @@ on:
         required: false
         type: string
         default: ""
-      prompt-repository:
-        description: Repository with LLM skills, overwrites the default.
-        required: false
-        type: string
-        default: ""
-      model-small:
-        required: false
-        type: string
-        default: "@vertexai-global/anthropic.claude-haiku-4-5@20251001"
-      model-medium:
-        required: false
-        type: string
-        default: "@vertexai-global/anthropic.claude-sonnet-4-5@20250929"
-      model-large:
-        required: false
-        type: string
-        default: "@vertexai-global/anthropic.claude-opus-4-5@20251101"
+      model:
+        description: Model size.
+        type: choice
+        options:
+        - small
+        - medium
+        - large
   workflow_call:
     inputs:
       ref:
@@ -54,28 +44,12 @@ on:
         required: false
         type: string
         default: ""
-      prompt-repository:
+      model:
         required: false
         type: string
-        default: ""
-      model-small:
-        required: false
-        type: string
-        default: "@vertexai-global/anthropic.claude-haiku-4-5@20251001"
-      model-medium:
-        required: false
-        type: string
-        default: "@vertexai-global/anthropic.claude-sonnet-4-5@20250929"
-      model-large:
-        required: false
-        type: string
-        default: "@vertexai-global/anthropic.claude-opus-4-5@20251101"
+        default: "medium"
     secrets:
-      ANTHROPIC_CUSTOM_HEADERS:
-        required: false
-      ANTHROPIC_BASE_URL:
-        required: false
-      ANTHROPIC_AUTH_TOKEN:
+      PORTKEY_API_KEY:
         required: false
 
 permissions:
@@ -92,8 +66,8 @@ jobs:
     steps:
     - name: Check if should run
       env:
-        ANTHROPIC_AUTH_TOKEN: ${{ secrets.ANTHROPIC_AUTH_TOKEN }}
-      if: ${{ env.ANTHROPIC_AUTH_TOKEN != '' && env.ANTHROPIC_AUTH_TOKEN != ' ' }}
+        PORTKEY_API_KEY: ${{ secrets.PORTKEY_API_KEY }}
+      if: ${{ env.PORTKEY_API_KEY != '' && env.PORTKEY_API_KEY != ' ' }}
       run: |
         echo "LLM_AGENT_RUN=true" >> "$GITHUB_ENV"
 
@@ -116,19 +90,13 @@ jobs:
         run-id: ${{ inputs.run-id }}
         repository: ${{ github.repository }}
 
-    - name: Get claude
-      if: ${{ env.LLM_AGENT_RUN == 'true' }}
-      run: |
-        export PATH="$HOME/.local/bin:$PATH"
-        command -v claude || curl -fsSL https://claude.ai/install.sh | bash -s 2.1.37
-        mkdir -p $HOME/.claude
-        echo '{ "includeCoAuthoredBy": false }' > $HOME/.claude/settings.json
-
     - name: Prepare prompt sources
       if: ${{ env.LLM_AGENT_RUN == 'true' }}
       run: |
         prompt_file=$(mktemp --suffix=.md)
         echo "prompt_file=$prompt_file" >> "$GITHUB_ENV"
+        session_file=$(mktemp --suffix=.jsonl)
+        echo "session_file=$session_file" >> "$GITHUB_ENV"
         summary_file=$(mktemp --suffix=.md)
         echo "summary_file=$summary_file" >> "$GITHUB_ENV"
         patches_path=$(mktemp -d)
@@ -137,16 +105,22 @@ jobs:
     - name: Prepare tools
       if: ${{ env.LLM_AGENT_RUN == 'true' }}
       run: |
-        export PATH="$HOME/.local/bin:$PATH"
         venv_path=$(mktemp -d)
         python3 -m venv $venv_path
         source $venv_path/bin/activate
         python3 -m ensurepip --upgrade
-
-        pip install adi-doctools[mcp] camelot-py
-        claude mcp add adoc $(which adoc-mcp)
-
+        pip install adi-doctools camelot-py
         echo "venv_path=$venv_path" >> "$GITHUB_ENV"
+
+        curl -sL -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -o .github/scripts/pretty-pi.py \
+              https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/pi/.github/scripts/pretty-pi.py
+
+    - name: Setup pi
+      if: ${{ env.LLM_AGENT_RUN == 'true' }}
+      run: |
+        npm install @mariozechner/pi-coding-agent@0.64.0
+        mkdir -p ~/.pi/agent
+        echo '{"providers":{"portkey":{"baseUrl":"https://api.portkey.ai","api":"anthropic-messages","apiKey":"PORTKEY_API_KEY","headers":{"x-portkey-api-key":"PORTKEY_API_KEY","x-portkey-virtual-key":"vertexai-global"},"models":[{"name":"small", "id":"anthropic.claude-haiku-4-5@20251001"},{"name":"medium", "id":"anthropic.claude-sonnet-4-5@20250929"},{"name":"large", "id":"anthropic.claude-opus-4-5@20251101"}]}}}' >  ~/.pi/agent/models.json
 
     - name: Prepare top prompt
       if: ${{ env.LLM_AGENT_RUN == 'true' }}
@@ -217,6 +191,12 @@ jobs:
           You can fetch sphinx references with (change the repo (no-OS, linux, etc))
             python3 -m sphinx.ext.intersphinx https://analogdevicesinc.github.io/hdl/objects.inv
           And use adoc-search to search all repository documentations.
+
+          To build just one part of the doc, you can use \`adoc serve --sparse\`, for example:
+          \`\`\`
+          adoc serve --sparse docs/learning docs/solutions/reference-designs/ad4052-ardz
+          \`\`\`
+          It is more efficient than calling sphinx-build and building all pages.
 
           This documentation is currently being imported from dokuwiki.
 
@@ -363,21 +343,16 @@ jobs:
         echo "${{ inputs.prompt-extra }}" >> $prompt_file
         cat $prompt_file
 
-    - name: Run claude
+    - name: Run pi
       if: ${{ env.LLM_AGENT_RUN == 'true' }}
       env:
-        ANTHROPIC_CUSTOM_HEADERS: ${{ secrets.ANTHROPIC_CUSTOM_HEADERS }}
-        ANTHROPIC_BASE_URL: ${{ secrets.ANTHROPIC_BASE_URL }}
-        ANTHROPIC_AUTH_TOKEN: ${{ secrets.ANTHROPIC_AUTH_TOKEN }}
-        ANTHROPIC_MODEL: ${{ inputs.model-medium }}
-        ANTHROPIC_DEFAULT_HAIKU_MODEL: ${{ inputs.model-small }}
-        ANTHROPIC_DEFAULT_SONNET_MODEL: ${{ inputs.model-medium }}
-        ANTHROPIC_DEFAULT_OPUS_MODEL: ${{ inputs.model-large }}
+        PORTKEY_API_KEY: ${{ secrets.PORTKEY_API_KEY }}
       run: |
-        export PATH="$HOME/.local/bin:$PATH"
         source $venv_path/bin/activate
-
-        timeout 60m adoc llm "$prompt_file" || true
+        cat "$prompt_file" | ./node_modules/.bin/pi -p \
+          --provider portkey --model "${{ inputs.model }}" \
+          --mode json --session "$session_file" \
+          | python3 .github/scripts/pretty-pi.py || true
 
     - name: Collect results
       if: ${{ env.LLM_AGENT_RUN == 'true' }}
@@ -391,6 +366,14 @@ jobs:
       with:
         name: llm-patches
         path: ${{ env.patches_path }}
+        if-no-files-found: ignore
+
+    - name: Store session log
+      if: ${{ env.LLM_AGENT_RUN == 'true' }}
+      uses: actions/upload-artifact@v6
+      with:
+        name: llm-session
+        path: ${{ env.session_file }}
         if-no-files-found: ignore
 
     - name: Get artifact url of suggested patches
@@ -407,9 +390,7 @@ jobs:
     - name: Clean-up
       if: ${{ env.LLM_AGENT_RUN == 'true' && always() }}
       run: |
-        rm -rf "$HOME/.claude"
-        rm -f $HOME/.claude.json
-        rm -f $HOME/.claude.*
-        rm -f "$annotations_file" "$summary_file" "$prompt_file"
+        rm -rf "$HOME/.pi"
+        rm -f "$annotations_file" "$summary_file" "$prompt_file" "$session_file"
         rm -rf "$patches_path"
         rm -rf "$venv_path"
