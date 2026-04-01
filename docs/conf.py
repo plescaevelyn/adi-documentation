@@ -15,15 +15,25 @@ extensions = [
     "sphinx.ext.todo",
     "adi_doctools",
     "sphinxcontrib.mermaid",
+    "myst_parser",
 ]
 
 needs_extensions = {
     'adi_doctools': '0.4.33'
 }
-
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store',
                     'solutions/reference-designs/common/zcu102-zynqmp-setup.rst']
-source_suffix = '.rst'
+
+source_suffix = {
+    ".rst": "restructuredtext",
+    ".md": "markdown",
+}
+
+html_static_path = ['_static']
+
+html_css_files = [
+    'custom.css',
+]
 
 # -- Custom extensions configuration ------------------------------------------
 
