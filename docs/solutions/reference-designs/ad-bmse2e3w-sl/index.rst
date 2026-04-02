@@ -229,7 +229,7 @@ Design & Integration Files
 
 .. admonition:: Download
 
-   `AD-BMSE2E3W-SL Design Support Package <ad-bmse2e3w-sl-designsupport.zip>`_
+   :download:`AD-BMSE2E3W-SL Design Support Package <ad-bmse2e3w-sl-designsupport.zip>`
 
    * Schematic
    * PCB Layout
