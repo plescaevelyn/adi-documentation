@@ -6,12 +6,13 @@ Software User Guide
 ===================
 
 This software user guide will help the user navigate the settings and command
-set to properly evaluate the best impedance analysis set-up for his or her
-application. The number of parameters makes it impossible to show every
-combination, but the user will understand how each parameter affects the
-measurement data.
+set to properly evaluate the best impedance analysis set-up for their
+application. Not all possible settings configurations with this system are shown.
+Due to the high number of possible configurations, only select configurations are
+shown. Users have the discretion to use these settings or use their own custom
+configuration. Performance may vary depending on these settings.
 
-The :adi:`AD-IMP2501DBZ-SL` comes with preloaded embedded firmware and can be
+The :adi:`AD-IMP2501DBZ-SL` comes with pre-loaded embedded firmware and can be
 used out of the box. This firmware handles communication with the host PC,
 setting user specified parameters, initiating signal generation, processing
 impedance measurement data, and reporting that information back to the user.
@@ -29,7 +30,7 @@ USB Driver Installation
 .. note::
 
    The default communication interface to the EVAL-AD-IMP250-SL is via its USB
-   port. Using the USB Type C cable included with the evaluation board
+   port. Using the USB Type-C cable included with the evaluation board
    (TTL-232R-RPI), FTDI's Virtual COM Port (VCP) drivers must be downloaded from
    their website located at https://www.ftdichip.com/Drivers/VCP.htm
 
@@ -74,9 +75,9 @@ Software/Firmware Request
 - A user must first make a myAnalog account by clicking ``Register with email``
   on my.analog.com. The email used to create an account will be needed in the
   next step.
-- Please contact your local ADI support or Ben Ferrara (Ben.Ferrara@analog.com)
-  and request access to the AD-IMP2501DBZ-SL firmware or software and designate
-  the email address used to create your myAnalog account.
+- Please contact your local ADI support and request access to the AD-IMP2501DBZ-SL
+  firmware or software and designate the email address used to create your myAnalog
+  account.
 - You will receive an email that looks like the below image once the request has
   been processed. Follow the URL at the bottom of the page:
 
@@ -130,7 +131,9 @@ revision the board reports is the same as the firmware file that was flashed
 
    If the version reported by the AD-IMP2501DBZ-SL is not correct, the flashing
    process may have failed. A good check is to re-open the explorer window and
-   check the DAPLINK drive.
+   check the DAPLINK drive. Refer to
+   :ref:`ad-imp2501-sl opening-a-session-via-teraterm` for instructions on how to
+   verify te version.
 
 .. figure:: images/fw_fail.png
    :width: 400px
@@ -320,6 +323,8 @@ Command Line
 For command line operation and explanation of the system API, please continue
 here.
 
+.. _ad-imp2501-sl terminal-emulator-installation:
+
 Terminal Emulator Installation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -340,6 +345,8 @@ instructions.
    Some terminals, such as PuTTY do not support the ANSI Escape Codes which
    manipulate the cursor position. If the ANSI Escape Codes are not supported,
    the terminal may not work properly. TeraTerm supports these characters.
+
+.. _ad-imp2501-sl opening-a-session-via-teraterm:
 
 Opening a Session via Teraterm
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -399,6 +406,7 @@ section for more details on each command.
 .. figure:: images/fishercat_help_command_page2.png
    :width: 700px
 
+.. _ad-imp2501-sl performing-basic-measurements-via-command-line:
 
 Performing Basic Measurements via Command Line
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -424,20 +432,23 @@ the terminal window.
 .. figure:: images/fishercat_get_default.png
    :width: 600px
 
-Measurement settings are not always in their base SI form. Frequency is in Hz,
-delays are in milliseconds. The signal magnitude sets the peak-to-peak value,
-centered around the offset voltage. The DC offset is in millivolts.
+Please note measurement parameter **units** in the ``get`` command. Frequency
+is in Hz, delays are in milliseconds. The signal magnitude sets the peak-to-peak
+value, centered around the offset voltage, and is input in mV. The DC offset is
+also in mV.
 
-The AC magnitude can be configured anywhere between approximately 10mV pk-pk and
-2.4V pk-pk. This represents the generated signal, but the actual magnitude
-across the DUT will be be dependent on the DUT impedance, due to the onboard
-100Ω source resistance (for current limiting and patient protection, can be
-modified for different applications); see
-:ref:`ad-imp2501-sl selecting-a-measurement-range` for details.
+The AC excitation signal magnitude can be set anywhere between approximately 10mV pk-pk and
+2.4V pk-pk. This represents the generated signal at the source, the actual signal magnitude
+measured across the DUT however, will be be dependent on the DUT impedance. There is also,
+by default, a 100 Ω source resistor onboard in series with the connected DUT. This is for
+current limiting and patient protection. That resistor can be modified for different
+applications to either limit the current further or reduce the series resistance; see
+:ref:`ad-imp2501-sl selecting-a-measurement-range` for more details on selecting a magnitude
+and measurement ranges.
 
 .. tip::
 
-   The order in which the settings commands are entered is not important.
+   The order in which the measurement parameters are entered is not important.
 
 Example
 ^^^^^^^
@@ -647,7 +658,8 @@ impedance (Z):
 | Z = R for resistors
 
 Where f is the frequency of the signal; C, L, and R are the component values in
-Farads, Henries and Ohms respectively. R represents resistance and X reactance.
+Farads, Henries and Ohms respectively. R and X make up the rectangular components
+of impedance, R represents resistance and X reactance.
 
 For admittance (Y):
 
@@ -1122,10 +1134,10 @@ To calibrate the module in a specific gain combination, follow the steps below:
 +-------------------------+--------------------+------------------------------------+
 | P8                      | Not Installed      | User Selectable Load               |
 +-------------------------+--------------------+------------------------------------+
-| P12                     | Pins 1-2           | EIS HCUR SMA/Onboard               |
-|                         | Pins 5-6           | EIS HPOT SMA/Onboard               |
-|                         | Pins 9-10          | EIS LPOT SMA/Onboard               |
-|                         | Pins 13-14         | EIS LCUR SMA/Onboard               |
+| P12                     | | Pins 1-2         | | EIS HCUR SMA/Onboard             |
+|                         | | Pins 5-6         | | EIS HPOT SMA/Onboard             |
+|                         | | Pins 9-10        | | EIS LPOT SMA/Onboard             |
+|                         | | Pins 13-14       | | EIS LCUR SMA/Onboard             |
 +-------------------------+--------------------+------------------------------------+
 
 - If using test clips or SMA cables that are tied together at the clip, remove

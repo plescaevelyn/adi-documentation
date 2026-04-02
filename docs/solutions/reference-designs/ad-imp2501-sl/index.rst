@@ -19,10 +19,10 @@ communication interfacing, varying electrical load connections, and easier
 setup/debug.
 
 The AD-IMP2501DBZ-SL is the electrical impedance spectroscopy module, capable of
-tetrapolar impedance measurements up to 250 impedance samples per second. It
-integrates AC waveform signal generation from 0V - 2.4V at 1Hz up to 1.5MHz,
-differential voltage measurement, current return measurement, and full impedance
-processing with an arm cortex M4 microprocessor. All in a 400mm square PCB.
+tetrapolar impedance measurements. The module integrates AC waveform signal
+generation from 0V - 2.4V at 1 Hz up to 1.5 MHz, differential voltage measurement,
+current return measurement, and full impedance processing with a 120 MHz
+Arm Cortex-M4 microprocessor. All in a sub 400mm square PCB.
 
 .. figure:: images/eval-ad-imp2501-sl.png
    :width: 500px
@@ -32,25 +32,28 @@ processing with an arm cortex M4 microprocessor. All in a 400mm square PCB.
 Features
 --------
 
-The **AD-IMP2501DBZ-SL** is a high-performance, impedance analyzer module.
+AD-IMP2501DBZ-SL
+~~~~~~~~~~~~~~~~
+High-performance, impedance analyzer measurement module.
 
-- Highly compact, 31.24mm x 12.83mm System-on-Module (SOM)
-- Impedance measurements from 0.1 Hz to 1.5 MHz
-- Current or Voltage drive application modes
+- Compact, 31.24mm x 12.83mm PCB 
+- Impedance measurements from 1 Hz to 1.5 MHz
+- Voltage or Current excitation modes
 - 16-bit acquisition channels
 - Operates from a single 5V supply
-- UART interface (additional BLE 5.2, USB, and SPI hardware support capable)
-- Meets patient leakage requirements for IEC 60601-1*
-- 6 display mode formats in SI units
+- UART interface (additional BLE 5.2, USB, and SPI hardware support capable, not implemented)
+- Designed to help meet leakage requirements for IEC 60601-1*
+- 6 display mode formats (R/X, Z/θ (deg), Z/θ (rad), G/B, Y/θ (deg), Y/θ (rad))
 - Command line, Graphical user interface, and Python API for easy system evaluation and data collection
 
 *\*Current hardware implementation is dependent on voltage drive levels. The
 hardware can be modified to limit the current depending on application
 specifications and voltage drive needs*
 
-The **AD-IMP2501EBZ-SL** is an easy-to-use evaluation and development board that
-enables convenient access to the functionality of the AD-IMP2501DBZ-SL Impedance
-Analyzer Measurement Module.
+AD-IMP2501EBZ-SL
+~~~~~~~~~~~~~~~~
+Easy-to-use evaluation and development board that enables convenient access to
+the functionality of the AD-IMP2501DBZ-SL Impedance Analyzer Measurement Module.
 
 - USB-C connector provides power and serial communication to host PC
 - On board FTDI USB to UART conversion
@@ -118,8 +121,12 @@ AD-IMP2501DBZ-SL
 
 #. **AD-IMP2501DBZ-SL** Impedance Analyzer Measurement Module
 
-.. figure:: images/ad-imp2501dbz-sl.png
-   :width: 300px
+.. figure:: images/ad-imp2501dbz-sl_top.png
+   :width: 400px
+
+.. figure:: images/ad-imp2501dbz-sl_bot.png
+   :width: 400px
+
 
 .. important::
 
@@ -130,13 +137,12 @@ AD-IMP2501DBZ-SL
 User guides
 -----------
 
-Follow these steps to start evaluating the :adi:`AD-IMP2501DBZ-SL`:
+These steps below are the essential steps to start evaluating the :adi:`AD-IMP2501DBZ-SL`:
 
-#. Driver Installation
-#. Terminal Emulator/GUI Installation
-#. Hardware Setup
-#. Command Line or GUI Operation
-#. Performing Impedance Measurements
+#. :ref:`ad-imp2501-sl usb-driver-installation`
+#. :ref:`ad-imp2501-sl terminal-emulator-installation`
+#. :ref:`ad-imp2501-sl general-setup`
+#. :ref:`ad-imp2501-sl performing-basic-measurements-via-command-line`
 
 .. toctree::
    :titlesonly:
