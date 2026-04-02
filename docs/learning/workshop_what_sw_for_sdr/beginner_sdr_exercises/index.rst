@@ -28,6 +28,7 @@ These exercises can be run either from a **PC** (Linux or Windows) or using a
 * **Jupiter or Talise SDR** (optional, for advanced platform exercises)
 * **SMA loopback cable** (for loopback exercises)
 * **Antennas**: 2.4 GHz or 915 MHz antennas for over-the-air exercises (Doppler radar, etc.)
+* **Ethernet cable** (for Jupiter connection)
 * **Two SD cards** (optional, for Raspberry Pi 5 setup)
 
 **Software:**
@@ -96,6 +97,81 @@ These exercises can be run either from a **PC** (Linux or Windows) or using a
 
    Generally, the exercises with both a receiver and transceiver counterpart may be run separately (altough
    they might yield some warnings) or together with a friend who has the same setup.
+
+System Setup
+~~~~~~~~~~~~
+
+The following image shows an example system setup with both the Pluto and Jupiter connected.
+The Raspberry Pi 400 shown was used in this particular version of the workshop, but it is not
+mandatory - you can use any PC with the required software installed.
+
+.. figure:: ../images/system_setup.png
+   :align: center
+   :width: 50em
+
+   Example system setup with Pluto and Jupiter SDR platforms
+
+Booting the Jupiter
+~~~~~~~~~~~~~~~~~~~
+
+.. important::
+
+   The Jupiter SD card image can be downloaded
+   `here <https://swdownloads.analog.com/cse/kuiper/Kuiper_jupiter_FTC2024_SDR.zip>`__.
+
+Before running Jupiter exercises, ensure the Jupiter is properly booted.
+
+**Verifying Boot Status:**
+
+Make sure the back panel **STAT** blue LED is blinking. This indicates the boot stage is
+successful. If the LEDs are red, the board is in shut down mode. To start it, press the
+push-button once and wait for a blinking pattern.
+
+.. figure:: ../images/jupiter_setup/jupiter_stat_led.png
+   :align: center
+   :width: 30em
+
+   Jupiter STAT LED indicating successful boot (blinking blue)
+
+.. figure:: ../images/jupiter_setup/jupiter_setup_blinking_led.png
+   :align: center
+   :width: 30em
+
+   Jupiter back panel showing the STAT LED location
+
+**Rebooting the Jupiter:**
+
+If you need to reboot the Jupiter (e.g., to close IIO Oscilloscope), you have two methods:
+
+*Method 1: Via SSH*
+
+Open a terminal and run the following commands:
+
+.. code-block:: bash
+
+   ssh root@jupiter.local
+   # press Enter and enter "analog" as password
+   reboot
+   # press Enter
+
+.. figure:: ../images/jupiter_setup/jupiter_reboot_ssh.png
+   :align: center
+   :width: 30em
+
+   Rebooting Jupiter via SSH
+
+*Method 2: Via Push-Button*
+
+.. figure:: ../images/jupiter_setup/jupiter_reboot_button.png
+   :align: center
+   :width: 25em
+
+   Rebooting Jupiter via push-button
+
+#. Press once the push-button on the back of the Jupiter
+#. Wait for the LEDs to turn red
+#. Press once more the push-button to boot again
+#. Wait for the STAT LED to blink again (blue color)
 
 .. _sinewave-loopback:
 
