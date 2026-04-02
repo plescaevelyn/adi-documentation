@@ -47,8 +47,8 @@ Content
 
 #. Device Drivers
 
-   #. :dokuwiki:`AXI ADC HDL Linux Driver </resources/tools-software/linux-drivers/iio-adc/axi-adc-hdl>`
-   #. :dokuwiki:`AXI DAC HDL Linux Driver </resources/tools-software/linux-drivers/iio-dds/axi-dac-dds-hdl>`
+   #. :external+linux:ref:`axi-adc-hdl`
+   #. :external+linux:ref:`axi-dac-dds-hdl`
    #. AXI DMAC Linux Driver
    #. etc.
 
