@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """
-Find and remove dangling files (not referenced in any .rst files) in docs folder.
+Find and remove dangling files (not referenced in any .rst or .md files) in docs folder.
 """
 
 import os
+import re
 import argparse
 import subprocess
 from pathlib import Path
@@ -50,51 +51,104 @@ def find_all_files(root_dir):
     return files
 
 
-def find_rst_files(root_dir):
-    """Find all .rst files in the docs folder."""
-    rst_files = []
+def find_doc_files(root_dir):
+    """Find all .rst and .md files in the docs folder."""
+    doc_files = []
     for root, dirs, filenames in os.walk(root_dir):
         dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
 
         for name in filenames:
-            if name.endswith('.rst'):
-                rst_files.append(Path(root) / name)
+            if name.endswith('.rst') or name.endswith('.md'):
+                doc_files.append(Path(root) / name)
 
-    return rst_files
+    return doc_files
 
 
-def load_rst_contents(rst_files):
-    """Load contents of all .rst files into a single string for fast searching."""
+def load_doc_contents(doc_files):
+    """Load contents of all .rst and .md files into a dict for fast searching."""
     contents = {}
-    for rst_file in rst_files:
+    for doc_file in doc_files:
         try:
-            contents[rst_file] = rst_file.read_text(encoding='utf-8')
+            contents[doc_file] = doc_file.read_text(encoding='utf-8')
         except (UnicodeDecodeError, PermissionError):
             pass
     return contents
 
 
-def is_file_referenced(file_path, rst_contents):
-    """Check if a file is referenced in any .rst file."""
-    filename = file_path.name
+# Directives/roles that actually include files in the Sphinx build
+# Optional path prefixes: ./ or ../*/ patterns
+PATH_PREFIX = r'(?:\./|(?:\.\./)+(?:\w+/)*)?'
 
-    for rst_file, content in rst_contents.items():
-        rel_path = os.path.relpath(file_path, rst_file.parent)
-        if rel_path in content:
+# RST patterns:
+#   .. directive:: path
+#   .. |substitution| directive:: path
+#   .. .. directive:: path  (commented out)
+#   :role:`text <path>` or :role:`path`
+#   :option: path
+VALID_RST_PATTERNS = [
+    r'\.\.\s+(?:\|[^|]+\|\s+)?[\w-]+::\s*' + PATH_PREFIX,  # .. directive:: or .. |sub| directive::
+    r':[\w-]+:`[^`]*<\s*' + PATH_PREFIX,  # :role:`text <path>`
+    r':[\w-]+:`\s*' + PATH_PREFIX,  # :role:`path`
+    r':[\w-]+:\s*' + PATH_PREFIX,  # :option: path
+]
+
+# MyST patterns:
+#   ```{directive}
+#   path
+#   ```
+#   {role}`text <path>` or {role}`path`
+#   :option: path
+VALID_MD_PATTERNS = [
+    r'```\{[\w-]+\}\s*' + PATH_PREFIX,  # ```{directive} path
+    r'\{[\w-]+\}`[^`]*<\s*' + PATH_PREFIX,  # {role}`text <path>`
+    r'\{[\w-]+\}`\s*' + PATH_PREFIX,  # {role}`path`
+    r':[\w-]+:\s*' + PATH_PREFIX,  # :option: path
+]
+
+
+def is_valid_reference(content, rel_path, patterns):
+    """Check if rel_path is referenced via a valid Sphinx directive."""
+    escaped_path = re.escape(rel_path)
+    for pattern in patterns:
+        # Check if the path follows a valid directive
+        if re.search(pattern + escaped_path, content):
             return True
+    return False
+
+
+def is_file_referenced(file_path, doc_contents):
+    """Check if a file is referenced via valid Sphinx directives.
+    
+    Only directives that actually copy/include files in the build count:
+    - RST: .. image::, .. figure::, :download:, .. literalinclude::, etc.
+    - MyST: {image}, {figure}, {download}, {literalinclude}, etc.
+    
+    Plain links like [text](path) or `path` don't copy files to the build.
+    """
+    for doc_file, content in doc_contents.items():
+        rel_path = os.path.relpath(file_path, doc_file.parent)
+        if rel_path not in content:
+            continue
+
+        if doc_file.suffix == '.md':
+            if is_valid_reference(content, rel_path, VALID_MD_PATTERNS):
+                return True
+        else:  # .rst
+            if is_valid_reference(content, rel_path, VALID_RST_PATTERNS):
+                return True
 
     return False
 
 
 def find_dangling_files(root_dir):
-    """Find files that are not referenced in any .rst file."""
+    """Find files that are not referenced in any .rst or .md file."""
     all_files = find_all_files(root_dir)
-    rst_files = find_rst_files(root_dir)
-    rst_contents = load_rst_contents(rst_files)
+    doc_files = find_doc_files(root_dir)
+    doc_contents = load_doc_contents(doc_files)
 
     dangling = []
     for file_path in all_files:
-        if not is_file_referenced(file_path, rst_contents):
+        if not is_file_referenced(file_path, doc_contents):
             dangling.append(file_path)
 
     return dangling
@@ -141,7 +195,7 @@ def main():
         return 0
 
     for f in dangling:
-        print(warning.format(file=str(f), message="Not referenced in any .rst file"))
+        print(warning.format(file=str(f), message="Not referenced in any .rst or .md file"))
 
     print(f"\nFound {len(dangling)} dangling files\n")
 
