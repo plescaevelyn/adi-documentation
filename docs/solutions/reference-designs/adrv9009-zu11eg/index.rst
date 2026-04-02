@@ -4,7 +4,15 @@ ADRV9009-ZU11EG RF System-on-Module
 Introduction
 ------------
 
-The :adi:`ADRV9009-ZU11EG` :adi:`Export Info <ADRV9009-ZU11EG>` is a highly integrated RF System-On-Module(RF-SOM) based on the Analog Devices :adi:`ADRV9009` and Xilinx `Zynq UltraScale+ MPSoC <https://www.xilinx.com/products/silicon-devices/soc/zynq-ultrascale-mpsoc.html>`_. The RF-SOM is a platform for evaluation and prototyping. To use the RF-SOM a carrier board is required. The Analog Devices ADRV2CRR-FMC Carrier board is designed for this purpose. An additional RF Transceiver board can also be fitted to the carrier to further expand the system up to 8 Tx and Rx radio channels.
+The :adi:`ADRV9009-ZU11EG` :adi:`Export Info <ADRV9009-ZU11EG>` is a highly
+integrated RF System-On-Module(RF-SOM) based on the Analog Devices
+:adi:`ADRV9009` and Xilinx
+`Zynq UltraScale+ MPSoC <https://www.xilinx.com/products/silicon-devices/soc/zynq-ultrascale-mpsoc.html>`_.
+The RF-SOM is a platform for evaluation and prototyping. To use the RF-SOM
+a carrier board is required. The Analog Devices ADRV2CRR-FMC Carrier board
+is designed for this purpose. An additional RF Transceiver board can also
+be fitted to the carrier to further expand the system up to 8 Tx and Rx
+radio channels.
 
 **The RF-SOM box includes:**
 
@@ -13,7 +21,8 @@ The :adi:`ADRV9009-ZU11EG` :adi:`Export Info <ADRV9009-ZU11EG>` is a highly inte
 
 **The Carrier box includes:**
 
--  ADRV2CRR-FMC carrier board(needed to evaluate the RF-SOM), SD-Card, Fan Heatsink and other accessories to get the user up and running
+-  ADRV2CRR-FMC carrier board(needed to evaluate the RF-SOM), SD-Card,
+   Fan Heatsink and other accessories to get the user up and running
 -  Full details found in the Carrier section
 
 --------------
@@ -48,7 +57,8 @@ ADRV9009-ZU11EG Highlevel specification
       -  L1 Cache 32KB I / D per core, Tightly Coupled Memory 128KB per core
 
    -  Mali-400 MP2 graphics processing unit up to 667 MHz
-   -  PCIe® Gen2 x4, 2x USB3.0, SATA 3.1, DisplayPort, 4x Tri-mode Gigabit Ethernet
+   -  PCIe® Gen2 x4, 2x USB3.0, SATA 3.1, DisplayPort,
+      4x Tri-mode Gigabit Ethernet
    -  2xUSB 2.0, 2x SD/SDIO, 2x UART, 2x CAN 2.0B, 2x I2C, 2x SPI, 4x 32b GPIO
    -  16nm FinFET+ programmable logic
 
@@ -57,7 +67,8 @@ ADRV9009-ZU11EG Highlevel specification
 -  On Board Memory:
 
    -  Processing System (Dedicated for ARM Cores) : 4 GByte DDR4(x64) (with ECC)
-   -  Programmable Logic (Dedicated for RF Data) : Two independent banks of 2 GByte DDR4(x32)
+   -  Programmable Logic (Dedicated for RF Data) : Two independent banks
+      of 2 GByte DDR4(x32)
    -  1Gbit serial flash for image storage
    -  removable SD-Card for secure file storage
 
@@ -82,26 +93,27 @@ Hardware Design Details
 
 .. important::
 
-   For Clock Distribution Synchronization some passive components need to be changed on the :doc:`ADRV2CRR-FMC </solutions/reference-designs/adrv9009zu11eg/adrv2crr-fmc_carrier_board>` Carrier Board.
+   For Clock Distribution Synchronization some passive components need to
+   be changed on the
+   :doc:`ADRV2CRR-FMC </solutions/reference-designs/adrv9009-zu11eg/adrv2crr-fmc_carrier_board>`
+   Carrier Board.
 
-   
    Rev C:
-   
+
    -  Replace C18, C19, C236, C240 with 0 Ohm resistors
    -  Replace C289, C290 with 0 Ohm resistors
    -  Unload 0 Ohm resistors from location R77, R112 and insert to R110, R111
-   
+
    Rev C.1:
-   
+
    -  Replace C289, C290 with 0 Ohm resistors
    -  Unload 0 Ohm resistors from location R77, R112 and insert to R110, R111
-   
 
--  :doc:`ADRV9009-ZU11EG </solutions/reference-designs/adrv9009zu11eg/hardware>`
+-  :doc:`ADRV9009-ZU11EG </solutions/reference-designs/adrv9009-zu11eg/hardware>`
 -  Included are further details on the RF-SOM schematics, BOM, system clocking
    tree, mechanical specs, power tree, electrical interface.
 
--  :doc:`ADRV2CRR-FMC </solutions/reference-designs/adrv9009zu11eg/adrv2crr-fmc_carrier_board>`
+-  :doc:`ADRV2CRR-FMC </solutions/reference-designs/adrv9009-zu11eg/adrv2crr-fmc_carrier_board>`
 -  Included are schematics, BOM, mechanical specs, high level system view.
 
 -  `AD-FMCOMMS8-EBZ <https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms8-ebz>`_
@@ -113,9 +125,21 @@ Hardware Design Details
 Application Development
 -----------------------
 
-Multiple ADRV9009-ZU11EG’s can be synchronized together enabling a complete solution for complex multi-stream applications ensuring end-to-end deterministic latency. The ADRV9009 Transceivers include integrated LO and phase synchronization. Overall system frequency & phase synchronization is maintained with a clock tree structure using ADI high performance low jitter :adi:`HMC7044` devices, making it ideal for applications requiring RF phase alignment with a large number of channels.
+Multiple ADRV9009-ZU11EG’s can be synchronized together enabling a complete
+solution for complex multi-stream applications ensuring end-to-end
+deterministic latency. The ADRV9009 Transceivers include integrated LO and
+phase synchronization. Overall system frequency & phase synchronization is
+maintained with a clock tree structure using ADI high performance low
+jitter :adi:`HMC7044` devices, making it ideal for applications requiring
+RF phase alignment with a large number of channels.
 
-The ADRV9009-ZU11EG has extensive I/O capability. Combined with the ADRV2CRR-FMC evaluation carrier board a variety of high speed I/O can be evaluated, including USB3, USB2, PCIe 3.0 x8, QSFP+, SFP+, 1Gb Ethernet x2, and CPRI capability. Please review the I/O functionality reference table provided in the :doc:`ADRV2CRR-FMC </solutions/reference-designs/adrv9009zu11eg/adrv2crr-fmc_carrier_board>` homepage for more details on the functionality provided.
+The ADRV9009-ZU11EG has extensive I/O capability. Combined with the
+ADRV2CRR-FMC evaluation carrier board a variety of high speed I/O can be
+evaluated, including USB3, USB2, PCIe 3.0 x8, QSFP+, SFP+, 1Gb Ethernet
+x2, and CPRI capability. Please review the I/O functionality reference
+table provided in the
+:doc:`ADRV2CRR-FMC </solutions/reference-designs/adrv9009-zu11eg/adrv2crr-fmc_carrier_board>`
+homepage for more details on the functionality provided.
 
 An additional High Pin Count FMC Daughter Board (AD-FMCOMMS8-EBZ) can be plugged
 into the carrier board with a further two ADRV9009 Transceivers increasing to a
@@ -144,11 +168,13 @@ Users should check that they have the appropriate Vivado license in place to be
 able to use and build the reference HDL code provided for the Ultrascale+ MPSOC
 in the system.
 
-People who follow the flow that is outlined, have a much better experience with things. However, like many things, documentation is never as complete as it should be. If you have any questions, feel free to :ez:`ask <fpga>`.
+People who follow the flow that is outlined, have a much better experience
+with things. However, like many things, documentation is never as complete
+as it should be. If you have any questions, feel free to :ez:`ask <fpga>`.
 
 -  Getting started with the ADRV9009-ZU11EG
 
-   -  :doc:`ADRV9009-ZU11EG Quick Start Guide </solutions/reference-designs/adrv9009zu11eg/quick-start-guide>`
+   -  :doc:`ADRV9009-ZU11EG Quick Start Guide </solutions/reference-designs/adrv9009-zu11eg/quick-start-guide>`
 
       -  `Configure a pre-existing SD-Card <https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux>`_
       -  `Update the old card you received with your hardware <https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux>`_
@@ -210,8 +236,7 @@ People who follow the flow that is outlined, have a much better experience with 
          -  `AXI DAC HDL Linux Driver <https://wiki.analog.com/resources/tools-software/linux-drivers/iio-dds/axi-dac-dds-hdl>`_
 
       -  `ADRV9009/ADRV9008 No-OS System Level Design Setup <https://wiki.analog.com/resources/eval/user-guides/adrv9009/no-os-setup>`_
-      -  :doc:`HDL Reference Design </solutions/reference-designs/adrv9009zu11eg/hdl>`
-      -  :doc:`ADRV9009-ZU11EG Multi-SOM Synchronization </solutions/reference-designs/adrv9009zu11eg/syncronization>`
+      -  :doc:`ADRV9009-ZU11EG Multi-SOM Synchronization </solutions/reference-designs/adrv9009-zu11eg/syncronization>`
 
 --------------
 
@@ -230,7 +255,7 @@ Functional Test
 Details on how the ADRV9009-ZU11EG is functionally tested can be found here.
 
 -  `ADRV2CRR-FMC Production Test <https://wiki.analog.com/resources/eval/user-guides/adrv2crr-fmc/testing>`_
--  :doc:`ADRV9009-ZU11EG Production Test </solutions/reference-designs/adrv9009zu11eg/testing>`
+-  :doc:`ADRV9009-ZU11EG Production Test </solutions/reference-designs/adrv9009-zu11eg/testing>`
 
 --------------
 
@@ -247,13 +272,11 @@ Engineer Zone.
 .. |image1| image:: images/sdr_book.png
    :width: 200
 
-
 .. toctree::
    :hidden:
 
    adrv2crr-fmc_carrier_board
    hardware
-   hdl
    pre-release
    quick-start-guide
    syncronization
