@@ -40,18 +40,18 @@ Helpful Files
 Software Needed:
 ----------------
 
--  :doc:`Analysis \| Control \| Evaluation (ACE) Software </wiki-migration/resources/tools-software/ace>`
--  :doc:`DPG Lite </wiki-migration/resources/tools-software/ace/dpg-lite>` (Recommended; Installed with ACE) or :doc:`DPG Downloader </wiki-migration/resources/eval/dpg/dpgdownloader>`
+-  `Analysis \| Control \| Evaluation (ACE) Software <https://wiki.analog.com/resources/tools-software/ace>`_
+-  `DPG Lite <https://wiki.analog.com/resources/tools-software/ace/dpg-lite>`_ (Recommended; Installed with ACE) or `DPG Downloader <https://wiki.analog.com/resources/eval/dpg/dpgdownloader>`_
 
 .. important::
 
-   \ Known Issue: ACE may fail to detect HS-DAC boards, details :doc:`here </wiki-migration/resources/tools-software/ace/knownissues>`.
+   \ Known Issue: ACE may fail to detect HS-DAC boards, details `here <https://wiki.analog.com/resources/tools-software/ace/knownissues>`_.
 
 Hardware Needed:
 ----------------
 
 -  :adi:`AD9783-DPG2-EBZ <en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD9783.html#eb-relatedhardware>` Evaluation Board
--  :doc:`SDP-H1 </wiki-migration/resources/eval/dpg/hsdac-sdp-h1>` (EVAL-SDP-CH1Z) Board / :doc:`ADS7-V2 </wiki-migration/resources/eval/ads7-v2>` (ADS7-V2EBZ) Board
+-  `SDP-H1 <https://wiki.analog.com/resources/eval/dpg/hsdac-sdp-h1>`_ (EVAL-SDP-CH1Z) Board / `ADS7-V2 <https://wiki.analog.com/resources/eval/ads7-v2>`_ (ADS7-V2EBZ) Board
 -  5Vdc 1A Power supply for the evaluation board
 -  :adi:`AD-DAC-FMC`-ADP High-Speed DAC Evaluation Board to FMC Adapter Board
 -  PC with ACE and DPG Lite Software Applications
