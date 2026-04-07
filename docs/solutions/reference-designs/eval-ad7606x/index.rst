@@ -24,12 +24,10 @@ Applications:
    :hidden:
 
    ad7606
-   ad7606
    ad7606_mbed_iio_application
    ad7606c-remotecontrol
    axi_ad7606x
-
-Recommendations
+   Recommendations
 -------------------------------------------------------------------------------
 
 People who follow the flow that is outlined, have a much better experience with

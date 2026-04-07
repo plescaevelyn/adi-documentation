@@ -1,11 +1,11 @@
 AD7606B/C ACE remote control
 ============================
 
-By using :doc:`ACE Remote Control </wiki-migration/resources/tools-software/ace/remotecontrol>`, AD7606B and AD7606C plug-ins can be automated to perform several evaluation activities across the different analog input ranges, bandwidth modes, channels, etc. Different example code are given on the MATLAB examples section.
+By using `ACE Remote Control <https://wiki.analog.com/resources/tools-software/ace/remotecontrol>`_, AD7606B and AD7606C plug-ins can be automated to perform several evaluation activities across the different analog input ranges, bandwidth modes, channels, etc. Different example code are given on the MATLAB examples section.
 
 Without hardware, the :adi:`AD7606x Family software model <en/products/ad7606b.html#product-tools>` can be used to try different configurations for both AD7606C and AD7606B: sampling rate, RC filtering, oversampling, calibration; and analyze frequency response, noise performance, interface timing or power consumption, among others.
 
-All the below features can also be tested by using the :doc:`MBed Example Code </wiki-migration/resources/tools-software/product-support-software/ad7606_mbed_iio_application>`, that makes use of No-OS drivers and interface with SDP-K or STM32 Nucleo boards.
+All the below features can also be tested by using the `MBed Example Code <https://wiki.analog.com/resources/tools-software/product-support-software/ad7606_mbed_iio_application>`_, that makes use of No-OS drivers and interface with SDP-K or STM32 Nucleo boards.
 
 Getting Started
 ---------------
@@ -44,7 +44,7 @@ Setting up communication with ACE
 Recording macros
 ----------------
 
-Start recording macros as explained on :doc:`Recording a macro </wiki-migration/software-tools/ace/recording-macros>` wiki page
+Start recording macros as explained on `Recording a macro <https://wiki.analog.com/software-tools/ace/recording-macros>`_ wiki page
 
 Editing macros in MATLAB
 ------------------------

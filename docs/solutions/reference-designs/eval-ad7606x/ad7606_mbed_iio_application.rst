@@ -128,7 +128,7 @@ done externally by capturing data from the Serial link on controller board.
 
 *\*Note: The DMM or Debug tab should not be accessed when capturing data as this would impact data capturing.*
 
-More info here: :doc:`/wiki-migration/resources/tools-software/product-support-software/data-capture-using-iio-app`
+More info here: `Data Capture Using Iio App <https://wiki.analog.com/resources/tools-software/product-support-software/data-capture-using-iio-app>`_
 
 .. important::
 
