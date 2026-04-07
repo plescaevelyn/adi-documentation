@@ -3,7 +3,7 @@ AD-FMCLIDAR1-EBZ
 
 .. warning::
 
-   Support for the ad_fmclidar_ebz is discontinued on all supported carriers: Arria10 SOC, zc706 and zcu102. ad_fmclidar_ebz will not be supported in future releases, last release in which pre-build files can be found is 2021_r1. Check the :external+kuiper:doc:`Kuiper Linux release notes <release_notes>` to see all available Kuiper Linux releases.
+   Support for the ad_fmclidar_ebz is discontinued on all supported carriers: Arria10 SOC, zc706 and zcu102. ad_fmclidar_ebz will not be supported in future releases, last release in which pre-build files can be found is 2021_r1. Check the `Kuiper Linux release notes <https://analogdevicesinc.github.io/documentation/linux/kuiper/release_notes.html>`_ to see all available Kuiper Linux releases.
 
 Introduction
 ------------
