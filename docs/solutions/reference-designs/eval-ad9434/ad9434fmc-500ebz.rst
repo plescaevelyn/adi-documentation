@@ -21,9 +21,8 @@ Typical Measurement Setup
 
 .. container:: centeralign
 
-   *Figure 1. Evaluation Board Connection—*\ :adi:`AD9434-FMC-500EBZ <AD9434>`\ *(on Left) and
-
-   *:adi:`EVAL-SDP-CH1Z <sdp>`\ *SDP-H1 (on Right)*
+   Figure 1. Evaluation Board Connection — :adi:`AD9434-FMC-500EBZ <AD9434>` (on Left) and
+   :adi:`EVAL-SDP-CH1Z <sdp>` SDP-H1 (on Right)
 
 Features
 --------
