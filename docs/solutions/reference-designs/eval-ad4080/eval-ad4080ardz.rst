@@ -45,7 +45,7 @@ ADALM2000 Active Learning Module and Scopy
 
 :adi:`ADALM2000 Active Learning Module <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/adalm2000.html>`
 
-:doc:`Scopy - A Graphical User Interface (GUI) for the ADALM2000. A multi-functional software toolset with strong capabilities for signal analysis </wiki-migration/university/tools/m2k/scopy>`
+`Scopy - A Graphical User Interface (GUI) for the ADALM2000. A multi-functional software toolset with strong capabilities for signal analysis <https://wiki.analog.com/university/tools/m2k/scopy>`_
 
 ADALM2000 Configuration Files
 -----------------------------
