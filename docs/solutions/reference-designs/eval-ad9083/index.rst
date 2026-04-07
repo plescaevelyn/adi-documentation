@@ -24,9 +24,7 @@ Applications:
    :hidden:
 
    ad9083
-   ad9083
-
-Recommendations
+   Recommendations
 -------------------------------------------------------------------------------
 
 People who follow the flow that is outlined, have a much better experience with
