@@ -332,7 +332,8 @@ ADC Common (axi_ad\*)
    +---------+--------+-------------+---------------------+------+---------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
    
-.. include:: /home/a/doc-migration/documentation/docs/wiki-migration/resources/fpga/docs/hdl/regmap_adc_custom.rst
+.. .. include:: /home/a/doc-migration/documentation/docs/wiki-migration/resources/fpga/docs/hdl/regmap_adc_custom.rst
+   :orphan:
 
    \|
 
@@ -3096,7 +3097,8 @@ ADC Common (axi_ad\*)
    +---------+--------+-------------+---------------------+------+---------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
    
-.. include:: /home/a/doc-migration/documentation/docs/wiki-migration/resources/fpga/docs/hdl/regmap_adc_custom.rst
+.. .. include:: /home/a/doc-migration/documentation/docs/wiki-migration/resources/fpga/docs/hdl/regmap_adc_custom.rst
+   :orphan:
 
    \|
 
@@ -5860,7 +5862,8 @@ ADC Common (axi_ad\*)
    +---------+--------+-------------+---------------------+------+---------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
    
-.. include:: /home/a/doc-migration/documentation/docs/wiki-migration/resources/fpga/docs/hdl/regmap_adc_custom.rst
+.. .. include:: /home/a/doc-migration/documentation/docs/wiki-migration/resources/fpga/docs/hdl/regmap_adc_custom.rst
+   :orphan:
 
    \|
 
