@@ -1,7 +1,8 @@
 AD-FMCOMMS11-EBZ Certification
-==============================
+================================================================================
 
-Both `CE <https://en.wikipedia.org/wiki/CE_marking>`_ and `FCC <https://en.wikipedia.org/wiki/FCC_Declaration_of_Conformity>`_ are necessary for system level products.
+Both `CE <https://en.wikipedia.org/wiki/CE_marking>`_ and `FCC <https://en.wikipedia.org/wiki/FCC_Declaration_of_Conformity>`_ 
+are necessary for system level products.
 
 Because ADI boards are custom built evaluation kits destined for professionals
 (you) to be used solely at research and development facilities for such

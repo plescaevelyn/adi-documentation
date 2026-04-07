@@ -1,55 +1,174 @@
-AD-FMCOMMS11-EBZ User Guide
-===========================
+AD-FMCOMMS11-EBZ 
+================================================================================
 
-The AD-FMComms11-EBZ board is a system platform board for communication infrastructure applications that demonstrates the Direct to RF (DRF) transmitter and observation receiver architecture. Using high sample rate RFDAC(s) and RFADC(s), a number of components in previous generation transmitters can be eliminated, such as mixers, modulators, IF amplifiers and filters. The objective being to bring the ADC or DAC as close to the antenna as possible, leading to possibly more cost effective and efficient communications solution. It is composed of multi-GSps RF ADC :adi:`AD9625` and DAC :adi:`AD9162`, Cheetah and Barium respectively. The transmit path contains a balun, low pass filter, gain block and variable attenuation to produce an output appropriate for a power amplifier module. Along the observation path, the PA output is coupled back into the board through a variable attenuator, a balun and finally the ADC. Clock management is taken care of on board; all the necessary clocks are generated from a reference. Power management is present as well. We will provide typical performance data for the entire range (70 MHz – 6 GHz) which is supported by the platform. This is primarily for system investigation and bring up of various waveforms from a software team before their custom hardware is complete, where they want to see waveforms, but are not concerned about the last 1dB or 1% EVM of performance.
+
+.. image:: images/AD9625-TR-TAG-chip-illustration.png
+   :align: left
+   :width: 150
+
+
+.. image:: images/AD9162-TR-chip-illustration.png
+   :align: left
+   :width: 150
+
+Overview
+--------------------------------------------------------------------------------
+
+The :adi:`AD-FMComms11-EBZ` board is a system platform board for communication
+infrastructure applications that demonstrates the Direct to RF (DRF) transmitter
+and observation receiver architecture. Using high sample rate RFDAC(s)
+and RFADC(s), a number of components in previous generation transmitters can be
+eliminated, such as mixers, modulators, IF amplifiers and filters. The objective
+being to bring the ADC or DAC as close to the antenna as possible, leading to
+possibly more cost effective and efficient communications solution.
+It is composed of multi-GSps RF ADC :adi:`AD9625` and DAC :adi:`AD9162`, Cheetah
+and Barium respectively. The transmit path contains a balun, low pass filter,
+gain block and variable attenuation to produce an output appropriate for a power
+amplifier module. Along the observation path, the PA output is coupled back into
+the board through a variable attenuator, a balun and finally the ADC. Clock
+management is taken care of on board; all the necessary clocks are generated
+from a reference. Power management is present as well. We will provide typical
+performance data for the entire range (70 MHz – 6 GHz) which is
+supported by the platform. This is primarily for system investigation and bring 
+up of various waveforms from a software team before their custom hardware is
+complete, where they want to see waveforms, but are not concerned about the last
+1dB or 1% EVM of performance.
+
+Features and Benefits:
+
+- TX
+   - 16-bit 12GSPS RFDAC
+   - JESD204B Interface
+      - 8 lanes up to 12.5Gbps
+   - 1x/2x/4x/6x/8x/12x/16x/24x/32x Interpolation
+   - 64-bit NCO at max rate
+   - Analog Modes of Operation:
+      - Normal Mode: 6GSPS DAC rate
+         - Synthesis up to 2.5GHz (1st Nyquist)
+      - Mix Mode: 6GSPS DAC rate
+         - Synthesis in 2nd & 3rd Nyquist zones
+      - 2X Normal Mode: 12GSPS DAC rate
+         - Synthesis up to 6GHz (1st Nyquist)
+      - Excellent dynamic performance
+- RX
+   - 3.2GHz full power bandwidth at 2.5GSPS
+      - Noise Density = -149.5dBFs/Hz, ENOB = 9.5 bits
+      - SFDR = 77 dBc at 1GHz Ain (2.5Gsps)
+      - SFDR = 77dBc at 1.8GHz Ain (2.5Gsps)
+   - +/-0.3 LSB DNL, +/-1.0 LSB INL
+   - Dual supplies : 1.3V and 2.5V
+   - 8 or 6 Lane JESD204B Outputs
+   - Programmable clipping threshold for Fast Detect output
+   - Two Integrated wide band digital down converters (DDC) per channel
+      - 10-bit complex NCO
+      - 2 cascaded half band filters (dec/8, dec/16)
+   - Timestamp for synchronous processing alignment
+      - SYSREF Setup/Hold detector
+   - Programmable Interrupt (IRQ) event monitor
+
+
+:adi:`ad-fmcomms11-ebz` looks like this, with 1x ADC and 1x DAC:
 
 .. image:: images/fmcomms11_image.png
    :align: center
    :width: 600
 
 Table of Contents
------------------
+--------------------------------------------------------------------------------
 
--  :doc:`Introduction </solutions/reference-designs/fmcomms11/introduction>`
--  :doc:`FMCOMMS11 Hardware </solutions/reference-designs/fmcomms11/hardware>`: This provides a brief description of the AD-FMCOMMS11-EBZ board by itself, and is a good reference for those who want to understand a little more about the board. If you just want to use the board, you can skip this section, and come back to it when you want to incorporate one of the devices into your product.
+#. :ref:`FMCOMMS11 Hardware <fmcomms11 hardware>`:
+   This provides a brief description of the AD-FMCOMMS11-EBZ
+   board by itself, and is a good reference for those who want
+   to understand a little more about the board. If you just
+   want to use the board, you can skip this section, and come
+   back to it when you want to incorporate one of the devices
+   into your product.
 
-   -  :doc:`Hardware </solutions/reference-designs/fmcomms11/hardware>` (including :doc:`schematics </solutions/reference-designs/fmcomms11/hardware>`)
+   #. :doc:`Functional Overview & Specifications </solutions/reference-designs/fmcomms11/hardware/functional_overview>`
+   #. :doc:`Characteristics & Performance </solutions/reference-designs/fmcomms11/hardware/card_specification>`
 
-      -  :doc:`Functional Overview & Specifications </solutions/reference-designs/fmcomms11/hardware/functional_overview>`
-      -  :doc:`Characteristics & Performance </solutions/reference-designs/fmcomms11/hardware/card_specification>`
-      -  :doc:`Configuration options </solutions/reference-designs/fmcomms11/hardware/configuration_options>`
-      -  :doc:`FCC or CE certification </solutions/reference-designs/fmcomms11/certification>`
+#. :doc:`FCC or CE certification </solutions/reference-designs/fmcomms11/certification>`
 
-   -  :doc:`Production Testing Process </solutions/reference-designs/fmcomms11/testing>`
+#. :doc:`Production Testing Process </solutions/reference-designs/fmcomms11/testing>`
 
--  Use the AD-FMCOMMS11-EBZ Board to better understand the :adi:`AD9625` and :adi:`AD9162`
+#. Using the evaluation board/full stack reference design that we offer:
 
-   -  :doc:`What you need to get started </solutions/reference-designs/fmcomms11/prerequisites>`
-   -  `Quick-Start Guides <https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms11-ebz/quickstart>`_
+   #. :ref:`fmcomms11 user-guide`- what you need to know about the
+      evaluation board
+   #. :ref:`fmcomms11 prerequisites`- what you need to get started
+   #. :ref:`Quick-Start Guide <fmcomms11 quickstart>`:
 
-      -  :doc:`Linux on ZC706 </solutions/reference-designs/fmcomms11/quickstart/zynq>`
-      -  `Configure a pre-existing SD-Card <https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux>`_
-      -  `Update the old card you received with your hardware <https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux>`_
+      #. Using the :ref:`ZC706 <fmcomms11 quickstart zc706>`
 
-   -  Linux Applications
+   #. Configure an SD Card with :external+kuiper:doc:`Kuiper <index>`
 
-      -  `IIO Scope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`_
+   #. Software Solutions
+       
+       #. :ref:`iio-oscilloscope`
+       #. :ref:`fmcomms11-plugin`
+       #. :external+scopy:doc:`Scopy <index>`
+       #. :ref:`IIO Command Line Tools <libiio cli>`
+       #. :ref:`Python Interfaces <pyadi-iio>`
+       #. :git+pyadi-iio:`FMCOMMS11 Python Example <main:examples/fmcomms11.py>`
 
-         -  `FMCOMMS11 Control in the IIO Scope Plugin <https://wiki.analog.com/resources/tools-software/linux-software/fmcomms11_plugin>`_
+#. Design with the FMCOMMS11 
 
-   -  :doc:`HDL reference design </solutions/reference-designs/fmcomms11/reference_hdl>`
+  #. :ref:`fmcomms11 block-diagram`
 
--  Design with the FMCOMMS11’s AD9625 and AD9162
+      #. :adi:`AD-FMCOMMS11-EBZ Product page <ad-fmcomms11-ebz>`
+      #. :adi:`AD9162 Product page <AD9162>`
+      #. :adi:`AD9625 Product page <AD9625>`
 
-   -  Understanding the FMCOMMS11
+   #. Hardware in the Loop / How to design your own custom BaseBand
 
-      -  :adi:`AD9162 Product page <AD9162>`
-      -  :adi:`AD9625 Product page <AD9625>`
+      #. :dokuwiki:`GNU Radio <resources/tools-software/linux-software/gnuradio>`
+      #. `Transceiver Toolbox <https://analogdevicesinc.github.io/TransceiverToolbox/master/>`_
 
--  `Help and Support <https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/help_and_support>`_
+   #. Resources for designing a custom AD9625/AD9162-based platform software
+
+      #. For Linux software:
+
+         #. About the device driver:
+
+            #. :external+linux:doc:`JESD204B Transmit Linux driver <drivers/jesd204/axi_jesd204_tx>`
+            #. :external+linux:doc:`JESD204B Receive Linux driver <drivers/jesd204/axi_jesd204_rx>`
+            #. :external+linux:doc:`JESD204B/C AXI_ADXCVR High-speed transceivers Linux driver <drivers/jesd204/axi_adxcvr>`
+            #. :external+linux:doc:`AXI ADC HDL Linux driver <drivers/iio-adc/axi-adc-hdl>`
+            #. :external+linux:doc:`AXI DAC HDL Linux driver <drivers/iio-dds/axi-dac-dds-hdl>`
+            #. :external+linux:doc:`AXI-DMAC DMA Controller Linux driver <drivers/dma/axi-dmac>`
+            #. :external+linux:doc:`AD9162 Linux driver <drivers/iio-pll/ad9162>`
+
+         #. About the device tree:
+
+            #. :dokuwiki:`Customizing the device tree on the target <resources/eval/user-guides/ad-fmcomms2-ebz/software/linux/zynq_tips_tricks>`
+
+         #. About the JESD204 utilities:
+
+            #. :external+linux:doc:`JESD204 (FSM) interface Linux Kernel framework <drivers/jesd204/jesd204-fsm-framework>`
+            #. :dokuwiki:`JESD204 status utility <resources/tools-software/linux-software/jesd_status>`
+            #. :dokuwiki:`JESD204 Eye Scan <resources/tools-software/linux-software/jesd_eye_scan>`
+            #. :external+hdl:ref:`jesd204`
+         
+      #. FPGA Resources:
+
+         #. :external+hdl:doc:`FMCOMMS11 HDL reference design <projects/fmcomms11/index>`
+         #. :external+hdl:ref:`HDL User Guide <user_guide>`
+         #. :external+hdl:doc:`HDL Customize Guide <user_guide/customize_hdl>`
+        
+
+
+.. _fmcomms11 block-diagram:
+
+Block diagram
+--------------------------------------------------------------------------------
+
+.. image:: images/fmcomms11_bd.svg
+   :align: center
+   :width: 800
+
 
 ADI Articles
-------------
+--------------------------------------------------------------------------------
 
 -   Four Quick Steps to Production: Using Model-Based Design for
     Software-Defined Radio
@@ -60,18 +179,24 @@ ADI Articles
    -  :adi:`Part 4 - Rapid Prototyping Using the Zynq SDR Kit and Simulink Code Generation Workflow <library/analogDialogue/archives/49-12/four-step-sdr-04.html>`
 
 ADI Videos
-----------
+--------------------------------------------------------------------------------
 
 -  :adi:`Silent Switcher µModule Regulators Powering GSPS Sampling ADC <en/products/ad9625.html#product-recommendations>`
 
 MathWorks Webinars
-------------------
+--------------------------------------------------------------------------------
 
 -  `Modelling and Simulating Analog Devices’ RF Transceivers with MATLAB and SimRF <https://www.mathworks.com/videos/modelling-and-simulating-analog-devices-rf-transceivers-with-matlab-and-simrf-89934.html>`_
 -  `Getting Started with Software-Defined Radio using MATLAB and Simulink <https://www.mathworks.com/videos/getting-started-with-software-defined-radio-using-matlab-and-simulink-108646.html>`_
 
+Help and support
+--------------------------------------------------------------------------------
+
+For questions and more information, please visit the :ez:`/`
+technical support community.
+
 Warning
--------
+--------------------------------------------------------------------------------
 
 .. esd-warning::
 
@@ -83,10 +208,8 @@ Warning
    fmcomms11_plugin
    hardware
    hardware/card_specification
-   hardware/configuration_options
    hardware/functional_overview
-   introduction
    prerequisites
-   quickstart/zynq
-   reference_hdl
+   quickstart/index
    testing
+   user-guide
