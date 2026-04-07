@@ -33,7 +33,7 @@ Getting Started
    :alt: connections
    :width: 600
 
--  Make sure the **Emergency Stop** switch is pressed (more information about drive board buttons in the :doc:`LV Board description </solutions/reference-designs/ad-fmcmotcon1-ebz/hardware/lv_board>`)
+-  Make sure the **Emergency Stop** switch is pressed (more information about drive board buttons in the `LV Board description <https://wiki.analog.com/resources/eval/user-guides/ad-fmcmotcon1-ebz/hardware/lv_board>`_)
 -  Insert the DYNO sensor wire in the P3 connector on the controller board with the black wire towards the ZedBoad. In case an encoder is used there is a one to one correspondence of the encoder's pins to the pins of the P3 connector.
 -  Insert the DYNO motor wire in the P2 connector on the Drive Board
 -  Connect the power supply to the P1 connector and, if a second motor is used also on the P3 connector
