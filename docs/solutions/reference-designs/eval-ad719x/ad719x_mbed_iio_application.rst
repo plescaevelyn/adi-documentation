@@ -118,7 +118,7 @@ done externally by capturing data from the Serial link on controller board.
 
 *\*Note: The DMM or Debug tab should not be accessed when capturing data as this would impact data capturing. Both DMM scan and data capture uses different methods of conversion. The DMM data is read using single conversion, while data capture uses continuous conversion mode of operation.*
 
-More info here: :doc:`Data Capture using IIO App </wiki-migration/resources/tools-software/product-support-software/data-capture-using-iio-app>`
+More info here: `Data Capture using IIO App <https://wiki.analog.com/resources/tools-software/product-support-software/data-capture-using-iio-app>`_
 
 Time Domain Plot
 ----------------
