@@ -1070,6 +1070,7 @@ nothing.
    q - Quit.
 
    Enter test option:
+
 Example Applications in Python
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1159,6 +1160,7 @@ The HART protocol is proprietary, customers implementing a full HART stack shoul
    d - Select HART channel                                              q - Quit
 
    Enter Option:
+
 *End of Document*
 
 .. |Common registers| image:: ../images/cn0435_qmodmaster_general_reg.png
