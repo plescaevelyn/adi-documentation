@@ -27,6 +27,8 @@ This example uses three types of boards:
 
 .. container:: centeralign
 
+   ..
+
 
 |image1|
 
