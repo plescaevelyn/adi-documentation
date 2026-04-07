@@ -27,7 +27,6 @@ Applications:
    ad7192
    ad7193
    ad719x_mbed_iio_application
-   Recommendations
 -------------------------------------------------------------------------------
 
 People who follow the flow that is outlined, have a much better experience with
