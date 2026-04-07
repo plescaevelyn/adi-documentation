@@ -144,5 +144,6 @@ The Vbus XADC measurement chain utilizes the entire path of the regular measurem
 **For RS = 5mΩ:**
 
 :math:`counts = ADC\,value,\; RS = 5e{-3},\; ADCrange = 320e{-3},\; ADCbits = 16,\; CTRLgain = \frac{1}{10},\; DRVgain = 20,\; PGAgain = 1{,}2{,}4\,or\,8`
+
 .. |image1| image:: ../images/vbus_chain.png
    :width: 800
