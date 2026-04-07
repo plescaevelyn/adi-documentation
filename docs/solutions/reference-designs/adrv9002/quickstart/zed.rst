@@ -689,6 +689,7 @@ Messages
          Raspbian GNU/Linux 10 analog ttyPS0
 
          analog login:
+
 These devices should be present:
 
 .. container:: box bggreen
@@ -1486,6 +1487,7 @@ Messages
          Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
          permitted by applicable law.
          root@analog:~#
+
 These devices should be present:
 
 .. container:: box bggreen
