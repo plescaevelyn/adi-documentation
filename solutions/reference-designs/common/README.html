@@ -884,27 +884,40 @@ supports both Linux and no-OS environments.</p>
 <td><p>Reference to IIO plugin documentation (required if
 <code class="docutils literal notranslate"><span class="pre">iio_has_plugin</span></code> is true)</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">iio_show_data_capture</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">iio_channel_description</span></code></p></td>
+<td><p>multiline string</p></td>
+<td><p>Custom RST content for the “Channel Description” section,
+placed after Plugin and before Data capture. Use YAML
+multiline syntax (<code class="docutils literal notranslate"><span class="pre">|</span></code>) to write content directly in the page.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">iio_show_data_capture</span></code></p></td>
 <td><p>boolean</p></td>
 <td><p>Enable data capture section</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">iio_show_time_domain</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">iio_show_time_domain</span></code></p></td>
 <td><p>boolean</p></td>
 <td><p>Show time domain plot (requires <code class="docutils literal notranslate"><span class="pre">iio_show_data_capture</span></code>)</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">iio_time_domain_image</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">iio_time_domain_image</span></code></p></td>
 <td><p>path</p></td>
 <td><p>Time domain capture image (required if <code class="docutils literal notranslate"><span class="pre">iio_show_time_domain</span></code>
 is true)</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">iio_show_frequency_domain</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">iio_show_frequency_domain</span></code></p></td>
 <td><p>boolean</p></td>
 <td><p>Show frequency domain plot (requires <code class="docutils literal notranslate"><span class="pre">iio_show_data_capture</span></code>)</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">iio_frequency_domain_image</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">iio_frequency_domain_image</span></code></p></td>
 <td><p>path</p></td>
 <td><p>Frequency domain capture image (required if
 <code class="docutils literal notranslate"><span class="pre">iio_show_frequency_domain</span></code> is true)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">iio_data_captures</span></code></p></td>
+<td><p>list</p></td>
+<td><p>List of data capture entries (requires <code class="docutils literal notranslate"><span class="pre">iio_show_data_capture</span></code>).
+Each entry has optional <code class="docutils literal notranslate"><span class="pre">title</span></code>, <code class="docutils literal notranslate"><span class="pre">time_domain_image</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">frequency_domain_image</span></code> fields. Use this for multiple data
+capture groups with different titles and images.</p></td>
 </tr>
 </tbody>
 </table>
@@ -940,6 +953,47 @@ is true)</p></td>
    iio_time_domain_image: ../images/ADRV9002_time_domain.png
    iio_show_frequency_domain: true
    iio_frequency_domain_image: ../images/ADRV9002_frequency_domain.png
+</pre></div>
+</div>
+<p><strong>With channel description:</strong></p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">include-template</span><span class="p">::</span> ../../common/using-iio-osc.rst.jinja
+
+   has_linux: true
+   has_no_os: true
+   iio_channel_description: |
+     Main receivers RX1 and RX2 are handled by the axi-ad9371-rx-hpc IIO
+     device, while the observation is handled by the axi-ad9371-rx-obs-hpc
+     device.
+
+     Channels:
+
+<span class="p">     ..</span> <span class="ow">list-table</span><span class="p">::</span>
+        <span class="nc">:header-rows:</span> 1
+
+        <span class="m">*</span> - IIO Device Channels
+          <span class="m">-</span> voltage0_i voltage0_q
+          <span class="m">-</span> voltage1_i voltage1_q
+        <span class="m">*</span> - axi-ad9371-rx-hpc
+          <span class="m">-</span> RX1
+          <span class="m">-</span> RX2
+        <span class="m">*</span> - axi-ad9371-rx-obs-hpc
+          <span class="m">-</span> OBS RX1
+          -
+</pre></div>
+</div>
+<p><strong>With multiple data captures:</strong></p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">include-template</span><span class="p">::</span> ../../common/using-iio-osc.rst.jinja
+
+   has_linux: true
+   has_no_os: true
+   iio_show_data_capture: true
+   iio_data_captures:
+     <span class="m">-</span> title: Channel 1
+       time_domain_image: ../images/ch1_time_domain.png
+       frequency_domain_image: ../images/ch1_frequency_domain.png
+     <span class="m">-</span> title: Channel 2
+       time_domain_image: ../images/ch2_time_domain.png
+       frequency_domain_image: ../images/ch2_frequency_domain.png
 </pre></div>
 </div>
 </section>
