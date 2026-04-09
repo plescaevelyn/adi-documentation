@@ -56,3 +56,18 @@ Once finished, the GitHub Summary contains the review, and the run artifacts
 include git patches with suggested changes and a session file to continue
 locally. An example run is available
 :git+documentation:`here <actions/runs/24085972371+>`.
+
+You can download the patches as apply in one go with :git+doctools:`apply-patches.sh <ci/scripts/apply-patches.sh>`:
+
+.. shell::
+
+   $ apply-patches --repo=documentation 123456789
+
+One liner to install:
+
+.. shell::
+
+   $ grep "/apply-patches.sh" ~/.bashrc || \
+     { curl "https://raw.githubusercontent.com/analogdevicesinc/doctools/refs/heads/main/ci/scripts/apply-patches.sh" \
+       -o ~/.local/bin/apply-patches.sh && \
+     echo "source ~/.local/bin/apply-patches.sh" >> ~/.bashrc ; }
