@@ -73,5 +73,5 @@ Software guide
    cross-platform (Windows, Linux, Mac) with language bindings for C, C#, Python,
    MATLAB, and others. Two easy examples that can be used with it are:
 
-     - :dokuwiki:`IIO Oscilloscope <resources/tools-software/linux-software/iio_oscilloscope>`
+     - :ref:`iio-oscilloscope`
      - :external+pyadi-iio:doc:`index`

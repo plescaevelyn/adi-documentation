@@ -556,7 +556,7 @@ More Information
 -  IIO mailing list: linux-iio@vger.kernel.org
 -  `IIO Linux Kernel Documentation sysfs-bus-iio-\* <https://www.kernel.org/doc/Documentation/ABI/testing>`_
 -  `IIO Documentation <https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-bus-iio>`_
--  :dokuwiki:`IIO test and visualization application <resources/tools-software/linux-software/iio_oscilloscope>`
+-  :ref:`iio-oscilloscope`
 -  :dokuwiki:`libiio - IIO system library <resources/tools-software/linux-software/libiio>`
 -  :dokuwiki:`libiio - Internals <resources/tools-software/linux-software/libiio_internals>`
 -  :dokuwiki:`Pointers and good books <resources/tools-software/pointers>`

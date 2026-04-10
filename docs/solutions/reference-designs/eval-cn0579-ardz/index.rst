@@ -341,7 +341,7 @@ library is cross-platform (Windows, Linux, Mac) with language bindings for C,
 C#, Python, MATLAB, and others. Two easy examples that can be used with the
 :adi:`EVAL-CN0579-ARDZ <CN0579>` are:
 
-- :dokuwiki:`IIO Oscilloscope Installation Guide </resources/tools-software/linux-software/iio_oscilloscope>`
+- :ref:`iio-oscilloscope`
 - :ref:`pyadi-iio`
 
 Connection
@@ -491,7 +491,7 @@ Reference Demos & Software
 --------------------------
 
 - :ref:`PyADI-IIO Installation Guide <pyadi-iio>`
-- :dokuwiki:`IIO Oscilloscope Installation Guide </resources/tools-software/linux-software/iio_oscilloscope>`
+- :ref:`iio-oscilloscope`
 - :ref:`Kuiper Images <kuiper>`
 - :git-hdl:`CN0579 HDL Reference Design </projects/cn0579>`
 

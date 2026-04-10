@@ -142,7 +142,7 @@ Lab Instruments and Software
 
 * :dokuwiki:`ADALM-PLUTO <university/tools/pluto>`
 
-  * :dokuwiki:`IIOScope (Software used for ADALM-PLUTO) <resources/tools-software/linux-software/iio_oscilloscope>`
+  * :ref:`iio-oscilloscope`
   * :dokuwiki:`GNU Radio (Software can be used for ADALM-PLUTO) <university/tools/pluto/gnuradio>`
   * :dokuwiki:`MATLAB Plugin (Software can be used for ADALM-PLUTO) <university/tools/pluto/matlab>`
 

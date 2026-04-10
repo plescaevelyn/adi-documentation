@@ -53,7 +53,7 @@ Contents
 #. Once the driver are configured and set up, you can interact with the
    :adi:`ADALM-PLUTO` Active Learning Module from:
 
-   #. :dokuwiki:`IIO oscilloscope </resources/tools-software/linux-software/iio_oscilloscope>`
+   #. :ref:`iio-oscilloscope`
    #. `gqrx <http://gqrx.dk/>`__, an open source software defined radio receiver
       (SDR) powered by the GNU Radio
    #. :mw:`Official support for MATLAB and Simulink <hardware-support/adalm-pluto-radio.html>`

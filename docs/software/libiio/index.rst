@@ -61,7 +61,7 @@ there are many places you can stream data to.
 
 - :dokuwiki:`MATLAB and Simulink </libiio/clients/matlab_simulink>`
 - :dokuwiki:`Visual Analog </libiio/clients/Visual Analog>`
-- :dokuwiki:`IIO oscilloscope for Windows </resources/tools-software/linux-software/iio_oscilloscope>`
+- :ref:`iio-oscilloscope`
 - :dokuwiki:`GNU Radio </resources/tools-software/linux-software/gnuradio>`
 - :ref:`pyadi-iio: Device Specific Python Interfaces For IIO Drivers <pyadi-iio>`
 
