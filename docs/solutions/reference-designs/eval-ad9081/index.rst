@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/ad9081_fmca_ebz
+
 .. _ad9081:
 
 AD9081 & AD9082

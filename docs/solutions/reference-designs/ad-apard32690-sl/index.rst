@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/ad-apard32690-sl
+
 
 AD-APARD32690-SL
 ================

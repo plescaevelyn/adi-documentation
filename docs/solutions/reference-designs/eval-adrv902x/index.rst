@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/adrv9026
+
 .. _adrv902x:
 
 EVAL-ADRV902X

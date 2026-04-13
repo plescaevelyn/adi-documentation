@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/ad-ps3803-rd
+
 AD-PS3803-RD
 ============
 

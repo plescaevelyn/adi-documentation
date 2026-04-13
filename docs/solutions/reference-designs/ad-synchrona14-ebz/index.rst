@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/ad-synchrona14-ebz
+
 .. _ad-syncrhona14-ebz:
 
 AD-SYNCHRONA14-EBZ

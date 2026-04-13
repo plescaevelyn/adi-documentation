@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/jupiter-sdr
+
 .. _ad-jupiter-ebz:
 
 AD-JUPITER-EBZ

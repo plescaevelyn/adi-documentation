@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/ad7768-1
+
 .. _ad77681:
 
 EVAL-AD7768-1FMCZ & EVAL-ADAQ7768-1FMC1Z

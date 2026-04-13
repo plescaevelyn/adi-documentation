@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/ad-max32lrwise-sl
+
 .. _ad-max32lrwise-sl:
 
 AD-MAX32LRWISE-SL

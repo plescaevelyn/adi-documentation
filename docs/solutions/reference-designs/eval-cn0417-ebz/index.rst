@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/cn0417
+
 EVAL-CN0417-EBZ
 ===============
 

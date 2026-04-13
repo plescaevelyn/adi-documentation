@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/ad-max32sxwise-sl
+
 .. _ad-max32sxwise-sl:
 
 AD-MAX32SXWISE-SL

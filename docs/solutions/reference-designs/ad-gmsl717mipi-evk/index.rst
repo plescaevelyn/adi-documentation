@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/ad-gmsl717mipi-evk
+
 AD-GMSL717MIPI-EVK
 ==================
 

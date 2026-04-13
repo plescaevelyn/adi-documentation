@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/ad-swiot1l-sl
+
 AD-SWIOT1L-SL
 =============
 

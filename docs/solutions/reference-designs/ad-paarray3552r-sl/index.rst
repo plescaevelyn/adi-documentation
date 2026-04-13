@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/ad-paarray3552r-sl
+
 .. _ad-paarray3552r-sl:
 
 AD-PAARRAY3552R-SL

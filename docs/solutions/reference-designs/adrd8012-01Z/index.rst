@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/adrd8012-01z
+
 ADRD8012-01Z
 ============
 

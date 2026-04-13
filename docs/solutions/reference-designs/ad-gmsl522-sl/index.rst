@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/ad-gmsl522-sl
+
 AD-GMSL522-SL
 =============
 

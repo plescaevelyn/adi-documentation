@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/ad-gmslcamrpi-adp
+
 .. _ad-gmslcamrpi-adp:
 
 AD-GMSLCAMRPI-ADP#

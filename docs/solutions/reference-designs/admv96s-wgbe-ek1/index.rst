@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/admv96s-wgbe-ek1
+
 .. _admv96s-wgbe-ek1:
 
 ADMV96S-WGBE-EK1

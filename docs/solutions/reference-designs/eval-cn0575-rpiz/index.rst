@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/cn0575
+
 .. _eval-cn0575-rpiz:
 
 EVAL-CN0575-RPIZ

@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/ad-gmsl-d-e-adp
+
 .. _ad-gmsl-d-e-adp:
 
 AD-GMSL-D-E-ADP#

@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/cn0582
+
 .. _eval-cn0582-usbz:
 
 EVAL-CN0582-USBZ

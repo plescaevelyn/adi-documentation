@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/eval-ad5592r-pmdz
+
 .. _eval-ad5592r-pmdz:
 
 EVAL-AD5592R-PMDZ

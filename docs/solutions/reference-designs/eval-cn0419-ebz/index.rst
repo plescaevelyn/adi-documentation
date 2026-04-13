@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/cn0419
+
 .. _eval-cn0419-ebz:
 
 EVAL-CN0419-EBZ

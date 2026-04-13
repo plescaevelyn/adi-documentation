@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/cn0555
+
 .. _eval-cn0555-ebz:
 
 EVAL-CN0555-EBZ

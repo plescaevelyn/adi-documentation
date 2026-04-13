@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/eval-ltpa-kit
+
 .. _eval-ltpa-kit:
 
 EVAL-LTPA-KIT (LTpowerAnalyzer™ Kit)

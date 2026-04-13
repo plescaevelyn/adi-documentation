@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/adrv904x
+
 ADRV9040 Prototyping Platform User Guide
 ========================================
 

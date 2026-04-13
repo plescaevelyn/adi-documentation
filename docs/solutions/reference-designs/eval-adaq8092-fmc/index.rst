@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guide/adaq8092-eval-board
+
 .. _adaq8092:
 
 EVAL-ADAQ8092-FMCZ

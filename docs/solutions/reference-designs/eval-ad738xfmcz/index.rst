@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/ad738x
+
 .. _eval-ad738xfmcz:
 
 EVAL-AD738xFMCZ

@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/cn0585
+
 .. _eval-cn0585-fmcz:
 
 EVAL-CN0585-FMCZ

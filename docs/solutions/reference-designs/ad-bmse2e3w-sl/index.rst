@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/ad-bmse2e3w-sl
+
 AD-BMSE2E3W-SL
 ==============
 

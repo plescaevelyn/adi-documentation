@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/eval-adbms6830bmsw
+
 .. _eval-adbms6830bmsw:
 
 EVAL-ADBMS6830BMSW

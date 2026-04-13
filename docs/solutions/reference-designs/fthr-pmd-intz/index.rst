@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/fthr-pmd-intz
+
 .. _fthr-pmd-intz:
 
 FTHR-PMD-INTZ

@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/ad9213_dual_ebz
+
 .. _eval-ad9213-dual:
 
 EVAL-AD9213-DUAL
