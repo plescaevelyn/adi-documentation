@@ -1,13 +1,17 @@
 Pre-release SD Card Creation
 ============================
 
-The project will be release as part of 2019_r1 release.Before then, the SD image
-for 2018_r2 can be used.
+.. note::
+
+   This page is archived. The content below refers to the 2019_r1 and
+   2018_r2 releases. For current SD card setup instructions, refer to
+   the :ref:`Quickstart guide <adrv9009-zu11eg quickstart>`.
 
 Writing the SD Card
 -------------------
 
-Details on how to write the SD card can be found at https://wiki.analog.com/resources/tools-software/linux-software/zynq_images.
+Details on how to write the SD card can be found at
+:dokuwiki:`Zynq Images <resources/tools-software/linux-software/zynq_images>`.
 
 ADRV9009-ZU11EG Specific Boot Files
 -----------------------------------
@@ -20,4 +24,8 @@ More information can be found in boot partition ReadMe.txt.
 Video Configuration
 -------------------
 
-The default configuration for most of the projects is to use the HDMI output, but for this project the DisplayPort is used. In order for it to work, you should follow the steps described here: `DisplayPort - no picture? <https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/software/linux/zynqmp>`_ After following the steps, the board should be rebooted.
+The default configuration for most of the projects is to use the HDMI output,
+but for this project the DisplayPort is used. In order for it to work, you should
+follow the steps described here:
+:dokuwiki:`DisplayPort - no picture? <resources/eval/user-guides/ad-fmcomms2-ebz/software/linux/zynqmp>`
+After following the steps, the board should be rebooted.

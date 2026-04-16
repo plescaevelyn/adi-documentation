@@ -1,7 +1,9 @@
-ADRV9009-ZU11EG Quick Start Guide
-=================================
+.. _adrv9009-zu11eg quick-start:
 
-.. image:: images/adrv9009-zu11g-quick-setup.png
+ADRV9009-ZU11EG Quick Start Guide
+==================================
+
+.. image:: ../images/adrv9009-zu11g-quick-setup.png
    :align: center
    :width: 600
 
@@ -10,7 +12,7 @@ set things up) on how to setup the ADRV9009-ZU11EG on:
 
 -  :adi:`ADRV2CRR-FMC`
 
-If you want to use it with FMCOMMS8, please refer to `FMCOMMS8 Quick Start Guide <https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms8-ebz/quick-start-guide>`_
+If you want to use it with FMCOMMS8, please refer to :ref:`adrv9009-zu11eg fmcomms8-quick-start`
 
 Instructions on how to build the ZynqMP / MPSoC Linux kernel and devicetrees
 from source can be found here:
@@ -63,14 +65,14 @@ Testing
 -  Configure ADRV2CRR-FMC for SD BOOT using ``S13``, ``S14``, ``S15``,
    ``S16``. See picture below.
 
-.. image:: images/adrv2crr_rev_a_and_b_sw_jmp_settings.jpg
+.. image:: ../images/adrv2crr_rev_a_and_b_sw_jmp_settings.jpg
    :align: center
    :width: 800
 
 -  Configure ``ADRV2CRR-FMC`` for SD BOOT from carrier using ``S9``.
    See picture below.
 
-.. image:: images/adrv9009-zu11g-sd-card-select.png
+.. image:: ../images/adrv9009-zu11g-sd-card-select.png
    :align: center
    :width: 400
 
@@ -958,5 +960,5 @@ address of the target in the popup window.
 
    |image1|
 
-.. |image1| image:: images/shutdown.png
+.. |image1| image:: ../images/shutdown.png
    :width: 300

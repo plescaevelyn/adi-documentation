@@ -1,5 +1,7 @@
+.. _adrv9009-zu11eg hardware:
+
 ADRV9009-ZU11EG RF-SOM Hardware Overview
-========================================
+=========================================
 
 .. image:: images/rf-som_heatplate.jpg
    :width: 500
@@ -11,20 +13,18 @@ The **ADRV9009-ZU11EG RF-SOM** package includes:
 .. image:: images/adrv9009_zu11eg_rfsom.png
 
 High level block diagram showing key components and IO routing
-==============================================================
+--------------------------------------------------------------
 
 .. image:: images/rfsom_blk_dig_7044b.png
 
---------------
-
 Connector Interface
-===================
+-------------------
 
 The interface of the ADRV9009-ZU11EG consists of two SAMTEC SEARAY™ 400-pin
 female connectors P1 and P2. Following signals are present:
 
 P1 Connector:
--------------
+~~~~~~~~~~~~~
 
 -  24x GTH transceiver lanes MGTHTX_N/P, MGTHRXN/P; GTH Reference clock
    inputs MGTREFCLKN/P
@@ -42,7 +42,7 @@ P1 Connector:
 -  :adi:`ADRV9009` auxiliary 3.3V voltage output VDDA3P3
 
 P2 Connector:
--------------
+~~~~~~~~~~~~~
 
 -  ZU11EG programmable logic GPIOs
 -  ZU11EG PS MIO pins
@@ -59,30 +59,30 @@ P2 Connector:
 -  1.8V, 3.3V digital supply outputs. Should be used only for powering IO
    buffers.
 
-.. admonition:: Download
-   :class: download
+.. figure:: images/adrv9009_zu11eg_p1_pinout.png
 
-   P1 pinout overview: |image1| P2 pinout overview:
+   P1 connector pinout overview
 
-   |image2|
+.. figure:: images/adrv9009_zu11eg_p2_pinout.png
+
+   P2 connector pinout overview
 
 .. admonition:: Download
    :class: download
 
    A detailed description of the connector interface for the complete
    system ADRV9009-ZU11EG and ADRV2CRR-FMC is located here:
-   `ADRV9009-ZU11EG_Connector_Pinout <images/adrv9009_zu11eg_connector_pinout_1.xlsx>`_
 
---------------
+   `ADRV9009-ZU11EG Connector Pinout <resources/adrv9009_zu11eg_connector_pinout_1.xlsx>`_
 
 Power Input
-===========
+-----------
 
 The ADRV9009-ZU11EG is powered from a single 12V supply. Requirements for the
 supply are 12V +/-8%, 120W.
 
 Hot Swap Controller
--------------------
+~~~~~~~~~~~~~~~~~~~
 
 ADRV9009-ZU11EG features a hot-swap controller :adi:`ADM1177` that allows
 safe board insertion from a live back-plane. ADM1177 also comes with
@@ -96,10 +96,10 @@ could be accessed using python to measure SOM's current consumption.
 
    Python script to read ADRV9009-ZU11EG RF-SOM power consumption:
 
-   -  `Power Measurement <https://wiki.analog.com/_media/resources/eval/user-guides/adrv9009-zu11eg/talise_SOM_power_measurement.zip>`_
+   -  `Power Measurement <resources/talise_som_power_measurement.zip>`_
 
 Power Monitoring
-================
+----------------
 
 The :adi:`ADM1266` voltage sequencer/supervisor is used to handle
 following tasks:
@@ -113,13 +113,13 @@ following tasks:
    internal supplies exceeds under/over voltage limits power to the RF-SOM
    will be turned off
 -  Supervises on-board temperature. If the on-board temperature exceeds
-   65degC PWR_FAULT1 signal will be asserted, if it passes 90degC power
+   65 °C PWR_FAULT1 signal will be asserted, if it passes 90 °C power
    to the RF-SOM will be switched off.
 -  Turns power off in any of the previous mentioned cases, deasserts PG_SOM and
    records the event in a non-volatile Blackbox.
 
 Power Fault Signals
--------------------
+~~~~~~~~~~~~~~~~~~~
 
 The two fault signals PWR_FAULT1 and PWR_FAULT2 are open-drain active
 high signals with internal 4.7K pull-ups to 1.8V. These are controlled by
@@ -130,7 +130,7 @@ state of the fault signals will reset, and the cause of the shutdown can
 be found only by accessing the :adi:`ADM1266` Blackbox.
 
 Power Good Signals
-------------------
+~~~~~~~~~~~~~~~~~~
 
 The RF-SOM uses the two power good signals, PG_SOM and PG_ALL, to ensure a
 correct power-up timing for the internal circuitry. While PG_SOM is an output
@@ -138,10 +138,11 @@ controlled by the on-board ADM1266, PG_ALL is an input and must be asserted by
 the carrier. Both signals are active high open drain signals, with on-board
 pull-ups to 1.8V. The diagram below shows the power good sequence at start-up:
 
-|image3|
+.. image:: images/adrv9009-zu11eg_power_good_1.png
+   :width: 600
 
 Reading the ADM1266 Blackbox Memory
------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Following tools are needed to read the Blackbox records:
 
@@ -154,7 +155,8 @@ signals SCL_ADM1266_3V3, SDA_ADM1266_3V3 accessible in connector P2.
 The image below shows how to connect the I2C USB dongle to P19 on the
 :adi:`ADRV2CRR-FMC` carrier board.
 
-|image4|
+.. image:: images/i2c_adm1266_dongle.png
+   :width: 200
 
 After connecting the I2C cable open the ADI Power Studio software, connect to
 the dongle and open the ADRV9009-ZU11EG RF-SOM project located below. The
@@ -165,7 +167,12 @@ Blackbox Records can be accessed from the Monitor menu.
 
    ADRV9009-ZU11EG RF-SOM ADI Power Studio project:
 
-   -  `Power sequence (ADI Power Studio project) <https://wiki.analog.com/_media/resources/eval/user-guides/adrv9009-zu11eg/ADRV9009-ZU11EG_ADM1266_v0.1.ssp.zip>`_
+   .. note::
+
+      The ``.ssp`` file is an ADI Power Studio project file. Open it with
+      :adi:`ADI Power Studio <en/design-center/adi-power-studio>`.
+
+   -  `Power sequence (ADI Power Studio project) <resources/adrv9009-zu11eg_adm1266_v0.1.ssp.zip>`_
 
    The System Power Map Diagram is located here:
 
@@ -175,20 +182,18 @@ Blackbox Records can be accessed from the Monitor menu.
 
       Troubleshooting power down issue on X-GRADE: :ez:`fpga/f/q-a/119706/adrv9009-zu11eg-adrv2crr-fmc_revb-auto-powerdown/356549`
 
---------------
-
 Interfaces
-==========
+----------
 
 RGMII Ethernet
---------------
+~~~~~~~~~~~~~~
 
 The RF-SOM has an on-board Marvell 88E1512 10/100/1000 Mbps Ethernet PHY
 connected to the GEM3 Controller in the PS on the Xilinx ZU11EG. The MDI signals
 are available in the interface connector P2.
 
 USB
----
+~~~
 
 The ADRV9009-ZU11EG features both USB 2.0 and USB 3.0, configured in host,
 device or OTG mode. For USB 2.0 there is an on-board USB3320 ULPI transceiver
@@ -196,7 +201,7 @@ connected to USB0 controller on the ZU11EG Zynq Ultrascale+. For USB3.0 the I/O
 path runs through the PS-GTR transceivers.
 
 Gigabit Serial Interfaces
--------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  PS-GTR transceivers support data rates up to 6Gb/s and provide I/O
    path for USB3.0, SGMII Ethernet, DisplayPort.
@@ -205,7 +210,7 @@ Gigabit Serial Interfaces
    multiple ADRV9009 transceivers, 100Gb Ethernet, PCIe
 
 Low Speed Interfaces
---------------------
+~~~~~~~~~~~~~~~~~~~~
 
 The PS Multiplexed IOs (MIO) give access to the low speed interfaces inside the
 Zynq Ultrascale+. The IO voltage level on all MIO pins is 1.8V. For other
@@ -218,10 +223,10 @@ voltages external voltage level are required.
    connected.
 
 Programmable Logic GPIOs
-------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 High Performance GPIOs
-~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^
 
 Programmable logic high performance banks 65, 67 and 68 are fully accessible in
 connector P2. Prior of using these signals the bank supply VCCO must be
@@ -230,13 +235,13 @@ applied as well, if the IO standard requires one. To use the internal VREF
 voltage a 500 or 1KOhm resistor needs to be connected from VREF pin to ground.
 
 High Density GPIOs
-~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^
 
 Programmable logic High density bank 89 is partially available in connector P2.
 Connect a voltage between 1.14V and 3.4V to the bank supply voltage VCCO_89.
 
 ADC inputs
-~~~~~~~~~~
+^^^^^^^^^^
 
 Alternatively, some of the IOs in bank 89 AD12P/N to AD15P/N can be used as ADC
 inputs for the ZU11EG on-chip System Monitor. The internal 1.25V reference is
@@ -245,7 +250,7 @@ operation the differential voltage is between -0.5V ... 0.5V, with the
 common-mode voltage 0.5V.
 
 SD card
--------
+~~~~~~~
 
 The ZU11EG on-chip SD Controller is compatible with SD memory card specification
 version 3.01, supporting UHS-I speeds and SDXC capacity format. The RF-SOM
@@ -255,58 +260,56 @@ between the two connectors. SD IOs and SDIO_SEL signal are available in
 connector P2. Leave SDIO_SEL floating for uSD on RF-SOM. Pull SDIO_SEL to ground
 for using the SD on the carrier.
 
---------------
-
 Minimal Carrier Setup
-=====================
+---------------------
 
 This chapter shows the connections to the ADRV9009-ZU11EG RF-SOM, that are
 mandatory for a minimum functional RF-SOM and carrier system.
 
 Power Input and Power Good signals
-----------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Connect 12V, 120W voltage supply. Connect PG_ALL to PG_SOM.
 
 Xilinx Zynq Ultrascale+ ZU11EG Configuration
---------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Reset Pins, Status LEDs, Mode Pins, JTAG connector
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The carrier needs to include reset buttons, LEDs for status signals, slide
 switches for selecting the configuration mode and JTAG connector as shown here:
 
-|image5|
+.. image:: images/zu11eg_configuration.png
 
 SD Card
--------
+~~~~~~~
 
 If the mechanical setup requires, place an SD card on the carrier and pull
 SDIO_SEL to ground.
 
 UART Interface for Debug
-------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 Connect UART1 interface in the carrier (MIO pins 16 and 17). The IO voltage
 level on these pins is 1.8V, so if a USB to UART interface like the FTDI FT232R
 is used, a voltage level translator from 3.3V to 1.8V must be used.
 
 RGMII Ethernet
---------------
+~~~~~~~~~~~~~~
 
 For a minimal setup it is recommended to use the RGMII Ethernet, since it
 requires only the RJ45 connector with magnetics on the carrier.
 
 Clock and Synchronization Signal Inputs
----------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Place BNC connector to provide access to input clock signals
 CLKIN0_HMC7044B_P/N, CLKIN1_HMC7044B_P/N and synchronization SYNC_HMC7044B.
 These signals are required for synchronizing multiple ADRV9009-ZU11EG RF-SOMs.
 
 ADM1266 Power Sequencer I2C Interface
--------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In order to be able to access the Blackbox memory the ADM1266 I2C
 interface needs to be accessible. Place a 1x4pin, 2.54mm pitch, male
@@ -316,25 +319,22 @@ dongle. Consult the Power Monitoring section for the connector pinout.
 The 4-th pin is VBUS and can be discarded.
 
 Active Cooler
--------------
+~~~~~~~~~~~~~
 
 The ADRV9009-ZU11EG RF-SOM requires active cooling. The heat spreader
 plate is designed to accommodate an active cooler with an AMD type
 SP3/TR4/sTRX4 socket. For more details consult the
-**Mechanical Reference** section.
-
---------------
+:ref:`adrv9009-zu11eg hardware mechanical` section.
 
 ADRV9009-ZU11EG RF-SOM Complete Prototyping System
-==================================================
+---------------------------------------------------
 
-.. image:: images/adrv9009-zu11eg_proto_system_pic.jpg
-   :align: right
+.. figure:: images/adrv9009-zu11eg_proto_system_pic.jpg
 
---------------
+   ADRV9009-ZU11EG RF-SOM complete prototyping system
 
 Synchronizing multiple ADRV9009-ZU11EG RF-SOMs
-==============================================
+-----------------------------------------------
 
 The following link includes detailed description on synchronization hardware and
 software:
@@ -358,19 +358,12 @@ there is the possibility of extending the number of carriers to three,
 totaling twelve :adi:`ADRV9009` transceivers. For extending this number
 multiple HMC7044B synchronization boards need to be cascaded.
 
-.. admonition:: Download
-   :class: download
+.. figure:: images/adrv9009_rfsom_clocking_tree.png
 
-   The System Clocking Tree Diagram is located here:
-
-   |ADRV9009-ZU11EG Clock Tree|
-
-There are two ways of phase aligning the output clocks, by distributing directly
-the clock or by distributing the reference. Either comes with advantages and
-disadvantages and a decision which to use is application dependent.
+   ADRV9009-ZU11EG system clocking tree diagram
 
 Clock Distribution
-------------------
+~~~~~~~~~~~~~~~~~~
 
 The clock generated by the first stage :adi:`HMC7044B` is distributed
 throughout the clock tree. The :adi:`HMC7044B` in the lower stages are
@@ -381,7 +374,7 @@ high frequency clock signal needs to be distributed it might create routing
 problems.
 
 Reference Distribution
-----------------------
+~~~~~~~~~~~~~~~~~~~~~~
 
 In reference distribution the PLLs inside the :adi:`HMC7044B` stages are
 active and work as clock generators and jitter cleaners, being synchronized
@@ -397,19 +390,17 @@ An example is shown for VCXO of 122.88MHz and internal VCO frequency of
 
    The System Clock Map is located here:
 
-   `adrv9009_rfsom_sync_clock_map.xlsx <images/adrv9009_rfsom_sync_clock_map.xlsx>`_
-
---------------
+   `System Clock Map <resources/adrv9009_rfsom_sync_clock_map.xlsx>`_
 
 Thermal Considerations
-======================
+----------------------
 
 .. important::
 
    The ADRV9009-ZU11EG RF-SOM requires active cooling. It includes
    overtemperature protection, which interrupts power to the RF-SOM when board
-   temperature reaches 90degC. Without a fan the RF-SOM will turn off in a few
-   minutes under normal operating conditions (25degC ambient, Linux machine
+   temperature reaches 90 °C. Without a fan the RF-SOM will turn off in a few
+   minutes under normal operating conditions (25 °C ambient, Linux machine
    running).
 
 The ADRV9009-ZU11EG RF-SOM comes equipped with a custom designed heat spreader
@@ -426,10 +417,8 @@ ADRV9009-ZU11EG RF-SOM, and Würth Elektronik 39410 EMI gasket sheet,
 that acts both as thermal transfer material between plate and heatsink,
 and RF Shield/Absorber.
 
---------------
-
 Supplementary Testing
-=====================
+---------------------
 
 .. admonition:: Download
    :class: download
@@ -438,12 +427,12 @@ Supplementary Testing
    reference for validation or qualification of custom designs. The report can
    be found here:
 
-   -  `EMC Test report <https://wiki.analog.com/_media/resources/eval/user-guides/adrv9009_zu11eg/ADRV9009-ZU11EG EMC Conformance.pdf>`_
+   -  `EMC Test report <resources/adrv9009-zu11eg_emc_conformance.pdf>`_
 
---------------
+.. _adrv9009-zu11eg hardware mechanical:
 
 Mechanical Reference Material
-=============================
+-----------------------------
 
 .. admonition:: Download
    :class: download
@@ -454,31 +443,27 @@ Mechanical Reference Material
 
    The RF-SOM 3D model is located here:
 
-   -  `Rev B DXF File <https://wiki.analog.com/_media/resources/eval/user-guides/adrv9009_zu11eg/08_048949b_DXF.zip>`_
+   -  `Rev B DXF File <resources/08_048949b_dxf.zip>`_
    -  `Rev B STP File <resources/08_048949b_stp.zip>`_
    -  `Rev C STP File <resources/08_048949c.zip>`_
 
    The Heat spreader plate 3D model is located here:
 
-   -  `Heat spreader 3D File Rev B <https://wiki.analog.com/_media/resources/eval/user-guides/adrv9009_zu11eg/Heatsink_revb.zip>`_
+   -  `Heat spreader 3D File Rev B <resources/heatsink_revb.zip>`_
    -  `Heat spreader threaded holes spec Rev B <resources/heatsink_threads_revb.pdf>`_
    -  `Heat spreader 3D File Rev C <resources/talise_heatsink_revc_production_edits.zip>`_
    -  `Heat spreader threaded holes spec Rev C <resources/talise_heatsink_revc_production_edits.pdf>`_
 
---------------
-
 ADRV9009-ZU11EG Schematics, BOM & Errata
-========================================
+-----------------------------------------
 
-Rev G is the latest available version.
+Rev G is the latest hardware revision. The schematics and BOM available
+for download below are for earlier revisions.
 
-:doc:`Link to Main Page for ADRV9009-ZU11EG </solutions/reference-designs/adrv9009-zu11eg/index>`
+.. admonition:: Download
+   :class: download
 
-.. |image1| image:: images/adrv9009_zu11eg_p1_pinout.png
-.. |image2| image:: images/adrv9009_zu11eg_p2_pinout.png
-.. |image3| image:: images/adrv9009-zu11eg_power_good_1.png
-   :width: 600
-.. |image4| image:: images/i2c_adm1266_dongle.png
-   :width: 200
-.. |image5| image:: images/zu11eg_configuration.png
-.. |ADRV9009-ZU11EG Clock Tree| image:: images/adrv9009_rfsom_clocking_tree.png
+   -  `Schematics Rev C <resources/02-048950-01-c.pdf>`_
+   -  `Schematics Rev C2.1 <resources/02-048950-01-c2_1_.pdf>`_
+   -  `BOM Rev C.1 <resources/rev_c.1_bom.zip>`_
+   -  `Errata Rev C to Rev C.1 <resources/revc_to_revc.1_errata.xlsx>`_

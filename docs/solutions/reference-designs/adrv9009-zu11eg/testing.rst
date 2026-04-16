@@ -85,26 +85,28 @@ Zynq images and can be downloaded from :
    :class: download
 
    -  **15 December 2022 release**
-   -   `Actual file <https://swdownloads.analog.com/cse/prod_test_rel/talise_test/talise_prod_15dec_2022.zip>`_
+   -   `Actual file (DUT, 15 Dec 2022) <https://swdownloads.analog.com/cse/prod_test_rel/talise_test/talise_prod_15dec_2022.zip>`_
    -  Checksum ``b056120a53e13b197b5b366742d9f5c7``
 
 .. admonition:: Download
    :class: download
 
    -  **28 May 2020 release**
-   -   `Actual file <https://swdownloads.analog.com/cse/prod_test_rel/talise_test/adrv9009_fmcomms8_test_card_28_05.img.tar.xz>`_
+   -   `Actual file (DUT, 28 May 2020 FMCOMMS8) <https://swdownloads.analog.com/cse/prod_test_rel/talise_test/adrv9009_fmcomms8_test_card_28_05.img.tar.xz>`_
    -  Checksum ``9d3455a071f4151b9c320282abcb2f04``
 
 .. admonition:: Download
    :class: download
 
    -  **27 May 2020 release**
-   -   `Actual file <https://swdownloads.analog.com/cse/prod_test_rel/talise_test/adrv9009_som_test_card_27_05.img.tar.xz>`_
+   -   `Actual file (DUT, 27 May 2020 SOM) <https://swdownloads.analog.com/cse/prod_test_rel/talise_test/adrv9009_som_test_card_27_05.img.tar.xz>`_
    -  Checksum ``4efbaa39928f2f36b7b462156e6d00f6``
 
 .. note::
 
-   To write it on SD card can follow the instructions for: `linux hosts <https://wiki.analog.com/resources/tools-software/linux-software/zynq_images/linux_hosts>`_ or `windows hosts <https://wiki.analog.com/resources/tools-software/linux-software/zynq_images/windows_hosts>`_
+   To write it on SD card can follow the instructions for:
+   :dokuwiki:`linux hosts <resources/tools-software/linux-software/zynq_images/linux_hosts>` or
+   :dokuwiki:`windows hosts <resources/tools-software/linux-software/zynq_images/windows_hosts>`
 
 Raspberry PI SD card
 ^^^^^^^^^^^^^^^^^^^^
@@ -117,26 +119,27 @@ Raspbian or downloaded from:
    :class: download
 
    -  **15 December 2022 release**
-   -  `Actual file <https://swdownloads.analog.com/cse/prod_test_rel/talise_test/rpi_talise+prod_15dec.zip>`_
+   -  `Actual file (RPi, 15 Dec 2022) <https://swdownloads.analog.com/cse/prod_test_rel/talise_test/rpi_talise+prod_15dec.zip>`_
    -  Checksum ``0d8759784c1cebbcd908fe8a01083272``
 
 .. admonition:: Download
    :class: download
 
    -  **02 Nov 2021 release**
-   -  `Actual file <https://swdownloads.analog.com/cse/prod_test_rel/talise_test/adrv9009_pi_test_card_02_11.tar.xz>`_
+   -  `Actual file (RPi, 02 Nov 2021) <https://swdownloads.analog.com/cse/prod_test_rel/talise_test/adrv9009_pi_test_card_02_11.tar.xz>`_
    -  Checksum ``080fb8771e12195eba7196f9de05ec1c``
 
 .. admonition:: Download
    :class: download
 
    -  **27 May 2020 release - outdated, do not use!**
-   -  `Actual file <https://swdownloads.analog.com/cse/prod_test_rel/talise_test/adrv9009_pi_test_card_27_05.img.tar.xz>`_
+   -  `Actual file (RPi, 27 May 2020) <https://swdownloads.analog.com/cse/prod_test_rel/talise_test/adrv9009_pi_test_card_27_05.img.tar.xz>`_
    -  Checksum ``cf5b55f2a874ef43e47f269b4c534c9d``
 
 .. note::
 
-   To write it on SD card can follow the instructions: `Installing PI images <https://www.raspberrypi.org/documentation/installation/installing-images/>`_
+   To write it on SD card can follow the instructions:
+   `Installing PI images <https://www.raspberrypi.com/documentation/computers/getting-started.html#installing-the-operating-system>`_
 
 Required setup steps
 ~~~~~~~~~~~~~~~~~~~~

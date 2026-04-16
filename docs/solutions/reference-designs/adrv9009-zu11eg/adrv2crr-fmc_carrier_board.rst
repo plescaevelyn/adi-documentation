@@ -1,5 +1,7 @@
+.. _adrv9009-zu11eg carrier-board:
+
 ADRV2CRR-FMC Carrier Board Hardware Overview
-============================================
+=============================================
 
 .. image:: images/adrv2crr-fmc_desc.png
 
@@ -10,8 +12,7 @@ supply that powers up the full system, heatsink that the user fits to the RFSOM
 heat spreader plate and necessary cables and adapters to get up and running.
 
 Information on getting started and links to access the system software
-provided is contained on the main
-:doc:`RF-SOM Wiki-page </solutions/reference-designs/adrv9009-zu11eg/index>`.
+provided is contained on the main :ref:`RF-SOM page <adrv9009-zu11eg>`.
 
 Power Input
 -----------
@@ -23,13 +24,11 @@ built out of :adi:`ADRV9009-ZU11EG`, :adi:`ADRV2CRR-FMC` and
 :adi:`AD-FMCOMMS8-EBZ`. There are four LEDs that show the status of the
 power supplies: PG_ALL, PG_SOM, PWR_FAULT1 and PWR_FAULT2. A detailed
 description of these signals is available in the
-:doc:`ADRV9009-ZU11EG RF-SOM Hardware Overview </solutions/reference-designs/adrv9009-zu11eg/hardware>`
+:ref:`ADRV9009-ZU11EG RF-SOM Hardware Overview <adrv9009-zu11eg hardware>`
 page.
 
---------------
-
 ZU11EG Ultrascale+ Configuration
---------------------------------
+---------------------------------
 
 Boot Mode Pins
 ~~~~~~~~~~~~~~
@@ -60,18 +59,14 @@ JTAG
 The JTAG connector P7 is a 2x14 pin header intended to fit the Xilinx Platform
 Cable.
 
---------------
-
 RF-SOM Interface Connectors
 ---------------------------
 
 The interface to the ADRV9009-ZU11EG consists of two SAMTEC SEARAY™
 400-pin connectors (P12 and P14). For a detailed description of the signal
 interface visit the
-:doc:`ADRV9009-ZU11EG RF-SOM Hardware Overview </solutions/reference-designs/adrv9009-zu11eg/hardware>`
+:ref:`ADRV9009-ZU11EG RF-SOM Hardware Overview <adrv9009-zu11eg hardware>`
 page.
-
---------------
 
 FMC Connector
 -------------
@@ -103,8 +98,6 @@ enhance the capability of the P1 connector by providing the possibility:
    connected, which conflicts with these signals remove the 0 Ohm jumpers. For
    the synchronization signal SYNC_OUT2 remove R21
 
---------------
-
 IO Expansion Connector
 ----------------------
 
@@ -112,8 +105,6 @@ IO expansion connector P25 is a 2.54mm pitch 2x10mm female connector that gives
 access to 12 single-ended (6 differential pairs) general purpose IOs, connected
 to high-performance ZU11EG PL bank 65. The expansion IOs are referenced to 1.8V.
 If other levels are needed voltage level translators need to be used.
-
---------------
 
 PMOD Connector
 --------------
@@ -127,8 +118,6 @@ PMOD connector P10, is a 2x6 pin, low-speed host interface, referenced to 3.3V.
    has auto direction sensing, and might not work properly with some signals,
    like bidirectional SPI data lines, or open-drain signals.
 
---------------
-
 Interfaces
 ----------
 
@@ -136,8 +125,6 @@ The following table outlines levels of functionality provided in software for
 the I/O interfaces on the carrier board.
 
 .. image:: images/carrier_io.png
-
---------------
 
 .. admonition:: Download
    :class: download
@@ -158,7 +145,7 @@ These are X-GRADE options.
 
    -  `Rev C.1 Schematics <resources/02-048950-01-c2_1_.pdf>`_
    -  `Rev C.1 BOM <resources/rev_c.1_bom.zip>`_
-   -  `Rev C to Rev C.1 Errata <images/revc_to_revc.1_errata.xlsx>`_
+   -  `Rev C to Rev C.1 Errata <resources/revc_to_revc.1_errata.xlsx>`_
    -  `Letter of Volatility <resources/letter_of_volatility_adrv2crr-fmc_carrier_board.pdf>`_
 
 .. admonition:: Download
@@ -166,15 +153,15 @@ These are X-GRADE options.
 
    -  `Rev C Schematics <resources/02-048950-01-c.pdf>`_
    -  `Rev C BOM <resources/05-048950-01-c.zip>`_
-   -  `Rev B/C BRD File <https://wiki.analog.com/_media/resources/eval/user-guides/adrv9009_zu11eg/08_048950c_BRD.zip>`_
+   -  `Rev B/C BRD File <resources/08_048950c_BRD.zip>`_
    -  `Rev C Board Design Files <resources/20_048950c_archive.zip>`_
 
 .. admonition:: Download
    :class: download
 
    -  `Rev B Schematics <resources/carrier_board_02_048950b_top.pdf>`_
-   -  `Rev B BOM <https://wiki.analog.com/_media/resources/eval/user-guides/adrv9009_zu11eg/05-048950-b_BOM.zip>`_
-   -  `Rev B/C BRD File <https://wiki.analog.com/_media/resources/eval/user-guides/adrv9009_zu11eg/08_048950c_BRD.zip>`_
+   -  `Rev B BOM <resources/05-048950-b_BOM.zip>`_
+   -  `Rev B/C BRD File <resources/08_048950c_BRD.zip>`_
 
 .. admonition:: Download
    :class: download
@@ -195,5 +182,3 @@ Switches/Jumpers
 .. image:: images/jmp_pgood.png
    :align: center
    :width: 200
-
-:doc:`Link to Main Page for ADRV9009-ZU11EG </solutions/reference-designs/adrv9009-zu11eg/index>`
