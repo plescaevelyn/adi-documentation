@@ -1,24 +1,45 @@
-.. _eval_adf5902 eval:
+.. _eval-adf5902:
 
-EVAL ADF5902
+EVAL-ADF5902
 =========================================================================
 
-.. TODO: Add a picture of the chip/board
+24 GHz, ISM Band, Multichannel FMCW Radar Transmitter
+
+.. image:: eval-adf5902.png
+   :align: center
+   :width: 500
 
 Overview
 -------------------------------------------------------------------------------
 
-.. TODO: Describe in max 10 rows the main features and applications.
+The :adi:`EVAL-ADF5902` evaluation board allows the user to evaluate the
+performance of the :adi:`ADF5902`, a 24 GHz transmitter (Tx) monolithic
+microwave integrated circuit (MMIC) with an on-chip, 24 GHz voltage controlled
+oscillator (VCO). The VCO features a fractional-N frequency synthesizer with
+waveform generation capability, programmable grid array (PGA), and dual
+transmitter channels for radar systems. The on-chip 24 GHz VCO generates the
+24 GHz signal for the two transmitter channels and the local oscillator (LO)
+output. Each transmitter channel contains a power control circuit. There is also
+an on-chip temperature sensor.
 
 Features:
 
-- feature 1
-- feature 2
+- 24 GHz to 24.25 GHz VCO (ISM band)
+- 2-channel 24 GHz power amplifier with 8 dBm output
+- Single-ended outputs with mux and mute function
+- Programmable output power
+- LO output buffer
+- High and low speed FMCW ramp generation
+- 25-bit fixed modulus allows subhertz frequency resolution
+- Auxiliary 8-bit ADC
+- Power control detector
+- ±5°C temperature sensor
 
 Applications:
 
-- application 1
-- application 2
+- Automotive radars
+- Industrial radars
+- Microwave radar sensors
 
 .. toctree::
    :hidden:

@@ -28,9 +28,9 @@ Build Application
 -----------------
 
 In order to build the application and generate the .elf file, please follow
-the `NO-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_.
+the :external+no-OS:doc:`no-OS build guide <build_guide>`.
 
-Source files for the application can be found in the :doc:`Downloads </solutions/reference-designs/eval-adf5902/software/no-os-setup>` section.
+Source files for the application can be found in the `Downloads`_ section.
 
 Run Application
 ---------------
