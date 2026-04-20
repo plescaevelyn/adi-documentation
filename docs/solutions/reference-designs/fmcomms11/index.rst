@@ -1,11 +1,11 @@
-AD-FMCOMMS11-EBZ 
+AD-FMCOMMS11-EBZ
 ================================================================================
 
+16-Bit, 12 GSPS RF DAC and 12-Bit, 2.5 GSPS RF ADC Development Platform.
 
 .. image:: images/AD9625-TR-TAG-chip-illustration.png
    :align: left
    :width: 150
-
 
 .. image:: images/AD9162-TR-chip-illustration.png
    :align: left
@@ -14,7 +14,7 @@ AD-FMCOMMS11-EBZ
 Overview
 --------------------------------------------------------------------------------
 
-The :adi:`AD-FMComms11-EBZ` board is a system platform board for communication
+The :adi:`AD-FMCOMMS11-EBZ` board is a system platform board for communication
 infrastructure applications that demonstrates the Direct to RF (DRF) transmitter
 and observation receiver architecture. Using high sample rate RFDAC(s)
 and RFADC(s), a number of components in previous generation transmitters can be
@@ -29,12 +29,12 @@ the board through a variable attenuator, a balun and finally the ADC. Clock
 management is taken care of on board; all the necessary clocks are generated
 from a reference. Power management is present as well. We will provide typical
 performance data for the entire range (70 MHz – 6 GHz) which is
-supported by the platform. This is primarily for system investigation and bring 
+supported by the platform. This is primarily for system investigation and bring
 up of various waveforms from a software team before their custom hardware is
 complete, where they want to see waveforms, but are not concerned about the last
 1dB or 1% EVM of performance.
 
-Features and Benefits:
+Features:
 
 - TX
    - 16-bit 12GSPS RFDAC
@@ -66,8 +66,23 @@ Features and Benefits:
       - SYSREF Setup/Hold detector
    - Programmable Interrupt (IRQ) event monitor
 
+Applications:
 
-:adi:`ad-fmcomms11-ebz` looks like this, with 1x ADC and 1x DAC:
+- TX
+   - Broadband communications systems
+   - DOCSIS 3.1 cable modem termination system (CMTS)/video on demand
+     (VOD)/edge quadrature amplitude modulation (EQAM)
+   - Wireless communications infrastructure
+   - W-CDMA, LTE, LTE-A, point to point
+   - Instrumentation, automatic test equipment (ATE)
+   - Radars and jammers
+- RX
+   - Spectrum analyzers
+   - Military communications
+   - Radar
+   - High performance digital storage oscilloscopes
+   - Active jamming/antijamming
+   - Electronic surveillance and countermeasures
 
 .. image:: images/fmcomms11_image.png
    :align: center
@@ -103,7 +118,7 @@ Table of Contents
    #. Configure an SD Card with :external+kuiper:doc:`Kuiper <index>`
 
    #. Software Solutions
-       
+
        #. :ref:`iio-oscilloscope`
        #. :ref:`fmcomms11-plugin`
        #. :external+scopy:doc:`Scopy <index>`
@@ -111,18 +126,13 @@ Table of Contents
        #. :ref:`Python Interfaces <pyadi-iio>`
        #. :git+pyadi-iio:`FMCOMMS11 Python Example <main:examples/fmcomms11.py>`
 
-#. Design with the FMCOMMS11 
+#. Design with the FMCOMMS11
 
   #. :ref:`fmcomms11 block-diagram`
 
       #. :adi:`AD-FMCOMMS11-EBZ Product page <ad-fmcomms11-ebz>`
       #. :adi:`AD9162 Product page <AD9162>`
       #. :adi:`AD9625 Product page <AD9625>`
-
-   #. Hardware in the Loop / How to design your own custom BaseBand
-
-      #. :dokuwiki:`GNU Radio <resources/tools-software/linux-software/gnuradio>`
-      #. `Transceiver Toolbox <https://analogdevicesinc.github.io/TransceiverToolbox/master/>`_
 
    #. Resources for designing a custom AD9625/AD9162-based platform software
 
@@ -148,14 +158,12 @@ Table of Contents
             #. :dokuwiki:`JESD204 status utility <resources/tools-software/linux-software/jesd_status>`
             #. :dokuwiki:`JESD204 Eye Scan <resources/tools-software/linux-software/jesd_eye_scan>`
             #. :external+hdl:ref:`jesd204`
-         
+
       #. FPGA Resources:
 
          #. :external+hdl:doc:`FMCOMMS11 HDL reference design <projects/fmcomms11/index>`
          #. :external+hdl:ref:`HDL User Guide <user_guide>`
          #. :external+hdl:doc:`HDL Customize Guide <user_guide/customize_hdl>`
-        
-
 
 .. _fmcomms11 block-diagram:
 
@@ -165,7 +173,6 @@ Block diagram
 .. image:: images/fmcomms11_bd.svg
    :align: center
    :width: 800
-
 
 ADI Articles
 --------------------------------------------------------------------------------
@@ -178,7 +185,7 @@ ADI Articles
    -  :adi:`Part 3—Mode S Signals Decoding Algorithm Validation Using Hardware in the Loop <library/analogDialogue/archives/49-11/four-step-sdr-03.html>`
    -  :adi:`Part 4 - Rapid Prototyping Using the Zynq SDR Kit and Simulink Code Generation Workflow <library/analogDialogue/archives/49-12/four-step-sdr-04.html>`
 
-ADI Videos
+Videos
 --------------------------------------------------------------------------------
 
 -  :adi:`Silent Switcher µModule Regulators Powering GSPS Sampling ADC <en/products/ad9625.html#product-recommendations>`
@@ -199,7 +206,6 @@ Warning
 --------------------------------------------------------------------------------
 
 .. esd-warning::
-
 
 .. toctree::
    :hidden:

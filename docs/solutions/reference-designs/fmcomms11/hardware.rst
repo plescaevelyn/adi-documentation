@@ -8,7 +8,6 @@ the :adi:`AD9162` RF DAC and the :adi:`AD9625` RF ADC.
 For detailed specifications and datasheets, refer to the
 respective product pages.
 
-
 .. _fmcomms11 hardware-design-files:
 
 Schematic, PCB Layout, Bill of Materials
@@ -19,12 +18,10 @@ Schematic, PCB Layout, Bill of Materials
 
    :adi:`AD-FMCOMMS5-EBZ Design & Integration Files <media/en/reference-design-documentation/design-integration-files/ad-fmcomms11-ebz-designsupport.zip>`
 
-
    -  Schematic
    -  PCB Layout
    -  Bill of Materials
    -  Allegro Project (get the `Allegro FREE Physical Viewer <https://www.cadence.com/en_US/home/tools/pcb-design-and-analysis/allegro-downloads-start.html>`_; you need 16.5 or higher).
-
 
 Picture and Main components
 --------------------------------------------------------------------------------

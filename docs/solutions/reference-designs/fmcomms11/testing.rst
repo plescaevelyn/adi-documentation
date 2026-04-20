@@ -27,8 +27,8 @@ parameters limits stored in the BOOT partition.
 Requirement
 --------------------------------------------------------------------------------
 
--  AD-FMCOMMS11-EBZ
--  Zynq ZC706
+-  :adi:`AD-FMCOMMS11-EBZ <ad-fmcomms11-ebz>`
+-  :xilinx:`ZC706`
 -  FMCOMMS SD card (at least 8 gb class 10) loaded with
    ADI zynq linux image installed with the fmcomms11_test
    program
@@ -208,5 +208,3 @@ Test process
    computer. As alternative, if the carrier board is
    connected to the network, SSH or SCP can be used to
    copy the files from the ZC706 to the computer.
-
-

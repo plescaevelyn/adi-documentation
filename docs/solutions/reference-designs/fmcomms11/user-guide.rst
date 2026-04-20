@@ -37,13 +37,12 @@ The FMCOMMS11 evaluation board is supported with the
 (Windows, Linux, Mac) with language bindings for C, C#, Python, MATLAB,
 and others.
 
-
 .. include-template:: ../common/using-iio-osc.rst.jinja
 
    has_linux: true
    iio_has_plugin: true
    iio_plugin_ref: fmcomms11-plugin
-  
+
 .. include-template:: ../common/using-scopy.rst.jinja
 
 PyADI-IIO

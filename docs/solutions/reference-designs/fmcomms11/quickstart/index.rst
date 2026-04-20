@@ -61,5 +61,3 @@ ZC706 + AD-FMCOMMS11-EBZ
 
 .. image:: ../images/system_test_setup.png
    :width: 800
-
-
