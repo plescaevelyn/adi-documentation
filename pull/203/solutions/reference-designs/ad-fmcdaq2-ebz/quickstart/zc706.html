@@ -103,6 +103,7 @@
 <li><a class="reference internal" href="#testing">Testing</a><ul>
 <li><a class="reference internal" href="#creating-the-setup">Creating the setup</a></li>
 <li><a class="reference internal" href="#boot-messages">Boot messages</a></li>
+<li><a class="reference internal" href="#useful-commands-for-the-serial-terminal">Useful commands for the serial terminal</a></li>
 </ul>
 </li>
 </ul>
@@ -969,7 +970,7 @@ guide on how to do it, then come back to this section)</p></li>
 <li><p>SD card with at least 16GB of memory</p></li>
 <li><p>Mini-USB cable (UART)</p></li>
 <li><p>LAN cable (Ethernet)</p></li>
-<li><p>2 x SMA cables</p></li>
+<li><p>(Optional) 2x SMA cable for analog signal loopback</p></li>
 <li><p>(Optional) USB keyboard &amp; mouse and a HDMI compatible monitor</p></li>
 </ul>
 <p>More details as to why you need these, can be found at <a class="reference internal" href="../prerequisites.html#ad-fmcdaq2-ebz-prerequisites"><span class="std std-ref">Prerequisites</span></a>.</p>
@@ -988,6 +989,10 @@ the DAC channels on the evaluation board, using SMA cables.</p>
 </ol>
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/documentation/daq2/docs/solutions/reference-designs/images/zc706.png"><img alt="https://media.githubusercontent.com/media/analogdevicesinc/documentation/daq2/docs/solutions/reference-designs/images/zc706.png" src="https://media.githubusercontent.com/media/analogdevicesinc/documentation/daq2/docs/solutions/reference-designs/images/zc706.png" width="900" />
 </a>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>This project was tested with <strong>VADJ range: 2.5V</strong></p>
+</div>
 <ol class="arabic simple">
 <li><p>Plug the AD-FMCDAQ2-EBZ into the HPC Connector</p></li>
 <li><p>Plug your HDMI display device into the HDMI Video Connector (P1)</p></li>
@@ -1656,7 +1661,63 @@ root@analog:~#
 </div>
 </div>
 </div>
-</div><p>After booting process is complete, you can open IIO-Oscilloscope. Learn more
+</div></section>
+<section id="useful-commands-for-the-serial-terminal">
+<h4>Useful commands for the serial terminal<a class="headerlink" href="#useful-commands-for-the-serial-terminal" title="Link to this heading"></a></h4>
+<p>The below commands are to be run in the serial terminal connected to the FPGA.</p>
+<p>To find out the IP of the FPGA board, run the following command and take the IP
+specified at “eth0 inet”:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ifconfig
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>To see the IIO devices detected, run:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iio_info<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>iio:device
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>iio:device0: xilinx-ams iio:device1: ad9523-1 iio:device2: ad7291
+iio:device3: axi-ad9144-hpc (buffer capable) iio:device4: axi-ad9680-hpc
+(buffer capable)
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>To use the <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/jesd_status" target="_blank">JESD204 status utility</a>, run:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>jesd_status
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>Additionally, if running <code class="docutils literal notranslate"><span class="pre">stty</span> <span class="pre">rows</span> <span class="pre">30</span></code> before running <code class="docutils literal notranslate"><span class="pre">jesd_status</span></code>, you
+can expand the visible area of it and see more than 4 lanes.</p>
+<p>To power off the system, run the following command, and wait for the final
+message to be printed, then power off the FPGA board from the switch as well.</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poweroff
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>To reboot the system, run:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>reboot
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Even thought this is Linux, this is a persistent file systems. Care should be
+taken not to corrupt the file system – please shut down things, don’t just
+turn off the power switch. Depending on your monitor, the standard power off
+could be hiding. You can do this from the terminal as well with <code class="code docutils literal notranslate"><span class="pre">sudo</span>
+<span class="pre">shutdown</span> <span class="pre">-h</span> <span class="pre">now</span></code> or the above-mentioned command for powering off.</p>
+</div>
+<p>After booting process is complete, you can open IIO-Oscilloscope. Learn more
 about it <a class="reference internal" href="../../../../software/iio-oscilloscope/index.html"><span class="doc">here</span></a>. You can interact with
 the IIO-Osc GUI either directly or over the network.</p>
 </section>
@@ -1692,7 +1753,7 @@ will include Vivado as well)</p></li>
 <li><p>AMD Xilinx <a class="icon link reference external" href="https://www.xilinx.com/ZC706" target="_blank">ZC706</a> Rev 1.1 or higher FPGA board and its power supply</p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD-FMCDAQ2-EBZ" target="_blank">AD-FMCDAQ2-EBZ</a> FMC evaluation board</p></li>
 <li><p>2x Micro-USB cables, one for UART and one for JTAG</p></li>
-<li><p>(Optional) USB keyboard &amp; mouse and a HDMI-compatible monitor</p></li>
+<li><p>(Optional) 2x SMA cable for analog signal loopback</p></li>
 </ul>
 <p>More details as to why you need these, can be found at <a class="reference internal" href="../prerequisites.html#ad-fmcdaq2-ebz-prerequisites"><span class="std std-ref">Prerequisites</span></a>.</p>
 </section>
@@ -1702,6 +1763,10 @@ will include Vivado as well)</p></li>
 <h4>Creating the setup<a class="headerlink" href="#id5" title="Link to this heading"></a></h4>
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/documentation/daq2/docs/solutions/reference-designs/ad-fmcdaq2-ebz/images/ad-fmcdaq2-ebz_zc706_no-OS.jpg"><img alt="https://media.githubusercontent.com/media/analogdevicesinc/documentation/daq2/docs/solutions/reference-designs/ad-fmcdaq2-ebz/images/ad-fmcdaq2-ebz_zc706_no-OS.jpg" src="https://media.githubusercontent.com/media/analogdevicesinc/documentation/daq2/docs/solutions/reference-designs/ad-fmcdaq2-ebz/images/ad-fmcdaq2-ebz_zc706_no-OS.jpg" width="900" />
 </a>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>This project was tested with <strong>VADJ = 2.5 V</strong></p>
+</div>
 <p>Follow the steps in this order, to avoid damaging the components:</p>
 <ol class="arabic simple">
 <li><p>Connect the <a class="icon adi reference external" href="https://www.analog.com/AD-FMCDAQ2-EBZ" target="_blank">AD-FMCDAQ2-EBZ</a> FMC board to the ZC706 <strong>HPC</strong> FMC socket</p></li>
@@ -1710,6 +1775,7 @@ one is: SW11 - Big Blue Switch in the middle, which controls the Boot Mode,
 it needs to be set: <strong>1: Down, 2: Down, 3: Down, 4: Down, 5: Down</strong>).</p></li>
 <li><p>Connect USB UART (Mini-USB) to your host PC</p></li>
 <li><p>Connect USB JTAG (Mini-USB) to your host PC</p></li>
+<li><p>(Optional) Connect SMA cable for analog signal loopback</p></li>
 <li><p>Turn on the power switch on the FPGA board</p></li>
 <li><p>Observe console output messages on your terminal (use the first ttyUSB or COM
 port registered)</p></li>
