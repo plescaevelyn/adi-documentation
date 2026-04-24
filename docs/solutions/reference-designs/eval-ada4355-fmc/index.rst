@@ -106,7 +106,7 @@ Table of Contents
 #. Use the board to better understand the :adi:`ADA4356`
 
    #. :external+kuiper:doc:`Configure a SD Card <hardware-configuration>`
-   #. :external+kuiper:doc:`Update the SD Card <repositories>`
+   #. :external+kuiper:ref:`package-management`
 
    #. Linux Applications
 

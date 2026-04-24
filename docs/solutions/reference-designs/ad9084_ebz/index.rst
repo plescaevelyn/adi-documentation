@@ -97,7 +97,7 @@ Table of Contents
 #. Use the board to better understand the :adi:`AD9084`
 
       #. :external+kuiper:doc:`Configure a SD Card <hardware-configuration>`
-      #. :external+kuiper:doc:`Update the SD Card <repositories>`
+      #. :external+kuiper:ref:`package-management`
       #. :ref:`AD9084 (Apollo) Profile Generator <ad9084 profile-generator>`
       #. :ref:`Running a new JESD mode on hardware <ad9084 quickstart new_usecase>`
 

@@ -83,8 +83,10 @@ Building libiio
 Building on the Linux/Zynq Target
 ---------------------------------
 
-Check out how to :external+kuiper:doc:`stay up to date <repositories>`.
-This will check out and build the latest version.
+If using Kuiper, checkout :external+kuiper:ref:`package-management` to learn how to
+install from the package manager.
+
+If you want to build from source, the instructions in the next section also applies.
 
 Building on the Linux Host Target
 ---------------------------------
