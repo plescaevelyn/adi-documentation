@@ -20,7 +20,7 @@ real-world system development.
 
 ADI MxFE, SDR, MEMS and power solutions integrated into validated system architectures.
 
-```{image} resources/Signal_Chain_Hardware_transparent.png
+```{image} resources/signal-chain-hardware.png
 ```
 ````
 
@@ -28,7 +28,7 @@ ADI MxFE, SDR, MEMS and power solutions integrated into validated system archite
 
 COTS FPGA platforms with production-grade HDL reference designs.
 
-```{image} resources/FPGA_Reference_HDL_transparent.png
+```{image} resources/fpga-reference-hdl.png
 ```
 ````
 
@@ -36,7 +36,7 @@ COTS FPGA platforms with production-grade HDL reference designs.
 
 Embedded Linux builds with native [IIO](https://www.kernel.org/doc/html/latest/driver-api/iio/index.html) support.
 
-```{image} resources/Linux_IIO_transparent.png
+```{image} resources/linux-iio.png
 ```
 ````
 
@@ -44,20 +44,12 @@ Embedded Linux builds with native [IIO](https://www.kernel.org/doc/html/latest/d
 
 System-level control via Python, MATLAB, or QIQ using libIIO APIs.
 
-```{image} resources/Application_Software_transparent.png
+```{image} resources/application-software.png
 ```
 ````
 `````
 
 ## Platforms
-
-```{toctree}
-:maxdepth: 1
-:hidden:
-
-Phaser (CN0566)<phaser/index>
-Pluto SDR<pluto/index>
-```
 
 For more information on each of ADC Platforms, please click on the links below:
 
@@ -82,7 +74,17 @@ Low-cost SDR system based on the AD9361
 ```{image} resources/pluto.png
 ```
 ````
-`````
+
+
+````{card} Triton
+:ref: adc triton
+
+16T/16R X-Band System Platform
+
+```{image} triton/images/adxband16ebz-top-angle-evaluation-board.png
+```
+````
+`````  
 
 ## Platform Pilots
 
@@ -137,5 +139,14 @@ We have a Catalyst centres in:
 3.  **Drive Collaborative Innovation**\
     Co-develop system-level solutions with customers and ADI design
     teams.
+
+```{toctree}
+:maxdepth: 1
+:hidden:
+
+Phaser (CN0566)<phaser/index>
+Pluto SDR<pluto/index>
+Triton <triton/index>
+```
 
 
