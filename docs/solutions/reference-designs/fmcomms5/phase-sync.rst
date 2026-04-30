@@ -4,7 +4,13 @@ FMComms5 Phase Synchronization
 Theory of Operation
 -------------------
 
-The AD9361 transceiver has no built-in functionality to provide phase synchronization, but through external equipment and additional software and HDL phase alignment can be achieved across multiple transceiver chips. The calibration process is documented on this :doc:`wiki page </solutions/reference-designs/fmcomms5/multi-chip-sync>` and as well in this `whitepage <resources/doa_whitepaper.pdf>`_ in the "Phase Alignment" discussion.
+The AD9361 transceiver has no built-in functionality to provide phase
+synchronization, but through external equipment and additional software and
+HDL phase alignment can be achieved across multiple transceiver chips. The
+calibration process is documented on this
+:doc:`wiki page </solutions/reference-designs/fmcomms5/multi-chip-sync>` and
+as well in this `whitepage <resources/doa_whitepaper.pdf>`_ in the "Phase
+Alignment" discussion.
 
 The calibration procedures are implemented in both IIO-Scope and in a C library
 libad9361. It can be useful to see how they are implemented, or if end-users
@@ -35,14 +41,14 @@ IIO-Scope Example Implementation
 
 For Rev-A and Rev-B FMComms5 boards, low LOs are recommended due to severe
 attenuation from onboard RF switches used for calibration above 1 GHz. Be aware
-on Rev-B and earlier, traces from the transceivers to the SMA connectors are not
-matched. This can cause residual phase ambiguity depending on LO frequency and
-tolerances required.
+on Rev-B and earlier, traces from the transceivers to the SMA connectors
+are not matched. This can cause residual phase ambiguity depending on LO
+frequency and tolerances required.
 
 The following example assumes the board is brought up in the standard
-configuration used by the driver. To guarantee this make sure IIO-Scope profiles
-have been removed from the board. Close IIO-Scope on the development system and
-removed the profile with command:
+configuration used by the driver. To guarantee this make sure IIO-Scope
+profiles have been removed from the board. Close IIO-Scope on the
+development system and removed the profile with command:
 
 ::
 
@@ -63,7 +69,8 @@ MHz. All LOs should be at 2.4 GHz by default.
 
 To calibrate FMComms5, perform the following within IIO-Scope:
 
--  From the FMComms5 panel, match all LOs to the same frequency for all four datapaths
+-  From the FMComms5 panel, match all LOs to the same frequency for all four
+   datapaths
 -  Disable all receiver trackings: Quadrature, RF DC, and BB DC
 -  Put all receivers into **manual** Gain Control Mode
 -  Set manual hardware gains for all receivers to the same level within a
@@ -76,7 +83,8 @@ To calibrate FMComms5, perform the following within IIO-Scope:
    :align: center
    :width: 1000
 
--  From the FMComms2/3/4/5 Advanced (or AD936X Advanced) panel, select the FMComms5 tab. From here click the "Reset Calibration" button
+-  From the FMComms2/3/4/5 Advanced (or AD936X Advanced) panel, select the
+   FMComms5 tab. From here click the "Reset Calibration" button
 -  Click the "MCS Sync" button at the bottom
 -  Click the "Calibrate" button which will launch the procedure
 -  To maintain minimal ambiguity over time disable Quadrature tracking again in
@@ -85,8 +93,8 @@ To calibrate FMComms5, perform the following within IIO-Scope:
 Once this completes, the DDSs used for calibration will remain on. To view the
 relative sync, you can open a capture window to view received data on the SMA
 connected receivers. The figure below was created with a FMComms5 configuration
-with a matched splitter feeding into 3 channels driven by a single receiver. SMA
-4 was left disconnected. Standard SMA cables were used, not matched length
+with a matched splitter feeding into 3 channels driven by a single receiver.
+SMA 4 was left disconnected. Standard SMA cables were used, not matched length
 cables which will provide better performance.
 
 |image1|
@@ -97,17 +105,25 @@ libad9361 Example Implementation
 Trace Differences
 -----------------
 
-On Rev-A and Rev-B boards there are trace differences to the SMA which can cause
-phase rotation. This rotation will be based on the operation frequency of the LO
-unless you sample rate is close to the LO. We can calculate the theoretical
-phase for what the maximum phase shift will be depending on your LO with the
+On Rev-A and Rev-B boards there are trace differences to the SMA which can
+cause phase rotation. This rotation will be based on the operation frequency
+of the LO unless you sample rate is close to the LO. We can calculate the
+theoretical phase for what the maximum phase shift will be depending on your
+LO with the
 following equation:
 
 .. math::
 
    \phi = 360 \times D \times f/c
 
-where :math:`\phi` is the phase difference in degrees, :math:`D` is the distance in meters, :math:`f` is the frequency in hertz, and :math:`c` is the speed of light through a specific medium in meters per second. For FMComms5 :math:`c=15 cm/nsec` which is in reference to FR4. Grab the :doc:`board files </solutions/reference-designs/fmcomms5/hardware>` for your specific revision to get the actual trace lengths for specific channels, which will determine :math:`D` . Below is a plot of possible offsets across frequency and trace distance deltas.
+where :math:`\phi` is the phase difference in degrees, :math:`D` is the
+distance in meters, :math:`f` is the frequency in hertz, and :math:`c` is
+the speed of light through a specific medium in meters per second. For
+FMComms5 :math:`c=15 cm/nsec` which is in reference to FR4. Grab the
+:doc:`board files </solutions/reference-designs/fmcomms5/hardware>` for your
+specific revision to get the actual trace lengths for specific channels, which
+will determine :math:`D` . Below is a plot of possible offsets across
+frequency and trace distance deltas.
 
 |Phase difference over frequency and distance|
 
@@ -137,7 +153,11 @@ MATLAB code for plot
    xlim([0,8])
    title('$$\phi = \frac{180}{\pi} \times \frac{2 \pi D f}{c} =\frac{360 D f}{c}, c = 15 cm/nsec$$','interpreter','latex');
 
-These phase estimates can be used to correct for trace mismatches, which can be applied through internal phase shifters with the HDL reference designs' `ADC <https://wiki.analog.com/resources/tools-software/linux-drivers/iio-adc/axi-adc-hdl>`_ and `DAC cores <https://wiki.analog.com/resources/tools-software/linux-drivers/iio-dds/axi-dac-dds-hdl>`_ by the calibphase properties.
+These phase estimates can be used to correct for trace mismatches, which can
+be applied through internal phase shifters with the HDL reference designs'
+`ADC <https://wiki.analog.com/resources/tools-software/linux-drivers/iio-adc/axi-adc-hdl>`_
+and `DAC cores <https://wiki.analog.com/resources/tools-software/linux-drivers/iio-dds/axi-dac-dds-hdl>`_
+by the calibphase properties.
 
 Phase Performance: Rev B vs. Rev C
 ----------------------------------
