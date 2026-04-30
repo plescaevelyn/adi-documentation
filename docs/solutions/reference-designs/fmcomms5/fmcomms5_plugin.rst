@@ -1,7 +1,7 @@
 FMComms5 Plugin Description
 ===========================
 
-.. |more| replace:: :doc:`Read More </wiki-migration/resources/tools-software/linux-drivers/iio-transceiver/ad9361>`
+.. |more| replace:: *(see AD9361 linux driver documentation)*
 
 The FMCOMMS5 plugin works with the
 `IIO Oscilloscope <https://wiki.analog.com/iio_oscilloscope>`_. You always
