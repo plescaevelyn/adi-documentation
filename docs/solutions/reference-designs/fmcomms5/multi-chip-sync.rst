@@ -6,22 +6,22 @@ Overview
 
 Some systems may require more complex configurations that combine multiple
 devices. Operating multiple
-`AD9361 <https://wiki.analog.com/../ad-fmcomms2-ebz/ad9361>`_ devices while
-trying to coordinate data for each channel of each device is not practical
-for devices that operate independently without any mechanism for aligning
-data timing. Data synchronization into and out of multiple devices is
-required to implement such configurations.
+:dokuwiki:`AD9361 </resources/eval/user-guides/ad-fmcomms2-ebz/ad9361>` devices
+while trying to coordinate data for each channel of each device is not practical
+for devices that operate independently without any mechanism for aligning data
+timing. Data synchronization into and out of multiple devices is required to
+implement such configurations.
 
-The AD9361 contains the external control inputs and internal circuitry
-needed to synchronize baseband sampling and data clocks, allowing the system
-design to utilize multiple devices in parallel with equivalent performance to
-a single device.
+The AD9361 contains the external control inputs and internal circuitry needed to
+synchronize baseband sampling and data clocks, allowing the system design to
+utilize multiple devices in parallel with equivalent performance to a single
+device.
 
 Unfortunately, the AD9361 does not include internal RF synchronization. The
 ability to synchronize the internal RF local oscillators is not available
-without some external assistance. Luckily this is trivial to do in today's FPGA
-systems, and will be explored below. An alternative option of using an external
-LO will also be explored.
+without some external assistance. Luckily this is trivial to do in today's
+FPGA systems, and will be explored below. An alternative option of using an
+external LO will also be explored.
 
 Multi-Chip Sync (MCS)
 ---------------------
@@ -30,25 +30,24 @@ Multi-Chip Sync (MCS)
    :width: 950
    :height: 650px
 
-The figure shows a simplified block diagram of the AD9361. The device
-utilizes a fractional-N synthesizer in the baseband PLL block to generate
-the desired sample rate for a given system. This synthesizer generates the
-ADC sample clock, DAC sample clock, and baseband digital clocks from any
-reference clock in the frequency range specified for the reference clock
-input.
+The figure shows a simplified block diagram of the AD9361. The device utilizes
+a fractional-N synthesizer in the baseband PLL block to generate the desired
+sample rate for a given system. This synthesizer generates the ADC sample
+clock, DAC sample clock, and baseband digital clocks from any reference clock
+in the frequency range specified for the reference clock input.
 
 For MIMO systems requiring more than two input or two output channels, multiple
 AD9361 devices and a common reference oscillator are required. The AD9361
 provides the capability to accept an external reference clock and synchronize
-operation with other devices using simple control logic. This detail is left
-off the simplified block diagram above.
+operation with other devices using simple control logic. This detail is left off
+the simplified block diagram above.
 
 Each AD9361 includes its own baseband PLL that generates sampling and data
 clocks from the reference clock input, so an additional control mechanism is
 required to synchronize multiple devices. A logical SYNC_IN pulse input is
 needed to align each device's data clock with a common reference. Having a
-quick peek in the schematics of the
-`schematics <https://wiki.analog.com/hardware>`_ shows how this is done. The
+quick peek in the schematics of the :doc:`schematics <hardware>` shows how
+this is done. The
 :adi:`ADCLK846` (U301) Clock Fanout Buffer, accepts a 40MHz Rakon oscillator
 (Y301), and drives:
 
@@ -59,14 +58,14 @@ quick peek in the schematics of the
 The ``SYNC_IN`` pin on the AD9361 is driven directly from the FPGA, length
 matched to both AD9361 devices, so the edge hits both parts at the same time.
 
-The total number of devices that can be connected in parallel is limited
-only by the drive capability of the clock and logic signals. Although on the
-FMCOMMS5, we show 2 devices, this can be extended to n devices.
+The total number of devices that can be connected in parallel is limited only by
+the drive capability of the clock and logic signals. Although on the FMCOMMS5,
+we show 2 devices, this can be extended to n devices.
 
 From a hardware perspective - this is all that is necessary, from a software
-perspective, this is when things get interesting. It's a matter of
-programming a few registers properly (in the right order), and then asserting
-the ``SYNC_IN`` at the right time.
+perspective, this is when things get interesting. It's a matter of programming a
+few registers properly (in the right order), and then asserting the ``SYNC_IN``
+at the right time.
 
 Linux
 ~~~~~
@@ -75,20 +74,20 @@ there is a small AD9361 helper library that helps manages the mcs issues, that
 is common between all IIO software (the iio-oscilloscope, and the various
 network backends)
 
-`AD9361 helper Library for IIO applications`_.
+`AD9361 helper Library for IIO applications <https://github.com/analogdevicesinc/libad9361-iio>`_.
 
 Specifically, in
 :git-libad9361-iio:`ad9361_multichip_sync.c <ad9361_multichip_sync.c#L42>`
 
-Calling the function with the two devices is all that is necessary. You can
-see it being used in the osc application
+Calling the function with the two devices is all that is necessary. You can see
+it being used in the osc application
 :git-iio-oscilloscope:`here <plugins/fmcomms2_adv.c#L743>`.
 
 To install the library on your system, follow the instructions below:
 
 ::
 
-   > git clone `libad9361-iio <https://github.com/analogdevicesinc/libad9361-iio>`_.git
+   > git clone https://github.com/analogdevicesinc/libad9361-iio.git
    > cd libad9361-iio
    > mkdir build && cd build
    > cmake ../
@@ -136,12 +135,12 @@ Internal LOs + FPGA
 ~~~~~~~~~~~~~~~~~~~~
 
 In this section, we assume that you have read and understood the math parts of
-`IQ Rotation and Correction`_ section, and we will focus here on the practical
+:dokuwiki:`IQ Rotation and Correction </resources/eval/user-guides/ad-fmcomms2-ebz/iq_rotation>` section, and we will focus here on the practical
 aspects of things.
 
 The FMCOMMS5 board includes two :adi:`ADG918` wide band (-3dB @ 4GHz) switches
-that are used to connect either Tx1B from either AD9361 device to Rx1C on
-either AD9361 device. This allows four different states:
+that are used to connect either Tx1B from either AD9361 device to Rx1C on either
+AD9361 device. This allows four different states:
 
 =============== =============== ===============
 Output \\ Input Device A (Rx1C) Device B (Rx1C)
@@ -162,10 +161,10 @@ We can use this to find the phase difference the in two difference receivers
 :math:`Theta_{Rx} = (Theta_{Rx1C_{B}} - Theta_{Rx1C_{A}})`
 
 Since our minimal switch matrix doesn't include a spitter (which would have a
-phase error of it's own), we need to have a multiple step measurement, and use
-a common reference of either of the transmitters (in this case
-:math:`Tx1B_{A}` . To keep the math correct, we add zero to the above
-equation (in this case :math:`Tx1B_{A} - Tx1B_{A} = 0` ):
+phase error of it's own), we need to have a multiple step measurement, and use a
+common reference of either of the transmitters (in this case :math:`Tx1B_{A}` .
+To keep the math correct, we add zero to the above equation (in this case
+:math:`Tx1B_{A} - Tx1B_{A} = 0` ):
 
 :math:`Theta_{Rx} = (Theta_{RX1C_{B}} - Theta_{Rx1C_{A}} + (Theta_{Tx1B_{A}} - Theta_{Tx1B_{A}}))`
 
@@ -174,8 +173,8 @@ measurement.
 
 :math:`Theta_{Rx} = (Theta_{Tx1B_{A}} - Theta_{Rx1C_{A}}) – (Theta_{Tx1B_{A}} – Theta_{RX1C_{B}})`
 
-The transmitter is the same - by using a common receiver, comparing two
-transmit paths is quite easy.
+The transmitter is the same - by using a common receiver, comparing two transmit
+paths is quite easy.
 
 :math:`Theta_{Tx} = (Theta_{Tx1B_{A}} - Theta_{RX1C_{A}}) – (Theta_{Tx1B_{B}} – Theta_{Rx1C_{A}})`
 
@@ -185,14 +184,14 @@ receiver channel. This gives us a time reference between Rx and Tx that never
 changes. It is well understood that the digital signal in Tx is not the same
 phase as the analog Tx signal, but we are only using things as a reference.
 The absolute position doesn't really matter. It's just a function of stepping
-through the four setups, and driving the difference to the same. The math to
-(a) calculate the difference in phases, or :math:`(Theta_{A} - Theta_{A})`
-and how to correct for this phase difference inside the FPGA is detailed
-`here <https://wiki.analog.com/../ad-fmcomms2-ebz/iq_rotation>`_.
+through the four setups, and driving the difference to the same. The math to (a)
+calculate the difference in phases, or :math:`(Theta_{A} - Theta_{A})` and how
+to correct for this phase difference inside the FPGA is detailed
+:dokuwiki:`here </resources/eval/user-guides/ad-fmcomms2-ebz/iq_rotation>`.
 
-In reality, we should just be able to measure the difference, and set the
-other difference to the same, but we find it visually appealing to drive all
-the differences to zero. This is done at the application level - for the osc
+In reality, we should just be able to measure the difference, and set the other
+difference to the same, but we find it visually appealing to drive all the
+differences to zero. This is done at the application level - for the osc
 application, it's in
 :git-iio-oscilloscope:`AD9361 advanced plugin <plugins/fmcomms2_adv.c#L788>`.
 
@@ -203,17 +202,17 @@ When it's needed to go through a internal LO phase calibration sequence
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Any time that software can effect things that can make the RF LOs to go out of
-phase, it's necessary to repeat these steps. This would be any time changes are
-made to:
+phase, it's necessary to repeat these steps. This would be any time changes
+are made to:
 
 -  To the internal RX/TX RFPLLs (LOs)
 -  The MCS is done
 
-This changes does include internal changes, like if you place the AD9361
-into TDD mode (where the LOs or LO dividers get powered off). What this
-really means - is you can't use the AD9361 in TDD mode (where the LOs get
-turned off) and get phase coherency at the RF level. Users are suggested to
-keep the LOs on, by using FDD mode.
+This changes does include internal changes, like if you place the AD9361 into
+TDD mode (where the LOs or LO dividers get powered off). What this really
+means - is you can't use the AD9361 in TDD mode (where the LOs get turned off)
+and get phase coherency at the RF level. Users are suggested to keep the LOs
+on, by using FDD mode.
 
 External LO generation
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -221,7 +220,3 @@ External LO generation
 .. [1]
    XTALN pin is floating, just like the datasheet says to do
 
-.. _AD9361 helper Library for IIO applications:
-   https://github.com/analogdevicesinc/libad9361-iio
-.. _IQ Rotation and Correction:
-   https://wiki.analog.com/../ad-fmcomms2-ebz/iq_rotation

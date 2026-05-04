@@ -4,8 +4,8 @@ FMComms5 Plugin Description
 .. |more| replace:: *(see AD9361 linux driver documentation)*
 
 The FMCOMMS5 plugin works with the
-`IIO Oscilloscope <https://wiki.analog.com/iio_oscilloscope>`_. You always
-use the latest version if possible. Changing any field will immediately write
+`IIO Oscilloscope <https://wiki.analog.com/iio_oscilloscope>`_. You always use
+the latest version if possible. Changing any field will immediately write
 changes which have been made to the FMComms5 settings to the hardware, and
 then read it back to make sure the setting is valid. If you want to set
 something that the GUI changes to a different number, that either means that
@@ -17,7 +17,6 @@ fabric) does not support that mode/precision.
    For the main OSC plot window: The allowed channel sections are based on
    following rules:
 
-
    -  Channels need to enabled pairwise I & Q. (example voltage0 & voltage1
       or voltage2 & voltage3, etc. )
    -  The number of enabled pairwise channels need to be equal between the
@@ -25,13 +24,12 @@ fabric) does not support that mode/precision.
    -  Devices are split as following: voltage0..3 Device A,
       voltage4..7 Device B
 
-
 If you want to go play with ``/sys/bus/iio/devices/....`` and manipulate the
-devices behind the back of the GUI, it's still possible to see the settings
-by clicking the "refresh" button at the bottom of the GUI.
+devices behind the back of the GUI, it's still possible to see the settings by
+clicking the "refresh" button at the bottom of the GUI.
 
 If you think the device has a setting that isn't managed by this tab, check
-out the `fmcomms5 Advanced Plugin`_ for the IIO Oscilloscope.
+out the :dokuwiki:`fmcomms5 Advanced Plugin </resources/tools-software/linux-software/fmcomms2_advanced_plugin>` for the IIO Oscilloscope.
 
 The FMComms5 view is divided in four sections:
 
@@ -40,7 +38,7 @@ The FMComms5 view is divided in four sections:
 -  **Transmit Chain**
 -  **FPGA Settings**
 
-.. image:: https://wiki.analog.com/_media/resources/tools-software/linux-software/fmcomms5_plugin.png
+.. image:: images/fmcomms5_plugin.png
    :align: right
    :width: 380
 
@@ -159,4 +157,3 @@ FPGA Settings
 
    -  **Phase Rotation :** Selects the rotation phase of a RX
 
-.. _fmcomms5 Advanced Plugin: https://wiki.analog.com/fmcomms2_advanced_plugin

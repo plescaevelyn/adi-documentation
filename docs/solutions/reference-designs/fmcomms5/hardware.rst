@@ -15,19 +15,16 @@ Rev. C
 
    :adi:`AD-FMCOMMS5-EBZ Design & Integration Files <media/en/reference-design-documentation/design-integration-files/ad-fmcomms5-ebz-designsupport.zip>`
 
-
    -  Schematic
    -  PCB Layout
    -  Bill of Materials
    -  Allegro Project (get the `Allegro FREE Physical Viewer <https://www.cadence.com/en_US/home/tools/pcb-design-and-analysis/allegro-downloads-start.html>`_; you need 17.2 or higher)
-
 
 Rev. B
 ~~~~~~
 
 .. admonition:: Download
    :class: download
-
 
    -  `Rev B Schematic <resources/fmcomms5_schematic.pdf>`_
    -  `Rev B BOM <images/fmcomms5-bom.xls>`_
@@ -38,12 +35,10 @@ Rev. B
 
       ERRATA:
 
-
          The FMCOMMS5, REV B has a bug in it, that doesn't allow the ADF5355 to
          function properly. (Pin 5, AVDD is a floating node). It's a simple fix
          - short pin 5 (AVDD) with pin 4 (CE) to make a connection to
          VDD_EXT_LO_3P3.
-
 
          |AD-FMCOMMS5-EBZ Rev B ADF5355 rework|
 
@@ -51,18 +46,18 @@ I/O Voltage
 -----------
 
 The :adi:`AD-FMCOMMS5-EBZ` (AD9361) assumes a VDD_INTERFACE voltage between
-1.71V and 2.625V (1.8 to 2.5 +/- 5%), so on your FPGA carrier board, you
-should ensure that V\ :sub:`ADJ` is between these levels. Setting things to
-3.3V will damage the part.
+1.71V and 2.625V (1.8 to 2.5 +/- 5%), so on your FPGA carrier board, you should
+ensure that V\ :sub:`ADJ` is between these levels. Setting things to 3.3V will
+damage the part.
 
 Phase Synchronization
 ---------------------
 
 Traces between baluns and SMAs are not phase-matched on REV-A and REV-B which
 can cause phase misalignment with the libad9361-iio ad9361_fmcomms5_phase_sync
-solution. This is corrected on REV-C. Therefore, phase alignment performance
-can vary over frequency. The RF switches on REV-A/B are also not designed to
-work above 900 MHz. Higher frequency switches are available on REV-C.
+solution. This is corrected on REV-C. Therefore, phase alignment performance can
+vary over frequency. The RF switches on REV-A/B are also not designed to work
+above 900 MHz. Higher frequency switches are available on REV-C.
 
 Below are some preliminary results using Release 2018-R1 with equal length but
 unmatched cables
@@ -84,7 +79,7 @@ Rev C
 .. toctree::
    :titlesonly:
 
-   hardware/configuration_options
+   configuration_options
 
 .. |AD-FMCOMMS5-EBZ Rev B ADF5355 rework| image:: images/fmcomms5_rework.png
    :width: 200

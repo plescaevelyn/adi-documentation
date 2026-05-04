@@ -5,8 +5,8 @@ Theory of Operation
 -------------------
 
 The AD9361 transceiver has no built-in functionality to provide phase
-synchronization, but through external equipment and additional software and
-HDL phase alignment can be achieved across multiple transceiver chips. The
+synchronization, but through external equipment and additional software and HDL
+phase alignment can be achieved across multiple transceiver chips. The
 calibration process is documented on this
 :doc:`wiki page </solutions/reference-designs/fmcomms5/multi-chip-sync>` and
 as well in this `whitepage <resources/doa_whitepaper.pdf>`_ in the "Phase
@@ -41,14 +41,14 @@ IIO-Scope Example Implementation
 
 For Rev-A and Rev-B FMComms5 boards, low LOs are recommended due to severe
 attenuation from onboard RF switches used for calibration above 1 GHz. Be aware
-on Rev-B and earlier, traces from the transceivers to the SMA connectors
-are not matched. This can cause residual phase ambiguity depending on LO
-frequency and tolerances required.
+on Rev-B and earlier, traces from the transceivers to the SMA connectors are
+not matched. This can cause residual phase ambiguity depending on LO frequency
+and tolerances required.
 
 The following example assumes the board is brought up in the standard
 configuration used by the driver. To guarantee this make sure IIO-Scope
-profiles have been removed from the board. Close IIO-Scope on the
-development system and removed the profile with command:
+profiles have been removed from the board. Close IIO-Scope on the development
+system and removed the profile with command:
 
 ::
 
@@ -108,9 +108,8 @@ Trace Differences
 On Rev-A and Rev-B boards there are trace differences to the SMA which can
 cause phase rotation. This rotation will be based on the operation frequency
 of the LO unless you sample rate is close to the LO. We can calculate the
-theoretical phase for what the maximum phase shift will be depending on your
-LO with the
-following equation:
+theoretical phase for what the maximum phase shift will be depending on your LO
+with the following equation:
 
 .. math::
 
@@ -122,8 +121,8 @@ the speed of light through a specific medium in meters per second. For
 FMComms5 :math:`c=15 cm/nsec` which is in reference to FR4. Grab the
 :doc:`board files </solutions/reference-designs/fmcomms5/hardware>` for your
 specific revision to get the actual trace lengths for specific channels, which
-will determine :math:`D` . Below is a plot of possible offsets across
-frequency and trace distance deltas.
+will determine :math:`D` . Below is a plot of possible offsets across frequency
+and trace distance deltas.
 
 |Phase difference over frequency and distance|
 
@@ -153,10 +152,10 @@ MATLAB code for plot
    xlim([0,8])
    title('$$\phi = \frac{180}{\pi} \times \frac{2 \pi D f}{c} =\frac{360 D f}{c}, c = 15 cm/nsec$$','interpreter','latex');
 
-These phase estimates can be used to correct for trace mismatches, which can
-be applied through internal phase shifters with the HDL reference designs'
-`ADC <https://wiki.analog.com/resources/tools-software/linux-drivers/iio-adc/axi-adc-hdl>`_
-and `DAC cores <https://wiki.analog.com/resources/tools-software/linux-drivers/iio-dds/axi-dac-dds-hdl>`_
+These phase estimates can be used to correct for trace mismatches, which can be
+applied through internal phase shifters with the HDL reference designs'
+:dokuwiki:`ADC </resources/tools-software/linux-drivers/iio-adc/axi-adc-hdl>`
+and :dokuwiki:`DAC cores </resources/tools-software/linux-drivers/iio-dds/axi-dac-dds-hdl>`
 by the calibphase properties.
 
 Phase Performance: Rev B vs. Rev C
