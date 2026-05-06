@@ -31,7 +31,7 @@ env:
 
 jobs:
   llm:
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.RUNNER != '' && fromJSON(vars.RUNNER) || 'ubuntu-latest' }}
     permissions:
       contents: read
       checks: read
@@ -267,7 +267,7 @@ jobs:
           rm -rf "$py_venv"
 
   pr-comment:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     needs: llm
     permissions:
       pull-requests: write
