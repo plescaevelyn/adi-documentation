@@ -1,4 +1,4 @@
-.. _ethernet-apl instrinsic-safety:
+.. _ethernet-apl intrinsic-safety:
 
 Intrinsic Safety Design
 =======================
@@ -6,10 +6,19 @@ Intrinsic Safety Design
 Introduction
 ------------
 
-The :adi:`AD-ETHERNETAPLDEVICE-SL` has been certify for Ex ia IIC Ga intrinsic
+The :adi:`AD-ETHERNETAPLDEVICE-SL` has been certified for Ex ia IIC Ga intrinsic
 safety requirements according to IEC 60079-11:2011 standard. It also complies
 with 2-WISE (two-wire intrinsically safe ethernet) standard dictated
 by IEC TS 60079-47.
+
+.. figure:: intrinsic-safety-cert.png
+
+   AD-EthernetAPLDevice-SL Intrinsic Safety Certificate
+
+.. admonition:: Tip
+
+   The full copy of the certificate can be found here:
+   :download:`AD-EthernetAPLDevice-SL Intrinsic Safety Certificate <ad-ethernetapldevice-sl-intrisic-safety-certificate.pdf>`
 
 Key Parameters
 ~~~~~~~~~~~~~~
