@@ -101,11 +101,11 @@ Table of Contents
    back to it when you want to incorporate one of the devices
    into your product.
 
-   #. :doc:`Functional Overview & Specifications <solutions/reference-designs/fmcomms11/hardware/functional_overview>`
-   #. :doc:`Characteristics & Performance <solutions/reference-designs/fmcomms11/hardware/card_specification>`
+   #. :doc:`Functional Overview & Specifications <solutions/reference-designs/ad-fmcomms11-ebz/hardware/functional_overview>`
+   #. :doc:`Characteristics & Performance <solutions/reference-designs/ad-fmcomms11-ebz/hardware/card_specification>`
 
-#. :doc:`FCC or CE certification <solutions/reference-designs/fmcomms11/certification>`
-#. :doc:`Production Testing Process <solutions/reference-designs/fmcomms11/testing>`
+#. :doc:`FCC or CE certification <solutions/reference-designs/ad-fmcomms11-ebz/certification>`
+#. :doc:`Production Testing Process <solutions/reference-designs/ad-fmcomms11-ebz/testing>`
 
 #. Using the evaluation board/full stack reference design that we offer:
 

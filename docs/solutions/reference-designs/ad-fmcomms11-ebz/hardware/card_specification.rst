@@ -59,7 +59,7 @@ K&L SPCL-00310 Microwave Tunable Filter (15 MHz to 4 GHz)
    :width: 600
 
 Receive Channel
-================================================================================
+--------------------------------------------------------------------------------
 
 Digital Step Attenuator (DSA) Frequency Response Test
 --------------------------------------------------------------------------------
@@ -259,7 +259,7 @@ Analyzer(VNA).
    :width: 600
 
 Transmit Channel
-================================================================================
+--------------------------------------------------------------------------------
 
 Dual band tests were conducted as well as this architecture is thought to be
 conducive to multiband transmission. A set of band pairs where investigated

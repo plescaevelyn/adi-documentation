@@ -33,7 +33,7 @@ The FMCOMMS11 view is divided in four sections:
    :width: 400
 
 ADC
-===============================================================================
+-------------------------------------------------------------------------------
 
 - **Sampling frequency(MHz):** Dispay the sample rate of the ADC.
 - **Input Scales / Reference:** Set the scale of the signal input.
@@ -41,12 +41,12 @@ ADC
    points.
 
 Input Attenuator
-===============================================================================
+-------------------------------------------------------------------------------
 
 - **Gain(dB):** Controls RX signal atteniation.
 
 DDS
-===============================================================================
+-------------------------------------------------------------------------------
 
 axi-ad9162-hpc
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -139,7 +139,7 @@ In this mode both DDS and DMA are disabled causing the DAC channels to stop
 transmitting any data.
 
 DAC
-===============================================================================
+-------------------------------------------------------------------------------
 
 - **Sampling frequency(MHz):** Dispay the sample rate of the DAC.
 - **NCO Frequency (MHz):** Set the frequency for NCO to enable digital
@@ -148,7 +148,7 @@ DAC
    85 dB digital attenuation that implements 2× NRZ mode.
 
 Output VGA
-===============================================================================
+-------------------------------------------------------------------------------
 
 - **Gain(dB):** Set the TX gain output.
 
