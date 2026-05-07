@@ -21,7 +21,7 @@ Supported carriers
 
 The :adi:`EVAL-AD719x-ASDZ <en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD7192.html>`
 connects to a controller board via a 120-pin connector or alternatively, Arduino
-and PMOD connectors.
+and Pmod connectors.
 
 The controller boards we support are:
 
@@ -35,7 +35,7 @@ The controller boards we support are:
    - - :adi:`EVAL-SDP-CB1Z <en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/sdp-b.html>`
      - 120-pin
    - - `Cora Z7S <https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development>`__
-     - PMOD JA / Arduino shield
+     - Pmod JA / Arduino shield
    - - :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
      - Arduino shield
 
@@ -112,12 +112,12 @@ EVAL-AD719x-ASDZ + EVAL-SDP-CB1Z
 EVAL-AD719x-ASDZ + Cora Z7
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Using the PMOD JA connector (default HDL configuration).
+- Using the Pmod JA connector (default HDL configuration).
 
   .. image:: ../images/cora_ad719x_pmod.png
      :width: 500
 
-- Using the Arduino shield connector (HDL built with ``ARDZ_PMOD_N=1``).
+- Using the Arduino shield connector (HDL built with ``ARDZ_Pmod_N=1``).
 
   .. image:: ../images/cora_ad719x.png
      :width: 500

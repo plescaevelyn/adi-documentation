@@ -24,7 +24,7 @@ Hardware prerequisites
    - :adi:`EVAL-SDP-CB1Z <en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/sdp-b.html>`
      (connects via 120-pin connector only) with a Micro-USB cable
    - `Cora Z7S <https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development>`__
-     (connects via PMOD JA or Arduino shield) with a Micro-USB cable
+     (connects via Pmod JA or Arduino shield) with a Micro-USB cable
    - :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
      (connects via Arduino shield) with a Micro-USB cable
 

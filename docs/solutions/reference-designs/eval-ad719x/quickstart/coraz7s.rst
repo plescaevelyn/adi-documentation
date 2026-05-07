@@ -10,7 +10,7 @@ This guide provides some quick instructions on how to setup the
 :ref:`EVAL-AD719x-ASDZ <ad719x-asdz>` on:
 
 - `Cora Z7S <https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development>`__
-  PMOD JA connector (default) or Arduino shield connector
+  Pmod JA connector (default) or Arduino shield connector
 
 Using Linux as software
 -----------------------
@@ -34,9 +34,8 @@ In the following sections, we explain **how to take them from the SD card**.
 Instructions on how to manually build the boot files from source can be found
 here:
 
-- `AD719x HDL reference design <https://analogdevicesinc.github.io/hdl/projects/ad719x_asdz/index.html>`__
-  build documentation. More HDL build details at
-  `Building HDL <https://analogdevicesinc.github.io/hdl/user_guide/build_hdl.html>`__.
+- :external+hdl:ref:`ad719x_asdz` build documentation. More HDL build
+  details at :external+hdl:ref:`build_hdl`.
 - :ref:`linux-kernel zynq`
 
 .. collapsible:: Building the device tree and kernel image from source
@@ -137,13 +136,13 @@ Follow the steps in this order, to avoid damaging the components:
 #. Connect the :ref:`EVAL-AD719x-ASDZ <ad719x-asdz>` to the CoraZ7S using one
    of the following configurations:
 
-   - **PMOD JA connector** (default HDL configuration):
+   - **Pmod JA connector** (default HDL configuration):
 
      .. image:: ../images/cora_ad719x_pmod.png
         :width: 500
 
-   - **Arduino shield connector** (HDL built with ``ARDZ_PMOD_N=1``).
-     See the `AD719x HDL project <https://analogdevicesinc.github.io/hdl/projects/ad719x_asdz/index.html>`__
+   - **Arduino shield connector** (HDL built with ``ARDZ_Pmod_N=1``).
+     See the :external+hdl:ref:`ad719x_asdz` project
      for details.
 
      .. image:: ../images/cora_ad719x.png
@@ -152,11 +151,16 @@ Follow the steps in this order, to avoid damaging the components:
 #. Insert the SD card with ADI Kuiper image into the microSD card slot on the
    CoraZ7S
 
-   +-------------------------------------------------+---------------------------------------------------+
-   | .. image:: ../../images/cora_sdcard_insert.jpg  | .. image:: ../../images/cora_sdcard_connected.jpg |
-   |    :align: center                               |    :align: center                                 |
-   |    :width: 400                                  |    :width: 400                                    |
-   +-------------------------------------------------+---------------------------------------------------+
+   .. grid::
+      :widths: 50 50
+
+      .. image:: ../../images/cora_sdcard_insert.jpg
+         :align: center
+         :width: 400
+
+      .. image:: ../../images/cora_sdcard_connected.jpg
+         :align: center
+         :width: 400
 
 #. Connect USB UART (Micro USB) to your host PC
 #. Connect an Ethernet cable to the CoraZ7S and to your network

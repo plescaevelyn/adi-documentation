@@ -88,9 +88,9 @@ Getting started
 
    Ensure the SDP board is not connected to the USB port of the PC
 
--  Install the :adi:`ACE Software <en/design-center/evaluation-hardware-and-software/evaluation-development-platforms/ace-software.html?doc=EVAL-AD7383FMCZ-ug-1770.pdf>`
+-  Install the :adi:`ACE Software <en/design-center/evaluation-hardware-and-software/evaluation-development-platforms/ace-software.html>`
 -  :doc:`Ace Plugin Install guide available here <softwareprocedures>`
--  If :adi:`ACE Software <en/design-center/evaluation-hardware-and-software/evaluation-development-platforms/ace-software.html?doc=EVAL-AD7383FMCZ-ug-1770.pdf>`
+-  If :adi:`ACE Software <en/design-center/evaluation-hardware-and-software/evaluation-development-platforms/ace-software.html>`
    is already installed, update the Plugins to download AD719x Plugin.
 
 -  Connect the EVAL-AD7193-ASDZ to the controller board

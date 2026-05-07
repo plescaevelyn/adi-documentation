@@ -33,9 +33,8 @@ In the following sections, we explain **how to take them from the SD card**.
 Instructions on how to manually build the boot files from source can be found
 here:
 
-- `AD719x HDL reference design <https://analogdevicesinc.github.io/hdl/projects/ad719x_asdz/index.html>`__
-  build documentation. More HDL build details at
-  `Building HDL <https://analogdevicesinc.github.io/hdl/user_guide/build_hdl.html>`__.
+- :external+hdl:ref:`ad719x_asdz` build documentation. More HDL build
+  details at :external+hdl:ref:`build_hdl`.
 
 Required Software
 ~~~~~~~~~~~~~~~~~
@@ -75,11 +74,16 @@ Follow the steps in this order, to avoid damaging the components:
 #. Insert the SD card with ADI Kuiper image into the microSD card slot on the
    DE10-Nano
 
-   +------------------------------------------------------+--------------------------------------------------------+
-   | .. image:: ../../images/de10-nano_sdcard_insert.jpg  | .. image:: ../../images/de10-nano_sdcard_connected.jpg |
-   |    :align: center                                    |    :align: center                                      |
-   |    :width: 400                                       |    :width: 400                                         |
-   +------------------------------------------------------+--------------------------------------------------------+
+   .. grid::
+      :widths: 50 50
+
+      .. image:: ../../images/de10-nano_sdcard_insert.jpg
+         :align: center
+         :width: 400
+
+      .. image:: ../../images/de10-nano_sdcard_connected.jpg
+         :align: center
+         :width: 400
 
 #. Using the Arduino shield connector, connect the
    :ref:`EVAL-AD719x-ASDZ <ad719x-asdz>` on top of the DE10-Nano

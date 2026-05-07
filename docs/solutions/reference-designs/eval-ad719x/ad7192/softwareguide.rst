@@ -15,8 +15,8 @@ Ace Plugin Install guide
 The software and drivers required for the installation walked through in this
 section can be found below:
 
--  :adi:`Ace Software <en/design-center/evaluation-hardware-and-software/evaluation-development-platforms/ace-software.html?doc=EVAL-AD7383FMCZ-ug-1770.pdf>`
--  :adi:`AD4130-8 Ace Plugin <media/en/evaluation-boards-kits/evaluation-software/AD4130-8>`
+-  :adi:`Ace Software <en/design-center/evaluation-hardware-and-software/evaluation-development-platforms/ace-software.html>`
+-  :adi:`AD7192 ACE Plugin <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7192asdz.html#eb-documentation>`
 -  `SDP controller system demonstration platform drivers <http://swdownloads.analog.com/ACE/SDP/SDPDrivers.exe>`_
 
 Installing the ACE Plugin software

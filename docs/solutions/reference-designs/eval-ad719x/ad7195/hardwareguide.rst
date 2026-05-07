@@ -164,8 +164,8 @@ SDP 120 Pin Connector P1  Function  Arduino connector P2,P3,P5,P6
 80                        SDA       P6-9
 81                        GND       -
 82                        SCLK      P6-6
-83                        SDO/MSIO  P6-5
-84                        SDI/MOSI  P6-4
+83                        SDO/miso  P6-5
+84                        SDI/mosi  P6-4
 85                        CS_N      P5-3,P5-2
 86,93,98,109,115          GND       -
 116                       VIO       P3-2
@@ -176,7 +176,7 @@ SDP 120 Pin Connector P1  Function  Arduino connector P2,P3,P5,P6
    :align: center
    :width: 400
 
-PMOD Connector P8
+Pmod Connector P8
 ^^^^^^^^^^^^^^^^^
 
 ========== ======== ========== ========
@@ -269,7 +269,7 @@ Serial communication options
    on the SDP-B board.
 
    -  Arduino connection SDP-K1
-   -  PMOD connector
+   -  Pmod connector
    -  Standalone mode
 
 For an introduction to the Serial Peripheral Interface (SPI), click :adi:`here <en/analog-dialogue/articles/introduction-to-spi-interface.html>`
