@@ -13,15 +13,12 @@ respective product pages.
 Schematic, PCB Layout, Bill of Materials
 --------------------------------------------------------------------------------
 
-.. admonition:: Download
-   :class: download
+:adi:`AD-FMCOMMS5-EBZ Design & Integration Files <media/en/reference-design-documentation/design-integration-files/ad-fmcomms11-ebz-designsupport.zip>`
 
-   :adi:`AD-FMCOMMS5-EBZ Design & Integration Files <media/en/reference-design-documentation/design-integration-files/ad-fmcomms11-ebz-designsupport.zip>`
-
-   -  Schematic
-   -  PCB Layout
-   -  Bill of Materials
-   -  Allegro Project (get the `Allegro FREE Physical Viewer <https://www.cadence.com/en_US/home/tools/pcb-design-and-analysis/allegro-downloads-start.html>`_; you need 16.5 or higher).
+- Schematic
+- PCB Layout
+- Bill of Materials
+- Allegro Project (get the `Allegro FREE Physical Viewer <https://www.cadence.com/en_US/home/tools/pcb-design-and-analysis/allegro-downloads-start.html>`_; you need 16.5 or higher).
 
 Picture and Main components
 --------------------------------------------------------------------------------

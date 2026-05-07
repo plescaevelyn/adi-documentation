@@ -22,9 +22,9 @@ Hardware guide
 
 For detailed hardware documentation, refer to:
 
-* :doc:`hardware` — Board overview, PCB layers and dimensions
-* :doc:`hardware/functional_overview` — System block diagram and signal paths
-* :doc:`hardware/card_specification` — Transmitter and receiver characterization
+- :doc:`hardware` - Board overview, PCB layers and dimensions
+- :doc:`hardware/functional_overview` - System block diagram and signal paths
+- :doc:`hardware/card_specification` - Transmitter and receiver characterization
 
 Design files (schematic, PCB layout, bill of materials) are available
 :ref:`here <fmcomms11 hardware-design-files>`.
@@ -50,14 +50,10 @@ PyADI-IIO
 
 :git-pyadi-iio:`PyADI-IIO </>` is a Python abstraction module for ADI
 hardware with IIO drivers. An FMCOMMS11 example can be found
-:git-pyadi-iio:`here </examples/fmcomms11_example.py>`.
+:git-pyadi-iio:`here <examples/fmcomms11_example.py>`.
 
 MATLAB
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-ADRV9002 support through `Transceiver Toolbox <https://analogdevicesinc.github.io/TransceiverToolbox/master/>`_
-
-GNU Radio
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-ADRV9002 integration with :dokuwiki:`GNU Radio <resources/tools-software/linux-software/gnuradio>`
+- `Modelling and Simulating Analog Devices' RF Transceivers with MATLAB and SimRF <https://www.mathworks.com/videos/modelling-and-simulating-analog-devices-rf-transceivers-with-matlab-and-simrf-89934.html>`_
+- `Getting Started with Software-Defined Radio using MATLAB and Simulink <https://www.mathworks.com/videos/getting-started-with-software-defined-radio-using-matlab-and-simulink-108646.html>`_

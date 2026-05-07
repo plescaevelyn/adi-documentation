@@ -22,11 +22,11 @@ for the IIO Oscilloscope.
 
 The FMCOMMS11 view is divided in four sections:
 
--  **ADC**
--  **Attenuator**
--  **DDS**
--  **DAC**
--  **Output VGA**
+- **ADC**
+- **Attenuator**
+- **DDS**
+- **DAC**
+- **Output VGA**
 
 .. image:: images/controls.jpg
    :align: right
@@ -35,15 +35,15 @@ The FMCOMMS11 view is divided in four sections:
 ADC
 ===============================================================================
 
--  **Sampling frequency(MHz):** Dispay the sample rate of the ADC.
--  **Input Scales / Reference:** Set the scale of the signal input.
--  **Channel 0 Test mode:** control the JESD204B interface test injection
+- **Sampling frequency(MHz):** Dispay the sample rate of the ADC.
+- **Input Scales / Reference:** Set the scale of the signal input.
+- **Channel 0 Test mode:** control the JESD204B interface test injection
    points.
 
 Input Attenuator
 ===============================================================================
 
--  **Gain(dB):** Controls RX signal atteniation.
+- **Gain(dB):** Controls RX signal atteniation.
 
 DDS
 ===============================================================================
@@ -121,13 +121,13 @@ the process, a click on the **Load** button is required.
 
 **Restrictions:**
 
--  There are two types of files than can be loaded: **.txt** or **.mat**. The
+- There are two types of files than can be loaded: **.txt** or **.mat**. The
    IIO-Oscilloscope comes with several
    :git-iio-oscilloscope:`data files <waveforms>` that can be used. If you
    want to create your own data files please take a look at the
    :dokuwiki:`Basic IQ Data Files <resources/eval/user-guides/ad-fmcomms2-ebz/software/basic_iq_datafiles>`
    documentation first.
--  Due to hardware limitation only specific combinations of enabled channels
+- Due to hardware limitation only specific combinations of enabled channels
    are possible. You can enable a total of 1, 2, 4, etc. channels. If 1
    channel is enabled then it can be any of them. If two channels are enabled
    then channels 0, 1 or channels 2, 3 can be enabled and so on.
@@ -141,16 +141,16 @@ transmitting any data.
 DAC
 ===============================================================================
 
--  **Sampling frequency(MHz):** Dispay the sample rate of the DAC.
--  **NCO Frequency (MHz):** Set the frequency for NCO to enable digital
+- **Sampling frequency(MHz):** Dispay the sample rate of the DAC.
+- **NCO Frequency (MHz):** Set the frequency for NCO to enable digital
    frequency shifts of signals with near infinite precision.
--  **Filter Settings:** Enable/disable finite impulse response filter with
+- **Filter Settings:** Enable/disable finite impulse response filter with
    85 dB digital attenuation that implements 2× NRZ mode.
 
 Output VGA
 ===============================================================================
 
--  **Gain(dB):** Set the TX gain output.
+- **Gain(dB):** Set the TX gain output.
 
 .. note::
 

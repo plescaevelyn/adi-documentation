@@ -1,3 +1,5 @@
+.. _fmcomms11 card-specification:
+
 AD-FMCOMMS11-EBZ Characteristics & Performance
 ================================================================================
 

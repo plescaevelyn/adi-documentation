@@ -1,3 +1,5 @@
+.. _fmcomms11:
+
 AD-FMCOMMS11-EBZ
 ================================================================================
 
@@ -99,12 +101,11 @@ Table of Contents
    back to it when you want to incorporate one of the devices
    into your product.
 
-   #. :doc:`Functional Overview & Specifications </solutions/reference-designs/fmcomms11/hardware/functional_overview>`
-   #. :doc:`Characteristics & Performance </solutions/reference-designs/fmcomms11/hardware/card_specification>`
+   #. :doc:`Functional Overview & Specifications <solutions/reference-designs/fmcomms11/hardware/functional_overview>`
+   #. :doc:`Characteristics & Performance <solutions/reference-designs/fmcomms11/hardware/card_specification>`
 
-#. :doc:`FCC or CE certification </solutions/reference-designs/fmcomms11/certification>`
-
-#. :doc:`Production Testing Process </solutions/reference-designs/fmcomms11/testing>`
+#. :doc:`FCC or CE certification <solutions/reference-designs/fmcomms11/certification>`
+#. :doc:`Production Testing Process <solutions/reference-designs/fmcomms11/testing>`
 
 #. Using the evaluation board/full stack reference design that we offer:
 
@@ -116,7 +117,6 @@ Table of Contents
       #. Using the :ref:`ZC706 <fmcomms11 quickstart zc706>`
 
    #. Configure an SD Card with :external+kuiper:doc:`Kuiper <index>`
-
    #. Software Solutions
 
        #. :ref:`iio-oscilloscope`
@@ -177,24 +177,24 @@ Block diagram
 ADI Articles
 --------------------------------------------------------------------------------
 
--   Four Quick Steps to Production: Using Model-Based Design for
-    Software-Defined Radio
+- Four Quick Steps to Production: Using Model-Based Design for
+  Software-Defined Radio
 
-   -  :adi:`Part 1—the Analog Devices/Xilinx SDR Rapid Prototyping Platform: Its Capabilities, Benefits, and Tools <library/analogDialogue/archives/49-09/four-step-sdr-01.html>`
-   -  :adi:`Part 2—Mode S Detection and Decoding Using MATLAB and Simulink <library/analogDialogue/archives/49-10/four-step-sdr-02.html>`
-   -  :adi:`Part 3—Mode S Signals Decoding Algorithm Validation Using Hardware in the Loop <library/analogDialogue/archives/49-11/four-step-sdr-03.html>`
-   -  :adi:`Part 4 - Rapid Prototyping Using the Zynq SDR Kit and Simulink Code Generation Workflow <library/analogDialogue/archives/49-12/four-step-sdr-04.html>`
+  - :adi:`Part 1—the Analog Devices/Xilinx SDR Rapid Prototyping Platform: Its Capabilities, Benefits, and Tools <library/analogDialogue/archives/49-09/four-step-sdr-01.html>`
+  - :adi:`Part 2—Mode S Detection and Decoding Using MATLAB and Simulink <library/analogDialogue/archives/49-10/four-step-sdr-02.html>`
+  - :adi:`Part 3—Mode S Signals Decoding Algorithm Validation Using Hardware in the Loop <library/analogDialogue/archives/49-11/four-step-sdr-03.html>`
+  - :adi:`Part 4 - Rapid Prototyping Using the Zynq SDR Kit and Simulink Code Generation Workflow <library/analogDialogue/archives/49-12/four-step-sdr-04.html>`
 
 Videos
 --------------------------------------------------------------------------------
 
--  :adi:`Silent Switcher µModule Regulators Powering GSPS Sampling ADC <en/products/ad9625.html#product-recommendations>`
+- :adi:`Silent Switcher µModule Regulators Powering GSPS Sampling ADC <en/products/ad9625.html#product-recommendations>`
 
 MathWorks Webinars
 --------------------------------------------------------------------------------
 
--  `Modelling and Simulating Analog Devices’ RF Transceivers with MATLAB and SimRF <https://www.mathworks.com/videos/modelling-and-simulating-analog-devices-rf-transceivers-with-matlab-and-simrf-89934.html>`_
--  `Getting Started with Software-Defined Radio using MATLAB and Simulink <https://www.mathworks.com/videos/getting-started-with-software-defined-radio-using-matlab-and-simulink-108646.html>`_
+- `Modelling and Simulating Analog Devices’ RF Transceivers with MATLAB and SimRF <https://www.mathworks.com/videos/modelling-and-simulating-analog-devices-rf-transceivers-with-matlab-and-simrf-89934.html>`_
+- `Getting Started with Software-Defined Radio using MATLAB and Simulink <https://www.mathworks.com/videos/getting-started-with-software-defined-radio-using-matlab-and-simulink-108646.html>`_
 
 Help and support
 --------------------------------------------------------------------------------
