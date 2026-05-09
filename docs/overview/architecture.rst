@@ -3,9 +3,10 @@
 Full Stack Architecture
 ===============================================================================
 
-This page explains the complete architecture of the ADI prototyping ecosystem,
-from hardware to applications. Understanding this layered approach will help you
-see how the different components work together and where your design fits in.
+This page explains the complete architecture of `ADI DataX™
+<https://developer.analog.com/solutions/adi-datax>`__, from hardware to
+applications. Understanding this layered approach will help you see how the
+different components work together and where your design fits in.
 
 .. contents:: Contents
    :local:
@@ -22,7 +23,7 @@ different platforms.
 .. svg:: architecture-layers.svg
    :align: center
 
-   Seven-layer architecture of the ADI prototyping technology stack
+   Seven-layer architecture of ADI DataX, from silicon to user applications
 
 Layer 1: Hardware
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -140,7 +141,7 @@ the details of drivers and low-level protocols.
 
 **libiio:**
 
-The :ref:`libiio` is the cornerstone of the software ecosystem:
+The :ref:`libiio` is the cornerstone of the DataX software stack:
 
 - **Multiple Backends:**
 
@@ -294,21 +295,21 @@ Scopy or a custom Python script displays and analyzes the data.
 This same architecture works for FPGA-based systems, just with HDL at Layer 3
 and Linux IIO drivers at Layer 4 instead of firmware and TinyIIO.
 
-Ecosystem Interdependencies
+Component Interdependencies
 -------------------------------------------------------------------------------
 
 Understanding Component Relationships
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-A key strength of the ADI ecosystem is how components share code and design
-patterns across different platforms. The HDL repository serves as a common
-foundation for both FPGA-based (Linux) and microcontroller-based (no-OS)
-implementations, while host tools work uniformly across both paths through libiio.
+A key strength of ADI DataX is how components share code and design patterns
+across different platforms. The HDL repository serves as a common foundation
+for both FPGA-based (Linux) and microcontroller-based (no-OS) implementations,
+while host tools work uniformly across both paths through libiio.
 
 .. svg:: ecosystem-interdependencies.svg
    :align: center
 
-   Ecosystem interdependencies showing HDL as common foundation
+   How the DataX components depend on each other, with HDL as a common foundation
 
 **Key Relationships:**
 
@@ -477,7 +478,7 @@ Each layer has well-defined interfaces:
 
 **5. Open Source**
 
-Most ecosystem components are open source:
+Most DataX components are open source:
 
 - HDL reference designs on `GitHub <https://github.com/analogdevicesinc/hdl>`_
 - Linux kernel drivers in mainline
@@ -586,7 +587,7 @@ See Also
 
 **Next Steps:**
 
-- :doc:`components` - Detailed information about each ecosystem component
+- :doc:`components` - Detailed information about each DataX component
 - :doc:`workflows` - Concrete examples showing components working together
 - :doc:`versioning-support` - Version compatibility and support
 

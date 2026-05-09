@@ -3,10 +3,11 @@
 Common Development Workflows
 ===============================================================================
 
-This page shows concrete examples of how ADI ecosystem components work together
-in real-world development scenarios. Each workflow demonstrates a complete path
-from hardware to application, illustrating which components are used and how
-they integrate.
+This page shows concrete examples of how `ADI DataX™
+<https://developer.analog.com/solutions/adi-datax>`__ components work
+together in real-world development scenarios. Each workflow demonstrates a
+complete path from hardware to application, illustrating which components
+are used and how they integrate.
 
 .. contents:: Contents
    :local:
@@ -15,8 +16,8 @@ they integrate.
 Introduction
 -------------------------------------------------------------------------------
 
-The ADI ecosystem supports five development workflows, each optimized
-for different use cases:
+ADI DataX supports five development workflows, each optimized for different
+use cases:
 
 1. **FPGA + High-Speed Data Converter** - For high-performance applications
    requiring GSPS sample rates, custom signal processing, or multiple devices

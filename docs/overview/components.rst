@@ -1,17 +1,19 @@
 .. _overview_components:
 
-Ecosystem Components
+ADI DataX Components
 ===============================================================================
 
-ADI publishes a stack of components that spans hardware, FPGA logic, kernel
-drivers, libraries, applications, and ready-to-use Linux images. **Most projects
-use only a subset.** Which pieces apply depends on where the ADI part lives,
-what processor (if any) sits next to it, and where the application code runs.
+`ADI DataX™ <https://developer.analog.com/solutions/adi-datax>`__ is the
+umbrella name for the stack of components ADI publishes to make its hardware
+easy to integrate — spanning FPGA logic, kernel drivers, libraries, language
+bindings, applications, and ready-to-use Linux images. **Most projects use
+only a subset.** Which pieces apply depends on where the ADI part lives, what
+processor (if any) sits next to it, and where the application code runs.
 
-This page is a reference: each section covers one component on its own terms —
-what it does, when it's the right tool, and where to find its full documentation.
-For end-to-end examples that show several components working together as a
-single system, see :ref:`overview_workflows`.
+This page is a reference: each section covers one DataX component on its own
+terms — what it does, when it's the right tool, and where to find its full
+documentation. For end-to-end examples that show several components working
+together as a single system, see :ref:`overview_workflows`.
 
 .. contents:: Contents
    :local:
@@ -297,10 +299,10 @@ libiio (Hardware Abstraction Library)
 What It Is
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-:ref:`libiio` is the cornerstone library of the ADI
-software ecosystem. It provides a platform-independent API for accessing IIO
-devices, abstracting away the differences between local hardware, network-connected
-devices, USB gadgets, and serial-connected microcontrollers.
+:ref:`libiio` is the cornerstone library of the DataX software stack. It
+provides a platform-independent API for accessing IIO devices, abstracting
+away the differences between local hardware, network-connected devices, USB
+gadgets, and serial-connected microcontrollers.
 
 With libiio, the same application code works whether your device is:
 

@@ -1,12 +1,14 @@
 .. _overview:
 
-Ecosystem Overview
+ADI DataX Overview
 ===============================================================================
 
-Welcome to the ADI System Level Documentation ecosystem overview. This section
-provides a high-level introduction to how Analog Devices' prototyping software
-and HDL components work together to help you bring your designs from concept to
-reality.
+Welcome to the overview of `ADI DataX™
+<https://developer.analog.com/solutions/adi-datax>`__, Analog Devices' open,
+multi-platform technology stack that connects ADI signal chains to your
+application across processing platforms, operating systems, and software
+ecosystems. This section is a high-level introduction to how the pieces fit
+together so you can bring your designs from concept to reality.
 
 .. contents:: Contents
    :local:
@@ -15,20 +17,54 @@ reality.
 Introduction
 -------------------------------------------------------------------------------
 
-Analog Devices provides a comprehensive ecosystem of hardware, HDL (Hardware
-Description Language) reference designs, software drivers, libraries, and
-applications to accelerate your development process. Whether you're building a
-high-speed FPGA-based data acquisition system, a precision embedded measurement
-device, or a prototyping platform on a Raspberry Pi, the ADI ecosystem provides
-the building blocks you need.
+ADI DataX is an umbrella for the HDL reference designs, drivers (Linux,
+Zephyr, no-OS), the libiio library and its companion daemon (``iiod`` /
+``tinyiiod``), language bindings such as pyadi-iio, and distributions like
+Kuiper Linux that ADI publishes to make its hardware easy to integrate.
+Whether you're building a high-speed FPGA-based data acquisition system, a
+precision embedded measurement device, or a prototyping platform on a
+Raspberry Pi, ADI DataX provides the building blocks you need.
+
+The diagram below — from the
+`ADI DataX landing page <https://developer.analog.com/solutions/adi-datax>`__ —
+summarises what DataX covers. The three blue layers in the middle are what
+DataX provides; everything above and below them is your application and the
+physical signal chain you connect it to:
+
+.. figure:: datax-stack.png
+   :align: center
+   :alt: ADI DataX layered software architecture
+   :width: 720px
+
+   ADI DataX layers the software stack between your signal chain and your
+   application.
+
+Reading the diagram from the bottom up:
+
+- **Physical World** — the analog signal chain plus any edge compute platform
+  (FPGA, MCU/SoC, APU) running the DataX stack.
+- **Hardware Abstraction Layer** — a thin layer that normalises access to the
+  hardware: FPGA IP, the Linux IIO subsystem, Zephyr's device APIs, and the
+  no-OS Common API. This is what lets the same higher-level driver code run
+  on very different platforms.
+- **ADI Device Drivers** — drivers for the actual ADI parts. Linux ships with
+  more than 1,500 ADI drivers (running on application processors); Zephyr and
+  no-OS together cover 600+ parts on microcontrollers and SoCs.
+- **Application API** — a single, platform-independent C API in libiio with
+  bindings throughout the broader ecosystem: pyadi-iio (Python), MATLAB, ROS 2,
+  Nvidia toolsets, GNU Radio, and more.
+- **Application** — your code. Because the API is the same regardless of where
+  the device lives or what runs the drivers, the same script that talks to a
+  USB instrument on a laptop can talk to an FPGA-attached transceiver on a
+  Zynq board.
 
 The Integrated System Approach
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-At the heart of the ADI approach is an **integrated system philosophy**: we surround
-your processor, FPGA, or microcontroller with best-in-class ADI analog and mixed-signal
-components, along with all the software and HDL support needed to make them work
-seamlessly together.
+At the heart of ADI DataX is an **integrated system philosophy**: we surround
+your processor, FPGA, or microcontroller with best-in-class ADI analog and
+mixed-signal components, along with all the software and HDL support needed
+to make them work seamlessly together.
 
 Rather than reinventing the wheel, we leverage established ecosystems:
 
@@ -41,10 +77,10 @@ Rather than reinventing the wheel, we leverage established ecosystems:
 This approach means you can focus on your application logic and signal processing
 while relying on proven, tested infrastructure for interfacing with ADI devices.
 
-What the Ecosystem Provides
+What ADI DataX Provides
 -------------------------------------------------------------------------------
 
-The ADI ecosystem spans seven layers, from hardware to high-level applications:
+ADI DataX spans seven layers, from hardware to high-level applications:
 
 .. list-table::
    :header-rows: 1
@@ -77,7 +113,7 @@ Who Should Read This
 
 This overview is designed for:
 
-- **Engineers new to ADI's ecosystem** who want to understand how the pieces fit together
+- **Engineers new to ADI DataX** who want to understand how the pieces fit together
 - **Experienced developers** looking for the right starting point for their project
 - **System architects** evaluating ADI solutions for their designs
 - **Students and researchers** learning about mixed-signal system development
@@ -100,12 +136,12 @@ This overview covers:
 
 **Architecture** explains the full-stack architecture and design philosophy,
 showing how data flows from hardware through HDL, drivers, libraries, and
-applications. Includes detailed diagrams of ecosystem interdependencies,
-demonstrating how HDL serves as a common foundation for both FPGA (Linux)
-and microcontroller (no-OS) paths, with host tools working uniformly across
-both through libiio.
+applications. Includes detailed diagrams of how DataX components depend on
+each other, demonstrating how HDL serves as a common foundation for both
+FPGA (Linux) and microcontroller (no-OS) paths, with host tools working
+uniformly across both through libiio.
 
-**Components** provides detailed information about each major ecosystem component:
+**Components** provides detailed information about each major DataX component:
 HDL, Linux kernel drivers, libiio, no-OS, pyadi-iio, and applications.
 
 **Workflows** shows concrete examples of how components work together in
@@ -145,7 +181,7 @@ Already know what you're looking for? Jump directly to:
 Next Steps
 -------------------------------------------------------------------------------
 
-**New to the ecosystem?**
+**New to ADI DataX?**
 
 1. Read :doc:`architecture` to understand the full-stack approach
 2. Review :doc:`components` to learn about each building block

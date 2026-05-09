@@ -3,20 +3,21 @@
 Versioning and Support
 ===============================================================================
 
-This page explains how versioning works across the ADI ecosystem, which component
-versions work together, where to find support, and how to stay up-to-date with
-new releases.
+This page explains how versioning works across `ADI DataX™
+<https://developer.analog.com/solutions/adi-datax>`__, which component
+versions work together, where to find support, and how to stay up-to-date
+with new releases.
 
 .. contents:: Contents
    :local:
    :depth: 2
 
-Understanding Ecosystem Versioning
+Understanding ADI DataX Versioning
 -------------------------------------------------------------------------------
 
-The ADI ecosystem consists of multiple independently-versioned components that
-must work together. Understanding the versioning strategy for each component
-helps you select compatible versions and plan upgrades.
+ADI DataX consists of multiple independently-versioned components that must
+work together. Understanding the versioning strategy for each component helps
+you select compatible versions and plan upgrades.
 
 Component Versioning Strategies
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -30,7 +31,7 @@ Outside of HDL, Linux, and no-OS, other components such as libiio and pyadi-iio 
 .. svg:: versioning-tracks.svg
    :align: center
 
-   Three release tracks across the ecosystem and how they converge in a Kuiper
+   Three release tracks across ADI DataX and how they converge in a Kuiper
    Linux release. Track A shares a single name across HDL, Linux, and no-OS;
    Track B versions independently; Kuiper pins one tested combination of all
    of them.
@@ -316,7 +317,7 @@ Run this on your Linux system to see all installed ADI component versions:
 .. code-block:: bash
 
    #!/bin/bash
-   echo "=== ADI Ecosystem Version Check ==="
+   echo "=== ADI DataX Version Check ==="
    echo ""
 
    echo "Linux Kernel:"
@@ -538,10 +539,10 @@ What to Include When Asking for Help
 
    *"My ADC doesn't work. Help!"*
 
-Contributing to the Ecosystem
+Contributing to ADI DataX
 -------------------------------------------------------------------------------
 
-The ADI ecosystem is open source and welcomes community contributions.
+ADI DataX is open source and welcomes community contributions.
 
 How to Contribute
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
