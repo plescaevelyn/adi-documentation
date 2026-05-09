@@ -3,13 +3,67 @@
 Ecosystem Components
 ===============================================================================
 
-This page provides detailed information about each major component in the ADI
-prototyping ecosystem. Each section explains what the component does, its key
-features, when to use it, and where to find detailed documentation.
+ADI publishes a stack of components that spans hardware, FPGA logic, kernel
+drivers, libraries, applications, and ready-to-use Linux images. **Most projects
+use only a subset.** Which pieces apply depends on where the ADI part lives,
+what processor (if any) sits next to it, and where the application code runs.
+
+This page is a reference: each section covers one component on its own terms —
+what it does, when it's the right tool, and where to find its full documentation.
+For end-to-end examples that show several components working together as a
+single system, see :ref:`overview_workflows`.
 
 .. contents:: Contents
    :local:
    :depth: 2
+
+Choosing what you need
+-------------------------------------------------------------------------------
+
+The components below are layered, but you rarely need every layer. A few common
+project shapes and the components each typically pulls in:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 12 18 12 28
+
+   * - Project shape
+     - HDL
+     - Linux drivers
+     - no-OS
+     - libiio / pyadi-iio
+   * - FPGA + Linux SoC (Zynq, ZynqMP, Versal)
+     - ✓
+     - ✓
+     -
+     - ✓
+   * - Microcontroller + ADI part (STM32, MAX32, RISC-V)
+     -
+     -
+     - ✓
+     - ✓ via TinyIIO
+   * - Raspberry Pi + Arduino-shield eval board
+     -
+     - ✓
+     -
+     - ✓
+   * - Host PC + USB instrument (ADALM2000, PlutoSDR)
+     -
+     -
+     -
+     - ✓
+   * - Remote target accessed over the network
+     - varies
+     - ✓ on the target
+     -
+     - ✓ on the host
+
+Each row picks up a different slice of the stack; the :doc:`workflows` page walks
+through a worked example of each.
+
+The remainder of this page is ordered roughly bottom-up through the stack: HDL,
+Linux kernel drivers, libiio, no-OS, pyadi-iio, and the user-facing applications
+and tools.
 
 HDL (Hardware Description Language)
 -------------------------------------------------------------------------------
@@ -255,6 +309,13 @@ With libiio, the same application code works whether your device is:
 - On a remote system over the network
 - Connected to a microcontroller via serial (TinyIIO protocol)
 
+.. svg:: libiio-architecture.svg
+   :align: center
+
+   libiio sits between the application and the underlying transport. The
+   ``IIOD`` daemon re-exports local devices over the network so a remote client
+   can use the same API with only a URI change.
+
 Key Features
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -321,66 +382,25 @@ Use libiio directly when:
 (built on libiio) rather than libiio directly, as it provides device-specific
 high-level interfaces.
 
-Getting Started
+API at a glance
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-**Installation:**
-
-On Debian/Ubuntu (including Kuiper Linux):
-
-.. code-block:: bash
-
-   sudo apt install libiio-utils libiio-dev python3-libiio
-
-**Build from Source:**
-
-See :ref:`libiio build` for complete instructions.
-
-**Example C Code:**
-
-.. code-block:: c
-
-   #include <iio.h>
-
-   struct iio_context *ctx;
-   struct iio_device *dev;
-
-   // Create context (local, network, USB, or serial)
-   ctx = iio_create_context_from_uri("local:");
-
-   // Find device
-   dev = iio_context_find_device(ctx, "ad4080");
-
-   // Read attribute
-   char buf[1024];
-   iio_device_attr_read(dev, "sampling_frequency", buf, sizeof(buf));
-   printf("Sample rate: %s\n", buf);
-
-   // Cleanup
-   iio_context_destroy(ctx);
-
-**Example Python Code:**
+The same code talks to a device regardless of where it lives — only the URI
+changes:
 
 .. code-block:: python
 
    import iio
-
-   # Create context
-   ctx = iio.Context("serial:/dev/ttyACM0,230400,8n1")
-
-   # Find device
+   ctx = iio.Context("serial:/dev/ttyACM0,230400,8n1")  # or local: / ip: / usb:
    dev = ctx.find_device("ad4080")
-
-   # Read attribute
    rate = dev.attrs["sampling_frequency"].value
-   print(f"Sample rate: {rate}")
 
 Documentation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - **Main Documentation:** `libiio Documentation <https://analogdevicesinc.github.io/libiio/v0.26/index.html>`__
 - **GitHub Repository:** :git-libiio:`/`
-- **Build Instructions and API reference:** :ref:`libiio`
+- **Build instructions, install steps, and full API reference:** :ref:`libiio`
 
 no-OS (Bare-Metal Firmware Framework)
 -------------------------------------------------------------------------------

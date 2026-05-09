@@ -27,6 +27,14 @@ The Kuiper Linux distribution release name is primarily tied to the version of A
 
 Outside of HDL, Linux, and no-OS, other components such as libiio and pyadi-iio have their own independent versioning strategies that are not tied to the Kuiper Linux or HDL release names. However, for each Kuiper Linux release, specific versions of libiio and pyadi-iio are bundled and tested together to ensure compatibility. These are documented in the Kuiper Linux release notes.
 
+.. svg:: versioning-tracks.svg
+   :align: center
+
+   Three release tracks across the ecosystem and how they converge in a Kuiper
+   Linux release. Track A shares a single name across HDL, Linux, and no-OS;
+   Track B versions independently; Kuiper pins one tested combination of all
+   of them.
+
 .. note::
 
    In 2026, new release naming will be more generic to denote the year and not

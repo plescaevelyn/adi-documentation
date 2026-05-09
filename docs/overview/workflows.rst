@@ -44,9 +44,8 @@ The same hardware — for example an AD9081 MxFE connected to a Zynq FPGA — ca
 be driven by either stack. The right choice depends on where you are in the
 development cycle, not just on the final deployment target.
 
-.. figure:: workflow-linux-noos.svg
+.. svg:: workflow-linux-noos.svg
    :align: center
-   :width: 800px
 
    Linux vs. no-OS development paths: same hardware, different software stacks
 
@@ -182,9 +181,8 @@ Use Case Example: AD9081 MxFE Software-Defined Radio
 **Application:** Multi-channel wideband transceiver for communications,
 radar, or test equipment.
 
-.. figure:: workflow-fpga.svg
+.. svg:: workflow-fpga.svg
    :align: center
-   :width: 700px
 
    FPGA workflow: Zynq + AD9081 MxFE via JESD204C
 
@@ -350,9 +348,8 @@ measurement instrument.
 
 This example is based on the :doc:`Software Infrastructure Tutorial </learning/sw_infrastructure/index>`.
 
-.. figure:: workflow-mcu.svg
+.. svg:: workflow-mcu.svg
    :align: center
-   :width: 700px
 
    Microcontroller workflow: STM32 + AD4080 ADC via SPI and TinyIIO
 
@@ -511,9 +508,8 @@ Use Case Example: Multi-Sensor Data Acquisition
 **Application:** Educational lab setup, proof-of-concept prototyping, or
 conference demonstration.
 
-.. figure:: workflow-rpi.svg
+.. svg:: workflow-rpi.svg
    :align: center
-   :width: 700px
 
    Raspberry Pi workflow: RPi + Arduino shields and USB devices
 
@@ -680,9 +676,8 @@ Use Case Example: Multi-Board Lab Automation
 **Application:** Centralized control of physically remote or rack-mounted
 instrumentation, multi-channel data collection, or distributed sensor networks.
 
-.. figure:: workflow-remote.svg
+.. svg:: workflow-remote.svg
    :align: center
-   :width: 800px
 
    Workflow 4: Host PC accessing multiple embedded targets via IIOD over Ethernet
 
@@ -839,9 +834,8 @@ Use Case Example: Automated Board Bring-Up with ADALM2000
 **Application:** Scripted board bring-up verification, production test
 automation, analog circuit characterization, or educational lab experiments.
 
-.. figure:: workflow-hil.svg
+.. svg:: workflow-hil.svg
    :align: center
-   :width: 750px
 
    Workflow 5: ADALM2000 as test instrument in a hardware-in-the-loop setup
 

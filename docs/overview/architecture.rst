@@ -19,9 +19,8 @@ services to the layer above it and consumes services from the layer below. This
 separation of concerns makes the system modular, testable, and portable across
 different platforms.
 
-.. figure:: architecture-layers.svg
+.. svg:: architecture-layers.svg
    :align: center
-   :width: 600px
 
    Seven-layer architecture of the ADI prototyping technology stack
 
@@ -241,9 +240,8 @@ Scenario: Capturing ADC data in Python on a host PC, with the AD4080
 connected to an STM32 microcontroller via SPI and the STM32 connected to the
 host via USB serial.
 
-.. figure:: dataflow-ad4080.svg
+.. svg:: dataflow-ad4080.svg
    :align: center
-   :width: 700px
 
    Data flow for AD4080 ADC with STM32 microcontroller
 
@@ -307,9 +305,8 @@ patterns across different platforms. The HDL repository serves as a common
 foundation for both FPGA-based (Linux) and microcontroller-based (no-OS)
 implementations, while host tools work uniformly across both paths through libiio.
 
-.. figure:: ecosystem-interdependencies.svg
+.. svg:: ecosystem-interdependencies.svg
    :align: center
-   :width: 800px
 
    Ecosystem interdependencies showing HDL as common foundation
 
@@ -342,9 +339,8 @@ How HDL Supports Both Paths
 The HDL repository contains more than just FPGA designs - it's the reference
 implementation for device behavior.
 
-.. figure:: hdl-shared-usage.svg
+.. svg:: hdl-shared-usage.svg
    :align: center
-   :width: 800px
 
    How HDL IP cores and specifications support both FPGA and MCU paths
 

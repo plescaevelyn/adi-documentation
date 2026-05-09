@@ -31,9 +31,8 @@ Rather than reinventing the wheel, we integrate with established open-source
 ecosystems like the Linux kernel, Python scientific computing, and MATLAB,
 allowing you to focus on your application while relying on proven infrastructure.
 
-.. figure:: ecosystem-intro.svg
+.. svg:: ecosystem-intro.svg
    :align: center
-   :width: 600px
 
    The ADI ecosystem provides a complete stack from hardware to applications
 
