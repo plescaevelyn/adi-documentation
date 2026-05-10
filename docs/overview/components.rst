@@ -82,52 +82,20 @@ The HDL components are written in Verilog and target both Xilinx and Intel (Alte
 FPGAs. They handle the low-level details of interfacing with high-speed serial
 links (JESD204), SPI buses, parallel interfaces, and more.
 
-Key Features
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Role in DataX
+~~~~~~~~~~~~~
 
-**Reference Designs:**
-
-Complete FPGA projects for ADI evaluation boards, including:
-
-- Top-level HDL integrating all IP blocks
-- Constraints files (pinout, timing)
-- Block designs for Zynq/ZynqMP (ARM + FPGA)
-- Build scripts and documentation
-
-Browse available designs at :external+hdl:doc:`projects/index`.
-
-**IP Core Library:**
-
-Reusable, parameterizable IP blocks:
-
-- **JESD204B/C Framework** (:external+hdl:doc:`library/jesd204/index`): Complete
-  implementation of the JESD204 high-speed serial interface standard used by
-  RF transceivers and high-speed ADCs/DACs
-
-- **SPI Engine** (:external+hdl:doc:`library/spi_engine/index`): High-performance
-  SPI controller optimized for ADI devices, supporting speeds up to 100 MHz
-
-- **AXI DMAC** (:external+hdl:doc:`library/axi_dmac/index`): High-throughput DMA
-  controller for moving data between FPGA fabric and processor memory
-
-- **ADI Device Interfaces**: Parallel, LVDS, and other device-specific cores
-
-**Common Infrastructure:**
-
-- Clock management and distribution
-- Reset generation and synchronization
-- AXI interconnects and bridges
-- Interrupt controllers
-- Utility functions (data width converters, clock domain crossings)
-
-**Build System:**
-
-- Automated project generation for Vivado and Quartus
-- Library dependency management
-- Multi-platform support (Zynq, ZynqMP, Versal, Intel SoCs)
+HDL is the FPGA-side foundation. The same IP cores (JESD204, SPI Engine,
+AXI DMAC) are reused across reference designs and feed both the Linux IIO
+drivers (via AXI memory-mapped interfaces and devicetree bindings) and
+no-OS code (which mirrors the same register maps and initialization
+sequences). Browse the
+:external+hdl:doc:`IP core library <library/index>` and
+:external+hdl:doc:`reference projects <projects/index>` for what's
+available.
 
 When to Use HDL Components
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Choose HDL-based FPGA designs when you need:
 
@@ -138,41 +106,19 @@ Choose HDL-based FPGA designs when you need:
 - **High Data Rates:** Multi-gigabit JESD204 links
 - **Flexible I/O:** Custom digital interfaces, GPIO control
 
-**Example Applications:**
-
-- Software-defined radio (SDR) platforms
-- Radar and communications systems
-- High-speed data acquisition
-- Medical imaging
-- Test and measurement equipment
-
-Getting Started
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-1. Choose a reference design for your evaluation board from :external+hdl:doc:`projects/index`
-2. Follow the :external+hdl:doc:`user_guide/build_hdl` guide to build the project
-3. Program the FPGA and boot Linux
-4. Use the Linux IIO drivers (pre-configured in reference designs)
-5. Access devices via libiio and pyadi-iio
-
-**Required Skills:**
-
-- Basic FPGA concepts (recommended but not required to use reference designs)
-- Vivado or Quartus tools familiarity
-- Linux kernel basics for driver integration
-
-**Learning Resources:**
-
-- :doc:`FPGA Integration Journey </learning/workshop_a_precision_converter_fpga_integration_journey/index>` workshop
-- :external+hdl:doc:`user_guide/index` - Complete HDL documentation
+Typical applications: software-defined radio, radar and communications
+systems, high-speed data acquisition, medical imaging, test &
+measurement.
 
 Documentation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~
 
-- **Main Documentation:** `HDL User Guide <https://analogdevicesinc.github.io/hdl/user_guide/index.html>`_
-- **GitHub Repository:** `analogdevicesinc/hdl <https://github.com/analogdevicesinc/hdl>`_
-- **Reference Projects:** :external+hdl:doc:`projects/index`
-- **IP Core Library:** :external+hdl:doc:`library/index`
+- :external+hdl:doc:`HDL user guide <user_guide/index>` — including
+  :external+hdl:doc:`build instructions <user_guide/build_hdl>`
+- :external+hdl:doc:`IP core library <library/index>`
+- :external+hdl:doc:`Reference projects <projects/index>`
+- :doc:`FPGA Integration Journey workshop </learning/workshop_a_precision_converter_fpga_integration_journey/index>` —
+  hands-on tutorial
 
 Linux Kernel Drivers
 -------------------------------------------------------------------------------
@@ -191,56 +137,19 @@ The drivers run in kernel space and expose devices through:
 - **Character devices:** High-speed data streaming via buffers
 - **Devicetree bindings:** Hardware description and platform configuration
 
-Key Features
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Role in DataX
+~~~~~~~~~~~~~
 
-**Comprehensive Device Support:**
-
-ADI drivers cover:
-
-- ADCs and DACs (SAR, Sigma-Delta, Pipeline, RF Sampling)
-- RF Transceivers and Direct-Sampling Converters
-- Amplifiers and References
-- IMUs, Accelerometers, Gyroscopes
-- Temperature Sensors
-- PLLs and Clock Generators
-- DDS (Direct Digital Synthesis)
-- Digital Potentiometers and Switches
-
-See the complete list at the `Linux Drivers Page <https://wiki.analog.com/resources/tools-software/linux-drivers-all>`_.
-
-**IIO Framework Benefits:**
-
-- **Standard Interface:** Same API for all device types
-- **High Performance:** DMA-based buffer interface for zero-copy data transfer
-- **Triggering:** Synchronized multi-device sampling
-- **Event System:** Threshold detection, alarms
-- **Debug Interface:** Complete attribute access via sysfs
-
-**Devicetree Integration:**
-
-Hardware configuration via devicetree:
-
-- Pin connections and chip selects
-- Clock frequencies
-- Reference voltages
-- Device-specific parameters
-
-Example devicetree snippet:
-
-::
-
-   &spi0 {
-       adc@0 {
-           compatible = "adi,ad4080";
-           reg = <0>;
-           spi-max-frequency = <80000000>;
-           refin-supply = <&adc_vref>;
-       };
-   };
+The Linux drivers are the largest and most mature DataX layer (1500+ ADI
+parts in mainline). They expose every supported device through the
+standardised IIO interfaces — sysfs attributes for control, character
+devices for high-throughput buffered capture — which is what libiio,
+pyadi-iio, and applications like Scopy depend on. On a Zynq-class FPGA
+platform, the drivers are the bridge between the HDL IP cores below and
+libiio above; on a Raspberry Pi, they're the entire kernel-side stack.
 
 When to Use Linux Drivers
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Choose Linux-based systems when you need:
 
@@ -250,48 +159,21 @@ Choose Linux-based systems when you need:
 - **Complex Applications:** Database logging, cloud connectivity, GUIs
 - **Rapid Development:** Leverage Linux tools and libraries
 
-**Supported Platforms:**
-
-- Xilinx Zynq/ZynqMP/Versal (ARM + FPGA)
-- Intel SoC FPGAs
-- Raspberry Pi
-- BeagleBone
-- i.MX, Rockchip, AllWinner processors
-- Any ARM/x86/RISC-V platform with appropriate buses (SPI, I2C, etc.)
-
-Getting Started
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-**For Xilinx Zynq Platforms:**
-
-1. Use ADI's pre-built HDL reference design (includes devicetree)
-2. Build Linux kernel with :ref:`linux-kernel`, :ref:`linux-kernel petalinux`
-   is also supported.
-3. Boot Linux on target
-4. Drivers load automatically based on devicetree
-5. Access via libiio
-
-**For Raspberry Pi / Other Platforms:**
-
-1. Use :doc:`Kuiper Linux </linux/kuiper/index>` (Debian with ADI integration)
-2. Connect ADI device via SPI/I2C (e.g., Arduino shields)
-3. Configure devicetree overlay
-4. Driver loads automatically
-5. Access via libiio
-
-**Required Skills:**
-
-- Linux basics (command line, package management)
-- Devicetree concepts (for custom hardware)
-- Optional: Kernel compilation for custom platforms
+Drivers run on any platform that supports the upstream Linux kernel:
+Xilinx Zynq / ZynqMP / Versal, Intel SoC FPGAs, Raspberry Pi,
+BeagleBone, i.MX / Rockchip / AllWinner processors, and other ARM /
+x86 / RISC-V hosts with the appropriate buses (SPI, I2C, ...).
 
 Documentation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~
 
-- **Driver Documentation:** `Linux Drivers Page <https://wiki.analog.com/resources/tools-software/linux-drivers-all>`_
-- **Getting Started:** `Linux Kernel Getting Started <https://analogdevicesinc.github.io/linux/getting_started.html>`_
-- **Kernel Builds:** :doc:`Build Guides </linux/kernel/index>`
-- **IIO Framework:** `Kernel IIO Documentation <https://www.kernel.org/doc/html/latest/driver-api/iio/index.html>`_
+- `Complete driver list <https://wiki.analog.com/resources/tools-software/linux-drivers-all>`_
+  on the ADI wiki — per-device documentation, devicetree examples, and
+  known issues
+- :doc:`Kernel build guides </linux/kernel/index>`
+- :doc:`Kuiper Linux </linux/kuiper/index>` — pre-configured image for
+  Raspberry Pi and similar boards
+- `Linux IIO framework reference <https://www.kernel.org/doc/html/latest/driver-api/iio/index.html>`_
 
 libiio (Hardware Abstraction Library)
 -------------------------------------------------------------------------------
@@ -318,91 +200,33 @@ With libiio, the same application code works whether your device is:
    ``IIOD`` daemon re-exports local devices over the network so a remote client
    can use the same API with only a URI change.
 
-Key Features
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Role in DataX
+~~~~~~~~~~~~~
 
-**Multiple Backends:**
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 50 30
-
-   * - Backend
-     - Description
-     - URI Format
-   * - ``local:``
-     - Direct access to local IIO devices via sysfs and char devices
-     - ``local:``
-   * - ``ip:``
-     - Network access via iiod (IIO daemon)
-     - ``ip:192.168.1.100`` or ``ip:hostname.local``
-   * - ``usb:``
-     - USB-connected devices (ADALM2000, PlutoSDR, etc.)
-     - ``usb:`` (auto-discover) or ``usb:1.2.5`` (specific device)
-   * - ``serial:``
-     - Serial-connected microcontrollers running TinyIIO
-     - ``serial:/dev/ttyACM0,230400,8n1``
-   * - ``xml:``
-     - Load saved device context from XML file
-     - ``xml:context.xml``
-
-**Language Bindings:**
-
-libiio has native bindings for:
-
-- C/C++ (native API)
-- Python
-- C# (.NET)
-- MATLAB (via mex files)
-
-**Command-Line Utilities:**
-
-Useful for debugging and scripting:
-
-- ``iio_info`` - List devices and attributes
-- ``iio_attr`` - Read/write attributes
-- ``iio_readdev`` - Capture data to file
-- ``iio_writedev`` - Replay data from file
-
-**Performance:**
-
-- Zero-copy data paths where possible
-- DMA buffer support for high throughput
-- Asynchronous I/O operations
+libiio is the unified API every DataX-aware host application talks to. Its
+backends — ``local:`` (sysfs / char devices on the same Linux host),
+``ip:`` (TCP through the ``iiod`` daemon on a remote target), ``usb:``
+(USB-attached instruments like ADALM2000), ``serial:`` (microcontrollers
+running TinyIIO), and ``xml:`` (saved contexts) — let the same application
+move between local, remote, and embedded targets by changing only the URI
+string. Native C, C++, Python, C#, and MATLAB bindings are available, plus
+command-line tools (``iio_info``, ``iio_attr``, ``iio_readdev``,
+``iio_writedev``) for scripting and debugging.
 
 When to Use libiio
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~
 
-Use libiio directly when:
-
-- You need fine-grained control over IIO device access
-- You're working in C/C++ and want low-level access
-- You're building custom applications or tools
-- You need the command-line utilities for scripting
-
-**Note:** Most Python developers will use :external+pyadi-iio:doc:`pyadi-iio <index>`
-(built on libiio) rather than libiio directly, as it provides device-specific
-high-level interfaces.
-
-API at a glance
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The same code talks to a device regardless of where it lives — only the URI
-changes:
-
-.. code-block:: python
-
-   import iio
-   ctx = iio.Context("serial:/dev/ttyACM0,230400,8n1")  # or local: / ip: / usb:
-   dev = ctx.find_device("ad4080")
-   rate = dev.attrs["sampling_frequency"].value
+Reach for libiio directly when you need fine-grained C/C++ control, are
+embedding the API in a custom tool, or want the command-line utilities
+for scripting and triage. Most Python work goes through
+:external+pyadi-iio:doc:`pyadi-iio <index>` instead — it's built on top
+of libiio and adds device-specific classes.
 
 Documentation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~
 
-- **Main Documentation:** `libiio Documentation <https://analogdevicesinc.github.io/libiio/v0.26/index.html>`__
-- **GitHub Repository:** :git-libiio:`/`
-- **Build instructions, install steps, and full API reference:** :ref:`libiio`
+- :ref:`libiio` — build, install, and full API reference
+- :git-libiio:`Source repository </>`
 
 no-OS (Bare-Metal Firmware Framework)
 -------------------------------------------------------------------------------
@@ -417,113 +241,44 @@ for ADI devices running on microcontrollers without a full operating system.
 The no-OS framework targets developers building cost-sensitive, low-power, or
 real-time systems where the overhead of Linux is unnecessary or undesirable.
 
-Key Features
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Role in DataX
+~~~~~~~~~~~~~
 
-**Platform Abstraction:**
+no-OS is the bare-metal counterpart to the Linux drivers: a
+platform-agnostic HAL plus device drivers that target STM32, MAX32,
+RISC-V, and other ARM Cortex-M MCUs. Three things make it integrate with
+the rest of DataX:
 
-Write once, compile for multiple MCU platforms:
-
-- STM32 (STMicroelectronics)
-- MAX32 (Analog Devices)
-- RISC-V (SiFive, GigaDevice)
-- Other ARM Cortex-M platforms
-
-The Hardware Abstraction Layer (HAL) isolates device drivers from platform-specific
-code.
-
-**Device Drivers:**
-
-Hundreds of drivers for:
-
-- Data converters (ADCs, DACs)
-- RF transceivers
-- Sensors and IMUs
-- PLLs and clock generators
-- Power management ICs
-
-Drivers are source-compatible with Linux IIO drivers where possible, easing
-migration between platforms. See :ref:`overview_workflows` for the recommended
-approach of prototyping with Linux first and transitioning to no-OS once the
-use case is proven.
-
-**TinyIIO Server:**
-
-A lightweight implementation of the IIO protocol for microcontrollers:
-
-- Exposes devices via serial, USB CDC, or network (with lwIP)
-- Compatible with libiio client applications
-- Allows using Scopy, IIO Oscilloscope, and pyadi-iio with MCUs
-- Minimal RAM/flash footprint
-
-**RTOS Support:**
-
-Integration with real-time operating systems:
-
-- FreeRTOS
-- Zephyr RTOS
-- Bare-metal (no RTOS)
-
-**Build System:**
-
-CMake-based build system supporting:
-
-- Multiple toolchains (GCC, Keil, IAR)
-- Out-of-tree projects
-- Library dependencies
+- **Source-compatible with Linux IIO drivers** where possible — a device
+  prototyped under Linux can transition to no-OS without rewriting
+  driver code.
+- **TinyIIO server** — a small implementation of the IIO protocol over
+  serial, USB-CDC, or (with lwIP) network, so libiio clients (Scopy,
+  pyadi-iio, etc.) can talk to a microcontroller exactly the way they
+  talk to a Zynq board.
+- **RTOS-friendly** — runs bare-metal or under FreeRTOS / Zephyr.
 
 When to Use no-OS
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~
 
-Choose no-OS for:
-
-- **Low Power:** Battery-operated devices, energy harvesting
-- **Low Cost:** Inexpensive MCUs ($1-$10)
-- **Real-Time:** Deterministic timing, hard deadlines
-- **Standalone Operation:** No need for networking or complex UI
-- **Simple Deployment:** Single binary, no OS updates
-- **Resource Constrained:** Limited RAM/flash
-
-**Example Applications:**
-
-- Portable medical devices
-- Industrial sensors
-- Wearable devices
-- Standalone data loggers
-- Battery-powered instrumentation
-- Precision measurement equipment
+Choose no-OS for low-power, low-cost, real-time, or resource-constrained
+deployments — battery-powered instruments, industrial sensors, wearables,
+standalone data loggers, precision measurement equipment.
 
 Getting Started
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
 
-**Prerequisites:**
-
-- Evaluation board (e.g., EVAL-AD4080-ARDZ)
-- Microcontroller board (e.g., ST Nucleo)
-- ARM GCC toolchain or vendor IDE (STM32CubeIDE, Keil, etc.)
-- Serial connection to host PC
-
-**Workflow:**
-
-1. Clone the :external+no-OS:doc:`no-OS repository <index>`
-2. Choose a project or create a new one
-3. Configure for your platform and device
-4. Build with CMake or vendor IDE
-5. Flash to microcontroller
-6. Connect via serial and use libiio to access device
-
-**Example from Tutorial:**
-
-The :doc:`Software Infrastructure tutorial </learning/sw_infrastructure/index>`
-walks through a complete example with the AD4080 ADC and STM32 Nucleo.
+For a complete walkthrough of running an AD4080 on STM32 Nucleo via
+TinyIIO, see :doc:`Software Infrastructure </learning/sw_infrastructure/index>`.
 
 Documentation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~
 
-- **Main Documentation:** `no-OS Documentation <https://analogdevicesinc.github.io/no-OS/index.html>`_
-- **GitHub Repository:** `analogdevicesinc/no-OS <https://github.com/analogdevicesinc/no-OS>`_
-- **Build Guide:** :external+no-OS:doc:`index`
-- **TinyIIO:** :external+no-OS:doc:`tinyiiod documentation <index>`
+- :external+no-OS:doc:`no-OS documentation <index>` — prerequisites,
+  build, flashing, and TinyIIO reference
+- :git-no-OS:`Source repository </>`
+- :doc:`Software Infrastructure tutorial </learning/sw_infrastructure/index>` —
+  hands-on AD4080 + STM32 Nucleo walkthrough
 
 pyadi-iio (Python Device Interfaces)
 -------------------------------------------------------------------------------
@@ -536,238 +291,67 @@ classes for ADI hardware, built on top of libiio. Rather than working with
 generic IIO attributes and buffers, you get a high-level, Pythonic API tailored
 to each device family.
 
-Key Features
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Role in DataX
+~~~~~~~~~~~~~
 
-**Device-Specific Classes:**
-
-Pre-built classes for major device families:
-
-- **AD9361 / AD9364:** Wideband transceivers
-- **AD9081 / AD9082:** MxFE (Mixed-Signal Front End)
-- **ADRV9009:** Wideband transceiver
-- **AD4080 / AD4630 / AD4020 / AD7124 / AD7606:** ADCs
-- **AD9144 / AD9172:** DACs
-- **ADXL345 / ADIS16505:** IMUs and sensors
-- And many more...
-
-**Pythonic API:**
-
-.. code-block:: python
-
-   import adi
-
-   # Create device
-   sdr = adi.ad9361(uri="ip:pluto.local")
-
-   # Configure (properties, not method calls)
-   sdr.sample_rate = 2000000
-   sdr.rx_rf_bandwidth = 200000
-   sdr.rx_lo = 915000000
-   sdr.gain_control_mode_chan0 = "slow_attack"
-
-   # Receive data (returns NumPy array)
-   data = sdr.rx()
-
-**NumPy Integration:**
-
-- Data returned as NumPy arrays (real or complex)
-- Direct integration with SciPy, Matplotlib, Pandas
-- Easy data processing and visualization
-
-**Quick Context Switching:**
-
-Change ``uri`` parameter to move between backends:
-
-.. code-block:: python
-
-   # Local device
-   adc = adi.ad4080(uri="local:")
-
-   # Network device
-   adc = adi.ad4080(uri="ip:192.168.1.100")
-
-   # Serial device
-   adc = adi.ad4080(uri="serial:/dev/ttyACM0,230400,8n1")
-
-   # Code remains identical regardless of backend
-
-**Jupyter Notebook Friendly:**
-
-Perfect for interactive exploration, data analysis, and educational use.
+pyadi-iio sits one layer above libiio: device-specific Python classes
+(``adi.ad9361``, ``adi.ad4080``, ``adi.adxl345``, etc.) hide the IIO
+register and attribute layout, return data as NumPy arrays ready for
+SciPy / Matplotlib / Pandas, and switch between local, network, USB, and
+serial backends by changing the ``uri`` parameter alone. Browse the
+:external+pyadi-iio:doc:`device class catalog <devices/index>` for
+what's supported.
 
 When to Use pyadi-iio
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
 
-Use pyadi-iio for:
-
-- **Rapid Prototyping:** Test device functionality quickly
-- **Data Analysis:** Capture data and analyze with SciPy/Pandas
-- **Automation:** Scripted testing and characterization
-- **Education:** Learn about devices interactively
-- **Application Development:** Build Python applications with ADI hardware
-- **Algorithm Development:** Test DSP algorithms with real hardware
-
-**Not Suitable For:**
-
-- Hard real-time applications (use C/C++ or no-OS)
-- Extremely high-throughput streaming (GHz sample rates)
-- Deeply embedded systems (no Python runtime)
-
-Getting Started
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-**Installation:**
-
-.. code-block:: bash
-
-   pip install pyadi-iio
-
-Or for latest development version:
-
-.. code-block:: bash
-
-   pip install git+https://github.com/analogdevicesinc/pyadi-iio.git
-
-**Quick Example:**
-
-.. code-block:: python
-
-   import adi
-   import matplotlib.pyplot as plt
-
-   # Create AD4080 ADC object
-   adc = adi.ad4080(uri="serial:/dev/ttyACM0,230400,8n1")
-
-   # Configure
-   adc.rx_buffer_size = 4096
-   adc.sampling_frequency = 1000000
-
-   # Capture data
-   data = adc.rx()
-
-   # Plot
-   plt.plot(data)
-   plt.title("AD4080 ADC Capture")
-   plt.xlabel("Sample")
-   plt.ylabel("Code")
-   plt.show()
+Use pyadi-iio for rapid prototyping, data analysis, scripted automation,
+education, and Jupyter-style exploration. Reach for libiio in C/C++
+instead when you need hard real-time, GHz-class streaming, or a deeply
+embedded build with no Python runtime.
 
 Documentation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~
 
-- **Main Documentation:** :external+pyadi-iio:doc:`index`
-- **GitHub Repository:** :git-pyadi-iio:`/`
-- **Examples:** :external+pyadi-iio:doc:`guides/examples`
-- **Device Classes:** :external+pyadi-iio:doc:`devices/index`
+- :external+pyadi-iio:doc:`pyadi-iio documentation <index>` — install,
+  API reference, supported devices
+- :external+pyadi-iio:doc:`Device classes <devices/index>`
+- :external+pyadi-iio:doc:`Examples <guides/examples>`
+- :git-pyadi-iio:`Source repository </>`
 
 Applications and Tools
 -------------------------------------------------------------------------------
 
-Scopy
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+These are the user-facing tools that DataX feeds into. They consume libiio
+(directly or via pyadi-iio) and so work with any DataX target — local,
+remote, or microcontroller-based — out of the box.
 
-:external+scopy:doc:`Scopy <index>` is a multi-function GUI application providing
-test instrument interfaces:
+**Scopy** (:external+scopy:doc:`docs <index>`) — multi-instrument GUI
+(oscilloscope, spectrum analyzer, signal generator, network and logic
+analyzer, pattern generator, power-supply control) with first-class
+support for the ADALM2000 and ADALM1000 plus generic IIO and TinyIIO
+targets. Linux, Windows, macOS.
 
-- **Oscilloscope:** Time-domain waveform capture and display
-- **Spectrum Analyzer:** FFT and frequency-domain analysis
-- **Signal Generator:** Arbitrary waveforms, sine, square, triangle
-- **Network Analyzer:** Bode plots, gain/phase measurements
-- **Logic Analyzer:** Digital signal capture
-- **Pattern Generator:** Digital pattern generation
-- **Power Supply Control:** For ADALM2000 and supported devices
-- **Device Panels:** Custom controls for specific devices
+**IIO Oscilloscope** — a leaner GUI viewer that works with any IIO device
+without per-device support: real-time time / frequency plots, full sysfs
+attribute access, and data logging. Linux primarily.
 
-**Supported Hardware:**
+**MATLAB Toolboxes** — Transceiver Toolbox (AD9361, AD9371, ADRV9009,
+AD9081, ...) and HSX Toolbox (AD9680, AD9144, AD9172, ...) stream data
+into MATLAB workspaces and integrate with Communications Toolbox. Windows,
+Linux, macOS (MATLAB 2018b or newer).
 
-- ADALM2000 (M2k) - primary platform
-- ADALM1000 (M1k)
-- Generic IIO devices (via debug panels)
-- Devices running TinyIIO (microcontrollers)
-
-**Platforms:** Linux, Windows, macOS
-
-IIO Oscilloscope
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-A generic viewer for any IIO device:
-
-- **Time Domain:** Real-time waveform plots
-- **Frequency Domain:** FFT analysis
-- **Attributes:** Configure all device settings via GUI
-- **Data Logging:** Record to files
-- **Debug Interface:** Access any IIO attribute
-
-Less polished than Scopy, but works with any IIO device without custom support.
-
-**Platforms:** Linux, Windows (older versions)
-
-MATLAB Toolboxes
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-**Transceiver Toolbox:**
-
-Control and data capture for RF transceivers:
-
-- AD9361, AD9371, ADRV9009, AD9081, and more
-- Streaming data to MATLAB workspace
-- Integration with Communications Toolbox
-- Filter design and configuration
-
-**HSX Toolbox:**
-
-Support for high-speed ADCs and DACs:
-
-- AD9680, AD9144, AD9172, and similar
-- Waveform generation and capture
-- JESD204 configuration
-
-**Platforms:** Windows, Linux, macOS (MATLAB 2018b or newer)
-
-Kuiper Linux
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-:doc:`Kuiper Linux </linux/kuiper/index>` is a Debian-based Linux distribution
-optimized for ADI development:
-
-**Pre-Installed Software:**
-
-- Scopy and IIO Oscilloscope
-- pyadi-iio and libiio
-- Development tools (GCC, Python, git)
-- Jupyter Lab for interactive Python
-- GNU Radio for SDR applications
-
-**Pre-Configured:**
-
-- Kernel with ADI drivers
-- Devicetree overlays for common boards
-- Network configuration for ADI devices
-
-**Supported Platforms:**
-
-- Raspberry Pi 4/400
-- BeagleBone
-- Xilinx Zynq (via SD card image)
+**Kuiper Linux** (:doc:`docs </linux/kuiper/index>`) — ADI's Debian-based
+distribution. Pins a tested combination of every component above (ADI
+kernel, libiio, pyadi-iio, Scopy, IIO Oscilloscope, GNU Radio, Jupyter
+Lab) plus devicetree overlays for common boards. Targets Raspberry Pi
+4/400, BeagleBone, and Xilinx Zynq via SD-card image.
 
 See Also
 -------------------------------------------------------------------------------
 
-**Next Steps:**
-
-- :doc:`workflows` - See how these components work together in real applications
-- :doc:`versioning-support` - Understand version compatibility
-- :doc:`architecture` - Review the full-stack architecture
-
-**Learning Resources:**
-
-- :doc:`Software Infrastructure Tutorial </learning/sw_infrastructure/index>`
-- :doc:`Converter Connectivity Tutorial </learning/converter_connectivity_tutorial/index>`
-
-**External Documentation:**
-
-- `HDL User Guide <https://analogdevicesinc.github.io/hdl/user_guide/index.html>`_
-- `Linux Drivers <https://wiki.analog.com/resources/tools-software/linux-drivers-all>`_
-- `libiio Documentation <https://analogdevicesinc.github.io/libiio/v0.26/index.html>`_
-- `no-OS Documentation <https://analogdevicesinc.github.io/no-OS/index.html>`_
+- :doc:`architecture` — full-stack architecture and data-flow examples
+- :doc:`workflows` — concrete end-to-end scenarios
+- :doc:`versioning-support` — version compatibility and release tracks
+- :doc:`Software Infrastructure tutorial </learning/sw_infrastructure/index>`
+- :doc:`Converter Connectivity tutorial </learning/converter_connectivity_tutorial/index>`

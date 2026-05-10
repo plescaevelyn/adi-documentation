@@ -51,36 +51,18 @@ development cycle, not just on the final deployment target.
    Linux vs. no-OS development paths: same hardware, different software stacks
 
 Why Start with Linux
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^
 
-The Linux IIO driver stack is the **recommended starting point** whenever both
-options exist. The reasons are practical rather than ideological:
-
-**Guardrails and error visibility**
-   Linux drivers validate register writes, check device states, and surface
-   errors through the kernel log (``dmesg``). A misconfigured clock rate or
-   an out-of-range gain setting produces an explicit error message rather
-   than silent misbehaviour. no-OS drivers are leaner and generally do less
-   checking — useful in production but harder to debug during bring-up.
-
-**Rich tooling out of the box**
-   With a Linux IIO driver loaded you immediately have access to ``iio_info``,
-   ``iio_readdev``, Scopy, IIO Oscilloscope, and pyadi-iio — all without
-   writing a line of application code. You can confirm the device initialises
-   correctly, check every register attribute, stream sample data, and plot
-   frequency spectra before your application logic exists.
-
-**Faster iteration**
-   Changing a device parameter under Linux is a file write or a Python one-liner.
-   Under no-OS, a configuration change requires editing source, rebuilding, and
-   reflashing firmware. During the exploratory phase of a project the Linux
-   iteration loop is dramatically faster.
-
-**Shared register maps and HDL designs**
-   The Linux driver and no-OS driver for the same device share the same device
-   register definitions and initialisation sequences — both are derived from the
-   same hardware specification. Work you do validating a configuration under
-   Linux transfers directly to the no-OS port.
+For any device that has both a Linux IIO driver and a no-OS bare-metal
+driver, prototype on Linux first. Linux drivers validate register writes
+and surface errors through ``dmesg``; the libiio command-line utilities,
+Scopy, and pyadi-iio all work the moment the driver loads, so you can
+confirm the hardware before writing application code; and Linux's
+file-write / Python-one-liner iteration loop is dramatically faster than
+the rebuild-and-reflash loop a no-OS port requires. The Linux and no-OS
+drivers for the same device share register maps and initialisation
+sequences, so configuration validated under Linux transfers directly to
+the no-OS port.
 
 .. list-table:: Linux vs. no-OS Comparison
    :header-rows: 1
@@ -123,44 +105,20 @@ options exist. The reasons are practical rather than ideological:
        | - Manual host integration (TinyIIO or custom)
 
 When to Transition to no-OS
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-no-OS is the right choice for the **deployed product**, not the development
-process. Consider transitioning once:
+no-OS is the right choice for the **deployed product**, not the
+development process. Transition once the device is fully characterised
+and configuration is stable; algorithms are validated; boot time, power
+budget, or BOM cost make Linux impractical; hard real-time guarantees
+are needed; or the system must operate without a network or host PC.
 
-- The device is fully characterised and the configuration is stable
-- Algorithms are validated and performance requirements are met
-- Boot time, power budget, or BOM cost make a full Linux system impractical
-- Hard real-time guarantees are required (deterministic interrupt latency,
-  precise sample timing)
-- The system must operate without a network connection or host PC
-
-The transition is deliberately low-friction. Because the Linux driver and
-no-OS driver share the same register definitions and HDL design, the device
-configuration you validated under Linux maps directly to the no-OS
-initialisation sequence.
-
-Recommended Transition Path
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-1. **Prototype with Linux** — Load the Linux IIO driver, use ``iio_info`` and
-   Scopy to confirm the device initialises correctly. Use pyadi-iio or MATLAB
-   to develop and validate your signal processing algorithms.
-
-2. **Lock the configuration** — Once the device settings (sample rate, gain,
-   filter coefficients, clock configuration) are finalised under Linux, record
-   them. These become the initialisation parameters for the no-OS project.
-
-3. **Port to no-OS** — Start from the matching no-OS reference project for
-   your device and platform. The device driver API mirrors the Linux driver
-   concepts. Swap in your validated configuration parameters.
-
-4. **Validate equivalence** — Run the same stimulus through both stacks and
-   compare outputs. The IIO framework's consistent data model makes this
-   straightforward.
-
-5. **Optimise for deployment** — With correctness established, tune the
-   no-OS firmware for your power, latency, and footprint targets.
+The recommended path: prototype under Linux with ``iio_info`` / Scopy /
+pyadi-iio, lock the validated device configuration, port to the
+matching no-OS reference project (driver concepts and register maps
+mirror the Linux driver), validate equivalence by running the same
+stimulus through both stacks, and finally optimise the no-OS firmware
+for your deployment targets.
 
 
 Workflow 1: FPGA + High-Speed Data Converter
@@ -188,108 +146,27 @@ radar, or test equipment.
    FPGA workflow: Zynq + AD9081 MxFE via JESD204C
 
 Architecture
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
 
-**Layer 1 - Hardware:**
-AD9081 MxFE provides 4 ADC channels (up to 4 GSPS each) and 4 DAC channels
-(up to 12 GSPS each) with digital signal processing (NCOs, filters, DDCs, DUCs).
-
-**Layer 2 - Hardware Interface:**
-Zynq UltraScale+ MPSoC combines:
-
-- ARM Cortex-A53 processors (4 cores) running Linux
-- Programmable logic (FPGA fabric) for JESD204 and signal processing
-- High-speed transceivers (GTH) for multi-gigabit serial links
-
-**Layer 3 - HDL:**
-The :external+hdl:doc:`AD9081 HDL project <projects/ad9081_fmca_ebz/index>` provides:
-
-- :external+hdl:doc:`JESD204 TPL/Link/PHY <library/jesd204/index>` implementation
-- DMA controllers for moving data to/from ARM processors
-- Clock management and synchronization
-- AXI interfaces to Linux
-
-**Layer 4 - Linux Drivers:**
-The ``axi-ad9081`` IIO driver:
-
-- Initializes AD9081 via SPI
-- Configures JESD204 link (lane rates, lane count, scrambling)
-- Programs digital filters, NCOs, DDCs/DUCs
-- Exposes DMA buffers for high-throughput streaming
-
-**Layer 5 - libiio:**
-Provides ``local:`` backend for direct access to IIO devices on the Zynq.
-
-**Layer 6 - pyadi-iio:**
-The ``adi.ad9081`` Python class:
-
-.. code-block:: python
-
-   import adi
-   import numpy as np
-   import matplotlib.pyplot as plt
-
-   # Create AD9081 object (on local Zynq)
-   mxfe = adi.ad9081(uri="local:")
-
-   # Configure receiver
-   mxfe.rx_enabled_channels = [0, 1]  # Enable 2 channels
-   mxfe.rx_buffer_size = 2**16
-
-   # Receive data
-   data = mxfe.rx()  # Returns complex NumPy array
-
-   # Plot spectrum
-   fft = np.fft.fftshift(np.fft.fft(data[0]))
-   plt.plot(20*np.log10(np.abs(fft)))
-   plt.show()
-
-**Layer 7 - Application:**
-MATLAB, GNU Radio, or custom Python/C++ applications for SDR, spectrum monitoring,
-or signal intelligence.
+The :external+hdl:doc:`AD9081 HDL project <projects/ad9081_fmca_ebz/index>`
+synthesises the JESD204 TPL/Link/PHY, DMA controllers, and clock management
+into the Zynq fabric and exposes them to Linux via AXI interfaces. Linux's
+``axi-ad9081`` IIO driver initialises the device over SPI, configures the
+JESD204 link, programs filters / NCOs / DDCs / DUCs, and presents DMA
+buffers as IIO devices. libiio (``local:`` backend) hands those off to
+``adi.ad9081`` in pyadi-iio (or to MATLAB / GNU Radio / custom C/C++) for
+the application code.
 
 Development Steps
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~
 
-1. **Hardware Setup:**
-
-   - Mount AD9081-FMCA-EBZ on ZCU102 FMC connector
-   - Connect clocks, power, and signal sources
-   - Ensure proper termination and grounding
-
-2. **Build HDL Project:**
-
-   Follow :external+hdl:doc:`build instructions <user_guide/build_hdl>`:
-
-   .. code-block:: bash
-
-      git clone https://github.com/analogdevicesinc/hdl
-      cd hdl/projects/ad9081_fmca_ebz/zcu102
-      make
-
-   This generates a Vivado project and builds the bitstream.
-
-3. **Build Linux Kernel:**
-
-   Use :doc:`Kuiper Linux </linux/kuiper/index>` or build with :doc:`PetaLinux </linux/kernel/petalinux>`.
-   The ``axi-ad9081`` driver is included in ADI's kernel.
-
-4. **Program and Boot:**
-
-   - Program FPGA bitstream
-   - Copy BOOT.BIN and image.ub to SD card
-   - Boot Linux on Zynq
-
-5. **Verify IIO Devices:**
-
-   .. code-block:: bash
-
-      iio_info
-      # Should show axi-ad9081 devices
-
-6. **Develop Application:**
-
-   Use pyadi-iio, MATLAB, or C/C++ with libiio to stream data.
+Mount the AD9081-FMCA-EBZ on the ZCU102 FMC connector, build the HDL
+project from :external+hdl:doc:`the matching reference design
+<projects/ad9081_fmca_ebz/index>`, build a Linux kernel with the
+``axi-ad9081`` driver (or use :doc:`Kuiper Linux </linux/kuiper/index>`),
+program the bitstream and SD-card image, boot the Zynq, and verify
+``iio_info`` lists the AD9081 device. Application code then talks to it
+through pyadi-iio, MATLAB, or libiio directly.
 
 When to Use This Workflow
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -355,103 +232,26 @@ This example is based on the :doc:`Software Infrastructure Tutorial </learning/s
    Microcontroller workflow: STM32 + AD4080 ADC via SPI and TinyIIO
 
 Architecture
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
 
-**Layer 1 - Hardware:**
-AD4080 40 MSPS oversampling SAR ADC with integrated digital filters (SINC5,
-SINC5+Comp, Averaging).
-
-**Layer 2 - Hardware Interface:**
-STM32H563ZI microcontroller provides:
-
-- High-speed SPI (up to 100 MHz capable)
-- USB 2.0 HS device (for TinyIIO over USB CDC)
-- DMA controllers for efficient data movement
-- 2 MB flash, 640 KB RAM
-
-**Layer 3 - no-OS Firmware:**
-The :external+no-OS:doc:`AD4080 no-OS project <index>` provides:
-
-- SPI driver for STM32 HAL
-- AD4080 device driver (register configuration, data capture)
-- TinyIIO server running on USB CDC (virtual serial port)
-- DMA-based circular buffers for continuous capture
-
-**Layer 4 - Drivers:**
-*Not used* - TinyIIO on the MCU communicates directly with libiio via serial
-protocol, bypassing the need for kernel drivers.
-
-**Layer 5 - libiio:**
-Uses ``serial:`` backend to connect to STM32 over USB:
-
-.. code-block:: bash
-
-   # From host PC (Raspberry Pi, laptop, etc.)
-   iio_info -u serial:/dev/ttyACM0,230400,8n1
-
-**Layer 6 - pyadi-iio:**
-The ``adi.ad4080`` Python class:
-
-.. code-block:: python
-
-   import adi
-
-   # Connect to AD4080 via serial (MCU appears as /dev/ttyACM0)
-   adc = adi.ad4080(uri="serial:/dev/ttyACM0,230400,8n1")
-
-   # Configure filter
-   adc.filter_type = "sinc5_plus_compensation"
-   adc.sampling_frequency = 1000000  # 1 MSPS
-   adc.rx_buffer_size = 4096
-
-   # Capture data
-   data = adc.rx()  # NumPy array
-
-**Layer 7 - Application:**
-Scopy for interactive testing, or custom Python scripts for data logging and
-analysis.
+The :external+no-OS:doc:`AD4080 no-OS project <index>` runs on the
+STM32H563ZI: it includes the AD4080 device driver, an SPI driver against
+the STM32 HAL, DMA-backed circular buffers, and a TinyIIO server speaking
+over USB-CDC. There is no Linux kernel driver layer in this stack —
+TinyIIO talks the IIO protocol straight over the virtual serial port. On
+the host (a laptop or Raspberry Pi), libiio's ``serial:`` backend
+connects to ``/dev/ttyACM0``; ``adi.ad4080`` in pyadi-iio (or Scopy /
+custom scripts) handles configuration and capture.
 
 Development Steps
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~
 
-1. **Hardware Setup:**
-
-   - Mount EVAL-AD4080-ARDZ on ST Nucleo (Arduino headers)
-   - Connect signal source (function generator, sensor)
-   - Connect Nucleo USB to host PC
-
-2. **Build Firmware:**
-
-   .. code-block:: bash
-
-      git clone https://github.com/analogdevicesinc/no-OS
-      cd no-OS/projects/ad4080
-      mkdir build && cd build
-      cmake .. -DPLATFORM=stm32
-      make
-
-   Or use STM32CubeIDE to import project.
-
-3. **Flash Firmware:**
-
-   Use ST-LINK programmer (built into Nucleo):
-
-   .. code-block:: bash
-
-      st-flash write ad4080_project.bin 0x8000000
-
-4. **Verify Connection:**
-
-   From host PC:
-
-   .. code-block:: bash
-
-      iio_info -u serial:/dev/ttyACM0,230400,8n1
-      # Should show ad4080 IIO device
-
-5. **Develop Application:**
-
-   Use Scopy, pyadi-iio, or MATLAB to control device and capture data.
+Mount the EVAL-AD4080-ARDZ on the ST Nucleo's Arduino headers, build the
+no-OS AD4080 firmware for STM32 and flash it via the on-board ST-LINK,
+then connect to the device from the host with ``iio_info -u
+serial:/dev/ttyACM0,230400,8n1`` and develop with Scopy or pyadi-iio. See
+:doc:`Software Infrastructure </learning/sw_infrastructure/index>` for the
+full hands-on walk-through.
 
 When to Use This Workflow
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -515,110 +315,25 @@ conference demonstration.
    Raspberry Pi workflow: RPi + Arduino shields and USB devices
 
 Architecture
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
 
-**Layer 1 - Hardware:**
-Various ADI devices on Arduino shields:
-
-- AD4052/AD4080 (precision ADCs)
-- AD5592R (ADC/DAC/GPIO)
-- ADXL345 (accelerometer)
-- ADALM2000 (USB multi-function instrument)
-
-**Layer 2 - Hardware Interface:**
-Raspberry Pi 4 provides:
-
-- GPIO header (SPI, I2C buses)
-- USB 3.0 ports
-- Gigabit Ethernet
-- ARM Cortex-A72 (4 cores, 1.5 GHz)
-
-**Layer 3 - HDL/Firmware:**
-*Not applicable* - Direct SPI/I2C from processor, no FPGA or MCU firmware.
-
-**Layer 4 - Linux IIO Drivers:**
-Kuiper Linux includes pre-loaded drivers:
-
-- ``ad4052``/``ad4080`` for precision ADCs
-- ``ad5592r`` for mixed-signal device
-- ``adxl345`` for accelerometer
-- ``m2k`` context for ADALM2000
-
-Devicetree overlays configure SPI chip selects and pin assignments.
-
-**Layer 5 - libiio:**
-Multiple backend types on same system:
-
-- ``local:`` for on-board IIO devices (SPI/I2C shields)
-- ``usb:`` for ADALM2000
-- ``ip:`` for remote devices
-
-**Layer 6 - pyadi-iio:**
-Unified Python interface:
-
-.. code-block:: python
-
-   import adi
-
-   # Local SPI device
-   adc = adi.ad4080(uri="local:")
-
-   # USB device
-   m2k = adi.m2k(uri="usb:")
-
-   # Remote device
-   remote_sensor = adi.adxl345(uri="ip:sensor-node.local")
-
-   # Capture from all simultaneously
-   adc_data = adc.rx()
-   m2k_data = m2k.rx()
-   accel_data = remote_sensor.rx()
-
-**Layer 7 - Applications:**
-Full desktop Linux environment:
-
-- Scopy for ADALM2000 control
-- IIO Oscilloscope for generic devices
-- Jupyter Lab for interactive Python
-- Custom web servers for remote monitoring
+There is no FPGA or MCU firmware layer in this stack — the Pi talks
+directly to its shields over SPI / I2C, and the kernel IIO drivers (for
+``ad4080``, ``ad4052``, ``ad5592r``, ``adxl345``, the ``m2k`` context for
+the ADALM2000, etc.) are already in :doc:`Kuiper Linux </linux/kuiper/index>`,
+configured by devicetree overlays. libiio runs three backends side-by-side
+on the same host: ``local:`` for the SPI/I2C shields, ``usb:`` for the
+ADALM2000, ``ip:`` for any other networked target. pyadi-iio uses the
+same device class regardless of backend, with the URI as the only
+difference.
 
 Development Steps
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~
 
-1. **Setup Kuiper Linux:**
-
-   - Download image from :doc:`Kuiper Linux page </linux/kuiper/index>`
-   - Write to SD card with balenaEtcher or dd
-   - Boot Raspberry Pi
-
-2. **Configure Hardware:**
-
-   Mount Arduino shields on GPIO header. For custom boards, enable devicetree
-   overlay:
-
-   .. code-block:: bash
-
-      sudo dtoverlay spi0-1cs  # Enable SPI with 1 chip select
-      # Edit /boot/config.txt to make permanent
-
-3. **Verify Devices:**
-
-   .. code-block:: bash
-
-      iio_info
-      # Should show all connected IIO devices
-
-4. **Install Additional Software:**
-
-   .. code-block:: bash
-
-      pip install additional-libraries
-      sudo apt install useful-tools
-
-5. **Develop Application:**
-
-   Use Jupyter Lab, Python scripts, or MATLAB (via remote access) to control
-   devices and visualize data.
+Flash :doc:`Kuiper Linux </linux/kuiper/index>` to an SD card, mount the
+Arduino shields on the Pi GPIO header (enabling the devicetree overlay
+for any custom configurations), and verify with ``iio_info``. From there
+develop in Jupyter Lab, Python scripts, MATLAB, or Scopy.
 
 When to Use This Workflow
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -683,92 +398,24 @@ instrumentation, multi-channel data collection, or distributed sensor networks.
    Workflow 4: Host PC accessing multiple embedded targets via IIOD over Ethernet
 
 Architecture
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
 
-**Layer 1 - Hardware:**
-Multiple ADI devices on separate embedded platforms:
-
-- AD9081 MxFE on Zynq board (RF transceiver, GSPS rates)
-- AD4080 / AD4052 precision ADCs on Raspberry Pi via SPI shields
-
-**Layer 2 - Hardware Interface:**
-Each embedded target runs independently — Zynq UltraScale+ MPSoC and
-Raspberry Pi 4 both running Linux. No direct hardware link between them.
-
-**Layer 3 - HDL/Firmware:**
-HDL project loaded on Zynq (standard Workflow 1 setup). Raspberry Pi uses
-direct SPI (standard Workflow 3 setup). Nothing changes at this layer.
-
-**Layer 4 - Linux IIO Drivers:**
-Standard IIO drivers on each target (same as Workflows 1 and 3). IIOD (IIO
-Daemon) runs on each embedded target, exposing the local IIO context over TCP
-port 30431:
-
-.. code-block:: bash
-
-   # IIOD is included in Kuiper Linux and starts automatically.
-   # On a custom Linux install:
-   sudo apt install iiod
-   sudo systemctl enable --now iiod
-
-**Layer 5 - libiio:**
-The host PC uses the ``ip:`` backend to connect to each remote IIOD server.
-No local IIO devices are needed on the host:
-
-.. code-block:: bash
-
-   # Discover devices on remote target
-   iio_info -u ip:192.168.1.10
-   iio_info -u ip:192.168.1.20
-
-**Layer 6 - pyadi-iio:**
-Each remote device is accessed with its ``ip:`` URI — the API is identical
-to a local connection:
-
-.. code-block:: python
-
-   import adi
-
-   # Connect to two different remote targets simultaneously
-   sdr = adi.ad9081(uri="ip:192.168.1.10")   # Zynq board
-   adc = adi.ad4080(uri="ip:192.168.1.20")   # Raspberry Pi
-
-   # Capture data from both — same API as local access
-   sdr_data = sdr.rx()
-   adc_data = adc.rx()
-
-**Layer 7 - Applications:**
-Centralized control application on the host PC: Python scripts, MATLAB, or
-Jupyter notebooks. Scopy on the host can connect to remote targets via the
-``ip:`` URI field.
+Each embedded target is a self-contained Workflow 1 or Workflow 3
+deployment running ``iiod`` (the IIO daemon, listening on TCP port
+30431). The host PC needs no local IIO hardware: libiio's ``ip:`` backend
+connects to each remote daemon, and pyadi-iio device classes are
+identical to the local case — the URI is the only thing that changes.
+Scopy on the host can also point at remote targets via the same ``ip:``
+URI in its connection dialog.
 
 Development Steps
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~
 
-1. **Ensure targets are running IIOD:**
-
-   Kuiper Linux enables IIOD automatically. Verify it is active:
-
-   .. code-block:: bash
-
-      # On each embedded target
-      systemctl status iiod
-
-2. **Verify network connectivity from host:**
-
-   .. code-block:: bash
-
-      ping 192.168.1.10
-      iio_info -u ip:192.168.1.10   # Should list IIO devices
-
-3. **Develop application on host:**
-
-   Use pyadi-iio with ``ip:`` URIs. See the code example above.
-
-4. **Optional — use Scopy remotely:**
-
-   In Scopy's connection dialog, enter ``ip:192.168.1.10`` to connect to a
-   remote target.
+Stand up each embedded target as you would for the corresponding
+single-target workflow. ``iiod`` is included and enabled automatically in
+:doc:`Kuiper Linux </linux/kuiper/index>` (``systemctl status iiod`` to
+verify). From the host, ``iio_info -u ip:<target>`` confirms the link;
+develop with pyadi-iio's ``ip:`` URIs, or connect Scopy remotely.
 
 When to Use This Workflow
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -841,116 +488,24 @@ automation, analog circuit characterization, or educational lab experiments.
    Workflow 5: ADALM2000 as test instrument in a hardware-in-the-loop setup
 
 Architecture
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
 
-This workflow uses libm2k rather than libiio/pyadi-iio as the primary host
-library, though libm2k is itself built on libiio internally.
-
-**Layer 1 - Hardware:**
-ADALM2000 connected to the DUT via probes or custom wiring. The ADALM2000
-simultaneously generates stimulus signals and captures the DUT's response.
-
-**Layer 2 - Hardware Interface:**
-Host PC via USB 2.0. The ADALM2000 appears as a USB device; no FPGA or MCU
-is required.
-
-**Layer 3 - HDL/Firmware:**
-ADALM2000 runs its own onboard firmware (updated via Scopy or ``adalm2000-fw``).
-No user HDL or firmware is required.
-
-**Layer 4 - IIO Context:**
-The ADALM2000 exposes an IIO context over USB (``usb:`` backend). libm2k
-wraps this context and adds instrument-level abstractions (AnalogIn,
-AnalogOut, PowerSupply, LogicAnalyzer).
-
-**Layer 5 - libm2k:**
-libm2k provides the hardware abstraction layer:
-
-.. code-block:: bash
-
-   pip install libm2k
-
-**Layer 6 - libm2k Language Bindings:**
-Python is the most common choice; C++, C#, LabVIEW, and MATLAB bindings are
-also available:
-
-.. code-block:: python
-
-   import libm2k
-
-   ctx = libm2k.m2kOpen("usb:")
-   ctx.calibrate()
-
-   ain  = ctx.getAnalogIn()
-   aout = ctx.getAnalogOut()
-   ps   = ctx.getPowerSupply()
-
-   # Power the DUT
-   ps.enableChannel(0, True)
-   ps.pushChannel(0, 5.0)   # +5 V rail
-
-   # Generate a 10 kHz sine wave on channel 0
-   import math
-   N = 1024
-   sine = [math.sin(2 * math.pi * i / N) for i in range(N)]
-   aout.setSampleRate(0, 750000)
-   aout.push(0, sine)
-
-   # Capture DUT output on channel 0
-   ain.setSampleRate(1000000)
-   ain.setRange(0, libm2k.PLUS_MINUS_25)
-   samples = ain.getSamples(1024)
-
-   libm2k.contextClose(ctx)
-
-**Layer 7 - Test Framework:**
-Python's ``pytest`` or ``unittest`` are commonly used to structure pass/fail
-criteria, generate test reports, and integrate into CI pipelines.
+The ADALM2000 plugs into the host PC over USB and exposes an IIO context
+through libiio's ``usb:`` backend. **libm2k** wraps that context with
+instrument-level abstractions — ``AnalogIn``, ``AnalogOut``,
+``PowerSupply``, ``LogicAnalyzer``, ``Voltmeter`` — so test code drives
+stimulus and reads measurements through the same library. Bindings are
+available for Python, C++, C#, LabVIEW, and MATLAB; ``pytest`` /
+``unittest`` are the usual harness for assembling pass / fail criteria,
+reports, and CI integration.
 
 Development Steps
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~
 
-1. **Install libm2k:**
-
-   .. code-block:: bash
-
-      pip install libm2k
-      # Or build from source: https://github.com/analogdevicesinc/libm2k
-
-2. **Connect ADALM2000:**
-
-   Plug ADALM2000 into the host PC via USB. Wire the probes/cables to your DUT.
-
-3. **Verify connection:**
-
-   .. code-block:: bash
-
-      iio_info -u usb:           # Shows m2k IIO context
-      python -c "import libm2k; print(libm2k.m2kOpen('usb:'))"
-
-4. **Write and run a test script:**
-
-   Use the code example above as a starting point. Add pass/fail assertions
-   around the measurement results.
-
-5. **Integrate with pytest (optional):**
-
-   .. code-block:: python
-
-      # test_dut.py
-      import libm2k, pytest
-
-      @pytest.fixture(scope="session")
-      def m2k():
-          ctx = libm2k.m2kOpen("usb:")
-          ctx.calibrate()
-          yield ctx
-          libm2k.contextClose(ctx)
-
-      def test_output_voltage(m2k):
-          vm = m2k.getVoltmeter()
-          voltage = vm.getVoltage(0)
-          assert 4.9 < voltage < 5.1, f"Rail out of range: {voltage} V"
+Install libm2k (``pip install libm2k`` or build from source), wire the
+ADALM2000 to the DUT, verify with ``iio_info -u usb:``, and write a
+script that combines stimulus and measurement. Examples and a full
+quick-start are in the :doc:`libm2k documentation </software/libm2k/index>`.
 
 When to Use This Workflow
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

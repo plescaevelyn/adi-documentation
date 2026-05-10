@@ -26,45 +26,24 @@ different platforms.
    Seven-layer architecture of ADI DataX, from silicon to user applications
 
 Layer 1: Hardware
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~
 
-At the foundation are ADI's analog and mixed-signal devices:
-
-- **Data Converters:** ADCs (SAR, Sigma-Delta, Pipeline) and DACs
-- **RF Transceivers:** Wideband transceivers, direct RF sampling converters
-- **Sensors:** IMUs, temperature sensors, pressure sensors
-- **Timing & Clocking:** PLLs, clock generators, DDS
-- **Power Management:** Voltage regulators, power monitors
-- **Signal Chain:** Amplifiers, references, switches
-
-These devices communicate with the digital world through standard interfaces:
-SPI, I2C, JESD204B/C, LVDS, parallel buses, and more.
+ADI's analog and mixed-signal silicon: data converters (SAR / Sigma-Delta /
+Pipeline ADCs and DACs), RF transceivers, sensors and IMUs, PLLs and
+clocks, power management, and signal-chain components. These devices talk
+to the digital world over SPI, I2C, JESD204B/C, LVDS, or parallel buses.
+See :doc:`components` for which DataX layers apply to each device family.
 
 Layer 2: Hardware Interface
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This layer consists of the processor, FPGA, or microcontroller that interfaces
-with ADI hardware:
-
-**FPGA Platforms:**
-
-- **AMD Xilinx Zynq/ZynqMP/Versal:** ARM cores + programmable logic
-- **Intel (Altera) SoC FPGAs:** ARM cores + programmable logic
-- **Standalone FPGAs:** With external processors
-
-**Processor Platforms:**
-
-- **Embedded Linux:** Raspberry Pi, BeagleBone, custom boards
-- **Application Processors:** i.MX, Rockchip, AllWinner
-
-**Microcontrollers:**
-
-- **ARM Cortex-M:** STM32, MAX32, NXP, Nordic
-- **RISC-V:** SiFive, GigaDevice
-- **Other MCUs:** AVR, PIC, MSP430
-
-The choice of platform depends on your requirements for speed, power, cost,
-and development environment preferences.
+The processor, FPGA, or microcontroller that physically connects to the
+ADI device. Three broad classes: FPGA SoCs (Zynq / ZynqMP / Versal,
+Intel SoC FPGAs), Linux-class application processors (Raspberry Pi,
+BeagleBone, i.MX, Rockchip, ...), and bare-metal microcontrollers (STM32,
+MAX32, RISC-V, and other ARM Cortex-M parts). The choice drives which
+DataX components apply; the workflows page works through the most common
+combinations.
 
 Layer 3: HDL and Firmware
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -273,21 +252,10 @@ libiio on the Raspberry Pi:
 - Provides buffer interface for data streaming
 
 **Layer 6 - Language Bindings:**
-pyadi-iio provides the ``ad4080`` Python class:
-
-.. code-block:: python
-
-   import adi
-
-   # Connect to AD4080 via serial
-   adc = adi.ad4080(uri="serial:/dev/ttyACM0,230400,8n1")
-
-   # Configure
-   adc.sampling_frequency = 1000000  # 1 MSPS
-   adc.rx_buffer_size = 4096
-
-   # Capture data
-   data = adc.rx()  # Returns NumPy array
+pyadi-iio's ``adi.ad4080`` class wraps the IIO context — the application
+code that targets ``serial:`` here is identical to the code that would
+target ``local:`` on a Zynq board or ``ip:`` on a remote target; only
+the URI changes.
 
 **Layer 7 - Applications:**
 Scopy or a custom Python script displays and analyzes the data.
@@ -420,70 +388,25 @@ Consider the AD9081 MxFE (Mixed-Signal Front End):
 
 3. Host application uses: ``adi.ad9081(uri="serial:/dev/ttyACM0,230400,8n1")``
 
-**Identical from Host Perspective:**
-
-.. code-block:: python
-
-   # Same Python code works for both platforms
-   mxfe.rx_sample_rate = 4000000000  # 4 GSPS
-   mxfe.rx_enabled_channels = [0, 1]
-   data = mxfe.rx()
-
-   # libiio handles backend differences transparently
+**Identical from the host's perspective:** the same pyadi-iio calls
+(``mxfe.rx_sample_rate = ...``, ``mxfe.rx()``) run against either target;
+libiio hides the backend difference.
 
 Design Philosophy
 -------------------------------------------------------------------------------
 
 Key Principles
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~
 
-**1. Leverage Existing Ecosystems**
-
-Rather than creating proprietary frameworks, ADI integrates with established
-open-source ecosystems:
-
-- Linux kernel IIO subsystem
-- Python scientific computing stack (NumPy, SciPy, Matplotlib)
-- MATLAB and Simulink
-- Standard FPGA toolchains
-
-This means you can use familiar tools and integrate with existing workflows.
-
-**2. Standard Interfaces**
-
-All ADI device drivers expose standard interfaces:
-
-- IIO sysfs attributes in Linux
-- Standard IIO buffer interface
-- JESD204 for high-speed serial links
-- TinyIIO protocol for microcontrollers
-
-You can write code once and reuse it across different devices.
-
-**3. Portability**
-
-The same high-level code works across platforms:
-
-- libiio abstracts backend differences (local, network, USB, serial)
-- pyadi-iio code runs on Linux, Windows, macOS
-- no-OS firmware compiles for STM32, MAX32, RISC-V, etc.
-
-**4. Modularity**
-
-Each layer has well-defined interfaces:
-
-- Swap FPGA platforms without changing HDL IP cores
-- Replace the processor without changing application code
-- Mix and match components as needed
-
-**5. Open Source**
-
-Most DataX components are open source:
-
-- HDL reference designs on `GitHub <https://github.com/analogdevicesinc/hdl>`_
-- Linux kernel drivers in mainline
-- libiio, pyadi-iio, no-OS on GitHub
-- Active community contributions
+DataX layers integrate with existing ecosystems rather than reinventing
+them — the Linux IIO subsystem, the Python scientific stack, MATLAB,
+and the standard FPGA toolchains all sit at the boundary. The interfaces
+between layers (IIO sysfs attributes, IIO buffers, JESD204 framing, the
+TinyIIO protocol on the wire) are stable enough that the same higher-
+level code runs across local, network, USB, and serial backends and
+across Linux, Windows, and macOS hosts. Most of the stack —
+HDL, Linux drivers, libiio, pyadi-iio, no-OS — is open source and
+maintained on GitHub.
 
 Why the IIO Framework?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -553,53 +476,25 @@ Choosing the Right Platform
 See :doc:`workflows` for detailed examples of each platform type.
 
 Migration Paths
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
 
-The layered architecture enables straightforward migration between platforms:
-
-**Prototype to Production:**
-
-1. Start with Raspberry Pi + Arduino shield for proof of concept
-2. Test algorithms in Python with pyadi-iio
-3. Move to microcontroller with no-OS for cost reduction
-4. Or move to FPGA for performance scaling
-
-**The code at layers 5-7 remains largely unchanged** - just switch the libiio
-backend URI.
-
-**Example Migration:**
-
-.. code-block:: python
-
-   # Prototype on Raspberry Pi (local driver)
-   adc = adi.ad4080(uri="local:")
-
-   # Test with remote STM32 (serial backend)
-   adc = adi.ad4080(uri="serial:/dev/ttyACM0,230400,8n1")
-
-   # Deploy with network-connected Zynq (network backend)
-   adc = adi.ad4080(uri="ip:192.168.1.100")
-
-The data capture code remains identical.
+The layered architecture is what makes platform migration cheap. Prototype
+on a Raspberry Pi with pyadi-iio, validate the algorithm in Python, then
+move to no-OS on an MCU for cost / power reduction or to a Zynq board for
+performance scaling — at layers 5-7 the code is unchanged; only the
+``uri`` passed to ``adi.<device>(uri=...)`` differs (``local:`` vs.
+``serial:`` vs. ``ip:``). The :doc:`workflows` page walks through each
+combination.
 
 See Also
 -------------------------------------------------------------------------------
 
-**Next Steps:**
-
-- :doc:`components` - Detailed information about each DataX component
-- :doc:`workflows` - Concrete examples showing components working together
-- :doc:`versioning-support` - Version compatibility and support
-
-**Hands-On Learning:**
-
-- :doc:`Software Infrastructure Tutorial </learning/sw_infrastructure/index>` - Complete AD4080 example
-- :doc:`FPGA Integration Journey </learning/workshop_a_precision_converter_fpga_integration_journey/index>` - HDL deep dive
-- :doc:`Converter Connectivity Tutorial </learning/converter_connectivity_tutorial/index>` - IIO framework basics
-
-**External References:**
-
-- `HDL User Guide <https://analogdevicesinc.github.io/hdl/user_guide/index.html>`_
-- `Linux Kernel IIO Documentation <https://www.kernel.org/doc/html/latest/driver-api/iio/index.html>`_
-- `libiio Documentation <https://analogdevicesinc.github.io/libiio/v0.26/index.html>`_
-- `no-OS Documentation <https://analogdevicesinc.github.io/no-OS/index.html>`_
+- :doc:`components` — per-component documentation
+- :doc:`workflows` — concrete end-to-end scenarios
+- :doc:`versioning-support` — version compatibility and release tracks
+- :doc:`Software Infrastructure tutorial </learning/sw_infrastructure/index>` —
+  complete AD4080 walk-through
+- :doc:`FPGA Integration Journey </learning/workshop_a_precision_converter_fpga_integration_journey/index>` —
+  HDL deep dive
+- :doc:`Converter Connectivity tutorial </learning/converter_connectivity_tutorial/index>` —
+  IIO framework basics
