@@ -86,6 +86,65 @@ Why each piece matters:
   Pick `max-width` based on the diagram width: 680 px for compact stacks,
   880 px for wider workflows.
 
+## Setting the rendered width
+
+The `.. svg::` directive does **not** accept a `:width:` option (its
+`option_spec` only declares `align`). Width has to live with the SVG
+itself or be applied via CSS. Three ways, in order of preference:
+
+**1. On the SVG root (preferred, per-diagram).** Edit the SVG's own
+`width` and `style="max-width: ..."`:
+
+```xml
+<svg ... viewBox="0 0 800 540"
+        width="100%"
+        style="max-width: 680px; height: auto;">
+```
+
+The pair (`width="100%"` + a `max-width` cap + `viewBox` for aspect
+ratio) gives a diagram that fills its column up to the cap and scales
+down on narrow viewports. Use `max-width: <px>` for a hard cap, or
+`max-width: 90%` if you want the diagram to always leave breathing room
+inside the content column regardless of how wide the column gets. Keep
+the size with the file so the diagram travels predictably when reused.
+
+**2. Per-class CSS rule** (when you want to override without editing
+every SVG). Tag the SVG with a custom class on its root:
+
+```xml
+<svg ... class="adi-figure no-background tight">
+```
+
+Then in `docs/_static/custom.css`:
+
+```css
+.svg svg.adi-figure.tight { max-width: 520px; }
+```
+
+Useful when several diagrams should share an overridden cap, or when a
+diagram needs different sizes between pages but you don't want to fork
+the SVG.
+
+**3. Wrap with a sized container.** The `.. svg::` directive emits the
+SVG inside a `<div class="svg">`. Wrap the directive in a Sphinx
+container to constrain just one placement without touching the SVG:
+
+```rst
+.. container:: narrow-figure
+
+   .. svg:: my-diagram.svg
+      :align: center
+
+      Caption text.
+```
+
+```css
+.narrow-figure .svg svg { max-width: 520px; }
+```
+
+Reach for option 1 first. Options 2 and 3 are escape hatches when the
+same SVG needs to render at different sizes on different pages.
+
 ## Available palette and helper classes
 
 Use CSS variables for every fill, stroke, and text colour — never
