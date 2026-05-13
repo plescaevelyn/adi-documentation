@@ -266,14 +266,20 @@ page CSS, and would re-introduce the dark-mode white-background bug.
 
 The `.. svg::` directive `open()`s the SVG file directly and does **not**
 register it as a Sphinx dependency. That means editing only the `.svg`
-file does not trigger an `adoc serve` rebuild. To force a rebuild after
-SVG-only edits, the caller must either:
+file does not trigger an `adoc serve` rebuild. Three ways to force the
+rebuild after SVG-only edits, in order of preference:
 
-- `touch` the including `.rst` file (preferred during iteration), or
-- Run `(cd docs && make clean && make html)` for a from-scratch build.
+- **Run `make svg-watch` in a second terminal** alongside `adoc serve`.
+  It polls every 0.5 s and `touch`es the including `.rst` whenever any
+  `.svg` under `docs/` changes. Set-and-forget for the whole editing
+  session; no per-edit action needed. (Source:
+  `docs/svg-watch.py`.)
+- `touch` the including `.rst` file by hand. Fine for a one-off edit.
+- `(cd docs && make clean && make html)` for a from-scratch build —
+  use when CSS or env-cache state has also drifted.
 
-Mention this to the caller in the final hand-off so they aren't confused
-when the live server seems to be ignoring their changes.
+Mention `make svg-watch` to the caller in the final hand-off so they
+aren't confused when the live server seems to be ignoring their changes.
 
 ## Filename conventions
 
