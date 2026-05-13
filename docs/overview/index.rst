@@ -34,7 +34,7 @@ physical signal chain you connect it to:
 .. figure:: datax-stack.png
    :align: center
    :alt: ADI DataX layered software architecture
-   :width: 720px
+   :width: 90%
 
    ADI DataX layers the software stack between your signal chain and your
    application.

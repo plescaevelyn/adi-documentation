@@ -97,43 +97,41 @@ The following table shows tested and recommended version combinations:
 
 .. list-table:: Recommended Version Combinations
    :header-rows: 1
-   :widths: 12 15 10 12 15 12 24
+   :widths: 14 15 10 12 15 12 12 24
 
-   * - HDL
+   * - Supported Tools
+     - HDL
      - Linux Kernel
      - libiio
      - pyadi-iio
      - Kuiper Linux
      - no-OS
      - Notes
-   * - **2024_r2**
-     - 6.1.75-adi
+   * - Vivado 2025.1
+     - main
+     - main
+     - libiio-v0
+     - main
+     - main
+     - main
+     - **Bleeding Edge** - Not fully tested, may have issues
+   * - Vivado 2023.2
+     - hdl_2023_r2
+     - 6.1.70
      - v0.26
-     - v0.0.17
-     - 2024_r1
-     - 2024_r2
-     - **Latest Stable** - Recommended for new projects
-   * - **2024_r1**
-     - 6.1.54-adi
-     - v0.25
-     - v0.0.16
+     - v0.0.19
      - 2023_r2
-     - 2024_r1
-     - **LTS** - Production use, well-tested
-   * - **2023_r2**
+     - 2023_r2
+     - **Latest Stable** - Recommended for new projects
+   * - Vivado 2022.2
+     - 2022_r2
      - 5.15.x-adi
      - v0.24
      - v0.0.15
-     - 2023_r2
-     - 2023_r2
-     - Previous LTS - Mature, conservative
-   * - **main**
-     - 6.6.x-adi
-     - main
-     - main
-     - N/A
-     - main
-     - **Development** - Bleeding edge, may have issues
+     - 2022_r2
+     - 2022_r2
+     - Previous Release - Mature, conservative
+
 
 Compatibility Notes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -166,7 +164,7 @@ HDL and Linux kernel versions must match for:
 - AXI IP core addresses
 - Driver compatibility with HDL features
 
-Use the same release tag (e.g., both ``2024_r1``) to ensure compatibility.
+Use the same release tag (e.g., ``2023_r2`` and ``hdl_2023_r2``) to ensure compatibility.
 
 Checking Installed Versions
 -------------------------------------------------------------------------------
@@ -198,8 +196,8 @@ notifications:
 
 Critical fixes are backported to the current release branch only; older
 release branches do not receive new features or updates. When asking for
-support, name the release you're on (e.g. ``Kuiper Linux 2024_r1`` /
-``HDL 2024_r2``) so a maintainer can match what you're seeing.
+support, name the release you're on (e.g. ``Kuiper Linux 2023_r2`` /
+``HDL hdl_2023_r2``) so a maintainer can match what you're seeing.
 
 Before upgrading a production system, read the relevant release notes,
 upgrade HDL and the Linux kernel together when their tags match
