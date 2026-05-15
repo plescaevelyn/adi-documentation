@@ -11,13 +11,86 @@ Overview
 
 The common templates provide standardized documentation sections for:
 
+- **Necessary Files** (``necessary_files.rst.jinja``) - Boot file
+  requirements for each FPGA platform
 - **IIO Oscilloscope** (``using-iio-osc.rst.jinja``) - ADI IIO
   Oscilloscope application documentation
 - **Scopy** (``using-scopy.rst.jinja``) - Scopy software toolbox
   documentation
 
 These templates are designed to be included in project-specific
-quickstart guides to maintain consistency across documentation.
+quickstart guides and user guides to maintain consistency across
+documentation.
+
+----
+
+necessary_files.rst.jinja
+--------------------------------------------------------------------------------
+
+Description
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This template generates the "Necessary files" section that lists the boot
+files required for a given FPGA platform. It handles differences between
+AMD and Intel families, Kuiper vs. non-Kuiper projects, and
+platform-specific build instructions.
+
+Template Variables
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 10 70
+
+   * - Variable
+     - Type
+     - Description
+   * - ``fpga_family``
+     - string
+     - Target FPGA family. Determines the boot file list, notes, and
+       build instructions. Supported values:
+
+       - **AMD**: ``zynq``, ``zynqmp``, ``versal``, ``microblaze``
+       - **Intel**: ``a10soc``, ``cyclone5``, ``agilex7soc``,
+         ``stratix10``
+   * - ``hdl_project_doc``
+     - string
+     - HDL project documentation path for Sphinx cross-references
+       (e.g., ``adrv9009``, ``ad9084``).
+   * - ``in_kuiper``
+     - boolean
+     - Whether the project ships pre-built boot files on the Kuiper
+       Linux SD card image. Defaults to ``true``. Set to ``false``
+       for projects that are not part of the release. Note that
+       ``agilex7soc`` and ``stratix10`` are never on Kuiper
+       regardless of this flag.
+   * - ``carrier``
+     - string
+     - (Optional) Carrier board identifier. Currently used to add
+       the System Controller SD card note for ``vck190`` and
+       ``vmk180`` carriers.
+
+Usage Example
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: rst
+
+   .. include-template:: necessary_files.rst.jinja
+
+      fpga_family: agilex7soc
+      hdl_project_doc: ad9084
+
+   .. include-template:: necessary_files.rst.jinja
+
+      fpga_family: versal
+      hdl_project_doc: adrv9009
+      carrier: vck190
+
+   .. include-template:: necessary_files.rst.jinja
+
+      fpga_family: zynq
+      hdl_project_doc: adrv9009
+      in_kuiper: false
 
 ----
 
