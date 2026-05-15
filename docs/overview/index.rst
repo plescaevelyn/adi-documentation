@@ -108,7 +108,7 @@ In This Section
 
    architecture
    components
-   layer_interactions
+   layer-interactions
    workflows
    versioning-support
 
