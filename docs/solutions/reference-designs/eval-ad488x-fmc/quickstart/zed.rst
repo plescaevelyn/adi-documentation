@@ -763,7 +763,7 @@ IIO Oscilloscope
 .. important::
 
    Make sure to download/update to the latest version of
-   :git-iio-oscilloscope:`IIO Oscilloscope <releases>`.
+   :git-iio-oscilloscope:`IIO Oscilloscope <releases+>`.
 
 #. Once done with the installation or an update of the latest IIO
    Oscilloscope, open the application. The user needs to supply a

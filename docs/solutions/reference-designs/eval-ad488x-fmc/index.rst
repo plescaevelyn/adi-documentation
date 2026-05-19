@@ -104,11 +104,9 @@ Table of contents
 
      #. For Linux software:
 
-        #. `AD488X IIO ADC Linux Driver
-           <https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/adc/ad4080.c>`__
+        #. :git-linux:`AD488X IIO ADC Linux Driver <drivers/iio/adc/ad4080.c>`
 
-     #. `HDL reference design
-        <https://analogdevicesinc.github.io/hdl/projects/ad4880_fmc_evb/index.html>`__
+     #. :external+hdl:ref:`ad4880_fmc_evb`
 
 #. :ref:`Help and Support <help-and-support>`
 
