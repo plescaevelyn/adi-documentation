@@ -97,8 +97,12 @@
           <ul>
 <li><a class="reference internal" href="#">Software Examples</a><ul>
 <li><a class="reference internal" href="#overview">Overview</a></li>
-<li><a class="reference internal" href="#prerequisites">Prerequisites</a><ul>
-<li><a class="reference internal" href="#code-fusion-studio-installation">Code Fusion Studio Installation</a></li>
+<li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li><a class="reference internal" href="#updating-the-firmware">Updating the Firmware</a><ul>
+<li><a class="reference internal" href="#programming-the-ad-ethernetapldevice-sl">Programming the AD-EthernetAPLDevice-SL</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#code-fusion-studio-installation">Code Fusion Studio Installation</a><ul>
 <li><a class="reference internal" href="#security-considerations">Security Considerations</a></li>
 </ul>
 </li>
@@ -1126,14 +1130,57 @@ compatibility and ease of use.</p>
 </section>
 <section id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h2>
+</section>
+<section id="updating-the-firmware">
+<h2>Updating the Firmware<a class="headerlink" href="#updating-the-firmware" title="Link to this heading"></a></h2>
+<p>The on-board MAX32690 microcontroller’s firmware must be updated to ensure compatibility
+with the latest software examples. To update the firmware, use the MAX32625PICO programmer
+before programming the AD-EthernetAPLDevice-SL board itself.</p>
+<p>Requirements:</p>
+<ul class="simple">
+<li><p>MAX32625PICO programmer</p></li>
+<li><p>Micro-USB cable</p></li>
+<li><p>Host PC with USB port</p></li>
+<li><p>10-pin ribbon cable (for connecting the MAX32625PICO to the AD-EthernetAPLDevice-SL)</p></li>
+</ul>
+<p>First, flash a new bootloader onto the MAX32625PICO:</p>
+<ol class="arabic simple">
+<li><p>Download the firmware image:
+<a class="icon link reference external" href="https://github.com/MaximIntegrated/max32625pico-firmware-images/raw/master/bin/max32625_max32650fthr_if_crc_swd_v1.0.6.bin" target="_blank">MAX32625PICO firmware</a></p></li>
+<li><p>Enter MAINTENANCE mode on the MAX32625PICO:</p>
+<ul class="simple">
+<li><p>Ensure the MAX32625PICO is disconnected from both the PC and the AD-EthernetAPLDevice-SL.</p></li>
+<li><p>Connect only the micro-USB cable to the MAX32625PICO.</p></li>
+<li><p>Press and hold the button on the MAX32625PICO.</p></li>
+<li><p>While holding the button, connect the USB cable to the PC.</p></li>
+<li><p>Release the button once the MAINTENANCE drive appears.</p></li>
+</ul>
+</li>
+<li><p>Copy the downloaded firmware image to the MAINTENANCE drive.</p></li>
+<li><p>Wait until the MAINTENANCE drive disappears and is replaced by a drive named DAPLINK.
+The bootloader update is complete.</p></li>
+</ol>
+<section id="programming-the-ad-ethernetapldevice-sl">
+<h3>Programming the AD-EthernetAPLDevice-SL<a class="headerlink" href="#programming-the-ad-ethernetapldevice-sl" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>Connect the MAX32625PICO to the PC using the micro-USB cable.</p></li>
+<li><p>Connect the MAX32625PICO to the AD-EthernetAPLDevice-SL board using the 10-pin ribbon cable.</p></li>
+<li><p>Power on the AD-EthernetAPLDevice-SL.</p></li>
+<li><p>Verify that a DAPLINK drive appears on the PC.</p></li>
+<li><p>Copy the new firmware image to the DAPLINK drive and wait for the drive to remount.</p></li>
+<li><p>Open the DAPLINK drive and check for a FAIL.TXT file. If FAIL.TXT is present, repeat the copy step.
+If not, safely disconnect the MAX32625PICO from the AD-EthernetAPLDevice-SL; the firmware update is complete.</p></li>
+</ol>
+</section>
+</section>
+<hr class="docutils" />
 <section id="code-fusion-studio-installation">
-<h3>Code Fusion Studio Installation<a class="headerlink" href="#code-fusion-studio-installation" title="Link to this heading"></a></h3>
+<h2>Code Fusion Studio Installation<a class="headerlink" href="#code-fusion-studio-installation" title="Link to this heading"></a></h2>
 <p>Before working with any examples, you’ll need to install Code Fusion Studio:</p>
 <ul class="simple">
 <li><p><strong>Download Instructions</strong>: <a class="icon adi reference external" href="https://www.analog.com/en/resources/evaluation-hardware-and-software/embedded-development-software/codefusion-studio.html" target="_blank">Code Fusion Studio Download</a></p></li>
 <li><p><strong>User Guide</strong>: <a class="icon link reference external" href="https://developer.analog.com/docs/codefusion-studio/2.0.0/user-guide/" target="_blank">CFS Documentation</a></p></li>
 </ul>
-</section>
 <section id="security-considerations">
 <h3>Security Considerations<a class="headerlink" href="#security-considerations" title="Link to this heading"></a></h3>
 <p>While the examples don’t require TESA access, the board is fully compatible
@@ -1143,6 +1190,7 @@ with additional security mechanisms. For enhanced security features:</p>
 </ul>
 </section>
 </section>
+<hr class="docutils" />
 <section id="msdk-examples">
 <h2>MSDK Examples<a class="headerlink" href="#msdk-examples" title="Link to this heading"></a></h2>
 <p>The MSDK examples demonstrate peripheral usage through the Maxim HAL
