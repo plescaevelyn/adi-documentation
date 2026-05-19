@@ -1290,81 +1290,125 @@ to load via the debugger.</p>
 <p>Microblaze embeds the device tree into the simpleImage, but if you need to
 generate a batch of images with the same kernel, you can create an “empty”
 devicetree, build the simpleImage:</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>/path/to/linux$
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">printf</span><span class="w"> </span><span class="s2">&quot;/dts-v1/;\n\n/ { };\n&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>arch/microblaze/boot/dts/generic.dts
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>/path/to/linux$
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>simpleImage.generic
 </pre></div>
 </div>
-<div class="clear-left"></div></div></div><p>And patch the device tree into the strip simpleImage:</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="clear-left"></div></div></div><p>Locate the embedded empty DTB slot using a helper script:</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-number">Listing 1 </span><span class="caption-text">find_empty_dtb.py</span><a class="headerlink" href="#id1" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">struct</span><span class="o">,</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="c1"># &#39;Empty&#39; DTB struct block: FDT_BEGIN_NODE, &#39;&#39;, FDT_END_NODE, FDT_END</span>
+<span class="n">EMPTY_STRUCT</span> <span class="o">=</span> <span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="s1">&#39;00000001000000000000000200000009&#39;</span><span class="p">)</span>
+<span class="n">DTB_MAGIC</span> <span class="o">=</span> <span class="mh">0xd00dfeed</span>
+<span class="n">OFF_DT_STRUCT</span> <span class="o">=</span> <span class="mi">56</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+<span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">EMPTY_STRUCT</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">pos</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">break</span>
+    <span class="n">dtb_start</span> <span class="o">=</span> <span class="n">pos</span> <span class="o">-</span> <span class="n">OFF_DT_STRUCT</span>
+    <span class="k">if</span> <span class="n">dtb_start</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">pos</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">continue</span>
+    <span class="n">magic</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;&gt;I&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">dtb_start</span><span class="p">:</span><span class="n">dtb_start</span><span class="o">+</span><span class="mi">4</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">magic</span> <span class="o">!=</span> <span class="n">DTB_MAGIC</span><span class="p">:</span>
+        <span class="n">pos</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">continue</span>
+    <span class="k">if</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;&gt;I&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">dtb_start</span><span class="o">+</span><span class="mi">8</span><span class="p">:</span><span class="n">dtb_start</span><span class="o">+</span><span class="mi">12</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">OFF_DT_STRUCT</span><span class="p">:</span>
+        <span class="n">pos</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">continue</span>
+    <span class="n">dtb_size</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;&gt;I&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">dtb_start</span><span class="o">+</span><span class="mi">4</span><span class="p">:</span><span class="n">dtb_start</span><span class="o">+</span><span class="mi">8</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">dtb_end</span> <span class="o">=</span> <span class="n">dtb_start</span> <span class="o">+</span> <span class="n">dtb_size</span>
+    <span class="n">boundary</span> <span class="o">=</span> <span class="n">dtb_end</span>
+    <span class="k">while</span> <span class="n">boundary</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="n">boundary</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">boundary</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dtb_start</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">dtb_size</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">boundary</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">boundary</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">dtb_start</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Then build the target DTB, zero the slot, and write the new DTB in place:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">image</span><span class="o">=</span>arch/microblaze/boot/simpleImage.generic.strip
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">dtb</span><span class="o">=</span>vcu118_quad_ad9081_204c_txmode_23_rxmode_25_onchip_pll_revc_nz1.dtb
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set dtb address and length</span>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">read</span><span class="w"> </span>dtb_start<span class="w"> </span>dtb_size<span class="w"> </span>dtb_boundary<span class="w"> </span>dtb_available<span class="w"> </span>&lt;<span class="w"> </span>&lt;<span class="o">(</span>python3<span class="w"> </span>find_empty_dtb.py<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$image</span><span class="s2">&quot;</span><span class="o">)</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">dtb_start</span><span class="o">=</span><span class="k">$((</span><span class="m">16#84e5c8</span><span class="k">))</span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">dtb_end</span><span class="o">=</span><span class="k">$((</span><span class="m">16#85f000</span><span class="k">))</span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">dtb_length</span><span class="o">=</span><span class="k">$((</span><span class="nv">dtb_end</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">dtb_start</span><span class="k">))</span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build</span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">$dtb</span>
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Clear any previous devicetree</span>
+<div class="clear-left"></div></div><div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Copy generic image and patch the copy</span>
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">dtb_length</span><span class="o">=</span><span class="k">$((</span><span class="nv">dtb_boundary</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">dtb_start</span><span class="k">))</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">image_out</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>dirname<span class="w"> </span><span class="nv">$image</span><span class="k">)</span><span class="s2">/simpleImage.</span><span class="si">${</span><span class="nv">dtb</span><span class="p">%.dtb</span><span class="si">}</span><span class="s2">.strip&quot;</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$image</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$image_out</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dd<span class="w"> </span><span class="k">if</span><span class="o">=</span>/dev/zero<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span><span class="nv">of</span><span class="o">=</span><span class="s2">&quot;arch/microblaze/boot/simpleImage.generic.strip&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">    </span><span class="nv">bs</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">seek</span><span class="o">=</span><span class="nv">$dtb_start</span><span class="w"> </span><span class="nv">conv</span><span class="o">=</span>notrunc<span class="w"> </span><span class="nv">count</span><span class="o">=</span><span class="nv">$dtb_length</span>
+<span class="w">   </span><span class="nv">of</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$image_out</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">   </span><span class="nv">bs</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">seek</span><span class="o">=</span><span class="nv">$dtb_start</span><span class="w"> </span><span class="nv">conv</span><span class="o">=</span>notrunc<span class="w"> </span><span class="nv">count</span><span class="o">=</span><span class="nv">$dtb_length</span>
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span> 68152 bytes (68 kB, 67 KiB) copied, 0.0198292 s, 3.4 MB/s
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>68152 bytes (68 kB, 67 KiB) copied, 0.0198292 s, 3.4 MB/s
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Write new</span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dd<span class="w"> </span><span class="k">if</span><span class="o">=</span><span class="s2">&quot;arch/microblaze/boot/dts/</span><span class="nv">$dtb</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">    </span><span class="nv">of</span><span class="o">=</span><span class="s2">&quot;arch/microblaze/boot/simpleImage.generic.strip&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="nv">of</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$image_out</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">    </span><span class="nv">bs</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">seek</span><span class="o">=</span><span class="nv">$dtb_start</span><span class="w"> </span><span class="nv">conv</span><span class="o">=</span>notrunc
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span> 31787 bytes (32 kB, 31 KiB) copied, 0.0111866 s, 2.8 MB/s
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>31787 bytes (32 kB, 31 KiB) copied, 0.0111866 s, 2.8 MB/s
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div></section>
@@ -1382,6 +1426,25 @@ Learn how to <a class="icon link reference external" href="https://analogdevices
 <strong>*.sdk/system_top.xsa</strong>, use the <strong>*.runs/impl_1/system_top.bit</strong>.</p>
 </div>
 <p>With <code class="docutils literal notranslate"><span class="pre">xsdb</span></code>/<code class="docutils literal notranslate"><span class="pre">xsct</span></code>:</p>
+<div class="tab-set docutils"><input checked="checked" id="tab-item-c81954d847dc1fd4d8a5529bcf1c50cf1601286a-0" name="tab-set-c81954d847dc1fd4d8a5529bcf1c50cf1601286a" type="radio"></input><label class="tab-label" for="tab-item-c81954d847dc1fd4d8a5529bcf1c50cf1601286a-0">Linux</label><div class="tab-content docutils"><div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>/path/to/Xilinx/2025.1/Vivado/settings64.sh
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>xsdb
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></div><input id="tab-item-c81954d847dc1fd4d8a5529bcf1c50cf1601286a-1" name="tab-set-c81954d847dc1fd4d8a5529bcf1c50cf1601286a" type="radio"></input><label class="tab-label" for="tab-item-c81954d847dc1fd4d8a5529bcf1c50cf1601286a-1">Windows</label><div class="tab-content docutils"><div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C</span><span class="p">:</span>\<span class="o">&gt;</span>
+</pre></div>
+</div>
+<div class="highlight-ps1 notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="p">:/</span><span class="n">Xilinx</span><span class="p">/</span><span class="n">Vivado_Lab</span><span class="p">/</span><span class="n">2025</span><span class="p">.</span><span class="n">1</span><span class="p">/</span><span class="n">bin</span><span class="p">/</span><span class="n">xsdb</span><span class="p">.</span><span class="n">bat</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></div></div><p>Then use the commands to program the FPGA:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xsdb</span><span class="o">&gt;</span> <span class="n">connect</span>
 <span class="n">xsdb</span><span class="o">&gt;</span> <span class="n">fpga</span> <span class="o">-</span><span class="n">f</span> <span class="n">system_top</span><span class="o">.</span><span class="n">bit</span>
 <span class="n">xsdb</span><span class="o">&gt;</span> <span class="n">targets</span>
