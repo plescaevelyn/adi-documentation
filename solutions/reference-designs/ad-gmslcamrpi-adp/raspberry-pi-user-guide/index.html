@@ -1424,24 +1424,64 @@ MAX96724 deserializer EV kit.</p>
 </section>
 <section id="running-the-evaluation-application">
 <h2>Running the Evaluation Application<a class="headerlink" href="#running-the-evaluation-application" title="Link to this heading"></a></h2>
-<p>Once Linux boots, you will see the Linux desktop on the HDMI monitor. Double-click
-the <strong>Home</strong> icon and navigate to the <strong>Workspace</strong> folder. Right-click inside this
-folder and select the <strong>Open Terminal Here</strong> option. Inside the terminal, type the
-following command and hit Enter:</p>
+<p>Once Linux boots, you will see the Linux desktop on the HDMI monitor.</p>
+<p><strong>1. Configuring Cameras</strong></p>
+<p>You can either run the configuration command directly (option a) or create a
+reusable script (option b).</p>
+<p><strong>a) Running the configuration command directly</strong></p>
+<p>Double-click the <strong>Home</strong> icon and navigate to the
+<strong>Workspace/pyv4l2/utils/cam</strong> folder. Right-click inside this folder and
+select the <strong>Open Terminal Here</strong> option. Inside the terminal, type the
+following command and hit Enter. Make sure to change the command parameters
+according to your setup:</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">RPI_MODEL</span></code> (specifies the model of the Raspberry Pi):</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">rpi4</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rpi5</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">CAM_MODEL</span></code> (specifies the model of the camera):</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">imx219</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ov5640</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">CAM_LIST</span></code> (specifies the list of cameras in the setup):</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">cam0</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cam0,cam1</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cam0,cam1,cam2</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cam0,cam1,cam2,cam3</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cam1,cam2</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cam0,cam3</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./video_cfg.sh
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./cam.py<span class="w"> </span>-p<span class="w"> </span>-c<span class="w"> </span>&lt;RPI_MODEL&gt;-gmsl-&lt;CAM_MODEL&gt;:&lt;CAM_LIST&gt;
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><figure class="align-default" id="id25">
-<img alt="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-gmslcamrpi-adp/raspberry-pi-user-guide/rpi_video_cfg.png" src="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-gmslcamrpi-adp/raspberry-pi-user-guide/rpi_video_cfg.png" />
+<img alt="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-gmslcamrpi-adp/raspberry-pi-user-guide/rpi_cam_config.png" src="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-gmslcamrpi-adp/raspberry-pi-user-guide/rpi_cam_config.png" />
 <figcaption>
-<p><span class="caption-number">Figure 24 </span><span class="caption-text">Raspberry Pi Video Configuration Script</span><a class="headerlink" href="#id25" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 24 </span><span class="caption-text">Camera Configuration Command</span><a class="headerlink" href="#id25" title="Link to this image"></a></p>
 </figcaption>
 </figure>
-<p>This script configures the Linux V4L2 (Video4Linux2) media pipeline for a GMSL
-multi-camera system on a Raspberry Pi:</p>
+<p><strong>b) Creating a video configuration script</strong></p>
+<p>Alternatively, you can create a reusable script. Double-click the <strong>Home</strong> icon
+and navigate to the <strong>Workspace</strong> folder. Create a new file named
+<code class="docutils literal notranslate"><span class="pre">video_cfg.sh</span></code> and copy-paste the following content into the file:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
 
 <span class="nv">CAM_LIST</span><span class="o">=</span><span class="s2">&quot;cam0&quot;</span>
@@ -1463,6 +1503,9 @@ multi-camera system on a Raspberry Pi:</p>
 <span class="nv">$PYV4L2_PATH</span>/utils/cam.py<span class="w"> </span>-c<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$RPI_MODEL</span><span class="s2">&quot;</span>-gmsl-<span class="s2">&quot;</span><span class="nv">$CAM_MODEL</span><span class="s2">&quot;</span>:<span class="nv">$CAM_LIST</span>
 </pre></div>
 </div>
+<p>This script configures the Linux V4L2 (Video4Linux2) media pipeline for a GMSL
+multi-camera system on a Raspberry Pi. It detects the Raspberry Pi model, sets
+the camera configuration, and runs a Python script to apply the settings.</p>
 <p>The following variables can be changed (if needed) inside the script:</p>
 <blockquote>
 <div><ul class="simple">
@@ -1489,22 +1532,46 @@ multi-camera system on a Raspberry Pi:</p>
 </ul>
 </div></blockquote>
 <p>The model of the Raspberry Pi does not need to be explicitly specified because the script detects it automatically.</p>
-<p>After the script is done running, click on <strong>Applications</strong> (found in the top
-left corner), which will open a dropdown list of items. From this list, select
-<strong>Multimedia</strong> and then <strong>Qt V4L2 test Utility</strong> in order to start the video
-capture application. After the application opens, press the green play button
-to start capturing video.</p>
-<figure class="align-default" id="id26">
-<img alt="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-gmslcamrpi-adp/raspberry-pi-user-guide/rpi_qv4l2.png" src="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-gmslcamrpi-adp/raspberry-pi-user-guide/rpi_qv4l2.png" />
+<p>Make sure to change the permissions of the file to make it executable. To do
+this, right-click inside this folder and select the <strong>Open Terminal Here</strong>
+option. Inside the terminal, type the following command and hit Enter:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>chmod<span class="w"> </span>+x<span class="w"> </span>./video_cfg.sh
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>To run the script, type the following command in the terminal and hit Enter:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./video_cfg.sh
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><figure class="align-default" id="id26">
+<img alt="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-gmslcamrpi-adp/raspberry-pi-user-guide/rpi_video_cfg.png" src="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-gmslcamrpi-adp/raspberry-pi-user-guide/rpi_video_cfg.png" />
 <figcaption>
-<p><span class="caption-number">Figure 25 </span><span class="caption-text">Video Capture Utility</span><a class="headerlink" href="#id26" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 25 </span><span class="caption-text">Raspberry Pi Video Configuration Script</span><a class="headerlink" href="#id26" title="Link to this image"></a></p>
 </figcaption>
 </figure>
-<p>The capture window will look as shown below.</p>
+<p><strong>2. Starting Video Capture</strong></p>
+<p>After the camera configuration is done, click on <strong>Applications</strong> (found in the
+top left corner), which will open a dropdown list of items. From this list,
+select <strong>Multimedia</strong> and then <strong>Qt V4L2 test Utility</strong> in order to start the
+video capture application. After the application opens, press the green play
+button to start capturing video.</p>
 <figure class="align-default" id="id27">
 <img alt="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-gmslcamrpi-adp/raspberry-pi-user-guide/rpi_running_qv4l2.png" src="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-gmslcamrpi-adp/raspberry-pi-user-guide/rpi_running_qv4l2.png" />
 <figcaption>
-<p><span class="caption-number">Figure 26 </span><span class="caption-text">Sample Video Capture</span><a class="headerlink" href="#id27" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 26 </span><span class="caption-text">Video Capture Utility</span><a class="headerlink" href="#id27" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p><strong>3. Viewing the Capture</strong></p>
+<p>The capture window will look as shown below.</p>
+<figure class="align-default" id="id28">
+<img alt="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-gmslcamrpi-adp/raspberry-pi-user-guide/rpi_qv4l2.png" src="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-gmslcamrpi-adp/raspberry-pi-user-guide/rpi_qv4l2.png" />
+<figcaption>
+<p><span class="caption-number">Figure 27 </span><span class="caption-text">Sample Video Capture</span><a class="headerlink" href="#id28" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <div class="admonition note">
