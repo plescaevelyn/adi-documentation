@@ -31,10 +31,8 @@ summarises what DataX covers. The three blue layers in the middle are what
 DataX provides; everything above and below them is your application and the
 physical signal chain you connect it to:
 
-.. figure:: datax-stack.png
+.. svg:: datax-stack.svg
    :align: center
-   :alt: ADI DataX layered software architecture
-   :width: 90%
 
    ADI DataX layers the software stack between your signal chain and your
    application.
@@ -104,6 +102,7 @@ In This Section
 -------------------------------------------------------------------------------
 
 .. toctree::
+   :hidden:
    :maxdepth: 1
 
    architecture
