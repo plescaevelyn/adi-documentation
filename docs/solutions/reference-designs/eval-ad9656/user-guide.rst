@@ -3,9 +3,9 @@
 User guide
 ===============================================================================
 
-This user guide describes the :adi:`AD9656` evaluation board
-:adi:`AD9656EBZ <EVAL-AD9656>`, which provides the support circuitry required to
-operate the ADC in its various modes and configurations.
+This user guide describes the :adi:`AD9656` evaluation board :adi:`AD9656EBZ
+<EVAL-AD9656>`, which provides the support circuitry required to operate the
+ADC in its various modes and configurations.
 
 The :adi:`AD9656` data sheet provides additional information and should be
 consulted when using the evaluation board. For additional information or
@@ -18,9 +18,9 @@ The evaluation board provides the support circuitry required to operate the
 :adi:`AD9656` in its various modes and configurations. It is critical that the
 signal sources used for the analog input and clock have very low phase noise
 (ideally ~100 fs rms jitter) to realize the optimum performance of the signal
-chain. Proper filtering of the analog input signal to remove harmonics and lower
-the integrated or broadband noise at the input is necessary to achieve the
-specified noise performance.
+chain. Proper filtering of the analog input signal to remove harmonics and
+lower the integrated or broadband noise at the input is necessary to achieve
+the specified noise performance.
 
 Hardware configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

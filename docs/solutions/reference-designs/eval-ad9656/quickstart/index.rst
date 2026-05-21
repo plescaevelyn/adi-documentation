@@ -3,8 +3,8 @@
 Quickstart
 ===============================================================================
 
-The Quick start guides provide simple step by step instructions on how to do
-an initial system setup for the :adi:`EVAL-AD9656` board on various FPGA
+The Quick start guides provide simple step by step instructions on how to do an
+initial system setup for the :adi:`EVAL-AD9656` board on various FPGA
 development boards.
 
 FPGA-based evaluation
@@ -56,8 +56,8 @@ Hardware setup
 -------------------------------------------------------------------------------
 
 On most carriers, the :adi:`EVAL-AD9656` board connects to the HPC0 connector
-(unless otherwise noted). The carrier setup requires power, UART (115200),
-and JTAG (no-OS) connections. A few typical setups are shown below.
+(unless otherwise noted). The carrier setup requires power, UART (115200), and
+JTAG (no-OS) connections. A few typical setups are shown below.
 
 ZCU102 + EVAL-AD9656
 -------------------------------------------------------------------------------

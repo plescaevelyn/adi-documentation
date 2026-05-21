@@ -87,9 +87,9 @@ following steps:
 
       VisualAnalog Default Configuration Message
 
-#. To view the canvas and associated functional blocks, click the
-   **Expand Display** button, located on the bottom right corner of the window
-   (see Figure 4), to see what is shown in Figure 5.
+#. To view the canvas and associated functional blocks, click the **Expand
+   Display** button, located on the bottom right corner of the window (see
+   Figure 4), to see what is shown in Figure 5.
 
    .. figure:: ../images/ad9656_va_toolbar_collapsed.png
       :align: center
@@ -129,8 +129,9 @@ following steps:
 #. In the ADC Data Capture Settings Window, Capture Board Tab, enter 60 in the
    Fill Delay field. Push the Browse button to navigate to the FPGA program file
    for the AD9656. The default installation location and filename will be
-   similar to: ``C:\Program Files\Analog Devices\VisualAnalog\Hardware\HADv6\AD9656_hadv6fmc.mcs``.
-   Push the program button.
+   similar to: ``C:\Program Files\Analog
+   Devices\VisualAnalog\Hardware\HADv6\AD9656_hadv6fmc.mcs``. Push the program
+   button.
 
    .. figure:: ../images/ad9656_adc_datacapturesettings_captureboardtab.png
       :align: center
@@ -162,8 +163,8 @@ following steps:
 
 #. VisualAnalog is now set up to work with the AD9656EBZ in the default
    configuration. Other VisualAnalog features and capture settings are
-   documented in the :adi:`AN-905 Application Note <AN-905>`,
-   *VisualAnalog Converter Evaluation Tool Version 1.0 User Manual*.
+   documented in the :adi:`AN-905 Application Note <AN-905>`, *VisualAnalog
+   Converter Evaluation Tool Version 1.0 User Manual*.
 
 Setting up the SPI Controller software
 -------------------------------------------------------------------------------
@@ -194,14 +195,14 @@ software using the following procedure:
 
       SPI Controller, New DUT Button
 
-#. In the **ADCBase0** tab of the **SPIController** window, find the
-   **CLOCK DIVIDE(B)** box (see Figure 12), and the **MODES(8)** box (see
-   Figure 13). If using the clock divider, use the drop-down box to select the
-   correct clock divide ratio, if necessary. If there is any interruption of the
-   ADC clock during power-up or during operation, a Digital Reset may be needed
-   to re-initialize the ADC (Figure 13). For additional information, refer to
-   the data sheet, the :adi:`AN-878 Application Note <an-878>`, *High Speed ADC
-   SPI Control Software*, and the :adi:`AN-877 Application Note <an-877>`,
+#. In the **ADCBase0** tab of the **SPIController** window, find the **CLOCK
+   DIVIDE(B)** box (see Figure 12), and the **MODES(8)** box (see Figure 13). If
+   using the clock divider, use the drop-down box to select the correct clock
+   divide ratio, if necessary. If there is any interruption of the ADC clock
+   during power-up or during operation, a Digital Reset may be needed to
+   re-initialize the ADC (Figure 13). For additional information, refer to the
+   data sheet, the :adi:`AN-878 Application Note <an-878>`, *High Speed ADC SPI
+   Control Software*, and the :adi:`AN-877 Application Note <an-877>`,
    *Interfacing to High Speed ADCs via SPI*.
 
    .. figure:: ../images/ad9656_spicontroller_adcbase0_tab_clkdiv.png
@@ -218,8 +219,8 @@ software using the following procedure:
 
 #. In the **ADCBase1** tab of the **SPIController** window, set the number of
    lanes the AD9656 will be configured to. Note that the number of lanes
-   selected here must match the settings made in VisualAnalog as shown in
-   Step 7, Figure 9 above.
+   selected here must match the settings made in VisualAnalog as shown in Step
+   7, Figure 9 above.
 
    .. figure:: ../images/ad9656_spicontroller_adcbase1_tab_quickconfig.png
       :align: center
@@ -227,15 +228,14 @@ software using the following procedure:
 
       SPI Controller, Quick Configure Box
 
-#. Note that other settings can be changed on the **ADCBase0** tab (see
-   Figure 12) and the **ADC A** through **ADC D** tabs (see Figure 15) to set
-   up the part in the desired mode. The **ADCBase0** tab settings affect the
-   entire part, whereas the settings on the **ADC A** through **ADC D** tabs
-   each affect the selected channel only. See the data sheet, the
-   :adi:`AN-878 Application Note <an-878>`, *High Speed ADC SPI Control
-   Software*, and the :adi:`AN-877 Application Note <an-877>`, *Interfacing to
-   High Speed ADCs via SPI*, for additional information on the available
-   settings.
+#. Note that other settings can be changed on the **ADCBase0** tab (see Figure
+   12) and the **ADC A** through **ADC D** tabs (see Figure 15) to set up the
+   part in the desired mode. The **ADCBase0** tab settings affect the entire
+   part, whereas the settings on the **ADC A** through **ADC D** tabs each
+   affect the selected channel only. See the data sheet, the :adi:`AN-878
+   Application Note <an-878>`, *High Speed ADC SPI Control Software*, and the
+   :adi:`AN-877 Application Note <an-877>`, *Interfacing to High Speed ADCs via
+   SPI*, for additional information on the available settings.
 
    .. figure:: ../images/ad9656_spicontroller_adca_tab.png
       :align: center
@@ -281,18 +281,17 @@ Troubleshooting
 
 Lack of SPI communication will cause difficulty in configuring the ADC.
 
-- Go to the **Global** tab of the **SPIController** window and push the
-  **Read** button in the **GENERIC READ/WRITE** window. This will read the
-  contents of ADC register 0x00. If SPI communication is working properly and
-  the ADC is powered up, the value 0x18 hexadecimal will appear. If the
-  contents show 0x00, the ADC is not powered up or SPI communication is not
-  working.
-- Check that there is correct power to the :adi:`AD9656EBZ <EVAL-AD9656>`
-  board, and to the :adi:`HSC-ADC-EVALEZ <hsadcevalboard>`.
+- Go to the **Global** tab of the **SPIController** window and push the **Read**
+  button in the **GENERIC READ/WRITE** window. This will read the contents of
+  ADC register 0x00. If SPI communication is working properly and the ADC is
+  powered up, the value 0x18 hexadecimal will appear. If the contents show 0x00,
+  the ADC is not powered up or SPI communication is not working.
+- Check that there is correct power to the :adi:`AD9656EBZ <EVAL-AD9656>` board,
+  and to the :adi:`HSC-ADC-EVALEZ <hsadcevalboard>`.
 - Check that the USB cable is properly connected from the PC to the
   :adi:`HSC-ADC-EVALEZ <hsadcevalboard>`.
-- The LED on the **VisualAnalog ADCDataCapture** block should be green. If it
-  is red, push the USB button on the same block to refresh the connection.
+- The LED on the **VisualAnalog ADCDataCapture** block should be green. If it is
+  red, push the USB button on the same block to refresh the connection.
 
 If the FFT plot appears abnormal, do the following:
 
@@ -304,10 +303,9 @@ If the FFT plot appears abnormal, do the following:
   input level, if necessary.
 - In **VisualAnalog**, click the **Settings** icon in the **Input Formatter**
   block. Check that **Number Format** is set to the correct encoding (twos
-  complement by default). Check that the **Number Format** in the
-  **VisualAnalog Input Formatter** matches the data format selected in the
-  **SPIController ADCBase0 OUTPUT MODE(14)** window. Repeat for the other
-  channels.
+  complement by default). Check that the **Number Format** in the **VisualAnalog
+  Input Formatter** matches the data format selected in the **SPIController
+  ADCBase0 OUTPUT MODE(14)** window. Repeat for the other channels.
 
 If the FFT appears normal but the performance is poor, check the following:
 
@@ -316,11 +314,10 @@ If the FFT appears normal but the performance is poor, check the following:
   clean (low phase noise).
 - Change the analog input frequency slightly if noncoherent sampling is being
   used.
-- Make sure that the SPI configuration file matches the product being
-  evaluated.
+- Make sure that the SPI configuration file matches the product being evaluated.
 
-If the FFT window remains blank after **Run** in VisualAnalog (see Figure 16)
-is clicked, do the following:
+If the FFT window remains blank after **Run** in VisualAnalog (see Figure 16) is
+clicked, do the following:
 
 - Make sure that the evaluation board is securely connected to the
   :adi:`HSC-ADC-EVALEZ <hsadcevalboard>` board.
@@ -329,12 +326,12 @@ is clicked, do the following:
   select the **FPGA** tab and verify that the proper FPGA .mcs file (one
   containing "AD9656" in the filename) is selected for the part.
 - Make sure that the FPGA has been programmed by verifying that the
-  **CONFIG_DONE** LED is illuminated on the
-  :adi:`HSC-ADC-EVALEZ <hsadcevalboard>` board. If the **CONFIG_DONE** LED is
-  not illuminated, click the **Settings** icon in the **ADC Data Capture** block
-  in VisualAnalog. Then select the **FPGA** tab and verify that the proper FPGA
-  .mcs file (one containing "AD9656" in the filename) is selected for the part.
-  Then push the **Program** button. The LED should light up.
+  **CONFIG_DONE** LED is illuminated on the :adi:`HSC-ADC-EVALEZ
+  <hsadcevalboard>` board. If the **CONFIG_DONE** LED is not illuminated, click
+  the **Settings** icon in the **ADC Data Capture** block in VisualAnalog. Then
+  select the **FPGA** tab and verify that the proper FPGA .mcs file (one
+  containing "AD9656" in the filename) is selected for the part. Then push the
+  **Program** button. The LED should light up.
 - On the :adi:`AD9656EBZ <EVAL-AD9656>` there is an LED next to a reset button
   (S501). If this LED is not lit, push the reset button and try running again.
 
@@ -343,12 +340,11 @@ Helpful documents
 
 - :adi:`AD9656` data sheet
 - High speed ADC FIFO evaluation kit (:adi:`HSC-ADC-EVALEZ <hsadcevalboard>`)
-- HSC-ADC-EVALEZ Wiki Guide
-  `hsc-adc-evale <https://wiki.analog.com/resources/eval/hsc-adc-evale>`_
+- HSC-ADC-EVALEZ Wiki Guide `hsc-adc-evale
+  <https://wiki.analog.com/resources/eval/hsc-adc-evale>`_
 - :adi:`AN-905 Application Note <an-905>`, *VisualAnalog Converter Evaluation
   Tool Version 1.0 User Manual*
-- :adi:`AN-878 Application Note <an-878>`, *High Speed ADC SPI Control
-  Software*
+- :adi:`AN-878 Application Note <an-878>`, *High Speed ADC SPI Control Software*
 - :adi:`AN-877 Application Note <an-877>`, *Interfacing to High Speed ADCs via
   SPI*
 - :adi:`AN-835 Application Note <an-835>`, *Understanding ADC Testing and

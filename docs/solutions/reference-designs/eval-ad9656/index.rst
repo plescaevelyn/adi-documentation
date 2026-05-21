@@ -50,8 +50,8 @@ things. However, like many things, documentation is never as complete as it
 should be. If you have any questions, check the :ref:`Help and Support
 <ad9656_fmc help_and_support>` section at the bottom of the page.
 
-To better understand the :adi:`AD9656`, we recommend to use
-the :adi:`EVAL-AD9656` evaluation board.
+To better understand the :adi:`AD9656`, we recommend to use the
+:adi:`EVAL-AD9656` evaluation board.
 
 Table of contents
 -------------------------------------------------------------------------------
@@ -71,9 +71,9 @@ Table of contents
 
 #. Design with the AD9656
 
-   - :adi:`AD9656 product page <AD9656>`
-   - :external+hdl:ref:`HDL reference design <ad9656_fmc>` which you must use
-     in your FPGA.
+   #. :adi:`AD9656 product page <AD9656>`
+   #. :external+hdl:ref:`HDL reference design <ad9656_fmc>` which you must use
+      in your FPGA.
 
 #. :ref:`Help and Support <ad9656_fmc help_and_support>`
 
