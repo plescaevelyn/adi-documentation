@@ -3,13 +3,12 @@
 User guide
 ===============================================================================
 
-This user guide describes the :adi:`AD9656` evaluation board :adi:`AD9656EBZ
-<EVAL-AD9656>`, which provides the support circuitry required to operate the
-ADC in its various modes and configurations.
+This user guide describes the :adi:`AD9656` evaluation board :adi:`EVAL-AD9656`,
+which provides the support circuitry required to operate the ADC in its various
+modes and configurations.
 
 The :adi:`AD9656` data sheet provides additional information and should be
-consulted when using the evaluation board. For additional information or
-questions, send an email to highspeed.converters@analog.com.
+consulted when using the evaluation board.
 
 Evaluation board hardware
 -------------------------------------------------------------------------------
@@ -21,6 +20,8 @@ signal sources used for the analog input and clock have very low phase noise
 chain. Proper filtering of the analog input signal to remove harmonics and
 lower the integrated or broadband noise at the input is necessary to achieve
 the specified noise performance.
+
+.. _ad9656_fmc user-guide hardware-configuration:
 
 Hardware configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -70,7 +71,7 @@ Figure 1.
    :align: center
    :width: 600
 
-   Default Jumper Connections for :adi:`AD9656EBZ <EVAL-AD9656>` Board
+   Default Jumper Connections for :adi:`EVAL-AD9656` Board
 
 .. figure:: images/ad9656_jumper_location_wiki_figure_3_-_white_box.png
    :align: center
@@ -80,7 +81,7 @@ Figure 1.
 Power supply
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The :adi:`AD9656EBZ <EVAL-AD9656>` can be powered in one of three ways:
+The :adi:`EVAL-AD9656` can be powered in one of three ways:
 
 **FMC connector power (default)**
 
@@ -142,11 +143,11 @@ inputs. The :adi:`AD9656` ADC is equipped with an internal clock divider
 frequency clocks. When using the internal divider and a higher input clock
 frequency, remove CR301 to preserve the slew rate of the clock signal.
 
-The :adi:`AD9656EBZ <EVAL-AD9656>` board is set up to be clocked through the
+The :adi:`EVAL-AD9656` board is set up to be clocked through the
 transformer-coupled input network from the 125MHz crystal oscillator, Y801. If
-an external clock source is desired, remove C302 (optionally) and Jumper J304
-to disable the oscillator from running and connect the external clock source to
-the SMA connector, J302 (labeled CLOCK+).
+an external clock source is desired, remove C302 (optionally) and Jumper J304 to
+disable the oscillator from running and connect the external clock source to the
+SMA connector, J302 (labeled CLOCK+).
 
 If an external clock source is used instead of the onboard crystal oscillator,
 it should also be supplied with a clean signal generator as previously specified

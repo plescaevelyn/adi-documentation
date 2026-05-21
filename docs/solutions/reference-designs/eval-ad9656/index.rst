@@ -47,11 +47,12 @@ Recommendations
 
 People who follow the flow that is outlined, have a much better experience with
 things. However, like many things, documentation is never as complete as it
-should be. If you have any questions, check the :ref:`Help and Support
-<ad9656_fmc help_and_support>` section at the bottom of the page.
+should be. If you have any questions, check the
+:ref:`Help and Support <ad9656_fmc help_and_support>` section at the bottom of
+the page.
 
-To better understand the :adi:`AD9656`, we recommend to use the
-:adi:`EVAL-AD9656` evaluation board.
+To better understand the :adi:`AD9656`, we recommend to use the :adi:`EVAL-AD9656`
+evaluation board.
 
 Table of contents
 -------------------------------------------------------------------------------

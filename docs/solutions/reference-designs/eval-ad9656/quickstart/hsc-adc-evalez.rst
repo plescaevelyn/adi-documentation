@@ -3,16 +3,15 @@
 HSC-ADC-EVALEZ Quick start
 ===============================================================================
 
-This guide provides quick instructions on how to set up the
-:adi:`AD9656EBZ <EVAL-AD9656>` with the :adi:`HSC-ADC-EVALEZ <hsadcevalboard>`
-FPGA-based data capture kit using VisualAnalog and SPIController software on
-a Windows PC.
+This guide provides quick instructions on how to set up the :adi:`EVAL-AD9656`
+with the :adi:`HSC-ADC-EVALEZ <hsadcevalboard>` FPGA-based data capture kit
+using VisualAnalog and SPIController software on a Windows PC.
 
 .. figure:: ../images/ad9656-125ebz_top_level.png
    :align: center
    :width: 600
 
-   Evaluation Board Connection — :adi:`AD9656EBZ <EVAL-AD9656>` (on Left) and :adi:`HSC-ADC-EVALEZ <hsadcevalboard>` (on Right)
+   Evaluation Board Connection — :adi:`EVAL-AD9656` (on Left) and :adi:`HSC-ADC-EVALEZ <hsadcevalboard>` (on Right)
 
 Equipment needed
 -------------------------------------------------------------------------------
@@ -23,7 +22,7 @@ Equipment needed
 - Switching power supply (12V, 3.3A) for HSC-ADC-EVALEZ
 - PC running Windows
 - USB 2.0 port
-- :adi:`AD9656EBZ <EVAL-AD9656>` board
+- :adi:`EVAL-AD9656` board
 - :adi:`HSC-ADC-EVALEZ <hsadcevalboard>` FPGA-based data capture kit
 
 Required software
@@ -40,11 +39,11 @@ Configuring the board
 Before using the software for testing, configure the evaluation board as
 follows:
 
-#. Connect the :adi:`AD9656EBZ <EVAL-AD9656>` to the
+#. Connect the :adi:`EVAL-AD9656` to the
    :adi:`HSC-ADC-EVALEZ <hsadcevalboard>` data capture board.
 #. Confirm that the jumpers are installed as shown in the
    :ref:`user guide <ad9656_fmc user-guide>`.
-#. The :adi:`AD9656EBZ <EVAL-AD9656>` can be powered in one of three ways. The
+#. The :adi:`EVAL-AD9656` can be powered in one of three ways. The
    default is to have the board obtain its power from the
    :adi:`HSC-ADC-EVALEZ <hsadcevalboard>` through the FMC connector. For this
    configuration, jumper Pin 1 to Pin 2 on both P101 and P103. The other power
@@ -129,9 +128,8 @@ following steps:
 #. In the ADC Data Capture Settings Window, Capture Board Tab, enter 60 in the
    Fill Delay field. Push the Browse button to navigate to the FPGA program file
    for the AD9656. The default installation location and filename will be
-   similar to: ``C:\Program Files\Analog
-   Devices\VisualAnalog\Hardware\HADv6\AD9656_hadv6fmc.mcs``. Push the program
-   button.
+   similar to: ``C:\Program Files\Analog Devices\VisualAnalog\Hardware\HADv6\AD9656_hadv6fmc.mcs``.
+   Push the program button.
 
    .. figure:: ../images/ad9656_adc_datacapturesettings_captureboardtab.png
       :align: center
@@ -232,10 +230,10 @@ software using the following procedure:
    12) and the **ADC A** through **ADC D** tabs (see Figure 15) to set up the
    part in the desired mode. The **ADCBase0** tab settings affect the entire
    part, whereas the settings on the **ADC A** through **ADC D** tabs each
-   affect the selected channel only. See the data sheet, the :adi:`AN-878
-   Application Note <an-878>`, *High Speed ADC SPI Control Software*, and the
-   :adi:`AN-877 Application Note <an-877>`, *Interfacing to High Speed ADCs via
-   SPI*, for additional information on the available settings.
+   affect the selected channel only. See the data sheet, the
+   :adi:`AN-878 Application Note <an-878>`, *High Speed ADC SPI Control Software*,
+   and the :adi:`AN-877 Application Note <an-877>`, *Interfacing to High Speed
+   ADCs via SPI*, for additional information on the available settings.
 
    .. figure:: ../images/ad9656_spicontroller_adca_tab.png
       :align: center
@@ -286,7 +284,7 @@ Lack of SPI communication will cause difficulty in configuring the ADC.
   ADC register 0x00. If SPI communication is working properly and the ADC is
   powered up, the value 0x18 hexadecimal will appear. If the contents show 0x00,
   the ADC is not powered up or SPI communication is not working.
-- Check that there is correct power to the :adi:`AD9656EBZ <EVAL-AD9656>` board,
+- Check that there is correct power to the :adi:`EVAL-AD9656` board,
   and to the :adi:`HSC-ADC-EVALEZ <hsadcevalboard>`.
 - Check that the USB cable is properly connected from the PC to the
   :adi:`HSC-ADC-EVALEZ <hsadcevalboard>`.
@@ -326,22 +324,21 @@ clicked, do the following:
   select the **FPGA** tab and verify that the proper FPGA .mcs file (one
   containing "AD9656" in the filename) is selected for the part.
 - Make sure that the FPGA has been programmed by verifying that the
-  **CONFIG_DONE** LED is illuminated on the :adi:`HSC-ADC-EVALEZ
-  <hsadcevalboard>` board. If the **CONFIG_DONE** LED is not illuminated, click
-  the **Settings** icon in the **ADC Data Capture** block in VisualAnalog. Then
-  select the **FPGA** tab and verify that the proper FPGA .mcs file (one
-  containing "AD9656" in the filename) is selected for the part. Then push the
-  **Program** button. The LED should light up.
-- On the :adi:`AD9656EBZ <EVAL-AD9656>` there is an LED next to a reset button
-  (S501). If this LED is not lit, push the reset button and try running again.
+  **CONFIG_DONE** LED is illuminated on the :adi:`HSC-ADC-EVALEZ <hsadcevalboard>`
+  board. If the **CONFIG_DONE** LED is not illuminated, click the **Settings**
+  icon in the **ADC Data Capture** block in VisualAnalog. Then select the
+  **FPGA** tab and verify that the proper FPGA .mcs file (one containing
+  "AD9656" in the filename) is selected for the part. Then push the **Program**
+  button. The LED should light up.
+- On the :adi:`EVAL-AD9656` there is an LED next to a reset button (S501). If
+  this LED is not lit, push the reset button and try running again.
 
 Helpful documents
 -------------------------------------------------------------------------------
 
 - :adi:`AD9656` data sheet
 - High speed ADC FIFO evaluation kit (:adi:`HSC-ADC-EVALEZ <hsadcevalboard>`)
-- HSC-ADC-EVALEZ Wiki Guide `hsc-adc-evale
-  <https://wiki.analog.com/resources/eval/hsc-adc-evale>`_
+- HSC-ADC-EVALEZ Wiki Guide `hsc-adc-evale <https://wiki.analog.com/resources/eval/hsc-adc-evale>`_
 - :adi:`AN-905 Application Note <an-905>`, *VisualAnalog Converter Evaluation
   Tool Version 1.0 User Manual*
 - :adi:`AN-878 Application Note <an-878>`, *High Speed ADC SPI Control Software*
