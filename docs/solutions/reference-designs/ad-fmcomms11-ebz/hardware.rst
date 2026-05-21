@@ -13,7 +13,7 @@ respective product pages.
 Schematic, PCB Layout, Bill of Materials
 --------------------------------------------------------------------------------
 
-:adi:`AD-FMCOMMS5-EBZ Design & Integration Files <media/en/reference-design-documentation/design-integration-files/ad-fmcomms11-ebz-designsupport.zip>`
+:adi:`AD-FMCOMMS11-EBZ Design & Integration Files <media/en/reference-design-documentation/design-integration-files/ad-fmcomms11-ebz-designsupport.zip>`
 
 - Schematic
 - PCB Layout

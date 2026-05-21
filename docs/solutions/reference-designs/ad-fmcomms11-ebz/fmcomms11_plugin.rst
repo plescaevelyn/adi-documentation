@@ -5,7 +5,7 @@ FMCOMMS11 Plugin Description
 
 The FMCOMMS11 plugin works with the :ref:`iio-oscilloscope`. You always use
 the latest version if possible. Changing any field will immediately write
-changes which have been made to the AD936X settings to the hardware, and then
+changes which have been made to the device settings to the hardware, and then
 read it back to make sure the setting is valid. If you want to set something
 that the GUI changes to a different number, that either means that GUI is
 rounding (sorry), or the hardware (either the FMCOMMS11 or the FPGA fabric)
@@ -15,12 +15,7 @@ If you want to go play with ``/sys/bus/iio/devices/....`` and manipulate the
 devices behind the back of the GUI, it's still possible to see the settings
 by clicking the "refresh" button at the bottom of the GUI.
 
-If you think the device has a setting that isn't managed by this tab, check
-out the
-:dokuwiki:`AD936X Advanced Plugin <fmcomms2_advanced_plugin>`
-for the IIO Oscilloscope.
-
-The FMCOMMS11 view is divided in four sections:
+The FMCOMMS11 view is divided in five sections:
 
 - **ADC**
 - **Attenuator**
@@ -35,7 +30,7 @@ The FMCOMMS11 view is divided in four sections:
 ADC
 -------------------------------------------------------------------------------
 
-- **Sampling frequency(MHz):** Dispay the sample rate of the ADC.
+- **Sampling frequency(MHz):** Display the sample rate of the ADC.
 - **Input Scales / Reference:** Set the scale of the signal input.
 - **Channel 0 Test mode:** control the JESD204B interface test injection
    points.
@@ -43,7 +38,7 @@ ADC
 Input Attenuator
 -------------------------------------------------------------------------------
 
-- **Gain(dB):** Controls RX signal atteniation.
+- **Gain(dB):** Controls RX signal attenuation.
 
 DDS
 -------------------------------------------------------------------------------
@@ -141,7 +136,7 @@ transmitting any data.
 DAC
 -------------------------------------------------------------------------------
 
-- **Sampling frequency(MHz):** Dispay the sample rate of the DAC.
+- **Sampling frequency(MHz):** Display the sample rate of the DAC.
 - **NCO Frequency (MHz):** Set the frequency for NCO to enable digital
    frequency shifts of signals with near infinite precision.
 - **Filter Settings:** Enable/disable finite impulse response filter with
@@ -155,7 +150,7 @@ Output VGA
 .. note::
 
    Upon pressing Reload Settings button the values will be reloaded with the
-   corresponding driver values. Useful in scenarios where the diver values
+   corresponding driver values. Useful in scenarios where the driver values
    get changed outside this plugin (e.g with the use of Debug plugin) and a
    refresh on plugin's values is needed.
 

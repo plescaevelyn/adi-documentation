@@ -90,6 +90,12 @@ Applications:
    :align: center
    :width: 600
 
+Recommendation
+-------------------------------------------------------------------------------
+
+To better understand the :adi:`AD9625` and :adi:`AD9162`, we recommend to use
+the :adi:`AD-FMCOMMS11-EBZ` evaluation board.
+
 Table of Contents
 --------------------------------------------------------------------------------
 
@@ -170,7 +176,7 @@ Table of Contents
 Block diagram
 --------------------------------------------------------------------------------
 
-.. image:: images/fmcomms11_bd.svg
+.. image:: images/AD-FMCOMMS11-EBZ-block-diagram.png
    :align: center
    :width: 800
 
@@ -199,8 +205,11 @@ MathWorks Webinars
 Help and support
 --------------------------------------------------------------------------------
 
-For questions and more information, please visit the :ez:`/`
-technical support community.
+People who follow the flow that is outlined have a much better experience.
+However, like many things, documentation is never as complete as it should be.
+If you have any questions, feel free to ask on the :ez:`/` technical support
+community, but before that, please make sure you read our documentation
+thoroughly.
 
 Warning
 --------------------------------------------------------------------------------

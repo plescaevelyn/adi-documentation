@@ -78,7 +78,7 @@ following results:
      - 2150MHz
    * - At 250MHz
      - -1dBFs
-   * - At 4GMHz
+   * - At 4GHz
      - -11.4dBFs
    * - At 6GHz
      - -14.5dBFs
@@ -140,7 +140,7 @@ power in dBFs.
 .. image:: ../images/sfdr.jpg
    :align: center
 
-Single Tone 2nd Harmonic Distoriton (HD2) Test
+Single Tone 2nd Harmonic Distortion (HD2) Test
 --------------------------------------------------------------------------------
 
 The following figure shows the 2nd harmonic distoriton with varying input power
@@ -149,7 +149,7 @@ in dBFs.
 .. image:: ../images/hd2.jpg
    :width: 600
 
-Single Tone 3rd Harmonic Distoriton (HD3) Test
+Single Tone 3rd Harmonic Distortion (HD3) Test
 --------------------------------------------------------------------------------
 
 The following figure shows the 3rd harmonic distoriton with varying input power
