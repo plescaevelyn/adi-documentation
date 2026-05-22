@@ -11,6 +11,7 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/app.min.css?v=ac863bf0" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=5f9cb17c" />
     <script async="async" src="../../../_static/app.umd.js?v=09b0c6bc"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <link rel="icon" href="../../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -128,6 +129,13 @@
 <li><a class="reference internal" href="#system-performance">System Performance</a><ul>
 <li><a class="reference internal" href="#efficiency">Efficiency</a></li>
 <li><a class="reference internal" href="#output-regulation">Output Regulation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#higher-power-configuration">Higher Power Configuration</a><ul>
+<li><a class="reference internal" href="#configuring-the-pd-circuit-at-higher-power-class">Configuring the PD Circuit at Higher Power Class</a></li>
+<li><a class="reference internal" href="#pd-controller-considerations">PD Controller Considerations</a></li>
+<li><a class="reference internal" href="#flyback-converter-at-higher-power">Flyback Converter at Higher Power</a></li>
+<li><a class="reference internal" href="#flyback-transformer-considerations">Flyback Transformer Considerations</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#resources">Resources</a><ul>
@@ -1151,15 +1159,15 @@ Content on this topic
   <section id="ad-ps3803-rd">
 <h1>AD-PS3803-RD<a class="headerlink" href="#ad-ps3803-rd" title="Link to this heading"></a></h1>
 <p>PoE+ with Ideal Diode Bridge to Isolated Flyback DC/DC (12V, 2A).</p>
-<figure class="align-left" id="id1">
+<figure class="align-left" id="id2">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/ad-ps3803-rd_angle.jpg"><img alt="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/ad-ps3803-rd_angle.jpg" src="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/ad-ps3803-rd_angle.jpg" style="width: 400px;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 1 </span><span class="caption-text">AD-PS3803-RD Board</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 1 </span><span class="caption-text">AD-PS3803-RD Board</span><a class="headerlink" href="#id2" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/AD-PS3803-RD" target="_blank">AD-PS3803-RD</a> reference design is a power converter
-capable of harnessing any IEEE802.3at (PoE+, Type 2)-compliant downstream
+capable of harnessing any IEEE802.3at (PoE+, Type 2) - compliant downstream
 power over Ethernet (PoE) supply to provide a galvanically isolated DC power.</p>
 <p>At the core of this solution is the <a class="icon adi reference external" href="https://www.analog.com/LT8306" target="_blank">LT8306</a> 60V no-opto flyback
 controller, stepping down the 37V to 57V PoE input voltage to a 12V, 24W
@@ -1174,12 +1182,20 @@ in passive PoE rectifier bridge.</p>
 37V to 57V.</p>
 <section id="features">
 <h2>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
-<ul class="simple">
+<ul>
 <li><p>Galvanically isolated 12 V flyback DC output with up to 24 W of output power
 capability</p></li>
 <li><p>No transformer third winding or opto-isolator for output regulation</p></li>
-<li><p>Supports IEEE802.3at (PoE+, Type 2) and IEEE802.3bt (PoE++, Type 3 and 4)
-interfacing and power supply control via a configurable jumper array</p></li>
+<li><p>Supports multiple PoE power classes, interfacing and power supply control
+via a configurable jumper array:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>IEEE802.3at &amp; PoE+, (Type 2),</p></li>
+<li><p>IEEE802.3bt &amp; PoE++, (Type 3 and 4), re-design of isolated DC-DC
+converter is required, (see <a class="reference internal" href="#id1">Higher Power Configuration</a> section).</p></li>
+</ul>
+</div></blockquote>
+</li>
 <li><p>Supports a wide input DC auxiliary power of 37 V to 57 V</p></li>
 </ul>
 </section>
@@ -1195,22 +1211,28 @@ interfacing and power supply control via a configurable jumper array</p></li>
 </section>
 <section id="block-diagram">
 <h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Link to this heading"></a></h2>
-<figure class="align-default" id="id2">
+<figure class="align-default" id="id3">
 <img alt="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/ad-ps3803-rd_block_diagram.png" src="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/ad-ps3803-rd_block_diagram.png" />
 <figcaption>
-<p><span class="caption-number">Figure 2 </span><span class="caption-text">AD-PS3803-RD Simplified System Block Diagram</span><a class="headerlink" href="#id2" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 2 </span><span class="caption-text">AD-PS3803-RD Simplified System Block Diagram</span><a class="headerlink" href="#id3" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </section>
 <section id="specifications">
 <h2>Specifications<a class="headerlink" href="#specifications" title="Link to this heading"></a></h2>
-<div class="table-wrapper docutils container" id="id3">
-<table class="docutils align-default" id="id3">
-<caption><span class="caption-number">Table 1 </span><span class="caption-text">Board Performance Summary</span><a class="headerlink" href="#id3" title="Link to this table"></a></caption>
+<p>The following are the performance parameters of <a class="icon adi reference external" href="https://www.analog.com/AD-PS3803-RD" target="_blank">AD-PS3803-RD</a>.</p>
+<div class="table-wrapper colwidths-given docutils container" id="id4">
+<table class="docutils align-default" id="id4">
+<caption><span class="caption-number">Table 1 </span><span class="caption-text">Board Performance Summary</span><a class="headerlink" href="#id4" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 23.1%" />
+<col style="width: 38.5%" />
+<col style="width: 38.5%" />
+</colgroup>
 <tbody>
-<tr class="row-odd"><td><p>Characteristic</p></td>
-<td><p>Condition</p></td>
-<td><p>Value</p></td>
+<tr class="row-odd"><td><p><strong>Characteristic</strong></p></td>
+<td><p><strong>Condition</strong></p></td>
+<td><p><strong>Value</strong></p></td>
 </tr>
 <tr class="row-even"><td><p>Port Voltage (VPORT)</p></td>
 <td><p>At Ethernet Port</p></td>
@@ -1222,23 +1244,23 @@ interfacing and power supply control via a configurable jumper array</p></li>
 </tr>
 <tr class="row-even"><td><p>Output Voltage (VOUT)</p></td>
 <td><p>VPORT = 54 V, IOUT = 100 mA to 2 A</p></td>
-<td><p>12.0 V ±5%</p></td>
+<td><p>12.0 V ± 5%</p></td>
 </tr>
 <tr class="row-odd"><td><p>Max Output Current (IOUTMAX)</p></td>
 <td><p>VPORT = 54 V</p></td>
 <td><p>2 ADC</p></td>
 </tr>
 <tr class="row-even"><td><p>Output Regulation</p></td>
-<td><p>VPORT = 54 V, 0% to 100% of IOUT</p></td>
-<td><p>± 0.30% of VOUT(Typ.)</p></td>
+<td><p>VPORT = 54 V, 0 % to 100 % of IOUT</p></td>
+<td><p>± 0.30 % of VOUT (Typical)</p></td>
 </tr>
 <tr class="row-odd"><td><p>Load Transient Response</p></td>
-<td><p>Load step from 25% to 100%</p></td>
-<td><p>±5%</p></td>
+<td><p>Load step from 25 % to 100 %</p></td>
+<td><p>± 5%</p></td>
 </tr>
 <tr class="row-even"><td><p>Efficiency</p></td>
 <td><p>VPORT = 54 V, IOUT = 2 A</p></td>
-<td><p>85.4% (Typ.)</p></td>
+<td><p>85.4 % (Typical)</p></td>
 </tr>
 </tbody>
 </table>
@@ -1248,10 +1270,10 @@ interfacing and power supply control via a configurable jumper array</p></li>
 <h2>Components and Connections<a class="headerlink" href="#components-and-connections" title="Link to this heading"></a></h2>
 <section id="basic-input-and-output-ports">
 <h3>Basic Input and Output Ports<a class="headerlink" href="#basic-input-and-output-ports" title="Link to this heading"></a></h3>
-<figure class="align-default" id="id4">
+<figure class="align-default" id="id5">
 <img alt="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/ad-ps3803-rd_03.png" src="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/ad-ps3803-rd_03.png" />
 <figcaption>
-<p><span class="caption-number">Figure 3 </span><span class="caption-text">Basic Input Output Ports</span><a class="headerlink" href="#id4" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 3 </span><span class="caption-text">Basic Input Output Ports</span><a class="headerlink" href="#id5" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <div class="admonition warning">
@@ -1264,7 +1286,7 @@ damaging the device.</p>
 <h3>Power Supply Ports<a class="headerlink" href="#power-supply-ports" title="Link to this heading"></a></h3>
 <p>Power the board either through its RJ45 female connector (PoE input)
 or via its DC auxiliary terminals.</p>
-<p>Both ports can handle input voltage of 37 V:sub:<cite>DC</cite> to 57 V:sub:<cite>DC</cite>.</p>
+<p>Both ports can handle input voltage of 37 VDC to 57 VDC.</p>
 <ul class="simple">
 <li><p><strong>P1</strong> - RJ45 input port for PoE from PSE</p></li>
 <li><p><strong>AUX+</strong> - Positive input terminal for auxiliary DC power supply</p></li>
@@ -1294,10 +1316,10 @@ turned on during normal operation.</p></li>
 <h3>Test Points<a class="headerlink" href="#test-points" title="Link to this heading"></a></h3>
 <p>Numerous test points such as turrets and test pads were added for
 easier probing of signals.</p>
-<figure class="align-default" id="id5">
+<figure class="align-default" id="id6">
 <img alt="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/ad-ps3803-rd_04.png" src="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/ad-ps3803-rd_04.png" />
 <figcaption>
-<p><span class="caption-number">Figure 4 </span><span class="caption-text">Board Test Points</span><a class="headerlink" href="#id5" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 4 </span><span class="caption-text">Board Test Points</span><a class="headerlink" href="#id6" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </section>
@@ -1336,22 +1358,25 @@ a LTPoE+.+ compliant PSE is detected.</p></li>
 <p>The board’s operating power level can be configured by changing the
 position of the class select jumpers, allowing different PSEs to be compatible
 with the device.</p>
-<figure class="align-default" id="id6">
+<figure class="align-default" id="id7">
 <img alt="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/ad-ps3803-rd_05.png" src="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/ad-ps3803-rd_05.png" />
 <figcaption>
-<p><span class="caption-number">Figure 5 </span><span class="caption-text">Class Select Jumper Array</span><a class="headerlink" href="#id6" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 5 </span><span class="caption-text">Class Select Jumper Array</span><a class="headerlink" href="#id7" title="Link to this image"></a></p>
 </figcaption>
 </figure>
-<p><strong>Table 1: Jumper Position</strong></p>
-<div class="table-wrapper docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p><strong>Power Level</strong></p></th>
-<th class="head"><p><strong>Jumper 1 Position</strong></p></th>
-<th class="head"><p><strong>Jumper 2 Position</strong></p></th>
-</tr>
-</thead>
+<div class="table-wrapper colwidths-given docutils container" id="id8">
+<table class="docutils align-default" id="id8">
+<caption><span class="caption-number">Table 2 </span><span class="caption-text">Jumper Position</span><a class="headerlink" href="#id8" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+</colgroup>
 <tbody>
+<tr class="row-odd"><td><p><strong>Power Level</strong></p></td>
+<td><p><strong>Jumper 1 Position</strong></p></td>
+<td><p><strong>Jumper 2 Position</strong></p></td>
+</tr>
 <tr class="row-even"><td><p>25.5 W</p></td>
 <td><p>JP9</p></td>
 <td><p>JP10</p></td>
@@ -1420,22 +1445,22 @@ voltage regulation, ripple voltage, and other parameters.</p>
 output voltage regulation. A Zener diode is placed on the output to clamp
 the voltage to 13V at no load.</p>
 </div>
-<figure class="align-default" id="id7">
+<figure class="align-default" id="id9">
 <img alt="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/ad-ps3803-rd_06.png" src="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/ad-ps3803-rd_06.png" />
 <figcaption>
-<p><span class="caption-number">Figure 6 </span><span class="caption-text">AD-PS3803-RD Setup with a Power Sourcing Equipment (PSE)</span><a class="headerlink" href="#id7" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 6 </span><span class="caption-text">AD-PS3803-RD Setup with a Power Sourcing Equipment (PSE)</span><a class="headerlink" href="#id9" title="Link to this image"></a></p>
 </figcaption>
 </figure>
-<figure class="align-default" id="id8">
+<figure class="align-default" id="id10">
 <img alt="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/ad-ps3803-rd_07.png" src="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/ad-ps3803-rd_07.png" />
 <figcaption>
-<p><span class="caption-number">Figure 7 </span><span class="caption-text">AD-PS3803-RD Setup  Using a PSE Board Module</span><a class="headerlink" href="#id8" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 7 </span><span class="caption-text">AD-PS3803-RD Setup  Using a PSE Board Module</span><a class="headerlink" href="#id10" title="Link to this image"></a></p>
 </figcaption>
 </figure>
-<figure class="align-default" id="id9">
+<figure class="align-default" id="id11">
 <img alt="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/ad-ps3803-rd_08.png" src="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/ad-ps3803-rd_08.png" />
 <figcaption>
-<p><span class="caption-number">Figure 8 </span><span class="caption-text">Example Setup using a PSE Module (DC2541A)</span><a class="headerlink" href="#id9" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 8 </span><span class="caption-text">Example Setup using a PSE Module (DC2541A)</span><a class="headerlink" href="#id11" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </li>
@@ -1459,10 +1484,10 @@ and VOUT- ports of the AD-PS3803-RD as illustrated in Figure 9.</p></li>
 <p class="admonition-title">Warning</p>
 <p>Observe correct polarity of connections to prevent damaging the device.</p>
 </div>
-<figure class="align-default" id="id10">
+<figure class="align-default" id="id12">
 <img alt="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/ad-ps3803-rd_09.png" src="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/ad-ps3803-rd_09.png" />
 <figcaption>
-<p><span class="caption-number">Figure 9 </span><span class="caption-text">AD-PS3803-RD Test Setup using an Auxiliary Power Supply</span><a class="headerlink" href="#id10" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 9 </span><span class="caption-text">AD-PS3803-RD Test Setup using an Auxiliary Power Supply</span><a class="headerlink" href="#id12" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </section>
@@ -1492,46 +1517,40 @@ interface and power range is compatible with the AD-PS3803-RD.</p>
 <li><p>Before connecting any power supplies, adjust the DC power supply’s output
 to 0V and set the current limit to 0.1A.</p></li>
 <li><p>Turn the supply OFF.</p></li>
-<li><p>Connect all the equipment, as shown in Figure 1. Do NOT connect the
+<li><p>Connect all the equipment, as shown in Figure 10. Do NOT connect the
 Ethernet cable to AD-PS3803-RD yet.</p>
-<figure class="align-default" id="id11">
+<figure class="align-default" id="id13">
 <img alt="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/ad-ps3803-rd_10.png" src="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/ad-ps3803-rd_10.png" />
 <figcaption>
-<p><span class="caption-number">Figure 10 </span><span class="caption-text">AD-PS3803 Test Setup Diagram</span><a class="headerlink" href="#id11" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 10 </span><span class="caption-text">AD-PS3803 Test Setup Diagram</span><a class="headerlink" href="#id13" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </li>
 <li><p>Verify that the electronic load is initially at the OFF position.</p></li>
 <li><p>Ensure that the indicated jumper position for DC2541A is set correctly,
-as shown in Table 1 and Figure 3.</p></li>
+as shown in Table 3 and Figure 11.</p></li>
 </ol>
-<p><strong>Table 2: DC2541A PSE Board Jumper Configuration</strong></p>
-<div class="table-wrapper docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>PSE
-Type</p></th>
-<th class="head"><p>Power
-Mode
-(JP6)</p></th>
-<th class="head"><p>PORT+
-(JP1) /
-PORT-(JP2)</p></th>
-<th class="head"><p>MID
-(JP3)</p></th>
-<th class="head"><p>DUALPD
-(JP4)</p></th>
-<th class="head"><p>LEGACY
-(JP5)</p></th>
-</tr>
-</thead>
+<div class="table-wrapper colwidths-given docutils container" id="id14">
+<table class="docutils align-default" id="id14">
+<caption><span class="caption-number">Table 3 </span><span class="caption-text">DC2541A PSE Board Jumper Configuration</span><a class="headerlink" href="#id14" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 16.0%" />
+<col style="width: 16.0%" />
+<col style="width: 16.0%" />
+<col style="width: 16.0%" />
+<col style="width: 16.0%" />
+</colgroup>
 <tbody>
-<tr class="row-even"><td><p>IEEE
-802.3at
-Type 2
-(25.5W)</p></td>
-<td><p>Type 2
-(25.5W)</p></td>
+<tr class="row-odd"><td><p><strong>PSE Type</strong></p></td>
+<td><p><strong>Power Mode  (JP6)</strong></p></td>
+<td><p><strong>PORT+ (JP1) /  PORT-(JP2)</strong></p></td>
+<td><p><strong>MID (JP3)</strong></p></td>
+<td><p><strong>DUALPD  (JP4)</strong></p></td>
+<td><p><strong>LEGACY  (JP5)</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>IEEE 802.3at Type 2 (25.5W)</p></td>
+<td><p>Type 2 (25.5W)</p></td>
 <td><p>2-PAIR</p></td>
 <td><p>LO/HI</p></td>
 <td><p>LO</p></td>
@@ -1540,10 +1559,10 @@ Type 2
 </tbody>
 </table>
 </div>
-<figure class="align-default" id="id12">
+<figure class="align-default" id="id15">
 <img alt="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/ad-ps3803-rd_11.png" src="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/ad-ps3803-rd_11.png" />
 <figcaption>
-<p><span class="caption-number">Figure 11 </span><span class="caption-text">Jumper Connections</span><a class="headerlink" href="#id12" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 11 </span><span class="caption-text">Jumper Connections</span><a class="headerlink" href="#id15" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </section>
@@ -1553,27 +1572,27 @@ Type 2
 <li><p>Turn the DC power supply ON and set the voltage to approximately 48V.</p></li>
 <li><p>Set the DC power supply current limit to 1A.</p></li>
 <li><p>Connect the RJ45-to-RJ45 Ethernet cable to AD-PS3803-RD, as illustrated in
-Figure 1.</p></li>
-<li><p>Turn ON the DC electronic load and set carefully set the current to 2A only.</p></li>
+Figure 10.</p></li>
+<li><p>Turn ON the DC electronic load and carefully set the current to 2A only.</p></li>
 <li><p>Check the output voltage reading from Voltmeter #1 and verify that it is
-within the maximum and minimum limits, as indicated in Table 3.</p></li>
+within the maximum and minimum limits, as indicated in Table 4.</p></li>
 </ol>
-<p><strong>Table 3: Output Voltage Limits</strong></p>
-<div class="table-wrapper docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p><strong>Assembly</strong></p></th>
-<th class="head"><p><strong>Output Voltage Range (V)
-[Voltmeter #1]</strong></p></th>
-<th class="head"></th>
-</tr>
-</thead>
+<div class="table-wrapper colwidths-given docutils container" id="id16">
+<table class="docutils align-default" id="id16">
+<caption><span class="caption-number">Table 4 </span><span class="caption-text">Output Voltage Limits via Voltmeter #1</span><a class="headerlink" href="#id16" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 38.5%" />
+<col style="width: 30.8%" />
+<col style="width: 30.8%" />
+</colgroup>
 <tbody>
+<tr class="row-odd"><td><p><strong>Device under Test</strong></p></td>
+<td><p><strong>Minimum VOUT (V)</strong></p></td>
+<td><p><strong>Maximum VOUT (V)</strong></p></td>
+</tr>
 <tr class="row-even"><td><p>AD-PS3803-RD</p></td>
-<td><p>Minimum (V)
-11.76</p></td>
-<td><p>Maximum (V)
-12.24</p></td>
+<td><p>11.76 V</p></td>
+<td><p>12.24 V</p></td>
 </tr>
 </tbody>
 </table>
@@ -1582,14 +1601,14 @@ within the maximum and minimum limits, as indicated in Table 3.</p></li>
 <li><p>Set the DC power supply voltage to approximately 57V.</p></li>
 <li><p>Verify that the DC electronic load is still set to the current of 2A.</p></li>
 <li><p>Check the output voltage reading from Voltmeter #1 and verify that it is
-within the maximum and minimum limits as indicated in Table 3.</p></li>
+within the maximum and minimum limits as indicated in Table 4.</p></li>
 <li><p>Set the DC electronic load to 0A.</p></li>
 <li><p>Disconnect the RJ45-to-RJ45 Ethernet cable from AD-PS3803-RD.</p></li>
 </ol>
-<figure class="align-default" id="id13">
+<figure class="align-default" id="id17">
 <img alt="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/ad-ps3803-rd_12.png" src="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/ad-ps3803-rd_12.png" />
 <figcaption>
-<p><span class="caption-number">Figure 12 </span><span class="caption-text">AD-PSD3803 Actual Test Setup</span><a class="headerlink" href="#id13" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 12 </span><span class="caption-text">AD-PSD3803 Actual Test Setup</span><a class="headerlink" href="#id17" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </section>
@@ -1600,11 +1619,11 @@ within the maximum and minimum limits as indicated in Table 3.</p></li>
 <h3>Efficiency<a class="headerlink" href="#efficiency" title="Link to this heading"></a></h3>
 <p>Below figure shows the efficiency performance of AD-PS3803-RD at PoE input voltage
 of 48V and 57V.</p>
-<figure class="align-default" id="id14">
+<figure class="align-default" id="id18">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/ad-ps3803-rd_13.png"><img alt="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/ad-ps3803-rd_13.png" src="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/ad-ps3803-rd_13.png" style="width: 500px;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 13 </span><span class="caption-text">AD-PS3803-RD Efficiency vs. Load Current Performance</span><a class="headerlink" href="#id14" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 13 </span><span class="caption-text">AD-PS3803-RD Efficiency vs. Load Current Performance</span><a class="headerlink" href="#id18" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </section>
@@ -1612,12 +1631,632 @@ of 48V and 57V.</p>
 <h3>Output Regulation<a class="headerlink" href="#output-regulation" title="Link to this heading"></a></h3>
 <p>The AD-PS3803-RD maintains within ±5% across its entire output current
 capability.</p>
-<figure class="align-default" id="id15">
+<figure class="align-default" id="id19">
 <img alt="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/014.png" src="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/014.png" />
 <figcaption>
-<p><span class="caption-number">Figure 14 </span><span class="caption-text">AD-PS3803-RD: Output Voltage vs. Load Current Performance</span><a class="headerlink" href="#id15" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 14 </span><span class="caption-text">AD-PS3803-RD: Output Voltage vs. Load Current Performance</span><a class="headerlink" href="#id19" title="Link to this image"></a></p>
 </figcaption>
 </figure>
+</section>
+</section>
+<section id="higher-power-configuration">
+<h2>Higher Power Configuration<a class="headerlink" href="#higher-power-configuration" title="Link to this heading"></a></h2>
+<section id="configuring-the-pd-circuit-at-higher-power-class">
+<span id="id1"></span><h3>Configuring the PD Circuit at Higher Power Class<a class="headerlink" href="#configuring-the-pd-circuit-at-higher-power-class" title="Link to this heading"></a></h3>
+<p>For enabling the PD circuit to receive the appropriate higher power classes from the PSE,
+AD-PS3803-RD must be modified as such, from configuring the power class selection of the
+PD controller, and the redesign of critical parts for higher power.</p>
+<figure class="align-default" id="id20">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/ad-ps3803-rd-simplified.png"><img alt="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/ad-ps3803-rd-simplified.png" src="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/ad-ps3803-rd-simplified.png" style="width: 1400px;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 15 </span><span class="caption-text">Simplified PD Controller Circuit with Isolated Supply</span><a class="headerlink" href="#id20" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>The hot-plug or inrush protection FET selected must be capable of higher parameters if it operates
+at higher power class, specifically the current that will flow from its drain to source I<sub>DS</sub>,
+which is the same input current of the PoE main line that may fluctuate as worst case to the peak
+current of the primary winding of the transformer I<sub>PRI</sub>. Improper selection of FET will
+cause overcurrent or failure of the FET.</p>
+<div class="admonition-calculation admonition">
+<p class="admonition-title">Calculation</p>
+<blockquote>
+<div><p>For Higher Current FET selection,
+it must satisfy Equation (1):</p>
+</div></blockquote>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\Large \mathrm{I_{DS} \ge I_{PRI}}\]</div>
+</div>
+</div>
+<div class="table-wrapper docutils container" id="id21">
+<table class="docutils align-default" id="id21">
+<caption><span class="caption-number">Table 5 </span><span class="caption-text">Recommended High Current MOSFETs for Hot-Input Protection</span><a class="headerlink" href="#id21" title="Link to this table"></a></caption>
+<tbody>
+<tr class="row-odd"><td><p>Part number</p></td>
+<td><p>Drain Current</p></td>
+<td><p>Drain-to-source Voltage</p></td>
+<td><p>On-resistance</p></td>
+</tr>
+<tr class="row-even"><td><p>PJQ4576AP-AU</p></td>
+<td><p>35A</p></td>
+<td><p>100V</p></td>
+<td><p>26.5mΩ</p></td>
+</tr>
+<tr class="row-odd"><td><p>PSMN040-100MSE</p></td>
+<td><p>30A</p></td>
+<td><p>100V</p></td>
+<td><p>36.6mΩ</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="pd-controller-considerations">
+<h3>PD Controller Considerations<a class="headerlink" href="#pd-controller-considerations" title="Link to this heading"></a></h3>
+<p>To make sure the PD controller is connected to the PSE, and that the PSE delivers the compatible
+power class, the power class resistor configuration should be set to the appropriate power delivery.
+If using the reference design AD-PS3803-RD, the same accessible jumper circuit can be used to select
+the power class. If designing on a new board, the correct resistor values for RCLS and RCLS++ must be
+applied, indicated on Table 6.</p>
+<p>Technically the LTPoE++ proprietary specs of <a class="icon adi reference external" href="https://www.analog.com/LT4275" target="_blank">LT4275</a> can work on the IEEE802.3bt when set at
+higher power class, like 90W for 71.3W for example, but the user may want a PD controller part
+that will negotiate on the specific power class indicated by the IEEE 802.3, because the class
+naming and PD power are not entirely the same. In which the user can replace it with <a class="icon adi reference external" href="https://www.analog.com/LT4294" target="_blank">LT4294</a>
+PD controller specifically compliant to IEEE 802.3 PoE standards.</p>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/LT4294" target="_blank">LT4294</a> is pin compatible with <a class="icon adi reference external" href="https://www.analog.com/LT4275" target="_blank">LT4275</a>, use Table 7 for the appropriate power class and resistor
+configuration of <a class="icon adi reference external" href="https://www.analog.com/LT4294" target="_blank">LT4294</a>. Take note of the slight differences in the PD power and resistor values.</p>
+<div class="table-wrapper colwidths-given docutils container" id="id22">
+<table class="docutils align-default" id="id22">
+<caption><span class="caption-number">Table 6 </span><span class="caption-text">LT4275 PoE+ Power Classes</span><a class="headerlink" href="#id22" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 11.5%" />
+<col style="width: 11.5%" />
+<col style="width: 11.5%" />
+<col style="width: 11.5%" />
+<col style="width: 11.5%" />
+<col style="width: 11.5%" />
+<col style="width: 11.5%" />
+<col style="width: 19.2%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>Maximum PD Power</strong></p></td>
+<td><p><strong>PD Type</strong></p></td>
+<td><p><strong>PD Class</strong></p></td>
+<td><p><strong>RCLS</strong></p></td>
+<td><p><strong>Odd Jumper</strong></p></td>
+<td><p><strong>RCLS++</strong></p></td>
+<td><p><strong>Even Jumper</strong></p></td>
+<td><p><strong>Notes</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>25.5W</p></td>
+<td><p>Type 2</p></td>
+<td><p>Class 4</p></td>
+<td><p>34.8Ω</p></td>
+<td><p>JP9</p></td>
+<td><p>Open</p></td>
+<td><p>JP10</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>38.7W</p></td>
+<td><p>LTPOE++</p></td>
+<td><p>Class 4*</p></td>
+<td><p>Open</p></td>
+<td><p>JP11</p></td>
+<td><p>34.8Ω</p></td>
+<td><p>JP12</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>52.7W</p></td>
+<td><p>LTPOE++</p></td>
+<td><p>Class 4*</p></td>
+<td><p>140Ω</p></td>
+<td><p>JP13</p></td>
+<td><p>46.4Ω</p></td>
+<td><p>JP14</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>70W</p></td>
+<td><p>LTPOE++</p></td>
+<td><p>Class 4*</p></td>
+<td><p>76.8Ω</p></td>
+<td><p>JP15</p></td>
+<td><p>64.9Ω</p></td>
+<td><p>JP16</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>90W</p></td>
+<td><p>LTPOE++</p></td>
+<td><p>Class 4*</p></td>
+<td><p>49.9Ω</p></td>
+<td><p>JP17</p></td>
+<td><p>118Ω</p></td>
+<td><p>JP18</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul class="simple">
+<li><p>An LTPoE++ PD will be classified as class 4 by an IEEE 802.3 compliant PSE</p></li>
+</ul>
+<div class="table-wrapper colwidths-given docutils container" id="id23">
+<table class="docutils align-default" id="id23">
+<caption><span class="caption-number">Table 7 </span><span class="caption-text">LT4294 IEEE 802.3 Power Classes</span><a class="headerlink" href="#id23" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 12.5%" />
+<col style="width: 12.5%" />
+<col style="width: 18.8%" />
+<col style="width: 12.5%" />
+<col style="width: 6.2%" />
+<col style="width: 6.2%" />
+<col style="width: 6.2%" />
+<col style="width: 6.2%" />
+<col style="width: 18.8%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>Power from PSE</strong></p></td>
+<td><p><strong>Maximum PD Power</strong></p></td>
+<td><p><strong>PD Type</strong></p></td>
+<td><p><strong>PD Class</strong></p></td>
+<td><p><strong>RCLS</strong></p></td>
+<td><p><strong>Odd Jumper</strong></p></td>
+<td><p><strong>RCLS++</strong></p></td>
+<td><p><strong>Even Jumper</strong></p></td>
+<td><p><strong>Notes</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>30W</p></td>
+<td><p>25.5W</p></td>
+<td><p>Type 2-IEEE 802.3at</p></td>
+<td><p>Class 4</p></td>
+<td><p>34.8Ω</p></td>
+<td><p>JP9</p></td>
+<td><p>Open</p></td>
+<td><p>JP10</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>45W</p></td>
+<td><p>40W</p></td>
+<td><p>Type 3-IEEE 802.3bt</p></td>
+<td><p>Class 5</p></td>
+<td><p>1.0kΩ</p></td>
+<td><p>JP11</p></td>
+<td><p>37.4Ω</p></td>
+<td><p>JP12</p></td>
+<td><p>Add RCLS = 1.0kΩ, and Add RCLS++ = 37.4Ω</p></td>
+</tr>
+<tr class="row-even"><td><p>60W</p></td>
+<td><p>51W</p></td>
+<td><p>Type 3-IEEE 802.3bt</p></td>
+<td><p>Class 6</p></td>
+<td><p>140Ω</p></td>
+<td><p>JP13</p></td>
+<td><p>46.4Ω</p></td>
+<td><p>JP14</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>75W</p></td>
+<td><p>62W</p></td>
+<td><p>Type 4-IEEE 802.3bt</p></td>
+<td><p>Class 7</p></td>
+<td><p>76.8Ω</p></td>
+<td><p>JP15</p></td>
+<td><p>64.9Ω</p></td>
+<td><p>JP16</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>90W</p></td>
+<td><p>71.3W</p></td>
+<td><p>Type 4-IEEE 802.3bt</p></td>
+<td><p>Class 8</p></td>
+<td><p>49.9Ω</p></td>
+<td><p>JP17</p></td>
+<td><p>118Ω</p></td>
+<td><p>JP18</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="flyback-converter-at-higher-power">
+<h3>Flyback Converter at Higher Power<a class="headerlink" href="#flyback-converter-at-higher-power" title="Link to this heading"></a></h3>
+<p>The isolated DC-DC converter must be re-designed in the appropriate power delivery of the PoE circuit.
+For the flyback converter using the <a class="icon adi reference external" href="https://www.analog.com/LT8306" target="_blank">LT8306</a>, the power class requirement will dictate the input
+power of the flyback and its entire design, especially the flyback transformer.</p>
+<p>The flyback converter of the 25.5W power class is differently designed to the flyback converter
+of higher power like the 71.3W power class of IEEE 802.3bt.</p>
+</section>
+<section id="flyback-transformer-considerations">
+<h3>Flyback Transformer Considerations<a class="headerlink" href="#flyback-transformer-considerations" title="Link to this heading"></a></h3>
+<p>The flyback converter of AD-PS3803-RD is optimally designed for the 25.5W power class which reflects
+as the input power. This flyback will output a maximum power of 24W when efficiency and power loss
+are considered, translated to the output of 12V and 2A maximum as stated by the board’s specifications.</p>
+<figure class="align-default" id="id24">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/dc-dc-flyback-simplified-lt8306.png"><img alt="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/dc-dc-flyback-simplified-lt8306.png" src="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/dc-dc-flyback-simplified-lt8306.png" style="width: 600px;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 16 </span><span class="caption-text">Simplified DC-DC Flyback using LT8306</span><a class="headerlink" href="#id24" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>For higher power classes like the 70W of Class 4 LTPoE++ and 71.3W of Type 4 Class 8 IEEE802.3bt,
+a likely larger transformer with higher specification is required. The flyback circuit is designed
+only for 25.5W which is expected will not work on higher power class because it can make the
+transformer saturate, resulting in the DC-DC converter regulation collapsing.</p>
+<p>We can verify this by checking the peak current of the primary winding of the transformer I<sub>PRI</sub>
+if it hits the transformer saturation specified on table 8, using equation 3 where input power is
+the PD power class, by first calculating switching frequency using equation 2.</p>
+<figure class="align-default" id="id25">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/winding-currents.png"><img alt="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/winding-currents.png" src="https://media.githubusercontent.com/media/analogdevicesinc/documentation/main/docs/solutions/reference-designs/ad-ps3803-rd/winding-currents.png" style="width: 500px;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 17 </span><span class="caption-text">Transformer Primary Winding and Secondary Winding Currents</span><a class="headerlink" href="#id25" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>The switching frequency is dictated by the PWM controller of the flyback, which is <a class="icon adi reference external" href="https://www.analog.com/LT8306" target="_blank">LT8306</a>. The
+on-time is the duration in which the current in the primary winding is conducting up to its peak,
+until it demagnetizes at the off-time where the secondary winding current conducts. If the flyback
+is operating at discontinuous conduction, there will be a dead-time in which both windings are not
+conducting. The cycle is complete after a time period of the primary winding conducting
+(on-time) and then the time demagnetizing, which dictates the switching frequency.</p>
+<p>The switching frequency boundaries, along with the minimum on-time is limited and spec by the
+controller, in which the parameters are indicated by the <a class="icon adi reference external" href="https://www.analog.com/LT8306" target="_blank">LT8306</a> datasheet. The switching frequency
+is an important parameter for calculating primary winding peak current and power capability of the
+flyback converter when choosing or selecting the appropriate transformer.</p>
+<div class="table-wrapper colwidths-given docutils container" id="id26">
+<table class="docutils align-default" id="id26">
+<caption><span class="caption-number">Table 8 </span><span class="caption-text">W.E. 750316116 Transformer Specification</span><a class="headerlink" href="#id26" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 71.4%" />
+<col style="width: 28.6%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>Parameter</strong></p></td>
+<td><p><strong>Value</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>Primary Winding Inductance ( L<sub>PRI</sub> )</p></td>
+<td><p>18 µH</p></td>
+</tr>
+<tr class="row-odd"><td><p>Turns Ratio ( N<sub>PS</sub> )</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-even"><td><p>Saturation Current ( I<sub>SAT</sub> )</p></td>
+<td><p>7.7 A</p></td>
+</tr>
+<tr class="row-odd"><td><p>Primary Winding Resistance ( DCR<sub>PRI</sub> )</p></td>
+<td><p>20 mΩ</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>For higher current capability, we can set LT8306’s limit current I<sub>LIM</sub> to 10A for example, just that
+the inductor peak current can go high enough for intended higher power.</p>
+<div class="admonition-calculation admonition">
+<p class="admonition-title">Calculation</p>
+<p>Switching Frequency is calculated by Equation (2):</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\Large \mathrm{F_{SW} = \frac{1}{T_{ON}+T_{DEMAG}} = \frac{1}{T} = \huge \frac{1}{\frac{L_{PRI}
+\ \bullet \ I_{LIM}}{V_{IN}}+\frac{L_{PRI} \ \bullet \ I_{LIM}}{N_{PS} \ \bullet \ (V_{OUT} \ + \ V_{F})}}}\]</div>
+</div>
+<p>Using the specs of 750316116, Switching frequency is 95.47 kHz</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\Large \mathrm{ F_{SW} = \huge \frac{1}{\frac{(18µH) \ \bullet \ (10A)}{57V}+\frac{(18µH) \ \bullet
+\ (10A)}{(2) \ \bullet \ (12V \ + \ 0.3V)}} = \normalsize \Large 95.47kHz }\]</div>
+</div>
+</div>
+<p>With the switching frequency calculated, the user can check if the selected transformer is applicable
+to the IEEE 802.3bt high input power of 71.3W by calculating the primary winding peak current I<sub>PRI</sub>,
+using equation 3.</p>
+<div class="admonition-calculation admonition">
+<p class="admonition-title">Calculation</p>
+<p>Flyback input power is presented by Equation (3):</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\Large \mathrm{ P_{IN} = \frac{L_{PRI} \ \bullet F_{SW} \ \bullet \ (I_{PRI})^2}{2} }\]</div>
+</div>
+<p>Given that the PD input power for IEEE 802.3bt is 71.3W,
+then I<sub>PRI</sub> can be calculated:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\Large \mathrm{ 71.3W = \frac{(18µH) \ \bullet \ (95.47kHz) \ \bullet \ (I_{PRI})^2}{2} }\]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\Large \mathrm{ Therefore, I_{PRI} = 9.13A }\]</div>
+</div>
+</div>
+<p>For a peak current of 9.13A, unfortunately it exceeds the saturation of the transformer of 7.7A.</p>
+<p>Another method of checking the capability of the transformer is the full-load output current it
+can deliver by using equation 4 and equation 5.</p>
+<div class="admonition-calculation admonition">
+<p class="admonition-title">Calculation</p>
+<p>Duty Cycle is calculated by Equation (4):</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\Large \mathrm{ D = \frac{T_{ON}}{T} = \frac{T_{ON}}{T_{ON}+T_{DEMAG}} = \frac{(V_{OUT}+V_{F})
+\ \bullet \ N_{PS}}{V_{IN}\ + \ (V_{OUT} \ + \ V_{F}) \ \bullet \ N_{PS}} }\]</div>
+</div>
+<p>Output Current I<sub>OUT</sub> is calculated by Equation (5):</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\Large \mathrm{ I_{OUT} = \frac{eff \ \bullet \ (1-D) \ \bullet \ \ N_{PS}
+\ \bullet \ I_{PRI}}{2} }\]</div>
+</div>
+</div>
+<p>Assuming efficiency is 85%, we selected the previously calculated peak current of I<sub>PRI</sub> of 9.31A:</p>
+<div class="admonition-calculation admonition">
+<p class="admonition-title">Calculation</p>
+<p>Duty Cycle is around 30.1%:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\Large \mathrm{ D = \frac{(12V \ + \ 0.3V) \ \bullet \ (2)}{57V \ \bullet
+\ (12V \ + \ 0.3V) \ \bullet \ (2)} = 0.301 }\]</div>
+</div>
+<p>Calculated I<sub>OUT</sub> is 4.75A, which is less then 5.4A output for PD of 71.3W:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\Large \mathrm{ I_{OUT} = \frac{(0.85) \ \bullet \ (1-0.301) \ \bullet
+\ (2) \ \bullet \ (9.31A)}{2} = 4.75A }\]</div>
+</div>
+</div>
+<p>If the designer wants to deliver the output power of 65W, for an input power of 71.3W when
+approximated efficiency of 85% is considered, the flyback must be able to deliver current
+of 5.4A at full load for an output voltage of 12V. The flyback in AD-PS3803-RD unfortunately
+is not designed for this, as it is only capable of delivering up to 4.75A at maximum, and
+it is not even optimized for that, because it is intentionally designed for 2A output (24W).</p>
+<p>Therefore, the designer must select a new transformer that will not saturate at higher PoE
+power class, either picking a transformer with higher saturation current, or higher primary
+winding inductance, appropriate turns ratio, or at least it indicates that it can produce
+the maximum output current and output power if the saturation current specification is
+not available.</p>
+<p>One example of a transformer that has a higher specification is <strong>750319036</strong> from Wurth
+Elektroniks. It is spec for power of up to 72W (12V at 6A).</p>
+<div class="table-wrapper colwidths-given docutils container" id="id27">
+<table class="docutils align-default" id="id27">
+<caption><span class="caption-number">Table 9 </span><span class="caption-text">W.E. 750319036 Transformer Specification</span><a class="headerlink" href="#id27" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 71.4%" />
+<col style="width: 28.6%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>Parameter</strong></p></td>
+<td><p><strong>Value</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>Primary Winding Inductance L<sub>PRI</sub></p></td>
+<td><p>16 µH</p></td>
+</tr>
+<tr class="row-odd"><td><p>Turns Ratio N<sub>PS</sub></p></td>
+<td><p>2.33</p></td>
+</tr>
+<tr class="row-even"><td><p>Saturation Current I<sub>SAT</sub></p></td>
+<td><p>10.4 A</p></td>
+</tr>
+<tr class="row-odd"><td><p>Primary Winding Resistance DCR<sub>PRI</sub></p></td>
+<td><p>26.2 mΩ</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Using this transformer, we are calculating the switching frequency and primary winding
+peak current of 750319036 for 71.3W, setting I<sub>LIM</sub> = 10A again to make sure it does not
+violate the minimum switching frequency of 12.5kHz and to allow higher current ceiling
+like the previous calculation, which must be adequate on the given transformer
+inductance.</p>
+<div class="admonition-calculation admonition">
+<p class="admonition-title">Calculation</p>
+<p>For primary winding inductance of 16µH, F<sub>SW</sub> is  more than 12.5kHz minimum.</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\Large \mathrm{ F_{SW} = \huge \frac{1}{\frac{(16µH) \ \bullet \ (10A)}{57V}+\frac{(16µH) \ \bullet
+\ (10A)}{(2) \ \bullet \ (12V \ + \ 0.3V)}} = \normalsize \Large 119.19kHz }\]</div>
+</div>
+<p>Calculating the peak current again for the transfomer if it is capable for IEEE 802.3bt.</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\Large \mathrm{ 71.3W = \frac{(16µH) \ \bullet \ (119.19kHz) \ \bullet \ (I_{PRI})^2}{2} }\]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\Large \mathrm{ Therefore, I_{PRI} = 8.6472A }\]</div>
+</div>
+</div>
+<p>With the primary current known at I<sub>PRI</sub> = 8.65A, this proves that the transformer will
+not saturate, then we verify the duty cycle and see how much output or load current it
+can deliver.</p>
+<div class="admonition-calculation admonition">
+<p class="admonition-title">Calculation</p>
+<p>The duty cycle is around 33.46%.</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\Large \mathrm{ D = \frac{(12V \ + \ 0.3V) \ \bullet \ (2.33)}{57V \ \bullet
+\ (12V \ + \ 0.3V) \ \bullet \ (2.33)} = 0.33457 }\]</div>
+</div>
+<p>I<sub>OUT</sub> is  5.7A, which is more than 5.4A.</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\Large \mathrm{ I_{OUT} = \frac{(0.85) \ \bullet \ (1-0.33457) \ \bullet
+\ (2) \ \bullet \ (8.6472A)}{2} = 5.7A }\]</div>
+</div>
+</div>
+<p>The calculated I<sub>OUT</sub> = 5.7A proves that the output capability is within the maximum load
+that the flyback converter can deliver, so that the DC-DC supply can pull an input power
+of what is specified on the PoE power classes of 71.3W or 70W for the full load current
+of 5.4A (65W output).</p>
+<p>The next checking will be the other parameters of the transformer, to ensure we select the
+compatible transformer for LT8306 flyback controller in terms of primary winding inductance
+and turns ratio using equations 6, 7 and 8.</p>
+<div class="admonition-calculation admonition">
+<p class="admonition-title">Calculation</p>
+<p>Sense Resistor for limiting current is Equation (6):</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\Large \mathrm{ R_{SENSE} = \frac{95mV}{I_{LIM}} }\]</div>
+</div>
+<p>Maximum allowable turns-ratio is Equation (7):</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\Large \mathrm{ N_{PS} = \frac{D_{MAX} \ \bullet
+\ V_{IN}}{(1-D_{MAX}) \ \bullet \ (V_{OUT} \ + \ V_{F})} }\]</div>
+</div>
+<p>Minimum inductance for primary winding of transformer is Equation (8):</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\Large \mathrm{ L_{PRI} \ge  \frac{V_{IN(MAX)} \ \bullet \ R_{SENSE} \
+\bullet \ T_{ON(MIN)}}{V_{SENSE(MIN)}} }\]</div>
+</div>
+</div>
+<p>Calculating other parameters using input conditions given by the LT8306 datasheet,</p>
+<p>Where D<sub>MAX</sub> = 0.65, V<sub>SENSE(MIN)</sub> = 17mV, &amp; T<sub>ON(MIN)</sub> = 200ns.</p>
+<div class="admonition-calculation admonition">
+<p class="admonition-title">Calculation</p>
+<p>For a current limit of 10A, the sense resistor value must be 9.5mΩ.</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\Large \mathrm{ R_{SENSE} = \frac{95mV}{10A} = 9.5m\Omega }\]</div>
+</div>
+<p>The transformer’s turns ratio of 2.33 did not exceeed the calculated maximum turns ratio:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\Large \mathrm{ N_{PS} = \frac{0.65 \ \bullet
+\ 57V}{(1-0.65) \ \bullet \ (12V \ + \ 0.3V)} = 8.61 }\]</div>
+</div>
+<p>The inductance of the transformer is 16µH, which is more than the minimum inductance:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\Large \mathrm{ L_{PRI} \ge  \frac{57V \ \bullet \ 9.5m\Omega \
+\bullet \ (200ns)}{17mV} \ge 6.37\mu H }\]</div>
+</div>
+</div>
+<p>Therefore, the selected transformer <strong>750319036</strong> from Wurth Elektroniks is a recommended part for
+higher power flyback circuit for the application of higher power PoE up to 72W. Other
+alternative transformers are indicated in Table 10.</p>
+<div class="table-wrapper colwidths-given docutils container" id="id28">
+<table class="docutils align-default" id="id28">
+<caption><span class="caption-number">Table 10 </span><span class="caption-text">Recommended Flyback Transformers for IEEE 802.3bt</span><a class="headerlink" href="#id28" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 18.8%" />
+<col style="width: 18.8%" />
+<col style="width: 12.5%" />
+<col style="width: 12.5%" />
+<col style="width: 12.5%" />
+<col style="width: 12.5%" />
+<col style="width: 12.5%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>Part Number</strong></p></td>
+<td><p><strong>Manufacturer</strong></p></td>
+<td><p><strong>Primary Winding Inductance</strong></p></td>
+<td><p><strong>Turns Ratio</strong></p></td>
+<td><p><strong>Saturation Current</strong></p></td>
+<td><p><strong>Output Voltage</strong></p></td>
+<td><p><strong>Output Current</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>750319036</p></td>
+<td><p>Wurth Elektroniks</p></td>
+<td><p>16 µH</p></td>
+<td><p>2.33</p></td>
+<td><p>10.4 A</p></td>
+<td><p>12 V</p></td>
+<td><p>6 A</p></td>
+</tr>
+<tr class="row-odd"><td><p>750319021</p></td>
+<td><p>Wurth Elektroniks</p></td>
+<td><p>22 µH</p></td>
+<td><p>2.4</p></td>
+<td><p>10.8 A</p></td>
+<td><p>12 V</p></td>
+<td><p>8 A</p></td>
+</tr>
+<tr class="row-even"><td><p>POE71F-12ED</p></td>
+<td><p>Coilcraft</p></td>
+<td><p>15.5 µH</p></td>
+<td><p>2</p></td>
+<td><p>6.6 A</p></td>
+<td><p>12 V</p></td>
+<td><p>5.4 A</p></td>
+</tr>
+<tr class="row-odd"><td><p>POE120PL-12L</p></td>
+<td><p>Coilcraft</p></td>
+<td><p>50 µH</p></td>
+<td><p>2</p></td>
+<td><p>–</p></td>
+<td><p>12 V</p></td>
+<td><p>10 A</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>After the transformer consideration is to design the rest of the flyback circuit like the
+flyback diode, snubber circuit selection and output capacitor calculations. These are all straight
+forward and can be directly calculated with the equations provided by the LT8306 datasheet for
+this specific flyback circuit that being used on AD-PS3803-RD.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Important disclaimer that, for any isolated DC-DC converters, higher power delivery consequently means
+part selections are bigger and with different footprints, especially for the flyback transformer as
+its critical part.</p>
+</div>
+<p>The AD-PS3803-RD is optimally designed for 25.5W input power, so at higher power applications,
+the selected new transformer will not fit the footprint and pin assignment of the existing flyback
+transformer in the reference design. This is also an argument for the capacitor and diode selection.
+The diodes may not also fit its footprint due to larger size at higher current. Capacitances are
+usually high at higher current because of the ripple requirements of flyback, so it will require
+many capacitors. Therefore, the changes for higher PD power class will may not fit to the PCB
+of AD-PS3803-RD.</p>
+<p>Here is an example part list of critical components on the flyback converter required for 71.3W input
+power, based on the simplified flyback circuit of figure 16.</p>
+<div class="table-wrapper colwidths-given docutils container" id="id29">
+<table class="docutils align-default" id="id29">
+<caption><span class="caption-number">Table 11 </span><span class="caption-text">Recommended Critical Parts for 71.3W Flyback Converter</span><a class="headerlink" href="#id29" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 16.7%" />
+<col style="width: 25.0%" />
+<col style="width: 16.7%" />
+<col style="width: 8.3%" />
+<col style="width: 33.3%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>Component</strong></p></td>
+<td><p><strong>Part Number</strong></p></td>
+<td><p><strong>Manufacturer</strong></p></td>
+<td><p><strong>Quantity</strong></p></td>
+<td><p><strong>Description</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>Transformer</p></td>
+<td><p>750319036</p></td>
+<td><p>WURTH Elektroniks</p></td>
+<td><p>1</p></td>
+<td><p>POE Transformer for Flyback L = 16µH</p></td>
+</tr>
+<tr class="row-odd"><td><p>Flyback Diode</p></td>
+<td><p>FSV12100V</p></td>
+<td><p>ONSEMI</p></td>
+<td><p>1</p></td>
+<td><p>Schottky Diode 100V 12A TO2773 package</p></td>
+</tr>
+<tr class="row-even"><td><p>Load Capacitor</p></td>
+<td><p>CAA573X7R1H686M670LH</p></td>
+<td><p>TDK</p></td>
+<td><p>≥10</p></td>
+<td><p>Multilayer Ceramic Capacitor 2232 X7R 50V 68uF ±20%</p></td>
+</tr>
+<tr class="row-odd"><td><p>Sense Resistor</p></td>
+<td><p>WSL25129L500FEA</p></td>
+<td><p>Vishay</p></td>
+<td><p>1</p></td>
+<td><p>9.5 mΩ ±1% 1W Resistor 2512</p></td>
+</tr>
+<tr class="row-even"><td><p>MOSFET</p></td>
+<td><p>BSC190N12NS3GATMA1</p></td>
+<td><p>Infineon</p></td>
+<td><p>1</p></td>
+<td><p>N-Channel MOSFET 120V 8.6A / 44A TDSON package</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </section>
 </section>
 <section id="resources">
@@ -1625,6 +2264,7 @@ capability.</p>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/lt8306" target="_blank">LT8306 Product Page</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/lt4275" target="_blank">LT4275 Product Page</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/lt4294" target="_blank">LT4294 Product Page</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/lt4321" target="_blank">LT4321 Product Page</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/DC2541A.PDF" target="_blank">DC2541A Demo Manual</a></p></li>
 </ul>
