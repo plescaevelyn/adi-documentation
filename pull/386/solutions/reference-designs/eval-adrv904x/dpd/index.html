@@ -4,9 +4,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="The DPD feature on the ADRV904x transceiver enables users to offload power amplifier linearization tasks from the baseband processor to the transceiver. With DPD implemented on the transceiver, the user does not need to allocate JESD serializer/de-serializer resources for observing power amplifier feedback data through the ORx channels, resulting in significant system power savings. Digital Up-Converters, Interpolators leading to the DPD actuator allow the baseband processor to transmit data at a lower rate on the JESD204B/C link than is needed for the full DPD correction bandwidth. The lower data rate at JESD translates directly into power savings and less number of lanes. Integration of the DPD into the transceiver chip results in significant system level cost, space, and power savings when compared to conventional FPGA/ASIC based implementations." name="description" />
+<meta content="This page is a source of technical information for Digital Pre-Distortion (DPD) on the ADRV9040, a highly integrated, advanced 8T8R RF Transceiver System supporting 400MHz iBW." name="description" />
 
-    <title>ADRV904x DFE SYSTEM LEVEL OVERVIEW &#8212; System Level Documentation  documentation</title>
+    <title>ADRV904x DPD USER GUIDE &#8212; System Level Documentation  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/app.min.css?v=ac863bf0" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=5f9cb17c" />
@@ -15,7 +15,7 @@
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
     <link rel="next" title="DPD INTRODUCTION" href="dpd_principle_of_operation.html" />
-    <link rel="prev" title="ADRV904x DPD Capabilities" href="adrv904x_dpd_capabilities.html" />
+    <link rel="prev" title="IIO OSC ADRV904x Capture Window" href="../adrv904x_osc_main.html" />
    
   
   
@@ -95,7 +95,14 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">ADRV904x DFE SYSTEM LEVEL OVERVIEW</a></li>
+<li><a class="reference internal" href="#">ADRV904x DPD USER GUIDE</a><ul>
+<li><a class="reference internal" href="#table-of-contents">TABLE OF CONTENTS</a><ul>
+<li><a class="reference internal" href="#adrv904x-dpd-getting-started">ADRV904x DPD Getting Started</a></li>
+<li><a class="reference internal" href="#adrv904x-dpd-troubleshooting-debugging">ADRV904x DPD Troubleshooting / Debugging</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
         </nav>
@@ -432,8 +439,13 @@ Content on this topic
 <li class="toctree-l3"><a class="reference internal" href="../../ad-fmcomms3-ebz/hardware-guide/config-options/index.html">FMCOMMS3 Configuration Options</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-8" id="toctree-collapse-14-8"/><div class="collapse"><a class="reference internal" href="../../ad-fmcomms6-ebz/index.html">AD-FMCOMMS6-EBZ (Obsolete)</a><label for="toctree-collapse-14-8"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../ad-fmcomms6-ebz/ad-fmcomms6-ebz.html">AD-FMCOMMS6-EBZ User Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ad-fmcomms6-ebz/hardware.html">AD-FMCOMMS6-EBZ Hardware</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../../ad-gmsl-d-e-adp/index.html">AD-GMSL-D-E-ADP#</a></li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-8" id="toctree-collapse-14-8"/><div class="collapse"><a class="reference internal" href="../../ad-gmsl522-sl/index.html">AD-GMSL522-SL</a><label for="toctree-collapse-14-8"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-9" id="toctree-collapse-14-9"/><div class="collapse"><a class="reference internal" href="../../ad-gmsl522-sl/index.html">AD-GMSL522-SL</a><label for="toctree-collapse-14-9"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../ad-gmsl522-sl/hardware-guide/index.html">Hardware Guide</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../ad-gmsl522-sl/software-guide/index.html">Software Guide</a></li>
 </ul>
@@ -442,18 +454,18 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../ad-gmsl717mipi-evk/index.html">AD-GMSL717MIPI-EVK</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ad-gmsl792mipi-evk/index.html">AD-GMSL792MIPI-EVK</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ad-gmsl793mipi-evk/index.html">AD-GMSL793MIPI-EVK</a></li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-9" id="toctree-collapse-14-9"/><div class="collapse"><a class="reference internal" href="../../ad-gmslcamrpi-adp/index.html">AD-GMSLCAMRPI-ADP#</a><label for="toctree-collapse-14-9"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-10" id="toctree-collapse-14-10"/><div class="collapse"><a class="reference internal" href="../../ad-gmslcamrpi-adp/index.html">AD-GMSLCAMRPI-ADP#</a><label for="toctree-collapse-14-10"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../ad-gmslcamrpi-adp/amd-kria/index.html">Using with AMD Kria</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../ad-gmslcamrpi-adp/nvidia-jetson/index.html">Using with Nvidia Jetson Orin Nano</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../ad-gmslcamrpi-adp/raspberry-pi-user-guide/index.html">Using with Raspberry Pi</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-10" id="toctree-collapse-14-10"/><div class="collapse"><a class="reference internal" href="../../ad-imp2501-sl/index.html">AD-IMP2501-SL</a><label for="toctree-collapse-14-10"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-11" id="toctree-collapse-14-11"/><div class="collapse"><a class="reference internal" href="../../ad-imp2501-sl/index.html">AD-IMP2501-SL</a><label for="toctree-collapse-14-11"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../ad-imp2501-sl/hardware-guide/index.html">Hardware User Guide</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../ad-imp2501-sl/software-guide/index.html">Software User Guide</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-11" id="toctree-collapse-14-11"/><div class="collapse"><a class="reference internal" href="../../ad-jupiter-ebz/index.html">AD-JUPITER-EBZ</a><label for="toctree-collapse-14-11"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-12" id="toctree-collapse-14-12"/><div class="collapse"><a class="reference internal" href="../../ad-jupiter-ebz/index.html">AD-JUPITER-EBZ</a><label for="toctree-collapse-14-12"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../ad-jupiter-ebz/quickstart/index.html">Jupiter SDR Quick Start Guide</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../ad-jupiter-ebz/hardware-overview.html">Jupiter SDR Hardware Overview</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../ad-jupiter-ebz/mcs-setup.html">Jupiter_SDR MCS Setup</a></li>
@@ -465,73 +477,73 @@ Content on this topic
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../ad-m2kbnc-ebz/index.html">AD-M2KBNC-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ad-m2kcbl-ebz/index.html">AD-M2KCBL-EBZ</a></li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-12" id="toctree-collapse-14-12"/><div class="collapse"><a class="reference internal" href="../../ad-max32lrwise-sl/index.html">AD-MAX32LRWISE-SL</a><label for="toctree-collapse-14-12"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-13" id="toctree-collapse-14-13"/><div class="collapse"><a class="reference internal" href="../../ad-max32lrwise-sl/index.html">AD-MAX32LRWISE-SL</a><label for="toctree-collapse-14-13"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../ad-max32lrwise-sl/ev-cattletag-ardz/index.html">EV-CATTLETAG-ARDZ</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../ad-max32lrwise-sl/max32670-lr-ardz/index.html">MAX32670-LR-ARDZ</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-13" id="toctree-collapse-14-13"/><div class="collapse"><a class="reference internal" href="../../ad-max32sxwise-sl/index.html">AD-MAX32SXWISE-SL</a><label for="toctree-collapse-14-13"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-14" id="toctree-collapse-14-14"/><div class="collapse"><a class="reference internal" href="../../ad-max32sxwise-sl/index.html">AD-MAX32SXWISE-SL</a><label for="toctree-collapse-14-14"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../ad-max32sxwise-sl/lora-software/index.html">ADI Long Range Wireless Radio Software User Guide</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../ad-max32sxwise-sl/max32670-sx-ardz/index.html">MAX32670-SX-ARDZ</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../ad-max32sxwise-sl/ev-structural-ardz/index.html">EV-STRUCTURAL-ARDZ</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../ad-max32sxwise-sl/ev-flowmeter-ardz/index.html">EV-FLOWMETER-ARDZ</a></li>
-<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-13-1" id="toctree-collapse-14-13-1"/><div class="collapse"><a class="reference internal" href="../../ad-max32sxwise-sl/eval-ade9000shieldz/index.html">EVAL-ADE9000SHIELDZ</a><label for="toctree-collapse-14-13-1"><div class="icon"></div></label></div><ul class="simple">
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-14-1" id="toctree-collapse-14-14-1"/><div class="collapse"><a class="reference internal" href="../../ad-max32sxwise-sl/eval-ade9000shieldz/index.html">EVAL-ADE9000SHIELDZ</a><label for="toctree-collapse-14-14-1"><div class="icon"></div></label></div><ul class="simple">
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-14" id="toctree-collapse-14-14"/><div class="collapse"><a class="reference internal" href="../../ad-paarray3552r-sl/index.html">AD-PAARRAY3552R-SL</a><label for="toctree-collapse-14-14"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-15" id="toctree-collapse-14-15"/><div class="collapse"><a class="reference internal" href="../../ad-paarray3552r-sl/index.html">AD-PAARRAY3552R-SL</a><label for="toctree-collapse-14-15"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../ad-paarray3552r-sl/hardware-guide/index.html">Hardware User Guide</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../ad-paarray3552r-sl/software-guide/index.html">Software User Guide</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-15" id="toctree-collapse-14-15"/><div class="collapse"><a class="reference internal" href="../../ad-pqmon-sl/index.html">AD-PQMON-SL</a><label for="toctree-collapse-14-15"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-16" id="toctree-collapse-14-16"/><div class="collapse"><a class="reference internal" href="../../ad-pqmon-sl/index.html">AD-PQMON-SL</a><label for="toctree-collapse-14-16"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../ad-pqmon-sl/hardware-guide/index.html">Hardware User Guide</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../ad-pqmon-sl/software-guide/index.html">Software User Guide</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../ad-ps3803-rd/index.html">AD-PS3803-RD</a></li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-16" id="toctree-collapse-14-16"/><div class="collapse"><a class="reference internal" href="../../ad-r1m/index.html">AD-R1M</a><label for="toctree-collapse-14-16"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-17" id="toctree-collapse-14-17"/><div class="collapse"><a class="reference internal" href="../../ad-r1m/index.html">AD-R1M</a><label for="toctree-collapse-14-17"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../ad-r1m/hardware-assembly.html">Hardware Assembly Guide</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-17" id="toctree-collapse-14-17"/><div class="collapse"><a class="reference internal" href="../../ad-rpi-t1lpse-sl/index.html">AD-RPI-T1LPSE-SL</a><label for="toctree-collapse-14-17"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-18" id="toctree-collapse-14-18"/><div class="collapse"><a class="reference internal" href="../../ad-rpi-t1lpse-sl/index.html">AD-RPI-T1LPSE-SL</a><label for="toctree-collapse-14-18"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../ad-rpi-t1lpse-sl/basic-sample-application/index.html">Basic Sample Application</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-18" id="toctree-collapse-14-18"/><div class="collapse"><a class="reference internal" href="../../ad-swiot1l-sl/index.html">AD-SWIOT1L-SL</a><label for="toctree-collapse-14-18"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-19" id="toctree-collapse-14-19"/><div class="collapse"><a class="reference internal" href="../../ad-swiot1l-sl/index.html">AD-SWIOT1L-SL</a><label for="toctree-collapse-14-19"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../ad-swiot1l-sl/hardware-guide/index.html">Hardware User Guide</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../ad-swiot1l-sl/firmware-guide/index.html">Firmware User Guide</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../ad-swiot1l-sl/software-guide/index.html">Software User Guide</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-19" id="toctree-collapse-14-19"/><div class="collapse"><a class="reference internal" href="../../ad-synchrona14-ebz/index.html">AD-SYNCHRONA14-EBZ</a><label for="toctree-collapse-14-19"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-20" id="toctree-collapse-14-20"/><div class="collapse"><a class="reference internal" href="../../ad-synchrona14-ebz/index.html">AD-SYNCHRONA14-EBZ</a><label for="toctree-collapse-14-20"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../ad-synchrona14-ebz/testing/index.html">Production testing of the AD-SYNCHRONA14-EBZ</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-20" id="toctree-collapse-14-20"/><div class="collapse"><a class="reference internal" href="../../ad4052-ardz/index.html">EVAL-AD4050/AD4052-ARDZ</a><label for="toctree-collapse-14-20"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-21" id="toctree-collapse-14-21"/><div class="collapse"><a class="reference internal" href="../../ad4052-ardz/index.html">EVAL-AD4050/AD4052-ARDZ</a><label for="toctree-collapse-14-21"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../ad4052-ardz/user-guide.html">Evaluating the device</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-21" id="toctree-collapse-14-21"/><div class="collapse"><a class="reference internal" href="../../ad4062-ardz/index.html">EVAL-AD4060/AD4062-ARDZ</a><label for="toctree-collapse-14-21"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-22" id="toctree-collapse-14-22"/><div class="collapse"><a class="reference internal" href="../../ad4062-ardz/index.html">EVAL-AD4060/AD4062-ARDZ</a><label for="toctree-collapse-14-22"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../ad4062-ardz/user-guide/linux.html">Linux User Guide</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../ad4062-ardz/user-guide/no-os.html">No-OS User Guide</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../ad4062-ardz/tools.html">Libraries and GUI Tools</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-22" id="toctree-collapse-14-22"/><div class="collapse"><a class="reference internal" href="../../ad7405-fmc/index.html">EVAL-AD7405FMCZ</a><label for="toctree-collapse-14-22"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-23" id="toctree-collapse-14-23"/><div class="collapse"><a class="reference internal" href="../../ad7405-fmc/index.html">EVAL-AD7405FMCZ</a><label for="toctree-collapse-14-23"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../ad7405-fmc/user-guide.html">User guide</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../ad7405-fmc/prerequisites.html">Prerequisites</a></li>
-<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-22-1" id="toctree-collapse-14-22-1"/><div class="collapse"><a class="reference internal" href="../../ad7405-fmc/quickstart/index.html">Quickstart</a><label for="toctree-collapse-14-22-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-23-1" id="toctree-collapse-14-23-1"/><div class="collapse"><a class="reference internal" href="../../ad7405-fmc/quickstart/index.html">Quickstart</a><label for="toctree-collapse-14-23-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../ad7405-fmc/quickstart/sdp-h1.html">With SDP-H1</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-23" id="toctree-collapse-14-23"/><div class="collapse"><a class="reference internal" href="../../ad7768-1-evb/index.html">EVAL-AD7768-1FMCZ &amp; EVAL-ADAQ7768-1FMC1Z</a><label for="toctree-collapse-14-23"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-24" id="toctree-collapse-14-24"/><div class="collapse"><a class="reference internal" href="../../ad7768-1-evb/index.html">EVAL-AD7768-1FMCZ &amp; EVAL-ADAQ7768-1FMC1Z</a><label for="toctree-collapse-14-24"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../ad7768-1-evb/user-guide.html">User guide</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../ad7768-1-evb/prerequisites.html">Prerequisites</a></li>
-<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-23-1" id="toctree-collapse-14-23-1"/><div class="collapse"><a class="reference internal" href="../../ad7768-1-evb/quickstart/index.html">Quickstart</a><label for="toctree-collapse-14-23-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-24-1" id="toctree-collapse-14-24-1"/><div class="collapse"><a class="reference internal" href="../../ad7768-1-evb/quickstart/index.html">Quickstart</a><label for="toctree-collapse-14-24-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../ad7768-1-evb/quickstart/zed.html">On ZED</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../ad7768-1-evb/quickstart/ad77681_mbed_iio_app.html">AD7768-1 on SDP-K1</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../ad7768-1-evb/quickstart/adaq77681-eval-board.html">ADAQ7768-1 on SDP-H1</a></li>
@@ -539,10 +551,10 @@ Content on this topic
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-24" id="toctree-collapse-14-24"/><div class="collapse"><a class="reference internal" href="../../ad9084_ebz/index.html">AD9084-FMCA-EBZ (Apollo)</a><label for="toctree-collapse-14-24"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-25" id="toctree-collapse-14-25"/><div class="collapse"><a class="reference internal" href="../../ad9084_ebz/index.html">AD9084-FMCA-EBZ (Apollo)</a><label for="toctree-collapse-14-25"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../ad9084_ebz/user-guide.html">User guide</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../ad9084_ebz/prerequisites.html">Prerequisites</a></li>
-<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-24-1" id="toctree-collapse-14-24-1"/><div class="collapse"><a class="reference internal" href="../../ad9084_ebz/quickstart/index.html">Quickstart</a><label for="toctree-collapse-14-24-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-25-1" id="toctree-collapse-14-25-1"/><div class="collapse"><a class="reference internal" href="../../ad9084_ebz/quickstart/index.html">Quickstart</a><label for="toctree-collapse-14-25-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../ad9084_ebz/quickstart/microblaze.html">Virtex UltraScale+ VCU118/VCU128</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../ad9084_ebz/quickstart/versal.html">Versal ACAP VCK190/VPK180</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../ad9084_ebz/quickstart/agilex.html">Intel Agilex 7 I-Series</a></li>
@@ -551,19 +563,19 @@ Content on this topic
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-25" id="toctree-collapse-14-25"/><div class="collapse"><a class="reference internal" href="../../ad9209-fmca-ebz/index.html">AD9209-FMCA-EBZ</a><label for="toctree-collapse-14-25"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-26" id="toctree-collapse-14-26"/><div class="collapse"><a class="reference internal" href="../../ad9209-fmca-ebz/index.html">AD9209-FMCA-EBZ</a><label for="toctree-collapse-14-26"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../ad9209-fmca-ebz/prerequisites.html">Prerequisites</a></li>
-<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-25-1" id="toctree-collapse-14-25-1"/><div class="collapse"><a class="reference internal" href="../../ad9209-fmca-ebz/quickstart/index.html">Quick Start</a><label for="toctree-collapse-14-25-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-26-1" id="toctree-collapse-14-26-1"/><div class="collapse"><a class="reference internal" href="../../ad9209-fmca-ebz/quickstart/index.html">Quick Start</a><label for="toctree-collapse-14-26-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../ad9209-fmca-ebz/quickstart/vck190.html">On VCK190</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../ad9209-fmca-ebz/user_guide.html">User Guide</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-26" id="toctree-collapse-14-26"/><div class="collapse"><a class="reference internal" href="../../ad9695_fmc/index.html">EVAL-AD9695</a><label for="toctree-collapse-14-26"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-27" id="toctree-collapse-14-27"/><div class="collapse"><a class="reference internal" href="../../ad9695_fmc/index.html">EVAL-AD9695</a><label for="toctree-collapse-14-27"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../ad9695_fmc/user-guide.html">User guide</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../ad9695_fmc/prerequisites.html">Prerequisites</a></li>
-<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-26-1" id="toctree-collapse-14-26-1"/><div class="collapse"><a class="reference internal" href="../../ad9695_fmc/quickstart/index.html">Quickstart</a><label for="toctree-collapse-14-26-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-27-1" id="toctree-collapse-14-27-1"/><div class="collapse"><a class="reference internal" href="../../ad9695_fmc/quickstart/index.html">Quickstart</a><label for="toctree-collapse-14-27-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../ad9695_fmc/quickstart/zcu102.html">On ZCU102</a></li>
 </ul>
 </li>
@@ -571,52 +583,52 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../adalp2000/index.html">ADALP2000</a></li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-27" id="toctree-collapse-14-27"/><div class="collapse"><a class="reference internal" href="../../adaq7980_sdz/index.html">EVAL-ADAQ7980-SDZ</a><label for="toctree-collapse-14-27"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-28" id="toctree-collapse-14-28"/><div class="collapse"><a class="reference internal" href="../../adaq7980_sdz/index.html">EVAL-ADAQ7980-SDZ</a><label for="toctree-collapse-14-28"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../adaq7980_sdz/user-guide.html">User guide</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../adaq7980_sdz/prerequisites.html">Prerequisites</a></li>
-<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-27-1" id="toctree-collapse-14-27-1"/><div class="collapse"><a class="reference internal" href="../../adaq7980_sdz/quickstart/index.html">Quickstart</a><label for="toctree-collapse-14-27-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-28-1" id="toctree-collapse-14-28-1"/><div class="collapse"><a class="reference internal" href="../../adaq7980_sdz/quickstart/index.html">Quickstart</a><label for="toctree-collapse-14-28-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../adaq7980_sdz/quickstart/zedboard.html">ZedBoard</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-28" id="toctree-collapse-14-28"/><div class="collapse"><a class="reference internal" href="../../admv96s-wgbe-ek1/index.html">ADMV96S-WGBE-EK1</a><label for="toctree-collapse-14-28"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-29" id="toctree-collapse-14-29"/><div class="collapse"><a class="reference internal" href="../../admv96s-wgbe-ek1/index.html">ADMV96S-WGBE-EK1</a><label for="toctree-collapse-14-29"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../admv96s-wgbe-ek1/hardware-guide/index.html">Hardware User Guide</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../admv96s-wgbe-ek1/software-guide/index.html">Software User Guide</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-29" id="toctree-collapse-14-29"/><div class="collapse"><a class="reference internal" href="../../admx100x_evb/index.html">ADMX1001 &amp; ADMX1002</a><label for="toctree-collapse-14-29"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-30" id="toctree-collapse-14-30"/><div class="collapse"><a class="reference internal" href="../../admx100x_evb/index.html">ADMX1001 &amp; ADMX1002</a><label for="toctree-collapse-14-30"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../admx100x_evb/prerequisites.html">Prerequisites</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../admx100x_evb/user-guide.html">User Guide</a></li>
-<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-29-1" id="toctree-collapse-14-29-1"/><div class="collapse"><a class="reference internal" href="../../admx100x_evb/quickstart/index.html">Quick Start</a><label for="toctree-collapse-14-29-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-30-1" id="toctree-collapse-14-30-1"/><div class="collapse"><a class="reference internal" href="../../admx100x_evb/quickstart/index.html">Quick Start</a><label for="toctree-collapse-14-30-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../admx100x_evb/quickstart/zed.html">On ZedBoard</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../admx100x_evb/quickstart/sdp-h1.html">On SDP-H1</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-30" id="toctree-collapse-14-30"/><div class="collapse"><a class="reference internal" href="../../admx6001_ebz/index.html">EVAL-ADMX6001-EBZ</a><label for="toctree-collapse-14-30"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-31" id="toctree-collapse-14-31"/><div class="collapse"><a class="reference internal" href="../../admx6001_ebz/index.html">EVAL-ADMX6001-EBZ</a><label for="toctree-collapse-14-31"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../admx6001_ebz/user-guide.html">User guide</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../admx6001_ebz/prerequisites.html">Prerequisites</a></li>
-<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-30-1" id="toctree-collapse-14-30-1"/><div class="collapse"><a class="reference internal" href="../../admx6001_ebz/quickstart/index.html">Quickstart</a><label for="toctree-collapse-14-30-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-31-1" id="toctree-collapse-14-31-1"/><div class="collapse"><a class="reference internal" href="../../admx6001_ebz/quickstart/index.html">Quickstart</a><label for="toctree-collapse-14-31-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../admx6001_ebz/quickstart/vcu118.html">On VCU118</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-31" id="toctree-collapse-14-31"/><div class="collapse"><a class="reference internal" href="../../adrd3161-01z/index.html">ADRD3161-01Z</a><label for="toctree-collapse-14-31"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-32" id="toctree-collapse-14-32"/><div class="collapse"><a class="reference internal" href="../../adrd3161-01z/index.html">ADRD3161-01Z</a><label for="toctree-collapse-14-32"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../adrd3161-01z/hardware-guide.html">ADRD3161-01Z Hardware Guide</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../adrd3161-01z/quick-start-guide.html">ADRD3161-01Z Quick Start Guide</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../adrd3161-01z/production-guide.html">ADRD3161-01Z Production Guide</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-32" id="toctree-collapse-14-32"/><div class="collapse"><a class="reference internal" href="../../adrd4161-01z/index.html">ADRD4161-01Z</a><label for="toctree-collapse-14-32"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-33" id="toctree-collapse-14-33"/><div class="collapse"><a class="reference internal" href="../../adrd4161-01z/index.html">ADRD4161-01Z</a><label for="toctree-collapse-14-33"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../adrd4161-01z/quick-start-guide.html">ADRD4161-01Z Quick Start Guide</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../adrd4161-01z/hardware-guide.html">ADRD4161-01Z Hardware Guide</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../adrd4161-01z/software-guide.html">ADRD4161-01Z Software Guide</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-33" id="toctree-collapse-14-33"/><div class="collapse"><a class="reference internal" href="../../adrd5161-01z/index.html">ADRD5161-01Z</a><label for="toctree-collapse-14-33"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-34" id="toctree-collapse-14-34"/><div class="collapse"><a class="reference internal" href="../../adrd5161-01z/index.html">ADRD5161-01Z</a><label for="toctree-collapse-14-34"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../adrd5161-01z/quick-start-guide.html">ADRD5161-01Z Quick Start Guide</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../adrd5161-01z/hardware-guide.html">ADRD5161-01Z Hardware Guide</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../adrd5161-01z/software-guide.html">ADRD5161-01Z Software Guide</a></li>
@@ -624,28 +636,6 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../adrd8012-01Z/index.html">ADRD8012-01Z</a></li>
-<li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-34" id="toctree-collapse-14-34" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">ADRV9040 Prototyping Platform User Guide</a><label for="toctree-collapse-14-34"><div class="icon"></div></label></div><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="../ad904x_hdl.html">ADRV904x HDL reference design</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../adrv904x.html">ADRV904x Block Diagram</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../dpd.html">ADRV904x DPD USER GUIDE</a></li>
-<li class="toctree-l3"><a class="reference internal" href="adrv904x_dpd_analysis_tool.html">ADRV904x DPD Analysis Tool</a></li>
-<li class="toctree-l3"><a class="reference internal" href="adrv904x_dpd_analysis_tool.html#analyzing-pa-response">Analyzing PA Response</a></li>
-<li class="toctree-l3"><a class="reference internal" href="adrv904x_dpd_analysis_tool.html#identifying-an-optimal-dpd-model">Identifying an Optimal DPD Model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="adrv904x_dpd_capabilities.html">ADRV904x DPD Capabilities</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">ADRV904x DFE SYSTEM LEVEL OVERVIEW</a></li>
-<li class="toctree-l3"><a class="reference internal" href="dpd_principle_of_operation.html">DPD INTRODUCTION</a></li>
-<li class="toctree-l3"><a class="reference internal" href="error_troubleshooting.html">ADRV904x DPD ERROR TROUBLESHOOTING</a></li>
-<li class="toctree-l3"><a class="reference internal" href="evaluation_user_guide.html">EVALUATING ADRV904x DPD</a></li>
-<li class="toctree-l3"><a class="reference internal" href="high_level_dev_flow.html">Typical High Level DPD Development Flow with ADRV904x Transceiver</a></li>
-<li class="toctree-l3"><a class="reference internal" href="high_level_development_flow.html">High Level DPD Development Flow</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pre-requisites.html">ADRV904x DPD EVALUATION PRE-REQUISITES</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../dpd_principle_of_operation.html">DPD INTRODUCTION</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../prerequisites.html">Supported Carriers</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../quickstart.html">ADRV904x Quick Start Guides</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../quickstart/zynqmp.html">ADRV904x-HB/PCBZ Zynq UltraScale+ MPSoC ZCU102 Quick Start Guide</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../quickstart/zynqmp.html#testing">Testing</a></li>
-</ul>
-</li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-35" id="toctree-collapse-14-35"/><div class="collapse"><a class="reference internal" href="../../adrv9371x/index.html">ADRV9371x</a><label for="toctree-collapse-14-35"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../adrv9371x/prerequisites.html">Prerequisites</a></li>
 <li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-35-1" id="toctree-collapse-14-35-1"/><div class="collapse"><a class="reference internal" href="../../adrv9371x/quickstart/index.html">Quick Start</a><label for="toctree-collapse-14-35-1"><div class="icon"></div></label></div><ul>
@@ -857,12 +847,14 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-52" id="toctree-collapse-14-52"/><div class="collapse"><a class="reference internal" href="../../eval-ad9083/index.html">EVAL-AD9083</a><label for="toctree-collapse-14-52"><div class="icon"></div></label></div><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../eval-ad9083/ad9083.html">AD9083 Linux Driver</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../eval-ad9083/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../eval-ad9083/ad9083.html">AD9083 Linux Driver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../eval-ad9083/user-guide.html">User guide</a></li>
 <li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-52-1" id="toctree-collapse-14-52-1"/><div class="collapse"><a class="reference internal" href="../../eval-ad9083/quickstart/index.html">Quickstart</a><label for="toctree-collapse-14-52-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../eval-ad9083/quickstart/zcu102.html">On ZCU102</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="../../eval-ad9083/eval/ad9083.html">AD9083EBZ and ADS8-V3EBZ Quick Start Guide</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-53" id="toctree-collapse-14-53"/><div class="collapse"><a class="reference internal" href="../../eval-ad9213-dual/index.html">EVAL-AD9213-DUAL</a><label for="toctree-collapse-14-53"><div class="icon"></div></label></div><ul>
@@ -949,11 +941,25 @@ Content on this topic
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-63" id="toctree-collapse-14-63"/><div class="collapse"><a class="reference internal" href="../../eval-adrv904x/index.html">EVAL-ADRV904x</a><label for="toctree-collapse-14-63"><div class="icon"></div></label></div><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../eval-adrv904x/user-guide.html">User guide</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../eval-adrv904x/prerequisites.html">Prerequisites</a></li>
-<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-63-1" id="toctree-collapse-14-63-1"/><div class="collapse"><a class="reference internal" href="../../eval-adrv904x/quickstart/index.html">Quick start</a><label for="toctree-collapse-14-63-1"><div class="icon"></div></label></div><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../eval-adrv904x/quickstart/zcu102.html">On ZCU102</a></li>
+<li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-63" id="toctree-collapse-14-63" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">EVAL-ADRV904x</a><label for="toctree-collapse-14-63"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../user-guide.html">User guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-63-1" id="toctree-collapse-14-63-1"/><div class="collapse"><a class="reference internal" href="../quickstart/index.html">Quick start</a><label for="toctree-collapse-14-63-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../quickstart/zcu102.html">On ZCU102</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../adrv904x_osc_main.html">IIO OSC ADRV904x Capture Window</a></li>
+<li class="toctree-l3 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-14-63-2" id="toctree-collapse-14-63-2" checked=""/><div class="collapse"><a class="current reference internal" href="#">ADRV904x DPD USER GUIDE</a><label for="toctree-collapse-14-63-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="dpd_principle_of_operation.html">DPD INTRODUCTION</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dfe_system_overview.html">ADRV904x DFE SYSTEM LEVEL OVERVIEW</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adrv904x_dpd_capabilities.html">ADRV904x DPD Capabilities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="high_level_development_flow.html">High Level DPD Development Flow</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pre-requisites.html">ADRV904x DPD EVALUATION PRE-REQUISITES</a></li>
+<li class="toctree-l4"><a class="reference internal" href="evaluation_user_guide.html">EVALUATING ADRV904x DPD</a></li>
+<li class="toctree-l4"><a class="reference internal" href="error_troubleshooting.html">ADRV904x DPD ERROR TROUBLESHOOTING</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adrv904x_dpd_analysis_tool.html">ADRV904x DPD Analysis Tool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adrv904x_dpd_analysis_tool.html#analyzing-pa-response">Analyzing PA Response</a></li>
+<li class="toctree-l4"><a class="reference internal" href="adrv904x_dpd_analysis_tool.html#identifying-an-optimal-dpd-model">Identifying an Optimal DPD Model</a></li>
 </ul>
 </li>
 </ul>
@@ -1159,56 +1165,49 @@ Content on this topic
       <div class="documentwrapper">
         <div class="bodywrapper" id="top-anchor">
           <div class="body-header">
-  <nav class="breadcrumb"><ol><li><a href="../../index.html">Reference Designs</a></li><li><a href="../index.html">ADRV9040 Prototyping Platform User Guide</a></li></ol></nav>
+  <nav class="breadcrumb"><ol><li><a href="../../index.html">Reference Designs</a></li><li><a href="../index.html">EVAL-ADRV904x</a></li></ol></nav>
 </div>
           <div class="body" role="main">
             
-  <section id="adrv904x-dfe-system-level-overview">
-<h1>ADRV904x DFE SYSTEM LEVEL OVERVIEW<a class="headerlink" href="#adrv904x-dfe-system-level-overview" title="Link to this heading"></a></h1>
-<p>The DPD feature on the ADRV904x transceiver enables users to offload power
-amplifier linearization tasks from the baseband processor to the transceiver.
-With DPD implemented on the transceiver, the user does not need to allocate JESD
-serializer/de-serializer resources for observing power amplifier feedback data
-through the ORx channels, resulting in significant system power savings. Digital
-Up-Converters, Interpolators leading to the DPD actuator allow the baseband
-processor to transmit data at a lower rate on the JESD204B/C link than is needed
-for the full DPD correction bandwidth. The lower data rate at JESD translates
-directly into power savings and less number of lanes. Integration of the DPD
-into the transceiver chip results in significant system level cost, space, and
-power savings when compared to conventional FPGA/ASIC based implementations.</p>
-<p>The ADRV904x transceiver provides digital signal processing capabilities in the
-embedded ARM quad core A55 processor + HW accelerators using closed-loop
-feedback signals from the observation receiver channels. These functions improve
-transmitter performance, measure system output, and reduce system power
-consumption. The list of functions includes the following: digital
-pre-distortion (DPD), closed-loop gain control (CLGC), voltage standing wave
-ratio(VSWR) measurement and crest factor reduction (CFR). These functions are
-collectively grouped together as the transceiver digital front end (DFE).</p>
-<p>The figure shown below is a simplified system level overview of the transceiver
-signal chain with DFE processing blocks highlighted. There are six main DFE
-processing blocks:</p>
+  <section id="adrv904x-dpd-user-guide">
+<span id="id1"></span><h1>ADRV904x DPD USER GUIDE<a class="headerlink" href="#adrv904x-dpd-user-guide" title="Link to this heading"></a></h1>
+<p>This page is a source of technical information for Digital Pre-Distortion (DPD)
+on the <a class="icon adi reference external" href="https://www.analog.com/ADRV9040" target="_blank">ADRV9040</a>, a highly integrated, advanced 8T8R RF Transceiver System
+supporting 400MHz iBW.</p>
+<div class="toctree-wrapper compound">
+</div>
+<section id="table-of-contents">
+<h2>TABLE OF CONTENTS<a class="headerlink" href="#table-of-contents" title="Link to this heading"></a></h2>
+<section id="adrv904x-dpd-getting-started">
+<h3>ADRV904x DPD Getting Started<a class="headerlink" href="#adrv904x-dpd-getting-started" title="Link to this heading"></a></h3>
 <ul class="simple">
-<li><p>CFR and hard clipper are used to reduce peak to average power ratio (PAPR) of the baseband signal, especially for multi-carrier waveforms such as OFDM. With reduced PAPR, the PA can operate at a higher output power, increasing the PA efficiency. This function is explained in the Crest Factor Reduction (CFR) section.</p></li>
-<li><p>There is also an optional post-CFR gain block that can be used to increase the gain of signals post CFR clipping to compensate for reduced peak amplitude post CFR.</p></li>
-<li><p>There are two half band filters with a total interpolation factor of 4x before the DPD actuator. These blocks can provide a total of 1x, 2x or 4x interpolation.</p></li>
-<li><p>There are three DPD capture buffers, which include the pre-DPD actuator data, post-DPD actuator data, and observation buffers. Each buffer can capture a maximum of 4096 samples.</p></li>
-<li><p>DPD actuator (max rate of 2GHz), which applies the inverse PA model to the baseband signal for power amplifier linearization. The DPD Actuator on ADRV904x comes with dedicated Charge Trapping Correction HW for GaN PAs.</p></li>
-<li><p>DFE Processor is a Quad core embedded ARM A55 processor on which the DPD,
-VSWR and CLGC algorithms are deployed. Additionally, there are dedicated HW
-accelerators for signal processing intensive tasks such as cross correlation
-and feature filtering.</p></li>
+<li><p><a class="reference internal" href="dpd_principle_of_operation.html#adrv904x-dpd-introduction"><span class="std std-ref">DPD INTRODUCTION</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="dfe_system_overview.html#adrv904x-dfe-overview"><span class="std std-ref">ADRV904x Digital Front End System Overview</span></a></p></li>
+<li><p><a class="reference internal" href="adrv904x_dpd_capabilities.html#adrv904x-dpd-capabilities"><span class="std std-ref">ADRV904x DPD specifications</span></a></p></li>
+<li><p><a class="reference internal" href="high_level_development_flow.html#adrv904x-dpd-dev-flow"><span class="std std-ref">High Level DPD development flow</span></a></p></li>
 </ul>
-<p>Please note that the observation path on ADRV904x consists of a direct RF
-sampling ADC compared to regular ADCs in the previous generation ADRV902x
-transceivers.</p>
-<img alt="https://media.githubusercontent.com/media/analogdevicesinc/documentation/wiki_migration/eval-ad9083_extra_pages/docs/solutions/reference-designs/adrv904x/images/adrv904x_dfe_system_overview.jpg" class="align-center" src="https://media.githubusercontent.com/media/analogdevicesinc/documentation/wiki_migration/eval-ad9083_extra_pages/docs/solutions/reference-designs/adrv904x/images/adrv904x_dfe_system_overview.jpg" />
+</li>
+<li><p><a class="reference internal" href="pre-requisites.html#adrv904x-dpd-pre-requisites"><span class="std std-ref">DPD Evaluation prerequisites</span></a></p></li>
+<li><p><a class="icon ez reference external" href="https://ez.analog.com/cfs-file/__key/communityserver-wikis-components-files/00-00-00-06-91/EVAL_2D00_ADRV904X_2D00_UG_2D00_2229_5F00_Preliminary_5F00_EZ.pdf" target="_blank">Unboxing ADRV904x Transceiver Eval Platform</a></p></li>
+<li><p><a class="reference internal" href="evaluation_user_guide.html#adrv904x-dpd-eval-guide"><span class="std std-ref">Evaluating ADRV904x DPD</span></a></p></li>
+</ul>
+</section>
+<section id="adrv904x-dpd-troubleshooting-debugging">
+<h3>ADRV904x DPD Troubleshooting / Debugging<a class="headerlink" href="#adrv904x-dpd-troubleshooting-debugging" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="error_troubleshooting.html#adrv904x-dpd-troubleshooting"><span class="std std-ref">ADRV904x DPD Error Troubleshooting</span></a></p></li>
+<li><p><a class="reference internal" href="adrv904x_dpd_analysis_tool.html#adrv904x-dpd-analysis-tool"><span class="std std-ref">ADRV904x DPD Analysis Tool</span></a></p></li>
+</ul>
+</section>
+</section>
 </section>
 
 
           </div>
               <div class="related">
                 &nbsp;
-    <a href="adrv904x_dpd_capabilities.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">ADRV904x DPD Capabilities</a>
+    <a href="../adrv904x_osc_main.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">IIO OSC ADRV904x Capture Window</a>
     <a href="dpd_principle_of_operation.html" title="Next document (Alt+Shift+RightArrow)" class="next">DPD INTRODUCTION</a>
               </div>
           
