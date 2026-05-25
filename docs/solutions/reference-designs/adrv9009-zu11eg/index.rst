@@ -176,8 +176,6 @@ Functional Block Diagram
 .. image:: ./images/adrv9009_blockdiagram.png
    :width: 600
 
-.. _help-and-support:
-
 Help and Support
 ----------------
 
