@@ -1,3 +1,5 @@
+.. _ad7195_software:
+
 Software Guide
 ==============
 
@@ -15,8 +17,8 @@ Ace Plugin Install guide
 The software and drivers required for the installation walked through in this
 section can be found below:
 
--  :adi:`Ace Software <en/design-center/evaluation-hardware-and-software/evaluation-development-platforms/ace-software.html>`
--  :adi:`AD7195 ACE Plugin <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7195asdz.html#eb-documentation>`
+-  :adi:`Ace Software <ACE>`
+-  :adi:`AD7195 ACE Plugin <EVAL-AD7195ASDZ>`
 -  `SDP controller system demonstration platform drivers <http://swdownloads.analog.com/ACE/SDP/SDPDrivers.exe>`_
 
 Installing the ACE Plugin software
@@ -147,7 +149,7 @@ PC, launch the ACE software by taking the following steps:
 Chip view window
 ~~~~~~~~~~~~~~~~
 
-After completing the steps in the :doc:`Software Installation Procedures <softwareguide>` section and the :doc:`Evaluation Board Set-up Procedures <hardwareguide>` section, set up the system for data capture by taking the following steps:
+After completing the steps in the :ref:`Software Installation Procedures <ad7195_software>` section and the :ref:`Evaluation Board Set-up Procedures <ad7195_hardware>` section, set up the system for data capture by taking the following steps:
 
 -  Block icons that are dark blue are programmable blocks. Click a dark blue
    block icon to open a configurable pop-up window to customize the data
@@ -252,13 +254,9 @@ AD7195 Demo Modes
 .. toctree::
    :hidden:
 
-   softwareguide/demo_modes
+   software/demo_modes
 
-:doc:`Visit the demo mode section here <softwareguide/demo_modes>`
-**Contents of the demo modes section:**
-
--  :doc:`Low Noise Test Demo <softwareguide/demo_modes>`
--  :doc:`Weigh scale Demo <softwareguide/demo_modes>`
+:ref:`Visit the demo mode section here <ad7195_demo_modes>`
 
 Virtual Eval Guide
 ------------------
@@ -279,9 +277,9 @@ Virtual Evaluation Tool.
 Firmware Install Guide
 ----------------------
 
-:doc:`Previous Page: Hardware Guide <hardwareguide>`
+:ref:`Previous Page: Hardware Guide <ad7195_hardware>`
 
-:doc:`Return to Homepage <index>`
+:ref:`Return to Homepage <ad7195_index>`
 
 .. |image1| image:: ../images/ad7192_waveformpage.png
    :width: 400

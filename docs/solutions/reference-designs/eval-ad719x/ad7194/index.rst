@@ -1,11 +1,13 @@
+.. _ad7194_index:
+
 AD7194 Evaluation Board User Guide
 ==================================
 
 .. toctree::
    :hidden:
 
-   hardwareguide
-   Using the System with ACE Software <softwareguide>
+   hardware
+   Using the System with ACE Software <software>
 
 The EVAL-AD7194-ASDZ evaluation kit features the AD7194 which is 4.8 kHz
 ultralow noise 24-bit sigma-delta (Σ-Δ) ADCs. The on-chip low noise gain stage
@@ -35,13 +37,13 @@ Features
 Related Documents
 -----------------
 
--  :adi:`AD7194 Data Sheet <media/en/technical-documentation/data-sheets/ad7194.pdf>`
+-  :adi:`AD7194 Data Sheet <ad7194>`
 
 Required Software
 -----------------
 
--  :adi:`ACE Software <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7194asdz.html#eb-documentation>`
--  :adi:`AD7194 ACE Plugin <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7194asdz.html#eb-documentation>`
+-  :adi:`ACE Software <EVAL-AD7194ASDZ>`
+-  :adi:`AD7194 ACE Plugin <EVAL-AD7194ASDZ>`
 
 Quick Start Guide
 ~~~~~~~~~~~~~~~~~
@@ -51,13 +53,13 @@ The following steps highlight the process to begin using the evaluation board.
 Equipment Required
 ------------------
 
--  :adi:`EVAL-AD7194-ASDZ evaluation board <en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD7194.html>`
+-  :adi:`EVAL-AD7194-ASDZ evaluation board <EVAL-AD7194ASDZ>`
 -  PC running Windows with a USB2.0 port and software installed.
 -  Controller Board
 
-   -  Option A: :adi:`EVAL-SDP-CK1Z <en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/sdp-k1.html>`
+   -  Option A: :adi:`EVAL-SDP-CK1Z <SDP-K1>`
       and a USB-C cable
-   -  Option B: :adi:`EVAL-SDP-CB1Z <en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/sdp-b.html>`
+   -  Option B: :adi:`EVAL-SDP-CB1Z <SDP-B>`
       and a Micro-USB cable
 
 Getting started
@@ -67,9 +69,9 @@ Getting started
 
    Ensure the SDP board is not connected to the USB port of the PC
 
--  Install the :adi:`ACE Software <en/design-center/evaluation-hardware-and-software/evaluation-development-platforms/ace-software.html>`
--  :doc:`Ace Plugin Install guide available here <softwareguide>`
--  If :adi:`ACE Software <en/design-center/evaluation-hardware-and-software/evaluation-development-platforms/ace-software.html>`
+-  Install the :adi:`ACE Software <ACE>`
+-  :ref:`Ace Plugin Install guide available here <ad7194_software>`
+-  If :adi:`ACE Software <ACE>`
    is already installed, update the Plugins to download AD719x Plugin.
 
 -  Connect the EVAL-AD7194-ASDZ to the controller board
@@ -105,36 +107,15 @@ Getting started
    :align: center
    :width: 300
 
--  The :doc:`ACE Plugin software <softwareguide>` is a useful tool to ensure
+-  The :ref:`ACE Plugin software <ad7194_software>` is a useful tool to ensure
    that the Evaluation board is communicating correctly.
 
 Hardware Guide
 ~~~~~~~~~~~~~~
 
-:doc:`Visit the hardware guide chapter here <hardwareguide>`
-**Contents of the Hardware guide:**
-
--  :doc:`Set-up Procedures <hardwareguide>`
--  :doc:`Block Diagram <hardwareguide>`
--  :doc:`Hardware Link Options <hardwareguide>`
--  :doc:`On Board Connections <hardwareguide>`
--  :doc:`Power Supplies <hardwareguide>`
--  :doc:`Serial Interface <hardwareguide>`
--  :doc:`Reference Options <hardwareguide>`
--  :doc:`GPIOs <hardwareguide>`
--  :doc:`Schematics <hardwareguide>`
--  :doc:`Bill of Materials <hardwareguide>`
+:ref:`Visit the hardware guide chapter here <ad7194_hardware>`
 
 Software Guide
 ~~~~~~~~~~~~~~
 
-:doc:`Visit the software guide chapter here <softwareguide>`
-**Contents of the Software guide:**
-
--  :doc:`Ace Plugin <softwareguide>`
-
-   -  :doc:`Ace Plugin Install <softwareguide>`
-
-      -  :doc:`Ace Plugin Operation <softwareguide>`
-
--  :doc:`Virtual Eval Guide <softwareguide>`
+:ref:`Visit the software guide chapter here <ad7194_software>`

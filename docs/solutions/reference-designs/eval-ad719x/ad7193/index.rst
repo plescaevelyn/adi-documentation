@@ -1,15 +1,17 @@
+.. _ad7193_index:
+
 AD7193 Evaluation Board User Guide
 ===================================
 
 .. toctree::
    :hidden:
 
-   hardwareguide
-   Using the System with ACE Software <softwareprocedures>
+   hardware
+   Using the System with ACE Software <software>
    Pmod Reference Design <pmod>
 
 The EVAL-AD7193-ASDZ evaluation kit features the
-:adi:`AD7193 <en/products/ad7193.html>`, is a low noise, complete analog front
+:adi:`AD7193`, is a low noise, complete analog front
 end for high precision measurement applications. It contains a low noise,
 24-bit sigma-delta (Σ-Δ) analog-to-digital converter (ADC). The on-chip low
 noise gain stage means that signals of small amplitude can interface directly
@@ -17,7 +19,7 @@ to the ADC. The internal clock option provides a compact solution for low BW
 requirements.
 
 The PC software fully configures the
-:adi:`AD7193 <en/products/ad7193.html>` device register functionality and
+:adi:`AD7193` device register functionality and
 provides AC time domain analysis in the form of waveform graphs, histograms,
 and associated noise analysis for ADC performance evaluation. The AC analysis
 is also provided by the software, examples of which are; an FFT displaying
@@ -55,13 +57,13 @@ Evaluation board Features
 Related Documents
 -----------------
 
--  :adi:`AD7193 Data Sheet <media/en/technical-documentation/data-sheets/ad7193.pdf>`
+-  :adi:`AD7193 Data Sheet <ad7193>`
 
 Required Software
 -----------------
 
--  :adi:`ACE Software <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7193asdz.html#eb-documentation>`
--  :adi:`AD7193 ACE Plugin <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7193asdz.html#eb-documentation>`
+-  :adi:`ACE Software <EVAL-AD7193ASDZ>`
+-  :adi:`AD7193 ACE Plugin <EVAL-AD7193ASDZ>`
 
 Quick Start Guide
 ~~~~~~~~~~~~~~~~~
@@ -72,13 +74,13 @@ board.
 Equipment Required
 ------------------
 
--  :adi:`EVAL-AD7193-ASDZ evaluation board <en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD7193.html>`
+-  :adi:`EVAL-AD7193-ASDZ evaluation board <EVAL-AD7193ASDZ>`
 -  PC running Windows with a USB2.0 port and software installed.
 -  Controller Board
 
-   -  Option A: :adi:`EVAL-SDP-CK1Z <en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/sdp-k1.html>`
+   -  Option A: :adi:`EVAL-SDP-CK1Z <SDP-K1>`
       and a USB-C cable
-   -  Option B: :adi:`EVAL-SDP-CB1Z <en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/sdp-b.html>`
+   -  Option B: :adi:`EVAL-SDP-CB1Z <SDP-B>`
       and a Micro-USB cable
 
 Getting started
@@ -88,9 +90,9 @@ Getting started
 
    Ensure the SDP board is not connected to the USB port of the PC
 
--  Install the :adi:`ACE Software <en/design-center/evaluation-hardware-and-software/evaluation-development-platforms/ace-software.html>`
--  :doc:`Ace Plugin Install guide available here <softwareprocedures>`
--  If :adi:`ACE Software <en/design-center/evaluation-hardware-and-software/evaluation-development-platforms/ace-software.html>`
+-  Install the :adi:`ACE Software <ACE>`
+-  :ref:`Ace Plugin Install guide available here <ad7193_software>`
+-  If :adi:`ACE Software <ACE>`
    is already installed, update the Plugins to download AD719x Plugin.
 
 -  Connect the EVAL-AD7193-ASDZ to the controller board
@@ -126,42 +128,16 @@ Getting started
    :align: center
    :width: 300
 
--  The :doc:`Low Noise Test Demo <softwareprocedures>` is a useful demo
+-  The :ref:`Low Noise Test Demo <ad7193_software>` is a useful demo
    mode of the Ace Plugin software to ensure that the Evaluation board is
    communicating correctly with the Ace Plugin software.
 
 Hardware Guide
 ~~~~~~~~~~~~~~
 
-:doc:`Visit the hardware guide chapter here <hardwareguide>`
-**Contents of the Hardware guide:**
-
--  :doc:`Set-up Procedures <hardwareguide>`
--  :doc:`Block Diagram <hardwareguide>`
--  :doc:`Hardware Link Options <hardwareguide>`
--  :doc:`On Board Connections <hardwareguide>`
--  :doc:`Power Supplies <hardwareguide>`
--  :doc:`Serial Interface <hardwareguide>`
--  :doc:`Reference Options <hardwareguide>`
--  :doc:`GPIOs <hardwareguide>`
--  :doc:`Schematics <hardwareguide>`
--  :doc:`Bill of Materials <hardwareguide>`
+:ref:`Visit the hardware guide chapter here <ad7193_hardware>`
 
 Software Guide
 ~~~~~~~~~~~~~~
 
-:doc:`Visit the software guide chapter here <softwareprocedures>`
-**Contents of the Software guide:**
-
--  :doc:`Ace Plugin <softwareprocedures>`
-
-   -  :doc:`Ace Plugin Install <softwareprocedures>`
-
-      -  :doc:`Ace Plugin Operation <softwareprocedures>`
-      -  :doc:`Ace Plugin Demo Modes <softwareprocedures>`
-
-         -  :doc:`Low Noise Test Demo <softwareprocedures>`
-
-            -  50Hz Quick Test
-
--  :doc:`Virtual Eval Guide <softwareprocedures>`
+:ref:`Visit the software guide chapter here <ad7193_software>`

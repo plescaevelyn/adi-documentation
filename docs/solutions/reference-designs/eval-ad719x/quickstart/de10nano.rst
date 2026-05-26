@@ -1,4 +1,4 @@
-.. _ad719x-asdz-quickstart-de10nano:
+.. _ad719x_asdz_quickstart_de10nano:
 
 DE10-Nano Quick start
 =====================
@@ -7,7 +7,7 @@ DE10-Nano Quick start
    :width: 800
 
 This guide provides some quick instructions on how to setup the
-:ref:`EVAL-AD719x-ASDZ <ad719x-asdz>` on:
+:ref:`EVAL-AD719x-ASDZ <ad719x_asdz>` on:
 
 - :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
   Arduino shield connector
@@ -45,7 +45,7 @@ Required Software
 Required Hardware
 ~~~~~~~~~~~~~~~~~
 
-- One of the :ref:`EVAL-AD719x-ASDZ <ad719x-asdz>` evaluation boards
+- One of the :ref:`EVAL-AD719x-ASDZ <ad719x_asdz>` evaluation boards
 - :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
 - Micro SD card with at least 16GB
 - Mini USB to USB Type A cable (UART)
@@ -86,7 +86,7 @@ Follow the steps in this order, to avoid damaging the components:
          :width: 400
 
 #. Using the Arduino shield connector, connect the
-   :ref:`EVAL-AD719x-ASDZ <ad719x-asdz>` on top of the DE10-Nano
+   :ref:`EVAL-AD719x-ASDZ <ad719x_asdz>` on top of the DE10-Nano
 #. Connect USB UART (Mini USB) to your host PC
 #. Connect an Ethernet cable to the DE10-Nano and to your network
 #. Connect the 5V power supply and power up the setup

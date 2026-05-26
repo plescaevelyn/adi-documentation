@@ -1,3 +1,5 @@
+.. _ad7192_demo_modes:
+
 Demo Modes
 ==========
 
@@ -54,9 +56,9 @@ Noise test Demo
 
 -  **Warning:** The evaluation software and drivers must be installed before connecting the EVAL-AD7192-ASDZ evaluation board and EVAL-SDP-CB1Z board to the USB port of the PC to ensure the PC correctly recognizes the evaluation system.
 
-If you have not set up the EVAL-AD7192-ASDZ and controller board previously please go to the :doc:`Quick Start Guide <../index>`
+If you have not set up the EVAL-AD7192-ASDZ and controller board previously please go to the :ref:`Quick Start Guide <ad7192_index>`
 
-If you have not set up/installed the ACE plugin before please go to :doc:`Install Guide <../softwareguide>`
+If you have not set up/installed the ACE plugin before please go to :ref:`Install Guide <ad7192_software>`
 
 -  Double click the AD7192 Eval Board icon to open the AD7192 Eval Board view
    window. The demo wizard will be on the left, either as shown in the figure
@@ -96,7 +98,7 @@ If you have not set up/installed the ACE plugin before please go to :doc:`Instal
    :align: center
    :width: 600
 
--  For more information on the Waveform window go to the software section :doc:`here <../softwareguide>`
+-  For more information on the Waveform window go to the software section :ref:`here <ad7192_software>`
 
 Reading Samples from the ADC
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -110,7 +112,7 @@ The evaluation board is set up to use the external 2.5 V on-board reference
    updated accordingly. (The analysis results are based on the value set in this
    input field.)
 
-   -  Information on the reference choice can be viewed in the :doc:`Reference Options Tab <../hardwareguide>`
+   -  Information on the reference choice can be viewed in the :ref:`Reference Options Tab <ad7192_hardware>`
 
 -  When selecting Run Once, a batch of samples is read when clicking the button;
    the batch size is set by the value in the Samples field.
@@ -137,4 +139,4 @@ using the Results Tab. To save the data into an Excel file, select the Export
 button from the Results Tab. A Save dialog box is displayed, prompting you to
 save the data to an appropriate folder location.
 
-:doc:`Return to Software Guide <../softwareguide>`
+:ref:`Return to Software Guide <ad7192_software>`

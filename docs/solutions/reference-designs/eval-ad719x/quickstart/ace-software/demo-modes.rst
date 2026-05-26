@@ -1,4 +1,4 @@
-.. _ad719x-asdz-demo-modes:
+.. _ad719x_asdz_demo_modes:
 
 Demo Modes
 ==========
@@ -14,7 +14,7 @@ Hardware setup for noise test
 
 Insert all pins on the low noise test link (LK13 on AD7190--AD7194, JP4 on
 AD7195) to enable the low noise test mode. See the
-:ref:`hardware guide <ad719x-asdz-hardware-guide>` for link option details.
+:ref:`hardware guide <ad7192_hardware>` for link option details.
 
 Running the noise test
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -106,7 +106,7 @@ Running the noise test
 
       .. tab-item:: AD7195
 
-         .. image:: ../../images/ad795noisewaveform.png
+         .. image:: ../../images/ad7195noisewaveform.png
             :align: center
             :width: 600px
 
@@ -123,7 +123,7 @@ The evaluation board is set up to use the external 2.5 V on-board reference
   field.
 
   - Information on the reference choice can be viewed in the
-    :ref:`Reference Options <ad719x-asdz-reference-options>` section of the
+    :ref:`Reference Options <ad7192_reference_options>` section of the
     hardware guide.
 
 - When selecting **Run Once**, a batch of samples is read when clicking the

@@ -1,3 +1,5 @@
+.. _ad7193_software:
+
 Software Guide
 ==============
 
@@ -15,8 +17,8 @@ Ace Plugin Install guide
 The software and drivers required for the installation walked through in
 this section can be found below:
 
--  :adi:`Ace Software <en/design-center/evaluation-hardware-and-software/evaluation-development-platforms/ace-software.html>`
--  :adi:`AD7193 ACE Plugin <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7193asdz.html#eb-documentation>`
+-  :adi:`Ace Software <ACE>`
+-  :adi:`AD7193 ACE Plugin <EVAL-AD7193ASDZ>`
 -  `SDP controller system demonstration platform drivers <http://swdownloads.analog.com/ACE/SDP/SDPDrivers.exe>`_
 
 Installing the ACE Plugin software
@@ -152,8 +154,8 @@ Chip view window
 ~~~~~~~~~~~~~~~~
 
 After completing the steps in the
-:doc:`Software Installation Procedures <softwareprocedures>` section and the
-:doc:`Evaluation Board Set-up Procedures <hardwareguide>` section, set up the
+:ref:`Software Installation Procedures <ad7193_software>` section and the
+:ref:`Evaluation Board Set-up Procedures <ad7193_hardware>` section, set up the
 system for data capture by taking the following steps:
 
 -  Block icons that are dark blue are programmable blocks. Click a dark
@@ -262,13 +264,9 @@ AD7193 Demo Modes
 .. toctree::
    :hidden:
 
-   softwareprocedures/demo_modes
+   software/demo_modes
 
-:doc:`Visit the demo mode section here <softwareprocedures/demo_modes>`
-**Contents of the demo modes section:**
-
--  :doc:`Low Noise Test Demo <softwareprocedures/demo_modes>`
--  :doc:`50 Hz Quick test <softwareprocedures/demo_modes>`
+:ref:`Visit the demo mode section here <ad7193_demo_modes>`
 
 Virtual Eval Guide
 ------------------
@@ -289,9 +287,9 @@ Virtual Evaluation Tool.
 Firmware Install Guide
 ----------------------
 
-:doc:`Previous Page: Hardware Guide <hardwareguide>`
+:ref:`Previous Page: Hardware Guide <ad7193_hardware>`
 
-:doc:`Return to Homepage <index>`
+:ref:`Return to Homepage <ad7193_index>`
 
 .. |image1| image:: ../images/ad7192_waveformpage.png
    :width: 400

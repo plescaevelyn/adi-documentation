@@ -1,4 +1,4 @@
-.. _ad719x-asdz-prerequisites:
+.. _ad719x_asdz_prerequisites:
 
 Prerequisites
 ===============================================================================
@@ -11,17 +11,17 @@ Hardware prerequisites
 
 #. One of the EVAL-AD719xASDZ evaluation boards:
 
-   - :adi:`EVAL-AD7190ASDZ <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7190asdz.html>`
-   - :adi:`EVAL-AD7192ASDZ <en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD7192.html>`
-   - :adi:`EVAL-AD7193ASDZ <en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD7193.html>`
-   - :adi:`EVAL-AD7194ASDZ <en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD7194.html>`
-   - :adi:`EVAL-AD7195ASDZ <en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD7195.html>`
+   - :adi:`EVAL-AD7190ASDZ`
+   - :adi:`EVAL-AD7192ASDZ`
+   - :adi:`EVAL-AD7193ASDZ`
+   - :adi:`EVAL-AD7194ASDZ`
+   - :adi:`EVAL-AD7195ASDZ`
 
 #. A controller board. The supported options are:
 
-   - :adi:`EVAL-SDP-CK1Z <en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/sdp-k1.html>`
+   - :adi:`EVAL-SDP-CK1Z <SDP-K1>`
      (connects via 120-pin or Arduino connectors) with a USB-C cable
-   - :adi:`EVAL-SDP-CB1Z <en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/sdp-b.html>`
+   - :adi:`EVAL-SDP-CB1Z <SDP-B>`
      (connects via 120-pin connector only) with a Micro-USB cable
    - `Cora Z7S <https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development>`__
      (connects via Pmod JA or Arduino shield) with a Micro-USB cable
@@ -44,15 +44,15 @@ Software prerequisites
 If using ACE Software (SDP controller boards)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#. :adi:`ACE Software <en/design-center/evaluation-hardware-and-software/evaluation-development-platforms/ace-software.html>`
+#. :adi:`ACE Software <ACE>`
 
 #. The ACE plugin matching your device:
 
-   - :adi:`AD7190 ACE Plugin <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7190asdz.html#eb-documentation>`
-   - :adi:`AD7192 ACE Plugin <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7192asdz.html#eb-documentation>`
-   - :adi:`AD7193 ACE Plugin <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7193asdz.html#eb-documentation>`
-   - :adi:`AD7194 ACE Plugin <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7194asdz.html#eb-documentation>`
-   - :adi:`AD7195 ACE Plugin <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7195asdz.html#eb-documentation>`
+   - :adi:`AD7190 ACE Plugin <EVAL-AD7190ASDZ>`
+   - :adi:`AD7192 ACE Plugin <EVAL-AD7192ASDZ>`
+   - :adi:`AD7193 ACE Plugin <EVAL-AD7193ASDZ>`
+   - :adi:`AD7194 ACE Plugin <EVAL-AD7194ASDZ>`
+   - :adi:`AD7195 ACE Plugin <EVAL-AD7195ASDZ>`
 
 #. `SDP controller board drivers <http://swdownloads.analog.com/ACE/SDP/SDPDrivers.exe>`_
    (required if not already installed on the PC)

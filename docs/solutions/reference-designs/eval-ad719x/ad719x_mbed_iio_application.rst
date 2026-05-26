@@ -1,3 +1,5 @@
+.. _ad719x_mbed_iio_application:
+
 AD719x IIO Application
 ======================
 
@@ -41,11 +43,11 @@ Useful links
 ~~~~~~~~~~~~
 
 -  :git-no-OS:`AD719x No-OS drivers <drivers/adc/ad719x>`
--  :adi:`AD7190 Product Page <en/products/ad7190.html>`
--  :adi:`AD7192 Product Page <en/products/ad7192.html>`
--  :adi:`AD7193 Product Page <en/products/ad7193.html>`
--  :adi:`AD7194 Product Page <en/products/ad7194.html>`
--  :adi:`AD7195 Product Page <en/products/ad7195.html>`
+-  :adi:`AD7190 Product Page <ad7190>`
+-  :adi:`AD7192 Product Page <ad7192>`
+-  :adi:`AD7193 Product Page <ad7193>`
+-  :adi:`AD7194 Product Page <ad7194>`
+-  :adi:`AD7195 Product Page <ad7195>`
 
 Hardware Connections
 --------------------
@@ -79,7 +81,7 @@ as a serial device when connected to a PC, which creates a COM port to
 connect to IIO Oscilloscope GUI running on Windows. The COM port
 assigned to a device can be seen through the Device Manager.
 
-.. image:: images/ad717x_assigned_com_port.png
+.. image:: images/ad719x_assigned_com_port.png
    :align: center
    :width: 600
 
@@ -88,11 +90,11 @@ default VCOM is configured as the default interface in the firmware. The
 interface can be set to UART by defining the macro
 ``USE_PHY_COM_PORT`` in the ``app_config.h`` file.
 
-.. image:: images/ad717x_phy_and_virtual_com.png
+.. image:: images/ad719x_phy_and_virtual_com.png
    :align: center
    :width: 600
 
-.. image:: images/ad717x_vir_com_port.png
+.. image:: images/ad719x_vir_com_port.png
    :align: center
    :width: 600
 

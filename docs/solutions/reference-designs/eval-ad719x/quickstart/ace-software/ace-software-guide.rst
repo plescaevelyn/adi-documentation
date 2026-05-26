@@ -1,4 +1,4 @@
-.. _ad719x-asdz-software-guide:
+.. _ad719x_asdz_software_guide:
 
 Software Guide
 ==============
@@ -8,21 +8,21 @@ Software Guide
    The evaluation software and drivers must be installed **before** connecting
    the EVAL-AD719x-ASDZ evaluation board and controller board to the USB port of
    the PC to ensure the PC correctly recognizes the evaluation system. See the
-   :ref:`prerequisites <ad719x-asdz-prerequisites>` for details.
+   :ref:`prerequisites <ad719x_asdz_prerequisites>` for details.
 
 ACE Plugin Install Guide
 ------------------------
 
 The software and drivers required for the installation are:
 
-- :adi:`ACE Software <en/design-center/evaluation-hardware-and-software/evaluation-development-platforms/ace-software.html>`
+- :adi:`ACE Software <ACE>`
 - ACE Plugin (select the plugin matching your device):
 
-  - :adi:`AD7190 ACE Plugin <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7190asdz.html#eb-documentation>`
-  - :adi:`AD7192 ACE Plugin <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7192asdz.html#eb-documentation>`
-  - :adi:`AD7193 ACE Plugin <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7193asdz.html#eb-documentation>`
-  - :adi:`AD7194 ACE Plugin <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7194asdz.html#eb-documentation>`
-  - :adi:`AD7195 ACE Plugin <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7195asdz.html#eb-documentation>`
+  - :adi:`AD7190 ACE Plugin <EVAL-AD7190ASDZ>`
+  - :adi:`AD7192 ACE Plugin <EVAL-AD7192ASDZ>`
+  - :adi:`AD7193 ACE Plugin <EVAL-AD7193ASDZ>`
+  - :adi:`AD7194 ACE Plugin <EVAL-AD7194ASDZ>`
+  - :adi:`AD7195 ACE Plugin <EVAL-AD7195ASDZ>`
 
 - `SDP controller board drivers <http://swdownloads.analog.com/ACE/SDP/SDPDrivers.exe>`_
   (required if not already installed on the PC)
@@ -372,7 +372,7 @@ register to display the register description.
 Demo Modes
 ----------
 
-See the :ref:`Demo Modes <ad719x-asdz-demo-modes>` page for details on available
+See the :ref:`Demo Modes <ad719x_asdz_demo_modes>` page for details on available
 demo modes for the AD7192, AD7193, and AD7195, including the Noise Test Demo and
 Weigh Scale Demo.
 

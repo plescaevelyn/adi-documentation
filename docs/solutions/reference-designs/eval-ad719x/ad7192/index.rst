@@ -1,11 +1,13 @@
+.. _ad7192_index:
+
 AD7192 Evaluation Board User Guide
 ==================================
 
 .. toctree::
    :hidden:
 
-   hardwareguide
-   Using the System with ACE Software <softwareguide>
+   hardware
+   Using the System with ACE Software <software>
 
 The EVAL-AD7192-ASDZ evaluation kit features the AD7192 which is 4.8 kHz
 ultralow noise 24-bit sigma-delta (Σ-Δ) ADCs. The on-chip low noise gain stage
@@ -35,13 +37,13 @@ Features
 Related Documents
 -----------------
 
--  :adi:`AD7192 Data Sheet <media/en/technical-documentation/data-sheets/ad7192.pdf>`
+-  :adi:`AD7192 Data Sheet <ad7192>`
 
 Required Software
 -----------------
 
--  :adi:`ACE Software <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7192asdz.html#eb-documentation>`
--  :adi:`AD7192 ACE Plugin <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7192asdz.html#eb-documentation>`
+-  :adi:`ACE Software <EVAL-AD7192ASDZ>`
+-  :adi:`AD7192 ACE Plugin <EVAL-AD7192ASDZ>`
 
 Quick Start Guide
 ~~~~~~~~~~~~~~~~~
@@ -51,13 +53,13 @@ The following steps highlight the process to begin using the evaluation board.
 Equipment Required
 ------------------
 
--  :adi:`EVAL-AD7192-ASDZ evaluation board <en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD7192.html>`
+-  :adi:`EVAL-AD7192-ASDZ evaluation board <EVAL-AD7192ASDZ>`
 -  PC running Windows with a USB2.0 port and software installed.
 -  Controller Board
 
-   -  Option A: :adi:`EVAL-SDP-CK1Z <en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/sdp-k1.html>`
+   -  Option A: :adi:`EVAL-SDP-CK1Z <SDP-K1>`
       and a USB-C cable
-   -  Option B: :adi:`EVAL-SDP-CB1Z <en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/sdp-b.html>`
+   -  Option B: :adi:`EVAL-SDP-CB1Z <SDP-B>`
       and a Micro-USB cable
 
 Getting started
@@ -67,9 +69,9 @@ Getting started
 
    Ensure the SDP board is not connected to the USB port of the PC
 
--  Install the :adi:`ACE Software <en/design-center/evaluation-hardware-and-software/evaluation-development-platforms/ace-software.html>`
--  :doc:`Ace Plugin Install guide available here <softwareguide>`
--  If :adi:`ACE Software <en/design-center/evaluation-hardware-and-software/evaluation-development-platforms/ace-software.html>`
+-  Install the :adi:`ACE Software <ACE>`
+-  :ref:`Ace Plugin Install guide available here <ad7192_software>`
+-  If :adi:`ACE Software <ACE>`
    is already installed, update the Plugins to download AD719x Plugin.
 
 -  Connect the EVAL-AD7192-ASDZ to the controller board
@@ -105,42 +107,16 @@ Getting started
    :align: center
    :width: 300
 
--  The :doc:`Low Noise Test Demo <softwareguide>` is a useful demo mode
+-  The :ref:`Low Noise Test Demo <ad7192_software>` is a useful demo mode
    of the Ace Plugin software to ensure that the Evaluation board is
    communicating correctly with the Ace Plugin software.
 
 Hardware Guide
 ~~~~~~~~~~~~~~
 
-:doc:`Visit the hardware guide chapter here <hardwareguide>`
-**Contents of the Hardware guide:**
-
--  :doc:`Set-up Procedures <hardwareguide>`
--  :doc:`Block Diagram <hardwareguide>`
--  :doc:`Hardware Link Options <hardwareguide>`
--  :doc:`On Board Connections <hardwareguide>`
--  :doc:`Power Supplies <hardwareguide>`
--  :doc:`Serial Interface <hardwareguide>`
--  :doc:`Reference Options <hardwareguide>`
--  :doc:`GPIOs <hardwareguide>`
--  :doc:`Schematics <hardwareguide>`
--  :doc:`Bill of Materials <hardwareguide>`
+:ref:`Visit the hardware guide chapter here <ad7192_hardware>`
 
 Software Guide
 ~~~~~~~~~~~~~~
 
-:doc:`Visit the software guide chapter here <softwareguide>`
-**Contents of the Software guide:**
-
--  :doc:`Ace Plugin <softwareguide>`
-
-   -  :doc:`Ace Plugin Install <softwareguide>`
-
-      -  :doc:`Ace Plugin Operation <softwareguide>`
-      -  :doc:`Ace Plugin Demo Modes <softwareguide>`
-
-         -  :doc:`Low Noise Test Demo <softwareguide>`
-
-            -  Weigh Scale Demo
-
--  :doc:`Virtual Eval Guide <softwareguide>`
+:ref:`Visit the software guide chapter here <ad7192_software>`

@@ -1,3 +1,5 @@
+.. _ad7192_software:
+
 Software Guide
 ==============
 
@@ -9,21 +11,21 @@ Ace Plugin Install guide
 
 -  **Warning**: The evaluation software and drivers must be installed before
    connecting both the evaluation board and the Controller (SDP) board to the
-   PC. This ensures that the evaluations system is correctly recognized when
-   it is connected to the PC.
+   PC. This ensures that the evaluations system is correctly recognized when it
+   is connected to the PC.
 
 The software and drivers required for the installation walked through in this
 section can be found below:
 
--  :adi:`Ace Software <en/design-center/evaluation-hardware-and-software/evaluation-development-platforms/ace-software.html>`
--  :adi:`AD7190 ACE Plugin <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7190asdz.html#eb-documentation>`
+-  :adi:`Ace Software <ACE>`
+-  :adi:`AD7192 ACE Plugin <EVAL-AD7192ASDZ>`
 -  `SDP controller system demonstration platform drivers <http://swdownloads.analog.com/ACE/SDP/SDPDrivers.exe>`_
 
 Installing the ACE Plugin software
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Download the ACE software from the ACE software page or the AD7190 product
-page. Install ACE on a PC **before using** the EVAL-AD7190-ASDZ.
+Download the ACE software from the ACE software page or the AD7192 product
+page. Install ACE on a PC **before using** the EVAL-AD7192-ASDZ.
 
 Installing ACE
 ~~~~~~~~~~~~~~
@@ -32,8 +34,8 @@ Installing ACE
 -  Double click the ACEInstall.exe file to begin the installation. By default,
    the software is saved to the following location:
    C:\\Program Files (x86)\\Analog Devices\\ACE.
--  A dialog box opens asking for permission to allow the program to make
-   changes to the PC. Click Yes to begin the installation process.
+-  A dialog box opens asking for permission to allow the program to make changes
+   to the PC. Click Yes to begin the installation process.
 -  In the ACE Setup window, click Next > to continue the installation.
 
 .. image:: ../images/ace_plugin_page_1.png
@@ -77,13 +79,13 @@ Installing ACE
    :align: center
    :width: 400
 
-AD7190 Plugin Install
+AD7192 Plugin Install
 ~~~~~~~~~~~~~~~~~~~~~
 
-After the AD7190 Plugin is downloaded follow the steps to install the file: -
-Double click on the AD7190 Plugin. - Connect up your EVAL-AD7190-ASDZ to your
-pc through a controller board. Alternatively, the AD7190 Plugin can be
-installed through the steps bellow:
+After the AD7192 Plugin is downloaded follow the steps to install the file: -
+Double click on the AD7192 Plugin. - Connect up your EVAL-AD7192-ASDZ to your
+pc through a controller board. Alternatively, the AD7192 Plugin can be installed
+through the steps bellow:
 
 -  From the Start menu of the PC, select All Programs > Analog Devices > ACE>
    ACE.exe to open the ACE software main window shown below.
@@ -96,13 +98,13 @@ installed through the steps bellow:
 
 -  Hit the + button next to the Zipped Plug-in Sources.
 
-.. image:: ../images/ad7190_ace_plugin_install.png
+.. image:: ../images/ad7192aceplugin.png
    :align: center
    :width: 400
 
--  Under the Name write "AD7190"
+-  Under the Name write "AD7192"
 -  Under Source hit the … button and set the path to where you have stored the
-   AD7190 Plugin.
+   AD7192 Plugin.
 -  Press "Ok".
 -  Press "Close".
 
@@ -112,53 +114,50 @@ ACE software Operation
 Launching the software
 ~~~~~~~~~~~~~~~~~~~~~~
 
-After the EVAL-AD7190-ASDZ and controller board are properly connected to the
+After the EVAL-AD7192-ASDZ and controller board are properly connected to the
 PC, launch the ACE software by taking the following steps:
 
 -  From the Start menu of the PC, select All Programs > Analog Devices > ACE>
    ACE.exe to open the ACE software main window shown below
--  If the EVAL-AD7190-ASDZ is not connected to the USB port via the controller
-   board when the software launches, the AD7190 Eval Board icon does not
-   appear in the Attached Hardware section in ACE (see Figure below). To make
-   the AD7190Eval Board icon appear, connect the EVAL-AD7190-ASDZ and the
-   controller board to the USB port of the PC, wait a few seconds, and then
-   follow the instructions in the dialog box that opens.
+-  If the EVAL-AD7192-ASDZ is not connected to the USB port via the controller
+   board when the software launches, the AD7192 Eval Board icon does not appear
+   in the Attached Hardware section in ACE (see Figure below). To make the
+   AD7192Eval Board icon appear, connect the EVAL-AD7192-ASDZ and the controller
+   board to the USB port of the PC, wait a few seconds, and then follow the
+   instructions in the dialog box that opens.
 
-.. image:: ../images/ad7190attach_hardware.png
+.. image:: ../images/ad7192_attachhardware.png
    :align: center
    :width: 400
 
--  Double click the AD7190 Eval Board icon to open the AD7190 Eval Board view
+-  Double click the AD7192 Eval Board icon to open the AD7192 Eval Board view
    window shown below:
 
-.. image:: ../images/ad7190board_view.png
+.. image:: ../images/ad7192_board_view.png
    :align: center
    :width: 400
 
--  Double click the AD7190 chip icon in the AD7190 Eval Board view window to
-   open the AD7190 chip view window shown below:
+-  Double click the AD7192 chip icon in the AD7192 Eval Board view window to
+   open the AD7192 chip view window shown below:
 -  Click Software Defaults and then click Apply Changes to apply the default
-   settings to the AD7190 (see figure below)
+   settings to the AD7192 (see figure below)
 
-.. image:: ../images/ad7190_chipview.png
+.. image:: ../images/ad7192chipview.png
    :align: center
-   :width: 400
+   :width: 600
 
 Chip view window
 ~~~~~~~~~~~~~~~~
 
-After completing the steps in the
-:doc:`Software Installation Procedures <softwareguide>` section and the
-:doc:`Evaluation Board Set-up Procedures <hardwareguide>` section, set up the
-system for data capture by taking the following steps:
+After completing the steps in the :ref:`Software Installation Procedures <ad7192_software>` section and the :ref:`Evaluation Board Set-up Procedures <ad7192_hardware>` section, set up the system for data capture by taking the following steps:
 
 -  Block icons that are dark blue are programmable blocks. Click a dark blue
    block icon to open a configurable pop-up window to customize the data
    capture.
--  The "Proceed to Memory Map" button brings the user to the memory map of
-   the AD7190. This allows the user to configure the AD7190.
+-  The "Proceed to Memory Map" button brings the user to the memory map of the
+   AD7192. This allows the user to configure the AD7192.
 -  The "Proceed to Analysis" button brings the user to the Analysis tab. This
-   allows the user to see the performance results of the AD7190 and displays
+   allows the user to see the performance results of the AD7192 and displays
    the data.
 
 Waveform Window
@@ -170,9 +169,9 @@ calculating the peak-to-peak noise, rms noise, and resolution.
 1) Waveform graph and controls
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The data waveform graph shows each successive sample of the ADC output. Zoom
-in on the data in the graph using the scroll wheel on your mouse or by
-selecting the magnifying glass.
+The data waveform graph shows each successive sample of the ADC output. Zoom in
+on the data in the graph using the scroll wheel on your mouse or by selecting
+the magnifying glass.
 
 2) Analysis Channel
 ~~~~~~~~~~~~~~~~~~~
@@ -186,31 +185,31 @@ The Result section shows the analysis of the channel selected
 
 The Samples numeric control set the number of samples gathered per batch. This
 control is unrelated to the ADC mode. You can capture a defined sample set or
-continuously gather batches of samples. In both cases, the number of samples
-set in the Samples numeric input dictates the number of samples. The Noise
-Analysis section displays the results of the noise analysis for the selected
-analysis channel, including both noise and resolution measurements.
+continuously gather batches of samples. In both cases, the number of samples set
+in the Samples numeric input dictates the number of samples. The Noise Analysis
+section displays the results of the noise analysis for the selected analysis
+channel, including both noise and resolution measurements.
 
 4) Capture
 ~~~~~~~~~~
 
 Click the Run Once button to start gathering ADC results. Click the Run
-Continuously button to start gathering ADC results continuously. Results
-appear in the waveform graph (Label 1).
+Continuously button to start gathering ADC results continuously. Results appear
+in the waveform graph (Label 1).
 
 5) Display Units and Axis Controls
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Click the Codes drop-down menu to select whether the data graph displays in
-units of voltages or codes. This control affects both the waveform graph and
-the histogram graph. The axis controls is fixed. When selecting Fixed, the
-axis ranges can be programmed; however, these ranges do not automatically
-adjust after each batch of samples.
+units of voltages or codes. This control affects both the waveform graph and the
+histogram graph. The axis controls is fixed. When selecting Fixed, the axis
+ranges can be programmed; however, these ranges do not automatically adjust
+after each batch of samples.
 
 Memory map Window
 ~~~~~~~~~~~~~~~~~
 
-Use the Memory Map tab to access the registers of the AD7190, shown in the
+Use the Memory Map tab to access the registers of the AD7192, shown in the
 figure below. This tab changes register settings and shows additional
 information about each bit in each individual register.
 
@@ -225,11 +224,10 @@ file for later use. Click Load to load a previously saved register map.
 ~~~~~~~~~~~
 
 The Register section shows the value that is set in the selected register.
-Check the value of the register in this window by clicking on the bits.
-Clicking any individual bit changes the bit from 1 to 0 or 0 to 1, depending
-on the initial state of the bit. The register value can also be changed by
-writing the hexadecimal value in the input field to the right of the
-individual bits.
+Check the value of the register in this window by clicking on the bits. Clicking
+any individual bit changes the bit from 1 to 0 or 0 to 1, depending on the
+initial state of the bit. The register value can also be changed by writing the
+hexadecimal value in the input field to the right of the individual bits.
 
 3) Bitfields
 ~~~~~~~~~~~~
@@ -249,18 +247,25 @@ description shown by label 6.
 
 |image2|
 
+AD7192 Demo Modes
+-----------------
+
+.. toctree::
+   :hidden:
+
+   software/demo_modes
+
+:ref:`Visit the demo mode section here <ad7192_demo_modes>`
+
 Virtual Eval Guide
 ------------------
 
 This page provides a step by step guide to launching and using ADI's new
 Virtual Evaluation Tool.
 
--  Navigate to the Virtual Eval tool by clicking this link:
-   `Virtual Eval <http://beta-tools.analog.com/virtualeval/>`_
-   or alternatively, by going to the AD7190 homepage on analog.com and
-   finding the link there.
--  Select the AD7190 by going to 'Precision ADC < 10MSPS' and finding the
-   part there.
+-  Navigate to the Virtual Eval tool by clicking this link: `Virtual Eval <http://beta-tools.analog.com/virtualeval/>`_ or alternatively, by going to the AD7192 homepage on analog.com and finding the link there.
+-  Select the AD7192 by going to 'Precision ADC < 10MSPS' and finding the part
+   there.
 
 .. image:: ../images/ad719x_virtual_eval.png
    :align: center
@@ -268,12 +273,12 @@ Virtual Evaluation Tool.
 
 -  Now you are ready to start using the tool.
 
-Firmware Install Guide
-----------------------
+Firmware Instal Guide
+---------------------
 
-:doc:`Previous Page: Hardware Guide <hardwareguide>`
+:ref:`Previous Page: Hardware Guide <ad7192_hardware>`
 
-:doc:`Return to Homepage <index>`
+:ref:`Return to Homepage <ad7192_index>`
 
 .. |image1| image:: ../images/ad7192_waveformpage.png
    :width: 400

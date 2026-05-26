@@ -1,10 +1,12 @@
+.. _ad7195_hardware:
+
 EVAL-AD7195-ASDZ Hardware Guide
 ===============================
 
 Set-up Procedures
 -----------------
 
-After following the instructions in the :doc:`Software Procedures <softwareguide>` section, set up the evaluation and SDP boards as detailed in this section.
+After following the instructions in the :ref:`Software Procedures <ad7195_software>` section, set up the evaluation and SDP boards as detailed in this section.
 
 -  **Warning:** The evaluation software and drivers must be installed
    before connecting the EVAL-AD7195-ASDZ evaluation board and
@@ -216,11 +218,11 @@ AVDD (JP2) selection
 
 -  **5V supply (DEFAULT)**
 
-   -  5V regulator supplies AVDD :adi:`ADP7142 <en/products/adp7142.html>`
+   -  5V regulator supplies AVDD :adi:`ADP7142`
 
 -  **3.3V supply**
 
-   -  3.3V regulator supplies AVDD :adi:`ADP150 <en/products/adp150.html>`
+   -  3.3V regulator supplies AVDD :adi:`ADP150`
 
 -  **External AVDD**
 
@@ -242,7 +244,7 @@ IOVDD (JP3) selection
 
 -  **3.3V supply (DEFAULT)**
 
-   -  3.3V regulator supplies IOVDD :adi:`ADP150 <en/products/adp150.html>`
+   -  3.3V regulator supplies IOVDD :adi:`ADP150`
 
 -  **External IOVDD**
 
@@ -265,7 +267,7 @@ Serial communication options
 
 -  When using the SDP-B connection (120 pin) The evaluation board
    connects via the serial peripheral interface (SPI) to the
-   Blackfin® :adi:`ADSP-BF527 <en/products/adsp-bf527.html>`
+   Blackfin® :adi:`ADSP-BF527`
    on the SDP-B board.
 
    -  Arduino connection SDP-K1
@@ -281,8 +283,8 @@ For an introduction to the Serial Peripheral Interface (SPI), click :adi:`here <
 Reference Options
 -----------------
 
--  **DEFAULT** :adi:`ADR4525 <en/products/adr4525.html>` On Board external reference on REFIN1+
--  :adi:`LTC6655LN-2.5/LTC6655LN-4.096 <en/products/ltc6655.html>`
+-  **DEFAULT** :adi:`ADR4525` On Board external reference on REFIN1+
+-  :adi:`LTC6655LN-2.5/LTC6655LN-4.096 <LTC6655>`
    On Board external reference on REFIN+
 
    -  Option to use ultra low noise reference
@@ -300,6 +302,6 @@ Bill of Materials
 
 -  :download:`AD7195 Bill of Materials <ad7195_bom.pdf>`
 
-:doc:`Next Page: Software Procedures <softwareguide>`
+:ref:`Next Page: Software Procedures <ad7195_software>`
 
-:doc:`Return to Homepage <index>`
+:ref:`Return to Homepage <ad7195_index>`

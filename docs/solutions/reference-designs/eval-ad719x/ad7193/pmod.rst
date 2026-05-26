@@ -1,10 +1,12 @@
+.. _ad7193_pmod:
+
 AD7193 Pmod Reference Design
 ============================
 
 Introduction
 ------------
 
-The :adi:`AD7193 <en/products/ad7193.html>` is a low noise, complete analog
+The :adi:`AD7193` is a low noise, complete analog
 front end for high precision measurement applications. It contains a low
 noise, 24-bit sigma-delta (Σ-Δ) analog-to-digital converter (ADC). The
 on-chip low noise gain stage means that signals of small amplitude can
@@ -233,6 +235,6 @@ Digilent Zedboard:
 More Information
 ----------------
 
--  :adi:`AD7193 Product Page <en/products/ad7193.html>`
--  :adi:`AD7193 Data Sheet <media/en/technical-documentation/data-sheets/ad7193.pdf>`
+-  :adi:`AD7193 Product Page <ad7193>`
+-  :adi:`AD7193 Data Sheet <ad7193>`
 -  :ez:`Ask questions on EngineerZone </>`

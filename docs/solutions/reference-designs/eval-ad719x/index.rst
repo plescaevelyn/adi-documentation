@@ -1,4 +1,4 @@
-.. _ad719x-asdz:
+.. _ad719x_asdz:
 
 EVAL-AD719x-ASDZ
 ================
@@ -9,7 +9,7 @@ Sigma-Delta ADCs.
 Overview
 --------
 
-The :adi:`AD719x <en/products/ad7190.html>` family of ADCs are ultralow
+The :adi:`AD719x <ad7190>` family of ADCs are ultralow
 noise, complete analog front ends for high precision measurement
 applications. They incorporate a 24-bit sigma-delta (Σ-Δ) analog-to-digital
 converter (ADC) with an on-chip low noise gain stage, enabling signals of
@@ -43,20 +43,20 @@ Evaluation Boards
       - Device
       - Data Sheet
    -  - EVAL-AD7190ASDZ
-      - :adi:`AD7190 <en/products/ad7190.html>`
-      - :adi:`Data Sheet <media/en/technical-documentation/data-sheets/ad7190.pdf>`
+      - :adi:`AD7190`
+      - :adi:`Data Sheet <ad7190>`
    -  - EVAL-AD7192ASDZ
-      - :adi:`AD7192 <en/products/ad7192.html>`
-      - :adi:`Data Sheet <media/en/technical-documentation/data-sheets/ad7192.pdf>`
+      - :adi:`AD7192`
+      - :adi:`Data Sheet <ad7192>`
    -  - EVAL-AD7193ASDZ
-      - :adi:`AD7193 <en/products/ad7193.html>`
-      - :adi:`Data Sheet <media/en/technical-documentation/data-sheets/ad7193.pdf>`
+      - :adi:`AD7193`
+      - :adi:`Data Sheet <ad7193>`
    -  - EVAL-AD7194ASDZ
-      - :adi:`AD7194 <en/products/ad7194.html>`
-      - :adi:`Data Sheet <media/en/technical-documentation/data-sheets/ad7194.pdf>`
+      - :adi:`AD7194`
+      - :adi:`Data Sheet <ad7194>`
    -  - EVAL-AD7195ASDZ
-      - :adi:`AD7195 <en/products/ad7195.html>`
-      - :adi:`Data Sheet <media/en/technical-documentation/data-sheets/ad7195.pdf>`
+      - :adi:`AD7195`
+      - :adi:`Data Sheet <ad7195>`
 
 User Guide
 ----------

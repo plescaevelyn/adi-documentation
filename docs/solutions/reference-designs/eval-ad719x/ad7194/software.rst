@@ -1,3 +1,5 @@
+.. _ad7194_software:
+
 Software Guide
 ==============
 
@@ -15,8 +17,8 @@ Ace Plugin Install guide
 The software and drivers required for the installation walked through in this
 section can be found below:
 
--  :adi:`Ace Software <en/design-center/evaluation-hardware-and-software/evaluation-development-platforms/ace-software.html>`
--  :adi:`AD7194 ACE Plugin <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7194asdz.html#eb-documentation>`
+-  :adi:`Ace Software <ACE>`
+-  :adi:`AD7194 ACE Plugin <EVAL-AD7194ASDZ>`
 -  `SDP controller system demonstration platform drivers <http://swdownloads.analog.com/ACE/SDP/SDPDrivers.exe>`_
 
 Installing the ACE Plugin software
@@ -148,8 +150,8 @@ Chip view window
 ~~~~~~~~~~~~~~~~
 
 After completing the steps in the
-:doc:`Software Installation Procedures <softwareguide>` section and the
-:doc:`Evaluation Board Set-up Procedures <hardwareguide>` section, set up the
+:ref:`Software Installation Procedures <ad7194_software>` section and the
+:ref:`Evaluation Board Set-up Procedures <ad7194_hardware>` section, set up the
 system for data capture by taking the following steps:
 
 -  Block icons that are dark blue are programmable blocks. Click a dark blue
@@ -271,9 +273,9 @@ Virtual Evaluation Tool.
 Firmware Install Guide
 ----------------------
 
-:doc:`Previous Page: Hardware Guide <hardwareguide>`
+:ref:`Previous Page: Hardware Guide <ad7194_hardware>`
 
-:doc:`Return to Homepage <index>`
+:ref:`Return to Homepage <ad7194_index>`
 
 .. |image1| image:: ../images/ad7194_waveform.png
    :width: 400

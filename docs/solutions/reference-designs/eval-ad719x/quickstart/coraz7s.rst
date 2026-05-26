@@ -1,4 +1,4 @@
-.. _ad719x-asdz-quickstart-coraz7s:
+.. _ad719x_asdz_quickstart_coraz7s:
 
 CoraZ7S Quick start
 ===================
@@ -7,7 +7,7 @@ CoraZ7S Quick start
    :width: 800
 
 This guide provides some quick instructions on how to setup the
-:ref:`EVAL-AD719x-ASDZ <ad719x-asdz>` on:
+:ref:`EVAL-AD719x-ASDZ <ad719x_asdz>` on:
 
 - `Cora Z7S <https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development>`__
   Pmod JA connector (default) or Arduino shield connector
@@ -95,7 +95,7 @@ Required Software
 Required Hardware
 ~~~~~~~~~~~~~~~~~
 
-- One of the :ref:`EVAL-AD719x-ASDZ <ad719x-asdz>` evaluation boards
+- One of the :ref:`EVAL-AD719x-ASDZ <ad719x_asdz>` evaluation boards
 - `Cora Z7S <https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development>`__
 - Micro SD card with at least 16GB
 - Micro USB to USB Type A cable (UART / power)
@@ -133,7 +133,7 @@ Follow the steps in this order, to avoid damaging the components:
           We are powering from the USB port.
         - Across Pins 3 & 2 (labeled USB)
 
-#. Connect the :ref:`EVAL-AD719x-ASDZ <ad719x-asdz>` to the CoraZ7S using one
+#. Connect the :ref:`EVAL-AD719x-ASDZ <ad719x_asdz>` to the CoraZ7S using one
    of the following configurations:
 
    - **Pmod JA connector** (default HDL configuration):
@@ -145,7 +145,7 @@ Follow the steps in this order, to avoid damaging the components:
      See the :external+hdl:ref:`ad719x_asdz` project
      for details.
 
-     .. image:: ../images/cora_ad719x.png
+     .. image:: ../images/cora_ad719x_arduino.png
         :width: 500
 
 #. Insert the SD card with ADI Kuiper image into the microSD card slot on the

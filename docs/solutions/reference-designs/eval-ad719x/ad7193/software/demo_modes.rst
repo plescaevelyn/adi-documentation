@@ -1,3 +1,5 @@
+.. _ad7193_demo_modes:
+
 Demo Modes
 ==========
 
@@ -75,10 +77,10 @@ Noise test Demo
 
 If you have not set up the EVAL-AD7193-ASDZ and controller board
 previously please go to the
-:doc:`Quick Start Guide <../index>`
+:ref:`Quick Start Guide <ad7193_index>`
 
 If you have not set up/installed the ACE plugin before please go to
-:doc:`Install Guide <../softwareprocedures>`
+:ref:`Install Guide <ad7193_software>`
 
 -  Double click the AD7193 Eval Board icon to open the AD7193 Eval Board
    view window. The demo wizard will be on the left, either as shown in
@@ -119,7 +121,7 @@ If you have not set up/installed the ACE plugin before please go to
    :align: center
    :width: 600
 
--  For more information on the Waveform window go to the software section :doc:`here <../softwareprocedures>`
+-  For more information on the Waveform window go to the software section :ref:`here <ad7193_software>`
 
 Reading Samples from the ADC
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -133,7 +135,7 @@ reference (ADR4525). To read samples from the ADC, do the following:
    Refin1(+/−) field should be updated accordingly. (The analysis results
    are based on the value set in this input field.)
 
-   -  Information on the reference choice can be viewed in the :doc:`Reference Options Tab <../hardwareguide>`
+   -  Information on the reference choice can be viewed in the :ref:`Reference Options Tab <ad7193_hardware>`
 
 -  When selecting Run Once, a batch of samples is read when clicking the
    button; the batch size is set by the value in the Samples field.
@@ -161,4 +163,4 @@ the Results Tab. To save the data into an Excel file, select the Export
 button from the Results Tab. A Save dialog box is displayed, prompting
 you to save the data to an appropriate folder location.
 
-:doc:`Return to Software Guide <../softwareprocedures>`
+:ref:`Return to Software Guide <ad7193_software>`

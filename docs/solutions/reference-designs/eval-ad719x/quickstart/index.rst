@@ -1,10 +1,10 @@
-.. _ad719x-asdz-quickstart:
+.. _ad719x_asdz_quickstart:
 
 Quick start
 ===========
 
 The following steps highlight the process to begin using the
-:adi:`EVAL-AD719x-ASDZ <en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD7192.html>`
+:adi:`EVAL-AD719x-ASDZ <EVAL-AD7192ASDZ>`
 evaluation board with a controller board and the ACE software on a Windows PC.
 
 .. toctree::
@@ -14,12 +14,12 @@ evaluation board with a controller board and the ACE software on a Windows PC.
    coraz7s
    de10nano
 
-.. _ad719x-asdz-carriers:
+.. _ad719x_asdz_carriers:
 
 Supported carriers
 ------------------
 
-The :adi:`EVAL-AD719x-ASDZ <en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD7192.html>`
+The :adi:`EVAL-AD719x-ASDZ <EVAL-AD7192ASDZ>`
 connects to a controller board via a 120-pin connector or alternatively, Arduino
 and Pmod connectors.
 
@@ -30,9 +30,9 @@ The controller boards we support are:
 
    - - Controller board
      - Connector
-   - - :adi:`EVAL-SDP-CK1Z <en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/sdp-k1.html>`
+   - - :adi:`EVAL-SDP-CK1Z <SDP-K1>`
      - 120-pin / Arduino
-   - - :adi:`EVAL-SDP-CB1Z <en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/sdp-b.html>`
+   - - :adi:`EVAL-SDP-CB1Z <SDP-B>`
      - 120-pin
    - - `Cora Z7S <https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development>`__
      - Pmod JA / Arduino shield
@@ -50,12 +50,12 @@ Supported environments
      - Linux software
      - No-OS software
      - ACE Software
-   - - :adi:`EVAL-SDP-CK1Z <en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/sdp-k1.html>`
+   - - :adi:`EVAL-SDP-CK1Z <SDP-K1>`
      - ---
      - ---
      - ---
      - Yes
-   - - :adi:`EVAL-SDP-CB1Z <en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/sdp-b.html>`
+   - - :adi:`EVAL-SDP-CB1Z <SDP-B>`
      - ---
      - ---
      - ---
@@ -76,7 +76,7 @@ Supported environments
      - Yes
      - ---
 
-.. _ad719x-asdz-hardware-setup:
+.. _ad719x_asdz_hardware_setup:
 
 Hardware Setup
 --------------
@@ -119,7 +119,7 @@ EVAL-AD719x-ASDZ + Cora Z7
 
 - Using the Arduino shield connector (HDL built with ``ARDZ_Pmod_N=1``).
 
-  .. image:: ../images/cora_ad719x.png
+  .. image:: ../images/cora_ad719x_arduino.png
      :width: 500
 
 EVAL-AD719x-ASDZ + DE10-Nano
@@ -127,12 +127,12 @@ EVAL-AD719x-ASDZ + DE10-Nano
 
 - Using the Arduino shield connector.
 
-  .. image:: ../images/de10nano_ad719x.png
+  .. image:: ../images/de10nano_ad719x_arduino.png
      :width: 500
 
 Getting started
 ---------------
 
 Once the hardware is set up, follow the
-:ref:`Software guide <ad719x-asdz-software-guide>` for ACE plugin installation,
+:ref:`Software guide <ad719x_asdz_software_guide>` for ACE plugin installation,
 operation, and demo modes.
