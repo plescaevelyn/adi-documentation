@@ -296,10 +296,6 @@ Serial communication options
 
 For an introduction to the Serial Peripheral Interface (SPI), click :adi:`here <en/analog-dialogue/articles/introduction-to-spi-interface.html>`
 
-.. image:: ../images/spi_pic.png
-   :align: center
-   :width: 400
-
 Reference Options
 -----------------
 
