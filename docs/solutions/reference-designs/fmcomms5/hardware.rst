@@ -1,3 +1,7 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms5-ebz/hardware
+
+.. _ad-fmcomms5-ebz-hardware:
+
 AD-FMCOMMS5-EBZ Hardware
 ========================
 
@@ -15,10 +19,12 @@ Rev. C
 
    :adi:`AD-FMCOMMS5-EBZ Design & Integration Files <media/en/reference-design-documentation/design-integration-files/ad-fmcomms5-ebz-designsupport.zip>`
 
-   -  Schematic
-   -  PCB Layout
-   -  Bill of Materials
-   -  Allegro Project (get the `Allegro FREE Physical Viewer <https://www.cadence.com/en_US/home/tools/pcb-design-and-analysis/allegro-downloads-start.html>`_; you need 17.2 or higher)
+   - Schematic
+   - PCB Layout
+   - Bill of Materials
+   - Allegro Project (get the `Allegro FREE Physical Viewer
+     <https://www.cadence.com/en_US/home/tools/pcb-design-and-analysis/allegro-downloads-start.html>`_;
+     you need 17.2 or higher)
 
 Rev. B
 ~~~~~~
@@ -26,10 +32,14 @@ Rev. B
 .. admonition:: Download
    :class: download
 
-   -  `Rev B Schematic <resources/fmcomms5_schematic.pdf>`_
-   -  `Rev B BOM <images/fmcomms5-bom.xls>`_
-   -  `Rev B Build Files <resources/fmcomms5_build.zip>`_
-   -  `Rev B Allegro Board File <resources/fmcomms5_revb.7z>`_ (This file is `compressed <http://www.7-zip.org/7z.html>`_). Get the `Allegro FREE Physical Viewer <https://www.cadence.com/en_US/home/tools/pcb-design-and-analysis/allegro-downloads-start.html>`_ (You need 16.5 or higher).
+   - :download:`Rev B Schematic <resources/fmcomms5_schematic.pdf>`
+   - :download:`Rev B BOM <images/fmcomms5-bom.xls>`
+   - :download:`Rev B Build Files <resources/fmcomms5_build.zip>`
+   - :download:`Rev B Allegro Board File <resources/fmcomms5_revb.7z>`
+     (This file is `compressed <http://www.7-zip.org/7z.html>`_). Get the
+     `Allegro FREE Physical Viewer
+     <https://www.cadence.com/en_US/home/tools/pcb-design-and-analysis/allegro-downloads-start.html>`_
+     (You need 16.5 or higher).
 
    .. important::
 

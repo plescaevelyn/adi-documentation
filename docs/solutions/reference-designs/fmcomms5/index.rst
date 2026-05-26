@@ -1,3 +1,7 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms5-ebz
+
+.. _ad-fmcomms5-ebz:
+
 AD-FMCOMMS5-EBZ
 ===============
 
@@ -37,8 +41,8 @@ to connect and synchronize (at the RF side) multiple AD9361s for
 applications. To help with algorithm array processing development, there are a
 variety of things that can be done, from purchasing complete solutions:
 
--  `MIMO receiver`_
--  `MIMO transmitter`_
+- `MIMO receiver`_
+- `MIMO transmitter`_
 
 .. _MIMO receiver:
    https://www.xilinx.com/products/intellectual-property/do-di-mimoenc-lte.html
@@ -53,7 +57,7 @@ To creating your own with something like `Phased Array System Toolbox`_.
 If you are just starting a design, or investigating the AD9361 for the first
 time, it's suggested to get familiar with the single AD9361 based platforms
 (:dokuwiki:`AD-FMCOMMS2-EBZ </resources/eval/user-guides/ad-fmcomms2-ebz>` or
-:dokuwiki:`AD-FMCOMMS3-EBZ </resources/eval/user-guides/ad-fmcomms3-ebz>`)
+:ref:`AD-FMCOMMS3-EBZ <ad-fmcomms3-ebz>`)
 first.
 
 Note that the AD-FMCOMMS5-EBZ uses a dual FMC connector. This means the base
@@ -86,8 +90,8 @@ Table of Contents
 
    #. Linux Applications
 
-      #. :dokuwiki:`IIO Scope </resources/tools-software/linux-software/iio_oscilloscope>`
-      #. :dokuwiki:`FMCOMMS5 Control IIO Scope Plugin </resources/tools-software/linux-software/fmcomms5_plugin>`
+      #. :ref:`IIO Scope <iio-oscilloscope>`
+      #. :doc:`FMCOMMS5 Control IIO Scope Plugin <fmcomms5_plugin>`
       #. :dokuwiki:`FMCOMMS2/3/4/5 Advanced Control IIO Scope Plugin </resources/tools-software/linux-software/fmcomms2_advanced_plugin>`
       #. :dokuwiki:`Command Line/Shell scripts </resources/eval/user-guides/ad-fmcomms2-ebz/software/linux/applications/shell_scripts>`
 
@@ -148,14 +152,14 @@ Table of Contents
 Presentations
 -------------
 
--  :adi:`Developing Multiple-Input Multiple-Output (MIMO) Systems with the AD9361 <en/education/education-library/webcasts/developing-multiple-input-multiple-output.html>`
-   As Software Defined Radio (SDR) and Multiple-Input Multiple-Output (MIMO)
-   become more prevalent there is a need for more channel diversity. This
-   webcast will detail how to use multiple AD9361 devices to create an NxN
-   MIMO system, as well as explore the available tradeoffs in the design. The
-   AD9361 is a fully integrated 2x2 MIMO transceiver. Its programmability and
-   wideband capability make it ideal for a broad range of transceiver
-   applications.
+- :adi:`Developing Multiple-Input Multiple-Output (MIMO) Systems with the AD9361 <en/education/education-library/webcasts/developing-multiple-input-multiple-output.html>`
+  As Software Defined Radio (SDR) and Multiple-Input Multiple-Output (MIMO)
+  become more prevalent there is a need for more channel diversity. This
+  webcast will detail how to use multiple AD9361 devices to create an NxN
+  MIMO system, as well as explore the available tradeoffs in the design. The
+  AD9361 is a fully integrated 2x2 MIMO transceiver. Its programmability and
+  wideband capability make it ideal for a broad range of transceiver
+  applications.
 
 Warning
 ~~~~~~~

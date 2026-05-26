@@ -1,3 +1,7 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms5-ebz/hardware/configuration_options
+
+.. _ad-fmcomms5-ebz-configuration-options:
+
 FMComms5 Configuration Options
 ==============================
 

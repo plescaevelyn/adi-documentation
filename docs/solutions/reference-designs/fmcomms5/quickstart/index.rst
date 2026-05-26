@@ -92,6 +92,6 @@ AD-FMCOMMS5-EBZ + ZCU102
 Getting started
 ---------------
 
--  :doc:`ZC702 quick start guide <zc702>`
--  :doc:`ZC706 quick start guide <zc706>`
--  :doc:`ZCU102 quick start guide <zcu102>`
+- :doc:`ZC702 quick start guide <zc702>`
+- :doc:`ZC706 quick start guide <zc706>`
+- :doc:`ZCU102 quick start guide <zcu102>`

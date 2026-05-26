@@ -1,3 +1,7 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms5-ebz/multi-chip-sync
+
+.. _ad-fmcomms5-ebz-multi-chip-sync:
+
 Synchronizing multiple AD9361 devices
 =====================================
 
@@ -51,9 +55,9 @@ this is done. The
 :adi:`ADCLK846` (U301) Clock Fanout Buffer, accepts a 40MHz Rakon oscillator
 (Y301), and drives:
 
--  ``XTALN_A`` to the "A" AD9361 device,  [1]_
--  ``XTALN_B`` to the "B" AD9361 device.
--  ``REF_CLK_FMC`` back to the FMC connector.
+- ``XTALN_A`` to the "A" AD9361 device,  [1]_
+- ``XTALN_B`` to the "B" AD9361 device.
+- ``REF_CLK_FMC`` back to the FMC connector.
 
 The ``SYNC_IN`` pin on the AD9361 is driven directly from the FPGA, length
 matched to both AD9361 devices, so the edge hits both parts at the same time.
@@ -116,9 +120,9 @@ Any time that software can effect things that can make the part go out of
 sequence, it's necessary to repeat these steps. This would be any time changes
 are made to:
 
--  Baseband PLL (BBPLL) rate (device data rates)
--  FIR Filter Enable/Disable in case the BBPLL must change
--  Changing either Tx or Rx LO settings
+- Baseband PLL (BBPLL) rate (device data rates)
+- FIR Filter Enable/Disable in case the BBPLL must change
+- Changing either Tx or Rx LO settings
 
 RF Phase difference
 -------------------
@@ -128,15 +132,16 @@ internally, and needs a little help.
 
 There are two methods to solve this issue:
 
--  measure the phase difference in the internal LOs, and correct in the FPGA
--  use an external LO signal
+- measure the phase difference in the internal LOs, and correct in the FPGA
+- use an external LO signal
 
 Internal LOs + FPGA
 ~~~~~~~~~~~~~~~~~~~~
 
 In this section, we assume that you have read and understood the math parts of
-:dokuwiki:`IQ Rotation and Correction </resources/eval/user-guides/ad-fmcomms2-ebz/iq_rotation>` section, and we will focus here on the practical
-aspects of things.
+the
+:dokuwiki:`IQ Rotation and Correction </resources/eval/user-guides/ad-fmcomms2-ebz/iq_rotation>`
+section, and we will focus here on the practical aspects of things.
 
 The FMCOMMS5 board includes two :adi:`ADG918` wide band (-3dB @ 4GHz) switches
 that are used to connect either Tx1B from either AD9361 device to Rx1C on either
@@ -205,8 +210,8 @@ Any time that software can effect things that can make the RF LOs to go out of
 phase, it's necessary to repeat these steps. This would be any time changes
 are made to:
 
--  To the internal RX/TX RFPLLs (LOs)
--  The MCS is done
+- To the internal RX/TX RFPLLs (LOs)
+- The MCS is done
 
 This changes does include internal changes, like if you place the AD9361 into
 TDD mode (where the LOs or LO dividers get powered off). What this really

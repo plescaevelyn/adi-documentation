@@ -1,3 +1,7 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms5-ebz/phase-sync
+
+.. _ad-fmcomms5-ebz-phase-sync:
+
 FMComms5 Phase Synchronization
 ==============================
 
@@ -7,17 +11,16 @@ Theory of Operation
 The AD9361 transceiver has no built-in functionality to provide phase
 synchronization, but through external equipment and additional software and HDL
 phase alignment can be achieved across multiple transceiver chips. The
-calibration process is documented on this
-:doc:`wiki page </solutions/reference-designs/fmcomms5/multi-chip-sync>` and
-as well in this `whitepage <resources/doa_whitepaper.pdf>`_ in the "Phase
-Alignment" discussion.
+calibration process is documented on the :doc:`multi-chip-sync` page and
+as well in this :download:`whitepaper <resources/doa_whitepaper.pdf>` in the
+"Phase Alignment" discussion.
 
 The calibration procedures are implemented in both IIO-Scope and in a C library
 libad9361. It can be useful to see how they are implemented, or if end-users
 want additional debug to be extracted start at the following linked lines:
 
--  :git-iio-oscilloscope:`IIO-Scope <plugins/fmcomms2_adv.c#L830>`
--  :git-libad9361-iio:`libad9361 <ad9361_fmcomms5_phase_sync.c#L507>`
+- :git-iio-oscilloscope:`IIO-Scope <plugins/fmcomms2_adv.c#L830>`
+- :git-libad9361-iio:`libad9361 <ad9361_fmcomms5_phase_sync.c#L507>`
 
 Note that both designs are implemented in slightly different ways.
 
@@ -69,26 +72,26 @@ MHz. All LOs should be at 2.4 GHz by default.
 
 To calibrate FMComms5, perform the following within IIO-Scope:
 
--  From the FMComms5 panel, match all LOs to the same frequency for all four
-   datapaths
--  Disable all receiver trackings: Quadrature, RF DC, and BB DC
--  Put all receivers into **manual** Gain Control Mode
--  Set manual hardware gains for all receivers to the same level within a
-   reasonable range. With loopback cables connecting RX and TX and DDSs set to
-   -18 dB RSSI should be ~37-43 dB. You should have something similar to the
-   below figure.
+- From the FMComms5 panel, match all LOs to the same frequency for all four
+  datapaths
+- Disable all receiver trackings: Quadrature, RF DC, and BB DC
+- Put all receivers into **manual** Gain Control Mode
+- Set manual hardware gains for all receivers to the same level within a
+  reasonable range. With loopback cables connecting RX and TX and DDSs set to
+  -18 dB RSSI should be ~37-43 dB. You should have something similar to the
+  below figure.
 
 .. image:: images/screenshot_20190530_143140.png
    :alt: Example Configuration
    :align: center
    :width: 1000
 
--  From the FMComms2/3/4/5 Advanced (or AD936X Advanced) panel, select the
-   FMComms5 tab. From here click the "Reset Calibration" button
--  Click the "MCS Sync" button at the bottom
--  Click the "Calibrate" button which will launch the procedure
--  To maintain minimal ambiguity over time disable Quadrature tracking again in
-   the FMComms5 panel
+- From the FMComms2/3/4/5 Advanced (or AD936X Advanced) panel, select the
+  FMComms5 tab. From here click the "Reset Calibration" button
+- Click the "MCS Sync" button at the bottom
+- Click the "Calibrate" button which will launch the procedure
+- To maintain minimal ambiguity over time disable Quadrature tracking again in
+  the FMComms5 panel
 
 Once this completes, the DDSs used for calibration will remain on. To view the
 relative sync, you can open a capture window to view received data on the SMA

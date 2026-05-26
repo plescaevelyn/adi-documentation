@@ -32,10 +32,10 @@ Hardware prerequisites
 
 #. A way to interact with the carrier:
 
-   -  ARM/FPGA SoC carriers (ZC702, ZC706): HDMI or VGA monitor, USB
-      keyboard and mouse
-   -  ZynqMP carrier (ZCU102): DisplayPort monitor, USB keyboard and
-      mouse (both optional; UART via Micro-USB is sufficient)
+   - ARM/FPGA SoC carriers (ZC702, ZC706): HDMI or VGA monitor, USB
+     keyboard and mouse
+   - ZynqMP carrier (ZCU102): DisplayPort monitor, USB keyboard and
+     mouse (both optional; UART via Micro-USB is sufficient)
 
 #. An internet connection for updating SD card scripts and binaries.
 #. RF test equipment (signal generator, spectrum analyzer) or SMA
