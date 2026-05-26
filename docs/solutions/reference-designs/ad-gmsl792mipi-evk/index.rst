@@ -251,3 +251,9 @@ reference design with Analog Devices components via the
 
 It should be noted that the older the tools' versions and release branches are,
 the lower the chances to receive support from ADI engineers.
+
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   production_testing/index
