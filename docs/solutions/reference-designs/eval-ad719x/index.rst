@@ -24,14 +24,14 @@ carrier boards.
 Features
 --------
 
--  Ultralow noise 24-bit sigma-delta ADC
--  On-chip low noise programmable gain stage (gains from x1 to x128)
--  4.8 kHz output data rate
--  On-chip digital filtering
--  Internal clock option for compact solutions
--  Automatic channel sequencer
--  SPI-compatible serial interface
--  PC software for control and data analysis (time and frequency domain)
+- Ultralow noise 24-bit sigma-delta ADC
+- On-chip low noise programmable gain stage (gains from x1 to x128)
+- 4.8 kHz output data rate
+- On-chip digital filtering
+- Internal clock option for compact solutions
+- Automatic channel sequencer
+- SPI-compatible serial interface
+- PC software for control and data analysis (time and frequency domain)
 
 Evaluation Boards
 -----------------
@@ -39,24 +39,24 @@ Evaluation Boards
 .. list-table::
    :header-rows: 1
 
-   -  - Evaluation Board
-      - Device
-      - Data Sheet
-   -  - EVAL-AD7190ASDZ
-      - :adi:`AD7190`
-      - :adi:`Data Sheet <ad7190>`
-   -  - EVAL-AD7192ASDZ
-      - :adi:`AD7192`
-      - :adi:`Data Sheet <ad7192>`
-   -  - EVAL-AD7193ASDZ
-      - :adi:`AD7193`
-      - :adi:`Data Sheet <ad7193>`
-   -  - EVAL-AD7194ASDZ
-      - :adi:`AD7194`
-      - :adi:`Data Sheet <ad7194>`
-   -  - EVAL-AD7195ASDZ
-      - :adi:`AD7195`
-      - :adi:`Data Sheet <ad7195>`
+  - - Evaluation Board
+    - Device
+    - Data Sheet
+  - - EVAL-AD7190ASDZ
+    - :adi:`AD7190`
+    - :adi:`Data Sheet <ad7190>`
+  - - EVAL-AD7192ASDZ
+    - :adi:`AD7192`
+    - :adi:`Data Sheet <ad7192>`
+  - - EVAL-AD7193ASDZ
+    - :adi:`AD7193`
+    - :adi:`Data Sheet <ad7193>`
+  - - EVAL-AD7194ASDZ
+    - :adi:`AD7194`
+    - :adi:`Data Sheet <ad7194>`
+  - - EVAL-AD7195ASDZ
+    - :adi:`AD7195`
+    - :adi:`Data Sheet <ad7195>`
 
 User Guide
 ----------

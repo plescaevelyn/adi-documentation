@@ -9,7 +9,9 @@ Ace Plugin
 Ace Plugin Install guide
 ------------------------
 
--  **Warning**: The evaluation software and drivers must be installed
+.. warning::
+
+   The evaluation software and drivers must be installed
    before connecting both the evaluation board and the Controller (SDP)
    board to the PC. This ensures that the evaluations system is correctly
    recognized when it is connected to the PC.
@@ -17,66 +19,66 @@ Ace Plugin Install guide
 The software and drivers required for the installation walked through in
 this section can be found below:
 
--  :adi:`Ace Software <ACE>`
--  :adi:`AD7193 ACE Plugin <EVAL-AD7193ASDZ>`
--  `SDP controller system demonstration platform drivers <http://swdownloads.analog.com/ACE/SDP/SDPDrivers.exe>`_
+- :adi:`Ace Software <ACE>`
+- :adi:`AD7193 ACE Plugin <EVAL-AD7193ASDZ>`
+- `SDP controller system demonstration platform drivers <http://swdownloads.analog.com/ACE/SDP/SDPDrivers.exe>`_
 
 Installing the ACE Plugin software
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Download the ACE software from the ACE software page or the AD7193
+Download the :adi:`Ace Software <ACE>` from the ACE software page or the AD7193
 product page. Install ACE on a PC **before using** the EVAL-AD7193-ASDZ.
 
 Installing ACE
 ~~~~~~~~~~~~~~
 
--  Download the ACE software to a Windows®-based PC.
--  Double click the ACEInstall.exe file to begin the installation. By
-   default, the software is saved to the following location:
-   C:\\Program Files (x86)\\Analog Devices\\ACE.
--  A dialog box opens asking for permission to allow the program to make
-   changes to the PC. Click Yes to begin the installation process.
--  In the ACE Setup window, click Next > to continue the installation.
+- Download the ACE software to a Windows®-based PC.
+- Double click the ACEInstall.exe file to begin the installation. By
+  default, the software is saved to the following location:
+  C:\\Program Files (x86)\\Analog Devices\\ACE.
+- A dialog box opens asking for permission to allow the program to make
+  changes to the PC. Click Yes to begin the installation process.
+- In the ACE Setup window, click Next > to continue the installation.
 
 .. image:: ../images/ace_plugin_page_1.png
    :align: center
    :width: 400
 
--  Read the software license agreement and click I Agree
+- Read the software license agreement and click I Agree
 
 .. image:: ../images/ace_plugin_page_2.png
    :align: center
    :width: 400
 
--  Click Browse … to choose the installation location and then click
-   Next >
+- Click Browse … to choose the installation location and then click
+  Next >
 
 .. image:: ../images/ace_plugin_page_3.png
    :align: center
    :width: 400
 
--  The ACE software components to install are preselected. Click
-   Install.
+- The ACE software components to install are preselected. Click
+  Install.
 
 .. image:: ../images/ace_plugin_page_4.png
    :align: center
    :width: 400
 
--  The Windows Security window opens . Click Install
+- The Windows Security window opens . Click Install
 
 .. image:: ../images/ace_plugin_page_5.png
    :align: center
    :width: 400
 
--  The installation in progress in the window below. No action is
-   required.
+- The installation in progress in the window below. No action is
+  required.
 
 .. image:: ../images/ace_plugin_page_6.png
    :align: center
    :width: 400
 
--  When the installation is complete, click Next >, and then click
-   Finish to complete the installation process
+- When the installation is complete, click Next >, and then click
+  Finish to complete the installation process
 
 .. image:: ../images/ace_plugin_page_7.png
    :align: center
@@ -90,26 +92,26 @@ file: - Double click on the AD7193 Plugin. - Connect up your
 EVAL-AD7193-ASDZ to your pc through a controller board. Alternatively,
 the AD7193 Plugin can be installed through the steps bellow:
 
--  From the Start menu of the PC, select All Programs > Analog Devices >
-   ACE> ACE.exe to open the ACE software main window shown below.
--  Click on the Plug-in Manager Tab in the top left panel in Ace.
--  Click on the Settings… button.
+- From the Start menu of the PC, select All Programs > Analog Devices >
+  ACE> ACE.exe to open the ACE software main window shown below.
+- Click on the Plug-in Manager Tab in the top left panel in Ace.
+- Click on the Settings… button.
 
 .. image:: ../images/ace_plugin_install_page_1.png
    :align: center
    :width: 400
 
--  Hit the + button next to the Zipped Plug-in Sources.
+- Hit the + button next to the Zipped Plug-in Sources.
 
 .. image:: ../images/ad7193aceplugin.png
    :align: center
    :width: 400
 
--  Under the Name write "AD7193"
--  Under Source hit the … button and set the path to where you have
-   stored the AD7193 Plugin.
--  Press "Ok".
--  Press "Close".
+- Under the Name write "AD7193"
+- Under Source hit the … button and set the path to where you have
+  stored the AD7193 Plugin.
+- Press "Ok".
+- Press "Close".
 
 ACE software Operation
 ----------------------
@@ -120,31 +122,31 @@ Launching the software
 After the EVAL-AD7193-ASDZ and controller board are properly connected
 to the PC, launch the ACE software by taking the following steps:
 
--  From the Start menu of the PC, select All Programs > Analog Devices >
-   ACE> ACE.exe to open the ACE software main window shown below
--  If the EVAL-AD7193-ASDZ is not connected to the USB port via the
-   controller board when the software launches, the AD7193 Eval Board
-   icon does not appear in the Attached Hardware section in ACE (see
-   Figure below). To make the AD7193 Eval Board icon appear, connect the
-   EVAL-AD7193-ASDZ and the controller board to the USB port of the PC,
-   wait a few seconds, and then follow the instructions in the dialog
-   box that opens.
+- From the Start menu of the PC, select All Programs > Analog Devices >
+  ACE> ACE.exe to open the ACE software main window shown below
+- If the EVAL-AD7193-ASDZ is not connected to the USB port via the
+  controller board when the software launches, the AD7193 Eval Board
+  icon does not appear in the Attached Hardware section in ACE (see
+  Figure below). To make the AD7193 Eval Board icon appear, connect the
+  EVAL-AD7193-ASDZ and the controller board to the USB port of the PC,
+  wait a few seconds, and then follow the instructions in the dialog
+  box that opens.
 
 .. image:: ../images/ad7193attachhardware.png
    :align: center
    :width: 400
 
--  Double click the AD7193 Eval Board icon to open the AD7193 Eval Board
-   view window shown below:
+- Double click the AD7193 Eval Board icon to open the AD7193 Eval Board
+  view window shown below:
 
 .. image:: ../images/ad7193boardview.png
    :align: center
    :width: 400
 
--  Double click the AD7193 chip icon in the AD7193 Eval Board view
-   window to open the AD7193 chip view window shown below:
--  Click Software Defaults and then click Apply Changes to apply the
-   default settings to the AD7193 (see figure below)
+- Double click the AD7193 chip icon in the AD7193 Eval Board view
+  window to open the AD7193 chip view window shown below:
+- Click Software Defaults and then click Apply Changes to apply the
+  default settings to the AD7193 (see figure below)
 
 .. image:: ../images/ad7193chipview.png
    :align: center
@@ -158,14 +160,14 @@ After completing the steps in the
 :ref:`Evaluation Board Set-up Procedures <ad7193_hardware>` section, set up the
 system for data capture by taking the following steps:
 
--  Block icons that are dark blue are programmable blocks. Click a dark
-   blue block icon to open a configurable pop-up window to customize the
-   data capture.
--  The "Proceed to Memory Map" button brings the user to the memory map
-   of the AD7193. This allows the user to configure the AD7193.
--  The "Proceed to Analysis" button brings the user to the Analysis tab.
-   This allows the user to see the performance results of the AD7193 and
-   displays the data.
+- Block icons that are dark blue are programmable blocks. Click a dark
+  blue block icon to open a configurable pop-up window to customize the
+  data capture.
+- The "Proceed to Memory Map" button brings the user to the memory map
+  of the AD7193. This allows the user to configure the AD7193.
+- The "Proceed to Analysis" button brings the user to the Analysis tab.
+  This allows the user to see the performance results of the AD7193 and
+  displays the data.
 
 Waveform Window
 ~~~~~~~~~~~~~~~
@@ -266,7 +268,6 @@ AD7193 Demo Modes
 
    software/demo_modes
 
-:ref:`Visit the demo mode section here <ad7193_demo_modes>`
 
 Virtual Eval Guide
 ------------------
@@ -274,22 +275,18 @@ Virtual Eval Guide
 This page provides a step by step guide to launching and using ADI's new
 Virtual Evaluation Tool.
 
--  Navigate to the Virtual Eval tool by clicking this link: `Virtual Eval <http://beta-tools.analog.com/virtualeval/>`_ or alternatively, by going to the AD7193 homepage on analog.com and finding the link there.
--  Select the AD7193 by going to 'Precision ADC < 10MSPS' and finding
-   the part there.
+- Navigate to the Virtual Eval tool by clicking this link:
+  `Virtual Eval <http://beta-tools.analog.com/virtualeval/>`_ or alternatively,
+  by going to the AD7193 homepage on analog.com and finding the link there.
+- Select the AD7193 by going to 'Precision ADC < 10MSPS' and finding
+  the part there.
 
 .. image:: ../images/ad719x_virtual_eval.png
    :align: center
    :width: 600
 
--  Now you are ready to start using the tool.
+- Now you are ready to start using the tool.
 
-Firmware Install Guide
-----------------------
-
-:ref:`Previous Page: Hardware Guide <ad7193_hardware>`
-
-:ref:`Return to Homepage <ad7193_index>`
 
 .. |image1| image:: ../images/ad7192_waveformpage.png
    :width: 400

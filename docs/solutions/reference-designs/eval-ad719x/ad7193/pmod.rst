@@ -27,22 +27,22 @@ Pmod interface.
 Applications
 ~~~~~~~~~~~~
 
--  PLC/DCS analog input modules
--  Data acquisition
--  Strain gage transducers
--  Pressure measurement
--  Temperature measurement
--  Flow measurement
--  Weigh scales
--  Chromatography
--  Medical and scientific instrumentation
+- PLC/DCS analog input modules
+- Data acquisition
+- Strain gage transducers
+- Pressure measurement
+- Temperature measurement
+- Flow measurement
+- Weigh scales
+- Chromatography
+- Medical and scientific instrumentation
 
 Supported Hardware Platforms
 ----------------------------
 
--  Spartan-6 LX9 MicroBoard (Avnet)
--  Nexys3 Spartan-6 FPGA Board (Digilent)
--  Zedboard (Digilent)
+- Spartan-6 LX9 MicroBoard (Avnet)
+- Nexys3 Spartan-6 FPGA Board (Digilent)
+- Zedboard (Digilent)
 
 Quick Start Guide
 -----------------
@@ -55,17 +55,17 @@ programmer (IMPACT).
 Required Hardware
 ~~~~~~~~~~~~~~~~~
 
--  One of the supported FPGA boards listed above
--  PmodAD5 (Digilent)
+- One of the supported FPGA boards listed above
+- PmodAD5 (Digilent)
 
 Required Software
 ~~~~~~~~~~~~~~~~~
 
--  AMD Xilinx ISE 14.4 (Programmer (IMPACT) is sufficient for the demo and
-   is available on Webpack)
--  A UART terminal (Tera Term / HyperTerminal), baud rate 115200 for
-   the Avnet LX-9 MicroBoard and Digilent Zedboard, or 9600 for the Digilent
-   Nexys3 Board
+- AMD Xilinx ISE 14.4 (Programmer (IMPACT) is sufficient for the demo and
+  is available on Webpack)
+- A UART terminal (Tera Term / HyperTerminal), baud rate 115200 for
+  the Avnet LX-9 MicroBoard and Digilent Zedboard, or 9600 for the Digilent
+  Nexys3 Board
 
 Board Setup
 -----------
@@ -190,17 +190,17 @@ pair), gain, sampling frequency, etc.
 
 .. note::
 
-   -  Connecting the PmodAD5 to the boards using an extension cable
-      provides ease of use.
-   -  UART must be set to 115200 baud rate for the Avnet LX-9
-      MicroBoard and Zedboard, or 9600 baud rate for the Digilent
-      Nexys3 Board.
-   -  When using AVDD > DVDD (= 3.3 V), JP1 on PmodAD5 must be
-      removed. The range for AVDD is 3.0 V to 5.25 V.
-   -  If using the AMD Xilinx SDK integrated console as a terminal client,
-      uncomment all the commented ``getchar();`` calls in ``main.c``,
-      because the console sees Enter as two consecutive keypresses.
-      If using Tera Term or similar software, do not modify anything.
+  - Connecting the PmodAD5 to the boards using an extension cable
+    provides ease of use.
+  - UART must be set to 115200 baud rate for the Avnet LX-9
+    MicroBoard and Zedboard, or 9600 baud rate for the Digilent
+    Nexys3 Board.
+  - When using AVDD > DVDD (= 3.3 V), JP1 on PmodAD5 must be
+    removed. The range for AVDD is 3.0 V to 5.25 V.
+  - If using the AMD Xilinx SDK integrated console as a terminal client,
+    uncomment all the commented ``getchar();`` calls in ``main.c``,
+    because the console sees Enter as two consecutive keypresses.
+    If using Tera Term or similar software, do not modify anything.
 
 When using the Zedboard reference design to develop your own software,
 make sure that the following options are set in ``system_config.h``:
@@ -219,22 +219,15 @@ Downloads
 
 Avnet LX-9 MicroBoard:
 
--  :download:`Reference design source code <ad7193_lx9.zip>`
+- :download:`Reference design source code <ad7193_lx9.zip>`
 
 Digilent Nexys3:
 
--  :download:`Reference design source code <ad7193_nexys3.zip>`
+- :download:`Reference design source code <ad7193_nexys3.zip>`
 
 Digilent Zedboard:
 
--  `XPS Project <https://github.com/analogdevicesinc/fpgahdl_xilinx/tree/master/cf_adv7511_zed>`__
--  `PmodAD5 Driver Files <https://github.com/analogdevicesinc/no-OS/tree/master/Pmods/PmodAD5>`__
--  `ZYNQ SoC Peripherals Driver Files <https://github.com/analogdevicesinc/no-OS/tree/master/Pmods/Common/sw>`__
--  `Programming Script <https://github.com/analogdevicesinc/no-OS/tree/master/Pmods/PmodAD5/bin>`__
-
-More Information
-----------------
-
--  :adi:`AD7193 Product Page <ad7193>`
--  :adi:`AD7193 Data Sheet <ad7193>`
--  :ez:`Ask questions on EngineerZone </>`
+- `XPS Project <https://github.com/analogdevicesinc/fpgahdl_xilinx/tree/master/cf_adv7511_zed>`__
+- :git-no-os:`PmodAD5 Driver Files <Pmods/PmodAD5>`
+- :git-no-os:`ZYNQ SoC Peripherals Driver Files <Pmods/Common/sw>`
+- :git-no-os:`Programming Script <Pmods/PmodAD5/bin>`

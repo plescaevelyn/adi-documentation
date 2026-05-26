@@ -49,56 +49,64 @@ Hardware Link for Noise Demo Mode
    * - LK13
      - Black
      - Uninserted
-     - This link shorts AIN1 to AIN2. This is useful to perform noise tests on the AD7192
+     - This link shorts AIN1 to AIN2. This is useful to perform noise tests
+       on the AD7192
 
 Noise test Demo
 ---------------
 
--  **Warning:** The evaluation software and drivers must be installed before connecting the EVAL-AD7192-ASDZ evaluation board and EVAL-SDP-CB1Z board to the USB port of the PC to ensure the PC correctly recognizes the evaluation system.
+.. warning::
 
-If you have not set up the EVAL-AD7192-ASDZ and controller board previously please go to the :ref:`Quick Start Guide <ad7192_index>`
+   The evaluation software and drivers must be installed before connecting the
+   EVAL-AD7192-ASDZ evaluation board and EVAL-SDP-CB1Z board to the USB port of
+   the PC to ensure the PC correctly recognizes the evaluation system.
 
-If you have not set up/installed the ACE plugin before please go to :ref:`Install Guide <ad7192_software>`
+If you have not set up the EVAL-AD7192-ASDZ and controller board previously
+please go to the :ref:`Quick Start Guide <ad7192_index>`
 
--  Double click the AD7192 Eval Board icon to open the AD7192 Eval Board view
-   window. The demo wizard will be on the left, either as shown in the figure
-   below (Label 1) or already expanded. Expand the wizard by clicking the arrow
-   (Label 2).
+If you have not set up/installed the ACE plugin before please go to
+:ref:`Install Guide <ad7192_software>`
+
+- Double click the AD7192 Eval Board icon to open the AD7192 Eval Board view
+  window. The demo wizard will be on the left, either as shown in the figure
+  below (Label 1) or already expanded. Expand the wizard by clicking the arrow
+  (Label 2).
 
 .. image:: ../../images/ad7192_noisetest.png
    :align: center
    :width: 600
 
--  With the wizard expanded, select the noise test button (Label 3).
--  The settings required for the demo are displayed to be viewed prior to
-   writing to the AD7192 (Label 4). Click apply (Label 5) to write these
-   settings to the board.
--  The summary is then displayed once the write is complete (Label 1).
+- With the wizard expanded, select the noise test button (Label 3).
+- The settings required for the demo are displayed to be viewed prior to
+  writing to the AD7192 (Label 4). Click apply (Label 5) to write these
+  settings to the board.
+- The summary is then displayed once the write is complete (Label 1).
 
 .. image:: ../../images/ad7192noise_summary.png
    :align: center
    :width: 600
 
--  From here navigate to the chip view by double-clicking the AD7192 chip
-   (Label 2).
--  To make further changes to the configuration click on the dark blue block in
-   the chip view (Label 1) or double click the memory map option (Label 2)
--  To begin capturing data double click the Analysis button (Label 3).
+- From here navigate to the chip view by double-clicking the AD7192 chip
+  (Label 2).
+- To make further changes to the configuration click on the dark blue block in
+  the chip view (Label 1) or double click the memory map option (Label 2)
+- To begin capturing data double click the Analysis button (Label 3).
 
 .. image:: ../../images/ad7192noise_chip.png
    :align: center
    :width: 600
 
--  To gather samples, change the Samples Count (Label 1) to the number of
-   samples required, then click the Run Once button (Label 2) to acquire the
-   samples from the ADC. The image below shows an example of the main window
-   after running a noise test.
+- To gather samples, change the Samples Count (Label 1) to the number of
+  samples required, then click the Run Once button (Label 2) to acquire the
+  samples from the ADC. The image below shows an example of the main window
+  after running a noise test.
 
 .. image:: ../../images/ad7190_noisetest_waveform.png
    :align: center
    :width: 600
 
--  For more information on the Waveform window go to the software section :ref:`here <ad7192_software>`
+- For more information on the Waveform window go to the software section
+  :ref:`here <ad7192_software>`
 
 Reading Samples from the ADC
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -106,23 +114,24 @@ Reading Samples from the ADC
 The evaluation board is set up to use the external 2.5 V on-board reference
 (ADR4525). To read samples from the ADC, do the following:
 
--  The value in the Refin1(+/−) field on the Configuration tab is set to 2.5 V
-   by default to use the external 2.5 V on-board reference (ADR4525). If a
-   different reference is used to the AD7192, the Refin1(+/−) field should be
-   updated accordingly. (The analysis results are based on the value set in this
-   input field.)
+- The value in the Refin1(+/−) field on the Configuration tab is set to 2.5 V
+  by default to use the external 2.5 V on-board reference (ADR4525). If a
+  different reference is used to the AD7192, the Refin1(+/−) field should be
+  updated accordingly. (The analysis results are based on the value set in this
+  input field.)
 
-   -  Information on the reference choice can be viewed in the :ref:`Reference Options Tab <ad7192_hardware>`
+  - Information on the reference choice can be viewed in the
+    :ref:`Reference Options Tab <ad7192_hardware>`
 
--  When selecting Run Once, a batch of samples is read when clicking the button;
-   the batch size is set by the value in the Samples field.
+- When selecting Run Once, a batch of samples is read when clicking the button;
+  the batch size is set by the value in the Samples field.
 
-   -  When selecting Run Continuous, the software performs a continuous capture
-      from the ADC by clicking the Run Once button. Click the Stop Capture
-      button again to stop capturing data.
+  - When selecting Run Continuous, the software performs a continuous capture
+    from the ADC by clicking the Run Once button. Click the Stop Capture
+    button again to stop capturing data.
 
--  Use the navigation tools within each graph to control the cursor, zooming,
-   and panning.
+- Use the navigation tools within each graph to control the cursor, zooming,
+  and panning.
 
 Reading Samples from the ADC
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -139,4 +148,3 @@ using the Results Tab. To save the data into an Excel file, select the Export
 button from the Results Tab. A Save dialog box is displayed, prompting you to
 save the data to an appropriate folder location.
 
-:ref:`Return to Software Guide <ad7192_software>`

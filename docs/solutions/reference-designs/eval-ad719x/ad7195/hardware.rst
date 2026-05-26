@@ -6,34 +6,39 @@ EVAL-AD7195-ASDZ Hardware Guide
 Set-up Procedures
 -----------------
 
-After following the instructions in the :ref:`Software Procedures <ad7195_software>` section, set up the evaluation and SDP boards as detailed in this section.
+After following the instructions in the
+:ref:`Software Procedures <ad7195_software>` section, set up the evaluation and
+SDP boards as detailed in this section.
 
--  **Warning:** The evaluation software and drivers must be installed
+.. warning::
+
+   The evaluation software and drivers must be installed
    before connecting the EVAL-AD7195-ASDZ evaluation board and
    EVAL-SDP-CB1Z board to the USB port of the PC to ensure the PC
    correctly recognizes the evaluation system.
--  Connect the EVAL-AD7195-ASDZ to the controller board
 
-   -  **Option A:** Connect the EVAL-AD7195-ASDZ to the EVAL-SDP-CK1Z
+- Connect the EVAL-AD7195-ASDZ to the controller board
 
-      -  Using the 120 pin connector
+  - **Option A:** Connect the EVAL-AD7195-ASDZ to the EVAL-SDP-CK1Z
 
-         -  Screw the two boards together using the plastic
-            screw-washer set included in the evaluation board kit to
-            ensure that the boards are connected firmly together.
-         -  Using the Arduino Connectors
+    - Using the 120 pin connector
+
+      - Screw the two boards together using the plastic
+        screw-washer set included in the evaluation board kit to
+        ensure that the boards are connected firmly together.
+      - Using the Arduino Connectors
 
 .. image:: ../images/sdp_connect.png
    :align: center
    :width: 400
 
--  **Option B:** Connect the EVAL-AD7195-ASDZ to the EVAL-SDP-CB1Z
+- **Option B:** Connect the EVAL-AD7195-ASDZ to the EVAL-SDP-CB1Z
 
-   -  Using the 120 pin connector
+  - Using the 120 pin connector
 
-      -  Screw the two boards together using the plastic screw-washer set
-         included in the evaluation board kit to ensure that the boards are
-         connected firmly together.
+    - Screw the two boards together using the plastic screw-washer set
+      included in the evaluation board kit to ensure that the boards are
+      connected firmly together.
 
 Block Diagram
 -------------
@@ -74,7 +79,8 @@ Hardware Link Options
    * - JP4
      - Black
      - Uninserted
-     - This link shorts AIN1 to AIN2. This is useful to perform noise tests on the AD7195
+     - This link shorts AIN1 to AIN2. This is useful to perform noise tests
+       on the AD7195
    * - JP5
      - Black
      - A
@@ -105,7 +111,7 @@ Connector P9: DC (Analog Input)
 
 **Functionality:**
 
--  **Bridge Connection**
+- **Bridge Connection**
 
 ========== =======================
 Connection Function
@@ -125,7 +131,7 @@ Link JP4: Low Noise Test Circuitry
 
 **Functionality:**
 
--  **Low Noise Test**
+- **Low Noise Test**
 
 -ALL INSERTED
 
@@ -202,9 +208,9 @@ SMB Connections
 There are 3 SMB connections on the board. To allow clock signals and
 reference into the board.
 
--  J1 Provides option for External Reference+
--  J2 Provides option for External Reference-
--  J3 Brings external MCLK to the AD7195
+- J1 Provides option for External Reference+
+- J2 Provides option for External Reference-
+- J3 Brings external MCLK to the AD7195
 
 Power Supplies
 --------------
@@ -216,43 +222,43 @@ supply levels from the applied USB voltage.
 AVDD (JP2) selection
 ~~~~~~~~~~~~~~~~~~~~
 
--  **5V supply (DEFAULT)**
+- **5V supply (DEFAULT)**
 
-   -  5V regulator supplies AVDD :adi:`ADP7142`
+  - 5V regulator supplies AVDD :adi:`ADP7142`
 
--  **3.3V supply**
+- **3.3V supply**
 
-   -  3.3V regulator supplies AVDD :adi:`ADP150`
+  - 3.3V regulator supplies AVDD :adi:`ADP150`
 
--  **External AVDD**
+- **External AVDD**
 
-   -  Connections on Connector P14
+  - Connections on Connector P14
 
 DVDD (JP5) selection
 ~~~~~~~~~~~~~~~~~~~~
 
--  **3.3V supply (DEFAULT)**
+- **3.3V supply (DEFAULT)**
 
-   -  3.3V supplies DVDD
+  - 3.3V supplies DVDD
 
--  **AVDD**
+- **AVDD**
 
-   -  AVDD connected to DVDD
+  - AVDD connected to DVDD
 
 IOVDD (JP3) selection
 ~~~~~~~~~~~~~~~~~~~~~
 
--  **3.3V supply (DEFAULT)**
+- **3.3V supply (DEFAULT)**
 
-   -  3.3V regulator supplies IOVDD :adi:`ADP150`
+  - 3.3V regulator supplies IOVDD :adi:`ADP150`
 
--  **External IOVDD**
+- **External IOVDD**
 
-   -  Connections on Connector P14
+  - Connections on Connector P14
 
--  **V_IO from SDP**
+- **V_IO from SDP**
 
-   -  R38 to be mounted
+  - R38 to be mounted
 
 Serial Interface
 ----------------
@@ -263,41 +269,36 @@ except for SDO/RDY, which is an output).
 Serial communication options
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  SDP-B board and the respective 120 pin SDP connector.
+- SDP-B board and the respective 120 pin SDP connector.
 
--  When using the SDP-B connection (120 pin) The evaluation board
-   connects via the serial peripheral interface (SPI) to the
-   Blackfin® :adi:`ADSP-BF527`
-   on the SDP-B board.
+- When using the SDP-B connection (120 pin) The evaluation board
+  connects via the serial peripheral interface (SPI) to the
+  Blackfin® :adi:`ADSP-BF527`
+  on the SDP-B board.
 
-   -  Arduino connection SDP-K1
-   -  Pmod connector
-   -  Standalone mode
-
-For an introduction to the Serial Peripheral Interface (SPI), click :adi:`here <en/analog-dialogue/articles/introduction-to-spi-interface.html>`
+  - Arduino connection SDP-K1
+  - Pmod connector
+  - Standalone mode
 
 Reference Options
 -----------------
 
--  **DEFAULT** :adi:`ADR4525` On Board external reference on REFIN1+
--  :adi:`LTC6655LN-2.5/LTC6655LN-4.096 <LTC6655>`
-   On Board external reference on REFIN+
+- **DEFAULT** :adi:`ADR4525` On Board external reference on REFIN1+
+- :adi:`LTC6655LN-2.5/LTC6655LN-4.096 <LTC6655>`
+  On Board external reference on REFIN+
 
-   -  Option to use ultra low noise reference
+  - Option to use ultra low noise reference
 
--  External Reference on REFIN1+ Connector J1
--  AVDD as Reference via R25
+- External Reference on REFIN1+ Connector J1
+- AVDD as Reference via R25
 
 Schematics
 ----------
 
--  :download:`AD7195 Schematic <ad7195_schematic.pdf>`
+- :download:`AD7195 Schematic <ad7195_schematic.pdf>`
 
 Bill of Materials
 -----------------
 
--  :download:`AD7195 Bill of Materials <ad7195_bom.pdf>`
+- :download:`AD7195 Bill of Materials <ad7195_bom.pdf>`
 
-:ref:`Next Page: Software Procedures <ad7195_software>`
-
-:ref:`Return to Homepage <ad7195_index>`

@@ -42,12 +42,12 @@ Arduino Header support, such as STM32-Discovery, STM32-Nucleo, etc.
 Useful links
 ~~~~~~~~~~~~
 
--  :git-no-OS:`AD719x No-OS drivers <drivers/adc/ad719x>`
--  :adi:`AD7190 Product Page <ad7190>`
--  :adi:`AD7192 Product Page <ad7192>`
--  :adi:`AD7193 Product Page <ad7193>`
--  :adi:`AD7194 Product Page <ad7194>`
--  :adi:`AD7195 Product Page <ad7195>`
+- :git-no-OS:`AD719x No-OS drivers <drivers/adc/ad719x>`
+- :adi:`AD7190 Product Page <ad7190>`
+- :adi:`AD7192 Product Page <ad7192>`
+- :adi:`AD7193 Product Page <ad7193>`
+- :adi:`AD7194 Product Page <ad7194>`
+- :adi:`AD7195 Product Page <ad7195>`
 
 Hardware Connections
 --------------------
@@ -59,12 +59,12 @@ position to drive SDP-K1 GPIOs at 3.3 V.
 
 EVAL-AD719X:
 
--  Stack the EVAL-AD719X-ASDZ on the Arduino connectors of the SDP-K1
-   board.
--  Connect a male-to-male jumper wire between D8 and D12 on the
-   Arduino connectors.
--  Set the LK7 and LK8 jumper headers to 3.3 V.
--  Set LK12 jumper header to position A.
+- Stack the EVAL-AD719X-ASDZ on the Arduino connectors of the SDP-K1
+  board.
+- Connect a male-to-male jumper wire between D8 and D12 on the
+  Arduino connectors.
+- Set the LK7 and LK8 jumper headers to 3.3 V.
+- Set LK12 jumper header to position A.
 
 .. image:: images/ad719x_hardware_connection.png
    :align: center
@@ -124,7 +124,7 @@ This library provides an abstracted interface to communicate between the
 IIO device and the IIO client application (IIO Oscilloscope) without
 worrying about the low level hardware details.
 
--  :git-libiio:`Libiio releases <releases>`
+- :git-libiio:`Libiio releases <releases>`
 
 IIO Oscilloscope (Client)
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -134,7 +134,7 @@ device configuration/debugging. The data from IIO devices (ADCs/DACs)
 is transmitted over Serial/Ethernet/USB link to IIO Oscilloscope through
 the abstracted layer of libiio.
 
--  :git-iio-oscilloscope:`IIO Oscilloscope releases <releases>`
+- :git-iio-oscilloscope:`IIO Oscilloscope releases <releases>`
 
 Evaluating AD719x Using IIO Ecosystem
 --------------------------------------
@@ -170,17 +170,17 @@ The IIO Oscilloscope allows the user to access and configure different
 device parameters, called "Device Attributes". There are 2 types of
 attributes:
 
--  **Device Attributes (Global):** Access/Configure common device
-   parameters.
--  **Channel Attributes (Specific to channels):** Access/Configure
-   channel specific device parameters.
+- **Device Attributes (Global):** Access/Configure common device
+  parameters.
+- **Channel Attributes (Specific to channels):** Access/Configure
+  channel specific device parameters.
 
 How to read and write an attribute:
 
--  To **read** an attribute, simply select the attribute from the list
-   or press the "Read" button on the left side.
--  To **write** an attribute, select the attribute value in the "value
-   field" and press the "Write" button.
+- To **read** an attribute, simply select the attribute from the list
+  or press the "Read" button on the left side.
+- To **write** an attribute, select the attribute value in the "value
+  field" and press the "Write" button.
 
 Using DMM Tab to Read DC Voltage on Input Channels
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -254,16 +254,16 @@ package.
 Setting-up Python Environment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Install Python on your local machine. The scripts are developed and
-   tested using Python 3.8.0; version 3.8.0 or newer is recommended.
--  Once Python is installed, make sure the environment path (on Windows)
-   is set properly. Verify by running ``python --version`` on a command
-   line tool such as Git Bash, Command Prompt, or PowerShell.
--  Install the pyadi-iio package by running
-   ``python -m pip install pyadi-iio``.
--  Install additional support packages by running
-   ``python -m pip install -r requirements.txt`` from the ``scripts/``
-   directory.
+- Install Python on your local machine. The scripts are developed and
+  tested using Python 3.8.0; version 3.8.0 or newer is recommended.
+- Once Python is installed, make sure the environment path (on Windows)
+  is set properly. Verify by running ``python --version`` on a command
+  line tool such as Git Bash, Command Prompt, or PowerShell.
+- Install the pyadi-iio package by running
+  ``python -m pip install pyadi-iio``.
+- Install additional support packages by running
+  ``python -m pip install -r requirements.txt`` from the ``scripts/``
+  directory.
 
 .. image:: images/ad719x_iio_python_requirement.png
    :align: center
@@ -272,27 +272,27 @@ Setting-up Python Environment
 Modifying/Running Python Scripts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  All Python scripts specific to the AD719x IIO firmware are stored in
-   the ``scripts`` folder in the project directory.
--  Ensure that the firmware is compiled with the noise testing mode,
-   using the macros in the ``app_config.h`` file.
+- All Python scripts specific to the AD719x IIO firmware are stored in
+  the ``scripts`` folder in the project directory.
+- Ensure that the firmware is compiled with the noise testing mode,
+  using the macros in the ``app_config.h`` file.
 
 .. image:: images/ad719x_iio_python_config.png
    :align: center
    :width: 400
 
--  Update the ``uri`` interface in the script according to the COM port
-   assigned to your device (SDP-K1). Default COM port is set to COM16 in
-   all scripts.
--  Update the ``device_name`` variable to match the device name in the
-   compiled firmware.
+- Update the ``uri`` interface in the script according to the COM port
+  assigned to your device (SDP-K1). Default COM port is set to COM16 in
+  all scripts.
+- Update the ``device_name`` variable to match the device name in the
+  compiled firmware.
 
 .. image:: images/ad719x_iio_python_com.png
    :align: center
    :width: 600
 
--  Enable the channel and set the size of the sample block for noise
-   analysis.
+- Enable the channel and set the size of the sample block for noise
+  analysis.
 
 .. image:: images/ad719x_iio_python_samples.png
    :align: center
@@ -323,18 +323,18 @@ app_config.h
 
 This file can be used to:
 
--  Select the active platform using the macro ``ACTIVE_PLATFORM_MBED``
-   (only Mbed is supported).
--  Select UART baud rate (for physical UART port) using the
-   ``IIO_UART_BAUD_RATE`` macro. Default is 230400.
--  Select burst capture mode or continuous capture mode using the
-   ``DATA_CAPTURE_MODE`` macro.
--  Select the active device by defining ``DEV_AD7193``. Default is
-   AD7193.
--  Uncomment the ``BIPOLAR_MODE`` macro to enable bipolar mode. Default
-   is unipolar mode.
--  Uncomment the ``DIFFERENTIAL_INPUT`` macro to enable differential
-   input. Default is pseudo differential input.
+- Select the active platform using the macro ``ACTIVE_PLATFORM_MBED``
+  (only Mbed is supported).
+- Select UART baud rate (for physical UART port) using the
+  ``IIO_UART_BAUD_RATE`` macro. Default is 230400.
+- Select burst capture mode or continuous capture mode using the
+  ``DATA_CAPTURE_MODE`` macro.
+- Select the active device by defining ``DEV_AD7193``. Default is
+  AD7193.
+- Uncomment the ``BIPOLAR_MODE`` macro to enable bipolar mode. Default
+  is unipolar mode.
+- Uncomment the ``DIFFERENTIAL_INPUT`` macro to enable differential
+  input. Default is pseudo differential input.
 
 ad719x_user_config.c/.h
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -368,5 +368,5 @@ access the memory map and perform data read) is done in integration with
 platform drivers. The functionality related to No-OS drivers is covered
 in the following files:
 
--  ``ad719x.c``
--  ``ad719x.h``
+- ``ad719x.c``
+- ``ad719x.h``

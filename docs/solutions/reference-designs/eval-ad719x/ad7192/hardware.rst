@@ -6,34 +6,39 @@ EVAL-AD7192-ASDZ Hardware Guide
 Set-up Procedures
 -----------------
 
-After following the instructions in the :ref:`Software Procedures <ad7192_software>` section, set up the evaluation and SDP boards as detailed in this section.
+After following the instructions in the
+:ref:`Software Procedures <ad7192_software>` section, set up the evaluation and
+SDP boards as detailed in this section.
 
--  **Warning:** The evaluation software and drivers must be installed
+.. warning::
+
+   The evaluation software and drivers must be installed
    before connecting the EVAL-AD7192-ASDZ evaluation board and
    EVAL-SDP-CB1Z board to the USB port of the PC to ensure the PC
    correctly recognizes the evaluation system.
--  Connect the EVAL-AD7192-ASDZ to the controller board
 
-   -  **Option A:** Connect the EVAL-AD7192-ASDZ to the EVAL-SDP-CK1Z
+- Connect the EVAL-AD7192-ASDZ to the controller board
 
-      -  Using the 120 pin connector
+  - **Option A:** Connect the EVAL-AD7192-ASDZ to the EVAL-SDP-CK1Z
 
-         -  Screw the two boards together using the plastic
-            screw-washer set included in the evaluation board kit to
-            ensure that the boards are connected firmly together.
-         -  Using the Arduino Connectors
+    - Using the 120 pin connector
+
+      - Screw the two boards together using the plastic
+        screw-washer set included in the evaluation board kit to
+        ensure that the boards are connected firmly together.
+      - Using the Arduino Connectors
 
 .. image:: ../images/sdp_connect.png
    :align: center
    :width: 400
 
--  **Option B:** Connect the EVAL-AD7192-ASDZ to the EVAL-SDP-CB1Z
+- **Option B:** Connect the EVAL-AD7192-ASDZ to the EVAL-SDP-CB1Z
 
-   -  Using the 120 pin connector
+  - Using the 120 pin connector
 
-      -  Screw the two boards together using the plastic screw-washer set
-         included in the evaluation board kit to ensure that the boards are
-         connected firmly together.
+    - Screw the two boards together using the plastic screw-washer set
+      included in the evaluation board kit to ensure that the boards are
+      connected firmly together.
 
 Block Diagram
 -------------
@@ -88,7 +93,8 @@ Hardware Link Options
    * - LK13
      - Black
      - Uninserted
-     - This link shorts AIN1 to AIN2. This is useful to perform noise tests on the AD7192
+     - This link shorts AIN1 to AIN2. This is useful to perform noise tests
+       on the AD7192
 
 .. image:: ../images/ad7190linkoptions.png
    :align: center
@@ -105,7 +111,7 @@ Connector P1: DC (Analog Input)
 
 **Functionality:**
 
--  **Bridge Connection**
+- **Bridge Connection**
 
 ========== =======================
 Connection Function
@@ -125,7 +131,7 @@ Link Lk13: Low Noise Test Circuitry
 
 **Functionality:**
 
--  **Low Noise Test**
+- **Low Noise Test**
 
 -ALL INSERTED
 
@@ -202,9 +208,9 @@ SMB Connections
 There are 3 SMB connections on the board. To allow clock signals and reference
 into the board.
 
--  J1 Provides option for External Reference+
--  J2 Provides option for External Reference-
--  J3 Brings external MCLK to the AD7192
+- J1 Provides option for External Reference+
+- J2 Provides option for External Reference-
+- J3 Brings external MCLK to the AD7192
 
 Power Supplies
 --------------
@@ -216,43 +222,43 @@ from the applied USB voltage.
 AVDD (LK9) selection
 ~~~~~~~~~~~~~~~~~~~~
 
--  **5V supply (DEFAULT)**
+- **5V supply (DEFAULT)**
 
-   -  5V regulator supplies AVDD :adi:`ADP7142`
+  - 5V regulator supplies AVDD :adi:`ADP7142`
 
--  **3.3V supply**
+- **3.3V supply**
 
-   -  3.3V regulator supplies AVDD :adi:`ADP150`
+  - 3.3V regulator supplies AVDD :adi:`ADP150`
 
--  **External AVDD**
+- **External AVDD**
 
-   -  Connections on Connector P4
+  - Connections on Connector P4
 
 DVDD (LK7) selection
 ~~~~~~~~~~~~~~~~~~~~
 
--  **3.3V supply (DEFAULT)**
+- **3.3V supply (DEFAULT)**
 
-   -  3.3V supplies DVDD
+  - 3.3V supplies DVDD
 
--  **AVDD**
+- **AVDD**
 
-   -  AVDD connected to DVDD
+  - AVDD connected to DVDD
 
 IOVDD (LK8) selection
 ~~~~~~~~~~~~~~~~~~~~~
 
--  **3.3V supply (DEFAULT)**
+- **3.3V supply (DEFAULT)**
 
-   -  3.3V regulator supplies IOVDD :adi:`ADP150`
+  - 3.3V regulator supplies IOVDD :adi:`ADP150`
 
--  **External IOVDD**
+- **External IOVDD**
 
-   -  Connections on Connector J4
+  - Connections on Connector J4
 
--  **V_IO from SDP**
+- **V_IO from SDP**
 
-   -  R4 to be mounted
+  - R4 to be mounted
 
 Serial Interface
 ----------------
@@ -263,33 +269,31 @@ except for SDO/RDY, which is an output).
 Serial communication options
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  SDP-B board and the respective 120 pin SDP connector.
+- SDP-B board and the respective 120 pin SDP connector.
 
--  When using the SDP-B connection (120 pin) The evaluation board connects via
-   the serial peripheral interface (SPI) to the
-   Blackfin® :adi:`ADSP-BF527`
-   on the SDP-B board.
+- When using the SDP-B connection (120 pin) The evaluation board connects via
+  the serial peripheral interface (SPI) to the
+  Blackfin® :adi:`ADSP-BF527`
+  on the SDP-B board.
 
-   -  Arduino connection SDP-K1
-   -  Pmod connector
-   -  Standalone mode
-
-For an introduction to the Serial Peripheral Interface (SPI), click :adi:`here <en/analog-dialogue/articles/introduction-to-spi-interface.html>`
+  - Arduino connection SDP-K1
+  - Pmod connector
+  - Standalone mode
 
 .. _ad7192_reference_options:
 
 Reference Options
 -----------------
 
--  **DEFAULT** :adi:`ADR4525` On Board external reference on REFIN1+
--  :adi:`LTC6655LN-2.5/LTC6655LN-4.096 <LTC6655>`
-   On Board external reference on REFIN+
+- **DEFAULT** :adi:`ADR4525` On Board external reference on REFIN1+
+- :adi:`LTC6655LN-2.5/LTC6655LN-4.096 <LTC6655>`
+  On Board external reference on REFIN+
 
-   -  Option to use ultra low noise reference
+  - Option to use ultra low noise reference
 
--  External Reference on REFIN1+ Connector J1
--  AVDD as Reference via R33
--  External reference can be supplied on P2-2 and P2-3 for REFIN2+ and REFIN2-
+- External Reference on REFIN1+ Connector J1
+- AVDD as Reference via R33
+- External reference can be supplied on P2-2 and P2-3 for REFIN2+ and REFIN2-
 
 Selecting the reference source:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -299,23 +303,23 @@ Software
 
 Board should be correctly connected to ACE
 
--  **Option A:** Open AD7192 memory map
+- **Option A:** Open AD7192 memory map
 
-   -  Search for the Configuration register
-   -  Set the REFSEL[] to the desired reference source by using these
-      bits:
+  - Search for the Configuration register
+  - Set the REFSEL[] to the desired reference source by using these
+    bits:
 
-      -  REFSEL[0]: External reference applied between REFIN1(+)
-         and REFIN1(−).
-      -  REFSEL[1]: External reference applied between
-         P1/REFIN2(+) and P0/REFIN2(-) pins.
+    - REFSEL[0]: External reference applied between REFIN1(+)
+      and REFIN1(−).
+    - REFSEL[1]: External reference applied between
+      P1/REFIN2(+) and P0/REFIN2(-) pins.
 
--  **Option B:** Open AD7192 Chip View
+- **Option B:** Open AD7192 Chip View
 
-   -  Right click on ADC block
-   -  Select Reference Source from the Reference Select option
-      given as highlighted(1) below in the picture.
-   -  Click on Apply Changes as highlighted(2) below.
+  - Right click on ADC block
+  - Select Reference Source from the Reference Select option
+    given as highlighted(1) below in the picture.
+  - Click on Apply Changes as highlighted(2) below.
 
 .. image:: ../images/refsel.png
    :align: center
@@ -348,30 +352,27 @@ The evaluation board highlights the functionality of the GPIOs
 BPDSW
 ^^^^^
 
--  Used as a Power Switch for Wire Bridge applications
+- Used as a Power Switch for Wire Bridge applications
 
 P0/REFIN2-
 ^^^^^^^^^^
 
--  Available on the P2 connector.
--  Also used as secondary reference option.
+- Available on the P2 connector.
+- Also used as secondary reference option.
 
 P1/REFIN2+
 ^^^^^^^^^^
 
--  Available on the P2 connector.
--  Also used as secondary reference option.
+- Available on the P2 connector.
+- Also used as secondary reference option.
 
 Schematics
 ----------
 
--  :download:`AD7192 Schematic <ad7192_schematic.pdf>`
+- :download:`AD7192 Schematic <ad7192_schematic.pdf>`
 
 Bill of Materials
 -----------------
 
--  :download:`AD7192 Bill of Materials <ad7192_bom.pdf>`
+- :download:`AD7192 Bill of Materials <ad7192_bom.pdf>`
 
-:ref:`Next Page: Software Procedures <ad7192_software>`
-
-:ref:`Return to Homepage <ad7192_index>`
