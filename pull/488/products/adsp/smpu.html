@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="The System Memory Protection Unit (SMPU) provides flexible protection of memory regions against unauthorized read or write access. Think of it as a security checkpoint for memory. This peripheral examines every memory transaction and decides whether to allow or block it." name="description" />
+
+    <title>System Memory Protection Unit (SMPU) &#8212; System Level Documentation  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=ac863bf0" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=5f9cb17c" />
+    <script async="async" src="../../_static/app.umd.js?v=09b0c6bc"></script>
+    <link rel="icon" href="../../_static/icon.svg"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="SC598 Clock Tree" href="sc598-clock-tree.html" />
+    <link rel="prev" title="System Protection Unit (SPU)" href="spu.html" />
+   
+  
+  
+  <meta name="repository" content="documentation">
+  <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head>
+  
+    <body>
+  
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
+        <div class="vertical-divider"></div>
+        
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Docs</label>
+        
+        <a id="logo" href="../../index.html">
+          <div>System Level</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../index.html" class="current">System Level</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div class="header localtoc-header">
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">System Memory Protection Unit (SMPU)</a><ul>
+<li><a class="reference internal" href="#what-does-the-smpu-do">What Does the SMPU Do?</a></li>
+<li><a class="reference internal" href="#key-features">Key Features</a><ul>
+<li><a class="reference internal" href="#multiple-protection-regions">Multiple Protection Regions</a></li>
+<li><a class="reference internal" href="#flexible-region-sizes">Flexible Region Sizes</a></li>
+<li><a class="reference internal" href="#id-based-protection">ID-Based Protection</a></li>
+<li><a class="reference internal" href="#security-integration">Security Integration</a></li>
+<li><a class="reference internal" href="#multiple-smpu-instances">Multiple SMPU Instances</a><ul>
+<li><a class="reference internal" href="#adsp-sc59x-smpu-instances">ADSP-SC59x SMPU Instances</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#how-it-works">How It Works</a></li>
+<li><a class="reference internal" href="#basic-configuration">Basic Configuration</a><ul>
+<li><a class="reference internal" href="#protecting-a-memory-region">Protecting a Memory Region</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#bus-master-ids">Bus Master IDs</a></li>
+<li><a class="reference internal" href="#memory-region-sizes">Memory Region Sizes</a></li>
+<li><a class="reference internal" href="#configuring-security">Configuring Security</a><ul>
+<li><a class="reference internal" href="#global-security-settings">Global Security Settings</a></li>
+<li><a class="reference internal" href="#per-region-security">Per-Region Security</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#read-speculation">Read Speculation</a></li>
+<li><a class="reference internal" href="#error-handling">Error Handling</a><ul>
+<li><a class="reference internal" href="#interrupts">Interrupts</a></li>
+<li><a class="reference internal" href="#bus-errors">Bus Errors</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#locking-configuration">Locking Configuration</a></li>
+<li><a class="reference internal" href="#register-summary">Register Summary</a></li>
+<li><a class="reference internal" href="#important-notes">Important Notes</a></li>
+<li><a class="reference internal" href="#current-linux-support-status">Current Linux Support Status</a></li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../../index.html">
+      System Level Documentation
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../index.html" class="current">System Level</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <p class="caption" role="heading">
+  <span class="caption-text">Product Categories</span>
+</p>
+
+<ul class="current">
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="index.html">Digital Signal Processors (ADSP)</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="linux-support.html">Linux support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="setup.html">Getting started</a></li>
+<li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1" checked=""/><div class="collapse"><a class="reference internal" href="system-protection.html">System Protection Features</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="spu.html">System Protection Unit (SPU)</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">System Memory Protection Unit (SMPU)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sc598-clock-tree.html">SC598 Clock Tree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="use-cases.html">Use cases</a></li>
+</ul>
+</li>
+</ul>
+
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+  <nav class="breadcrumb"><ol><li><a href="index.html">Digital Signal Processors (ADSP)</a></li><li><a href="system-protection.html">System Protection Features</a></li></ol></nav>
+</div>
+          <div class="body" role="main">
+            
+  <section id="system-memory-protection-unit-smpu">
+<span id="adsp-smpu"></span><h1>System Memory Protection Unit (SMPU)<a class="headerlink" href="#system-memory-protection-unit-smpu" title="Link to this heading"></a></h1>
+<p>The System Memory Protection Unit (SMPU) provides flexible protection of memory
+regions against unauthorized read or write access. Think of it as a security
+checkpoint for memory. This peripheral examines every memory transaction and
+decides whether to allow or block it.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This guide applies to all ADSP-SC5xx processors. While the SMPU
+functionality is consistent across processor families, the specific details vary:</p>
+<ul class="simple">
+<li><p>Number and location of SMPU instances</p></li>
+<li><p>System ID assignments for bus masters</p></li>
+<li><p>Number of available protection regions</p></li>
+</ul>
+</div>
+<section id="what-does-the-smpu-do">
+<h2>What Does the SMPU Do?<a class="headerlink" href="#what-does-the-smpu-do" title="Link to this heading"></a></h2>
+<p>The SMPU protects specific regions of memory from being accessed by unauthorized
+bus masters (processor cores, DMA controllers, etc.). We can configure:</p>
+<ul class="simple">
+<li><p>Which memory regions to protect</p></li>
+<li><p>Whether to protect reads, writes, or both</p></li>
+<li><p>Which bus masters are allowed to access each region</p></li>
+<li><p>Whether secure or non-secure transactions are permitted</p></li>
+</ul>
+</section>
+<section id="key-features">
+<h2>Key Features<a class="headerlink" href="#key-features" title="Link to this heading"></a></h2>
+<section id="multiple-protection-regions">
+<h3>Multiple Protection Regions<a class="headerlink" href="#multiple-protection-regions" title="Link to this heading"></a></h3>
+<p>Each SMPU instance can monitor up to 8 memory regions simultaneously. Each region
+can have its own size and protection settings.</p>
+</section>
+<section id="flexible-region-sizes">
+<h3>Flexible Region Sizes<a class="headerlink" href="#flexible-region-sizes" title="Link to this heading"></a></h3>
+<p>Memory regions can range from 4 KB to 4 GB, with alignment requirements based on
+the region size. This flexibility allows us to protect exactly what we need.</p>
+</section>
+<section id="id-based-protection">
+<h3>ID-Based Protection<a class="headerlink" href="#id-based-protection" title="Link to this heading"></a></h3>
+<p>Each bus master has a unique ID. The SMPU can allow or block access based on
+these IDs. It gives control over who can access each memory region.</p>
+</section>
+<section id="security-integration">
+<h3>Security Integration<a class="headerlink" href="#security-integration" title="Link to this heading"></a></h3>
+<p>The SMPU works with ARM TrustZone to enforce security boundaries:</p>
+<ul class="simple">
+<li><p>Block non-secure accesses to secure memory</p></li>
+<li><p>Allow secure masters to access both secure and non-secure memory</p></li>
+<li><p>Per-region security configuration</p></li>
+</ul>
+</section>
+<section id="multiple-smpu-instances">
+<h3>Multiple SMPU Instances<a class="headerlink" href="#multiple-smpu-instances" title="Link to this heading"></a></h3>
+<p>Each processor family has multiple SMPU instances protecting different memory paths.
+The number and configuration varies by family. An example from SC59x is given below.</p>
+<section id="adsp-sc59x-smpu-instances">
+<h4>ADSP-SC59x SMPU Instances<a class="headerlink" href="#adsp-sc59x-smpu-instances" title="Link to this heading"></a></h4>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 60.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Instance</p></th>
+<th class="head"><p>Location</p></th>
+<th class="head"><p>What It Protects</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SMPU-CL2_0</p></td>
+<td><p>L2 Core Port 0</p></td>
+<td><p>L2 SRAM Banks 0-3, Boot ROM0</p></td>
+</tr>
+<tr class="row-odd"><td><p>SMPU-DL2_0</p></td>
+<td><p>L2 DMA Port 0</p></td>
+<td><p>L2 SRAM Banks 0-7, Boot ROM0-2</p></td>
+</tr>
+<tr class="row-even"><td><p>SMPU-CL2_1</p></td>
+<td><p>L2 Core Port 1</p></td>
+<td><p>L2 SRAM Banks 4-7, Boot ROM1-2</p></td>
+</tr>
+<tr class="row-odd"><td><p>SMPU-DL2_1</p></td>
+<td><p>L2 DMA Port 1</p></td>
+<td><p>L2 SRAM Banks 0-7, Boot ROM0-2</p></td>
+</tr>
+<tr class="row-even"><td><p>SMPU-CL2_2</p></td>
+<td><p>L2 Core Port 2</p></td>
+<td><p>L2 SRAM Banks 0-7, Boot ROM0-2</p></td>
+</tr>
+<tr class="row-odd"><td><p>SMPU-DMC0</p></td>
+<td><p>DDR Controller</p></td>
+<td><p>External DDR3 memory</p></td>
+</tr>
+<tr class="row-even"><td><p>SMPU-SPI2</p></td>
+<td><p>SPI/OSPI Flash</p></td>
+<td><p>External flash memory</p></td>
+</tr>
+<tr class="row-odd"><td><p>SMPU-OTP</p></td>
+<td><p>OTP Memory</p></td>
+<td><p>One-time programmable memory</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>For SC57x/SC58x check the related Hardware Reference Manual to see SMPU instance table.</p>
+</section>
+</section>
+</section>
+<section id="how-it-works">
+<h2>How It Works<a class="headerlink" href="#how-it-works" title="Link to this heading"></a></h2>
+<p>The SMPU examines every memory transaction in this order:</p>
+<ol class="arabic simple">
+<li><p>Address Check - Does it fall within a protected region?</p></li>
+<li><p>Operation Check - Is it a read or write?</p></li>
+<li><p>Bus Master ID check - Which bus master is making the request?</p></li>
+<li><p>Security Level Check - Is it a secure or non-secure transaction?</p></li>
+<li><p>Decide - Pass the transaction, or return an error</p></li>
+</ol>
+<p>Basically, SMPU sits between bus masters and memory.</p>
+</section>
+<section id="basic-configuration">
+<h2>Basic Configuration<a class="headerlink" href="#basic-configuration" title="Link to this heading"></a></h2>
+<section id="protecting-a-memory-region">
+<h3>Protecting a Memory Region<a class="headerlink" href="#protecting-a-memory-region" title="Link to this heading"></a></h3>
+<p>To protect a memory region, we need to configure several registers.</p>
+<p>First, we should define the region to protect. This can be done by setting the
+base address and size in <code class="docutils literal notranslate"><span class="pre">SMPU_RADDR[n]</span></code> and <code class="docutils literal notranslate"><span class="pre">SMPU_RCTL[n]</span></code>.</p>
+<p>Second, we need to configure the protection itself. After deciding whether we allow
+read/write or both, we may set <code class="docutils literal notranslate"><span class="pre">RPROTEN</span></code> and <code class="docutils literal notranslate"><span class="pre">WPROTEN</span></code>.</p>
+<p>After that we need to specify which IDs we are going to allow. For this, we need to
+understand how ID specification works. By using <code class="docutils literal notranslate"><span class="pre">RIDA0</span></code> / <code class="docutils literal notranslate"><span class="pre">RIDB0</span></code> and <code class="docutils literal notranslate"><span class="pre">RIDMSKA0</span></code> /
+<code class="docutils literal notranslate"><span class="pre">RIDMSKB0</span></code>, we can set which bus master IDs can bypass the protection.</p>
+<p>As we can understand from register names, SMPU uses two “protection units” (A and B) for
+ID matching. Each unit performs a masked comparison with the incoming transaction ID. The
+operation is basically having a logical AND operation with IDs and masks. There is also a
+register to invert the result of this match, allowing us to decide which IDs are NOT allowed.</p>
+</section>
+</section>
+<section id="bus-master-ids">
+<h2>Bus Master IDs<a class="headerlink" href="#bus-master-ids" title="Link to this heading"></a></h2>
+<p>Each bus master (processor core, DMA controller, peripheral) has a unique ID.
+The SMPU uses these IDs to control access. Example of entries from SC59x can be seen below.</p>
+<p><strong>Example: Common SC59x Bus Master IDs</strong></p>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 30.0%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Master</p></th>
+<th class="head"><p>ID (binary)</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SHARC+ 0 Data Port</p></td>
+<td><p>0xxxx00001001</p></td>
+<td><p>Core 0 data accesses</p></td>
+</tr>
+<tr class="row-odd"><td><p>SHARC+ 0 Instruction</p></td>
+<td><p>0000001000111</p></td>
+<td><p>Core 0 instruction fetches</p></td>
+</tr>
+<tr class="row-even"><td><p>SHARC+ 1 Data Port</p></td>
+<td><p>0xxxx00011001</p></td>
+<td><p>Core 1 data accesses</p></td>
+</tr>
+<tr class="row-odd"><td><p>SHARC+ 1 Instruction</p></td>
+<td><p>0000001010111</p></td>
+<td><p>Core 1 instruction fetches</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Note: ‘x’ means the bit can be 0 or 1 (use mask to match groups)</p>
+<p>For SC57x and SC58x, we can check Hardware Reference Manual to see System Controller IDs table.</p>
+</section>
+<section id="memory-region-sizes">
+<h2>Memory Region Sizes<a class="headerlink" href="#memory-region-sizes" title="Link to this heading"></a></h2>
+<p>SMPU allows us to set region size between 4KB and 4GB. Each size has an address aligment requirement.
+If the address is not properly aligned, the SMPU will mask the lower bits. It may end up with
+potentially protecting a different region than intended. Some of the valid region sizes and their
+alignment requirements can be seen below.</p>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 60.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Size</p></th>
+<th class="head"><p>SIZE Value</p></th>
+<th class="head"><p>Address Alignment</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>4 KB</p></td>
+<td><p>0</p></td>
+<td><p>Multiple of 4 KB (0xXXXXX000)</p></td>
+</tr>
+<tr class="row-odd"><td><p>8 KB</p></td>
+<td><p>1</p></td>
+<td><p>Specific values only (0, 0x2000, 0x4000, etc.)</p></td>
+</tr>
+<tr class="row-even"><td><p>1 MB</p></td>
+<td><p>8</p></td>
+<td><p>Multiple of 1 MB (0xXXX00000)</p></td>
+</tr>
+<tr class="row-odd"><td><p>2 MB</p></td>
+<td><p>9</p></td>
+<td><p>Specific values only</p></td>
+</tr>
+<tr class="row-even"><td><p>4 MB</p></td>
+<td><p>10</p></td>
+<td><p>Multiple of 4 MB (0xXXX00000)</p></td>
+</tr>
+<tr class="row-odd"><td><p>8 MB - 4 GB</p></td>
+<td><p>11-20</p></td>
+<td><p>See Hardware Reference Manual for details.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="configuring-security">
+<h2>Configuring Security<a class="headerlink" href="#configuring-security" title="Link to this heading"></a></h2>
+<section id="global-security-settings">
+<h3>Global Security Settings<a class="headerlink" href="#global-security-settings" title="Link to this heading"></a></h3>
+<p>We can control whether secure/non-secure transactions are allowed by writing to
+<code class="docutils literal notranslate"><span class="pre">SMPU_SECURECTL</span></code> register. As default, only secure transactions are allowed.
+To also support non-secure transactions, we can set <code class="docutils literal notranslate"><span class="pre">WNSEN</span></code> and <code class="docutils literal notranslate"><span class="pre">RNSEN</span></code> bits.</p>
+</section>
+<section id="per-region-security">
+<h3>Per-Region Security<a class="headerlink" href="#per-region-security" title="Link to this heading"></a></h3>
+<p>We can also configure security for individual regions by writing to <code class="docutils literal notranslate"><span class="pre">SMPU_SECURERCTL[n]</span></code>
+register. It simply exist of 4 different bits, each one belongs to either read/write for
+secure/non-secure accesses.</p>
+</section>
+</section>
+<section id="read-speculation">
+<h2>Read Speculation<a class="headerlink" href="#read-speculation" title="Link to this heading"></a></h2>
+<p>The SMPU can forward read requests to memory before checking permissions,
+saving one clock cycle. However, this may cause side effects for memory-mapped
+registers that change state when read (like FIFOs that auto-clear). This is controlled
+by <code class="docutils literal notranslate"><span class="pre">RSDIS</span></code> bit in <code class="docutils literal notranslate"><span class="pre">SMPU_CTL</span></code> register. When protecting memory-mapped FIFOs or other
+auto-clearing memory, always disable read speculation to prevent unintended side effects.</p>
+</section>
+<section id="error-handling">
+<h2>Error Handling<a class="headerlink" href="#error-handling" title="Link to this heading"></a></h2>
+<section id="interrupts">
+<h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading"></a></h3>
+<p>We can configure the SMPU to generate interrupts. This is controlled under <code class="docutils literal notranslate"><span class="pre">SMPU_CTL</span></code>
+register as <code class="docutils literal notranslate"><span class="pre">PINTEN</span></code> bit. After setting this bit, we can examine <code class="docutils literal notranslate"><span class="pre">SMPU_IADDR</span></code> and
+<code class="docutils literal notranslate"><span class="pre">SMPU_IDTLS</span></code> register to see the details of the violation. Detailed instructions on how
+we can handle interrupts can be examined in Hardware Reference Manual.</p>
+</section>
+<section id="bus-errors">
+<h3>Bus Errors<a class="headerlink" href="#bus-errors" title="Link to this heading"></a></h3>
+<p>Bus errors are enabled as default. We can disable them by setting <code class="docutils literal notranslate"><span class="pre">PBEDIS</span></code> bit under <code class="docutils literal notranslate"><span class="pre">SMPU_CTL</span></code>.
+When a transaction is blocked and bus error generation is enabled, the SMPU returns an
+error to the requesting master. The master’s bus fault handler will be called. We can
+examine <code class="docutils literal notranslate"><span class="pre">SMPU_BADDR</span></code> and <code class="docutils literal notranslate"><span class="pre">SMPU_BDTLS</span></code> register to see the details of the violation.
+Detailed instructions on how we can handle bus errors can be examined in Hardware Reference Manual.</p>
+</section>
+</section>
+<section id="locking-configuration">
+<h2>Locking Configuration<a class="headerlink" href="#locking-configuration" title="Link to this heading"></a></h2>
+<p>SMPU allows us to protect the configurations we created by providing a lock mechanism. These lock
+is simply the <code class="docutils literal notranslate"><span class="pre">LOCK</span></code> and/or <code class="docutils literal notranslate"><span class="pre">RLOCK</span></code> bits under <code class="docutils literal notranslate"><span class="pre">SMPU_CTL</span></code> register. If we lock the configs,
+they are protected until SPU releases global lock.</p>
+</section>
+<section id="register-summary">
+<h2>Register Summary<a class="headerlink" href="#register-summary" title="Link to this heading"></a></h2>
+<p>Key SMPU registers for each region n (0-7):</p>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Register</p></th>
+<th class="head"><p>Purpose</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SMPU_CTL</span></code></p></td>
+<td><p>Control: Lock, interrupts, bus errors, read speculation</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SMPU_STAT</span></code></p></td>
+<td><p>Status: Interrupts, errors, overruns</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SMPU_RADDR[n]</span></code></p></td>
+<td><p>Region base address (bits 31:12)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SMPU_RCTL[n]</span></code></p></td>
+<td><p>Region control: Size, enable, read/write protection, ID invert</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SMPU_RIDA[n]</span></code></p></td>
+<td><p>Region ID A for matching</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SMPU_RIDB[n]</span></code></p></td>
+<td><p>Region ID B for matching</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SMPU_RIDMSKA[n]</span></code></p></td>
+<td><p>Mask for ID A matching</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SMPU_RIDMSKB[n]</span></code></p></td>
+<td><p>Mask for ID B matching</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SMPU_SECURECTL</span></code></p></td>
+<td><p>Security control: Global secure/non-secure enable</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SMPU_SECURERCTL[n]</span></code></p></td>
+<td><p>Per-region security configuration</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SMPU_IADDR</span></code></p></td>
+<td><p>Address that caused last interrupt</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SMPU_IDTLS</span></code></p></td>
+<td><p>Interrupt details: ID, read/write, secure</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SMPU_BADDR</span></code></p></td>
+<td><p>Address that caused last bus error</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SMPU_BDTLS</span></code></p></td>
+<td><p>Bus error details: ID, read/write, secure</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="important-notes">
+<h2>Important Notes<a class="headerlink" href="#important-notes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>When using SMPU with cached memory, be careful about write-only regions (cache-back might fail).</p></li>
+<li><p>Make sure you’re configuring the right SMPU instance for the memory path
+you want to protect. L2 memory has multiple SMPU instances!</p></li>
+<li><p>An overly permissive mask might allow more IDs than intended. Always verify
+your mask matches only the intended IDs.</p></li>
+<li><p>After reset, only secure transactions are allowed. If you’re running non-secure
+code, you must enable non-secure transactions or you’ll be blocked.</p></li>
+<li><p>Don’t enable protection on memory regions that are actively being used by
+code or data. You’ll immediately get violations.</p></li>
+<li><p>The SMPU will mask misaligned addresses. Always verify alignment to prevent
+protecting the wrong memory range.</p></li>
+</ul>
+</section>
+<section id="current-linux-support-status">
+<h2>Current Linux Support Status<a class="headerlink" href="#current-linux-support-status" title="Link to this heading"></a></h2>
+<p>SMPU driver support is currently under development for the ADSP Linux kernel
+(<a class="icon link reference external" href="https://github.com/analogdevicesinc/linux/pull/3339" target="_blank">PR #3339</a>).</p>
+<p>The ADI DSP Linux kernel and accompanying examples are designed with the intent
+that the ARM core owns and allocates most of the system’s peripherals.
+The accompanying SHARC examples leverage peripherals minimally to prevent
+contention with the ARM for system resources.</p>
+<p>Systems where SHARC cores boot their own applications prior to Linux/ARM will
+not be supported due to contention with Linux for system resources
+(peripherals, interrupts, DMA, shared L2 memory, etc.). For these systems,
+system resources must be carefully managed by the developer to avoid conflicts
+with the understanding that Linux/ARM will own the SMPU configuration
+and all system resources allocated in the devicetree.</p>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="spu.html"><span class="doc">System Protection Unit (SPU)</span></a> for peripheral protection</p></li>
+<li><p><a class="reference internal" href="system-protection.html"><span class="doc">System Protection Features</span></a> for overview of protection features</p></li>
+<li><p>Hardware Reference Manual Chapter for complete SMPU documentation and system security overview</p></li>
+<li><p>Silicon Anomaly 20000003 for known SMPU limitations</p></li>
+</ul>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="spu.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">System Protection Unit (SPU)</a>
+    <a href="sc598-clock-tree.html" title="Next document (Alt+Shift+RightArrow)" class="next">SC598 Clock Tree</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2026, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

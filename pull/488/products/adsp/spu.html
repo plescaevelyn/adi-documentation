@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="The System Protection Unit (SPU) protects peripheral configuration registers from unintended writes. In systems with multiple processors and DMA controllers, the SPU acts like a security guard, controlling who can modify critical peripheral settings." name="description" />
+
+    <title>System Protection Unit (SPU) &#8212; System Level Documentation  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=ac863bf0" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=5f9cb17c" />
+    <script async="async" src="../../_static/app.umd.js?v=09b0c6bc"></script>
+    <link rel="icon" href="../../_static/icon.svg"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="System Memory Protection Unit (SMPU)" href="smpu.html" />
+    <link rel="prev" title="System Protection Features" href="system-protection.html" />
+   
+  
+  
+  <meta name="repository" content="documentation">
+  <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head>
+  
+    <body>
+  
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
+        <div class="vertical-divider"></div>
+        
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Docs</label>
+        
+        <a id="logo" href="../../index.html">
+          <div>System Level</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../index.html" class="current">System Level</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div class="header localtoc-header">
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">System Protection Unit (SPU)</a><ul>
+<li><a class="reference internal" href="#what-does-the-spu-do">What Does the SPU Do?</a></li>
+<li><a class="reference internal" href="#key-features">Key Features</a><ul>
+<li><a class="reference internal" href="#write-protection-per-peripheral">Write Protection per Peripheral</a></li>
+<li><a class="reference internal" href="#global-locking">Global Locking</a></li>
+<li><a class="reference internal" href="#security-integration">Security Integration</a></li>
+<li><a class="reference internal" href="#self-protection">Self-Protection</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#how-it-works">How It Works</a></li>
+<li><a class="reference internal" href="#basic-configuration">Basic Configuration</a><ul>
+<li><a class="reference internal" href="#protecting-a-peripheral">Protecting a Peripheral</a></li>
+<li><a class="reference internal" href="#using-global-lock">Using Global Lock</a></li>
+<li><a class="reference internal" href="#configuring-security">Configuring Security</a></li>
+<li><a class="reference internal" href="#checking-security-status">Checking Security Status</a></li>
+<li><a class="reference internal" href="#locking-the-spu">Locking the SPU</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#error-handling">Error Handling</a><ul>
+<li><a class="reference internal" href="#interrupts">Interrupts</a></li>
+<li><a class="reference internal" href="#bus-errors">Bus Errors</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#peripherals-with-global-lock-support">Peripherals with Global Lock Support</a></li>
+<li><a class="reference internal" href="#register-summary">Register Summary</a></li>
+<li><a class="reference internal" href="#important-notes">Important Notes</a></li>
+<li><a class="reference internal" href="#current-linux-support-status">Current Linux Support Status</a></li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../../index.html">
+      System Level Documentation
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../index.html" class="current">System Level</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <p class="caption" role="heading">
+  <span class="caption-text">Product Categories</span>
+</p>
+
+<ul class="current">
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="index.html">Digital Signal Processors (ADSP)</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="linux-support.html">Linux support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="setup.html">Getting started</a></li>
+<li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1" checked=""/><div class="collapse"><a class="reference internal" href="system-protection.html">System Protection Features</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">System Protection Unit (SPU)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="smpu.html">System Memory Protection Unit (SMPU)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sc598-clock-tree.html">SC598 Clock Tree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="use-cases.html">Use cases</a></li>
+</ul>
+</li>
+</ul>
+
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+  <nav class="breadcrumb"><ol><li><a href="index.html">Digital Signal Processors (ADSP)</a></li><li><a href="system-protection.html">System Protection Features</a></li></ol></nav>
+</div>
+          <div class="body" role="main">
+            
+  <section id="system-protection-unit-spu">
+<span id="adsp-spu"></span><h1>System Protection Unit (SPU)<a class="headerlink" href="#system-protection-unit-spu" title="Link to this heading"></a></h1>
+<p>The System Protection Unit (SPU) protects peripheral configuration registers from
+unintended writes. In systems with multiple processors and DMA controllers, the SPU
+acts like a security guard, controlling who can modify critical peripheral settings.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This guide applies to all ADSP-SC5xx processors. While the SPU
+functionality is consistent across processor families, the specific details vary:</p>
+<ul class="simple">
+<li><p>Number of protected peripherals</p></li>
+<li><p>Specific register mappings</p></li>
+</ul>
+</div>
+<section id="what-does-the-spu-do">
+<h2>What Does the SPU Do?<a class="headerlink" href="#what-does-the-spu-do" title="Link to this heading"></a></h2>
+<p>Think of the SPU as a gatekeeper for peripheral registers. It sits between the
+system bus and peripheral configuration registers, checking every write request.
+If a write comes from an unauthorized source, the SPU blocks it.</p>
+</section>
+<section id="key-features">
+<h2>Key Features<a class="headerlink" href="#key-features" title="Link to this heading"></a></h2>
+<section id="write-protection-per-peripheral">
+<h3>Write Protection per Peripheral<a class="headerlink" href="#write-protection-per-peripheral" title="Link to this heading"></a></h3>
+<p>Each peripheral has a dedicated protection register <code class="docutils literal notranslate"><span class="pre">SPU_WP[n]</span></code> that controls
+which bus masters can write to its registers. We can:</p>
+<ul class="simple">
+<li><p>Allow or block specific processor cores</p></li>
+<li><p>Allow or block DMA controllers</p></li>
+<li><p>Configure different permissions for each peripheral</p></li>
+</ul>
+</section>
+<section id="global-locking">
+<h3>Global Locking<a class="headerlink" href="#global-locking" title="Link to this heading"></a></h3>
+<p>The SPU can issue a system-wide lock signal that all peripherals recognize. When
+enabled, any peripheral with its lock bit set will reject all write attempts to
+its control register.</p>
+</section>
+<section id="security-integration">
+<h3>Security Integration<a class="headerlink" href="#security-integration" title="Link to this heading"></a></h3>
+<p>The SPU integrates with ARM TrustZone to enforce security boundaries:</p>
+<ul class="simple">
+<li><p>Secure peripherals only accept secure transactions</p></li>
+<li><p>Non-secure masters cannot access secure peripherals</p></li>
+<li><p>Each peripheral’s security level is configurable</p></li>
+</ul>
+</section>
+<section id="self-protection">
+<h3>Self-Protection<a class="headerlink" href="#self-protection" title="Link to this heading"></a></h3>
+<p>The SPU can protect its own configuration registers, preventing unauthorized changes
+to the protection settings. Once locked, only a system reset can restore access.</p>
+</section>
+</section>
+<section id="how-it-works">
+<h2>How It Works<a class="headerlink" href="#how-it-works" title="Link to this heading"></a></h2>
+<p>The SPU examines every write transaction in this order:</p>
+<ol class="arabic simple">
+<li><p>Destination Check - Which peripheral is being accessed?</p></li>
+<li><p>Source Check - Which bus master is requesting the write?</p></li>
+<li><p>Permission Check - Is this master allowed to write to this peripheral?</p></li>
+<li><p>Decide - Pass the write through, or return a bus error</p></li>
+</ol>
+<p>Basically, SPU sits between the system crossbar and peripheral registers.</p>
+</section>
+<section id="basic-configuration">
+<h2>Basic Configuration<a class="headerlink" href="#basic-configuration" title="Link to this heading"></a></h2>
+<section id="protecting-a-peripheral">
+<h3>Protecting a Peripheral<a class="headerlink" href="#protecting-a-peripheral" title="Link to this heading"></a></h3>
+<p>To protect a peripheral from writes by specific bus masters, we need to configure several registers.</p>
+<p>First, we should find the peripheral’s write-protect register number in the Hardware Reference Manual.</p>
+<p>Second, we can set the corresponding bits in <code class="docutils literal notranslate"><span class="pre">SPU_WP[n]</span></code> for bus masters we want to block. It exist of
+two types of bits, named <code class="docutils literal notranslate"><span class="pre">CM[n]</span></code> and <code class="docutils literal notranslate"><span class="pre">SM[n]</span></code> for Core Requesters and System Requesters. They keep the
+information of who is going to be blocked.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Bits [2:0] =  - Block writes from processor cores</p></li>
+<li><p>Bits [18:16] =  - Block writes from system masters (DMA, etc.)</p></li>
+</ul>
+</div></blockquote>
+<p>The bit positions (CM, SM) are the similar across all families, but the peripheral-to-WP register
+mappings differ more.</p>
+</section>
+<section id="using-global-lock">
+<h3>Using Global Lock<a class="headerlink" href="#using-global-lock" title="Link to this heading"></a></h3>
+<p>Global lock provides a quick way to simultaneously protect control registers
+across multiple peripherals. This mechanism is controlled by registers both in SPU and others.
+For example CDU_CTL register has LOCK bit to enable it. When we activate the global lock over
+SPU_CTL by setting GCLK bit, the registers with lock bit enabled are going to be blocked from write access.</p>
+</section>
+<section id="configuring-security">
+<h3>Configuring Security<a class="headerlink" href="#configuring-security" title="Link to this heading"></a></h3>
+<p>TrustZone security features apply to all SC5xx processors with ARM Cortex cores.
+The SPU security register numbers match the WP numbers. This is controlled over
+SSEC and MSEC bits under <code class="docutils literal notranslate"><span class="pre">SPU_SECUREP[n]</span></code> registers for peripherals. For cores, there is
+<code class="docutils literal notranslate"><span class="pre">SPU_SECUREC[n]</span></code> register with <code class="docutils literal notranslate"><span class="pre">CSEC[n]</span></code> bits. For peripherals, each <code class="docutils literal notranslate"><span class="pre">SPU_SECUREP</span></code>
+register is assigned to a specific MMR address range associated with one peripheral. Each has
+a Slave Secure (SSEC) bit and a Master Secure (MSEC) bit. When the Slave Secure (SSEC) bit is
+set, the SPU will only allow Secure Masters generating secure transactions to access the
+peripheral’s MMR address space. When the Master Secure (MSEC) bit is set, the associated
+peripheral will be secure and will generate secure transactions.</p>
+</section>
+<section id="checking-security-status">
+<h3>Checking Security Status<a class="headerlink" href="#checking-security-status" title="Link to this heading"></a></h3>
+<p>Software can check if it’s running in secure or non-secure mode by examining the value of
+<code class="docutils literal notranslate"><span class="pre">SPU_SECURECHK</span></code> register. The <code class="docutils literal notranslate"><span class="pre">SPU_SECURECHK</span></code> register reads by secure requesters return
+<code class="docutils literal notranslate"><span class="pre">0xFFFFFFFF</span></code>. Reads by non-secure requesters return <code class="docutils literal notranslate"><span class="pre">0x00000000</span></code>.</p>
+</section>
+<section id="locking-the-spu">
+<h3>Locking the SPU<a class="headerlink" href="#locking-the-spu" title="Link to this heading"></a></h3>
+<p>To prevent any changes to SPU configuration until the next reset, we can even lock the SPU itself.
+For this, we can set WPLCK and GLCK and also block all masters to SPUs own write-protect registers.
+We need to be careful since this lock can only be unclocked with a reset.</p>
+</section>
+</section>
+<section id="error-handling">
+<h2>Error Handling<a class="headerlink" href="#error-handling" title="Link to this heading"></a></h2>
+<section id="interrupts">
+<h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading"></a></h3>
+<p>The SPU can generate interrupts when a write is blocked.</p>
+<p>We can configure the SPU to generate interrupts. This is controlled under <code class="docutils literal notranslate"><span class="pre">SPU_CTL</span></code>
+register as <code class="docutils literal notranslate"><span class="pre">PINTEN</span></code> bit. After setting this bit, we can examine <code class="docutils literal notranslate"><span class="pre">SPU_STAT</span></code> register
+to see the details of the violation. Detailed instructions on how we can handle interrupts
+can be examined in Hardware Reference Manual.</p>
+</section>
+<section id="bus-errors">
+<h3>Bus Errors<a class="headerlink" href="#bus-errors" title="Link to this heading"></a></h3>
+<p>When a transaction is blocked, the SPU returns a bus error to the requesting master.
+The master’s bus fault handler will be called. We can examine <code class="docutils literal notranslate"><span class="pre">SPU_STAT</span></code> register to see the
+details of the violation. Specifically, the LWERR, ADDRERR or VIRQ bits can be used to see
+the details of the error. Detailed instructions on how we can handle bus errors can be examined
+in Hardware Reference Manual.</p>
+</section>
+</section>
+<section id="peripherals-with-global-lock-support">
+<h2>Peripherals with Global Lock Support<a class="headerlink" href="#peripherals-with-global-lock-support" title="Link to this heading"></a></h2>
+<p>The following peripherals support the global lock feature (they have a lock
+enable bit in their control register) for SC59x.</p>
+<ul class="simple">
+<li><p>General-Purpose IO</p></li>
+<li><p>System Event Controller</p></li>
+<li><p>Trigger Routing Unit</p></li>
+<li><p>Clock Generation Unit</p></li>
+<li><p>Clock Distribution Unit</p></li>
+<li><p>Dynamic Power Management</p></li>
+<li><p>Reset Control Unit</p></li>
+<li><p>System Protection Unit</p></li>
+<li><p>L2 Memory Controller</p></li>
+</ul>
+<p>For SC57x and SC58x, refer to processor’s Hardware Reference Manual for the list of peripherals
+that support global lock.</p>
+</section>
+<section id="register-summary">
+<h2>Register Summary<a class="headerlink" href="#register-summary" title="Link to this heading"></a></h2>
+<p>Key SPU registers:</p>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Register</p></th>
+<th class="head"><p>Purpose</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SPU_CTL</span></code></p></td>
+<td><p>Control: Global lock, write-protect lock, interrupt enable</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SPU_STAT</span></code></p></td>
+<td><p>Status: Lock write errors, interrupts</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SPU_WP[n]</span></code></p></td>
+<td><p>Write-protect register for each peripheral (n = 0-202)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SPU_SECURECTL</span></code></p></td>
+<td><p>Security control: Lock secure config, interrupt enable</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SPU_SECUREC[n]</span></code></p></td>
+<td><p>Core security configuration</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SPU_SECUREP[n]</span></code></p></td>
+<td><p>Peripheral security configuration (n = 0-213)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SPU_SECURECHK</span></code></p></td>
+<td><p>Check if running in secure or non-secure mode</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="important-notes">
+<h2>Important Notes<a class="headerlink" href="#important-notes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Don’t lock peripherals before completing all initialization. You might lock
+yourself out and need a hard reset.</p></li>
+<li><p>If you lock the SPU’s control register but forget to protect the SPU’s own
+WP register (WP121), someone can still modify the protection settings.</p></li>
+<li><p>Global lock only works if the peripheral has its lock enable bit set in its
+control register. Don’t forget that step.</p></li>
+<li><p>After system initialization, lock down clock, power, and boot configuration
+to prevent accidental changes.</p></li>
+</ul>
+</section>
+<section id="current-linux-support-status">
+<h2>Current Linux Support Status<a class="headerlink" href="#current-linux-support-status" title="Link to this heading"></a></h2>
+<p>SPU driver support is currently being tracked in the ADI Linux kernel repository, under issue
+(<cite>Implement system partitioning in ADSP SoCs &lt;https://github.com/analogdevicesinc/linux/issues/3133&gt;</cite>).</p>
+<p>The ADI DSP Linux kernel and accompanying examples are designed with the intent
+that the ARM core owns and allocates most of the system’s peripherals.
+The accompanying SHARC examples leverage peripherals minimally to prevent
+contention with the ARM for system resources.</p>
+<p>Systems where SHARC cores boot their own applications prior to Linux/ARM will
+not be supported due to contention with Linux for system resources
+(peripherals, interrupts, DMA, shared L2 memory, etc.). For these systems,
+system resources must be carefully managed by the developer to avoid conflicts
+with the understanding that Linux/ARM will own the SPU configuration
+and all system resources allocated in the devicetree.</p>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="smpu.html"><span class="doc">System Memory Protection Unit (SMPU)</span></a> for memory protection</p></li>
+<li><p><a class="reference internal" href="system-protection.html"><span class="doc">System Protection Features</span></a> for overview of protection features</p></li>
+<li><p>Hardware Reference Manual for complete SPU documentation and system security overview</p></li>
+<li><p>Silicon Anomaly 20000003 for known SPU limitations</p></li>
+</ul>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="system-protection.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">System Protection Features</a>
+    <a href="smpu.html" title="Next document (Alt+Shift+RightArrow)" class="next">System Memory Protection Unit (SMPU)</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2026, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>
