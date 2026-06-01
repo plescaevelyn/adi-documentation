@@ -13,7 +13,7 @@ Necessary Files
 
 Download the ADI Kuiper Linux image:
 
-- :external+kuiper:doc:`ADI Kuiper Linux Downloads </>`
+- :external+kuiper:doc:`ADI Kuiper Linux Downloads <index>`
 
 .. TODO:: Add direct link to Kuiper image with AD5529R support
 

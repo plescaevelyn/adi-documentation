@@ -45,8 +45,8 @@ Software Prerequisites
 
     Build instructions:
 
-     - :external+hdl:ref:`Building the HDL Project <building_the_hdl>`
-     - :dokuwiki:`Building the Linux Kernel </resources/tools-software/linux-build/>`
+     - :external+hdl:ref:`build_hdl`
+     - :ref:`linux-kernel zynq`
 
 Tools Required
 --------------
@@ -57,7 +57,7 @@ The IIO Oscilloscope provides a graphical interface for controlling the DAC
 channels and monitoring device attributes.
 
 - :git-iio-oscilloscope:`IIO Oscilloscope Repository </>`
-- :doc:`IIO Oscilloscope Documentation </tools/iio-oscilloscope>`
+- :ref:`iio-oscilloscope`
 
 **UART Terminal**
 

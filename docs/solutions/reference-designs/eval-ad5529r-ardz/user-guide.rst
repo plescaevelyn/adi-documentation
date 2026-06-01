@@ -211,7 +211,7 @@ Device Driver Support
 
 The AD5529R is supported by the Linux IIO subsystem:
 
-- :git-linux:`AD5529R Linux Driver </>`
+- :git-linux:`AD5529R Linux Driver <main:drivers/iio/dac/ad5529r.c>`
 
 The driver exposes each DAC channel as an IIO output channel with attributes:
 
@@ -223,7 +223,7 @@ The driver exposes each DAC channel as an IIO output channel with attributes:
 
 For bare-metal applications:
 
-- :git-no-OS:`AD5529R no-OS Driver </>`
+- :git-no-OS:`AD5529R no-OS Driver <drivers/dac/ad552xr>`
 
 HDL Reference Design
 ~~~~~~~~~~~~~~~~~~~~
@@ -268,7 +268,7 @@ The HDL project implements high-throughput DAC streaming:
 Kuiper Linux
 ~~~~~~~~~~~~
 
-:external+kuiper:doc:`ADI Kuiper Linux </>` provides a ready-to-use Linux
+:external+kuiper:doc:`ADI Kuiper Linux <index>` provides a ready-to-use Linux
 distribution with IIO tools and drivers pre-installed.
 
 The AD5529R device appears as an IIO device:
