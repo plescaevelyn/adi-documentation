@@ -217,6 +217,15 @@ Design & Integration Files
    - Bill of Materials
    - Allegro Project
 
+User Guides
+~~~~~~~~~~~
+
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   production_testing/index
+
 Help and Support
 ~~~~~~~~~~~~~~~~
 
