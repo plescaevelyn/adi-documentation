@@ -60,6 +60,6 @@ Downloads
       * - Noise Analysis
         - :download:`Noise Analysis <images/noiseanalysis_adl5380_adl5566-ad9652.xls>`
       * - Bill of Material
-        - :download:`radx_1d_bom.xlsx <images/radx_1d_bom.xlsx>`
+        - :dokuwiki:`radx_1d_bom.xlsx <_media/resources/eval/user-guides/ad-fmcomms6-ebz/radx_1d_bom.xlsx>`
 
    -  Get the `Allegro FREE Physical Viewer <https://www.cadence.com/en_US/home/tools/pcb-design-and-analysis/allegro-downloads-start.html>`_ (You need 16.5 or higher).

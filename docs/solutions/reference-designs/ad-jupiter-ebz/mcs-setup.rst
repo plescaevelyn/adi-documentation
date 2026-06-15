@@ -57,11 +57,11 @@ MCS prebuild files
 
 - Jupiter SDR boot partition files for MCS sync example:
 
- :download:`jupiter_mcs_sync_03_25.zip <jupiter_mcs_sync_03_25.zip>`
+ :dokuwiki:`jupiter_mcs_sync_03_25.zip <_media/resources/eval/user-guides/jupiter_sdr/jupiter_mcs_sync_03_25.zip>`
 
 - Device tree source and blob overlay for Synchrona:
 
- :download:`synchrona_jupiter_mcs_setup_03_28.zip <synchrona_jupiter_mcs_setup_03_28.zip>`
+ :dokuwiki:`synchrona_jupiter_mcs_setup_03_28.zip <_media/resources/eval/user-guides/jupiter_sdr/synchrona_jupiter_mcs_setup_03_28.zip>`
 
 .. caution::
     
@@ -411,8 +411,8 @@ Resources
 
 - Jupiter SDR boot partition files for MCS sync example:
 
- :download:`jupiter_mcs_sync_03_25.zip <jupiter_mcs_sync_03_25.zip>`
+ :dokuwiki:`jupiter_mcs_sync_03_25.zip <_media/resources/eval/user-guides/jupiter_sdr/jupiter_mcs_sync_03_25.zip>`
 
 - Device tree source and blob overlay for Synchrona:
 
- :download:`synchrona_jupiter_mcs_setup_05_08.zip <synchrona_jupiter_mcs_setup_05_08.zip>`
+ :dokuwiki:`synchrona_jupiter_mcs_setup_05_08.zip <_media/resources/eval/user-guides/jupiter_sdr/synchrona_jupiter_mcs_setup_05_08.zip>`

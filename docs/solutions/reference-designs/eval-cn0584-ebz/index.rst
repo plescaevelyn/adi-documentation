@@ -353,9 +353,9 @@ Copy the following files onto the boot directory to configure the SD card:
 
 .. admonition:: Download
 
-      for :download:`EVAL-CN0585-FMCZ RevB<sd_card_config_files_revb.zip>`
+      for :dokuwiki:`EVAL-CN0585-FMCZ RevB <_media/resources/eval/user-guides/circuits-from-the-lab/cn0584/sd_card_config_files_revb.zip>`
 
-      for :download:`EVAL-CN0585-FMCZ<sdcard_config_files.zip>`
+      for :dokuwiki:`EVAL-CN0585-FMCZ <_media/resources/eval/user-guides/circuits-from-the-lab/cn0584/sdcard_config_files.zip>`
 
 - **uImage** file for Zynq
 - **BOOT.BIN** specific to your :adi:`EVAL-CN0585-FMCZ <CN0585>` + ZedBoard
