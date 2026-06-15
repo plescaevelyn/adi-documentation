@@ -59,9 +59,11 @@ Hardware Design Files
 - :download:`Layout Power and Comms board <08-083152-01-b.pdf>`
 - :download:`Layout Digital IS board <08-083153-01-d.pdf>`
 - :download:`Layout Digital NON-IS board <08-084576-01-b.pdf>`
-- :download:`Bill of Materials Power and Comms board <05-083152-01-b.zip>`
-- :download:`Bill of Materials Digital IS board <05-083153-01-e.csv.zip>`
-- :download:`Bill of Materials Digital NON-IS board <05-084576-01-c.csv.zip>`
+- :adi:`AD-ETHERNETAPLDEVICE-SL Design Files <media/en/reference-design-documentation/design-integration-files/ad-ethernetapldevice-sl-design-files.zip>`
+
+  - Bill of Materials Power and Comms board
+  - Bill of Materials Digital IS board
+  - Bill of Materials Digital NON-IS board
 
 Package Contents
 ----------------

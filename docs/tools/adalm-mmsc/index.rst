@@ -266,7 +266,7 @@ Design & Integration Files
 
 .. admonition:: Download
 
-   :download:`ADALM-MMSC Design & Integration Files <ADALM-MMSC-designsupport.zip>`
+   :adi:`ADALM-MMSC Design & Integration Files <media/en/reference-design-documentation/design-integration-files/adalm-mmsc-designsupport.zip>`
 
     * Schematic
     * PCB Layout

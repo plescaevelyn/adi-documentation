@@ -235,7 +235,7 @@ Design & Integration Files
 
 .. admonition:: Download
 
-     :download:`AD-GMSL792MIPI-EVK Design Support Package <files/design-support.zip>`
+     :adi:`AD-GMSL792MIPI-EVK Design Support Package <media/en/reference-design-documentation/design-integration-files/ad-gmsl792mipi-evk-designsupport.zip>`
 
      - Schematic
      - PCB Layout
