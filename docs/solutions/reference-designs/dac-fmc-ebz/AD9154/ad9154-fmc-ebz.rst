@@ -1,3 +1,5 @@
+.. _ad9154-fmc-ebz:
+
 SPIPRO AD9154-FMC-EBZ Evaluation Board Quick Start Guide
 ========================================================
 

@@ -1,3 +1,5 @@
+.. _eval-ad9152:
+
 AD9152 Evaluation Board
 =======================
 

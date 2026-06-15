@@ -1,3 +1,5 @@
+.. _ace-ad9136-ebz:
+
 AD9136/AD9135-EBZ Evaluation Board Quick Start Guide
 ====================================================
 

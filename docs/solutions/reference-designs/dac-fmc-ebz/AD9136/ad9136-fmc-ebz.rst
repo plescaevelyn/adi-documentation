@@ -1,3 +1,5 @@
+.. _ad9136-fmc-ebz:
+
 EVALUATING THE AD9135/AD9136 DIGITAL-TO-ANALOG CONVERTER
 ========================================================
 

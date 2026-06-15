@@ -1,3 +1,5 @@
+.. _eval-ad9144:
+
 AD9144 Evaluation Boards
 ========================
 

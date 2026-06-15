@@ -1,3 +1,5 @@
+.. _ad9144-adrf6720-ebz:
+
 AD9144-ADRF6720-EBZ Evaluation Board Quick Start Guide
 ======================================================
 

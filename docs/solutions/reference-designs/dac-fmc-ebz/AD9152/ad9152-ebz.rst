@@ -1,3 +1,5 @@
+.. _ad9152-ebz:
+
 AD9152-EBZ Evaluation Board Quick Start Guide
 =============================================
 

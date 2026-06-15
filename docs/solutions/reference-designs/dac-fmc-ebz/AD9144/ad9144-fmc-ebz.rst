@@ -1,3 +1,5 @@
+.. _ad9144-fmc-ebz:
+
 AD9144-FMC-EBZ Evaluation Board Quick Start Guide
 =================================================
 

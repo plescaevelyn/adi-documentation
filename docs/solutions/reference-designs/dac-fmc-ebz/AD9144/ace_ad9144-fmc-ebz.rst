@@ -1,3 +1,5 @@
+.. _ace-ad9144-fmc-ebz:
+
 EVALUATING THE AD9144 DIGITAL-TO-ANALOG CONVERTER
 =================================================
 

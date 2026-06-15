@@ -1,3 +1,5 @@
+.. _ace-ad9144-ebz:
+
 AD9144-EBZ Evaluation Board Quick Start Guide Using ACE (Analysis \| Control \| Evaluate) Software
 ==================================================================================================
 

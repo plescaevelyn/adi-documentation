@@ -1,3 +1,5 @@
+.. _ad9154-ace-ebz:
+
 ACE AD9154-EBZ Evaluation Board Quick Start Guide
 =================================================
 

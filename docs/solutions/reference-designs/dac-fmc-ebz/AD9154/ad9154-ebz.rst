@@ -1,3 +1,5 @@
+.. _ad9154-ebz:
+
 SPIPRO AD9154-EBZ Evaluation Board Quick Start Guide
 ====================================================
 

@@ -1,3 +1,5 @@
+.. _ad9152-fmc-ebz:
+
 EVALUATING THE AD9152 DIGITAL-TO-ANALOG CONVERTER
 =================================================
 
