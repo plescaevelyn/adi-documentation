@@ -41,25 +41,25 @@ Files included in the AD9144 Update:
      - Not Currently Supported
      - :doc:`ace_ad9144-fmc-ebz <ace_ad9144-fmc-ebz>`
    * - Schematics
-     - :download:`RevA <../resources/ad9144-ebz_reva_schematic.pdf>`
-     - :download:`RevC <../resources/ad9144-adrf6720-ebz_revc_schematic.pdf>`
-     - :download:`RevB <../resources/ad9144-fmc-ebz_revb_schematic.pdf>`
+     - :dokuwiki:`RevA <_media/resources/eval/dpg/ad9144-ebz_reva_schematic.pdf>`
+     - :dokuwiki:`RevC <_media/resources/eval/dpg/ad9144-adrf6720-ebz_revc_schematic.pdf>`
+     - :dokuwiki:`RevB <_media/resources/eval/dpg/ad9144-fmc-ebz_revb_schematic.pdf>`
    * - Bill of Materials
-     - :download:`RevA <../resources/ad9144-ebz_reva_bom.xls>`
+     - :dokuwiki:`RevA <_media/resources/eval/dpg/ad9144-ebz_reva_bom.xls>`
      - Unavailable
-     - :download:`RevB <../resources/ad9144-fmc-ebz_revb_bom.xls>`
+     - :dokuwiki:`RevB <_media/resources/eval/dpg/ad9144-fmc-ebz_revb_bom.xls>`
    * - PCB Gerber Files
-     - :download:`RevA <../resources/ad9144-ebz_reva_gerber_files.zip>`
-     - :download:`RevC <../resources/ad9144-adrf6720-ebz_revc_gerber_files.zip>`
-     - :download:`RevB <../resources/ad9144-fmc-ebz_revb_gerber_files.zip>`
+     - :dokuwiki:`RevA <_media/resources/eval/dpg/ad9144-ebz_reva_gerber_files.zip>`
+     - :dokuwiki:`RevC <_media/resources/eval/dpg/ad9144-adrf6720-ebz_revc_gerber_files.zip>`
+     - :dokuwiki:`RevB <_media/resources/eval/dpg/ad9144-fmc-ebz_revb_gerber_files.zip>`
    * - PCB BRD File
-     - :download:`RevA <../resources/ad9144-ebz_reva.zip>`
-     - :download:`RevC <../resources/ad9144-adrf6720-ebz_revc.zip>`
-     - :download:`RevB <../resources/ad9144-fmc-ebz_revb.zip>`
+     - :dokuwiki:`RevA <_media/resources/eval/dpg/ad9144-ebz_reva.zip>`
+     - :dokuwiki:`RevC <_media/resources/eval/dpg/ad9144-adrf6720-ebz_revc.zip>`
+     - :dokuwiki:`RevB <_media/resources/eval/dpg/ad9144-fmc-ebz_revb.zip>`
    * - PCB Layout PDF
-     - :download:`RevA <../resources/ad9144-ebz_reva_layout.pdf>`
-     - :download:`RevC <../resources/ad9144-adrf6720-ebz_revc_layout.pdf>`
-     - :download:`RevB <../resources/ad9144-fmc-ebz_revb_layout.pdf>`
+     - :dokuwiki:`RevA <_media/resources/eval/dpg/ad9144-ebz_reva_layout.pdf>`
+     - :dokuwiki:`RevC <_media/resources/eval/dpg/ad9144-adrf6720-ebz_revc_layout.pdf>`
+     - :dokuwiki:`RevB <_media/resources/eval/dpg/ad9144-fmc-ebz_revb_layout.pdf>`
 
 Data Pattern Generator
 ----------------------

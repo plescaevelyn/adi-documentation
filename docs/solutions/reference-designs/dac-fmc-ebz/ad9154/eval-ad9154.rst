@@ -33,25 +33,25 @@ Files included in the AD9154 Update:
      - :doc:`ad9154-m6720-ebz <ad9154-m6720-ebz>`
      - :doc:`ad9154-ace-fmc-ebz <ad9154-ace-fmc-ebz>`
    * - Schematics
-     - :download:`RevD <../resources/ad9154-ebz_revd_schematic.pdf>`
-     - :download:`RevA <../resources/ad9154-adrf6720-ebz_reva_schematic.pdf>`
-     - :download:`RevA <../resources/ad9154-fmc-ebz_reva_schematic.pdf>`
+     - :dokuwiki:`RevD <_media/resources/eval/dpg/ad9154-ebz_revd_schematic.pdf>`
+     - :dokuwiki:`RevA <_media/resources/eval/dpg/ad9154-adrf6720-ebz_reva_schematic.pdf>`
+     - :dokuwiki:`RevA <_media/resources/eval/dpg/ad9154-fmc-ebz_reva_schematic.pdf>`
    * - Bill of Materials
-     - :download:`RevD <../resources/ad9154-ebz_revd_bom.xls>`
-     - :download:`RevA <../resources/ad9154-adrf6720-ebz_reva_bom.xls>`
-     - :download:`RevA <../resources/ad9154-fmc-ebz_reva_bom.xls>`
+     - :dokuwiki:`RevD <_media/resources/eval/dpg/ad9154-ebz_revd_bom.xls>`
+     - :dokuwiki:`RevA <_media/resources/eval/dpg/ad9154-adrf6720-ebz_reva_bom.xls>`
+     - :dokuwiki:`RevA <_media/resources/eval/dpg/ad9154-fmc-ebz_reva_bom.xls>`
    * - PCB Gerber Files
-     - :download:`RevD <../resources/ad9154-ebz_revd_gerber_files.zip>`
-     - :download:`RevA <../resources/ad9154-adrf6720-ebz_reva_gerber_files.zip>`
-     - :download:`RevA <../resources/ad9154-fmc-ebz_reva_gerber_files.zip>`
+     - :dokuwiki:`RevD <_media/resources/eval/dpg/ad9154-ebz_revd_gerber_files.zip>`
+     - :dokuwiki:`RevA <_media/resources/eval/dpg/ad9154-adrf6720-ebz_reva_gerber_files.zip>`
+     - :dokuwiki:`RevA <_media/resources/eval/dpg/ad9154-fmc-ebz_reva_gerber_files.zip>`
    * - PCB BRD File
-     - :download:`RevD <../resources/ad9154-ebz_revd.zip>`
-     - :download:`RevA <../resources/ad9154-adrf6720-ebz_reva.zip>`
-     - :download:`RevA <../resources/ad9154-fmc-ebz_reva.zip>`
+     - :dokuwiki:`RevD <_media/resources/eval/dpg/ad9154-ebz_revd.zip>`
+     - :dokuwiki:`RevA <_media/resources/eval/dpg/ad9154-adrf6720-ebz_reva.zip>`
+     - :dokuwiki:`RevA <_media/resources/eval/dpg/ad9154-fmc-ebz_reva.zip>`
    * - PCB Layout PDF
-     - :download:`RevD <../resources/ad9154-ebz_revd_layout.pdf>`
-     - :download:`RevA <../resources/ad9154-adrf6720-ebz_reva_layout.pdf>`
-     - :download:`RevA <../resources/ad9154-fmc-ebz_reva_layout.pdf>`
+     - :dokuwiki:`RevD <_media/resources/eval/dpg/ad9154-ebz_revd_layout.pdf>`
+     - :dokuwiki:`RevA <_media/resources/eval/dpg/ad9154-adrf6720-ebz_reva_layout.pdf>`
+     - :dokuwiki:`RevA <_media/resources/eval/dpg/ad9154-fmc-ebz_reva_layout.pdf>`
 
 Data Pattern Generator
 ----------------------

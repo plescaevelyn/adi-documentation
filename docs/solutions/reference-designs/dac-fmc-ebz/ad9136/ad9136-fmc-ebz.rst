@@ -50,11 +50,11 @@ Helpful Files/Links
 -  IBIS Model: :adi:`AD9135 <media/en/package-pcb-model-library/ibis-models/ad9135bcpz>`,\ :adi:`AD9136 <media/en/package-pcb-model-library/ibis-models/ad9136bcpz>`
 -  AMI Model: `AD9144/AD9152/AD9154/AD9135/AD9136 <https://form.analog.com/Form_Pages/securedownloads/designFilePackage.aspx?prodID=AD9144-9152-9154-9135-9136>`_
 -  Simulink ADIsimDAC Model: `AD9136 <http://download.analog.com/behavioral-models/mathworks/ad9136_mathworks.zip>`_
--  Schematic: `AD9135-FMC-EBZ <../resources/ad9135-fmc-ebz_revb_schematic.pdf>`_, `AD9136-FMC-EBZ <../resources/ad9136-fmc-ebz_revb_schematic.pdf>`_
--  Bill of Materials: `AD9135-FMC-EBZ <../resources/ad9135-fmc-ebz_revb_bom_customer.xlsx>`_, `AD9136-FMC-EBZ <../resources/ad9136-fmc-ebz_revb_bom_customer.xls>`_
--  PCB Gerber Files: `RevB <../resources/ad9144-fmc-ebz_revb_gerber_files.zip>`_
--  PCB BRD File: `RevB <../resources/ad9144-fmc-ebz_revb.zip>`_
--  PCB Layout PDF: `RevB <../resources/ad9144-fmc-ebz_revb_layout.pdf>`_
+-  Schematic: :dokuwiki:`AD9135-FMC-EBZ <_media/resources/eval/dpg/ad9135-fmc-ebz_revb_schematic.pdf>`, :dokuwiki:`AD9136-FMC-EBZ <_media/resources/eval/dpg/ad9136-fmc-ebz_revb_schematic.pdf>`
+-  Bill of Materials: :dokuwiki:`AD9135-FMC-EBZ <_media/resources/eval/dpg/ad9135-fmc-ebz_revb_bom_customer.xlsx>`, :dokuwiki:`AD9136-FMC-EBZ <_media/resources/eval/dpg/ad9136-fmc-ebz_revb_bom_customer.xls>`
+-  PCB Gerber Files: :dokuwiki:`RevB <_media/resources/eval/dpg/ad9144-fmc-ebz_revb_gerber_files.zip>`
+-  PCB BRD File: :dokuwiki:`RevB <_media/resources/eval/dpg/ad9144-fmc-ebz_revb.zip>`
+-  PCB Layout PDF: :dokuwiki:`RevB <_media/resources/eval/dpg/ad9144-fmc-ebz_revb_layout.pdf>`
 
 Software Needed
 ---------------

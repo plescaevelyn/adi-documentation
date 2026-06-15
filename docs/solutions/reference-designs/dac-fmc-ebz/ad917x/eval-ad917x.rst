@@ -51,15 +51,15 @@ Files included in the AD9171, AD9172, AD9173, AD9174, AD9175, AD9176 Update:
    * - Item
      - AD917(1,2,3,4,5,6)-FMC-EBZ
    * - Schematics
-     - :download:`AD917x-FMC-EBZ Schematic <../resources/ad9172-fmc-ebz_revc_schematic.pdf>`
+     - :dokuwiki:`AD917x-FMC-EBZ Schematic <_media/resources/eval/dpg/ad9172-fmc-ebz_revc_schematic.pdf>`
    * - Layout
-     - :download:`AD917x-FMC-EBZ Layout <../resources/ad9172-fmc-ebz_revc_layout.pdf>`
+     - :dokuwiki:`AD917x-FMC-EBZ Layout <_media/resources/eval/dpg/ad9172-fmc-ebz_revc_layout.pdf>`
    * - Bill of Materials
-     - :download:`AD917x-FMC-EBZ BOM <../resources/ad9172-fmc-ebz_revc_bom.zip>`
+     - :dokuwiki:`AD917x-FMC-EBZ BOM <_media/resources/eval/dpg/ad9172-fmc-ebz_revc_bom.zip>`
    * - PCB Gerber Files
-     - :download:`AD917x-FMC-EBZ Gerber Files <../resources/ad9172-fmc-ebz_revc_gerber_files.zip>`
+     - :dokuwiki:`AD917x-FMC-EBZ Gerber Files <_media/resources/eval/dpg/ad9172-fmc-ebz_revc_gerber_files.zip>`
    * - PCB BRD File
-     - :download:`AD917x-FMC-EBZ Board File <../resources/ad9172-fmc-ebz_revc.zip>`
+     - :dokuwiki:`AD917x-FMC-EBZ Board File <_media/resources/eval/dpg/ad9172-fmc-ebz_revc.zip>`
 
 Data Pattern Generator
 ----------------------

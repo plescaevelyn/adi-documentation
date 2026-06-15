@@ -35,11 +35,11 @@ Helpful Files/Links
 -  Datasheet: :adi:`AD9154 <media/en/technical-documentation/data-sheets/AD9154.pdf>`
 -  IBIS Model: :adi:`AD9154 <media/en/package-pcb-model-library/ibis-models/ad9154bcpz>`
 -  AMI Model: `AD9144/AD9152/AD9154/AD9135/AD9136 <https://form.analog.com/Form_Pages/securedownloads/designFilePackage.aspx?prodID=AD9144-9152-9154-9135-9136>`_
--  Schematic: `RevA <../resources/ad9154-fmc-ebz_reva_schematic.pdf>`_
--  Bill of Materials: `RevA <../resources/ad9154-fmc-ebz_reva_bom.xls>`_
--  PCB Gerber Files: `RevA <../resources/ad9154-fmc-ebz_reva_gerber_files.zip>`_
--  PCB BRD File: `RevA <../resources/ad9154-fmc-ebz_reva.zip>`_
--  PCB Layout PDF: `RevA <../resources/ad9154-fmc-ebz_reva_layout.pdf>`_
+-  Schematic: :dokuwiki:`RevA <_media/resources/eval/dpg/ad9154-fmc-ebz_reva_schematic.pdf>`
+-  Bill of Materials: :dokuwiki:`RevA <_media/resources/eval/dpg/ad9154-fmc-ebz_reva_bom.xls>`
+-  PCB Gerber Files: :dokuwiki:`RevA <_media/resources/eval/dpg/ad9154-fmc-ebz_reva_gerber_files.zip>`
+-  PCB BRD File: :dokuwiki:`RevA <_media/resources/eval/dpg/ad9154-fmc-ebz_reva.zip>`
+-  PCB Layout PDF: :dokuwiki:`RevA <_media/resources/eval/dpg/ad9154-fmc-ebz_reva_layout.pdf>`
 
 Software Needed
 ---------------

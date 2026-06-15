@@ -36,22 +36,22 @@ Files
      - :doc:`ACE <ace_ad9136-ebz>` / :doc:`SPIPro <ad9136-ebz>`
      - :doc:`ACE <ad9136-fmc-ebz>`
    * - Schematics
-     - :download:`RevA <../resources/ad9144-ebz_reva_schematic.pdf>`
-     - :download:`AD9135-FMC-EBZ <../resources/ad9135-fmc-ebz_revb_schematic.pdf>` /
-       :download:`AD9136-FMC-EBZ <../resources/ad9136-fmc-ebz_revb_schematic.pdf>`
+     - :dokuwiki:`RevA <_media/resources/eval/dpg/ad9144-ebz_reva_schematic.pdf>`
+     - :dokuwiki:`AD9135-FMC-EBZ <_media/resources/eval/dpg/ad9135-fmc-ebz_revb_schematic.pdf>` /
+       :dokuwiki:`AD9136-FMC-EBZ <_media/resources/eval/dpg/ad9136-fmc-ebz_revb_schematic.pdf>`
    * - Bill of Materials
-     - :download:`RevA <../resources/ad9144-ebz_reva_bom.xls>`
-     - :download:`AD9135-FMC-EBZ <../resources/ad9135-fmc-ebz_revb_bom_customer.xlsx>` /
-       :download:`AD9136-FMC-EBZ <../resources/ad9136-fmc-ebz_revb_bom_customer.xls>`
+     - :dokuwiki:`RevA <_media/resources/eval/dpg/ad9144-ebz_reva_bom.xls>`
+     - :dokuwiki:`AD9135-FMC-EBZ <_media/resources/eval/dpg/ad9135-fmc-ebz_revb_bom_customer.xlsx>` /
+       :dokuwiki:`AD9136-FMC-EBZ <_media/resources/eval/dpg/ad9136-fmc-ebz_revb_bom_customer.xls>`
    * - PCB Gerber Files
-     - :download:`RevA <../resources/ad9144-ebz_reva_gerber_files.zip>`
-     - :download:`RevB <../resources/ad9144-fmc-ebz_revb_gerber_files.zip>`
+     - :dokuwiki:`RevA <_media/resources/eval/dpg/ad9144-ebz_reva_gerber_files.zip>`
+     - :dokuwiki:`RevB <_media/resources/eval/dpg/ad9144-fmc-ebz_revb_gerber_files.zip>`
    * - PCB BRD File
-     - :download:`RevA <../resources/ad9144-ebz_reva.zip>`
-     - :download:`RevB <../resources/ad9144-fmc-ebz_revb.zip>`
+     - :dokuwiki:`RevA <_media/resources/eval/dpg/ad9144-ebz_reva.zip>`
+     - :dokuwiki:`RevB <_media/resources/eval/dpg/ad9144-fmc-ebz_revb.zip>`
    * - PCB Layout PDF
-     - :download:`RevA <../resources/ad9144-ebz_reva_layout.pdf>`
-     - :download:`RevB <../resources/ad9144-fmc-ebz_revb_layout.pdf>`
+     - :dokuwiki:`RevA <_media/resources/eval/dpg/ad9144-ebz_reva_layout.pdf>`
+     - :dokuwiki:`RevB <_media/resources/eval/dpg/ad9144-fmc-ebz_revb_layout.pdf>`
 
 Data Pattern Generator
 ----------------------

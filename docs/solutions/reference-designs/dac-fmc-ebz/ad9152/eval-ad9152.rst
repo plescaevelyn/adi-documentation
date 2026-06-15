@@ -29,25 +29,25 @@ Files included in the AD9152 Update:
      - :doc:`ad9152-adrf6720-ebz <ad9152-adrf6720-ebz>`
      - :doc:`ad9152-fmc-ebz <ad9152-fmc-ebz>`
    * - Schematics
-     - :download:`RevB <../resources/ad9152-ebz_revb_schematic.pdf>`
-     - :download:`RevB <../resources/ad9152-adrf6720-ebz_revb_schematic.pdf>`
-     - :download:`RevA <../resources/ad9152-fmc-ebz_reva_schematic.pdf>`
+     - :dokuwiki:`RevB <_media/resources/eval/dpg/ad9152-ebz_revb_schematic.pdf>`
+     - :dokuwiki:`RevB <_media/resources/eval/dpg/ad9152-adrf6720-ebz_revb_schematic.pdf>`
+     - :dokuwiki:`RevA <_media/resources/eval/dpg/ad9152-fmc-ebz_reva_schematic.pdf>`
    * - Bill of Materials
-     - :download:`RevB <../resources/ad9152-ebz_revb_bom.xlsx>`
-     - :download:`RevB <../resources/ad9152-adrf6720-ebz_revb_bom.xlsx>`
-     - :download:`RevA <../resources/ad9152-fmc-ebz_reva_bom.xlsx>`
+     - :dokuwiki:`RevB <_media/resources/eval/dpg/ad9152-ebz_revb_bom.xlsx>`
+     - :dokuwiki:`RevB <_media/resources/eval/dpg/ad9152-adrf6720-ebz_revb_bom.xlsx>`
+     - :dokuwiki:`RevA <_media/resources/eval/dpg/ad9152-fmc-ebz_reva_bom.xlsx>`
    * - PCB Gerber Files
-     - :download:`RevB <../resources/ad9152-ebz_revb_gerber_files.zip>`
-     - :download:`RevB <../resources/ad9152-adrf6720-ebz_revb_gerber_files.zip>`
-     - :download:`RevA <../resources/ad9152-fmc-ebz_reva_gerber_files.zip>`
+     - :dokuwiki:`RevB <_media/resources/eval/dpg/ad9152-ebz_revb_gerber_files.zip>`
+     - :dokuwiki:`RevB <_media/resources/eval/dpg/ad9152-adrf6720-ebz_revb_gerber_files.zip>`
+     - :dokuwiki:`RevA <_media/resources/eval/dpg/ad9152-fmc-ebz_reva_gerber_files.zip>`
    * - PCB BRD File
-     - :download:`RevB <../resources/ad9152-ebz_revb.zip>`
-     - :download:`RevB <../resources/ad9152-adrf6720-ebz_revb.zip>`
-     - :download:`RevA <../resources/ad9152-fmc-ebz_reva.zip>`
+     - :dokuwiki:`RevB <_media/resources/eval/dpg/ad9152-ebz_revb.zip>`
+     - :dokuwiki:`RevB <_media/resources/eval/dpg/ad9152-adrf6720-ebz_revb.zip>`
+     - :dokuwiki:`RevA <_media/resources/eval/dpg/ad9152-fmc-ebz_reva.zip>`
    * - PCB Layout PDF
-     - :download:`RevB <../resources/ad9152-ebz_revb_layout.pdf>`
-     - :download:`RevB <../resources/ad9152-adrf6720-ebz_revb_layout.pdf>`
-     - :download:`RevA <../resources/ad9152-fmc-ebz_reva_layout.pdf>`
+     - :dokuwiki:`RevB <_media/resources/eval/dpg/ad9152-ebz_revb_layout.pdf>`
+     - :dokuwiki:`RevB <_media/resources/eval/dpg/ad9152-adrf6720-ebz_revb_layout.pdf>`
+     - :dokuwiki:`RevA <_media/resources/eval/dpg/ad9152-fmc-ebz_reva_layout.pdf>`
 
 Data Pattern Generator
 ----------------------
