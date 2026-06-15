@@ -33,11 +33,11 @@ Supported devices:
    user-guide
    prerequisites
    quickstart/index
-   AD9136/index
-   AD9144/index
-   AD9152/index
-   AD9154/index
-   AD917x/index
+   ad9136/index
+   ad9144/index
+   ad9152/index
+   ad9154/index
+   ad917x/index
 
 Table of contents
 -------------------------------------------------------------------------------

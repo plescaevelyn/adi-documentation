@@ -47,10 +47,10 @@ Design files for each board variant are available in the respective evaluation
 board pages:
 
 - :ref:`eval-ad9136`
-- :ref:`AD9144/eval-ad9144`
-- :ref:`AD9152/eval-ad9152`
-- :ref:`AD9154/eval-ad9154`
-- :ref:`AD917x/eval-ad917x`
+- :ref:`eval-ad9144`
+- :ref:`eval-ad9152`
+- :ref:`eval-ad9154`
+- :ref:`eval-ad917x`
 
 Software Guide
 -------------------------------------------------------------------------------
