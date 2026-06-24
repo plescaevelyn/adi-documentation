@@ -15,27 +15,26 @@ Tooling for AI-assisted work
 
 A large language model can explain, draft, and connect ideas quickly, but it is
 not a substitute for project knowledge or validation. The value comes from
-placing the model in a workflow where it can inspect the repository, call the
-right tools, read the right documentation, and report what it verified.
+placing the model in a workflow where it can inspect a code base, call the
+right tools, read the documentation, and report verified results.
 
-ADI uses two complementary mechanisms for that:
+We utilize two complementary mechanisms to achieve this:
 
-- **MCP servers** expose tools through the Model Context Protocol, so an
-  assistant can search documentation, inspect designs, query hardware-facing
-  libraries, or run project-specific checks through structured tool calls.
-- **Skills** package task-specific instructions and tool inventories. They help
-  an assistant choose the right workflow for a repository instead of guessing
-  from file names or prompt text alone.
+- **MCP Servers** exposes tools and data through the Model Context Protocol.
+  By coupling context with assertion, they allow the system to dynamically
+  steer theagent toward optimal tool usage on the fly.
+- **Skills** package task-specific instructions and tool inventories as text
+  files. They teach the agent how to utilize tools and execute tasks without
+  forcing tight coupling or rigid hooks.
 
-The important design choice is that these interfaces are **CLI-first**: tools
-exposed through an MCP server also exist as command-line entry points. This
-keeps automation scriptable, reproducible, and suitable for CI as well as
-interactive AI-assisted development.
+A foundational design choice is our CLI-first stance: every tool available to
+the MCP is also accessible via the CLI. This ensures that frequent tasks can be
+automated programmatically and sustainably.
 
-Public MCP servers and skills
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+MCP servers and skills
+~~~~~~~~~~~~~~~~~~~~~~
 
-Available public interfaces include:
+Our set of MCPs and Skills include:
 
 - :external+doctools:ref:`doctools MCP <mcp>`:
   Searches ADI public documentation under
@@ -57,11 +56,8 @@ Available public interfaces include:
   Catalogs Scopy development tools such as the package generator, test tools,
   CI scripts, format and license checks, and development plugin commands.
 
-Documentation as context
-~~~~~~~~~~~~~~~~~~~~~~~~
-
-Documentation is part of the toolchain. Assistants should be able to read the
-content available to users.
+We believe documentation is part of the code base and that assistants should
+have access to it just like users have.
 
 Besides using the :external+doctools:ref:`doctools MCP <mcp>`, public
 documentation sources can be fetched directly, for example, the source for this
@@ -93,6 +89,10 @@ by the run, including tool output and the agent session, the result can be
 reviewed. If something goes wrong, the interaction can be traced back to the
 step that introduced the issue.
 
+Examples of coding harnesses are `pi.dev <https://pi.dev>`__,
+`OpenCode <https://opencode.ai>`__, `Claude Code <https://claude.com/product/claude-code>`__,
+and `OpenAI codex <https://openai.com/codex/>`__.
+
 Jagged frontier and context
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -121,10 +121,9 @@ tools available for the model, with careful analysis of sessions.
 Pull request reviewer
 ---------------------
 
-The pull request reviewer applies the same harness-and-tools approach to code
-review. It is an AI-assisted reviewer integrated into CI/CD. It uses the
-tooling present in each workflow to provide contextual feedback on pull
-requests: builds, static analysis, style validation, checks, and any other
+The pull request reviewer is an AI-assisted reviewer integrated into CI/CD. It
+uses the tooling present in each workflow to provide contextual feedback on
+pull requests: builds, static analysis, style validation, checks, and any other
 project-specific tool that is meaningful for the code base.
 
 It supports models from multiple vendors, cloud-hosted or self-hosted. The tool
