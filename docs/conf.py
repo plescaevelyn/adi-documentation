@@ -46,6 +46,8 @@ interref_repos = [
     'doctools',
     'hdl',
     'pyadi-iio',
+    'pyadi-dt',
+    'pyadi-jif',
     'kuiper',
     'scopy',
     'linux',

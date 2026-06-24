@@ -4,6 +4,45 @@ AI Usage
 For information on Analog Devices Inc. stance on AI usage, please see
 :adi:`Responsible AI @ ADI <en/who-we-are/legal-and-risk-oversight/responsible-ai.html>`.
 
+MCP servers and skills
+----------------------
+
+We maintain a collection of MCP servers and skills for various ADI tools,
+here is an overview:
+
+- :external+doctools:ref:`doctools MCP <mcp>`:
+  Searches ADI public documentation
+  (https://analogdevicesinc.github.io and https://wiki.analog.com).
+
+- :external+pyadi-iio:doc:`pyadi-iio MCP <mcp/index>`:
+  Interact hardware at runtime. Exposes tools for device discovery,
+  connection management, property configuration, data capture, and signal
+  generation across all supported device classes.
+
+- :external+pyadi-dt:doc:`pyadi-dt MCP <mcp_server>`:
+  Exposes device tree generation, linting, and inspection tools.
+
+- :external+pyadi-jif:doc:`pyadi-jif MCP <mcp_server>`:
+  Provides a programmatic interface for interacting with pyadi-jif
+  functionalities, including querying JESD modes and performing system-level
+  solving.
+
+- :git+scopy:`Scopy Skills <tools/scopy_dev_plugin/skills/scopy-tools-inventory/SKILL.md>`:
+  Catalog of all :external+scopy:doc:`index` development tools including package generator, testing
+  tools, CI scripts, format/license scripts, and dev plugin commands. Loaded
+  when analyzing what tools exist for a task.
+
+With a **CLI-first** approach, every tool that is available in the MCP is
+available in the CLI, allowing to programmatically and sustainably automate
+frequent tasks.
+
+Beyond the :external+doctools:ref:`doctools MCP <mcp>` for documentation, all
+public documentation sources can be directly fetched, for example, this page
+source is :git+documentation:`raw+docs/contributing/ai.rst`.
+Each page in the browser contains a ``Copy content`` that copies the page as Markdown,
+powered by the script :git+doctools:`adi_doctools/theme/harmonic/scripts/html2md.js`;
+the MCP uses :git+doctools:`adi_doctools/cli/aux_html2md.py` to convert with python.
+
 Pull request reviewer
 ---------------------
 
