@@ -5,7 +5,9 @@ Engineering University Program
 
 .. toctree::
    :maxdepth: 4
+   :hidden:
 
+   tools/index
 
 Mission
 -------------------------------------------------------------------------------
