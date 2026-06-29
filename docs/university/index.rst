@@ -6,6 +6,8 @@ Engineering University Program
 .. toctree::
    :maxdepth: 4
 
+   courses/index
+
 
 Mission
 -------------------------------------------------------------------------------
@@ -122,7 +124,7 @@ Tutorials, Glossary, Terminology, eBooks and Other Helpful Resources
   * //Amplifiers, Converters, References, Regulators, and many other topics//
 
 * :dokuwiki:`Analog Devices Electronics Handbooks <university/courses/tutorials/index#ebooks_in_pdf>`
-* :dokuwiki:`Electronics Glossary <university/courses/electronics/text/glossary>`
+* :ref:`Electronics Glossary <electronics-glossary>`
 * :dokuwiki:`Oscilloscope Terminology <university/courses/alm1k/intro/oscilloscope-terminology>`
 * :adi:`Glossary of Electrical Engineering Terms <en/design-center/glossary.html>`
 * :adi:`Software Defined Radio for Engineers <en/education/education-library/software-defined-radio-for-engineers.html>`
