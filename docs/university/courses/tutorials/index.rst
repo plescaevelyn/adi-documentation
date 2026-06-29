@@ -265,3 +265,57 @@ Linear Circuit Design Handbook
 edited by Hank Zumbahlen
 
 :adi:`Basic Linear Design eBook <en/education/education-library/linear-circuit-design-handbook.html>`
+
+.. _test-measurement-tutorials:
+
+Test and Measurement Tutorials
+===============================================================================
+
+.. epigraph::
+
+   "When you can measure what you are speaking about, and express it in numbers,
+   you know something about it."
+
+   -- Lord Kelvin
+
+These tutorials focus on testing and measurement techniques that extend the
+capabilities of USB-based personal instruments like the ADALM1000 (M1K) and
+ADALM2000 (M2K) Active Learning Modules.
+
+Core Tutorials
+-------------------------------------------------------------------------------
+
+.. toctree::
+   :maxdepth: 1
+
+   alm-active-loads
+   alm-awg-ac-mains-tests
+   alm-awg-dc-offset
+   alm-milli-ohm-meter
+   alm-hv-awg-part1
+   alm-awg-external-power
+   alm-measure-outside-0-5-range
+   alm-cir-signal-generators
+   alm-cir-lab-rail-splitter
+   alm-bipolar-step-up-dc-dc
+   alm-power-profiler
+
+M1K Accessories
+-------------------------------------------------------------------------------
+
+.. toctree::
+   :maxdepth: 1
+
+   m1k-accessory-boards
+
+M2K Accessories and Tutorials
+-------------------------------------------------------------------------------
+
+.. toctree::
+   :maxdepth: 1
+
+   m2k-power-booster
+   m2k-bnc-adapter
+   m2k-adc-digital-filters
+   m2k-build-radio
+   m2k-sync-multiple
