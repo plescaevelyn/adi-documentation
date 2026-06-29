@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="By forwarding the trigger signal on one module’s TriggerOut (TO) pin, and reading it on another’s TriggerIn (TI) pin, one can obtain more synchronized channels of both analog and digital inputs. This can be achieved either with Scopy, as well as with libm2k." name="description" />
+
+    <title>Synchronizing Multiple ADALM2000s &#8212; System Level Documentation  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/app.min.css?v=a8f9a170" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=5f9cb17c" />
+    <script async="async" src="../../../_static/app.umd.js?v=26d0298f"></script>
+    <link rel="icon" href="../../../_static/icon.svg"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="prev" title="How to Build a Radio with the M2k" href="m2k-build-radio.html" />
+   
+  
+  
+  
+  <meta name="repository" content="documentation">
+  <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head>
+  
+    <body>
+  
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
+        <div class="vertical-divider"></div>
+        
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Docs</label>
+        
+        <a id="logo" href="../../../index.html">
+          <div>System Level</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../../index.html" class="current">System Level</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div class="header localtoc-header">
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">Synchronizing Multiple ADALM2000s</a><ul>
+<li><a class="reference internal" href="#hardware-connections">Hardware Connections</a><ul>
+<li><a class="reference internal" href="#analog-example">Analog Example</a></li>
+<li><a class="reference internal" href="#digital-example">Digital Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-scopy">Using Scopy</a><ul>
+<li><a class="reference internal" href="#id1">Analog Example</a></li>
+<li><a class="reference internal" href="#id2">Digital Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-libm2k">Using libm2k</a><ul>
+<li><a class="reference internal" href="#id3">Analog Example</a></li>
+<li><a class="reference internal" href="#id4">Digital Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#adding-more-modules">Adding More Modules</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../../../index.html">
+      System Level Documentation
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../../index.html" class="current">System Level</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <p class="caption" role="heading">
+  <span class="caption-text">University Program</span>
+</p>
+
+<ul class="current">
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="../../index.html">Engineering University Program</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1" checked=""/><div class="collapse"><a class="reference internal" href="index.html">Test and Measurement Tutorials</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="alm-active-loads.html">Active Electronic Loads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-awg-ac-mains-tests.html">Making AC Mains Voltage and Current Measurements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-awg-dc-offset.html">Adding DC Offsets to AWG Outputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-milli-ohm-meter.html">Measuring Very Small Resistances, A Milliohm Meter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-hv-awg-part1.html">Techniques To Increase Signal Generator Output Voltage, Part 1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-awg-external-power.html">External Power Supplies for Active Learning Labs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-measure-outside-0-5-range.html">Measuring Voltages Outside 0-5 V Range</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-cir-signal-generators.html">Signal Generators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-cir-lab-rail-splitter.html">Battery Voltage “Rail-Splitter”</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-bipolar-step-up-dc-dc.html">Bipolar Power Supplies for Active Learning Labs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-power-profiler.html">DC Power Profiling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="m1k-accessory-boards.html">ADALM1000 (M1K) Accessory PC Boards</a></li>
+<li class="toctree-l3"><a class="reference internal" href="m2k-power-booster.html">ADALM2000 Power Booster Board</a></li>
+<li class="toctree-l3"><a class="reference internal" href="m2k-bnc-adapter.html">ADALM2000 BNC Adapter Board</a></li>
+<li class="toctree-l3"><a class="reference internal" href="m2k-adc-digital-filters.html">ADC Digital Filters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="m2k-build-radio.html">How to Build a Radio with the M2k</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Synchronizing Multiple ADALM2000s</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+  <nav class="breadcrumb"><ol><li><a href="../../index.html">Engineering University Program</a></li><li><a href="index.html">Test and Measurement Tutorials</a></li></ol></nav>
+</div>
+          <div class="body" role="main">
+            
+  <section id="synchronizing-multiple-adalm2000s">
+<span id="m2k-sync-multiple"></span><h1>Synchronizing Multiple ADALM2000s<a class="headerlink" href="#synchronizing-multiple-adalm2000s" title="Link to this heading"></a></h1>
+<p>By forwarding the trigger signal on one module’s TriggerOut (TO) pin, and
+reading it on another’s TriggerIn (TI) pin, one can obtain more synchronized
+channels of both analog and digital inputs. This can be achieved either with
+Scopy, as well as with libm2k.</p>
+<p>The following example will provide a description on how to make use of two
+ADALM2000 modules’ trigger features to have their analog and digital inputs
+synchronized.</p>
+<figure class="align-center" id="id5">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/2m2k.jpg"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/2m2k.jpg" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/2m2k.jpg" width="600" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 1 </span><span class="caption-text">Two ADALM2000 modules connected for synchronized operation</span><a class="headerlink" href="#id5" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<section id="hardware-connections">
+<h2>Hardware Connections<a class="headerlink" href="#hardware-connections" title="Link to this heading"></a></h2>
+<section id="analog-example">
+<h3>Analog Example<a class="headerlink" href="#analog-example" title="Link to this heading"></a></h3>
+<p>Both modules will read a test signal on their channel 1, respectively the
+trigger on channel 2. The trigger will be generated using DIO0 of the first
+ADALM2000. This is going to be transmitted to the second module by connecting
+its TriggerIn pin to the first’s TriggerOut pin.</p>
+<p>You will have to make the connections shown in the diagram below. The connection
+between the TO and TI pins, highlighted with red, links the two devices’
+triggers, thus enabling them to acquire data in a synchronized manner.</p>
+<figure class="align-center" id="id6">
+<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/2m2k_analog.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/2m2k_analog.png" />
+<figcaption>
+<p><span class="caption-number">Figure 2 </span><span class="caption-text">Hardware connections for analog synchronization</span><a class="headerlink" href="#id6" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="digital-example">
+<h3>Digital Example<a class="headerlink" href="#digital-example" title="Link to this heading"></a></h3>
+<p>Here, the trigger is also going to be generated on the first ADALM2000’s DIO0
+pin and then forwarding it to the second’s trigger in. Both of the modules’
+DIO1 pins will read the same generated waveform.</p>
+<p>To do this, connect the modules as shown below. Again, the connection which
+enables the two modules to acquire data simultaneously is the one between the
+TO and TI pins, highlighted with red.</p>
+<figure class="align-center" id="id7">
+<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/2m2k_dig.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/2m2k_dig.png" />
+<figcaption>
+<p><span class="caption-number">Figure 3 </span><span class="caption-text">Hardware connections for digital synchronization</span><a class="headerlink" href="#id7" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+<section id="using-scopy">
+<h2>Using Scopy<a class="headerlink" href="#using-scopy" title="Link to this heading"></a></h2>
+<p>In order to achieve this with Scopy, you will need to open a second instance
+of Scopy.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>MacOS users:</strong> To be able to open multiple instances of Scopy, open a
+terminal window and run the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>open<span class="w"> </span>-n<span class="w"> </span>/path/to/application/Scopy.app
+</pre></div>
+</div>
+</div>
+<section id="id1">
+<h3>Analog Example<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<p>Open Scopy and connect the first module. Click the button for the Digital I/O
+instrument and set DIO 0 to output.</p>
+<figure class="align-center" id="id8">
+<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/2m2k_dio1.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/2m2k_dio1.png" />
+<figcaption>
+<p><span class="caption-number">Figure 4 </span><span class="caption-text">Setting DIO 0 to output on the first module</span><a class="headerlink" href="#id8" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>Then go to the Oscilloscope and open the Trigger settings menu. Set the trigger
+mode to normal, channel 2 as source and the condition to Rising Edge.</p>
+<figure class="align-center" id="id9">
+<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/2m2k_trig1.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/2m2k_trig1.png" />
+<figcaption>
+<p><span class="caption-number">Figure 5 </span><span class="caption-text">Configuring trigger settings on the first module</span><a class="headerlink" href="#id9" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>Then configure the TriggerOut pin to forward the oscilloscope trigger. Click
+the single button when you are done and you will see that the device is waiting
+for the trigger signal.</p>
+<figure class="align-center" id="id10">
+<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/2m2k_trig1fw.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/2m2k_trig1fw.png" />
+<figcaption>
+<p><span class="caption-number">Figure 6 </span><span class="caption-text">Configuring TriggerOut to forward the oscilloscope trigger</span><a class="headerlink" href="#id10" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>Let’s configure the second module now. Open the second instance of Scopy and go
+to the Oscilloscope instrument. Open the Trigger Settings menu and set the
+trigger mode to normal. Then disable the internal trigger and enable the
+digital one. Set the source to External Trigger In and the condition to rising
+edge. Once again, click the single button when you are done.</p>
+<figure class="align-center" id="id11">
+<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/2m2k_trig2.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/2m2k_trig2.png" />
+<figcaption>
+<p><span class="caption-number">Figure 7 </span><span class="caption-text">Configuring trigger settings on the second module</span><a class="headerlink" href="#id11" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>Go back to the first instance of Scopy. Open the Signal Generator and generate
+a square waveform of 5 MHz on channel 1. Then, open the Digital I/O instrument
+and run it. Then set the state of DIO 0 to 1.</p>
+<figure class="align-center" id="id12">
+<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/2m2k_dio2.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/2m2k_dio2.png" />
+<figcaption>
+<p><span class="caption-number">Figure 8 </span><span class="caption-text">Setting DIO 0 state to generate trigger</span><a class="headerlink" href="#id12" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>You will notice that both Oscilloscope instruments were triggered. In the image
+below, the superior half shows the analog inputs of the module whose trigger
+signal is being forwarded, while the inferior depicts the second ADALM2000.
+With the cursors enabled, a delay of approximately 190 nanoseconds is measured.</p>
+<figure class="align-center" id="id13">
+<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/2m2k_ainsync1.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/2m2k_ainsync1.png" />
+<figcaption>
+<p><span class="caption-number">Figure 9 </span><span class="caption-text">First module oscilloscope showing synchronized capture</span><a class="headerlink" href="#id13" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<figure class="align-center" id="id14">
+<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/2m2k_ainsync2.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/2m2k_ainsync2.png" />
+<figcaption>
+<p><span class="caption-number">Figure 10 </span><span class="caption-text">Second module oscilloscope showing synchronized capture with delay measurement</span><a class="headerlink" href="#id14" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="id2">
+<h3>Digital Example<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<p>In the Digital I/O Instrument of the first instance of Scopy, keep the DIO0 pin
+as output and make sure its state is set to 0. Open the Logic Analyser
+instrument and enable pins: DIO0, DIO1. Set the trigger condition on DIO0 to
+rising edge.</p>
+<figure class="align-center" id="id15">
+<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/2m2k_digla1.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/2m2k_digla1.png" />
+<figcaption>
+<p><span class="caption-number">Figure 11 </span><span class="caption-text">Logic Analyser configuration on the first module</span><a class="headerlink" href="#id15" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>Then, go to the Oscilloscope’s Trigger settings menu. Here, select the Logic
+Analyser option for the External TriggerOut configuration.</p>
+<figure class="align-center" id="id16">
+<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/2m2k_digtrig.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/2m2k_digtrig.png" />
+<figcaption>
+<p><span class="caption-number">Figure 12 </span><span class="caption-text">Configuring External TriggerOut for Logic Analyser</span><a class="headerlink" href="#id16" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>In the second instance of Scopy, open the Logic Analyser instrument, and enable
+pins: DIO0 and DIO1. Go to the Trigger menu and set the mode to normal, the
+source to External Trigger In and the condition to rising edge.</p>
+<figure class="align-center" id="id17">
+<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/2m2k_digtrig2.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/2m2k_digtrig2.png" />
+<figcaption>
+<p><span class="caption-number">Figure 13 </span><span class="caption-text">Logic Analyser trigger configuration on the second module</span><a class="headerlink" href="#id17" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>Go to the Pattern Generator of the first instance of Scopy and enable DIO7.
+Generate a clock signal of 5 MHz on this pin. Go back to the Digital I/O
+instrument where we configured our trigger pin. Run the instrument and set the
+state of DIO0 to 1. Again, you will notice that both instruments have triggered.</p>
+<p>The figure below shows the instance of Scopy from where the trigger is being
+forwarded in the superior half, while under it the second one is displayed.</p>
+<figure class="align-center" id="id18">
+<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/2m2k_digsync1.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/2m2k_digsync1.png" />
+<figcaption>
+<p><span class="caption-number">Figure 14 </span><span class="caption-text">First module Logic Analyser showing synchronized digital capture</span><a class="headerlink" href="#id18" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<figure class="align-center" id="id19">
+<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/2m2k_digsync2.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/2m2k_digsync2.png" />
+<figcaption>
+<p><span class="caption-number">Figure 15 </span><span class="caption-text">Second module Logic Analyser showing synchronized digital capture</span><a class="headerlink" href="#id19" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>If you zoom in on the plot and enable the cursors in the second instance of
+Scopy, you will be able to measure the delay, as shown below.</p>
+<figure class="align-center" id="id20">
+<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/2m2k_digsync3.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/2m2k_digsync3.png" />
+<figcaption>
+<p><span class="caption-number">Figure 16 </span><span class="caption-text">Measuring the delay between synchronized digital captures</span><a class="headerlink" href="#id20" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+<section id="using-libm2k">
+<h2>Using libm2k<a class="headerlink" href="#using-libm2k" title="Link to this heading"></a></h2>
+<section id="id3">
+<h3>Analog Example<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>Maintaining the connections made when demonstrating the synchronization of the
+analog inputs using Scopy, the same result can be achieved using the example
+Python libm2k script. The script follows the exact steps shown in the Scopy
+section of this tutorial.</p>
+<ul class="simple">
+<li><p><a class="icon link reference external" href="https://github.com/analogdevicesinc/libm2k/blob/master/bindings/python/examples/analogin_sync_2m2ks.py" target="_blank">Analog Input Sync Script (analogin_sync_2m2ks.py)</a></p></li>
+</ul>
+</section>
+<section id="id4">
+<h3>Digital Example<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>As mentioned in the previous sub-section, keep the connections you made when
+you did this with Scopy and use the Python libm2k script provided with the
+library. This script also reproduces the steps shown in the Scopy section of
+this tutorial.</p>
+<ul class="simple">
+<li><p><a class="icon link reference external" href="https://github.com/analogdevicesinc/libm2k/blob/master/bindings/python/examples/digitalin_sync_2m2ks.py" target="_blank">Digital Input Sync Script (digitalin_sync_2m2ks.py)</a></p></li>
+</ul>
+</section>
+</section>
+<section id="adding-more-modules">
+<h2>Adding More Modules<a class="headerlink" href="#adding-more-modules" title="Link to this heading"></a></h2>
+<p>This section offers instructions on how to add more modules to the chain of
+M2Ks. For example, you can forward the trigger from the second module to a
+third in the same manner: connect the second M2K’s TriggerOut pin to the
+third’s TriggerIn pin.</p>
+<p>If you want to use Scopy, you will need to open as many instances as the number
+of modules you want to use. On the other hand, if you want to use libm2k, you
+will also need to edit the example scripts to comply with your desired
+configuration.</p>
+<figure class="align-center" id="id21">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/3m2k.jpg"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/3m2k.jpg" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/3m2k.jpg" width="600" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 17 </span><span class="caption-text">Three ADALM2000 modules connected in a chain for extended synchronization</span><a class="headerlink" href="#id21" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="m2k-build-radio.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">How to Build a Radio with the M2k</a>
+    <div></div>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2026, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

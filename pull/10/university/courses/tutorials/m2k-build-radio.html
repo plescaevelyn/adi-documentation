@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="In order to be able to process radio signals with ADALM2000 is necessary a receiver that can convert the incoming RF signal to a lower intermediate frequency. The FM signal, centered on a carrier frequency with high values, is reduced to an intermediate value, called IF, through a downconverter receiver." name="description" />
+
+    <title>How to Build a Radio with the M2k &#8212; System Level Documentation  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/app.min.css?v=a8f9a170" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=5f9cb17c" />
+    <script async="async" src="../../../_static/app.umd.js?v=26d0298f"></script>
+    <link rel="icon" href="../../../_static/icon.svg"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Synchronizing Multiple ADALM2000s" href="m2k-sync-multiple.html" />
+    <link rel="prev" title="ADC Digital Filters" href="m2k-adc-digital-filters.html" />
+   
+  
+  
+  
+  <meta name="repository" content="documentation">
+  <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head>
+  
+    <body>
+  
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
+        <div class="vertical-divider"></div>
+        
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Docs</label>
+        
+        <a id="logo" href="../../../index.html">
+          <div>System Level</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../../index.html" class="current">System Level</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div class="header localtoc-header">
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">How to Build a Radio with the M2k</a><ul>
+<li><a class="reference internal" href="#background">Background</a><ul>
+<li><a class="reference internal" href="#low-noise-amplifier">Low Noise Amplifier</a></li>
+<li><a class="reference internal" href="#mixer">Mixer</a></li>
+<li><a class="reference internal" href="#local-oscillator">Local Oscillator</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#hardware-setup">Hardware Setup</a><ul>
+<li><a class="reference internal" href="#eval-boards-interconnection">EVAL Boards Interconnection</a></li>
+<li><a class="reference internal" href="#power-supplies">Power Supplies</a></li>
+<li><a class="reference internal" href="#connections-to-m2k">Connections to M2k</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#software">Software</a><ul>
+<li><a class="reference internal" href="#adf4350-block">ADF4350 Block</a><ul>
+<li><a class="reference internal" href="#project-structure">Project Structure</a></li>
+<li><a class="reference internal" href="#create-the-inclusion-header">Create the Inclusion Header</a></li>
+<li><a class="reference internal" href="#create-the-implementation-class">Create the Implementation Class</a></li>
+<li><a class="reference internal" href="#create-python-bindings">Create Python Bindings</a></li>
+<li><a class="reference internal" href="#create-the-grc-component">Create the GRC Component</a></li>
+<li><a class="reference internal" href="#build-the-new-created-block">Build the New Created Block</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#gnu-radio-companion-flowgraph">GNU Radio Companion Flowgraph</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../../../index.html">
+      System Level Documentation
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../../index.html" class="current">System Level</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <p class="caption" role="heading">
+  <span class="caption-text">University Program</span>
+</p>
+
+<ul class="current">
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="../../index.html">Engineering University Program</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1" checked=""/><div class="collapse"><a class="reference internal" href="index.html">Test and Measurement Tutorials</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="alm-active-loads.html">Active Electronic Loads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-awg-ac-mains-tests.html">Making AC Mains Voltage and Current Measurements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-awg-dc-offset.html">Adding DC Offsets to AWG Outputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-milli-ohm-meter.html">Measuring Very Small Resistances, A Milliohm Meter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-hv-awg-part1.html">Techniques To Increase Signal Generator Output Voltage, Part 1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-awg-external-power.html">External Power Supplies for Active Learning Labs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-measure-outside-0-5-range.html">Measuring Voltages Outside 0-5 V Range</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-cir-signal-generators.html">Signal Generators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-cir-lab-rail-splitter.html">Battery Voltage “Rail-Splitter”</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-bipolar-step-up-dc-dc.html">Bipolar Power Supplies for Active Learning Labs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-power-profiler.html">DC Power Profiling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="m1k-accessory-boards.html">ADALM1000 (M1K) Accessory PC Boards</a></li>
+<li class="toctree-l3"><a class="reference internal" href="m2k-power-booster.html">ADALM2000 Power Booster Board</a></li>
+<li class="toctree-l3"><a class="reference internal" href="m2k-bnc-adapter.html">ADALM2000 BNC Adapter Board</a></li>
+<li class="toctree-l3"><a class="reference internal" href="m2k-adc-digital-filters.html">ADC Digital Filters</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">How to Build a Radio with the M2k</a></li>
+<li class="toctree-l3"><a class="reference internal" href="m2k-sync-multiple.html">Synchronizing Multiple ADALM2000s</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+  <nav class="breadcrumb"><ol><li><a href="../../index.html">Engineering University Program</a></li><li><a href="index.html">Test and Measurement Tutorials</a></li></ol></nav>
+</div>
+          <div class="body" role="main">
+            
+  <section id="how-to-build-a-radio-with-the-m2k">
+<span id="m2k-build-radio"></span><h1>How to Build a Radio with the M2k<a class="headerlink" href="#how-to-build-a-radio-with-the-m2k" title="Link to this heading"></a></h1>
+<section id="background">
+<h2>Background<a class="headerlink" href="#background" title="Link to this heading"></a></h2>
+<p>In order to be able to process radio signals with ADALM2000 is necessary a
+receiver that can convert the incoming RF signal to a lower intermediate
+frequency. The FM signal, centered on a carrier frequency with high values, is
+reduced to an intermediate value, called IF, through a downconverter receiver.</p>
+<p>The receiver built for the M2k-radio has a basic radio architecture with four
+main components: Antenna, Low noise amplifier, Mixer and a Local oscillator.
+These 3 main parts need additional components (usually some filters) in order
+to work well together and receive signals in certain desired bandwidths.</p>
+<figure class="align-center" id="id1">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/block.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/block.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/block.png" width="700" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 1 </span><span class="caption-text">Figure 1. Block Schematic of the M2k Receiver</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<section id="low-noise-amplifier">
+<h3>Low Noise Amplifier<a class="headerlink" href="#low-noise-amplifier" title="Link to this heading"></a></h3>
+<p>Because antennas are sources of weak signal, it is necessary to amplify the
+signal received through it but is also important to keep the noise level as low
+as possible. For this purpose, is used a low noise amplifier which amplifies a
+low power signal without introducing additional noise. As FM radio has a 200kHz
+bandwidth, from 88.1 to 108.1 MHz is important to use an LNA with a bandwidth
+that includes these frequencies.</p>
+</section>
+<section id="mixer">
+<h3>Mixer<a class="headerlink" href="#mixer" title="Link to this heading"></a></h3>
+<p>A well-suited IC component for RF to IF down-conversion applications is the
+AD831 Low Distortion Mixer. It consists of a mixer core, a limiting amplifier,
+a low noise output amplifier, and a bias circuit. The mixer produces a
+high-level output at IFP and IFN—consisting of the sum and difference
+frequencies of the RF and LO inputs.</p>
+</section>
+<section id="local-oscillator">
+<h3>Local Oscillator<a class="headerlink" href="#local-oscillator" title="Link to this heading"></a></h3>
+<p>The Local oscillator of this receiver can be implemented using ADF4351
+component. This is a wideband synthesizer with integrated VCO which allows
+implementation of fractional-N or integer-N phase-locked loop (PLL) frequency
+synthesizers when used with an external loop filter and external reference
+frequency. The optimum LO frequency and power can be software programmed on the
+ADF4351.</p>
+</section>
+</section>
+<section id="hardware-setup">
+<h2>Hardware Setup<a class="headerlink" href="#hardware-setup" title="Link to this heading"></a></h2>
+<section id="eval-boards-interconnection">
+<h3>EVAL Boards Interconnection<a class="headerlink" href="#eval-boards-interconnection" title="Link to this heading"></a></h3>
+<p>For building a first prototype, it is possible to find each block in the form
+of an EVAL-board which has all the necessary components already integrated and
+is ready to be easily used in the project. The blocks are interconnected with
+SMA connectors. The filters between the blocks can be used to reduce the
+unwanted frequencies so the acquired signal is at a better quality.</p>
+<figure class="align-center" id="id2">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/eval.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/eval.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/eval.png" width="600" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 2 </span><span class="caption-text">Figure 2. EVAL Boards</span><a class="headerlink" href="#id2" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="power-supplies">
+<h3>Power Supplies<a class="headerlink" href="#power-supplies" title="Link to this heading"></a></h3>
+<p>The last thing necessary, from a hardware point of view, is the power supply.
+Using an external supply and some voltage regulators is possible to implement
+an easy solution. In this case, with a 12V supply and simple voltage regulators
+together with their bypass capacitors you can implement the 5V and 9V supplies
+needed for the boards.</p>
+<figure class="align-center" id="id3">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/supplies.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/supplies.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/supplies.png" width="600" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 3 </span><span class="caption-text">Figure 3. Power Supplies schematic</span><a class="headerlink" href="#id3" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<figure class="align-center" id="id4">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/power_supplies.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/power_supplies.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/power_supplies.png" width="900" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 4 </span><span class="caption-text">Figure 4. Power Supplies breadboard connections</span><a class="headerlink" href="#id4" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>The outputs of the regulators should be connected on the corresponding VCC
+pins/pads of each board (5V for LNA and PLL, 9V for the mixer).</p>
+</section>
+<section id="connections-to-m2k">
+<h3>Connections to M2k<a class="headerlink" href="#connections-to-m2k" title="Link to this heading"></a></h3>
+<p>The following table describes the pin connections between the M2k and the radio
+components:</p>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>M2k Pin</p></th>
+<th class="head"><p>Connection</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1+</p></td>
+<td><p>AD831 IFout</p></td>
+</tr>
+<tr class="row-odd"><td><p>1-</p></td>
+<td><p>AD831 GND (outer part of the SMA connector)</p></td>
+</tr>
+<tr class="row-even"><td><p>2+</p></td>
+<td><p>(not used)</p></td>
+</tr>
+<tr class="row-odd"><td><p>2-</p></td>
+<td><p>(not used)</p></td>
+</tr>
+<tr class="row-even"><td><p>W1</p></td>
+<td><p>(not used)</p></td>
+</tr>
+<tr class="row-odd"><td><p>DIO0</p></td>
+<td><p>ADF4351 CLK</p></td>
+</tr>
+<tr class="row-even"><td><p>DIO1</p></td>
+<td><p>ADF4351 DATA</p></td>
+</tr>
+<tr class="row-odd"><td><p>DIO2</p></td>
+<td><p>ADF4351 LE</p></td>
+</tr>
+<tr class="row-even"><td><p>DIO3</p></td>
+<td><p>ADF4351 MUXOUT</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<figure class="align-center" id="id5">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/pinout.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/pinout.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/pinout.png" width="400" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 5 </span><span class="caption-text">Figure 5. M2k Pinout</span><a class="headerlink" href="#id5" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<figure class="align-center" id="id6">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/final_circ.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/final_circ.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/final_circ.png" width="800" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 6 </span><span class="caption-text">Figure 6. M2k Radio Receiver</span><a class="headerlink" href="#id6" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+<section id="software">
+<h2>Software<a class="headerlink" href="#software" title="Link to this heading"></a></h2>
+<p>GNU Radio is a free and open-source software development toolkit that provides
+signal processing blocks to implement software radios. GNU Radio Companion
+(GRC) is a graphical tool for creating signal flow graphs and generating
+flow-graph source code.</p>
+<p>GNU Radio can be extended with own functionality and blocks using
+OutOfTreeModules. gr-m2k is a module containing blocks for interfacing with
+ADALM2000.</p>
+<p>Creating a flowgraph in GRC, using GNU Radio 3.8, is an easy and fast solution.
+There are two possible approaches:</p>
+<ul class="simple">
+<li><p>Creating a new out-of-tree module. Please check the available OutOfTreeModules
+<a class="icon link reference external" href="https://wiki.gnuradio.org/index.php/OutOfTreeModules#Tools_and_resources_at_my_disposal" target="_blank">documentation</a></p></li>
+<li><p>Integrating the ADF4350 block with gr-m2k</p></li>
+</ul>
+<p>All steps for integrating ADF4350 with gr-m2k will be further explained.</p>
+<section id="adf4350-block">
+<h3>ADF4350 Block<a class="headerlink" href="#adf4350-block" title="Link to this heading"></a></h3>
+<p>Controlling the radio implies controlling the output voltage frequency of
+ADF4350. A GRC block, integrated with M2k blocks, that controls the frequency
+can be created. no-OS provides a driver for ADF4350 that simplifies the work.
+This driver communicates using SPI. In the following steps we are going to
+create a GRC block for gr-m2k that uses libm2k communication segment integrated
+with no-OS drivers.</p>
+<ol class="arabic simple">
+<li><p>Install libm2k. Instructions can be found in the
+<a class="icon dokuwiki reference external" href="https://wiki.analog.com/university/tools/m2k/libm2k/libm2k" target="_blank">libm2k documentation</a>.</p></li>
+<li><p>Compile the gr-m2k blocks for your PC. Check the steps in the
+<a class="icon dokuwiki reference external" href="https://wiki.analog.com/university/tools/m2k/libm2k/gr-m2k" target="_blank">gr-m2k documentation</a>.</p></li>
+<li><p>Download the ADF4350 driver from the
+<a class="icon link reference external" href="https://github.com/analogdevicesinc/no-OS/tree/d00cc225a264d03807cafc4bf6a133af69affa36/drivers/frequency/adf4350" target="_blank">no-OS page</a>.</p></li>
+</ol>
+<p>The steps to implement a GRC block:</p>
+<ol class="arabic simple">
+<li><p>Create the inclusion header</p></li>
+<li><p>Create the implementation class</p>
+<ul class="simple">
+<li><p>Add the driver</p></li>
+<li><p>Implement the class</p></li>
+</ul>
+</li>
+<li><p>Create python bindings</p></li>
+<li><p>Create the GRC component</p></li>
+</ol>
+<section id="project-structure">
+<h4>Project Structure<a class="headerlink" href="#project-structure" title="Link to this heading"></a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>gr-m2k
+├── grc
+│   └── m2k_adf4350_sink.block.yml
+├── include/m2k
+│   └── adf4350_sink.h
+├── lib
+│   ├── drivers
+│   │   ├── adf4350.h
+│   │   ├── adf4350.c
+│   │   └── spi.h
+│   ├── adf4350_sink_impl.h
+│   └── adf4350_sink_impl.cc
+└── swig
+    └── m2k_swig.i
+</pre></div>
+</div>
+</section>
+<section id="create-the-inclusion-header">
+<h4>Create the Inclusion Header<a class="headerlink" href="#create-the-inclusion-header" title="Link to this heading"></a></h4>
+<p>Create <code class="docutils literal notranslate"><span class="pre">adf4350_sink.h</span></code> in gr-m2k/include/m2k.</p>
+<p>Add this file in the corresponding CMake file:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">install</span><span class="p">(</span><span class="s">FILES</span>
+<span class="s">...</span>
+<span class="s">adf4350_sink.h</span>
+<span class="s">DESTINATION</span><span class="w"> </span><span class="o">${</span><span class="nv">GR_INCLUDE_DIR</span><span class="o">}</span><span class="s">/m2k</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In the make function add as parameters the URI and all attributes from the
+<code class="docutils literal notranslate"><span class="pre">adf4350_init_param</span></code> structure (23 attributes) found in the driver. This way
+they could be change from GRC without hard coding them.</p>
+</section>
+<section id="create-the-implementation-class">
+<h4>Create the Implementation Class<a class="headerlink" href="#create-the-implementation-class" title="Link to this heading"></a></h4>
+<p>In this part we are going to integrate libm2k with a no-OS driver. For more
+information please check the
+<a class="icon dokuwiki reference external" href="https://wiki.analog.com/university/tools/m2k/libm2k/digital_communication#libm2k_and_no-os_drivers" target="_blank">libm2k and no-OS drivers documentation</a>.</p>
+<p>Create <code class="docutils literal notranslate"><span class="pre">adf4350_sink_impl.h</span></code> and <code class="docutils literal notranslate"><span class="pre">adf4350_sink_impl.cc</span></code> in gr-m2k/lib.</p>
+<p>Create a drivers directory in gr-m2k/lib and add the ADF4350 driver. Add both
+source files in the corresponding CMake file:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">list</span><span class="p">(</span><span class="s">APPEND</span><span class="w"> </span><span class="s">m2k_sources</span>
+<span class="s">...</span>
+<span class="s">adf4350_sink_impl.cc</span>
+<span class="s">drivers/adf4350.c</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Create a header called <code class="docutils literal notranslate"><span class="pre">spi.h</span></code> and include the SPI header of libm2k:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">//spi.h</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;libm2k/tools/spi.hpp&gt;</span>
+</pre></div>
+</div>
+<p>ADF4350 block will receive a message from a QT GUI block. The message contains
+the value of the frequency.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">adf4350_sink_impl</span></code> class has to implement the class constructor and a
+method (<code class="docutils literal notranslate"><span class="pre">write_attribute</span></code>) that will receive the message and will communicate
+with the chip in order to set its output frequency.</p>
+<p>In the source file (<code class="docutils literal notranslate"><span class="pre">adf4350_sink_impl.cc</span></code>) include the SPI extra header of
+libm2k (<code class="docutils literal notranslate"><span class="pre">&lt;libm2k/tools/spi_extra.hpp&gt;</span></code>). In the constructor open the context
+and initialize <code class="docutils literal notranslate"><span class="pre">m2k_spi_init</span></code> structure:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">libm2k</span><span class="o">::</span><span class="n">contexts</span><span class="o">::</span><span class="n">M2k</span><span class="w"> </span><span class="o">*</span><span class="n">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">analog_in_source_impl</span><span class="o">::</span><span class="n">get_context</span><span class="p">(</span><span class="n">uri</span><span class="p">);</span>
+<span class="n">m2k_spi_init</span><span class="w"> </span><span class="n">m2KSpiInit</span><span class="p">;</span>
+<span class="n">m2KSpiInit</span><span class="p">.</span><span class="n">clock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="n">m2KSpiInit</span><span class="p">.</span><span class="n">mosi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="n">m2KSpiInit</span><span class="p">.</span><span class="n">miso</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span>
+<span class="n">m2KSpiInit</span><span class="p">.</span><span class="n">bit_numbering</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MSB</span><span class="p">;</span>
+<span class="n">m2KSpiInit</span><span class="p">.</span><span class="n">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">context</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Initialize the adf4350 structure with the given parameters. The first
+parameter, <code class="docutils literal notranslate"><span class="pre">spi_init_param</span></code>, should contain these values:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="mi">1000000</span><span class="p">,</span>
+<span class="w">    </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">    </span><span class="n">SPI_MODE_0</span><span class="p">,</span>
+<span class="w">    </span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">m2KSpiInit</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">write_attribute</span></code> function is supposed to:</p>
+<ul class="simple">
+<li><p>Receive the message</p></li>
+<li><p>Convert it into a number</p></li>
+<li><p>Pass the value to the driver, in order to set the output frequency of ADF4350</p></li>
+</ul>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">pmt</span><span class="o">::</span><span class="n">pmt_t</span><span class="w"> </span><span class="n">key</span><span class="p">;</span>
+
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">is_pair</span><span class="p">(</span><span class="n">pdu</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">&quot;Message not a pair!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pmt</span><span class="o">::</span><span class="n">car</span><span class="p">(</span><span class="n">pdu</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">skey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pmt</span><span class="o">::</span><span class="n">symbol_to_string</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
+
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">skey</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;frequency&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">frequency</span><span class="p">;</span>
+<span class="w">    </span><span class="n">pmt</span><span class="o">::</span><span class="n">pmt_t</span><span class="w"> </span><span class="n">freq</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pmt</span><span class="o">::</span><span class="n">cdr</span><span class="p">(</span><span class="n">pdu</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">sfreq</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pmt</span><span class="o">::</span><span class="n">symbol_to_string</span><span class="p">(</span><span class="n">freq</span><span class="p">);</span>
+<span class="w">    </span><span class="n">frequency</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">stoll</span><span class="p">(</span><span class="n">sfreq</span><span class="p">);</span>
+<span class="w">    </span><span class="n">adf4350_out_altvoltage0_frequency</span><span class="p">(</span><span class="n">d_adf4350_device</span><span class="p">,</span><span class="w"> </span><span class="n">frequency</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;ADF4350: PLL 0 frequency = &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">frequency</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Hz.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="create-python-bindings">
+<h4>Create Python Bindings<a class="headerlink" href="#create-python-bindings" title="Link to this heading"></a></h4>
+<p>In swig directory is a file called <code class="docutils literal notranslate"><span class="pre">m2k_swig.i</span></code>. Include the block’s header
+in this file:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="p">{</span>
+<span class="p">...</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;m2k/adf4350_sink.h&quot;</span>
+<span class="o">%</span><span class="p">}</span>
+
+<span class="p">...</span>
+<span class="o">%</span><span class="n">include</span><span class="w"> </span><span class="s">&quot;m2k/adf4350_sink.h&quot;</span>
+
+<span class="p">...</span>
+<span class="n">GR_SWIG_BLOCK_MAGIC2</span><span class="p">(</span><span class="n">m2k</span><span class="p">,</span><span class="w"> </span><span class="n">adf4350_sink</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="create-the-grc-component">
+<h4>Create the GRC Component<a class="headerlink" href="#create-the-grc-component" title="Link to this heading"></a></h4>
+<p>GNU Radio 3.8 uses yml files for creating GRC blocks. Create a file
+<code class="docutils literal notranslate"><span class="pre">m2k_adf4350_sink.block.yml</span></code> in the <code class="docutils literal notranslate"><span class="pre">grc</span></code> directory. This file will
+describe how the GRC block should look like.</p>
+<p>Add all parameters using the following format:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w">   </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;key&gt;</span>
+<span class="w">    </span><span class="nt">label</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;name&gt;</span>
+<span class="w">    </span><span class="nt">dtype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;type&gt;</span>
+<span class="w">    </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;value&gt;</span>
+<span class="w">    </span><span class="nt">hide</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">part</span><span class="w">  </span><span class="c1"># optional</span>
+</pre></div>
+</div>
+<p>This block is a sink for messages, not streams. To specify this create the
+following tag:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">inputs</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w">   </span><span class="nt">domain</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">message</span>
+<span class="w">      </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">msg</span>
+<span class="w">      </span><span class="nt">optional</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</pre></div>
+</div>
+</section>
+<section id="build-the-new-created-block">
+<h4>Build the New Created Block<a class="headerlink" href="#build-the-new-created-block" title="Link to this heading"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>build
+cmake<span class="w"> </span>..
+make
+sudo<span class="w"> </span>make<span class="w"> </span>install
+<span class="nb">cd</span><span class="w"> </span>../..
+sudo<span class="w"> </span>ldconfig
+</pre></div>
+</div>
+<p>The source code can be found on the
+<a class="icon link reference external" href="https://github.com/analogdevicesinc/gr-m2k" target="_blank">gr-m2k github page</a>. In order to
+build it, make sure to enable digital option (<code class="docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">-DDIGITAL=ON</span> <span class="pre">..</span></code>).</p>
+</section>
+</section>
+<section id="gnu-radio-companion-flowgraph">
+<h3>GNU Radio Companion Flowgraph<a class="headerlink" href="#gnu-radio-companion-flowgraph" title="Link to this heading"></a></h3>
+<figure class="align-center" id="id7">
+<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/m2k_fm.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/m2k_fm.png" />
+<figcaption>
+<p><span class="caption-number">Figure 7 </span><span class="caption-text">GNU Radio Companion FM Radio Flowgraph</span><a class="headerlink" href="#id7" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>The gnuradio flowgraph acquires the data from the M2K and sets the ADF4350 PLL
+frequency. When changing the PLL frequency slider, the gnuradio ADF4350 block
+that we just written, encodes SPI messages to the PLL in order to change the
+frequency that is fed into the mixer.</p>
+<p>The data acquired from the mixer is captured by the M2k using GNURadio. The
+flow then shifts the frequency by a smaller offset in the “offset” slider. The
+offset slider allows fine tuning of the signal before it gets demodulated by
+the WBFM receiver block. Eventually the data is sent to an audio sink which
+plays back the radio in the speakers.</p>
+<p>This project was presented at GRCon 2019. Slides are available
+<a class="icon link reference external" href="https://www.gnuradio.org/grcon/grcon19/presentations/Building_a_radio_with_M2K_and_spare_parts/" target="_blank">here</a>.</p>
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="m2k-adc-digital-filters.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">ADC Digital Filters</a>
+    <a href="m2k-sync-multiple.html" title="Next document (Alt+Shift+RightArrow)" class="next">Synchronizing Multiple ADALM2000s</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2026, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

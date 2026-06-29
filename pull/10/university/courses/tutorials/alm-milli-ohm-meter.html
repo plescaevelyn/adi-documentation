@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="The objective of this document is to present techniques to measure very small resistances, below 1 ohm, accurately using the AD8210 current shunt monitor IC." name="description" />
+
+    <title>Measuring Very Small Resistances, A Milliohm Meter &#8212; System Level Documentation  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/app.min.css?v=a8f9a170" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=5f9cb17c" />
+    <script async="async" src="../../../_static/app.umd.js?v=26d0298f"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <link rel="icon" href="../../../_static/icon.svg"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Techniques To Increase Signal Generator Output Voltage, Part 1" href="alm-hv-awg-part1.html" />
+    <link rel="prev" title="Adding DC Offsets to AWG Outputs" href="alm-awg-dc-offset.html" />
+   
+  
+  
+  
+  <meta name="repository" content="documentation">
+  <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head>
+  
+    <body>
+  
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
+        <div class="vertical-divider"></div>
+        
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Docs</label>
+        
+        <a id="logo" href="../../../index.html">
+          <div>System Level</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../../index.html" class="current">System Level</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div class="header localtoc-header">
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">Measuring Very Small Resistances, A Milliohm Meter</a><ul>
+<li><a class="reference internal" href="#objective">Objective</a></li>
+<li><a class="reference internal" href="#background">Background</a></li>
+<li><a class="reference internal" href="#the-kelvin-measurement-technique">The Kelvin Measurement Technique</a></li>
+<li><a class="reference internal" href="#applying-the-technique">Applying the Technique</a><ul>
+<li><a class="reference internal" href="#using-the-adalm1000">Using the ADALM1000</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#making-the-4-wire-connections">Making the “4 Wire” Connections</a><ul>
+<li><a class="reference internal" href="#using-the-adalm2000">Using the ADALM2000</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#making-the-kelvin-connections">Making the Kelvin Connections</a></li>
+<li><a class="reference internal" href="#a-more-robust-construction">A More Robust Construction</a></li>
+<li><a class="reference internal" href="#specialized-milliohm-software-for-m1k">Specialized Milliohm Software for M1k</a><ul>
+<li><a class="reference internal" href="#alternate-way-to-auto-zero">Alternate Way to Auto Zero</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-the-milliohm-board-as-high-current-ammeter">Using the Milliohm Board as High Current Ammeter</a></li>
+<li><a class="reference internal" href="#one-final-thing">One Final Thing</a></li>
+<li><a class="reference internal" href="#for-further-reading">For Further Reading</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../../../index.html">
+      System Level Documentation
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../../index.html" class="current">System Level</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <p class="caption" role="heading">
+  <span class="caption-text">University Program</span>
+</p>
+
+<ul class="current">
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="../../index.html">Engineering University Program</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1" checked=""/><div class="collapse"><a class="reference internal" href="index.html">Test and Measurement Tutorials</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="alm-active-loads.html">Active Electronic Loads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-awg-ac-mains-tests.html">Making AC Mains Voltage and Current Measurements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-awg-dc-offset.html">Adding DC Offsets to AWG Outputs</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Measuring Very Small Resistances, A Milliohm Meter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-hv-awg-part1.html">Techniques To Increase Signal Generator Output Voltage, Part 1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-awg-external-power.html">External Power Supplies for Active Learning Labs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-measure-outside-0-5-range.html">Measuring Voltages Outside 0-5 V Range</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-cir-signal-generators.html">Signal Generators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-cir-lab-rail-splitter.html">Battery Voltage “Rail-Splitter”</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-bipolar-step-up-dc-dc.html">Bipolar Power Supplies for Active Learning Labs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-power-profiler.html">DC Power Profiling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="m1k-accessory-boards.html">ADALM1000 (M1K) Accessory PC Boards</a></li>
+<li class="toctree-l3"><a class="reference internal" href="m2k-power-booster.html">ADALM2000 Power Booster Board</a></li>
+<li class="toctree-l3"><a class="reference internal" href="m2k-bnc-adapter.html">ADALM2000 BNC Adapter Board</a></li>
+<li class="toctree-l3"><a class="reference internal" href="m2k-adc-digital-filters.html">ADC Digital Filters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="m2k-build-radio.html">How to Build a Radio with the M2k</a></li>
+<li class="toctree-l3"><a class="reference internal" href="m2k-sync-multiple.html">Synchronizing Multiple ADALM2000s</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+  <nav class="breadcrumb"><ol><li><a href="../../index.html">Engineering University Program</a></li><li><a href="index.html">Test and Measurement Tutorials</a></li></ol></nav>
+</div>
+          <div class="body" role="main">
+            
+  <section id="measuring-very-small-resistances-a-milliohm-meter">
+<span id="alm-milli-ohm-meter"></span><h1>Measuring Very Small Resistances, A Milliohm Meter<a class="headerlink" href="#measuring-very-small-resistances-a-milliohm-meter" title="Link to this heading"></a></h1>
+<section id="objective">
+<h2>Objective<a class="headerlink" href="#objective" title="Link to this heading"></a></h2>
+<p>The objective of this document is to present techniques to measure very small
+resistances, below 1 ohm, accurately using the AD8210 current shunt monitor IC.</p>
+</section>
+<section id="background">
+<h2>Background<a class="headerlink" href="#background" title="Link to this heading"></a></h2>
+<p>The lowest resistance range on a typical three and a half digit digital
+multi-meter (DMM) is 200 ohms with a resolution of 0.1 ohms. More expensive
+high end dedicated bench milliohm meters will support lower ranges and 4 wire
+measurements.</p>
+<p>Why would you need a milliohm meter? To test and debug cables, connectors, PC
+board traces and other kinds of low resistance cases. To measure the series
+resistance of power inductors that can be a few tenths of an ohm. For accurate
+measurements of components like switches and relay contacts you will need to
+resolve resistance values of 1 ohm or less with resolution in the milliohms.
+Contact resistance due to oxidation or corrosion build-up will require a
+substantial current to break through any film built up on the contacts.</p>
+</section>
+<section id="the-kelvin-measurement-technique">
+<h2>The Kelvin Measurement Technique<a class="headerlink" href="#the-kelvin-measurement-technique" title="Link to this heading"></a></h2>
+<p>A “4-wire” or <a class="icon link reference external" href="https://en.wikipedia.org/wiki/Four-terminal_sensing" target="_blank">Kelvin measurement technique</a> for low resistance is
+illustrated in figure 1. This technique eliminates the effects of test
+equipment lead and probe resistance. A current of known value from the current
+source is forced to flow through the test resistance R<sub>DUT</sub>. A voltmeter
+is used to measure (sense) the drop across the resistor INSIDE the current
+forcing connections. The four wires connected to the resistance to be tested
+are noted as F+ and F- for the force connections and S+ and S- for the sense
+connections. Ohms law can then be used to calculate just the resistance seen
+between S+ and S-. Voltage drops in the current loop due to any resistance in
+the F+ and F- force test leads is not seen by the volt meter. Any resistance
+in the S+ and S- sense test leads is unimportant given the assumed very high
+input impedance of the voltmeter compared to R<sub>DUT</sub>.</p>
+<figure class="align-center" id="id1">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig1.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig1.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig1.png" width="400" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 1 </span><span class="caption-text">Figure 1, “4-wire” or Kelvin measurement technique</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>Because the voltage drop across the unidentified resistance is measured at the
+probe tips, the resistance of the test leads carrying the constant current is
+not included. The resistance under test can be found by dividing the voltage
+drop between the sense probes by the test current.</p>
+<p>The test current for a typical DMM on the 200 ohm range is typically between
+1 mA and 2 mA. For lower ohm ranges like 20 ohms or even 2 ohms the test
+current would need to increase to 20 mA and 200 mA. Specialty milliohm meters
+generally use test currents in the area of 100 mA to 200 mA and can sometimes
+be as high as 1A.</p>
+</section>
+<section id="applying-the-technique">
+<h2>Applying the Technique<a class="headerlink" href="#applying-the-technique" title="Link to this heading"></a></h2>
+<p>By combining a few components from the ADALP2000 analog parts kit a milliohm
+meter can be constructed that can make 4 wire measurements of very small
+resistances.</p>
+<p>A key component of this milliohm meter is the AD8210 current shunt monitor IC.
+This circuit is most often used to measure an unknown current flowing through a
+known low value shunt resistor. The small differential voltage drop across the
+shunt is amplified by a fixed gain of 20 and referenced to a DC output
+reference level, often ground. The block diagram from the AD8210 datasheet is
+shown here in figure 2.</p>
+<figure class="align-center" id="id2">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig2.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig2.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig2.png" width="400" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 2 </span><span class="caption-text">Figure 2, AD8210 data sheet block diagram</span><a class="headerlink" href="#id2" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>The output voltage of the AD8210 is given by:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[V_{OUT} = I_{SHUNT} \times R_{SHUNT} \times 20\]</div>
+</div>
+<p>Rearranging for the measured current:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[I_{SHUNT} = \frac{V_{OUT}}{R_{SHUNT} \times 20}\]</div>
+</div>
+<p>We can also flip this equation around to measure resistance:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[R_{DUT} = \frac{V_{OUT}}{I_{TEST} \times 20}\]</div>
+</div>
+<section id="using-the-adalm1000">
+<h3>Using the ADALM1000<a class="headerlink" href="#using-the-adalm1000" title="Link to this heading"></a></h3>
+<p>The programmable current source(s) in the ADALM1000 can supply anything from
+-200 mA to +200 mA. This makes it ideal for use as the driving source for a
+milliohm meter. The 0 to 5 V input range of the ADALM1000 is also well suited
+as the sense volt meter. The 16 bit ADC has enough dynamic range to measure
+very small voltages but it is not a differential input which makes it
+unsuitable for 4 wire measurements. To fix that shortcoming we can use the
+AD8210 as a differential to single-ended converter circuit.</p>
+<p>The practical range of test currents from the source in the M1k is 5 mA to
+150 mA (or slightly higher). The input Voltage measurement range of one of the
+M1k inputs is 0 to 5 V. AD8210 has a voltage gain of 20. Assuming that the
+AD8210 is powered by the fixed +5V supply and the 5 volt input span of the
+M1k, which translates to a maximum differential voltage at the inputs of the
+AD8210 of 5/20 or 250 mV. For a test current of 150 mA that gives a maximum
+resistance of 250 mV/150 mA or 1.667 ohms. If we assume 1 mV resolution for the
+M1k 0-5 V input range or 0.05 mV resolution at the test resistance gives an
+approximate resistance resolution of 0.3 mOhms at 150 mA. The largest
+resistance that can be practically measured is around 50 ohms using a test
+current of 5 mA.</p>
+<p>To use the AD8210 with the M1k the following connections are made as shown in
+figure 3. Resistor R<sub>1</sub> is inserted in series with the channel A current
+source because the driver is not stable driving loads much smaller than 10 ohm.
+The actual value of R<sub>1</sub> does not matter and does not figure into the
+measurements (the 6.2 ohm power resistor from the kit for example). There is an
+upper limit to the value of R<sub>1</sub> based on the maximum voltage available
+on channel A. For a 150 mA maximum test current the voltage drop across 10 ohm
+is 1.5 V. This added to the +2.5 V at F- results in a possible output voltage
+on channel A of 2.5 + 1.5 + 0.25 = 4.25 V which is within the available output
+voltage range.</p>
+<figure class="align-center" id="id3">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig3.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig3.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig3.png" width="600" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 3 </span><span class="caption-text">Figure 3, ADALM1000 Connections</span><a class="headerlink" href="#id3" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>The AD8210 will likely have some small output offset. With channel A set to
+Hi-Z mode i.e. not sourcing any current, the average voltage seen on channel B
+(in Split I/O Hi-Z mode) will be the offset. This can be nulled out in the
+ALICE software by using the channel B offset entry. With the offset adjusted to
+zero we can now make measurements.</p>
+<p>To make the measurement, the channel A source is set to SIMV mode and DC. The
+value for the desired test current, say +150 mA is entered in the channel A Max
+value.</p>
+<p>The measured resistance can be calculated using the following formula entered
+as the channel A User measurement formula:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DCV2</span><span class="o">/</span><span class="p">(</span><span class="mi">20</span><span class="o">*</span><span class="n">DCI1</span><span class="o">/</span><span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The value returned in the DCV2 variable is the channel B average voltage and
+the value returned in DCI1 is the average channel A current (in mA). The factor
+of 20 is the fixed gain of the AD8210 and the factor of 1000 converts mAmps to
+Amps.</p>
+</section>
+</section>
+<section id="making-the-4-wire-connections">
+<h2>Making the “4 Wire” Connections<a class="headerlink" href="#making-the-4-wire-connections" title="Link to this heading"></a></h2>
+<p>In figure 4 we see the ADALM1000 connected to a small solder-less breadboard
+that contains the AD8210. Four mini-grabber clips are used to connect to the
+test resistor, in this case a 1 ohm power resistor. The red and black grabbers
+are the F+ and F- wires respectively and the blue and green grabbers are the
+S+ and S- wires respectively. Note that the sense connections are right next
+to the body of the resistor and the force connections are at the ends of the
+leads.</p>
+<figure class="align-center" id="id4">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig4.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig4.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig4.png" width="600" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 4 </span><span class="caption-text">Figure 4, DUT Connection example</span><a class="headerlink" href="#id4" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>Figure 5 is a close-up screen shot of the ALICE desktop scope measurements
+display. The calculated resistance (Ohms) is 0.9989 Ohms for this particular
+1 ohm 5% resistor. The channel A test current display shows the 150 mA current
+and the channel B voltage (AD8210 output) is also displayed.</p>
+<figure class="align-center" id="id5">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig5.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig5.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig5.png" width="500" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 5 </span><span class="caption-text">Figure 5, Screen close-up of measured value</span><a class="headerlink" href="#id5" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>Also shown in figure 4 are some other low value resistors and two 4 pin Vishay
+(VPR221S) calibration resistors (four terminal precision 2 ohm 0.05%
+calibration resistors). Notice that two of the calibration resistors have four
+leads such that the Kelvin connection is made inside the package for the
+highest possible accuracy. Figure 6 is a close-up screen shot of the ALICE
+desktop scope measurements for a 50 mOhm resistor. The measured value is
+49.5 mOhms.</p>
+<figure class="align-center" id="id6">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig6.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig6.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig6.png" width="500" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 6 </span><span class="caption-text">Figure 6, Screen close-up of 50 mOhm measurement</span><a class="headerlink" href="#id6" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<section id="using-the-adalm2000">
+<h3>Using the ADALM2000<a class="headerlink" href="#using-the-adalm2000" title="Link to this heading"></a></h3>
+<p>The ADALM2000 can also be used with this 4 wire technique but lacks some of
+the capabilities of the ADALM1000 such as the high current drive capability
+and current measurement capability. The analog inputs of the M2k are
+differential however; the 12 bit ADC in the M2k does not have enough dynamic
+range to measure very small voltages directly so again the AD8210 amplifier is
+needed. The ADALM2000 connections are shown in figure 7.</p>
+<figure class="align-center" id="id7">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig7.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig7.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig7.png" width="600" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 7 </span><span class="caption-text">Figure 7, ADALM2000 Connections</span><a class="headerlink" href="#id7" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>To accurately measure the test current I<sub>TEST</sub>, we need to accurately
+know the resistance of R<sub>1</sub> (actual value to be measured using a bench
+DMM). The voltage drop across R<sub>1</sub> can be accurately measured using the
+channel 1 differential inputs 1+ and 1- using a four wire connection method.
+With this voltage and the known value of R<sub>1</sub> we can calculate the
+actual value of I<sub>TEST</sub>.</p>
+<p>The W1 and W2 voltage sources of the M2k can be connected in parallel due to
+the internal 50 ohm series resistors. This effectively doubles the maximum
+available test current. If each source supplies 50 mA of current the voltage
+drop across the internal 50 ohm series resistor will be 2.5 V leaving a maximum
+of 2.5 volts that can be dropped across the combination of R<sub>1</sub> and
+R<sub>DUT</sub>. If for example, R<sub>1</sub> is 10 ohm and I<sub>TEST</sub> is less
+than or equal to 100 mA (50 mA from W1 plus 50 mA from W2) then there will be
+up to 1 volt dropped across R<sub>1</sub>. Allowing for 0.25 V drop across
+R<sub>DUT</sub>, R<sub>1</sub> could be up to 20 ohm and still deliver a total of
+100 mA from the up to +5 V internal output range of W1 and W2.</p>
+</section>
+</section>
+<section id="making-the-kelvin-connections">
+<h2>Making the Kelvin Connections<a class="headerlink" href="#making-the-kelvin-connections" title="Link to this heading"></a></h2>
+<p>Using things like the mini-grabbers is OK for the wire leads on some components
+but another option for making the Kelvin connections is to use special test
+probes and clips. These special purpose test leads can be rather expensive,
+often hundred dollars or more. Some look like normal test probes but with two
+pointy bits rather than a single probe point as in figure 8.</p>
+<figure class="align-center" id="id8">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig8.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig8.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig8.png" width="300" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 8 </span><span class="caption-text">Figure 8, Kelvin test probes</span><a class="headerlink" href="#id8" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>For hobbyists, Adafruit offers these <a class="icon link reference external" href="https://www.adafruit.com/product/3313" target="_blank">Kelvin spring clips</a> for $2.50 each with no wires attached.
+Each side of the plastic clip is electrically insulated. These clips can also
+be ordered through <a class="icon link reference external" href="https://www.digikey.com/product-detail/en/adafruit-industries-llc/3313/1528-2279-ND/7310912" target="_blank">Digikey</a>.</p>
+<figure class="align-center" id="id9">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig9.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig9.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig9.png" width="500" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 9 </span><span class="caption-text">Figure 9, Two wire Kelvin test clip</span><a class="headerlink" href="#id9" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>The SMD test lead tweezers shown in figure 10 can also be used in some cases to
+make the force/sense Kelvin connection right at a component lead.</p>
+<figure class="align-center" id="id10">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig10.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig10.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig10.png" width="300" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 10 </span><span class="caption-text">Figure 10, SMD test lead tweezers</span><a class="headerlink" href="#id10" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="a-more-robust-construction">
+<h2>A More Robust Construction<a class="headerlink" href="#a-more-robust-construction" title="Link to this heading"></a></h2>
+<p>Using a solder-less breadboard to connect to the AD8210 can be a little flakey
+resulting in the offset shifting when the wires are wiggled. To try to minimize
+the variability, a soldered proto board can be used to connect the AD8210 to
+the M1k and provide a place to connect the 4 force and sense wires / test
+probes.</p>
+<p>One approach to minimize the variability, a small adapter board for the BOB
+mounted AD8210 from the ADALP2000 kit can be constructed on a small proto-board
+as shown in figure 11. The square pins of the AD8210 BOB do not fit into a
+standard DIP IC socket so using female pin headers might be required. Not
+perfect but better than a solder-less breadboard.</p>
+<figure class="align-center" id="id11">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig11.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig11.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig11.png" width="600" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 11 </span><span class="caption-text">Figure 11, Hand soldered adapter board.</span><a class="headerlink" href="#id11" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>Further testing of the configuration suggested above has shown that offset and
+linearity of the AD8210 when the output is near ground is not very good.
+Connecting pin 7 (V<sub>REF1</sub>) to 2.5 volts as shown in figure 12 will
+reference the “zero” current point at 2.5V/2 or 1.25 V. This takes away from
+the total range (by about 1/4) but gives much better accuracy. One or two
+hundred mV above ground at the AD8210 output is enough shift but this is the
+simplest way to shift the output away from ground.</p>
+<figure class="align-center" id="id12">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig12.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig12.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig12.png" width="600" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 12 </span><span class="caption-text">Figure 12, AD8210 connections to center Vout at 1.25 V (2.5/2)</span><a class="headerlink" href="#id12" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>Going even further a small 1” by 1” plug in accessory PC board has been
+designed to mount the SMD AD8210 and connect it to the M1k and provide a place
+to connect the 4 force and sense wires / test probes.</p>
+<figure class="align-center" id="id13">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig13.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig13.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig13.png" width="600" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 13 </span><span class="caption-text">Figure 13, SMD break-out PC board</span><a class="headerlink" href="#id13" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>In figure 13 the Milliohm meter board is shown connected to a 4 pin Vishay
+(VPR221S) 2 ohm 0.05% calibration resistor.</p>
+</section>
+<section id="specialized-milliohm-software-for-m1k">
+<h2>Specialized Milliohm Software for M1k<a class="headerlink" href="#specialized-milliohm-software-for-m1k" title="Link to this heading"></a></h2>
+<p>Using the full blown ALICE desktop scope display is overkill for the milliohm
+meter. A standalone tool much like the other DC tools offered in the ALICE
+software package is available. It is included in the release package of the
+ALICE tools for Windows. A screen shot of the standalone tool is shown in
+figure 14. It includes an example schematic at the bottom as a reminder for how
+to connect the AD8210. Included are controls to manually and auto zero the
+channel B offset voltage and channel A offset current.</p>
+<figure class="align-center" id="id14">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig14.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig14.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig14.png" width="400" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 14 </span><span class="caption-text">Figure 14, Milliohm meter software tool</span><a class="headerlink" href="#id14" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>The AD8210 will likely have some small output offset. As the software runs,
+with the auto zero boxes checked, first the channel A current is set to 0,
+i.e. not sourcing any current, the average measured channel A current and
+channel B voltage will be the automatically entered in the offset entry
+locations. Then channel A is set to the test current and the unknown resistance
+is measured and displayed on the top line.</p>
+<p>When the Auto Zero boxes are not checked you can manually enter the values. The
+second line reports the measured channel A current and channel B voltage. If
+the CA Test I is set to 0 these will be the offsets.</p>
+<p>If the Test current is set too high for the resistance being measured such that
+the channel B voltage goes above 4.8 V the line displaying the voltage (and
+current) turns red.</p>
+<p>The gain accuracy of the AD8210 in the datasheet is specified to be +/- 0.5%
+Max and the calibration accuracy of the M1k is likely in the same range. The
+software has entry places to adjust the gain as well. In the screen shot of
+figure 14 the current and voltage gains (really only need to change one) are
+adjusted such that the reading is exactly 2.000 ohms for one of the Vishay
+calibration resistors. The total adjustment was 0.8% which is within the range
+that we might expect. A second 2.000 ohm calibration resistor was then checked
+with the adjusted values with identical results.</p>
+<p>It should also be noted that the board used in this case had pin 7 connected to
++2.5 V so the channel B offset (zero current value) was around 1.3 V.</p>
+<section id="alternate-way-to-auto-zero">
+<h3>Alternate Way to Auto Zero<a class="headerlink" href="#alternate-way-to-auto-zero" title="Link to this heading"></a></h3>
+<p>Also since the current source in the M1k is bipolar it should be possible in a
+test version of the software to alternate between both positive and negative
+test current and null out the offset that way. In figure 15 we show pin 7
+connected to the +5 V supply. Now the “zero” current output of the AD8210 will
+be at +5V/2 or +2.5 V. Because we have half the voltage range at the output of
+the AD8210 we have to also reduce the magnitude of the test current by half.</p>
+<figure class="align-center" id="id15">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig15.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig15.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig15.png" width="600" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 15 </span><span class="caption-text">Figure 15, M1k Connections for bipolar auto-zero</span><a class="headerlink" href="#id15" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>A screen shot of a test version of the software that implements this bipolar
+test current technique is shown in figure 16. In this case there are no check
+boxes to enable auto zero or places to enter the offsets. We still need places
+to enter the test current and adjust the gain. The reminder schematic at the
+bottom is changed to show how pin 7 should be connected for this version of the
+software.</p>
+<p>A second copy of the PCB was configured for this technique. The screen shot
+shows the results for the same 2 ohm calibration resistor. For this board the
+total gain adjustment needed was slightly different (1.3%).</p>
+<figure class="align-center" id="id16">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig16.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig16.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig16.png" width="400" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 16 </span><span class="caption-text">Figure 16, Bipolar test current software version</span><a class="headerlink" href="#id16" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+<section id="using-the-milliohm-board-as-high-current-ammeter">
+<h2>Using the Milliohm Board as High Current Ammeter<a class="headerlink" href="#using-the-milliohm-board-as-high-current-ammeter" title="Link to this heading"></a></h2>
+<p>A side benefit of this AD8210 break-out board is that with a known external
+shunt resistor it can be used as a high current Ammeter. In figure 17 a hand
+wired shunt using a 0.12 ohm power resistor and two screw terminals is shown.
+The exact value of the shunt can of course be measured using the Milliohm meter
+software, after calibrating it against the Vishay resistor.</p>
+<figure class="align-center" id="id17">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig17.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig17.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig17.png" width="600" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 17 </span><span class="caption-text">Figure 17, External shunt resistor connection example as Ammeter</span><a class="headerlink" href="#id17" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="one-final-thing">
+<h2>One Final Thing<a class="headerlink" href="#one-final-thing" title="Link to this heading"></a></h2>
+<p>Here is another example of test leads for the Milliohm meter. Shown in
+figure 18 two wire shielded mini-grabber cables are used for F+ / S+ and
+F- / S-.</p>
+<figure class="align-center" id="id18">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig18.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig18.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/milli-ohm-meter-fig18.png" width="600" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 18 </span><span class="caption-text">Figure 18, Another set of test leads</span><a class="headerlink" href="#id18" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="for-further-reading">
+<h2>For Further Reading<a class="headerlink" href="#for-further-reading" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="icon link reference external" href="https://www.edn.com/design/test-and-measurement/4411117/Two-wire-vs--four-wire-resistance-measurements" target="_blank">Two wire vs four wire resistance measurements</a></p></li>
+<li><p><a class="icon link reference external" href="http://www.electronicdesign.com/blog/four-wire-sensing-can-make-or-break-your-measurements" target="_blank">Four wire sensing can make or break your measurements</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/analog-dialogue/articles/optimize-high-current-sensing-accuracy.html" target="_blank">Optimize high current sensing accuracy</a></p></li>
+<li><p><a class="icon link reference external" href="http://www.instructables.com/id/Measuring-low-resistance-4-wire-on-the-cheap/" target="_blank">Measuring low resistance 4 wire on the cheap</a></p></li>
+</ul>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="alm-awg-dc-offset.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">Adding DC Offsets to AWG Outputs</a>
+    <a href="alm-hv-awg-part1.html" title="Next document (Alt+Shift+RightArrow)" class="next">Techniques To Increase Signal Generator Output Voltage, Part 1</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2026, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

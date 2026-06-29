@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="Power Consumption Profiling and Battery Life Analysis Techniques" name="description" />
+
+    <title>DC Power Profiling &#8212; System Level Documentation  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/app.min.css?v=a8f9a170" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=5f9cb17c" />
+    <script async="async" src="../../../_static/app.umd.js?v=26d0298f"></script>
+    <link rel="icon" href="../../../_static/icon.svg"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="ADALM1000 (M1K) Accessory PC Boards" href="m1k-accessory-boards.html" />
+    <link rel="prev" title="Bipolar Power Supplies for Active Learning Labs" href="alm-bipolar-step-up-dc-dc.html" />
+   
+  
+  
+  
+  <meta name="repository" content="documentation">
+  <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head>
+  
+    <body>
+  
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
+        <div class="vertical-divider"></div>
+        
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Docs</label>
+        
+        <a id="logo" href="../../../index.html">
+          <div>System Level</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../../index.html" class="current">System Level</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div class="header localtoc-header">
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">DC Power Profiling</a><ul>
+<li><a class="reference internal" href="#background">Background</a></li>
+<li><a class="reference internal" href="#setting-up-the-hardware">Setting Up The Hardware</a><ul>
+<li><a class="reference internal" href="#simple-use-case">Simple Use Case</a></li>
+<li><a class="reference internal" href="#summing-in-an-offset-current">Summing in an Offset Current</a></li>
+<li><a class="reference internal" href="#external-battery-offset">External Battery Offset</a></li>
+<li><a class="reference internal" href="#offset-current-from-external-powered-source">Offset Current from External Powered Source</a><ul>
+<li><a class="reference internal" href="#lt3080-variant">LT3080 Variant</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dut-powered-by-battery-voltage-greater-than-5-v">DUT Powered by Battery Voltage Greater than 5 V</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#power-profiler-software-tool">Power Profiler Software Tool</a><ul>
+<li><a class="reference internal" href="#smu-channel-controls">SMU Channel Controls</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#for-further-reading">For Further Reading</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../../../index.html">
+      System Level Documentation
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../../index.html" class="current">System Level</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <p class="caption" role="heading">
+  <span class="caption-text">University Program</span>
+</p>
+
+<ul class="current">
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="../../index.html">Engineering University Program</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1" checked=""/><div class="collapse"><a class="reference internal" href="index.html">Test and Measurement Tutorials</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="alm-active-loads.html">Active Electronic Loads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-awg-ac-mains-tests.html">Making AC Mains Voltage and Current Measurements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-awg-dc-offset.html">Adding DC Offsets to AWG Outputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-milli-ohm-meter.html">Measuring Very Small Resistances, A Milliohm Meter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-hv-awg-part1.html">Techniques To Increase Signal Generator Output Voltage, Part 1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-awg-external-power.html">External Power Supplies for Active Learning Labs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-measure-outside-0-5-range.html">Measuring Voltages Outside 0-5 V Range</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-cir-signal-generators.html">Signal Generators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-cir-lab-rail-splitter.html">Battery Voltage “Rail-Splitter”</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alm-bipolar-step-up-dc-dc.html">Bipolar Power Supplies for Active Learning Labs</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">DC Power Profiling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="m1k-accessory-boards.html">ADALM1000 (M1K) Accessory PC Boards</a></li>
+<li class="toctree-l3"><a class="reference internal" href="m2k-power-booster.html">ADALM2000 Power Booster Board</a></li>
+<li class="toctree-l3"><a class="reference internal" href="m2k-bnc-adapter.html">ADALM2000 BNC Adapter Board</a></li>
+<li class="toctree-l3"><a class="reference internal" href="m2k-adc-digital-filters.html">ADC Digital Filters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="m2k-build-radio.html">How to Build a Radio with the M2k</a></li>
+<li class="toctree-l3"><a class="reference internal" href="m2k-sync-multiple.html">Synchronizing Multiple ADALM2000s</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+  <nav class="breadcrumb"><ol><li><a href="../../index.html">Engineering University Program</a></li><li><a href="index.html">Test and Measurement Tutorials</a></li></ol></nav>
+</div>
+          <div class="body" role="main">
+            
+  <section id="dc-power-profiling">
+<span id="alm-power-profiler"></span><h1>DC Power Profiling<a class="headerlink" href="#dc-power-profiling" title="Link to this heading"></a></h1>
+<p><strong>Power Consumption Profiling and Battery Life Analysis Techniques</strong></p>
+<p>In other documents the voltage and current measurement features of the
+<a class="icon adi reference external" href="https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/ADALM1000.html" target="_blank">ADALM1000</a>
+(SMU) have been discussed. In this document techniques to measure DC voltage
+and current consumption or power of a device or system using the Active
+Learning Modules are discussed.</p>
+<section id="background">
+<h2>Background<a class="headerlink" href="#background" title="Link to this heading"></a></h2>
+<p>Energy savings and power efficiency are top priorities for developers of an
+ever-growing number of embedded systems applications. These constraints can be
+due to government initiatives or regulations, requirements to increase battery
+life, or simply a need to lower the electricity bill. In battery-operated
+systems, energy efficiency often plays the most important role. In cases where
+developers are satisfied with their system’s battery life, increasing the
+energy efficiency means the design can use a smaller and lighter battery, which
+could lower the overall cost. There are also situations where the operating
+life must be extended to the absolute maximum, such as products where the
+battery cannot be replaced or replacement involves very high costs.</p>
+<p>Having a low-power microcontroller (MCU) by itself does not mean a design will
+have low energy consumption. The trick is to optimize the system software not
+just in terms of functionality, but also with respect to energy efficiency.
+Having full control of the hardware surrounding the MCU and optimizing the
+overall software and peripheral usage are crucial factors for reducing system
+energy consumption. Software is not usually seen as an energy drain, yet every
+clock cycle consumes energy. Minimizing the number of clock cycles becomes a
+key challenge to reduce overall system consumption.</p>
+<p>Hardware instruments that can measure voltage and current over an extended time
+frame enable designers to visualize the energy consumption of individual
+devices, multiple devices within a larger system, or a network of interacting
+devices to analyze and improve the power performance of these systems.</p>
+<p>Generally, data logging is the capture of data for a specific duration of time.
+The data is then analyzed to determine the performance of a circuit board,
+module, or a product. The duration of time can last for seconds, minutes or
+even hours.</p>
+<p>The M1k precision Source Measure Unit (SMU) channels can be used to capture
+high dynamic range voltage and current measurements over extended time. The
+M1k’s SMU channels can directly measure DC voltages from 0 to 5 V (higher
+voltages possible by using <a class="reference internal" href="alm-measure-outside-0-5-range.html#alm-measure-outside-0-5-range"><span class="std std-ref">external attenuators</span></a>)
+and DC currents from -200mA to +200mA.</p>
+<p>Because of the 100 KSPS sampling rate it can actually measure time varying
+currents as well. But the current to be measured has to be flowing into or out
+of the SMU channel. This limits the range of voltages that the current must be
+“referenced” to, 0 to +5V.</p>
+</section>
+<section id="setting-up-the-hardware">
+<h2>Setting Up The Hardware<a class="headerlink" href="#setting-up-the-hardware" title="Link to this heading"></a></h2>
+<section id="simple-use-case">
+<h3>Simple Use Case<a class="headerlink" href="#simple-use-case" title="Link to this heading"></a></h3>
+<p>For testing devices that use supply voltages less than or equal to +5 V and
+currents up to +200 mA, the simplest way to connect the M1k SMU channel to a
+device under test (DUT) is shown in figure 1.</p>
+<figure class="align-center" id="id1">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/alm-power-profile-fig-1.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/alm-power-profile-fig-1.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/alm-power-profile-fig-1.png" width="600" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 1 </span><span class="caption-text">Figure 1, Powering DUT directly from SMU channel.</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>The DUT voltage and current are measured directly and the DUT power is simply
+calculated from the measured voltage and current. Because the M1k has two SMU
+channels two devices or partitions of a larger system can be tested at the
+same time.</p>
+</section>
+<section id="summing-in-an-offset-current">
+<h3>Summing in an Offset Current<a class="headerlink" href="#summing-in-an-offset-current" title="Link to this heading"></a></h3>
+<p>The M1k SMU channels operate in two quadrants, positive voltage (0 to 5) and
+positive and negative current (-200mA to +200mA). When the SMU channels are
+used to power a system or device under test, generally only the positive half
+of the current range is required (one quadrant). This effectively wastes half
+of the available current measurement range. If a constant DC current is summed
+with the output of an SMU channel (set to SVMI mode) the net current range
+supplied to the device under test can be effectively offset to be mainly (or
+just) in the positive quadrant. The result being, the range of current
+available is now 0 to as much as +400 mA.</p>
+<p>The offset current could be supplied by the second SMU channel as shown in
+figure 2. A series resistor is used to isolate the two SMU channels. SMU
+channel A is used as the voltage source, as in figure 1, in SVMI mode and SMU
+channel B is set in SIMV mode as the offsetting current source. In the example
+shown the 6.2 Ohm power resistor from the <a class="icon link reference external" href="https://analogdevicesinc.github.io/documentation/solutions/reference-designs/adalp2000/index.html#adalp2000" target="_blank" title="(in System Level Documentation)"><span class="xref std std-ref">ADALP2000</span></a>
+parts kit is used but any low value resistor greater than 2 Ohm could be
+substituted. The output voltage of Channel B cannot go above the 5 V limit
+which forces the maximum usable voltage from Channel A to be 5 V minus the
+voltage drop across the series resistor. In this example the voltage drop
+would be up to 200mA times 6.2 Ohm, or 1.24 V. The channel A output voltage
+would ideally need to be no higher than 5.0 - 1.24 = 3.76. Practically speaking
+the maximum usable voltage might be closer to 3.3 or 3.5 V. This is still a
+very useful supply voltage range in that many micro-controllers operate at
+3.3V or even lower.</p>
+<figure class="align-center" id="id2">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/alm-power-profile-fig-2.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/alm-power-profile-fig-2.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/alm-power-profile-fig-2.png" width="500" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 2 </span><span class="caption-text">Figure 2, Offset current summed from CHB.</span><a class="headerlink" href="#id2" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>The current from CHA can be both positive when the DUT current is greater than
+the constant DC offset current from CHB and negative when the DUT current is
+less than the constant DC offset current from CHB.</p>
+</section>
+<section id="external-battery-offset">
+<h3>External Battery Offset<a class="headerlink" href="#external-battery-offset" title="Link to this heading"></a></h3>
+<p>If a 1.5 V AA battery, B<sub>1</sub>, for example is substituted for resistor
+R<sub>1</sub> as shown in figure 3 the voltage seen at the output of SMU Channel
+B will be 1.5 V lower (more negative) than the DUT voltage which is set by SMU
+Channel A. Now SMU Channel A can be set all the way up to the maximum +5.0 V.
+However, the lowest voltage that SMU Channel A can be set to now has to be
+greater than the battery voltage or +1.5V in this case. Other battery voltages
+can be used as long as the voltage seen at the output of SMU Channel B remains
+within the permitted 0 to +5 V.</p>
+<figure class="align-center" id="id3">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/alm-power-profile-fig-3.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/alm-power-profile-fig-3.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/alm-power-profile-fig-3.png" width="500" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 3 </span><span class="caption-text">Figure 3, External Battery Offsets CHB voltage.</span><a class="headerlink" href="#id3" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="offset-current-from-external-powered-source">
+<h3>Offset Current from External Powered Source<a class="headerlink" href="#offset-current-from-external-powered-source" title="Link to this heading"></a></h3>
+<p>As an alternative, an externally powered current source such as the
+<a class="icon adi reference external" href="https://www.analog.com/LT3092" target="_blank">LT3092</a> from the ADALP2000 kit could be used as in figure 4. Fixed
+resistors R<sub>1</sub> and R<sub>2</sub> along with variable resistor
+R<sub>pot</sub> adjust the DC current supplied. The external power supply
+voltage needs to be high enough to accommodate the DUT voltage plus the minimum
+voltage headroom of the LT3092 current source. Given there is 1 V across
+R<sub>1</sub> plus the 1.2 V minimum headroom of the LT3092, the external power
+supply voltage will need to be at least 2.2 V greater than the DUT voltage or
+7.2 V for V<sub>DUT</sub> equal to 5 V.</p>
+<p>With the externally powered current source it is possible to potentially drive
+the CHA output pin above the +5 V limit when the SMU channel is off or in the
+Hi-Z mode. To limit the current that would otherwise flow in the output
+protection diodes on the M1k board, clamp PNP transistor Q<sub>1</sub> is added
+to the output as shown. If the voltage on CHA were to go more than 0.6 V above
++5 V the transistor will turn on shunting the current to ground. The resistor
+in the collector shares some of the power dissipation with Q<sub>1</sub>.
+Q<sub>1</sub> can be any PNP transistor capable of handling the possible 200 mA
+current.</p>
+<figure class="align-center" id="id4">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/alm-power-profile-fig-4.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/alm-power-profile-fig-4.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/alm-power-profile-fig-4.png" width="600" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 4 </span><span class="caption-text">Figure 4, External offset current from LT3092.</span><a class="headerlink" href="#id4" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<section id="lt3080-variant">
+<h4>LT3080 Variant<a class="headerlink" href="#lt3080-variant" title="Link to this heading"></a></h4>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/LT3080" target="_blank">LT3080</a> linear regulator can be used in a similar current source
+configuration with a slightly different pinout as in figure 5. Please refer to
+the LT3080 datasheet page 21 for more detail on use as a two terminal current
+source.</p>
+<figure class="align-center" id="id5">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/alm-power-profile-fig-5.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/alm-power-profile-fig-5.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/alm-power-profile-fig-5.png" width="600" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 5 </span><span class="caption-text">Figure 5, Variant that uses LT3080.</span><a class="headerlink" href="#id5" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+<section id="dut-powered-by-battery-voltage-greater-than-5-v">
+<h3>DUT Powered by Battery Voltage Greater than 5 V<a class="headerlink" href="#dut-powered-by-battery-voltage-greater-than-5-v" title="Link to this heading"></a></h3>
+<p>Suppose the use case is to profile a DUT powered from a 9V battery, B<sub>1</sub>,
+as in figure 6. With SMU channel A set in the SVMI Split I/O mode and with the
+voltage source set to 0 V and with output pin CHA connected to the negative
+battery terminal it can measure the DUT current. The 9 V battery voltage is
+too high to measure directly with the AIN input. Voltage divider R<sub>1</sub>
+and R<sub>2</sub> in parallel with the internal 1 MOhm resistor forms a ratio of
+2.47. This allows the AIN input to measure voltages up to 2.47 X 5.0 or
+12.35 V which is more than enough to measure the 9 V battery (other resistor
+divider values can of course be used, more on using voltage divider can be
+found here: <a class="reference internal" href="alm-measure-outside-0-5-range.html#alm-measure-outside-0-5-range"><span class="std std-ref">Measuring Voltages Outside 0-5 V Range</span></a>).</p>
+<figure class="align-center" id="id6">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/alm-power-profile-fig-6.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/alm-power-profile-fig-6.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/alm-power-profile-fig-6.png" width="600" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 6 </span><span class="caption-text">Figure 6, Measuring DUT with supply voltage greater than +5 V.</span><a class="headerlink" href="#id6" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>It is also of course possible to combine the offset current technique here as
+well.</p>
+</section>
+</section>
+<section id="power-profiler-software-tool">
+<h2>Power Profiler Software Tool<a class="headerlink" href="#power-profiler-software-tool" title="Link to this heading"></a></h2>
+<p>The ALICE desktop software can of course be used to capture the test voltage
+and current measurements vs time but it is not ideally suited to this
+application. The Data Logger tool is closer but lacks the ability to display
+the current or power over time. The Power Profiler tool adds this
+functionality. Python source code can be found
+<a class="icon link reference external" href="https://raw.githubusercontent.com/analogdevicesinc/alice/Version-1.3/power-profiler-1.3.pyw" target="_blank">here</a>.</p>
+<p>Once the program is running the main time trace display and controls, as shown
+in figure 7, should appear. Be sure that the ALM1000 is plugged into the USB
+port before starting the program. When first started the chart will be blank.</p>
+<figure class="align-center" id="id7">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/alm-power-profile-fig-7.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/alm-power-profile-fig-7.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/alm-power-profile-fig-7.png" width="700" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 7 </span><span class="caption-text">Figure 7, Power Profiler software tool.</span><a class="headerlink" href="#id7" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>The majority of the area is taken up by the graph or chart. Below that are
+various control buttons and entry slots. Starting on the left there are
+controls for each SMU channel. One trace can be displayed for each channel,
+either voltage, current, power or off. Traces can be drawn on a single grid or
+on 2 separate grids. On the chart, there are 10 equally spaced vertical grids
+drawn on the single grid or 5 equally spaced vertical grids drawn on each of
+the two grids. Next to that are controls to set the vertical range (scale per
+division) and position (offset) for each channel.</p>
+<p>The Run button starts the recording and the Stop button will pause the
+recording. The Reset button clears the chart. The Exit button closes the
+program. With the Save Screen button you can save the chart area to an
+encapsulated postscript file.</p>
+<p>Normally the program records data continuously until the Stop button is
+clicked. Clicking on the Run For box and entering a number of samples will halt
+the recording after running for the set number of samples. Entering a number of
+seconds greater than zero for the Delay will take data samples at that rate,
+otherwise the sample rate (from 50 sps to 300 sps) can be selected with the
+spinbox. The actual average number of samples per second (Sps) is displayed.
+Finally there is a control to turn on/off logging to a file.</p>
+<section id="smu-channel-controls">
+<h3>SMU Channel Controls<a class="headerlink" href="#smu-channel-controls" title="Link to this heading"></a></h3>
+<p>The SMU channel controls are shown in figure 8. These are essentially the same
+as in the Meter-Source and Data Logger tools.</p>
+<figure class="align-center" id="id8">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/alm-power-profile-fig-8.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/alm-power-profile-fig-8.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/documentation/university-labs/test-and-measurements-tutorials/docs/university/courses/tutorials/images/alm-power-profile-fig-8.png" width="600" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 8 </span><span class="caption-text">Figure 8, SMU Channel DC controls.</span><a class="headerlink" href="#id8" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>There are buttons to Save and Load the channel configuration.</p>
+</section>
+</section>
+<section id="for-further-reading">
+<h2>For Further Reading<a class="headerlink" href="#for-further-reading" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="icon link reference external" href="https://en.wikipedia.org/wiki/Battery_management_system" target="_blank">Battery Life Analysis</a></p></li>
+<li><p><a class="icon link reference external" href="https://en.wikipedia.org/wiki/Power_analysis" target="_blank">Power Profiling Techniques</a></p></li>
+</ul>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="alm-bipolar-step-up-dc-dc.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">Bipolar Power Supplies for Active Learning Labs</a>
+    <a href="m1k-accessory-boards.html" title="Next document (Alt+Shift+RightArrow)" class="next">ADALM1000 (M1K) Accessory PC Boards</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2026, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>
