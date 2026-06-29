@@ -6,6 +6,7 @@ Engineering University Program
 .. toctree::
    :maxdepth: 4
 
+   courses/index
 
 Mission
 -------------------------------------------------------------------------------
@@ -117,11 +118,13 @@ Tutorials, Glossary, Terminology, eBooks and Other Helpful Resources
 
 
 * :dokuwiki:`Test And Measurement Tutorials <university/courses/tutorials/test-measurment-tutorials>`
+* :ref:`Mini Tutorials <university-tutorials>`
+* :ref:`test-measurement-tutorials`
 * :dokuwiki:`Mini Tutorials <university/courses/tutorials:index>`
 
-  * //Amplifiers, Converters, References, Regulators, and many other topics//
+  * Amplifiers, Converters, References, Regulators, and many other topics
 
-* :dokuwiki:`Analog Devices Electronics Handbooks <university/courses/tutorials/index#ebooks_in_pdf>`
+* :ref:`Analog Devices Electronics Handbooks <electronics-ebooks>`
 * :dokuwiki:`Electronics Glossary <university/courses/electronics/text/glossary>`
 * :dokuwiki:`Oscilloscope Terminology <university/courses/alm1k/intro/oscilloscope-terminology>`
 * :adi:`Glossary of Electrical Engineering Terms <en/design-center/glossary.html>`
@@ -182,6 +185,7 @@ Interviews with the following people(in order of appearance):
    :maxdepth: 4
 
    active_learning/index
+   courses/tutorials/index
 
 * Jeffrey Pawlick, `Electrical Engineering student, Rensselaer Polytechnic Institute <http://www.ecse.rpi.edu/>`_,
 * Sarah Evans, `Applied Physics student, Rensselaer Polytechnic Institute <http://www.rpi.edu/dept/phys/>`_,
