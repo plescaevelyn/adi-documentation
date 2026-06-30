@@ -79,9 +79,9 @@ our take on how the core concepts in EE might be grouped. Often the same Lab may
 be listed in more than one course as a review or based on the extent of material
 to be covered in a given course.
 
-* :dokuwiki:`Introduction to Electrical Engineering - Teaching Material <university/courses/intro_ee>`
+* :ref:`Introduction to Electrical Engineering - Teaching Material <university-courses-intro_ee>`
 
-  * :dokuwiki:`Introduction to Electrical Engineering - Lab Exercises <university/labs/intro_ee>`
+  * :ref:`Introduction to Electrical Engineering - Lab Exercises <university-labs-intro_ee>`
 
 * :dokuwiki:`Circuits I & II - Teaching Material <university/courses/circuits>`
 
@@ -117,12 +117,12 @@ Tutorials, Glossary, Terminology, eBooks and Other Helpful Resources
 
 
 * :dokuwiki:`Test And Measurement Tutorials <university/courses/tutorials/test-measurment-tutorials>`
-* :dokuwiki:`Mini Tutorials <university/courses/tutorials:index>`
+* :ref:`Mini Tutorials <university-resources-tutorials-index>`
 
-  * //Amplifiers, Converters, References, Regulators, and many other topics//
+  * *Amplifiers, Converters, References, Regulators, and many other topics*
 
-* :dokuwiki:`Analog Devices Electronics Handbooks <university/courses/tutorials/index#ebooks_in_pdf>`
-* :dokuwiki:`Electronics Glossary <university/courses/electronics/text/glossary>`
+* :ref:`Analog Devices Electronics Handbooks <university-resources-tutorials-ebooks>`
+* :ref:`Electronics Glossary <university-resources-glossary>`
 * :dokuwiki:`Oscilloscope Terminology <university/courses/alm1k/intro/oscilloscope-terminology>`
 * :adi:`Glossary of Electrical Engineering Terms <en/design-center/glossary.html>`
 * :adi:`Software Defined Radio for Engineers <en/education/education-library/software-defined-radio-for-engineers.html>`
@@ -182,6 +182,11 @@ Interviews with the following people(in order of appearance):
    :maxdepth: 4
 
    active_learning/index
+   courses/intro_ee
+   courses/electronics/index
+   resources/tutorials/index
+   resources/glossary
+   labs/intro_ee
 
 * Jeffrey Pawlick, `Electrical Engineering student, Rensselaer Polytechnic Institute <http://www.ecse.rpi.edu/>`_,
 * Sarah Evans, `Applied Physics student, Rensselaer Polytechnic Institute <http://www.rpi.edu/dept/phys/>`_,
