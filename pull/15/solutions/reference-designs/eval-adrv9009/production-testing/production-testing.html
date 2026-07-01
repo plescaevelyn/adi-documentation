@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="The production testing framework for ADRV9009-ZU11EG comprises Bash scripts operating on both a Raspberry Pi host and the device under test (DUT). Testing requires a Raspberry Pi 4 board (host) connected via Ethernet cable to the DUT with attached HDMI monitor and USB keyboard for GUI-based test selection and execution." name="description" />
+
+    <title>Production Testing &#8212; System Level Documentation  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/app.min.css?v=a8f9a170" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=5f9cb17c" />
+    <script async="async" src="../../../../_static/app.umd.js?v=26d0298f"></script>
+    <link rel="icon" href="../../../../_static/icon.svg"/>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="prev" title="Basic IQ Datafiles" href="../basic-iq-datafiles.html" />
+   
+  
+  
+  
+  <meta name="repository" content="documentation">
+  <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head>
+  
+    <body>
+  
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
+        <div class="vertical-divider"></div>
+        
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Docs</label>
+        
+        <a id="logo" href="../../../../index.html">
+          <div>System Level</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../../../index.html" class="current">System Level</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div class="header localtoc-header">
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">Production Testing</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#test-duration">Test Duration</a></li>
+<li><a class="reference internal" href="#test-requirements">Test Requirements</a><ul>
+<li><a class="reference internal" href="#required-hardware">Required Hardware</a><ul>
+<li><a class="reference internal" href="#computing-and-display">Computing and Display</a></li>
+<li><a class="reference internal" href="#connectivity-and-cables">Connectivity and Cables</a></li>
+<li><a class="reference internal" href="#storage">Storage</a></li>
+<li><a class="reference internal" href="#test-equipment-and-loopbacks">Test Equipment and Loopbacks</a></li>
+<li><a class="reference internal" href="#power">Power</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#required-software">Required Software</a><ul>
+<li><a class="reference internal" href="#adrv9009-zu11eg-sd-card-image">ADRV9009-ZU11EG SD Card Image</a></li>
+<li><a class="reference internal" href="#raspberry-pi-sd-card-image">Raspberry Pi SD Card Image</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#required-setup">Required Setup</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#test-process">Test Process</a><ul>
+<li><a class="reference internal" href="#initialization">Initialization</a></li>
+<li><a class="reference internal" href="#running-the-test-software">Running the Test Software</a><ul>
+<li><a class="reference internal" href="#test-1">Test 1</a></li>
+<li><a class="reference internal" href="#test-2">Test 2</a></li>
+<li><a class="reference internal" href="#test-4-5-and-6">Test 4, 5, and 6</a></li>
+<li><a class="reference internal" href="#heatsink-installation">Heatsink Installation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pass-criteria">Pass Criteria</a></li>
+<li><a class="reference internal" href="#fail-criteria">Fail Criteria</a></li>
+<li><a class="reference internal" href="#shutdown-procedure">Shutdown Procedure</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../../../../index.html">
+      System Level Documentation
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../../../index.html" class="current">System Level</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <p class="caption" role="heading">
+  <span class="caption-text">Apps &amp; Solutions</span>
+</p>
+
+<ul class="current">
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="../../index.html">Reference Designs</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">ADRV9009 &amp; ADRV9008</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../basic-iq-datafiles.html">Basic IQ Datafiles</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Production Testing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+  <nav class="breadcrumb"><ol><li><a href="../../index.html">Reference Designs</a></li><li><a href="../index.html">ADRV9009 &amp; ADRV9008</a></li></ol></nav>
+</div>
+          <div class="body" role="main">
+            
+  <section id="production-testing">
+<h1>Production Testing<a class="headerlink" href="#production-testing" title="Link to this heading"></a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The production testing framework for ADRV9009-ZU11EG comprises Bash scripts
+operating on both a Raspberry Pi host and the device under test (DUT). Testing
+requires a Raspberry Pi 4 board (host) connected via Ethernet cable to the DUT
+with attached HDMI monitor and USB keyboard for GUI-based test selection and
+execution.</p>
+</section>
+<section id="test-duration">
+<h2>Test Duration<a class="headerlink" href="#test-duration" title="Link to this heading"></a></h2>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 70.0%" />
+<col style="width: 30.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Step Description</p></th>
+<th class="head"><p>Estimated Time (minutes)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Test bench setup</p></td>
+<td><p>5 min</p></td>
+</tr>
+<tr class="row-odd"><td><p>Software test</p></td>
+<td><p>10 min</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Total time</strong></p></td>
+<td><p><strong>15 min</strong></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="test-requirements">
+<h2>Test Requirements<a class="headerlink" href="#test-requirements" title="Link to this heading"></a></h2>
+<section id="required-hardware">
+<h3>Required Hardware<a class="headerlink" href="#required-hardware" title="Link to this heading"></a></h3>
+<section id="computing-and-display">
+<h4>Computing and Display<a class="headerlink" href="#computing-and-display" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>1x Raspberry Pi 4 (USB 3.0 connection mandatory) + USB-C Power Supply</p></li>
+<li><p>1x HDMI monitor</p></li>
+<li><p>1x USB keyboard (connected to USB 2.0 black port)</p></li>
+</ul>
+</section>
+<section id="connectivity-and-cables">
+<h4>Connectivity and Cables<a class="headerlink" href="#connectivity-and-cables" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>1x CAT5 Ethernet cable (DUT M2 port connection)</p></li>
+<li><p>1x USB A-to-USB Type-C cable (Raspberry Pi USB 3.0 to DUT)</p></li>
+<li><p>1x USB A-to-Micro USB cable (Raspberry Pi USB 2.0 to DUT P8 UART)</p></li>
+<li><p>1x I2C programming cable (Raspberry Pi pins 3, 2, 6 to ADRV2CRR-FMC P19)</p></li>
+<li><p>1x DisplayPort-to-HDMI cable (DUT P2 video output)</p></li>
+<li><p>1x USB-C OTG cable (USB host mode testing)</p></li>
+</ul>
+<figure class="align-default" id="id1">
+<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/talise-doc-update/docs/solutions/reference-designs/eval-adrv9009/production-testing/images/i2c-rpi-adrv9009-conn.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/talise-doc-update/docs/solutions/reference-designs/eval-adrv9009/production-testing/images/i2c-rpi-adrv9009-conn.png" />
+<figcaption>
+<p><span class="caption-number">Figure 1 </span><span class="caption-text">I2C connection between Raspberry Pi and ADRV2CRR-FMC</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="storage">
+<h4>Storage<a class="headerlink" href="#storage" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>1x Raspberry Pi microSD card (minimum 8GB Class 10)</p></li>
+<li><p>1x DUT SD card (minimum 8GB Class 10, inserted in P15)</p></li>
+<li><p>1x USB 3.0 FAT-formatted memory stick</p></li>
+</ul>
+</section>
+<section id="test-equipment-and-loopbacks">
+<h4>Test Equipment and Loopbacks<a class="headerlink" href="#test-equipment-and-loopbacks" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>1x ADRV2CRR-FMC carrier board</p></li>
+<li><p>1x ADRV9009-ZU11EG RF-SOM</p></li>
+<li><p>1x QSFP loopback (P3, Molex 747630020)</p></li>
+<li><p>1x SFP loopback (P4, Amphenol SF-SFPPLOOPBK-003.5)</p></li>
+<li><p>1x FMC loopback (P1 on ADRV2CRR-FMC, iWave VITA)</p></li>
+<li><p>1x PCIe loopback (P17, Whizz Systems, powered via USB micro)</p></li>
+<li><p>1x Ethernet loopback (M1 SGMII port)</p></li>
+<li><p>1x Audio loopback (P6 and P5 connectors)</p></li>
+<li><p>4x U.FL loopback cables (RF testing: U.FL-2LPHF6-068N1T-A-100)</p></li>
+</ul>
+<figure class="align-default" id="id2">
+<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/talise-doc-update/docs/solutions/reference-designs/eval-adrv9009/production-testing/images/ufl-loopback.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/talise-doc-update/docs/solutions/reference-designs/eval-adrv9009/production-testing/images/ufl-loopback.png" />
+<figcaption>
+<p><span class="caption-number">Figure 2 </span><span class="caption-text">U.FL loopback cable connections</span><a class="headerlink" href="#id2" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="id3">
+<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/talise-doc-update/docs/solutions/reference-designs/eval-adrv9009/production-testing/images/fmc_loopback_connection_closeup.jpg" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/talise-doc-update/docs/solutions/reference-designs/eval-adrv9009/production-testing/images/fmc_loopback_connection_closeup.jpg" />
+<figcaption>
+<p><span class="caption-number">Figure 3 </span><span class="caption-text">FMC loopback connection closeup</span><a class="headerlink" href="#id3" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="power">
+<h4>Power<a class="headerlink" href="#power" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>1x USB-C power supply (Raspberry Pi)</p></li>
+<li><p>1x 12V power supply (DUT P11)</p></li>
+</ul>
+</section>
+</section>
+<section id="required-software">
+<h3>Required Software<a class="headerlink" href="#required-software" title="Link to this heading"></a></h3>
+<section id="adrv9009-zu11eg-sd-card-image">
+<h4>ADRV9009-ZU11EG SD Card Image<a class="headerlink" href="#adrv9009-zu11eg-sd-card-image" title="Link to this heading"></a></h4>
+<p>Latest release (15 December 2022):</p>
+<ul class="simple">
+<li><p>File: <code class="docutils literal notranslate"><span class="pre">talise_prod_15dec_2022.zip</span></code></p></li>
+<li><p>Checksum: <code class="docutils literal notranslate"><span class="pre">b056120a53e13b197b5b366742d9f5c7</span></code></p></li>
+<li><p>Source: Zynq official release</p></li>
+</ul>
+</section>
+<section id="raspberry-pi-sd-card-image">
+<h4>Raspberry Pi SD Card Image<a class="headerlink" href="#raspberry-pi-sd-card-image" title="Link to this heading"></a></h4>
+<p>Latest release (15 December 2022):</p>
+<ul class="simple">
+<li><p>File: <code class="docutils literal notranslate"><span class="pre">rpi_talise+prod_15dec.zip</span></code></p></li>
+<li><p>Checksum: <code class="docutils literal notranslate"><span class="pre">0d8759784c1cebbcd908fe8a01083272</span></code></p></li>
+<li><p>Based on Raspbian with desktop; includes testing scripts</p></li>
+</ul>
+</section>
+</section>
+<section id="required-setup">
+<h3>Required Setup<a class="headerlink" href="#required-setup" title="Link to this heading"></a></h3>
+<figure class="align-default" id="id4">
+<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/talise-doc-update/docs/solutions/reference-designs/eval-adrv9009/production-testing/images/zu11eg-prod-test-setup.jpg" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/talise-doc-update/docs/solutions/reference-designs/eval-adrv9009/production-testing/images/zu11eg-prod-test-setup.jpg" />
+<figcaption>
+<p><span class="caption-number">Figure 4 </span><span class="caption-text">Complete test setup</span><a class="headerlink" href="#id4" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 10.0%" />
+<col style="width: 90.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>No.</p></th>
+<th class="head"><p>Steps</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>Connect HDMI cable to Raspberry Pi</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>Attach USB keyboard to Raspberry Pi</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>Insert Raspberry Pi microSD card</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>Supply power to Raspberry Pi</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>Connect all loopbacks to DUT:</p>
+<ul class="simple">
+<li><p>QSFP loopback (P3)</p></li>
+<li><p>SFP loopback (P4)</p></li>
+<li><p>FMC loopback (P1 on ADRV2CRR-FMC)</p></li>
+<li><p>PCIe loopback (P17)</p></li>
+<li><p>Ethernet loopback (M1)</p></li>
+<li><p>Audio loopback (P6 and P5)</p></li>
+<li><p>U.FL loopback cables</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>Connect Ethernet cable between Raspberry Pi and DUT (M2 port)</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>Connect USB cables:</p>
+<ul class="simple">
+<li><p>USB A-to-C cable (Raspberry Pi USB 3.0 to DUT)</p></li>
+<li><p>USB A-to-Micro cable (Raspberry Pi USB 2.0 to DUT P8)</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>Connect I2C pins (Raspberry Pi to P19)</p></td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p>Insert SD card into DUT (P15)</p></td>
+</tr>
+<tr class="row-odd"><td><p>10</p></td>
+<td><p>Connect DisplayPort cable to DUT (P2)</p></td>
+</tr>
+<tr class="row-even"><td><p>11</p></td>
+<td><p>Power on DUT using 12V power supply (P11)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="test-process">
+<h2>Test Process<a class="headerlink" href="#test-process" title="Link to this heading"></a></h2>
+<section id="initialization">
+<h3>Initialization<a class="headerlink" href="#initialization" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>Power on both DUT and Raspberry Pi</p></li>
+<li><p>Verify boot screen appears on monitor</p></li>
+<li><p>Label RF shielding top cover with serial number and MAC address</p></li>
+</ol>
+<figure class="align-default" id="id5">
+<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/talise-doc-update/docs/solutions/reference-designs/eval-adrv9009/production-testing/images/adrv9009-rf-shielding.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/talise-doc-update/docs/solutions/reference-designs/eval-adrv9009/production-testing/images/adrv9009-rf-shielding.png" />
+<figcaption>
+<p><span class="caption-number">Figure 5 </span><span class="caption-text">RF shielding label</span><a class="headerlink" href="#id5" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Do not swap RF shielding covers between boards after labeling.</p>
+</div>
+</section>
+<section id="running-the-test-software">
+<h3>Running the Test Software<a class="headerlink" href="#running-the-test-software" title="Link to this heading"></a></h3>
+<p>After the Raspberry Pi boots up, the test menu will appear on the monitor.</p>
+<figure class="align-default" id="id6">
+<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/talise-doc-update/docs/solutions/reference-designs/eval-adrv9009/production-testing/images/boot-pi-screen.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/talise-doc-update/docs/solutions/reference-designs/eval-adrv9009/production-testing/images/boot-pi-screen.png" />
+<figcaption>
+<p><span class="caption-number">Figure 6 </span><span class="caption-text">Raspberry Pi boot screen</span><a class="headerlink" href="#id6" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>Execute the following tests in order:</p>
+<ol class="arabic simple">
+<li><p>Test 1</p></li>
+<li><p>Test 2</p></li>
+<li><p>Test 4</p></li>
+<li><p>Test 5</p></li>
+<li><p>Test 6</p></li>
+</ol>
+<figure class="align-default" id="id7">
+<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/talise-doc-update/docs/solutions/reference-designs/eval-adrv9009/production-testing/images/adrv9009-seq-pll.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/talise-doc-update/docs/solutions/reference-designs/eval-adrv9009/production-testing/images/adrv9009-seq-pll.png" />
+<figcaption>
+<p><span class="caption-number">Figure 7 </span><span class="caption-text">Test sequence execution</span><a class="headerlink" href="#id7" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Testing begins by checking Ethernet connectivity. If an error message
+appears, verify the following:</p>
+<ul class="simple">
+<li><p>Ethernet cable is properly connected</p></li>
+<li><p>DUT is powered on</p></li>
+<li><p>SD card is inserted correctly</p></li>
+<li><p>Boot mode switches (S13-S16) are configured for SD boot</p></li>
+</ul>
+</div>
+<figure class="align-default" id="id8">
+<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/talise-doc-update/docs/solutions/reference-designs/eval-adrv9009/production-testing/images/boot-pi-eth-conn.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/talise-doc-update/docs/solutions/reference-designs/eval-adrv9009/production-testing/images/boot-pi-eth-conn.png" />
+<figcaption>
+<p><span class="caption-number">Figure 8 </span><span class="caption-text">Ethernet connection error message</span><a class="headerlink" href="#id8" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<section id="test-1">
+<h4>Test 1<a class="headerlink" href="#test-1" title="Link to this heading"></a></h4>
+<p>Wait 30 seconds after PS_DONE LED illuminates before proceeding.</p>
+<figure class="align-default" id="id9">
+<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/talise-doc-update/docs/solutions/reference-designs/eval-adrv9009/production-testing/images/talise_t1_led_on.jpg" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/talise-doc-update/docs/solutions/reference-designs/eval-adrv9009/production-testing/images/talise_t1_led_on.jpg" />
+<figcaption>
+<p><span class="caption-number">Figure 9 </span><span class="caption-text">PS_DONE LED illuminated</span><a class="headerlink" href="#id9" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="test-2">
+<h4>Test 2<a class="headerlink" href="#test-2" title="Link to this heading"></a></h4>
+<p>Power cycle is required after PS_DONE LED turns off.</p>
+<figure class="align-default" id="id10">
+<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/talise-doc-update/docs/solutions/reference-designs/eval-adrv9009/production-testing/images/talise_t1_led_off.jpg" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/talise-doc-update/docs/solutions/reference-designs/eval-adrv9009/production-testing/images/talise_t1_led_off.jpg" />
+<figcaption>
+<p><span class="caption-number">Figure 10 </span><span class="caption-text">PS_DONE LED off</span><a class="headerlink" href="#id10" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="test-4-5-and-6">
+<h4>Test 4, 5, and 6<a class="headerlink" href="#test-4-5-and-6" title="Link to this heading"></a></h4>
+<p>Follow on-screen instructions.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Test 5 requires entering the last four digits of the MAC address from the
+RF shielding label.</p>
+</div>
+</section>
+<section id="heatsink-installation">
+<h4>Heatsink Installation<a class="headerlink" href="#heatsink-installation" title="Link to this heading"></a></h4>
+<p>After completing the initial tests, install the heatsink and rerun Test 6.</p>
+</section>
+</section>
+<section id="pass-criteria">
+<h3>Pass Criteria<a class="headerlink" href="#pass-criteria" title="Link to this heading"></a></h3>
+<p>A green “PASSED” message displayed indicates that the DUT passed all assigned
+tests.</p>
+<figure class="align-default" id="id11">
+<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/talise-doc-update/docs/solutions/reference-designs/eval-adrv9009/production-testing/images/test_passed_screen.jpg" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/talise-doc-update/docs/solutions/reference-designs/eval-adrv9009/production-testing/images/test_passed_screen.jpg" />
+<figcaption>
+<p><span class="caption-number">Figure 11 </span><span class="caption-text">Test passed screen</span><a class="headerlink" href="#id11" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="fail-criteria">
+<h3>Fail Criteria<a class="headerlink" href="#fail-criteria" title="Link to this heading"></a></h3>
+<p>A “FAIL” message will be displayed if any test fails. The system will prompt
+whether to repeat the test immediately.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>You may repeat failed tests indefinitely</p></li>
+<li><p>You can bypass a failed test (not recommended) by responding “NO” to
+“Do you want to close the test?” question</p></li>
+</ul>
+</div>
+<figure class="align-default" id="id12">
+<img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/talise-doc-update/docs/solutions/reference-designs/eval-adrv9009/production-testing/images/test_failed_screen.jpg" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/talise-doc-update/docs/solutions/reference-designs/eval-adrv9009/production-testing/images/test_failed_screen.jpg" />
+<figcaption>
+<p><span class="caption-number">Figure 12 </span><span class="caption-text">Test failed screen</span><a class="headerlink" href="#id12" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="shutdown-procedure">
+<h3>Shutdown Procedure<a class="headerlink" href="#shutdown-procedure" title="Link to this heading"></a></h3>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 10.0%" />
+<col style="width: 90.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>No.</p></th>
+<th class="head"><p>Steps</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>Select menu item 9 to power off ADRV</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>Wait until LEDs DS6 and DS7 turn off</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>Disconnect power from ADRV</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>Select menu item 8 to power off Raspberry Pi</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>Unplug power (prevents SD card corruption)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Always follow the proper shutdown procedure to prevent SD card corruption.</p>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="../basic-iq-datafiles.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">Basic IQ Datafiles</a>
+    <div></div>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2026, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>
