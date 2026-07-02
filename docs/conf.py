@@ -48,6 +48,7 @@ interref_repos = [
     'pyadi-iio',
     'pyadi-dt',
     'pyadi-jif',
+    'genalyzer/master',
     'kuiper',
     'scopy',
     'linux',
