@@ -23,7 +23,7 @@ Key Features
      Support available for security certification.
 
 - :adi:`MAX42500` voltage monitor with integrated windowing watchdog
-- :adi:`MAX66132` temperature sensor
+- :adi:`MAX6613` temperature sensor
 - :adi:`ADFS7124-4` sigma-delta AfDC (SC3 certified)
 - Complete FMEDA documentation
 - :adi:`MAX32690`  dual-core MCU (ARM Cortex-M4 with FPU + RISC-V co-processor)
