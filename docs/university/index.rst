@@ -183,6 +183,12 @@ Interviews with the following people(in order of appearance):
    :maxdepth: 4
 
    active_learning/index
+   courses/intro_ee
+   courses/electronics/index
+   resources/tutorials/index
+   resources/glossary
+   labs/intro_ee
+   tools/index
 
 * Jeffrey Pawlick, `Electrical Engineering student, Rensselaer Polytechnic Institute <http://www.ecse.rpi.edu/>`_,
 * Sarah Evans, `Applied Physics student, Rensselaer Polytechnic Institute <http://www.rpi.edu/dept/phys/>`_,
