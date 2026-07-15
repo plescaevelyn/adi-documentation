@@ -8,13 +8,13 @@
 
     <title>Temperature Controller Application &#8212; System Level Documentation  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/app.min.css?v=a8f9a170" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/app.min.css?v=d3f78147" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=5f9cb17c" />
     <script async="async" src="../../../../_static/app.umd.js?v=26d0298f"></script>
     <link rel="icon" href="../../../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
-    <link rel="prev" title="AD-SWIOT1L-SL" href="../index.html" />
+    <link rel="prev" title="Firmware User Guide" href="../firmware-guide/index.html" />
    
   
   
@@ -146,6 +146,7 @@ Content on this topic
 <ul class="current">
 <li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="../../index.html">Reference Designs</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
 <li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">AD-SWIOT1L-SL</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../firmware-guide/index.html">Firmware User Guide</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Temperature Controller Application</a></li>
 </ul>
 </li>
@@ -176,14 +177,14 @@ configurable thresholds and hysteresis.</p>
 <section id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p>Python 3.8 or newer (3.8–3.11 tested with pyadi-iio). Ensure that a
-compatible version is installed on your system before continuing. Older
-versions (&lt;3.8) may not work reliably with pyadi-iio.</p></li>
+<li><p>Python 3.11 or newer (3.10–3.14 tested with pyadi-iio). Ensure that a
+compatible version is installed on your system before continuing.</p></li>
 <li><p>Git command-line tools installed.</p></li>
-<li><p>Raspberry Pi with <a class="icon adi reference external" href="https://www.analog.com/Kuiper 2" target="_blank">Kuiper 2</a> image installed. Follow the instructions in
-the <a class="icon link reference external" href="https://analogdevicesinc.github.io/kuiper/index.html" target="_blank" title="(in Kuiper latest)"><span>ADI Kuiper Linux</span></a> documentation to prepare the Raspberry Pi.</p></li>
+<li><p>Raspberry Pi with <a class="icon adi reference external" href="https://www.analog.com/kuiper" target="_blank">Kuiper 2</a> image installed. Follow the
+instructions in the <a class="icon link reference external" href="https://analogdevicesinc.github.io/kuiper/index.html" target="_blank" title="(in Kuiper latest)"><span>ADI Kuiper Linux</span></a> documentation to prepare the
+Raspberry Pi.</p></li>
 <li><p>Ensure that the first two <strong>Software Setup</strong> steps described in
-<a class="icon link reference external" href="https://analogdevicesinc.github.io/documentation/solutions/reference-designs/ad-rpi-t1lpse-sl/index.html#software-setup" target="_blank" title="(in System Level Documentation)"><span>Software Setup</span></a> (<em>Downloading and Flashing the Micro-SD Card</em> and
+<a class="icon link reference external" href="https://analogdevicesinc.github.io/documentation/solutions/reference-designs/ad-rpi-t1lpse-sl/index.html#software-setup" target="_blank" title="(in System Level Documentation)"><span>Software Setup</span></a> (<em>Building and Flashing the Micro-SD Card</em> and
 <em>Configuring the Micro-SD Card</em>) are performed <strong>with the Kuiper 2 image</strong>,
 not with previous Kuiper releases. These steps must be redone after flashing
 Kuiper 2 to ensure proper compatibility before continuing.</p></li>
@@ -202,12 +203,12 @@ Kuiper 2 to ensure proper compatibility before continuing.</p></li>
 <ul class="simple">
 <li><p>1x <a class="icon adi reference external" href="https://www.analog.com/AD-RPI-T1LPSE-SL" target="_blank">AD-RPI-T1LPSE-SL</a> Board</p></li>
 <li><p>2x <a class="icon adi reference external" href="https://www.analog.com/AD-SWIOT1L-SL" target="_blank">AD-SWIOT1L-SL</a> Boards</p></li>
-<li><p>1x Raspberry Pi 4 Model B running Kuiper 2</p></li>
+<li><p>1x Raspberry Pi 4 Model B or newer running Kuiper 2</p></li>
 <li><p>1x <a class="icon adi reference external" href="https://www.analog.com/TMP01" target="_blank">TMP01</a> Temperature Sensor</p></li>
 <li><p>1x MC002103 DC Axial Fan</p></li>
 <li><p>1x Raspberry Pi USB Type-C Power Supply (5V, 3A)</p></li>
-<li><p>1x Power Resistor (6.2Ω, 10W was used by us)</p></li>
-<li><p>1x Power Supply for the Power Resistor (5V, 1A was used by us)</p></li>
+<li><p>1x 6.2Ω, 10W Power Resistor</p></li>
+<li><p>1x 5V, 1A Power Supply for the Power Resistor (a 5V USB wall adapter works well)</p></li>
 </ul>
 <p><strong>Setup Procedure</strong></p>
 <ol class="arabic">
@@ -238,14 +239,16 @@ TMP01 analog output. Connect:</p>
 <p class="admonition-title">Note</p>
 <p>CH3 provides a regulated 5 V supply to power the TMP01, while CH4 is
 configured as a high-impedance voltage input with a 0–5 V range to measure
-the TMP01 VOUT signal. Both channels must share the same ground reference
+the TMP01 Vout signal. Both channels must share the same ground reference
 with the sensor.</p>
 </div>
 </li>
-<li><p>Power on the power resistor. Attach the power resistor to the TMP01 sensor
-to simulate temperature changes via rubber bands or similar means to dissipate heat.
-The power resistor acts as a heat source simulating a GPU under load (similar
-to running a graphics-intensive application like <a class="icon link reference external" href="https://supertuxkart.net/Main_Page.html" target="_blank">SuperTuxKart</a>).</p></li>
+<li><p>Attach the power resistor to the <a class="icon adi reference external" href="https://www.analog.com/TMP01" target="_blank">TMP01</a> sensor, making sure they are
+in good thermal contact. You can use cyanoacrylate glue (permanent), silicone
+adhesive, or thermal transfer compound and a rubber band to hold the two
+together. The power resistor acts as a heat source simulating a GPU under
+load (similar to running a graphics-intensive application like
+<a class="icon link reference external" href="https://supertuxkart.net/Main_Page.html" target="_blank">SuperTuxKart</a>).</p></li>
 <li><p>Connect the fan actuator to the second <a class="icon adi reference external" href="https://www.analog.com/AD-SWIOT1L-SL" target="_blank">AD-SWIOT1L-SL</a> board</p>
 <p>The second SWIOT1L-SL board drives the fan according to the control loop.</p>
 <ul class="simple">
@@ -264,6 +267,8 @@ to running a graphics-intensive application like <a class="icon link reference e
 </ul>
 </li>
 <li><p>Power the Raspberry Pi with a 5V, 3A USB Type-C power supply.</p></li>
+<li><p>Apply 5V across the 6.2Ω, 10W Power Resistor. The resistor will dissipate
+approximately 4W and may get quite warm, so use caution.</p></li>
 </ol>
 </section>
 <section id="software-setup">
@@ -282,6 +287,12 @@ to running a graphics-intensive application like <a class="icon link reference e
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>pyadi-iio
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~/pyadi-iio$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>release/ad-swiot1l-sl
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div></li>
@@ -317,9 +328,6 @@ to running a graphics-intensive application like <a class="icon link reference e
 <h3>Firmware Flashing<a class="headerlink" href="#firmware-flashing" title="Link to this heading"></a></h3>
 <p>Each <a class="icon adi reference external" href="https://www.analog.com/AD-SWIOT1L-SL" target="_blank">AD-SWIOT1L-SL</a> must be updated with the provided firmware image.</p>
 <ol class="arabic">
-<li><p>Follow the official update instructions here:
-<a class="icon link reference external" href="https://analogdevicesinc.github.io/documentation/solutions/reference-designs/ad-swiot1l-sl/software-guide/index.html#updating-the-ad-swiot1l-sl-firmware" target="_blank">Updating the AD-SWIOT1L-SL firmware</a>.</p></li>
-<li><p>Repeat the process for <strong>both boards</strong>.</p></li>
 <li><p>Use the firmware images provided below. These images configure the boards with
 static IP addresses:</p>
 <ul class="simple">
@@ -334,25 +342,33 @@ static IP addresses:</p>
 mentioned above. You may use the other two images if you wish to change the
 IP addresses of the boards or to extend the application.</p>
 </li>
+<li><p>Follow the official update instructions here:
+<a class="reference internal" href="../firmware-guide/index.html#updating-the-ad-swiot1l-sl-firmware"><span class="std std-ref">Updating the AD-SWIOT1L-SL Firmware</span></a>.</p></li>
+<li><p>Repeat the process for <strong>both boards</strong>.</p></li>
 </ol>
 </section>
 <section id="applying-overlays">
 <h3>Applying Overlays<a class="headerlink" href="#applying-overlays" title="Link to this heading"></a></h3>
 <p>Overlays are required to enable the proper device tree configurations for the <a class="icon adi reference external" href="https://www.analog.com/AD-RPI-T1LPSE-SL" target="_blank">AD-RPI-T1LPSE-SL</a> HAT.</p>
-<p>Open a terminal and write this command:</p>
+<p>Open a terminal and edit <code class="docutils literal notranslate"><span class="pre">/boot/config.txt</span></code> using Nano (or your favorite text
+editor):</p>
 <blockquote>
 <div><div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>/boot/config.txt<span class="w"> </span>&lt;&lt;<span class="s1">&#39;EOF&#39;</span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>  dtoverlay=rpi-t1lpse-apl
-  dtoverlay=rpi-t1lpse-class12
-  EOF
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>nano<span class="w"> </span>/boot/config.txt
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div></div></blockquote>
+<p>Add the following lines to the very end of the file:</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[all]
+dtoverlay=rpi-t1lpse-apl
+dtoverlay=rpi-t1lpse-class12
+</pre></div>
+</div>
+</div></blockquote>
+<p>Save and exit the editor.</p>
 </section>
 <section id="network-setup">
 <h3>Network Setup<a class="headerlink" href="#network-setup" title="Link to this heading"></a></h3>
@@ -455,7 +471,14 @@ with the boards:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ping<span class="w"> </span><span class="m">192</span>.168.97.41
 </pre></div>
 </div>
-<div class="clear-left"></div></div></div></li>
+<div class="clear-left"></div></div></div><figure class="align-center" id="id3">
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/t1lpse-temp-controller/docs/solutions/reference-designs/ad-swiot1l-sl/sample_application/ad-rpi-t1lpse-sl-sample-application-ping.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/t1lpse-temp-controller/docs/solutions/reference-designs/ad-swiot1l-sl/sample_application/ad-rpi-t1lpse-sl-sample-application-ping.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/t1lpse-temp-controller/docs/solutions/reference-designs/ad-swiot1l-sl/sample_application/ad-rpi-t1lpse-sl-sample-application-ping.png" width="500" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 3 </span><span class="caption-text">Verifying connectivity to the AD-SWIOT1L-SL boards</span><a class="headerlink" href="#id3" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</li>
 </ol>
 </section>
 </section>
@@ -499,21 +522,15 @@ provides the <a class="icon adi reference external" href="https://www.analog.com
 </section>
 <section id="running-the-application">
 <h3>Running the Application<a class="headerlink" href="#running-the-application" title="Link to this heading"></a></h3>
-<p>Run the Temperature Controller example with example thresholds:</p>
+<p>Run the Temperature Controller example, specifying board IP addresses and
+thresholds:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>examples/rpi_t1lpse
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>examples/t1lpse
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~/examples/rpi_t1lpse$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>temperature_controller.py<span class="w"> </span>--temp-on<span class="w"> </span><span class="m">50</span><span class="w"> </span>--temp-off<span class="w"> </span><span class="m">40</span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div><p>Specify board IP addresses and thresholds:</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~$
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>analog@analog:~/examples/t1lpse$
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>temperature_controller.py<span class="w"> </span><span class="se">\</span>
@@ -523,18 +540,18 @@ provides the <a class="icon adi reference external" href="https://www.analog.com
 <span class="w">   </span>--temp-off<span class="w"> </span><span class="m">40</span>
 </pre></div>
 </div>
-<div class="clear-left"></div></div></div><figure class="align-center" id="id3">
+<div class="clear-left"></div></div></div><figure class="align-center" id="id4">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/t1lpse-temp-controller/docs/solutions/reference-designs/ad-swiot1l-sl/sample_application/ad-rpi-t1lpse-sl-sample-application-console-output.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/t1lpse-temp-controller/docs/solutions/reference-designs/ad-swiot1l-sl/sample_application/ad-rpi-t1lpse-sl-sample-application-console-output.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/t1lpse-temp-controller/docs/solutions/reference-designs/ad-swiot1l-sl/sample_application/ad-rpi-t1lpse-sl-sample-application-console-output.png" width="500" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 3 </span><span class="caption-text">Example Console Output of the Temperature Controller Application</span><a class="headerlink" href="#id3" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 4 </span><span class="caption-text">Example Console Output of the Temperature Controller Application</span><a class="headerlink" href="#id4" title="Link to this image"></a></p>
 </figcaption>
 </figure>
-<figure class="align-center" id="id4">
+<figure class="align-center" id="id5">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/t1lpse-temp-controller/docs/solutions/reference-designs/ad-swiot1l-sl/sample_application/ad-rpi-t1lpse-sl-sample-application-plot-output.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/t1lpse-temp-controller/docs/solutions/reference-designs/ad-swiot1l-sl/sample_application/ad-rpi-t1lpse-sl-sample-application-plot-output.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/t1lpse-temp-controller/docs/solutions/reference-designs/ad-swiot1l-sl/sample_application/ad-rpi-t1lpse-sl-sample-application-plot-output.png" width="500" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 4 </span><span class="caption-text">Example Plot Result of the Temperature Controller Application</span><a class="headerlink" href="#id4" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 5 </span><span class="caption-text">Example Plot Result of the Temperature Controller Application</span><a class="headerlink" href="#id5" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </section>
@@ -547,11 +564,11 @@ and applied either as defaults or via command-line arguments.</p>
 <p>Wide thresholds (for example, fan ON at 100 °C and OFF at 0 °C) may be used during
 initial bring-up or validation, while tighter thresholds can be selected for
 normal operation.</p>
-<figure class="align-center" id="id5">
+<figure class="align-center" id="id6">
 <a class="reference internal image-reference" href="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/t1lpse-temp-controller/docs/solutions/reference-designs/ad-swiot1l-sl/sample_application/ad-rpi-t1lpse-sl-sample-application-step-response.png"><img alt="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/t1lpse-temp-controller/docs/solutions/reference-designs/ad-swiot1l-sl/sample_application/ad-rpi-t1lpse-sl-sample-application-step-response.png" src="https://media.githubusercontent.com/media/plescaevelyn/adi-documentation/t1lpse-temp-controller/docs/solutions/reference-designs/ad-swiot1l-sl/sample_application/ad-rpi-t1lpse-sl-sample-application-step-response.png" width="500" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 5 </span><span class="caption-text">Temperature response and fan state during system characterization</span><a class="headerlink" href="#id5" title="Link to this image"></a></p>
+<p><span class="caption-number">Figure 6 </span><span class="caption-text">Temperature response and fan state during system characterization</span><a class="headerlink" href="#id6" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </section>
@@ -574,7 +591,7 @@ industrial or lab equipment</p></li>
           </div>
               <div class="related">
                 &nbsp;
-    <a href="../index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">AD-SWIOT1L-SL</a>
+    <a href="../firmware-guide/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">Firmware User Guide</a>
     <div></div>
               </div>
           
