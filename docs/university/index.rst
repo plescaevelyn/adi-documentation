@@ -119,6 +119,8 @@ Tutorials, Glossary, Terminology, eBooks and Other Helpful Resources
 
 * :dokuwiki:`Test And Measurement Tutorials <university/courses/tutorials/test-measurment-tutorials>`
 * :ref:`Mini Tutorials <university-tutorials>`
+* :ref:`test-measurement-tutorials`
+* :dokuwiki:`Mini Tutorials <university/courses/tutorials:index>`
 
   * Amplifiers, Converters, References, Regulators, and many other topics
 
@@ -183,6 +185,7 @@ Interviews with the following people(in order of appearance):
    :maxdepth: 4
 
    active_learning/index
+   courses/tutorials/index
 
 * Jeffrey Pawlick, `Electrical Engineering student, Rensselaer Polytechnic Institute <http://www.ecse.rpi.edu/>`_,
 * Sarah Evans, `Applied Physics student, Rensselaer Polytechnic Institute <http://www.rpi.edu/dept/phys/>`_,
