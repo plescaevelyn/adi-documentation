@@ -7,7 +7,7 @@
      - User guide <.>
 
    hdl:
-     - HDL Project (cn0363) <projects/cn0363>
+     - HDL Project (cn0363) <projects/cn0363/index>
 
    linux:
      - Linux driver (ad7173) <drivers/iio-adc/ad7173>

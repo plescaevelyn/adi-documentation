@@ -7,7 +7,7 @@
      - User guide <.>
 
    hdl:
-     - HDL Project (pulsar_adc) <projects/pulsar_adc>
+     - HDL Project (pulsar_adc) <projects/pulsar_adc/index>
 
    no-OS:
      - no-OS driver (pulsar_adc) <drivers/adc/pulsar_adc>

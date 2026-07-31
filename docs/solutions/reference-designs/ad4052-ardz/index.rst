@@ -7,7 +7,7 @@
      - User guide <.>
 
    hdl:
-     - HDL Project (ad4052_ardz) <projects/ad4052_ardz>
+     - HDL Project (ad4052_ardz) <projects/ad4052_ardz/index>
 
    no-OS:
      - no-OS driver (ad405x) <drivers/adc/ad405x>

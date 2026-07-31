@@ -7,7 +7,7 @@
      - User guide <.>
 
    hdl:
-     - HDL Project (ad9434_fmc) <projects/ad9434_fmc>
+     - HDL Project (ad9434_fmc) <projects/ad9434_fmc/index>
 
    no-OS:
      - no-OS Driver (ad9434) <drivers/adc/ad9434>
