@@ -116,9 +116,8 @@ jobs:
       pages: write
       id-token: write
     if: >
-      github.ref == 'refs/heads/main' ||
-      github.event_name == 'pull_request' ||
-      github.ref_type == 'tag'
+      (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) ||
+      github.ref == 'refs/heads/main'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}${{ github.event_name == 'pull_request' && format('pull/{0}', github.event.number) || '' }}
