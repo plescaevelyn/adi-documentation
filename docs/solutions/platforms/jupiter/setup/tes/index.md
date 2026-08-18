@@ -40,7 +40,7 @@ and run **ADRV9002 Transceiver Evaluation Software setup** as administrator
 ```
 
 ## Using TES
-This section will give a high-level overview of some of the configuration pages in TES. For a more in depth guide on TES see {ref}`here <ad-jupiter-ebz profile-generation>`.
+This section will give a high-level overview of some of the configuration pages in TES. For a more in depth guide on TES see {ref}`here <ad-jupiter-ebz production-testing>`.
 
 ### Connection
 The TES software cannot connect directly to Jupiter, it is used to create a profile that will have corresponding .bin and .json files that can be used to configure Jupiter. This section will give a high level overview of some of the important features to consider when creating a profile in TES, as well as how to generate the .bin and .json files to be uploaded.

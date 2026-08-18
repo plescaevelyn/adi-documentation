@@ -70,7 +70,7 @@ AD-Jupiter-EBZ (Jupiter) is a software defined radio platform based on the **ADR
 
 ## Purpose
 <!-- Need to link each one of these sections when they are spelled out in this paragraph -->
-This documentation serves as a straight-forward, but detailed start-up guide for Jupiter. Topics covered are {ref}`hardware <adc-jupiter-hardware>`, {ref}`setup <adc-jupiter-setup>`, {ref}`software <adc-jupiter-software>`, and a more detailed {ref}`MCS Pilot <adc-jupiter-mcs-quick-start>`. Additional information regarding the Jupiter Platform can be found in the {ref}`reference design documentation <jupiter-sdr hardware-overview>`.
+This documentation serves as a straight-forward, but detailed start-up guide for Jupiter. Topics covered are {ref}`hardware <adc-jupiter-hardware>`, {ref}`setup <adc-jupiter-setup>`, {ref}`software <adc-jupiter-software>`, and a more detailed {ref}`MCS Pilot <adc-jupiter-mcs-quick-start>`. Additional information regarding the Jupiter Platform can be found in the {ref}`reference design documentation <ad-jupiter-ebz hardware-overview>`.
 
 <!-- After following this documentation a user will be able to:
 

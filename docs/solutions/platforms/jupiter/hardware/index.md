@@ -6,7 +6,7 @@ Tasks left to be done:
  -->
 (adc-jupiter-hardware)=
 # Hardware
-This page covers the basics of Jupiter hardware and what a user should know to use the hardware. An in-depth hardware guide can be found {ref}`here <jupiter-sdr hardware-overview>`.
+This page covers the basics of Jupiter hardware and what a user should know to use the hardware. An in-depth hardware guide can be found {ref}`here <ad-jupiter-ebz hardware-overview>`.
 
 ## I/O
 
