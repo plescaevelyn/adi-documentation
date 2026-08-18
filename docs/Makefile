@@ -10,4 +10,11 @@ help:
 .PHONY: help Makefile
 
 %: Makefile
+	@printf "Use \033[0;34madoc serve --sparse <path>\033[0m for faster build time.\n"
+	@read -p "Continue? (yes/no) " yn ; \
+	case $$yn in \
+		y ) ;; \
+		yes ) ;; \
+		* ) exit 1 ; \
+	esac
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
