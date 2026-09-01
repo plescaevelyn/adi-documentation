@@ -65,6 +65,7 @@ install the software stack on a Linux or Windows PC:
 
          .. code-block:: bash
 
+            sudo apt update
             sudo apt install datax-workshops-what-sw-for-my-sdr
 
          .. note::
@@ -75,6 +76,7 @@ install the software stack on a Linux or Windows PC:
 
             .. code-block:: bash
 
+               sudo apt update
                sudo apt install ./datax-workshops-what-sw-for-my-sdr_*.deb
 
             Avoid ``dpkg -i`` for this: ``dpkg`` does not install dependencies, so it
@@ -88,7 +90,7 @@ install the software stack on a Linux or Windows PC:
 
             /usr/share/datax-workshops-what-sw-for-my-sdr/setup
 
-         ``setup`` installs PyADI-IIO, builds ``gr-paint``, and copies the exercises to
+         ``setup`` installs PyADI-IIO and copies the exercises to
          ``~/Desktop/datax-workshops/what-sw-for-my-sdr``.
 
       After this, the DataX Expert exercises are available under
@@ -102,7 +104,7 @@ install the software stack on a Linux or Windows PC:
          .. code-block:: bash
 
             # Debian/Ubuntu
-            sudo apt install python3 python3-pip gnuradio
+            sudo apt install python3 python3-pip python3-matplotlib python3-tk gnuradio
 
             # Install PyADI-IIO (use --break-system-packages on Debian 12+ / Ubuntu 23.04+)
             pip install pyadi-iio
@@ -145,7 +147,7 @@ install the software stack on a Linux or Windows PC:
    The following exercises assume the usage of Thonny Python IDE on the Raspberry Pi, but you can use any
    Python IDE or command-line environment on Linux or Windows with the appropriate software installed.
 
-   Generally, the exercises with both a receiver and transceiver counterpart may be run separately (altough
+   Generally, the exercises with both a receiver and transmitter counterpart may be run separately (although
    they might yield some warnings) or together with a friend who has the same setup.
 
 .. important::
@@ -153,6 +155,13 @@ install the software stack on a Linux or Windows PC:
    **Pluto USB Speed Limitation**: USB 2.0 limits data transfer to 20.4 MiB/s,
    which translates to a maximum sample rate of **5.347 MS/s**.
    Keep this in mind when configuring sample rates for your experiments.
+
+.. tip::
+
+   **Pluto address:** the exercises use ``ip:pluto.local`` (mDNS hostname) and
+   ``ip:192.168.2.1`` (default USB-Ethernet IP) interchangeably — both refer to the same
+   device. Use whichever resolves on your setup. If ``pluto.local`` does not resolve
+   (mDNS/Avahi not available), replace it with ``192.168.2.1``, or vice versa.
 
 .. note::
 
@@ -272,15 +281,17 @@ Every high-level API (PyADI-IIO, GNU Radio, MATLAB, Scopy) ultimately reads and 
 * **Integration knowledge**: Understand how to integrate SDR control into any application
 * **Troubleshooting ability**: Verify attribute values when behavior seems unexpected
 
-**Three Ways to Access IIO Attributes:**
+**Ways to Access IIO Attributes:**
 
 Today's exercises will use:
 
 #. :adi:`PyADI-IIO <pyadi-iio>`: Python library for SDR control
-#. :adi:`libiio <libiio>` utilities: Command-line tools (iio_attr)
-#. :adi:`Scopy <scopy>`: Visual instrument and debugging interface
+#. :adi:`libiio <libiio>` utilities: Command-line tools (``iio_attr``, ``iio_info``)
+#. :adi:`Scopy <scopy>`: Visual instrument and debugging interface (see the
+   `official Scopy documentation <https://wiki.analog.com/university/tools/m2k/scopy>`__
+   for a complete guide)
 
-See the official documentation for complete details. This exercise demonstrates all three approaches using the RX gain attribute as an example.
+This exercise demonstrates these approaches using the RX gain attribute as an example.
 
 **Using PyADI-IIO to Read/Write Attributes**
 
@@ -625,7 +636,7 @@ The open-source code for this block is available at:
 
 #. Connect the loopback cable between TX1 and RX1:
 
-   .. figure:: ../images/hw_setup/pluto_loopback_setup.png
+   .. figure:: ../images/hw_setup/pluto_loopback_setup.jpg
       :align: center
       :width: 45em
 
@@ -678,8 +689,9 @@ The flowgraph contains:
       :align: center
       :width: 45em
 
-      Eye diagram after Costas loop of the RX. Use the slider to rotate the constellation
-      in steps of 90° - observe that symbols received are the same due to Differential Decoding.
+      Eye diagram after Costas loop of the RX. Use the slider to manually rotate the constellation
+      in steps of 90° until it aligns with the transmitted pattern (differential decoding is not
+      available for 16QAM).
 
 #. **Observe EVM measurements:**
 
@@ -931,7 +943,7 @@ In DataX Novice QPSK exercises, symbol sync was hidden inside a complete receive
 
 #. Connect loopback cable between TX1 and RX1
 
-   .. figure:: ../images/hw_setup/pluto_loopback_setup.png
+   .. figure:: ../images/hw_setup/pluto_loopback_setup.jpg
       :align: center
       :width: 45em
 
