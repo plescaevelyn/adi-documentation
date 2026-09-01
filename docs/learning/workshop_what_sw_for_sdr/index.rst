@@ -305,6 +305,12 @@ For automation, scripting, and headless operation, the IIO framework includes co
 * **iio_writedev**: Transmits samples to device channels
 * **iio_reg**: Direct register access for low-level debugging
 
+.. note::
+
+   The examples below are not meant to be run as part of this workshop — they are some of
+   the most common ``iio`` commands that you may choose to run on your own to explore the
+   attributes and capabilities of your IIO devices.
+
 These tools are particularly useful for:
 
 * Automated testing and continuous integration

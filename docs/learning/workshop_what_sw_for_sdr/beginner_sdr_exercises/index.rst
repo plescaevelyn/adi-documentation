@@ -58,6 +58,7 @@ install the software stack on a Linux or Windows PC:
 
          .. code-block:: bash
 
+            sudo apt update
             sudo apt install datax-workshops-what-sw-for-my-sdr
 
          .. note::
@@ -68,6 +69,7 @@ install the software stack on a Linux or Windows PC:
 
             .. code-block:: bash
 
+               sudo apt update
                sudo apt install ./datax-workshops-what-sw-for-my-sdr_*.deb
 
             Avoid ``dpkg -i`` for this: ``dpkg`` does not install dependencies, so it
@@ -81,8 +83,7 @@ install the software stack on a Linux or Windows PC:
 
             /usr/share/datax-workshops-what-sw-for-my-sdr/setup
 
-         ``setup`` installs PyADI-IIO, builds ``gr-paint`` (used by the Spectrum Paint
-         exercise), and copies the exercises to
+         ``setup`` installs PyADI-IIO and copies the exercises to
          ``~/Desktop/datax-workshops/what-sw-for-my-sdr``.
 
       After this, the DataX Novice exercises are available under
@@ -96,7 +97,7 @@ install the software stack on a Linux or Windows PC:
          .. code-block:: bash
 
             # Debian/Ubuntu
-            sudo apt install python3 python3-pip gnuradio
+            sudo apt install python3 python3-pip python3-matplotlib python3-tk gnuradio
 
             # Install PyADI-IIO (use --break-system-packages on Debian 12+ / Ubuntu 23.04+)
             pip install pyadi-iio
@@ -113,6 +114,13 @@ install the software stack on a Linux or Windows PC:
 
       #. Install `Python <https://www.python.org/downloads/>`__ (ensure "Add to PATH" is checked)
 
+      #. Install `libiio <https://github.com/analogdevicesinc/libiio/releases>`__
+         (download the latest Windows installer from the releases page).
+
+         .. note::
+
+            These exercises have been tested with libiio v0.26.
+
       #. Use `Radioconda <https://github.com/ryanvolz/radioconda>`__ to install GNU Radio:
 
          * Download and install Radioconda from the
@@ -123,11 +131,11 @@ install the software stack on a Linux or Windows PC:
 
               conda install gnuradio
 
-      #. Install PyADI-IIO:
+      #. Install PyADI-IIO and Matplotlib:
 
          .. code-block:: bash
 
-            pip install pyadi-iio
+            pip install pyadi-iio matplotlib
 
 .. note::
 
@@ -137,7 +145,7 @@ install the software stack on a Linux or Windows PC:
    The following exercises assume the usage of Thonny Python IDE on the Raspberry Pi, but you can use any
    Python IDE or command-line environment on Linux or Windows with the appropriate software installed.
 
-   Generally, the exercises with both a receiver and transceiver counterpart may be run separately (altough
+   Generally, the exercises with both a receiver and transmitter counterpart may be run separately (although
    they might yield some warnings) or together with a friend who has the same setup.
 
 .. note::
@@ -161,7 +169,7 @@ use.
    :width: 50em
 
    Example system setup with the Pluto and Jupiter connected to the host. The Raspberry Pi
-   400 shown was used in this version of the workshop, but it is not mandatory — any PC with
+   5 shown was used in this version of the workshop, but it is not mandatory — any PC with
    the required software installed works.
 
 Setting up the ADALM-Pluto
@@ -251,22 +259,27 @@ latest Kuiper release:
 #. Flash an SD card with the **newest Kuiper Linux image** (Debian trixie) from the official
    `ADI Kuiper repository <https://github.com/analogdevicesinc/adi-kuiper-gen>`__.
 
-#. Run the following configuration commands against the freshly flashed card:
+#. Configure the SD card using a **Raspberry Pi** — the Jupiter cannot boot without
+   this step, so the commands must be run on a Raspberry Pi first:
 
-   .. code-block:: bash
+   a. Insert the freshly flashed SD card into a Raspberry Pi and boot it.
 
-      sudo configure-setup.sh jupiter_sdr
-      sudo hostnamectl set-hostname jupiter
+   b. Run the following configuration commands:
 
-   There are two ways to run these commands:
+      .. code-block:: bash
 
-   * **Using a Raspberry Pi:** insert the new SD card into a Raspberry Pi, boot it, run the
-     commands above, then shut it down and move the card into the Jupiter.
-   * **Directly on the Jupiter:** connect a monitor to the Jupiter with a DisplayPort cable,
-     boot it with the new card inserted, and run the commands there.
+         sudo configure-setup.sh jupiter_sdr jupiter_sdr
+         sudo hostnamectl set-hostname jupiter
 
-#. Once the commands finish, the Jupiter setup is complete — insert the SD card into the
-   Jupiter (if it isn't already) and boot it.
+      After the first command, you should see a message similar to:
+
+      .. code-block:: text
+
+         Successfully prepared boot partition for running project jupiter_sdr on jupiter_sdr.
+
+   c. Power off the Raspberry Pi, remove the SD card, and insert it into the Jupiter.
+
+#. Boot the Jupiter with the configured SD card.
 
 **3. Boot and confirm the connection.**
 
@@ -562,7 +575,7 @@ Follow the next steps:
 
 #. Make the loopback setup using Pluto with TX connected to RX via an SMA cable and connect it to your PC.
 
-   .. figure:: ../images/hw_setup/pluto_loopback_setup.png
+   .. figure:: ../images/hw_setup/pluto_loopback_setup.jpg
       :align: center
       :width: 20em
 
@@ -593,49 +606,14 @@ Follow the next steps:
 
       Run the Python script in Thonny IDE
 
-#. After running the script, six plots appear:
+#. After running the script, the TX and RX plots appear:
 
-   .. figure:: images/exercises/pluto_exercises/sinewave_loopback/tx_time_domain.png
-      :alt: TX Time Domain
+   .. figure:: images/exercises/pluto_exercises/sinewave_loopback/sinewave_loopback_plot.png
+      :alt: Sinewave Loopback Plot
       :align: center
       :width: 40em
 
-      TX time domain - I and Q components 90° out of phase.
-
-   .. figure:: images/exercises/pluto_exercises/sinewave_loopback/tx_fft.png
-      :alt: TX FFT
-      :align: center
-      :width: 40em
-
-      TX FFT - single peak at 20 kHz.
-
-   .. figure:: images/exercises/pluto_exercises/sinewave_loopback/tx_constellation_plot.png
-      :alt: TX Constellation
-      :align: center
-      :width: 40em
-
-      TX constellation - circular pattern from continuous phase rotation.
-
-   .. figure:: images/exercises/pluto_exercises/sinewave_loopback/rx_time_domain.png
-      :alt: RX Time Domain
-      :align: center
-      :width: 40em
-
-      RX time domain - received I and Q components.
-
-   .. figure:: images/exercises/pluto_exercises/sinewave_loopback/rx_fft.png
-      :alt: RX FFT
-      :align: center
-      :width: 40em
-
-      RX FFT - received spectrum with harmonic at 20 kHz.
-
-   .. figure:: images/exercises/pluto_exercises/sinewave_loopback/rx_constellation_plot.png
-      :alt: RX Constellation
-      :align: center
-      :width: 40em
-
-      RX constellation - deviations from a perfect circle indicate channel effects.
+      TX and RX time domain, FFT, and constellation plots for Pluto sinewave loopback
 
 #. To zoom on a plot, you can use the zoom option as depicted below. Encircle holding left click the area you want to zoom.
    On this example, if you zoom at the figure below on the received signal, you should see a harmonic at 20KHz.
@@ -786,7 +764,7 @@ Follow these steps:
 
 #. Make the loopback setup using Pluto with TX connected to RX via an SMA cable and connect it to your PC.
 
-   .. figure:: ../images/hw_setup/pluto_loopback_setup.png
+   .. figure:: ../images/hw_setup/pluto_loopback_setup.jpg
       :align: center
       :width: 20em
 
@@ -1160,7 +1138,7 @@ Follow these steps to run the BPSK transmission and reception experiment:
 
 #. Make the loopback setup using Pluto with TX connected to RX via an SMA cable and connect it to your PC.
 
-   .. figure:: ../images/hw_setup/pluto_loopback_setup.png
+   .. figure:: ../images/hw_setup/pluto_loopback_setup.jpg
       :align: center
       :width: 20em
 
@@ -1428,6 +1406,96 @@ Follow these steps:
 #. Run the script by pressing the green button in Thonny. Close all plot windows to stop.
 
 
+Raw Loopback in GNU Radio - No Additional DSP (Pluto, Jupiter)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This GNU Radio exercise is the BPSK equivalent of the QPSK raw loopback: it intentionally
+omits matched filter, frequency correction, and timing recovery to show what happens without
+them. Compare the result with the fully processed BPSK Python loopback above to see why each
+DSP stage matters.
+
+**Transmitter:**
+
+* Generate a sequence of bits
+* Map bits onto BPSK symbols (-1, +1)
+* Offset the spectrum to the right to avoid DC leakage
+
+**Receiver:**
+
+* Shift the spectrum back to DC
+* Display time, frequency, and constellation plots — with no additional processing
+
+**Pluto**
+
+Follow these steps:
+
+#. Make the loopback setup using Pluto with TX connected to RX via an SMA cable and connect it to your PC.
+
+   .. figure:: ../images/hw_setup/pluto_loopback_setup.jpg
+      :align: center
+      :width: 20em
+
+      Pluto SDR with loopback cable connecting TX to RX
+
+#. Open the terminal and launch GNU Radio Companion:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ gnuradio-companion
+
+#. In GNU Radio Companion, open **BPSK_raw_loopback_pluto.grc** from
+   **beginner_exercises → 2. Binary Phase Shift Keying (BPSK) → GNU Radio**.
+
+#. Click the **Execute** button (green arrow) to run the flowgraph.
+
+#. Observe the output displays:
+
+   **Observations:**
+
+   * No frequency offset because the example works on loopback and the LO is the same for RX and TX
+   * But has a phase offset between the two paths
+   * The constellation shows two clusters that may be rotated away from the real axis
+   * Try tweaking the frequency offset slider between TX and RX and see how the data looks — this
+     happens when transmitting and receiving between two different devices
+   * The spectrum is inefficiently used (spectrum of square wave, no pulse shaping)
+
+#. Click the **Stop** button (red square) when finished.
+
+**Jupiter**
+
+Follow these steps:
+
+#. Make the loopback setup with Jupiter — connect TX to RX and connect the board via Ethernet.
+
+   .. figure:: ../images/hw_setup/jupiter_loopback_setup.png
+      :align: center
+      :width: 20em
+
+      Jupiter SDR with loopback cable connecting TX to RX
+
+#. Open the terminal and launch GNU Radio Companion:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ gnuradio-companion
+
+#. In GNU Radio Companion, open **BPSK_raw_loopback_jupiter.grc** from
+   **beginner_exercises → 2. Binary Phase Shift Keying (BPSK) → GNU Radio**.
+
+#. Click the **Execute** button (green arrow) to run the flowgraph.
+
+#. Observe the same effects as the Pluto version. The frequency offset slider
+   demonstrates what happens when TX and RX oscillators are not perfectly synchronized.
+
+#. Click the **Stop** button (red square) when finished.
+
+
 Quadrature Phase Shift Keying (QPSK)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1488,113 +1556,8 @@ The QPSK loopback example in GNU Radio demonstrates the full DSP chain:
 * Using the rotation slider, you can rotate the constellation in steps of 90° and observe
   that the symbols received are the same due to Differential Decoding
 
-Console Messaging (Pluto, Jupiter)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. note::
-
-   **Bonus exercise.** This is an optional bonus exercise — feel free to pick and
-   choose which bonus exercises you try.
-
-**Pluto**
-
-Packet-based QPSK system where messages are transmitted in bursts and displayed on console.
-Each packet contains: access key (preamble), payload length, message data, and CRC32 checksum.
-
-   .. figure:: images/exercises/pluto_exercises/qpsk_gnuradio/qpsk_point_to_point_schematic.png
-      :alt: QPSK Console Messaging Flowgraph
-      :align: center
-      :width: 40em
-
-      Transmitter and receiver flowgraph for packet-based QPSK.
-
-Follow these steps:
-
-#. Make the following setup: connect the receiver antenna to the RX antenna connector and the
-   transceiver antenna to the TX antenna connector. Then connect the Pluto to your PC.
-   The following image offers an example for the receiver connection.
-
-   .. figure:: ../images/hw_setup/pluto_qpsk_setup.png
-      :alt: QPSK Pluto Setup
-      :align: center
-      :width: 40em
-
-      QPSK Pluto Setup - receiver antenna connected to RX connector
-
-#. Open the terminal and navigate to the Desktop directory, then launch GNU Radio Companion:
-
-   .. shell::
-      :user: analog
-      :group: analog
-      :show-user:
-
-      $ cd ~/Desktop/datax-workshops/what-sw-for-my-sdr
-      $ gnuradio-companion
-
-#. In GNU Radio Companion, open **console_message_receiver_pluto.grc** from
-   **beginner_exercises → 3. Quadrature Phase Shift Keying (QPSK) → Console Messaging → Pluto → receiver_pluto**.
-
-#. Click the **Execute** button (green arrow) to run the flowgraph.
-
-#. Observe the output:
-
-   .. figure:: images/exercises/pluto_exercises/qpsk_simple/qpsk_tx_plot.png
-      :alt: QPSK Console Message TX Plot
-      :align: center
-      :width: 40em
-
-      TX plot showing transmitted samples and spectrum.
-
-   .. figure:: images/exercises/pluto_exercises/qpsk_simple/qpsk_rx_result.png
-      :alt: QPSK Console Message Reception
-      :align: center
-      :width: 40em
-
-      Received message, samples, spectrum, and QPSK constellation.
-
-#. Click the **Stop** button (red square) when finished.
-
-
-**Jupiter**
-
-Same as Pluto, with minimal code changes for Jupiter.
-
-Follow these steps:
-
-#. Make the following setup: connect the receiver antenna to the RX antenna connector and the
-   transceiver antenna to the TX antenna connector.
-   The following image offers an example for the receiver connection.
-
-   .. figure:: ../images/hw_setup/jupiter_psk_setup.png
-      :alt: Jupiter SDR Hardware Setup for Console Messaging
-      :align: center
-      :width: 40em
-
-      Jupiter SDR setup - receiver antenna connected to RX connector
-
-#. Open the terminal and launch GNU Radio Companion:
-
-   .. shell::
-      :user: analog
-      :group: analog
-      :show-user:
-
-      $ cd ~/Desktop/datax-workshops/what-sw-for-my-sdr
-      $ gnuradio-companion
-
-#. In GNU Radio Companion, open **console_message_receiver_jupiter.grc** from
-   **beginner_exercises → 3. Quadrature Phase Shift Keying (QPSK) → Console Messaging → Jupiter → receiver_jupiter**.
-
-#. Click the **Execute** button (green arrow) to run the flowgraph.
-
-#. Observe the received message displayed in the **msg_rx variable** on the console,
-   along with the constellation diagram showing the QPSK signal quality.
-
-#. Click the **Stop** button (red square) when finished.
-
-
-Raw Loopback - No Additional DSP (Pluto)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Raw Loopback - No Additional DSP (Pluto, Jupiter)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Intentionally omits matched filter, frequency correction, and timing recovery to show what happens
 without them: wide spectrum, rotating constellation, wrong samples.
@@ -1615,11 +1578,13 @@ without them: wide spectrum, rotating constellation, wrong samples.
 
 * Shift the spectrum back to DC
 
+**Pluto**
+
 Follow these steps:
 
 #. Make the loopback setup using Pluto with TX connected to RX via an SMA cable and connect it to your PC.
 
-   .. figure:: ../images/hw_setup/pluto_loopback_setup.png
+   .. figure:: ../images/hw_setup/pluto_loopback_setup.jpg
       :align: center
       :width: 20em
 
@@ -1663,6 +1628,37 @@ Follow these steps:
 
 #. Click the **Stop** button (red square) when finished.
 
+**Jupiter**
+
+Follow these steps:
+
+#. Make the loopback setup with Jupiter — connect TX to RX and connect the board via Ethernet.
+
+   .. figure:: ../images/hw_setup/jupiter_loopback_setup.png
+      :align: center
+      :width: 20em
+
+      Jupiter SDR with loopback cable connecting TX to RX
+
+#. Open the terminal and launch GNU Radio Companion:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ gnuradio-companion
+
+#. In GNU Radio Companion, open **QPSK_raw_loopback_jupiter.grc** from
+   **beginner_exercises → 3. Quadrature Phase Shift Keying (QPSK)**.
+
+#. Click the **Execute** button (green arrow) to run the flowgraph.
+
+#. Observe the same effects as the Pluto version. The frequency offset slider
+   demonstrates what happens when TX and RX oscillators are not perfectly synchronized.
+
+#. Click the **Stop** button (red square) when finished.
+
 **Conclusions:**
 
 * The frequency offset and LO drift is required to be corrected at receiver
@@ -1691,7 +1687,7 @@ Follow these steps:
 
 #. Make the loopback setup using Pluto with TX connected to RX via an SMA cable and connect it to your PC.
 
-   .. figure:: ../images/hw_setup/pluto_loopback_setup.png
+   .. figure:: ../images/hw_setup/pluto_loopback_setup.jpg
       :align: center
       :width: 20em
 
@@ -1747,7 +1743,7 @@ Follow these steps:
 
 #. Make the loopback setup using Pluto with TX connected to RX via an SMA cable and connect it to your PC.
 
-   .. figure:: ../images/hw_setup/pluto_loopback_setup.png
+   .. figure:: ../images/hw_setup/pluto_loopback_setup.jpg
       :align: center
       :width: 20em
 
@@ -1781,6 +1777,228 @@ Follow these steps:
       :width: 40em
 
       A more precise frequency offset correction still needs to be applied
+
+#. Click the **Stop** button (red square) when finished.
+
+
+Console Messaging (Pluto, Jupiter)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. note::
+
+   **Bonus exercise.** This is an optional bonus exercise — feel free to pick and
+   choose which bonus exercises you try.
+
+Packet-based QPSK system where messages are transmitted in bursts and displayed on console.
+Each packet contains: access key (preamble), payload length, message data, and CRC32 checksum.
+
+.. figure:: images/exercises/pluto_exercises/qpsk_gnuradio/qpsk_point_to_point_schematic.png
+   :alt: QPSK Console Messaging Flowgraph
+   :align: center
+   :width: 40em
+
+   Transmitter and receiver flowgraph for packet-based QPSK.
+
+This exercise requires **two separate devices** — one running the transmitter flowgraph and
+one running the receiver flowgraph. Each device needs its own SDR (Pluto or Jupiter) with
+antennas attached. In a workshop setting the instructor typically runs the transmitter; if
+you want to run both sides yourself, you need two SDRs and two PCs (or two GNU Radio
+Companion instances on the same PC, each connected to a different SDR).
+
+**Pluto**
+
+Follow these steps on the **receiver** device:
+
+#. Attach a receiver antenna to the RX antenna connector and a transmitter antenna to the
+   TX antenna connector. Then connect the Pluto to your PC.
+
+   .. figure:: ../images/hw_setup/pluto_qpsk_setup.jpg
+      :alt: QPSK Pluto Setup
+      :align: center
+      :width: 40em
+
+      QPSK Pluto Setup - antennas connected to the RX and TX connectors
+
+#. Open the terminal and navigate to the Desktop directory, then launch GNU Radio Companion:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ cd ~/Desktop/datax-workshops/what-sw-for-my-sdr
+      $ gnuradio-companion
+
+#. In GNU Radio Companion, open **console_message_receiver_pluto.grc** from
+   **beginner_exercises → 3. Quadrature Phase Shift Keying (QPSK) → Console Messaging → Pluto → receiver_pluto**.
+
+#. Click the **Execute** button (green arrow) to run the flowgraph.
+
+On the **transmitter** device (the second Pluto), the same steps apply but open
+**console_message_transmitter_pluto.grc** from the ``transmitter_pluto`` subfolder instead.
+
+Once both sides are running:
+
+* The **transmitter** window shows the transmitted samples and spectrum.
+
+  .. figure:: images/exercises/pluto_exercises/qpsk_simple/qpsk_tx_plot.png
+     :alt: QPSK Console Message TX Plot
+     :align: center
+     :width: 40em
+
+     Transmitter output — transmitted samples and spectrum
+
+* The **receiver** window shows the received message, spectrum, and QPSK constellation.
+
+  .. figure:: images/exercises/pluto_exercises/qpsk_simple/qpsk_rx_result.png
+     :alt: QPSK Console Message Reception
+     :align: center
+     :width: 40em
+
+     Receiver output — received message, spectrum, and QPSK constellation
+
+Click the **Stop** button (red square) on each device when finished.
+
+
+**Jupiter**
+
+Same as Pluto, with minimal code changes for Jupiter.
+
+Follow these steps on the **receiver** device:
+
+#. Attach a receiver antenna to the RX antenna connector and a transmitter antenna to the
+   TX antenna connector.
+
+   .. figure:: ../images/hw_setup/jupiter_psk_setup.png
+      :alt: Jupiter SDR Hardware Setup for Console Messaging
+      :align: center
+      :width: 40em
+
+      Jupiter SDR setup - antennas connected to the RX and TX connectors
+
+#. Open the terminal and launch GNU Radio Companion:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ cd ~/Desktop/datax-workshops/what-sw-for-my-sdr
+      $ gnuradio-companion
+
+#. In GNU Radio Companion, open **console_message_receiver_jupiter.grc** from
+   **beginner_exercises → 3. Quadrature Phase Shift Keying (QPSK) → Console Messaging → Jupiter → receiver_jupiter**.
+
+#. Click the **Execute** button (green arrow) to run the flowgraph.
+
+On the **transmitter** device, open **console_message_transmitter_jupiter.grc** from the
+``transmitter_jupiter`` subfolder instead.
+
+Once both sides are running, observe the received message displayed in the **msg_rx
+variable** on the receiver console, along with the constellation diagram showing the QPSK
+signal quality.
+
+Click the **Stop** button (red square) on each device when finished.
+
+
+Text File Messaging (Pluto, Jupiter)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. note::
+
+   **Bonus exercise.** This is an optional bonus exercise — feel free to pick and
+   choose which bonus exercises you try.
+
+This exercise extends the Console Messaging concept: instead of displaying messages on the console,
+the transmitter reads a text file and sends its contents over the air using QPSK, and the receiver
+writes the decoded text to a file (``received.txt``). The same packet-based structure is used —
+access key, payload length, data, and CRC32 — but the data source and sink are files on disk.
+
+Like Console Messaging, this is a point-to-point exercise: the transmitter flowgraph runs on a
+separate device (typically set up by the instructor). The steps below open only the receiver
+flowgraph. If you want to run both sides yourself, the transmitter flowgraphs are in the
+``transmitter_pluto`` / ``transmitter_jupiter`` subfolders alongside the receiver.
+
+.. figure:: images/exercises/pluto_exercises/qpsk_txtfile_messaging/text_file_msg_gnuradio_schematic.png
+   :alt: QPSK Text File Messaging Flowgraph
+   :align: center
+   :width: 45em
+
+   Transmitter reads from a text file; receiver writes decoded data to ``received.txt``
+
+**Pluto**
+
+Follow these steps:
+
+#. Make the following setup: connect the receiver antenna to the RX antenna connector and the
+   transmitter antenna to the TX antenna connector. Then connect the Pluto to your PC.
+
+   .. figure:: ../images/hw_setup/pluto_qpsk_setup.jpg
+      :alt: QPSK Pluto Setup
+      :align: center
+      :width: 40em
+
+      QPSK Pluto Setup - receiver antenna connected to RX connector
+
+#. Open the terminal and navigate to the Desktop directory, then launch GNU Radio Companion:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ cd ~/Desktop/datax-workshops/what-sw-for-my-sdr
+      $ gnuradio-companion
+
+#. In GNU Radio Companion, open **qpsk_receiver_txtfile_pluto.grc** from
+   **beginner_exercises → 3. Quadrature Phase Shift Keying (QPSK) → Text File Messaging → Pluto → receiver_pluto**.
+
+#. Click the **Execute** button (green arrow) to run the flowgraph.
+
+#. Observe the output — the received text is written to ``received.txt`` in the same
+   directory as the flowgraph:
+
+   .. figure:: images/exercises/pluto_exercises/qpsk_txtfile_messaging/text_file_msg_gnuradio_output.png
+      :alt: QPSK Text File Messaging Output
+      :align: center
+      :width: 40em
+
+      Received text file contents and signal quality plots
+
+#. Click the **Stop** button (red square) when finished. Open ``received.txt`` to verify the
+   decoded message.
+
+**Jupiter**
+
+Follow these steps:
+
+#. Make the following setup: connect the receiver antenna to the RX antenna connector and the
+   transmitter antenna to the TX antenna connector.
+
+   .. figure:: ../images/hw_setup/jupiter_psk_setup.png
+      :alt: Jupiter SDR Hardware Setup for Text File Messaging
+      :align: center
+      :width: 40em
+
+      Jupiter SDR setup - receiver antenna connected to RX connector
+
+#. Open the terminal and launch GNU Radio Companion:
+
+   .. shell::
+      :user: analog
+      :group: analog
+      :show-user:
+
+      $ cd ~/Desktop/datax-workshops/what-sw-for-my-sdr
+      $ gnuradio-companion
+
+#. In GNU Radio Companion, open **qpsk_receiver_txtfile_jupiter.grc** from
+   **beginner_exercises → 3. Quadrature Phase Shift Keying (QPSK) → Text File Messaging → Jupiter → receiver_jupiter**.
+
+#. Click the **Execute** button (green arrow) to run the flowgraph.
+
+#. Observe the received text written to ``received.txt``, along with the constellation
+   diagram showing the QPSK signal quality.
 
 #. Click the **Stop** button (red square) when finished.
 
@@ -1822,7 +2040,7 @@ Follow these steps:
 
 #. Make the loopback setup using Pluto with TX connected to RX via an SMA cable and connect it to your PC.
 
-   .. figure:: ../images/hw_setup/pluto_loopback_setup.png
+   .. figure:: ../images/hw_setup/pluto_loopback_setup.jpg
       :align: center
       :width: 20em
 
@@ -1903,8 +2121,8 @@ Follow these steps:
 #. Click the **Stop** button (red square) when finished.
 
 
-Doppler Radar with GNU Radio (Pluto, Jupiter)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Doppler Radar with GNU Radio (Pluto)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. note::
 
@@ -1917,12 +2135,12 @@ This exercise creates a continuous-wave radar using GNU Radio Companion.
 The SDR transmits a CW signal at 2.5 GHz. When the signal reflects off your moving hand,
 the received frequency shifts - higher pitch when moving toward, lower when moving away.
 
-   .. figure:: images/exercises/pluto_exercises/doppler_radar/filter_frequency_diagram.png
-      :alt: Band Pass and Reject Filters
-      :align: center
-      :width: 40em
+.. figure:: images/exercises/pluto_exercises/doppler_radar/filter_frequency_diagram.png
+   :alt: Band Pass and Reject Filters
+   :align: center
+   :width: 40em
 
-      Band Reject Filter removes carrier, Band Pass Filter isolates Doppler shift.
+   Band Reject Filter removes carrier, Band Pass Filter isolates Doppler shift.
 
 **Pluto**
 
@@ -1930,10 +2148,10 @@ Follow these steps:
 
 #. Make the following setup using Pluto and connect it to your PC:
 
-   .. figure:: ../images/hw_setup/pluto_doppler_setup.png
+   .. figure:: ../images/hw_setup/pluto_qpsk_setup.jpg
       :alt: Pluto SDR Doppler Radar Setup
       :align: center
-      :width: 40em
+      :width: 20em
 
       Pluto SDR setup for Doppler radar experiment
 
@@ -1983,145 +2201,9 @@ Follow these steps:
       Rx antenna, shifting the received frequency by ±Δf.
 
 
-**Jupiter**
-
-This exercise implements the same Doppler radar experiment using Jupiter SDR.
-
-Before running this exercise, connect to Jupiter via SSH (see :ref:`booting-jupiter`) and
-configure the profile:
-
-.. code-block:: bash
-
-   cat /home/analog/jupiter_profiles/jupiter_1_92MHz_profile.json > /sys/bus/iio/devices/iio:device1/profile_config
-
-The Doppler effect causes a frequency shift when there is relative motion between radar and target:
-
-   .. figure:: images/exercises/jupiter_exercises/doppler_radar/band_filters.png
-      :alt: Band Pass and Reject Filters
-      :align: center
-      :width: 40em
-
-      Band Reject Filter removes carrier, Band Pass Filter isolates Doppler shift.
-
-Follow these steps:
-
-#. Make the following setup using Jupiter SDR with two antennas connected:
-
-   .. figure:: ../images/hw_setup/jupiter_doppler_setup.png
-      :alt: Jupiter SDR Doppler Radar Setup
-      :align: center
-      :width: 40em
-
-      Jupiter SDR setup for Doppler radar experiment with TX and RX antennas
-
-#. Open the terminal and launch GNU Radio Companion:
-
-   .. shell::
-      :user: analog
-      :group: analog
-      :show-user:
-
-      $ cd ~/Desktop/datax-workshops/what-sw-for-my-sdr
-      $ gnuradio-companion
-
-#. In GNU Radio Companion, click **File → Open** and open from **beginner_exercises → 5. Doppler Radar**
-   the **doppler_radar.grc** file.
-
-   .. figure:: images/exercises/jupiter_exercises/doppler_radar/doppler_gnuradio_schematic.png
-      :alt: Doppler Radar GNU Radio Flowgraph for Jupiter
-      :align: center
-      :width: 45em
-
-      GNU Radio flowgraph for the Doppler radar experiment with Jupiter
-
-#. To run the flowgraph, click the **Execute** button (green arrow) from the top toolbar.
-
-#. Move your hand toward and away from the antennas and observe how the sound and the frequency
-   of the received harmonic changes in real time plots.
-
-   .. figure:: images/exercises/jupiter_exercises/doppler_radar/doppler_gnuradio_plot_result.png
-      :alt: Doppler Radar Plots for Jupiter
-      :align: center
-      :width: 45em
-
-      Real-time plots of the Doppler radar experiment with Jupiter
-
-   .. figure:: images/exercises/jupiter_exercises/doppler_radar/doppler_image.png
-      :alt: Doppler Radar Frequency Analysis
-      :align: center
-      :width: 45em
-
-      Frequency analysis showing Doppler shift in the received signal
-
-#. Click the **Stop** button (red square) when finished.
-
-
-Spectrum Paint using Pluto
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 .. note::
 
-   **Bonus exercise.** This is an optional bonus exercise — feel free to pick and
-   choose which bonus exercises you try.
+   The Doppler radar exercise is only available for the ADALM-Pluto. Jupiter does not
+   support this exercise.
 
-This exercise demonstrates a creative application of SDR: "painting" images in the frequency spectrum.
-By transmitting signals at different frequencies over time, you can create visible patterns on a
-waterfall display, which shows frequency on the horizontal axis and time on the vertical axis.
 
-**How Spectrum Paint Works:**
-
-A waterfall display is a spectrogram that shows:
-
-* **Frequency** (horizontal axis): Different colors represent signal strength at each frequency
-* **Time** (vertical axis): Each new row represents a new time snapshot
-* **Amplitude** (color intensity): Brighter colors indicate stronger signals
-
-By carefully controlling which frequencies are transmitted at each moment, you can "draw" images,
-text, or patterns that become visible as the waterfall scrolls down.
-
-**Applications:**
-
-While spectrum paint is primarily a demonstration, the underlying technique is used in:
-
-* Frequency-hopping spread spectrum (FHSS)
-* Chirp radar systems
-* Multi-carrier communications
-* Signal identification and watermarking
-
-This exercise showcases the flexibility of software-defined radio: the same hardware can transmit
-any arbitrary frequency pattern by simply changing the software.
-
-Follow these steps to create a spectrum painting:
-
-#. Make the loopback setup using Pluto with TX connected to RX via an SMA cable and connect it to your PC.
-
-   .. figure:: ../images/hw_setup/pluto_loopback_setup.png
-      :align: center
-      :width: 20em
-
-      Pluto SDR with loopback cable connecting TX to RX
-
-#. Open the terminal and launch GNU Radio Companion:
-
-   .. shell::
-      :user: analog
-      :group: analog
-      :show-user:
-
-      $ gnuradio-companion
-
-#. In GNU Radio Companion, open the **paint_tx.grc** file from
-   **beginner_exercises → 6. Spectrum Paint**.
-
-#. Click the **Execute** button (green arrow) to run the flowgraph.
-
-#. Observe the waterfall display as the spectrum painting appears, created by the Pluto SDR
-   transmitting the frequency pattern. You may change the image to whatever you like by modifying
-   the Image File Source block in the flowgraph.
-
-   .. figure:: images/exercises/pluto_exercises/spectrum_paint/paint_tx.png
-      :alt: Spectrum Paint Waterfall Display
-      :align: center
-      :width: 40em
-
-      Waterfall display showing the spectrum painting created by transmitting controlled frequency patterns
