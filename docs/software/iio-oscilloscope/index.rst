@@ -147,15 +147,16 @@ The other prerequisites and build steps are identical.
 macOS
 +++++
 
-The recommended method is to use brew with tfcollin's tap:
+Install using the Homebrew tap:
 
 .. shell::
 
-   $git clone -b fix-gtk-upgrade https://github.com/tfcollins/homebrew-formulae.git
-   $cd homebrew-formulae
-   $brew install --build-from-source ./gtkdatabox-prev1.rb
-   #if necessary: brew link --overwrite gtkdatabox-prev1
-   $brew install --build-from-source ./iio-oscilloscope.rb
+   $ git clone https://github.com/tfcollins/homebrew-formulae.git
+   $ cd homebrew-formulae
+   $ brew trust tfcollins/formulae
+   $ brew install --build-from-source ./iio-oscilloscope.rb
+
+Last tested on macOS Tahoe 26.7.1.
 
 User guide
 ----------
