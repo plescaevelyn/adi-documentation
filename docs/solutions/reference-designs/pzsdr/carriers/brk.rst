@@ -23,10 +23,10 @@ breakout carrier.
 .. admonition:: Download
    :class: download
 
-   -  :dokuwiki:`Rev C2 Schematic <resources/eval/user-guides/pzsdr/carriers/02-039931-01-c2.pdf>`
-   -  :dokuwiki:`Rev C BOM <resources/eval/user-guides/pzsdr/carriers/05-039931-c.xls>`
-   -  :dokuwiki:`Rev C Gerbers <resources/eval/user-guides/pzsdr/carriers/09-039931-01c.zip>`
-   -  :dokuwiki:`Rev C Allegro Board File <resources/eval/user-guides/pzsdr/carriers/08_039931c.zip>`. (This file is `compressed <http://www.7-zip.org/7z.html>`_) Get the `Allegro FREE Physical Viewer <https://www.cadence.com/en_US/home/tools/pcb-design-and-analysis/allegro-downloads-start.html>`_ (You need 16.6 or higher).
+   -  :dokuwiki:`Rev C2 Schematic <_media/resources/eval/user-guides/pzsdr/carriers/02-039931-01-c2.pdf>`
+   -  :dokuwiki:`Rev C BOM <_media/resources/eval/user-guides/pzsdr/carriers/05-039931-c.xls>`
+   -  :dokuwiki:`Rev C Gerbers <_media/resources/eval/user-guides/pzsdr/carriers/09-039931-01c.zip>`
+   -  :dokuwiki:`Rev C Allegro Board File <_media/resources/eval/user-guides/pzsdr/carriers/08_039931c.zip>`. (This file is `compressed <http://www.7-zip.org/7z.html>`_) Get the `Allegro FREE Physical Viewer <https://www.cadence.com/en_US/home/tools/pcb-design-and-analysis/allegro-downloads-start.html>`_ (You need 16.6 or higher).
 
    -  `Rev C STP File <https://wiki.analog.com/_media/resources/eval/user-guides/pzsdr/carriers/BR-039931STP.7z>`_
       (Note: some DNI components are populated)

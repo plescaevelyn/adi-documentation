@@ -48,11 +48,11 @@ This is the Rev C schematic and layout files for the ADRV1CRR-FMC carrier.
 .. admonition:: Download
    :class: download
 
-   -  :dokuwiki:`Rev C Schematic <resources/eval/user-guides/pzsdr/carriers/02_039799c_top.pdf>`
-   -  :dokuwiki:`Rev C BOM <resources/eval/user-guides/pzsdr/carriers/05_039799-c.xlsx>`
-   -  :dokuwiki:`Rev C Gerbers <resources/eval/user-guides/pzsdr/carriers/038799c.zip>`
-   -  :dokuwiki:`Rev C Allegro Board File <resources/eval/user-guides/pzsdr/carriers/08_039799c.zip>` (This file is `compressed <http://www.7-zip.org/7z.html>`_). Get the `Allegro FREE Physical Viewer <https://www.cadence.com/en_US/home/tools/pcb-design-and-analysis/allegro-downloads-start.html>`_ (You need 16.6 or higher).
-   -  :dokuwiki:`Letter of Volatility <resources/eval/user-guides/pzsdr/carriers/letter_of_volatility_adrv1-fmc.pdf>`
+   -  :dokuwiki:`Rev C Schematic <_media/resources/eval/user-guides/pzsdr/carriers/02_039799c_top.pdf>`
+   -  :dokuwiki:`Rev C BOM <_media/resources/eval/user-guides/pzsdr/carriers/05_039799-c.xlsx>`
+   -  :dokuwiki:`Rev C Gerbers <_media/resources/eval/user-guides/pzsdr/carriers/038799c.zip>`
+   -  :dokuwiki:`Rev C Allegro Board File <_media/resources/eval/user-guides/pzsdr/carriers/08_039799c.zip>` (This file is `compressed <http://www.7-zip.org/7z.html>`_). Get the `Allegro FREE Physical Viewer <https://www.cadence.com/en_US/home/tools/pcb-design-and-analysis/allegro-downloads-start.html>`_ (You need 16.6 or higher).
+   -  :dokuwiki:`Letter of Volatility <_media/resources/eval/user-guides/pzsdr/carriers/letter_of_volatility_adrv1-fmc.pdf>`
 
 Tips and Tricks
 -------------------------------------------------------------------------------
