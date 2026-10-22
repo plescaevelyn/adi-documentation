@@ -29,7 +29,9 @@ Before programming the EEPROM, ensure:
    - ADXUD1AEBZ interposer installed
 2. **Network or UART connection** to ZCU102
 3. **Root access** to the Linux system
-4. **FRU tools** installed (included in Kuiper Linux)
+4. **FRU tools** installed — included in the Kuiper Linux **Full** edition
+   (the Basic edition does not ship them; see
+   {ref}`x-band-sdcard`)
 
 ## EEPROM Programming Procedure
 
@@ -171,4 +173,4 @@ The output should show valid FRU data (not all 0x00 or 0xFF).
 ## Additional Resources
 
 - [FMC Standard Specification](https://www.vita.com/fmc)
-- {ref}`ADI FRU Tools Documentation <software fru-dump>`
+- {ref}`software fru-dump`

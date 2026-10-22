@@ -34,7 +34,9 @@ Verify you have received all components before beginning assembly:
 - **12V DC Power Supplies** - 12V (for ZCU102, ADXUD1A, and ADAR1000EVAL1Z)
 
 *Additional Hardware*
-- **microSD Card** - Pre-loaded with Kuiper Linux image (16GB minimum)
+- **microSD Card** - 16GB minimum, flashed with Kuiper Linux 2026.1.0 or newer
+  (see {ref}`x-band-sdcard`; a card shipped with an
+  older image must be reflashed)
 - **Mounting Hardware** - Standoffs, screws, spacers (if provided)
 
 **Tools Required**

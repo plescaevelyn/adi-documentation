@@ -13,9 +13,9 @@ This section provides links to publications, technical articles, related part pa
 
 **AD9081 MxFE**
 - {adi}`AD9081 Product Page <en/products/ad9081.html>`
-- {ref}`AD9081/AD9082 Zynq UltraScale+ MPSoC ZCU102 Quick Start Guide <ad9081 quickstart zcu102>`
+- {ref}`ad9081 quickstart zcu102`
 - {adi}`UG-1578 AD9081/AD9082 User Guide <media/en/technical-documentation/user-guides/ad9081-ad9082-ug-1578.pdf>`
-- {ref}`AD9081-FMCA-EBZ Evaluation Board Documentation <ad9081>`
+- {ref}`ad9081`
 
 **ADXUD1AEBZ Up/Down Converter**
 - ADXUD1AEBZ Evaluation Board Documentation

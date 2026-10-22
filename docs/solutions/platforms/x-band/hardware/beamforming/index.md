@@ -1,3 +1,4 @@
+(x-band-beamforming)=
 # ADAR1000 Beamforming Board
 
 The ADAR1000EVAL1Z (Stingray) is the analog beamforming heart of the X-Band platform, providing 32-channel transmit and receive capability with individual phase and amplitude control.

@@ -6,10 +6,10 @@ This section provides step-by-step instructions for unboxing, assembling, and pe
 
 For complete setup of your X-Band platform, follow these guides in order:
 
-1. **[Hardware Assembly](assembly/index.md)** - Assemble all boards and make connections
-2. **[ZCU102 Configuration](zcu102config/index.md)** - Configure boot mode, USB, and network settings
-3. **[SD Card Configuration](sdcard/index.md)** - Format, flash, and prepare the boot media
-4. **[EEPROM Programming](eeprom/index.md)** - Program the FMC EEPROM for proper VADJ power
+1. **{ref}`x-band-assembly`** - Assemble all boards and make connections
+2. **{ref}`x-band-zcu102config`** - Configure boot mode, USB, and network settings
+3. **{ref}`x-band-sdcard`** - Format, flash, and prepare the boot media
+4. **{ref}`x-band-eeprom`** - Program the FMC EEPROM for proper VADJ power
 
 
 ```{tip}
@@ -60,7 +60,10 @@ The X-Band platform requires several configuration steps before first use. Each 
 
 ### SD Card Setup
 
-Prepare the SD card with ADI Kuiper Linux operating system.
+Prepare the SD card with ADI Kuiper Linux operating system. The X-Band platform
+requires **release 2026.1.0 or newer** (ARM 64-bit Full), available from
+the Kuiper {external+kuiper:ref}`releases-downloads` page
+— it is the first public release that supports the TDD engine.
 
 **Steps Include:**
 - Format SD card properly
@@ -68,7 +71,7 @@ Prepare the SD card with ADI Kuiper Linux operating system.
 - Copy boot files (BOOT.BIN, Image, system.dtb)
 - Verify boot operation
 
-**📖 See**: [SD Card Configuration Guide](sdcard/index.md)
+**📖 See**: {ref}`x-band-sdcard`
 
 ### ZCU102 Hardware Configuration
 
@@ -80,7 +83,7 @@ Configure switches and jumpers on the ZCU102 board for proper operation.
 - UART connection for console access
 - Network configuration for remote access
 
-**📖 See**: [ZCU102 Configuration Guide](zcu102config/index.md)
+**📖 See**: {ref}`x-band-zcu102config`
 
 ### EEPROM Programming
 
@@ -91,7 +94,7 @@ Program the FMC EEPROM on the ADXUD1AEBZ interposer board.
 - FMC board identification
 - System initialization
 
-**📖 See**: [EEPROM Programming Guide](eeprom/index.md)
+**📖 See**: {ref}`x-band-eeprom`
 
 ## Configuration Quick Reference
 
@@ -99,11 +102,11 @@ Program the FMC EEPROM on the ADXUD1AEBZ interposer board.
 
 | Component | Configuration | Guide |
 |-----------|---------------|-------|
-| **ZCU102 Boot Mode** | SW6: ON-OFF-OFF-OFF | [ZCU102 Config](zcu102config/index.md) |
-| **USB Host Mode** | J7, J109-113 configured | [ZCU102 Config](zcu102config/index.md) |
-| **SD Card** | Kuiper Linux + boot files | [SD Card Guide](sdcard/index.md) |
-| **FMC EEPROM** | Programmed for VADJ | [EEPROM Guide](eeprom/index.md) |
-| **UART Console** | 115200 baud, 8N1 | [ZCU102 Config](zcu102config/index.md) |
+| **ZCU102 Boot Mode** | SW6: ON-OFF-OFF-OFF | {ref}`x-band-zcu102config` |
+| **USB Host Mode** | J7, J109-113 configured | {ref}`x-band-zcu102config` |
+| **SD Card** | Kuiper Linux 2026.1.0+ (ARM 64-bit Full) + boot files | {ref}`x-band-sdcard` |
+| **FMC EEPROM** | Programmed for VADJ | {ref}`x-band-eeprom` |
+| **UART Console** | 115200 baud, 8N1 | {ref}`x-band-zcu102config` |
 
 ## Initial Power-On
 
@@ -123,7 +126,7 @@ Program the FMC EEPROM on the ADXUD1AEBZ interposer board.
 
 ```{seealso}
 **Detailed Instructions:**
-- [Hardware Assembly Guide](assembly/index.md) - Complete assembly and power connection details
+- {ref}`x-band-assembly` - Complete assembly and power connection details
 ```
 
 ## Safety Considerations

@@ -8,9 +8,9 @@ The **{adi}`X-Band Phased Array Development Platform <en/design-center/evaluatio
 ```
 
 The platform consists of three main components:
-- **[AD9081-FMCA-EBZ](hardware/mxfe/index)** - AD9081 MxFE Evaluation Board
-- **[ADXUD1AEBZ](hardware/converter/index)** - X/C Band Up/Down Converter
-- **[ADAR1000EVAL1Z](hardware/beamforming/index)** - X/Ku-Band Analog Beamforming Board (Stingray)
+- **{ref}`x-band-mxfe`** - AD9081 MxFE Evaluation Board
+- **{ref}`x-band-converter`** - X/C Band Up/Down Converter
+- **{ref}`x-band-beamforming`** - X/Ku-Band Analog Beamforming Board (Stingray)
 
 The system is designed to mate with a {xilinx}`ZCU102 <products/boards-and-kits/ek-u1-zcu102-g.html>` Evaluation Board from Xilinx®, featuring the Zynq® UltraScale+™ ZU9EG FPGA, with provided reference software, HDL code, and MATLAB/Python system-level interfacing.
 

@@ -10,13 +10,24 @@ Before starting, ensure you have:
 - **SD Card**: Minimum 16GB recommended (32GB preferred)
 - **SD Card Formatter**: [Download from SD Association](https://www.sdcard.org/downloads/formatter/)
 - **BalenaEtcher**: [Download from balena.io](https://www.balena.io/etcher/)
-- **ADI Kuiper Linux Image**
+- **ADI Kuiper Linux Image**: release **2026.1.0** or newer, **ARM 64-bit Full**
+  variant — download it from {external+kuiper:ref}`releases-downloads`
 - **SD Card Reader**: USB or built-in card reader
 - **Host Computer**: Windows, Mac, or Linux
 
 ```{important}
-**This version of Kuiper Linux is not yet released publicly.**
-Reach out to an ADI FAE for a copy
+**ADI Kuiper Linux 2026.1.0 is the minimum required release.** It is the first
+public Kuiper release that supports the TDD engine (`axi-core-tdd`), which the
+X-Band platform uses for TX/RX switching — earlier public releases do not
+include it. Download it from
+the Kuiper {external+kuiper:ref}`releases-downloads` page.
+```
+
+```{note}
+The ZCU102 is a Zynq UltraScale+ (`zynqmp`) carrier, so it requires the
+**ARM 64-bit** image. Choose the **Full** edition — it includes the ADI
+software stack (libiio, pyadi-iio) and the FRU tools used for
+{ref}`x-band-eeprom`.
 ```
 
 ## Step 1: Format the SD Card
@@ -45,16 +56,20 @@ Use the SD Card Formatter program rather than Windows/Mac built-in formatting to
 
 ## Step 2: Flash the Kuiper Linux Image
 
-1. **Open BalenaEtcher** application
-2. **Click "Flash from file"**
-3. **Select the Kuiper Linux image**:
-   - Navigate to your downloaded `.img` file
-   - Example: `2024-06-18-ADI-Kuiper-full.img`
-4. **Click "Select target"**
-5. **Select your SD Card**:
+Kuiper releases download as a `.zip` archive, so extract the image before
+flashing it.
+
+1. **Extract the downloaded archive** to get the `.img` file
+   - Example: `kuiper_full_64_image_2026.1.0.zip`
+2. **Open BalenaEtcher** application
+3. **Click "Flash from file"**
+4. **Select the Kuiper Linux image**:
+   - Navigate to the `.img` file you extracted
+5. **Click "Select target"**
+6. **Select your SD Card**:
    - **CRITICAL**: Double-check you've selected the correct drive
    - Selecting the wrong drive will erase its contents
-6. **Click "Flash!"**
+7. **Click "Flash!"**
    - This may require administrator privileges
    - The flashing process takes approximately 10-15 minutes
    - A verification process will follow the flashing
@@ -163,7 +178,7 @@ BOOT/
 1. **Power down the X-Band platform** completely
 2. **Remove any existing SD Card** from the ZCU102
 3. **Insert the newly programmed SD Card** into the ZCU102 SD card slot
-4. **Ensure ZCU102 is configured for SD boot** (see {ref}`ZCU102 Configuration <x-band-zcu102config>`)
+4. **Ensure ZCU102 is configured for SD boot** (see {ref}`x-band-zcu102config`)
 
 ### First Boot
 
@@ -197,11 +212,18 @@ BOOT/
    :alt: IIO Device Verification
    ```
 
-4. **Verify Kuiper version**:
+4. **Verify the Kuiper image**:
+
+   Every Kuiper 2 image records its version in `/etc/kuiper-release`, and the
+   options it was built with in `/config`:
    ```bash
-   root@analog:~# cat /boot/VERSION.txt
+   root@analog:~# . /etc/kuiper-release && echo "$KUIPER_VERSION ($KUIPER_ARCH/$KUIPER_VARIANT)"
    ```
-   - Confirm it matches your downloaded image version
+   - Confirm the version, architecture (`arm64`) and variant (`full`) match the
+     release you downloaded
+   - If `/etc/kuiper-release` is missing, the card holds a deprecated Kuiper 1
+     image and must be reflashed — see
+     {external+kuiper:ref}`checking-your-kuiper-version`
 
    ```{image} xbdp_sd_card_image_verification.png
    :alt: SD Card Image Verification
@@ -227,11 +249,13 @@ Boot is confirmed successful when **40 IIO devices** appear in the terminal **an
 
 - [SD Association - SD Card Formatter](https://www.sdcard.org/downloads/formatter/)
 - [BalenaEtcher Download](https://www.balena.io/etcher/)
-- {ref}`ADI Kuiper Linux Images <kuiper>`
+- {external+kuiper:ref}`releases-downloads` - Get release 2026.1.0 or newer
+- {external+kuiper:ref}`use-kuiper-image-writing`
+- {ref}`kuiper`
 - {xilinx}`ZCU102 Documentation <products/boards-and-kits/ek-u1-zcu102-g.html>`
 
 ```{seealso}
-- {ref}`ZCU102 Configuration <x-band-zcu102config>` - Configure boot mode and peripherals
-- {ref}`EEPROM Programming <x-band-eeprom>` - Program FMC EEPROM for proper VADJ
-- {ref}`Assembly Guide <x-band-assembly>` - Complete hardware assembly instructions
+- {ref}`x-band-zcu102config` - Configure boot mode and peripherals
+- {ref}`x-band-eeprom` - Program FMC EEPROM for proper VADJ
+- {ref}`x-band-assembly` - Complete hardware assembly instructions
 ```

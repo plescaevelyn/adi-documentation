@@ -19,7 +19,7 @@ Reference for resolving common issues with the X-Band Phased Array Development P
 Two issues commonly prevent 1.8V VADJ from powering the AD9081-FMCA-EBZ:
 
 1. **ADXUD1AEBZ FMC EEPROM** — Non-compliant EEPROM prevents VADJ from enabling during boot.
-   - Program the FMC EEPROM (see {ref}`EEPROM Programming <x-band-eeprom>`), then perform a full power cycle of the FPGA.
+   - Program the FMC EEPROM (see {ref}`x-band-eeprom`), then perform a full power cycle of the FPGA.
 
 2. **AD9081 LTM4616 enable pin voltage** — The run-control threshold is 1.7 V. If R1M voltage falls below this, VADJ will not enable.
    - Replace R1M (2.2 kΩ) with a 220 Ω 0402 resistor to raise the enable pin voltage above 1.7 V.
@@ -70,7 +70,7 @@ Checksums will NOT match between different firmware builds or software versions.
 | Intermittent boot failures | Corrupted SD card | Reformat and reflash using BalenaEtcher |
 | Boot hangs at U-Boot | Missing or misnamed boot files | Verify `BOOT.BIN`, `Image`, and `system.dtb` are in SD card root (case-sensitive) |
 | Linux boots but fewer than 40 IIO devices | Wrong device tree | Copy matching `system.dtb` for your clocking config; full power cycle |
-| VADJ not present after boot | EEPROM not programmed | See {ref}`EEPROM Programming <x-band-eeprom>` |
+| VADJ not present after boot | EEPROM not programmed | See {ref}`x-band-eeprom` |
 | "Flash Failed" in BalenaEtcher | Expected behavior | This is normal — verification always fails for Kuiper Linux images; proceed |
 | File copy errors on ADI PCs | Windows auto-encryption | Use network drive mapping; never copy directly through Windows Explorer to SD card |
 
@@ -117,6 +117,7 @@ Checksums will NOT match between different firmware builds or software versions.
 | Symptom | Possible Cause | Solution |
 |---------|---------------|----------|
 | No transitions seen on TR probe point | TDD not enabled or driver not loaded | Run `iio_attr -c axi-core-tdd enable`; check `lsmod \| grep tdd` |
+| IIO TDD device not found | Kuiper release too old | TDD support requires Kuiper 2026.1.0 or newer; verify with `cat /etc/kuiper-release` and reflash if needed (see {ref}`x-band-sdcard`) |
 | IIO TDD device not found | Bitstream doesn't include TDD core | Confirm FPGA bitstream and device tree include the TDD core |
 | Measured timing doesn't match configuration | Wrong units or unstable clock | Verify system clock frequency; check µs vs. clock-cycle unit settings |
 | TX leakage visible during RX window | Guard time too short | Increase guard time between TX and RX windows |
@@ -199,5 +200,7 @@ Always verify TDD timing with an oscilloscope before enabling high-power TX mode
 ## Additional Support
 
 - **ADI EngineerZone**: {ez}`adef-system-platforms`
-- {external+pyadi-iio:doc}`pyadi-iio Documentation <index>`
-- {ref}`Kuiper Linux Documentation <kuiper>`
+- {external+pyadi-iio:doc}`index`
+- {ref}`kuiper`
+- {external+kuiper:ref}`releases-downloads`
+- {external+kuiper:ref}`troubleshooting`

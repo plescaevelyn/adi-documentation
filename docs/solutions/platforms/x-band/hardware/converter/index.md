@@ -1,3 +1,4 @@
+(x-band-converter)=
 # ADXUD1A Up/Down Converter
 
 The ADXUD1AEBZ is a quad-channel X/C band frequency converter that bridges the gap between X-Band RF signals (8–12 GHz) used by the ADAR1000 beamforming board and the C-Band IF signals (4.2–6.3 GHz) that the AD9081 MxFE can process.
@@ -250,7 +251,7 @@ The ADXUD1AEBZ supports both **external** and **internal** LO sources:
 - **External LO (default)**: Signal fed via SMA-F connector, distributed to all four channels through an on-board splitter network
 - **On-board ADF4371 PLL**: Generates LO internally using a 100 MHz on-board VCXO reference or an external reference clock
 
-Refer to the {ref}`Clocking Configuration <x-band-clocking>` page for details on switching between these options.
+Refer to the {ref}`x-band-clocking` page for details on switching between these options.
 
 ## Switching Speed
 

@@ -176,10 +176,10 @@ The CP2108 provides 4 UART channels:
 
 - {xilinx}`ZCU102 Evaluation Board User Guide (UG1182) <content/dam/xilinx/support/documents/boards_and_kits/zcu102/ug1182-zcu102-eval-bd.pdf>`
 - [Silicon Labs CP210x Driver Download](https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers)
-- {ref}`ADI Kuiper Linux Documentation <kuiper>`
+- {ref}`kuiper`
 
 ```{seealso}
-- {ref}`SD Card Configuration <x-band-sdcard>` - Prepare boot media with Kuiper Linux
-- {ref}`EEPROM Programming <x-band-eeprom>` - Program FMC EEPROM for VADJ power
-- {ref}`Assembly Guide <x-band-assembly>` - Complete hardware assembly instructions
+- {ref}`x-band-sdcard` - Prepare boot media with Kuiper Linux
+- {ref}`x-band-eeprom` - Program FMC EEPROM for VADJ power
+- {ref}`x-band-assembly` - Complete hardware assembly instructions
 ```

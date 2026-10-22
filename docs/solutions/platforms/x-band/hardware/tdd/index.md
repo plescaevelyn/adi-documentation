@@ -2,6 +2,15 @@
 
 The X-Band platform implements Time Division Duplexing (TDD) through a TDD IP Core (`axi-core-tdd`) that provides hardware integration and firmware control for precise transmit/receive switching in radar applications.
 
+```{important}
+**Software requirement**: the TDD engine requires **ADI Kuiper Linux 2026.1.0 or
+newer**, the first public release that supports `axi-core-tdd`. On earlier
+public releases the TDD IIO device does not appear and TX/RX switching cannot be
+configured. Download the ARM 64-bit Full image from
+the Kuiper {external+kuiper:ref}`releases-downloads` page,
+then follow {ref}`x-band-sdcard`.
+```
+
 **TDD Components:**
 
 - **Hardware Layer**: Interposer board with GPIO signal routing and distribution
