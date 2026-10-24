@@ -1,3 +1,5 @@
+(adc-platforms)=
+
 # Aerospace, Defense and Communication Platforms
 
 ## Complete Evaluation & Demonstration Systems for ADI Data Converters
