@@ -31,8 +31,8 @@ System Level Documentation
 
             ..
 
-         System level designs, from mixed signal hardware to software drivers
-         and algorithms.
+         Reference designs combining mixed signal hardware, software and
+         algorithms.
 
       .. card:: Products
          :ref: products
@@ -41,7 +41,8 @@ System Level Documentation
 
             ..
 
-         Evaluation boards, processors and lab tools.
+         Evaluation boards, embedded processors and lab tools for hardware
+         development.
 
       .. card:: ADC Platforms
          :ref: adc-platforms
@@ -50,16 +51,18 @@ System Level Documentation
 
             ..
 
-         Complete evaluation and demonstration systems for data converters.
+         Integrated evaluation and demonstration platforms for data converter
+         systems.
 
-      .. card:: Single Pair Ethernet Hub
-         :ref: single-pair-ethernet-hub
+      .. card:: Application Software
+         :ref: application-software
 
-         .. container:: landing-icon icon-single-pair-ethernet-hub
+         .. container:: landing-icon icon-application-software
 
             ..
 
-         MQTT-based evaluation platform to monitor and control SPE devices.
+         Applications for device evaluation, system integration and solution
+         development.
 
    Firmware & Software
    -------------------
@@ -74,7 +77,8 @@ System Level Documentation
 
             ..
 
-         Debian-based Linux distribution, ready to use with evaluation hardware.
+         Debian-based Linux distribution with tools and drivers for evaluation
+         hardware.
 
       .. card:: Kernel and devicetrees
          :ref: linux-kernel
@@ -83,7 +87,8 @@ System Level Documentation
 
             ..
 
-         Build the Linux kernel and devicetrees for each platform and host.
+         Build guides for the Linux kernel and devicetrees across supported
+         platforms.
 
       .. card:: Linux drivers
          :ref: linux drivers
@@ -92,7 +97,8 @@ System Level Documentation
 
             ..
 
-         Device drivers in the Linux kernel.
+         Linux kernel drivers for connecting devices and accessing their
+         functionality.
 
       .. card:: Software
          :ref: software
@@ -101,7 +107,8 @@ System Level Documentation
 
             ..
 
-         Libraries, toolboxes and applications.
+         Libraries, toolboxes and applications for device control and data
+         acquisition.
 
    Learning
    --------
@@ -116,7 +123,8 @@ System Level Documentation
 
             ..
 
-         Mixed signal basics, system design and hands-on workshops.
+         Hands-on tutorials and workshops covering mixed signal basics and
+         system design.
 
       .. card:: University Program
          :ref: university
@@ -125,7 +133,7 @@ System Level Documentation
 
             ..
 
-         Hands-on learning tools and courses for the next generation of design
+         Learning tools and practical courses for the next generation of design
          engineers.
 
 .. toctree::
