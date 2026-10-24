@@ -3,8 +3,7 @@
 Engineering University Program
 ===============================================================================
 
-.. toctree::
-   :maxdepth: 4
+.. toctree-preview::
 
    courses/index
 

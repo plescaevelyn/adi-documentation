@@ -3,8 +3,7 @@
 Learning! Tutorials, Workshops, Etc
 ===============================================================================
 
-.. toctree::
-   :maxdepth: 4
+.. toctree-preview::
 
    demo_hp_analog_meets_ai/index
    an_industrial_story/index
@@ -13,8 +12,7 @@ Learning! Tutorials, Workshops, Etc
 Mixed Signal Basics
 -------------------------------------------------------------------------------
 
-.. toctree::
-   :maxdepth: 1
+.. toctree-preview::
 
    tutorial_prec_adc/index
 
@@ -22,28 +20,23 @@ Mixed Signal Basics
 System Design
 -------------------------------------------------------------------------------
 
-.. toctree::
-   :maxdepth: 1
+.. toctree-preview::
 
    converter_connectivity_tutorial/index
 
-.. toctree::
-   :maxdepth: 1
+.. toctree-preview::
 
    sw_infrastructure/index
 
-.. toctree::
-   :maxdepth: 1
+.. toctree-preview::
 
    tools_for_ls/index
 
-.. toctree::
-   :maxdepth: 1
+.. toctree-preview::
 
    tools_for_prec_wb/index
 
-.. toctree::
-   :maxdepth: 1
+.. toctree-preview::
 
    tools_for_hs/index
 
@@ -51,20 +44,17 @@ System Design
 Workshops
 -------------------------------------------------------------------------------
 
-.. toctree::
-   :maxdepth: 1
+.. toctree-preview::
 
    workshop_what_sw_for_sdr/index
 
 
-.. toctree::
-   :maxdepth: 1
+.. toctree-preview::
 
    workshop_a_precision_converter_fpga_integration_journey/index
 
 
-.. toctree::
-   :maxdepth: 1
+.. toctree-preview::
 
    workshop_kuiper/index
 
@@ -72,8 +62,7 @@ Workshops
 Academic Workshops
 -------------------------------------------------------------------------------
 
-.. toctree::
-   :maxdepth: 1
+.. toctree-preview::
 
    workshops_software_defined_instrumentation/index
    workshops_introduction_to_electronics/index
