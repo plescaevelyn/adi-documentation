@@ -144,6 +144,7 @@ System Level Documentation
 
    solutions/reference-designs/index
    products/index
+   tools/index
    solutions/application-software/index
    ADC Platforms <solutions/platforms/index>
 
