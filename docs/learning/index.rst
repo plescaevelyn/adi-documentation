@@ -60,6 +60,11 @@ Workshops
    workshop_kuiper/index
 
 
+.. toctree-preview::
+
+   workshop_alif_analog_attach/index
+
+
 Academic Workshops
 -------------------------------------------------------------------------------
 
